@@ -97,7 +97,8 @@
   .player-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 9px 12px; border-radius: 8px; cursor: pointer; transition: background 0.1s; align-items: center; border: 1px solid transparent; margin-bottom: 2px; }
   .player-row:hover { background: var(--surface2); }
   .player-row.selected { background: rgba(232,200,74,0.07); border-color: rgba(232,200,74,0.25); }
-  .player-row.deselected { opacity: 0.45; }
+  .player-row.no-click { cursor: default; }
+  .player-row.no-click:hover { background: transparent; }
   .check-cell { font-size: 15px; color: var(--accent); }
   .player-name-cell { display: flex; align-items: center; gap: 8px; }
   .pos-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
@@ -553,23 +554,56 @@ function updateCap() {
 
 function toggle(id) {
   if (!currentTeam) return;
+
+  // Check if this is a drafted rookie for this team
+  const pickIdx = DRAFT_ORDER.findIndex((slot, i) => slot.franchise === currentTeam && draftPicks[i] === id);
+  if (pickIdx !== -1) {
+    // Drafted rookie — just toggle keep/cut status, never remove from roster
+    if (releasedDraftRookies.has(pickIdx)) {
+      // Currently cut — add back (keep)
+      releasedDraftRookies.delete(pickIdx);
+      // Re-add to taxi if there's a free slot
+      const taxi = taxiAssignments[currentTeam];
+      if (!taxi.includes(id) && taxi.includes('')) {
+        taxi[taxi.indexOf('')] = id;
+      }
+    } else {
+      // Currently kept — mark as cut (stays on roster page, just deselected)
+      releasedDraftRookies.add(pickIdx);
+      // Remove from taxi and lineup slots
+      const taxi = taxiAssignments[currentTeam];
+      for (let i = 0; i < TAXI_SLOTS; i++) {
+        if (taxi[i] === id) taxi[i] = '';
+      }
+      const assignments = lineupAssignments[currentTeam];
+      const overrides = manualOverrides[currentTeam];
+      for (const key in assignments) {
+        if (assignments[key] === id) { assignments[key] = ''; overrides.delete(key); }
+      }
+    }
+    updateCap(); renderTable(); renderLineup();
+    if (currentView === 'league') renderLeagueView();
+    if (currentView === 'available') renderAvailView();
+    if (currentView === 'draft') renderDraftView();
+    try { saveDraftState(); } catch(e) {}
+    return;
+  }
+
+  // Regular keeper toggle
   const sel = allSelections[currentTeam];
   if (sel.has(id)) {
     sel.delete(id);
-    // If this player was in a manual override slot, clear that override
     const assignments = lineupAssignments[currentTeam];
     const overrides = manualOverrides[currentTeam];
     for (const key in assignments) {
       if (assignments[key] === id) {
         assignments[key] = '';
-        overrides.delete(key); // clear override so it can be auto-filled
+        overrides.delete(key);
       }
     }
-    // Re-run full smart assignment — cascades automatically
     autoAssignLineup(currentTeam);
   } else {
     sel.add(id);
-    // Re-run assignment so newly added player fills any open starter slot
     autoAssignLineup(currentTeam);
   }
   updateCap(); renderTable(); renderLineup();
@@ -847,27 +881,22 @@ function renderTable() {
   el.innerHTML = players.map(p => {
     const isDrafted = p._drafted;
     const isReleased = p._released;
-    const isSelected = isDrafted && !isReleased || sel.has(p.id);
+    const isSelected = isDrafted ? !isReleased : sel.has(p.id);
     const onTaxi = isDrafted && currentTaxiRookieIds.has(p.id);
 
-    // Click action: released rookies can be re-added (undo release), drafted active go to release, keepers toggle
-    const clickAction = isReleased
-      ? `undoPick(${p._pickIdx})`
-      : isDrafted
-        ? `releaseDraftedRookie('${p._pickIdx}')`
-        : `toggle('${p.id}')`;
-    const tooltip = isReleased ? 'Click to re-draft' : isDrafted ? 'Click to release to FA pool' : '';
+    // All players: click toggles keep/cut. Toggle handles drafted rookies specially.
+    const clickAction = `toggle('${p.id}')`;
+    const tooltip = isDrafted ? (isReleased ? 'Click to add back to roster' : 'Click to cut') : '';
 
     // Badges: R icon for all drafted rookies, TX badge only if on taxi
     const rBadge = isDrafted ? `<span class="source-badge source-rookie">R</span>` : '';
     const txBadge = onTaxi ? `<span style="font-size:9px;font-weight:700;padding:2px 5px;background:rgba(255,140,58,0.15);color:var(--orange);border-radius:3px;margin-left:3px;">TX</span>` : '';
-    const relBadge = isReleased ? `<span class="source-badge source-cut" style="margin-left:3px;">REL</span>` : '';
 
-    return `<div class="player-row${isSelected ? ' selected' : ' deselected'}" onclick="${clickAction}" style="${isReleased ? 'opacity:0.55;' : ''}" ${tooltip ? `title="${tooltip}"` : ''}>
+    return `<div class="player-row${isSelected ? ' selected' : ' deselected'}" onclick="${clickAction}" ${tooltip ? `title="${tooltip}"` : ''}>
       <div class="check-cell">${isSelected ? '✓' : '✕'}</div>
       <div class="player-name-cell">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
-        <div><div class="player-name">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}${relBadge}</div></div>
+        <div><div class="player-name">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}</div></div>
       </div>
       <div class="td-num" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>
       <div class="td-num">${p.ecr && p.ecr < 999 ? p.ecr : '—'}</div>
@@ -944,10 +973,11 @@ function renderAvailView() {
   const availMap = new Map();
   for (const p of LEAGUE_DATA.freeAgents) {
     if (keptIds.has(p.id)) continue;
-    // Check if this rookie was drafted then released — always show them
+    // Check if this rookie was drafted then released back to pool via undoPick
+    // (pick slot is empty = truly released; pick slot filled = just cut on roster, stays on team)
     const releasedPickIdx = p.rookie ? [...releasedDraftRookies].find(i => draftPicks[i] === p.id) : undefined;
-    const isReleasedRookie = releasedPickIdx !== undefined;
-    if (isReleasedRookie) {
+    const isReleasedToPool = releasedPickIdx !== undefined && !draftPicks[releasedPickIdx];
+    if (isReleasedToPool) {
       availMap.set(p.id, { ...p, source: 'cut', fromTeam: LEAGUE_DATA.teams[DRAFT_ORDER[releasedPickIdx].franchise]?.name || '', releasedRookie: true });
     } else if (p.rookie && showRookies) {
       availMap.set(p.id, { ...p, source: 'fa', fromTeam: null });
