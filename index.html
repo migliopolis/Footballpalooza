@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Footballpalooza 2026 Keeper Builder">
+<meta property="og:description" content="Manage keepers, mock draft rookies, and plan your auction budget for Footballpalooza 2026.">
+<meta property="og:image" content="https://www47.myfantasyleague.com/fflnetdynamic2026/14482_league_logo.png">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www47.myfantasyleague.com/fflnetdynamic2026/14482_league_logo.png">
 <title>Footballpalooza 2026 — Keeper Builder</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -67,9 +75,10 @@
     flex: 1; background: var(--surface2); border: 1px solid var(--border);
     color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px;
     padding: 5px 8px; border-radius: 6px; cursor: pointer; outline: none;
-    min-width: 0;
+    min-width: 0; -webkit-appearance: auto;
   }
-  .lineup-select:focus { border-color: var(--accent); }
+  .lineup-select:focus { border-color: var(--accent); outline: none; box-shadow: none; }
+  .lineup-select:invalid, .lineup-select:-moz-ui-invalid { box-shadow: none !important; border-color: var(--border) !important; outline: none !important; }
   .lineup-select option { background: var(--surface2); }
 
   .bench-player { flex: 1; font-size: 12px; color: var(--text2); padding: 5px 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; transition: border-color 0.15s; }
@@ -99,6 +108,9 @@
   .player-row.selected { background: rgba(232,200,74,0.07); border-color: rgba(232,200,74,0.25); }
   .player-row.no-click { cursor: default; }
   .player-row.no-click:hover { background: transparent; }
+  .th-sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+  .th-sortable:hover { color: var(--text); }
+  .th-sortable.sort-active { color: var(--accent2); }
   .check-cell { font-size: 15px; color: var(--accent); }
   .player-name-cell { display: flex; align-items: center; gap: 8px; }
   .pos-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
@@ -269,11 +281,14 @@
 
     <!-- LINEUP -->
     <div class="lineup-section" id="lineupSection" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:6px;flex-wrap:wrap;">
         <div class="lineup-title" style="margin-bottom:0;">Keeping</div>
-        <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
-          <button id="displayRank" class="lineup-display-btn active" onclick="setLineupDisplay('rank')">Rankings</button>
-          <button id="displaySalary" class="lineup-display-btn" onclick="setLineupDisplay('salary')">Salary</button>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="lineup-display-btn" style="padding:4px 8px;font-size:10px;background:rgba(74,158,255,0.12);border-color:var(--accent2);color:var(--accent2);" onclick="setOptimalLineup()">★ Optimal</button>
+          <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+            <button id="displayRank" class="lineup-display-btn active" onclick="setLineupDisplay('rank')">Rankings</button>
+            <button id="displaySalary" class="lineup-display-btn" onclick="setLineupDisplay('salary')">Salary</button>
+          </div>
         </div>
       </div>
       <div id="lineupRows"></div>
@@ -293,19 +308,14 @@
         <button class="pos-btn" onclick="setFilter('TE')">TE</button>
         <button class="pos-btn" onclick="setFilter('DEF')">DEF</button>
       </div>
-      <div class="sort-row">
-        <span class="sort-label">Sort:</span>
-        <button class="sort-btn" onclick="setSort('pos')">Position</button>
-        <button class="sort-btn" onclick="setSort('ecr')">OVR</button>
-        <button class="sort-btn" onclick="setSort('pts')">2025 Pts</button>
-        <button class="sort-btn active" onclick="setSort('salary')">Salary</button>
-        <button class="sort-btn" onclick="setSort('name')">Name</button>
-        <button class="sort-btn" onclick="setSort('contract')">Contract</button>
-      </div>
     </div>
     <div class="table-header-row">
       <div></div><div>Player</div>
-      <div class="th-num">POS</div><div class="th-num">OVR</div><div class="th-num">2025 Pts</div><div class="th-num">Salary</div><div class="th-num">Contract</div>
+      <div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')" title="Sort by position">POS</div>
+      <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')" title="Sort by overall rank">OVR</div>
+      <div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')" title="Sort by 2025 points">2025 Pts</div>
+      <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')" title="Sort by salary">Salary</div>
+      <div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')" title="Sort by contract">Contract</div>
     </div>
     <div id="playerTable"><div class="empty-state">Select a team from the dropdown above.</div></div>
   </div>
@@ -360,16 +370,13 @@
         <button class="pos-btn" onclick="setAvailFilter('DEF')">DEF</button>
       </div>
     </div>
-    <div class="controls" style="margin-bottom:10px;">
-      <div class="sort-row">
-        <span class="sort-label">Sort:</span>
-        <button class="sort-btn active" id="asort-ecr" onclick="setAvailSort('ecr')">OVR</button>
-        <button class="sort-btn" id="asort-pos" onclick="setAvailSort('pos')">Position</button>
-        <button class="sort-btn" id="asort-pts" onclick="setAvailSort('pts')">2025 Pts</button>
-        <button class="sort-btn" id="asort-name" onclick="setAvailSort('name')">Name</button>
-      </div>
+    <div class="controls" style="margin-bottom:10px;"></div>
+    <div class="avail-table-header">
+      <div>Player</div>
+      <div class="th-num th-sortable" id="asort-pos" onclick="setAvailSort('pos')" title="Sort by position rank">POS ▲</div>
+      <div class="th-num th-sortable" id="asort-ecr" onclick="setAvailSort('ecr')" title="Sort by overall rank">OVR</div>
+      <div class="th-num th-sortable" id="asort-pts" onclick="setAvailSort('pts')" title="Sort by 2025 points">2025 Pts</div>
     </div>
-    <div class="avail-table-header"><div>Player</div><div class="th-num">POS</div><div class="th-num">OVR</div><div class="th-num">2025 Pts</div></div>
     <div id="availTable"></div>
   </div>
 
@@ -538,15 +545,27 @@ function updateCap() {
   const rookieSpent = getRookieSalaryForTeam(currentTeam);
   const spent = keeperSpent + rookieSpent;
   const remain = t.cap - spent;
+
+  // Count bench rookies — drafted rookies not on taxi and not in starters
+  const taxiIds = new Set((taxiAssignments[currentTeam] || []).filter(Boolean));
+  const starterIds = new Set(Object.values(lineupAssignments[currentTeam] || {}).filter(Boolean));
+  const draftedEntries = getDraftedPlayersByTeam(currentTeam);
+  const benchRookieCount = draftedEntries.filter(e =>
+    !taxiIds.has(e.player.id) && !starterIds.has(e.player.id)
+  ).length;
+
+  // Keepers kept + bench rookies = filled spots; taxi rookies don't count
+  const filledSpots = sel.size + benchRookieCount;
+  const openSpots = Math.max(0, ROSTER_SIZE - filledSpots);
+
   document.getElementById('capSpent').textContent = '$' + spent;
   const rv = document.getElementById('capRemain');
   rv.textContent = '$' + remain;
   rv.className = 'cap-val ' + (remain < 0 ? 'over' : remain < 20 ? 'warn' : 'ok');
-  document.getElementById('keepCount').textContent = sel.size;
-  document.getElementById('openCount').textContent = Math.max(0, ROSTER_SIZE - sel.size);
+  document.getElementById('keepCount').textContent = filledSpots;
+  document.getElementById('openCount').textContent = openSpots;
   document.getElementById('overWarning').className = 'over-warning' + (remain < 0 ? ' show' : '');
-  const open = Math.max(0, ROSTER_SIZE - sel.size);
-  const maxBid = Math.max(1, remain - open);
+  const maxBid = Math.max(1, remain - openSpots);
   const mb = document.getElementById('maxBid');
   mb.textContent = '$' + maxBid;
   mb.className = 'cap-val ' + (maxBid <= 1 ? 'over' : maxBid < 10 ? 'warn' : 'ok');
@@ -658,6 +677,26 @@ function setLineupDisplay(mode) {
   renderLineup();
 }
 
+// Taxi squad constants — must be declared before renderLineup
+const TAXI_SLOTS = 4;
+const taxiAssignments = {};
+for (const tid of Object.keys(LEAGUE_DATA.teams)) {
+  taxiAssignments[tid] = ['', '', '', ''];
+}
+
+function getTaxiAssignments(tid) {
+  const drafted = getDraftedPlayersByTeam(tid);
+  const saved = taxiAssignments[tid];
+  const starterIds = new Set(Object.values(lineupAssignments[tid] || {}).filter(Boolean));
+  const draftedIds = new Set(drafted.map(e => e.player.id));
+  for (let i = 0; i < TAXI_SLOTS; i++) {
+    if (saved[i] && (!draftedIds.has(saved[i]) || starterIds.has(saved[i]))) {
+      saved[i] = '';
+    }
+  }
+  return saved;
+}
+
 function renderLineup() {
   if (!currentTeam) return;
   const t = LEAGUE_DATA.teams[currentTeam];
@@ -679,12 +718,18 @@ function renderLineup() {
   const bench = kept.filter(p => !startedIds.has(p.id));
   bench.sort((a, b) => b.pts - a.pts);
 
+  // Compute taxi state before rendering starters (needed for TX marker)
+  const taxiSlotIds = getTaxiAssignments(currentTeam);
+  const taxiSet = new Set(taxiSlotIds.filter(Boolean));
+  const currentTaxiIds = taxiSet;
+
+  // Bench rookies — drafted rookies NOT on taxi and NOT in starter slots
+  const benchRookies = draftedByTeam.filter(e => !taxiSet.has(e.player.id) && !startedIds.has(e.player.id));
+
   let html = '';
 
   // Starter slots
   html += `<div class="lineup-divider">Starters</div>`;
-  // Get current taxi IDs so we can mark only those players with 🚕
-  const currentTaxiIds = new Set(getTaxiAssignments(currentTeam).filter(Boolean));
   for (const slot of STARTER_SLOTS) {
     const eligible = allEligible.filter(p => slot.pos.includes(p.pos));
     eligible.sort((a, b) => b.pts - a.pts);
@@ -693,12 +738,13 @@ function renderLineup() {
     // Build options — include blank + all eligible
     const opts = [`<option value="">— None —</option>`];
     for (const p of eligible) {
-      const inOtherSlot = startedIds.has(p.id) && assignments[slot.key] !== p.id;
+      const isSelected = currentVal === p.id;
+      const inOtherSlot = !isSelected && startedIds.has(p.id);
       const rookieMark = currentTaxiIds.has(p.id) ? ' · TX' : '';
       const label = lineupDisplay === 'salary'
         ? `${p.name} · ${p.team}${rookieMark} ($${p.salary} · ${p.contract})`
         : `${p.name} · ${p.team}${rookieMark} (${p.posRank || p.rookiePosRank || '—'} · OVR ${p.ecr < 999 ? p.ecr : '—'})`;
-      opts.push(`<option value="${p.id}" ${currentVal === p.id ? 'selected' : ''} ${inOtherSlot ? 'disabled' : ''}>${label}</option>`);
+      opts.push(`<option value="${p.id}" ${isSelected ? 'selected' : ''} ${inOtherSlot ? 'disabled' : ''}>${label}</option>`);
     }
 
     html += `<div class="lineup-row">
@@ -707,12 +753,7 @@ function renderLineup() {
     </div>`;
   }
 
-  // Compute taxi assignments first — needed by bench section below
-  const taxiSlotIds = getTaxiAssignments(currentTeam);
-  const taxiSet = new Set(taxiSlotIds.filter(Boolean));
-
-  // Bench — kept players + drafted rookies NOT on taxi and NOT in starter slots
-  const benchRookies = draftedByTeam.filter(e => !taxiSet.has(e.player.id) && !startedIds.has(e.player.id));
+  // Bench
   const benchRookiePlayers = benchRookies.map(e => ({
     ...e.player, salary: e.salary, _pickIdx: e.pickIdx, _isRookie: true
   }));
@@ -775,30 +816,37 @@ function renderLineup() {
   document.getElementById('lineupRows').innerHTML = html;
 }
 
-// Taxi squad constants
-const TAXI_SLOTS = 4;
-// taxiAssignments[tid] = array of 4 player IDs (or '' for empty)
-const taxiAssignments = {};
-for (const tid of Object.keys(LEAGUE_DATA.teams)) {
-  taxiAssignments[tid] = ['', '', '', ''];
-}
+function setOptimalLineup() {
+  if (!currentTeam) return;
+  const t = LEAGUE_DATA.teams[currentTeam];
+  const sel = allSelections[currentTeam];
+  const draftedEntries = getDraftedPlayersByTeam(currentTeam);
+  const draftedPlayers = draftedEntries.map(e => ({ ...e.player }));
+  const keptPlayers = t.players.filter(p => sel.has(p.id));
+  const allPlayers = [...keptPlayers, ...draftedPlayers]
+    .sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
 
-function getTaxiAssignments(tid) {
-  const drafted = getDraftedPlayersByTeam(tid);
-  const saved = taxiAssignments[tid];
+  const assignments = lineupAssignments[currentTeam];
+  const overrides = manualOverrides[currentTeam];
+  const usedIds = new Set();
 
-  // Players currently in starter slots should not be on taxi
-  const starterIds = new Set(Object.values(lineupAssignments[tid] || {}).filter(Boolean));
-  const draftedIds = new Set(drafted.map(e => e.player.id));
+  // Clear all current assignments and overrides
+  for (const slot of STARTER_SLOTS) {
+    assignments[slot.key] = '';
+    overrides.delete(slot.key);
+  }
 
-  // Only remove invalid entries — never auto-fill here
-  // (auto-fill happens in draftPlayer so it only runs once per pick)
-  for (let i = 0; i < TAXI_SLOTS; i++) {
-    if (saved[i] && (!draftedIds.has(saved[i]) || starterIds.has(saved[i]))) {
-      saved[i] = '';
+  // Fill each slot greedily by ECR
+  for (const slot of STARTER_SLOTS) {
+    const best = allPlayers.find(p => slot.pos.includes(p.pos) && !usedIds.has(p.id));
+    if (best) {
+      assignments[slot.key] = best.id;
+      overrides.add(slot.key);
+      usedIds.add(best.id);
     }
   }
-  return saved;
+
+  renderLineup();
 }
 
 function onTaxiChange(slotIdx, playerId) {
@@ -825,9 +873,15 @@ function setFilter(f) {
 
 function setSort(s) {
   if (currentSort === s) sortDir *= -1; else { currentSort = s; sortDir = -1; }
-  const labels = { pos: 'Position', ecr: 'OVR', pts: '2025 Pts', salary: 'Salary', name: 'Name', contract: 'Contract' };
-  document.querySelectorAll('.sort-btn').forEach(b =>
-    b.classList.toggle('active', b.textContent.trim() === labels[s]));
+  const dir = sortDir === 1 ? ' ▲' : ' ▼';
+  const keys = ['pos','ecr','pts','salary','contract'];
+  keys.forEach(k => {
+    const el = document.getElementById('rsort-' + k);
+    if (!el) return;
+    const labels = { pos: 'POS', ecr: 'OVR', pts: '2025 Pts', salary: 'Salary', contract: 'Contract' };
+    el.textContent = labels[k] + (k === s ? dir : '');
+    el.classList.toggle('sort-active', k === s);
+  });
   renderTable();
 }
 
@@ -866,8 +920,15 @@ function renderTable() {
   let players = [...t.players, ...draftedPlayers];
   if (currentFilter !== 'ALL') players = players.filter(p => p.pos === currentFilter);
   players.sort((a, b) => {
-    if (currentSort === 'pos') return ((POS_ORDER[a.pos] ?? 9) - (POS_ORDER[b.pos] ?? 9)) || (b.pts - a.pts);
-    if (currentSort === 'ecr') return (a.ecr - b.ecr) * sortDir;
+    if (currentSort === 'pos') {
+      const posCmp = (POS_ORDER[a.pos] ?? 9) - (POS_ORDER[b.pos] ?? 9);
+      if (posCmp !== 0) return posCmp;
+      // Within same position, sort by posRank number (e.g. RB15 < RB31)
+      const aNum = parseInt((a.posRank || '').replace(/\D/g,'')) || 999;
+      const bNum = parseInt((b.posRank || '').replace(/\D/g,'')) || 999;
+      return aNum - bNum;
+    }
+    if (currentSort === 'ecr') return ((a.ecr || 999) - (b.ecr || 999)) * sortDir;
     if (currentSort === 'name') return a.name.localeCompare(b.name) * sortDir;
     if (currentSort === 'salary') return (a.salary - b.salary) * sortDir;
     if (currentSort === 'pts') return (a.pts - b.pts) * sortDir;
@@ -957,8 +1018,15 @@ function renderLeagueView() {
 
 function setAvailSort(s) {
   if (availSort === s) availSortDir *= -1; else { availSort = s; availSortDir = s === 'ecr' ? 1 : -1; }
-  document.querySelectorAll('[id^="asort-"]').forEach(b =>
-    b.classList.toggle('active', b.id === 'asort-' + s));
+  const dir = availSortDir === 1 ? ' ▲' : ' ▼';
+  const keys = ['pos','ecr','pts'];
+  keys.forEach(k => {
+    const el = document.getElementById('asort-' + k);
+    if (!el) return;
+    const labels = { pos: 'POS', ecr: 'OVR', pts: '2025 Pts' };
+    el.textContent = labels[k] + (k === s ? dir : '');
+    el.classList.toggle('sort-active', k === s);
+  });
   renderAvailView();
 }
 
@@ -986,11 +1054,22 @@ function renderAvailView() {
     }
   }
   if (showCUT) {
+    // Cut keepers from team rosters
     for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
       const sel = allSelections[tid];
       for (const p of t.players) {
         if (!sel.has(p.id)) availMap.set(p.id, { id: p.id, name: p.name, pos: p.pos, team: p.team, pts: p.pts, ecr: p.ecr, posRank: p.posRank, rookie: false, source: 'cut', fromTeam: t.name });
       }
+    }
+    // Cut drafted rookies (cut on roster page, pick still held — not in FA pool)
+    for (const pickIdx of releasedDraftRookies) {
+      const pid = draftPicks[pickIdx];
+      if (!pid) continue; // truly pool-released, already handled above
+      const player = LEAGUE_DATA.freeAgents.find(x => x.id === pid);
+      if (!player || availMap.has(pid)) continue;
+      const tid = DRAFT_ORDER[pickIdx].franchise;
+      const teamName = LEAGUE_DATA.teams[tid]?.name || '';
+      availMap.set(pid, { ...player, source: 'cut', fromTeam: teamName, rookie: true, cutRookie: true });
     }
   }
 
@@ -998,10 +1077,15 @@ function renderAvailView() {
   if (availFilter !== 'ALL') players = players.filter(p => p.pos === availFilter);
   if (rankedOnly) players = players.filter(p => (p.ecr && p.ecr < 999) || p.rookieRank);
   players.sort((a, b) => {
-    if (availSort === 'ecr') {
-      const aVal = a.rookie && a.rookieRank ? a.rookieRank : (a.ecr || 999);
-      const bVal = b.rookie && b.rookieRank ? b.rookieRank : (b.ecr || 999);
-      return (aVal - bVal) * availSortDir;
+    if (availSort === 'ecr') return ((a.ecr || 999) - (b.ecr || 999)) * availSortDir;
+    if (availSort === 'pos') {
+      const posOrd = { QB: 0, RB: 1, WR: 2, TE: 3, DEF: 4 };
+      const posCmp = (posOrd[a.pos] ?? 9) - (posOrd[b.pos] ?? 9);
+      if (posCmp !== 0) return posCmp;
+      // Within same position, sort by posRank number
+      const aNum = parseInt((a.posRank || '').replace(/\D/g, '')) || 999;
+      const bNum = parseInt((b.posRank || '').replace(/\D/g, '')) || 999;
+      return (aNum - bNum) * availSortDir;
     }
     if (availSort === 'pts') return (b.pts - a.pts) * availSortDir;
     if (availSort === 'name') return a.name.localeCompare(b.name) * availSortDir;
@@ -1014,18 +1098,17 @@ function renderAvailView() {
   if (!players.length) { el.innerHTML = '<div class="empty-state">No players match current filters.</div>'; return; }
 
   el.innerHTML = players.map(p => {
-    const badge = p.releasedRookie
+    const badge = p.releasedRookie || p.cutRookie
       ? `<span class="source-badge source-cut">CUT</span><span class="source-badge source-rookie">R</span>`
       : p.source === 'cut'
-        ? `<span class="source-badge source-cut">CUT</span>`
+        ? `<span class="source-badge source-cut">CUT</span>${p.rookie ? '<span class="source-badge source-rookie">R</span>' : ''}`
         : p.rookie
           ? `<span class="source-badge source-rookie">R</span>`
           : `<span class="source-badge source-fa">FA</span>`;
     const sub = (p.source === 'cut' || p.releasedRookie) ? ` · was ${p.fromTeam}` : '';
     const ecrDisplay = p.ecr && p.ecr < 999 ? p.ecr : '—';
-    const posRankDisplay = p.rookie && p.rookiePosRank
-      ? p.rookiePosRank
-      : (p.posRank && p.posRank.length > 2 ? p.posRank : '—');
+    // Always use overall positional rank (posRank), never rookie-specific rank
+    const posRankDisplay = p.posRank && p.posRank.length > 2 ? p.posRank : '—';
     return `<div class="avail-row">
       <div class="player-name-cell">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
