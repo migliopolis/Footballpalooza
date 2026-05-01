@@ -102,12 +102,20 @@
   .sort-btn.active { border-color: var(--accent2); color: var(--accent2); }
 
   .table-header-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+  .table-header-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
   .th-num { text-align: right; }
   .player-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 9px 12px; border-radius: 8px; cursor: pointer; transition: background 0.1s; align-items: center; border: 1px solid transparent; margin-bottom: 2px; }
+  .player-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
   .player-row:hover { background: var(--surface2); }
   .player-row.selected { background: rgba(232,200,74,0.07); border-color: rgba(232,200,74,0.25); }
   .player-row.no-click { cursor: default; }
   .player-row.no-click:hover { background: transparent; }
+  .proj-year-cell { font-size: 11px; font-weight: 600; text-align: right; padding-right: 4px; }
+  .proj-ok { color: var(--green); }
+  .proj-warn { color: var(--accent); }
+  .proj-over { color: #ff5c5c; }
+  .proj-empty { color: var(--text3); font-size: 10px; }
+  #projToggle.active { background: rgba(74,158,255,0.15); border-color: var(--accent2); color: var(--accent2); }
   .th-sortable { cursor: pointer; user-select: none; white-space: nowrap; }
   .th-sortable:hover { color: var(--text); }
   .th-sortable.sort-active { color: var(--accent2); }
@@ -300,16 +308,19 @@
   <!-- ROSTER VIEW -->
   <div class="table-area" id="rosterView">
     <div class="controls">
-      <div class="pos-filters" id="rosterPosFilters">
-        <button class="pos-btn active" onclick="setFilter('ALL')">All</button>
-        <button class="pos-btn" onclick="setFilter('QB')">QB</button>
-        <button class="pos-btn" onclick="setFilter('RB')">RB</button>
-        <button class="pos-btn" onclick="setFilter('WR')">WR</button>
-        <button class="pos-btn" onclick="setFilter('TE')">TE</button>
-        <button class="pos-btn" onclick="setFilter('DEF')">DEF</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+        <div class="pos-filters" id="rosterPosFilters">
+          <button class="pos-btn active" onclick="setFilter('ALL')">All</button>
+          <button class="pos-btn" onclick="setFilter('QB')">QB</button>
+          <button class="pos-btn" onclick="setFilter('RB')">RB</button>
+          <button class="pos-btn" onclick="setFilter('WR')">WR</button>
+          <button class="pos-btn" onclick="setFilter('TE')">TE</button>
+          <button class="pos-btn" onclick="setFilter('DEF')">DEF</button>
+        </div>
+        <button id="projToggle" onclick="toggleProjection()" style="padding:5px 12px;font-size:11px;font-weight:600;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;">$ Projection</button>
       </div>
     </div>
-    <div class="table-header-row">
+    <div class="table-header-row" id="rosterTableHeader">
       <div></div><div>Player</div>
       <div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')" title="Sort by position">POS</div>
       <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')" title="Sort by overall rank">OVR</div>
@@ -628,6 +639,7 @@ function toggle(id) {
   updateCap(); renderTable(); renderLineup();
   if (currentView === 'league') renderLeagueView();
   if (currentView === 'available') renderAvailView();
+  try { saveRosterState(); } catch(e) {}
 }
 
 function onLineupChange(slotKey, newId) {
@@ -668,6 +680,7 @@ function resetSelections() {
   updateCap(); renderTable(); renderLineup();
   if (currentView === 'league') renderLeagueView();
   if (currentView === 'available') renderAvailView();
+  try { saveRosterState(); } catch(e) {}
 }
 
 function setLineupDisplay(mode) {
@@ -892,6 +905,96 @@ function setAvailFilter(f) {
   renderAvailView();
 }
 
+// ─── MARKET VALUE & SALARY PROJECTION ────────────────────────────────────────
+// Built from 3 years of league auction data (2023-2025) blended with 2011-2018
+// historical data, smoothed and monotonically decreasing by rank.
+const MV_TABLE = {
+  RB: {1:53,2:50,3:46,4:42,5:37,6:33,7:29,8:26,9:23,10:20,11:18,12:16,13:15,14:14,15:13,16:12,17:11,18:10,19:9,20:8,21:7,22:7,23:6,24:6,25:5,26:5,27:4,28:4,29:3,30:3,31:3,32:2,33:2,34:2,35:2,36:1,37:1,38:1,39:1,40:1},
+  WR: {1:56,2:45,3:38,4:33,5:29,6:26,7:24,8:22,9:20,10:19,11:17,12:16,13:15,14:14,15:13,16:12,17:12,18:11,19:10,20:10,21:9,22:9,23:8,24:8,25:7,26:7,27:6,28:6,29:5,30:5,31:4,32:4,33:3,34:3,35:2,36:2,37:2,38:1,39:1,40:1},
+  TE: {1:25,2:18,3:14,4:11,5:9,6:8,7:7,8:6,9:5,10:4,11:4,12:3,13:3,14:2,15:2,16:2,17:1,18:1,19:1,20:1},
+  QB: {1:30,2:26,3:21,4:16,5:12,6:9,7:7,8:6,9:5,10:4,11:4,12:3,13:3,14:3,15:2,16:2,17:1,18:1,19:1,20:1},
+  DEF:{1:4,2:3,3:2,4:1,5:1}
+};
+
+function getMarketValue(pos, rankNum) {
+  const table = MV_TABLE[pos] || MV_TABLE.DEF;
+  const maxRank = Math.max(...Object.keys(table).map(Number));
+  return table[Math.min(rankNum, maxRank)] || 1;
+}
+
+function getContractCosts(salary, yr, maxYr, isTaxi, isRookie) {
+  // Cumulative increase above Year 1 base per contract year:
+  // Veteran (3yr):       +$0, +$3, +$9
+  // Rookie active (5yr): +$0, +$3, +$9, +$18, +$30
+  // Rookie taxi (6yr):   +$0, +$0, +$3, +$9,  +$18, +$30
+  const cum = isTaxi   ? [0, 0, 3, 9, 18, 30]
+            : isRookie ? [0, 3, 9, 18, 30]
+            :            [0, 3, 9];
+  const base = salary - (cum[yr-1] ?? cum[cum.length-1]);
+  return Array.from({length: maxYr - yr + 1}, (_,i) => base + (cum[yr-1+i] ?? cum[cum.length-1]));
+}
+
+function keeperSurplus(salary, contract, pos, posRankNum) {
+  try {
+    const [yr, maxYr] = contract.split('/').map(Number);
+    const mv = getMarketValue(pos, posRankNum);
+    const isTaxi = maxYr === 6;
+    const isRookie = maxYr >= 5 && !isTaxi;
+    const costs = getContractCosts(salary, yr, maxYr, isTaxi, isRookie);
+    const avg = costs.reduce((s,c) => s + mv - c, 0) / costs.length;
+    return Math.round((yr === maxYr ? avg * 0.8 : avg) * 10) / 10;
+  } catch(e) { return null; }
+}
+
+function getYearSalaries(salary, contract, pos) {
+  // Returns {2027: $X, 2028: $Y, ...} for each future year of the contract
+  try {
+    const [yr, maxYr] = contract.split('/').map(Number);
+    const isTaxi = maxYr === 6;
+    const isRookie = maxYr >= 5 && !isTaxi;
+    const costs = getContractCosts(salary, yr, maxYr, isTaxi, isRookie);
+    // Current year is 2026 (yr), future years start at 2027 (yr+1)
+    const result = {};
+    costs.slice(1).forEach((cost, i) => { result[2027 + i] = cost; });
+    return result;
+  } catch(e) { return {}; }
+}
+
+let showProjection = false;
+const PROJ_YEARS = [2027, 2028, 2029, 2030, 2031];
+
+function toggleProjection() {
+  showProjection = !showProjection;
+  const btn = document.getElementById('projToggle');
+  btn.classList.toggle('active', showProjection);
+  // Update header
+  const header = document.getElementById('rosterTableHeader');
+  header.classList.toggle('proj-mode', showProjection);
+  const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
+  if (showProjection) {
+    header.innerHTML = `<div></div><div>Player</div>
+      <div class="th-num th-sortable sort-active" id="rsort-pos" onclick="setSort('pos')">POS</div>
+      <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
+      <div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
+      <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
+      <div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>
+      ${yearCols}`;
+  } else {
+    header.innerHTML = `<div></div><div>Player</div>
+      <div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')">POS</div>
+      <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
+      <div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
+      <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
+      <div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>`;
+  }
+  renderTable();
+}
+
+function posRankNum(s) {
+  const n = parseInt((s||'').replace(/\D/g,''));
+  return isNaN(n) ? 99 : n;
+}
+
 function renderTable() {
   const el = document.getElementById('playerTable');
   if (!currentTeam) { el.innerHTML = '<div class="empty-state">Select a team above.</div>'; return; }
@@ -953,7 +1056,36 @@ function renderTable() {
     const rBadge = isDrafted ? `<span class="source-badge source-rookie">R</span>` : '';
     const txBadge = onTaxi ? `<span style="font-size:9px;font-weight:700;padding:2px 5px;background:rgba(255,140,58,0.15);color:var(--orange);border-radius:3px;margin-left:3px;">TX</span>` : '';
 
-    return `<div class="player-row${isSelected ? ' selected' : ' deselected'}" onclick="${clickAction}" ${tooltip ? `title="${tooltip}"` : ''}>
+    const rank = posRankNum(p.posRank);
+    const mv = (!isDrafted && p.pos !== 'DEF') ? getMarketValue(p.pos, rank) : null;
+    const surplus = (mv && p.contract) ? keeperSurplus(p.salary, p.contract, p.pos, rank) : null;
+    const salTip = mv ? `Mkt $${mv}${surplus !== null ? ` · ${surplus >= 0 ? '+' : ''}$${surplus}/yr avg` : ''}` : '';
+
+    // Year-by-year projection columns
+    let projCols = '';
+    if (showProjection) {
+      let projContract = p.contract;
+      let projSalary = p.salary;
+      if (isDrafted) {
+        // Derive contract from pick: taxi=1/6, active=1/5; current year is Y1
+        const isTaxiPick = currentTaxiRookieIds.has(p.id);
+        projContract = isTaxiPick ? '1/6' : '1/5';
+        projSalary = p.salary; // already this year's salary
+      }
+      const yearSals = projContract ? getYearSalaries(projSalary, projContract, p.pos) : {};
+      const projMv = isDrafted ? null : mv;
+      projCols = PROJ_YEARS.map(yr => {
+        const sal = yearSals[yr];
+        if (sal === undefined) return `<div class="proj-year-cell proj-empty">—</div>`;
+        const cls = projMv && sal <= projMv * 0.85 ? 'proj-ok'
+                  : projMv && sal <= projMv * 1.1  ? 'proj-warn'
+                  : projMv                          ? 'proj-over'
+                  : 'proj-warn';
+        return `<div class="proj-year-cell ${cls}">$${sal}</div>`;
+      }).join('');
+    }
+
+    return `<div class="player-row${isSelected ? ' selected' : ' deselected'}${showProjection ? ' proj-mode' : ''}" onclick="${clickAction}" ${tooltip ? `title="${tooltip}"` : ''}>
       <div class="check-cell">${isSelected ? '✓' : '✕'}</div>
       <div class="player-name-cell">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
@@ -964,6 +1096,7 @@ function renderTable() {
       <div class="td-num">${p.pts > 0 ? p.pts.toFixed(1) : '—'}</div>
       <div class="td-salary">$${p.salary}</div>
       <div class="td-contract">${isDrafted ? `<span style="color:var(--orange);">${isReleased ? '—' : currentTaxiRookieIds.has(p.id) ? '1/6' : '1/5'}</span>` : contractStr(p.contract)}</div>
+      ${projCols}
     </div>`;
   }).join('');
 }
@@ -1038,11 +1171,17 @@ function renderAvailView() {
   const keptIds = new Set();
   for (const sel of Object.values(allSelections)) for (const id of sel) keptIds.add(id);
 
+  // Build set of all drafted rookie IDs currently on a team (not released to pool)
+  const draftedRookieIds = new Set();
+  DRAFT_ORDER.forEach((slot, i) => {
+    if (draftPicks[i] && !releasedDraftRookies.has(i)) draftedRookieIds.add(draftPicks[i]);
+  });
+
   const availMap = new Map();
   for (const p of LEAGUE_DATA.freeAgents) {
     if (keptIds.has(p.id)) continue;
+    if (draftedRookieIds.has(p.id)) continue; // on a team's roster, not available
     // Check if this rookie was drafted then released back to pool via undoPick
-    // (pick slot is empty = truly released; pick slot filled = just cut on roster, stays on team)
     const releasedPickIdx = p.rookie ? [...releasedDraftRookies].find(i => draftPicks[i] === p.id) : undefined;
     const isReleasedToPool = releasedPickIdx !== undefined && !draftPicks[releasedPickIdx];
     if (isReleasedToPool) {
@@ -1210,6 +1349,27 @@ async function saveDraftState() {
   try { await window.storage.set('draft-picks', JSON.stringify({ version: DRAFT_STORAGE_VERSION, picks: draftPicks })); } catch(e) {}
   try { await window.storage.set('draft-released', JSON.stringify([...releasedDraftRookies])); } catch(e) {}
   try { await window.storage.set('draft-taxi', JSON.stringify(taxiAssignments)); } catch(e) {}
+}
+
+// Save/load keeper selections across all teams
+async function saveRosterState() {
+  const toSave = {};
+  for (const [tid, sel] of Object.entries(allSelections)) {
+    toSave[tid] = [...sel];
+  }
+  try { await window.storage.set('roster-selections', JSON.stringify(toSave)); } catch(e) {}
+}
+
+async function loadRosterState() {
+  try {
+    const result = await window.storage.get('roster-selections');
+    if (result && result.value) {
+      const saved = JSON.parse(result.value);
+      for (const [tid, ids] of Object.entries(saved)) {
+        if (allSelections[tid]) allSelections[tid] = new Set(ids);
+      }
+    }
+  } catch(e) {}
 }
 
 // Set of pick indices where the owner released the drafted rookie back to FA pool
@@ -1469,10 +1629,10 @@ async function runMockDraft() {
   try { await saveDraftState(); } catch(e) {}
 }
 
-// Initialize draft state on load
-loadDraftState().then(() => {
+// Initialize on load
+Promise.all([loadDraftState(), loadRosterState()]).then(() => {
+  if (currentTeam) { autoAssignLineup(currentTeam); updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'draft') renderDraftView();
-  if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
 });
 </script>
