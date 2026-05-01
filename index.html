@@ -37,7 +37,9 @@
   .main { display: flex; min-height: calc(100vh - 61px); }
 
   /* SIDEBAR */
-  .sidebar { width: 300px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
+  .sidebar { width: 300px; min-width: 220px; max-width: 600px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; position: relative; }
+  .sidebar-resizer { position: absolute; top: 0; right: -3px; width: 6px; height: 100%; cursor: col-resize; z-index: 10; background: transparent; transition: background 0.15s; }
+  .sidebar-resizer:hover, .sidebar-resizer.dragging { background: var(--accent); opacity: 0.5; }
   .team-identity { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; min-height: 72px; }
   .team-logo { width: 50px; height: 50px; object-fit: contain; flex-shrink: 0; border-radius: 6px; }
   .team-logo-placeholder { width: 50px; height: 50px; background: var(--border); border-radius: 6px; flex-shrink: 0; }
@@ -92,6 +94,7 @@
 
   /* TABLE AREA */
   .table-area { flex: 1; overflow-y: auto; padding: 20px; }
+  .roster-ghost-logo { position: fixed; pointer-events: none; z-index: 0; opacity: 0.15; object-fit: contain; width: 420px; height: 420px; transform: translate(-50%, -50%); transition: opacity 0.3s; }
   .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
   .pos-filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .pos-btn { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; }
@@ -112,6 +115,8 @@
   .player-row.no-click:hover { background: transparent; }
   .proj-year-cell { font-size: 11px; font-weight: 600; text-align: right; padding-right: 4px; }
   .proj-ok { color: var(--green); }
+  .proj-final { color: var(--red); }
+  .proj-penult { color: var(--orange); }
   .proj-warn { color: var(--accent); }
   .proj-over { color: #ff5c5c; }
   .proj-empty { color: var(--text3); font-size: 10px; }
@@ -270,7 +275,8 @@
 </div>
 
 <div class="main">
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-resizer" id="sidebarResizer"></div>
     <div class="team-identity" id="teamIdentity">
       <div class="team-logo-placeholder"></div>
       <div><div class="team-identity-name" style="color:var(--text3);">No team selected</div><div class="team-identity-sub">Pick a team above</div></div>
@@ -307,6 +313,7 @@
 
   <!-- ROSTER VIEW -->
   <div class="table-area" id="rosterView">
+    <img id="rosterGhostLogo" class="roster-ghost-logo" src="" alt="" style="display:none;">
     <div class="controls">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
         <div class="pos-filters" id="rosterPosFilters">
@@ -526,6 +533,8 @@ function setView(v) {
   document.getElementById('leagueView').style.display = v === 'league' ? 'block' : 'none';
   document.getElementById('availView').style.display = v === 'available' ? 'block' : 'none';
   document.getElementById('draftView').style.display = v === 'draft' ? 'flex' : 'none';
+  const ghost = document.getElementById('rosterGhostLogo');
+  if (ghost) ghost.style.display = (v === 'roster' && currentTeam && LEAGUE_DATA.teams[currentTeam]?.logo) ? 'block' : 'none';
   if (v === 'league') { setLeagueSort(leagueSort); }
   if (v === 'available') renderAvailView();
   if (v === 'draft') renderDraftView();
@@ -542,6 +551,8 @@ function selectTeam(tid) {
   identity.innerHTML = t.logo
     ? `<img class="team-logo" src="${t.logo}" alt="${t.name}"><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`
     : `<div class="team-logo-placeholder"></div><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`;
+  const ghost = document.getElementById('rosterGhostLogo');
+  if (t.logo) { ghost.src = t.logo; ghost.style.display = 'block'; if (window._positionGhost) window._positionGhost(); } else { ghost.style.display = 'none'; }
   document.getElementById('lineupSection').style.display = 'block';
   autoAssignLineup(tid);
   updateCap(); renderTable(); renderLineup();
@@ -1074,12 +1085,14 @@ function renderTable() {
       }
       const yearSals = projContract ? getYearSalaries(projSalary, projContract, p.pos) : {};
       const projMv = isDrafted ? null : mv;
+      const contractYears = Object.keys(yearSals).map(Number);
+      const finalContractYr = contractYears.length ? Math.max(...contractYears) : null;
+      const penultimateContractYr = contractYears.length > 1 ? finalContractYr - 1 : null;
       projCols = PROJ_YEARS.map(yr => {
         const sal = yearSals[yr];
         if (sal === undefined) return `<div class="proj-year-cell proj-empty">—</div>`;
-        const cls = projMv && sal <= projMv * 0.85 ? 'proj-ok'
-                  : projMv && sal <= projMv * 1.1  ? 'proj-warn'
-                  : projMv                          ? 'proj-over'
+        const cls = yr === finalContractYr ? 'proj-final'
+                  : yr === penultimateContractYr ? 'proj-penult'
                   : 'proj-warn';
         return `<div class="proj-year-cell ${cls}">$${sal}</div>`;
       }).join('');
@@ -1635,6 +1648,47 @@ Promise.all([loadDraftState(), loadRosterState()]).then(() => {
   if (currentView === 'draft') renderDraftView();
   if (currentView === 'league') renderLeagueView();
 });
+
+// Sidebar resize
+(function() {
+  const sidebar = document.getElementById('sidebar');
+  const resizer = document.getElementById('sidebarResizer');
+  let startX, startW;
+
+  function positionGhost() {
+    const ghost = document.getElementById('rosterGhostLogo');
+    if (!ghost || ghost.style.display === 'none') return;
+    const sw = sidebar.offsetWidth;
+    ghost.style.left = (sw + (window.innerWidth - sw) / 2) + 'px';
+    ghost.style.top = '50%';
+  }
+
+  resizer.addEventListener('mousedown', e => {
+    startX = e.clientX;
+    startW = sidebar.offsetWidth;
+    resizer.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!resizer.classList.contains('dragging')) return;
+    const newW = Math.min(600, Math.max(220, startW + (e.clientX - startX)));
+    sidebar.style.width = newW + 'px';
+    positionGhost();
+  });
+  document.addEventListener('mouseup', () => {
+    if (!resizer.classList.contains('dragging')) return;
+    resizer.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+
+  // Initial position and on resize
+  window.addEventListener('resize', positionGhost);
+  // Expose for use when team is selected
+  window._positionGhost = positionGhost;
+})();
 </script>
 </body>
 </html>
