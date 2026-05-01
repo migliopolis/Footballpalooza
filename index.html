@@ -219,9 +219,10 @@
   .draft-col-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--accent); }
   #draftBoard { overflow-y: auto; flex: 1; padding: 8px 0; }
   #draftPool { overflow-y: auto; flex: 1; padding: 4px 0; }
-  .draft-pool-header { display: grid; grid-template-columns: 1fr 52px 52px 72px; padding: 8px 20px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); align-items: center; }
+  .draft-pool-header { display: grid; grid-template-columns: 1fr 52px 52px 72px; padding: 8px 20px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); align-items: center; min-width: 480px; }
 
-  .draft-pool-row { display: grid; grid-template-columns: 1fr 52px 52px 72px; padding: 8px 20px; border-radius: 0; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(42,45,53,0.5); transition: background 0.1s; }
+  .draft-pool-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .draft-pool-row { display: grid; grid-template-columns: 1fr 52px 52px 72px; padding: 8px 20px; border-radius: 0; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(42,45,53,0.5); transition: background 0.1s; min-width: 480px; }
   .draft-pool-row:hover { background: var(--surface2); }
   .draft-pool-row.drafted { opacity: 0.3; pointer-events: none; }
 
@@ -239,7 +240,7 @@
   .draft-pick-row { display: flex; align-items: center; gap: 10px; padding: 7px 16px; border-radius: 0; transition: background 0.1s; border-bottom: 1px solid rgba(42,45,53,0.5); }
   .draft-pick-row.on-clock { background: rgba(232,200,74,0.08); border-left: 3px solid var(--accent); }
   .draft-pick-row.drafted { opacity: 0.7; }
-  .draft-pick-num { font-size: 11px; font-weight: 700; color: var(--text3); width: 28px; flex-shrink: 0; }
+  .draft-pick-num { font-size: 11px; font-weight: 700; color: var(--text3); width: 38px; flex-shrink: 0; }
   .draft-pick-team { display: flex; align-items: center; gap: 6px; width: 130px; flex-shrink: 0; }
   .draft-pick-logo { width: 22px; height: 22px; object-fit: contain; border-radius: 3px; flex-shrink: 0; }
   .draft-pick-logo-ph { width: 22px; height: 22px; background: var(--border); border-radius: 3px; flex-shrink: 0; }
@@ -469,10 +470,12 @@
           <button class="pos-btn" onclick="setDraftFilter('TE')">TE</button>
         </div>
       </div>
-      <div class="draft-pool-header">
-        <div>Player</div><div class="th-num">Pos Rk</div><div class="th-num">Dyn Rk</div><div class="th-num">Overall</div>
+      <div class="draft-pool-scroll">
+        <div class="draft-pool-header">
+          <div>Player</div><div class="th-num">Pos Rk</div><div class="th-num">Dyn Rk</div><div class="th-num">Overall</div>
+        </div>
+        <div id="draftPool"></div>
       </div>
-      <div id="draftPool"></div>
     </div>
   </div>
 </div>
@@ -1650,7 +1653,7 @@ function renderDraftBoard() {
     const viaHtml = slot.via ? `<div class="draft-pick-via">via ${slot.via}</div>` : '';
 
     html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}">
-      <div class="draft-pick-num">${slot.overall}</div>
+      <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
       <div class="draft-pick-team">
         ${logoHtml}
         <div>
@@ -1709,7 +1712,7 @@ function renderDraftPool() {
     } else {
       dcBadge = `<span class="dc-udfa" style="font-size:10px;">UDFA</span>`;
     }
-    const overallDisplay = p.nflPick ? `<span style="color:var(--text3);font-size:11px;">#${p.nflPick}</span>` : '';
+    const overallDisplay = p.nflPick ? `<span style="color:var(--text3);font-size:11px;">${p.nflPick}</span>` : '';
     return `<div class="draft-pool-row ${isDrafted ? 'drafted' : ''}"
         ${clickable ? `onclick="draftPlayer('${p.id}')" title="Draft ${p.name}"` : ''}>
       <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
