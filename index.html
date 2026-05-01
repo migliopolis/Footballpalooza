@@ -104,7 +104,8 @@
 
   .table-header-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; }
   .table-header-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
-  .avail-table-header { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; }
+  .avail-table-header { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; min-width: 420px; }
+  .avail-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   /* Contract tooltip */
   .contract-tip { position: relative; display: inline-block; cursor: default; }
@@ -199,7 +200,7 @@
   .source-fa { background: rgba(62,207,110,0.15); color: var(--green); }
   .source-cut { background: rgba(144,152,168,0.12); color: var(--text2); }
   .source-rookie { background: rgba(232,200,74,0.18); color: var(--accent); }
-  .avail-row { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 9px 12px; border-radius: 8px; align-items: center; margin-bottom: 2px; }
+  .avail-row { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 9px 12px; border-radius: 8px; align-items: center; margin-bottom: 2px; min-width: 420px; }
   .avail-row:hover { background: var(--surface2); }
   .ranked-only-label { display: flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text2); background: transparent; transition: all 0.15s; user-select: none; }
   .ranked-only-label:has(input:checked) { border-color: var(--accent2); color: #000; background: var(--accent2); }
@@ -210,6 +211,65 @@
   .mobile-draft-toggle { display: none; border-bottom: 1px solid var(--border); background: var(--surface); }
   .mobile-draft-toggle button { flex: 1; padding: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; background: transparent; border: none; color: var(--text2); cursor: pointer; transition: all 0.15s; }
   .mobile-draft-toggle button.active { background: var(--accent); color: #000; }
+
+  /* ── TRADE SIMULATOR ──────────────────────────────────────────────── */
+  .trade-view { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 20px; gap: 20px; }
+  .trade-builder { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .trade-side { display: flex; flex-direction: column; min-height: 320px; }
+  .trade-side-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: var(--surface2); }
+  .trade-side-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; color: var(--accent); }
+  .trade-team-pick { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 5px 8px; border-radius: 7px; cursor: pointer; outline: none; }
+  .trade-divider { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); gap: 6px; padding: 10px 0; }
+  .trade-arrow { font-size: 18px; color: var(--text3); }
+  .trade-items { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 6px; min-height: 120px; }
+  .trade-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; }
+  .trade-item-label { flex: 1; color: var(--text); }
+  .trade-item-sub { font-size: 10px; color: var(--text3); }
+  .trade-remove { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 14px; padding: 0 2px; line-height: 1; transition: color 0.1s; flex-shrink: 0; }
+  .trade-remove:hover { color: var(--red); }
+  .trade-add-section { padding: 10px; border-top: 1px solid var(--border); }
+  .trade-add-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .trade-add-btn { padding: 5px 10px; font-size: 11px; font-weight: 600; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .trade-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .trade-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .trade-accept-btn { padding: 10px 28px; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; background: var(--green); color: #000; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.15s; }
+  .trade-accept-btn:hover { opacity: 0.85; }
+  .trade-accept-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .trade-clear-btn { padding: 10px 20px; font-size: 13px; font-weight: 600; background: transparent; color: var(--text2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .trade-clear-btn:hover { border-color: var(--red); color: var(--red); }
+  .trade-picker-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+  .trade-picker-overlay.open { display: flex; }
+  .trade-picker-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 480px; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden; }
+  .trade-picker-header { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .trade-picker-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; color: var(--accent); }
+  .trade-picker-close { background: none; border: none; color: var(--text3); font-size: 20px; cursor: pointer; padding: 0; line-height: 1; }
+  .trade-picker-close:hover { color: var(--text); }
+  .trade-picker-search { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .trade-picker-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 8px 12px; border-radius: 8px; outline: none; }
+  .trade-picker-input:focus { border-color: var(--accent); }
+  .trade-picker-list { overflow-y: auto; flex: 1; }
+  .trade-picker-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; border-bottom: 1px solid rgba(42,45,53,0.5); transition: background 0.1s; }
+  .trade-picker-item:hover { background: var(--surface2); }
+  .trade-picker-item.already-added { opacity: 0.35; pointer-events: none; }
+  .trade-picker-item-label { flex: 1; font-size: 13px; color: var(--text); }
+  .trade-picker-item-sub { font-size: 11px; color: var(--text3); }
+  .trade-picker-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .trade-picker-tab { flex: 1; padding: 8px; font-size: 11px; font-weight: 600; background: transparent; border: none; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .trade-picker-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .trade-log-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .trade-log-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface2); }
+  .trade-log-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; color: var(--text2); }
+  .trade-log-empty { padding: 24px; text-align: center; color: var(--text3); font-size: 13px; }
+  .trade-log-item { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 12px; }
+  .trade-log-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--text3); flex-shrink: 0; width: 24px; }
+  .trade-log-body { flex: 1; font-size: 12px; line-height: 1.6; color: var(--text2); }
+  .trade-log-teams { font-weight: 600; color: var(--text); font-size: 13px; margin-bottom: 3px; }
+  .trade-log-undo { padding: 5px 12px; font-size: 11px; font-weight: 600; border: 1px solid var(--orange); border-radius: 6px; background: transparent; color: var(--orange); cursor: pointer; flex-shrink: 0; transition: all 0.15s; }
+  .trade-log-undo:hover { background: rgba(255,140,58,0.15); }
+  @media (max-width: 768px) {
+    .trade-builder { grid-template-columns: 1fr; }
+    .trade-divider { flex-direction: row; border-left: none; border-right: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 8px 16px; }
+  }
 
   /* DRAFT VIEW */
   .draft-view { display: flex; flex: 1; min-height: 0; overflow: hidden; }
@@ -309,6 +369,7 @@
       <button class="view-btn" onclick="setView('league')">All Keepers</button>
       <button class="view-btn" onclick="setView('available')">Available</button>
       <button class="view-btn" onclick="setView('draft')">Rookie Draft</button>
+      <button class="view-btn" onclick="setView('trade')">⇄ Trades</button>
     </div>
   </div>
 </div>
@@ -431,13 +492,15 @@
       </div>
     </div>
     <div class="controls" style="margin-bottom:10px;"></div>
-    <div class="avail-table-header">
-      <div>Player</div>
-      <div class="th-num th-sortable" id="asort-pos" onclick="setAvailSort('pos')" title="Sort by position rank">POS ▲</div>
-      <div class="th-num th-sortable" id="asort-ecr" onclick="setAvailSort('ecr')" title="Sort by overall rank">OVR</div>
-      <div class="th-num th-sortable" id="asort-pts" onclick="setAvailSort('pts')" title="Sort by 2025 points">2025 Pts</div>
+    <div class="avail-scroll">
+      <div class="avail-table-header">
+        <div>Player</div>
+        <div class="th-num th-sortable" id="asort-pos" onclick="setAvailSort('pos')" title="Sort by position rank">POS ▲</div>
+        <div class="th-num th-sortable" id="asort-ecr" onclick="setAvailSort('ecr')" title="Sort by overall rank">OVR</div>
+        <div class="th-num th-sortable" id="asort-pts" onclick="setAvailSort('pts')" title="Sort by 2025 points">2025 Pts</div>
+      </div>
+      <div id="availTable"></div>
     </div>
-    <div id="availTable"></div>
   </div>
 
   <!-- DRAFT VIEW -->
@@ -476,6 +539,90 @@
         </div>
         <div id="draftPool"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- TRADE VIEW -->
+  <div class="trade-view" id="tradeView" style="display:none;">
+    <div class="trade-builder">
+      <!-- SIDE A -->
+      <div class="trade-side" id="tradeSideA">
+        <div class="trade-side-header">
+          <span class="trade-side-title">TEAM A GIVES</span>
+          <select class="trade-team-pick" id="tradeTeamA" onchange="renderTradeSide('A')">
+            <option value="">Select team…</option>
+          </select>
+        </div>
+        <div class="trade-items" id="tradeItemsA">
+          <div style="color:var(--text3);font-size:12px;padding:8px 0;">Select a team, then add items below.</div>
+        </div>
+        <div class="trade-add-section">
+          <div class="trade-add-row">
+            <button class="trade-add-btn" onclick="openPicker('A','player')">+ Player</button>
+            <button class="trade-add-btn" onclick="openPicker('A','pick')">+ Draft Pick</button>
+            <button class="trade-add-btn" onclick="openPicker('A','cap')">+ Cap $</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="trade-divider">
+        <span class="trade-arrow">⇄</span>
+      </div>
+
+      <!-- SIDE B -->
+      <div class="trade-side" id="tradeSideB">
+        <div class="trade-side-header">
+          <span class="trade-side-title">TEAM B GIVES</span>
+          <select class="trade-team-pick" id="tradeTeamB" onchange="renderTradeSide('B')">
+            <option value="">Select team…</option>
+          </select>
+        </div>
+        <div class="trade-items" id="tradeItemsB">
+          <div style="color:var(--text3);font-size:12px;padding:8px 0;">Select a team, then add items below.</div>
+        </div>
+        <div class="trade-add-section">
+          <div class="trade-add-row">
+            <button class="trade-add-btn" onclick="openPicker('B','player')">+ Player</button>
+            <button class="trade-add-btn" onclick="openPicker('B','pick')">+ Draft Pick</button>
+            <button class="trade-add-btn" onclick="openPicker('B','cap')">+ Cap $</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="trade-actions">
+      <button class="trade-accept-btn" id="tradeAcceptBtn" onclick="acceptTrade()" disabled>✓ Accept Trade</button>
+      <button class="trade-clear-btn" onclick="clearTrade()">✕ Clear</button>
+    </div>
+
+    <!-- Trade Log -->
+    <div class="trade-log-section">
+      <div class="trade-log-header">
+        <span class="trade-log-title">TRADE LOG</span>
+        <span id="tradeLogCount" style="font-size:11px;color:var(--text3);">0 trades</span>
+      </div>
+      <div id="tradeLog"><div class="trade-log-empty">No trades recorded yet.</div></div>
+    </div>
+  </div>
+
+  <!-- Trade Picker Modal -->
+  <div class="trade-picker-overlay" id="tradePickerOverlay" onclick="closePicker(event)">
+    <div class="trade-picker-modal" onclick="event.stopPropagation()">
+      <div class="trade-picker-header">
+        <span class="trade-picker-title" id="tradePickerTitle">Add Item</span>
+        <button class="trade-picker-close" onclick="closePicker()">✕</button>
+      </div>
+      <div class="trade-picker-tabs" id="tradePickerTabs" style="display:none;">
+        <button class="trade-picker-tab active" onclick="setPickerTab('player')">Players</button>
+        <button class="trade-picker-tab" onclick="setPickerTab('pick')">Draft Picks</button>
+        <button class="trade-picker-tab" onclick="setPickerTab('cap')">Cap $</button>
+      </div>
+      <div class="trade-picker-search" id="tradePickerSearchWrap">
+        <input type="text" class="trade-picker-input" id="tradePickerSearch" placeholder="Search…" oninput="renderPickerList()">
+      </div>
+      <div class="trade-picker-list" id="tradePickerList"></div>
     </div>
   </div>
 </div>
@@ -613,13 +760,14 @@ function autoAssignLineup(tid) {
 
 function setView(v) {
   currentView = v;
-  const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft' };
+  const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades' };
   document.querySelectorAll('.view-btn').forEach(b =>
     b.classList.toggle('active', b.textContent.trim() === labels[v]));
   document.getElementById('rosterView').style.display = v === 'roster' ? 'block' : 'none';
   document.getElementById('leagueView').style.display = v === 'league' ? 'block' : 'none';
   document.getElementById('availView').style.display = v === 'available' ? 'block' : 'none';
   document.getElementById('draftView').style.display = v === 'draft' ? 'flex' : 'none';
+  document.getElementById('tradeView').style.display = v === 'trade' ? 'flex' : 'none';
   // On mobile, hide the sidebar for non-roster views
   document.getElementById('sidebar').classList.toggle('mobile-hidden', v !== 'roster');
   if (v === 'league') { setLeagueSort(leagueSort); }
@@ -1157,8 +1305,7 @@ function renderTable() {
     const tooltip = isDrafted ? (isReleased ? 'Click to add back to roster' : 'Click to cut') : '';
 
     // Badges: R icon for drafted rookies and rookie-contract veterans (maxYr >= 5), TX badge only if on taxi
-    const isRookieContract = !isDrafted && p.contract && parseInt(p.contract.split('/')[1]) >= 5;
-    const rBadge = (isDrafted || isRookieContract) ? `<span class="source-badge source-rookie">R</span>` : '';
+    const rBadge = (isDrafted || p.rookie) ? `<span class="source-badge source-rookie">R</span>` : '';
     const txBadge = onTaxi ? `<span style="font-size:9px;font-weight:700;padding:2px 5px;background:rgba(255,140,58,0.15);color:var(--orange);border-radius:3px;margin-left:3px;">TX</span>` : '';
 
     const rank = posRankNum(p.posRank);
@@ -1357,10 +1504,13 @@ function renderAvailView() {
     const ecrDisplay = p.ecr && p.ecr < 999 ? p.ecr : '—';
     // Always use overall positional rank (posRank), never rookie-specific rank
     const posRankDisplay = p.posRank && p.posRank.length > 2 ? p.posRank : '—';
+    const fromTeamStr = (p.source === 'cut' || p.releasedRookie) ? p.fromTeam : p.team;
     return `<div class="avail-row">
-      <div class="player-name-cell">
+      <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
-        <div><div class="player-name">${p.name}${badge}</div><div class="player-team">${p.team}${sub}</div></div>
+        <span class="player-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</span>
+        ${badge}
+        <span class="player-team" style="white-space:nowrap;flex-shrink:0;">${fromTeamStr}</span>
       </div>
       <div class="td-num" style="font-size:11px;color:var(--text2);">${posRankDisplay}</div>
       <div class="td-num">${ecrDisplay}</div>
@@ -1850,6 +2000,318 @@ function copyShareLink() {
     }
   } catch(e) {}
 })();
+
+// ─── TRADE SIMULATOR ─────────────────────────────────────────────────────────
+
+// 2027 picks: traded as "Team X's 2027 Xth Round" — no pick number since order unknown
+// Generated dynamically per team in the picker
+
+// Trade state
+let tradeA = { tid: '', players: [], picks: [], cap: 0 };
+let tradeB = { tid: '', players: [], picks: [], cap: 0 };
+let pickerSide = 'A';
+let pickerTab = 'player';
+let tradeHistory = []; // [{snapshot, summary}]
+
+// Populate team dropdowns
+(function initTradeView() {
+  const selA = document.getElementById('tradeTeamA');
+  const selB = document.getElementById('tradeTeamB');
+  for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
+    [selA, selB].forEach(sel => {
+      const o = document.createElement('option');
+      o.value = tid; o.textContent = t.name;
+      sel.appendChild(o);
+    });
+  }
+})();
+
+function getSide(side) { return side === 'A' ? tradeA : tradeB; }
+
+function renderTradeSide(side) {
+  const sel = document.getElementById(`tradeTeam${side}`);
+  const state = getSide(side);
+  state.tid = sel.value;
+  state.players = [];
+  state.picks = [];
+  state.cap = 0;
+  renderTradeItems(side);
+  updateTradeAcceptBtn();
+}
+
+function renderTradeItems(side) {
+  const state = getSide(side);
+  const el = document.getElementById(`tradeItems${side}`);
+  if (!state.players.length && !state.picks.length && !state.cap) {
+    el.innerHTML = `<div style="color:var(--text3);font-size:12px;padding:8px 0;">${state.tid ? 'Add items using the buttons below.' : 'Select a team, then add items below.'}</div>`;
+    return;
+  }
+  let html = '';
+  state.players.forEach((p, i) => {
+    html += `<div class="trade-item">
+      <span class="pos-badge pos-${p.pos}" style="font-size:9px;padding:2px 4px;">${p.pos}</span>
+      <span class="trade-item-label">${p.name}</span>
+      <span class="trade-item-sub">$${p.salary} · ${p.contract}</span>
+      <button class="trade-remove" onclick="removeTradeItem('${side}','player',${i})">✕</button>
+    </div>`;
+  });
+  state.picks.forEach((pk, i) => {
+    html += `<div class="trade-item">
+      <span style="font-size:10px;font-weight:700;color:var(--accent2);min-width:28px;">📋</span>
+      <span class="trade-item-label">${pk.label}</span>
+      <button class="trade-remove" onclick="removeTradeItem('${side}','pick',${i})">✕</button>
+    </div>`;
+  });
+  if (state.cap) {
+    html += `<div class="trade-item">
+      <span style="font-size:10px;font-weight:700;color:var(--accent2);min-width:28px;">💰</span>
+      <span class="trade-item-label">$${state.cap} auction budget</span>
+      <button class="trade-remove" onclick="removeTradeItem('${side}','cap',0)">✕</button>
+    </div>`;
+  }
+  el.innerHTML = html;
+  updateTradeAcceptBtn();
+}
+
+function removeTradeItem(side, type, idx) {
+  const state = getSide(side);
+  if (type === 'player') state.players.splice(idx, 1);
+  else if (type === 'pick') state.picks.splice(idx, 1);
+  else if (type === 'cap') state.cap = 0;
+  renderTradeItems(side);
+}
+
+function updateTradeAcceptBtn() {
+  const btn = document.getElementById('tradeAcceptBtn');
+  const hasA = tradeA.tid && (tradeA.players.length || tradeA.picks.length || tradeA.cap);
+  const hasB = tradeB.tid && (tradeB.players.length || tradeB.picks.length || tradeB.cap);
+  const diffTeams = tradeA.tid && tradeB.tid && tradeA.tid !== tradeB.tid;
+  btn.disabled = !(hasA && hasB && diffTeams);
+}
+
+// ─── PICKER MODAL ──────────────────────────────────────────────────────────
+function openPicker(side, tab) {
+  const state = getSide(side);
+  if (!state.tid) { alert('Select a team first.'); return; }
+  pickerSide = side;
+  pickerTab = tab;
+  document.getElementById('tradePickerOverlay').classList.add('open');
+  document.getElementById('tradePickerSearch').value = '';
+  document.getElementById('tradePickerSearchWrap').style.display = tab === 'cap' ? 'none' : 'block';
+  document.getElementById('tradePickerTitle').textContent =
+    tab === 'player' ? 'Add Player' : tab === 'pick' ? 'Add Draft Pick' : 'Add Cap Money';
+  renderPickerList();
+}
+
+function closePicker(e) {
+  if (!e || e.target === document.getElementById('tradePickerOverlay')) {
+    document.getElementById('tradePickerOverlay').classList.remove('open');
+  }
+}
+
+function setPickerTab(tab) {
+  pickerTab = tab;
+  document.querySelectorAll('.trade-picker-tab').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(tab)));
+  document.getElementById('tradePickerSearch').value = '';
+  document.getElementById('tradePickerSearchWrap').style.display = tab === 'cap' ? 'none' : 'block';
+  renderPickerList();
+}
+
+function renderPickerList() {
+  const state = getSide(pickerSide);
+  const el = document.getElementById('tradePickerList');
+  const q = document.getElementById('tradePickerSearch').value.toLowerCase().trim();
+  const team = LEAGUE_DATA.teams[state.tid];
+
+  if (pickerTab === 'player') {
+    const addedIds = new Set(state.players.map(p => p.id));
+    const players = team.players.filter(p =>
+      (!q || p.name.toLowerCase().includes(q) || p.pos.toLowerCase().includes(q))
+    );
+    el.innerHTML = players.map(p => `
+      <div class="trade-picker-item ${addedIds.has(p.id) ? 'already-added' : ''}" onclick="addTradePlayer('${p.id}')">
+        <span class="pos-badge pos-${p.pos}" style="font-size:9px;padding:2px 4px;">${p.pos}</span>
+        <span class="trade-picker-item-label">${p.name}</span>
+        <span class="trade-picker-item-sub">$${p.salary} · ${p.contract}</span>
+      </div>`).join('') || '<div style="padding:20px;text-align:center;color:var(--text3);">No players found.</div>';
+
+  } else if (pickerTab === 'pick') {
+    const addedLabels = new Set(state.picks.map(pk => pk.label));
+
+    // 2026 remaining fantasy draft picks owned by this team
+    const my2026 = DRAFT_ORDER
+      .filter((slot, i) => slot.franchise === state.tid && !draftPicks[i])
+      .map(slot => ({
+        year: 2026, round: slot.round, pick: slot.pick,
+        label: `2026 Round ${slot.round} Pick ${slot.pick}`,
+        specific: true
+      }));
+
+    // 2027 picks: own picks only (all 4 rounds) — order unknown so no pick number
+    const ordinals = ['1st', '2nd', '3rd', '4th'];
+    const my2027 = ordinals.map((ord, i) => ({
+      year: 2027, round: i + 1,
+      label: `2027 ${ord} Round (${LEAGUE_DATA.teams[state.tid]?.name || ''})`,
+      specific: false
+    }));
+
+    const allPicks = [...my2026, ...my2027]
+      .filter(pk => !q || pk.label.toLowerCase().includes(q));
+
+    const sections = [
+      { header: '2026 Picks (specific)', items: allPicks.filter(p => p.specific) },
+      { header: '2027 Picks', items: allPicks.filter(p => !p.specific) },
+    ];
+
+    el.innerHTML = sections.map(sec => {
+      if (!sec.items.length) return '';
+      return `<div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;padding:8px 16px 4px;">${sec.header}</div>` +
+        sec.items.map(pk => `
+          <div class="trade-picker-item ${addedLabels.has(pk.label) ? 'already-added' : ''}" onclick="addTradePick(${JSON.stringify(pk).replace(/"/g,'&quot;')})">
+            <span style="font-size:10px;font-weight:700;color:${pk.year === 2026 ? 'var(--accent)' : 'var(--accent2)'};width:40px;">${pk.year}</span>
+            <span class="trade-picker-item-label">${pk.label}</span>
+          </div>`).join('');
+    }).join('') || '<div style="padding:20px;text-align:center;color:var(--text3);">No picks found.</div>';
+
+  } else if (pickerTab === 'cap') {
+    const maxCap = team.cap;
+    el.innerHTML = `
+      <div style="padding:20px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">How much auction budget is included?</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <span style="color:var(--accent);font-size:20px;font-weight:700;">$</span>
+          <input type="number" id="capInput" min="1" max="${maxCap}" value="${state.cap || 10}"
+            style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:18px;font-weight:700;padding:8px 12px;border-radius:8px;outline:none;width:100%;">
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Team budget: $${maxCap}</div>
+        <button onclick="addTradeCap()" style="width:100%;padding:10px;background:var(--accent);color:#000;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;">Add Cap Money</button>
+      </div>`;
+  }
+}
+
+function addTradePlayer(pid) {
+  const state = getSide(pickerSide);
+  const team = LEAGUE_DATA.teams[state.tid];
+  const player = team.players.find(p => p.id === pid);
+  if (!player || state.players.find(p => p.id === pid)) return;
+  state.players.push(player);
+  renderTradeItems(pickerSide);
+  renderPickerList();
+}
+
+function addTradePick(pk) {
+  const state = getSide(pickerSide);
+  if (state.picks.find(p => p.label === pk.label)) return;
+  state.picks.push(pk);
+  renderTradeItems(pickerSide);
+  renderPickerList();
+}
+
+function addTradeCap() {
+  const val = parseInt(document.getElementById('capInput')?.value) || 0;
+  if (val <= 0) return;
+  const state = getSide(pickerSide);
+  state.cap = val;
+  renderTradeItems(pickerSide);
+  document.getElementById('tradePickerOverlay').classList.remove('open');
+}
+
+function clearTrade() {
+  tradeA = { tid: tradeA.tid, players: [], picks: [], cap: 0 };
+  tradeB = { tid: tradeB.tid, players: [], picks: [], cap: 0 };
+  renderTradeItems('A');
+  renderTradeItems('B');
+  updateTradeAcceptBtn();
+}
+
+// ─── ACCEPT TRADE ──────────────────────────────────────────────────────────
+function acceptTrade() {
+  const tA = LEAGUE_DATA.teams[tradeA.tid];
+  const tB = LEAGUE_DATA.teams[tradeB.tid];
+
+  // Snapshot for undo
+  const snapshot = {
+    teamA: { tid: tradeA.tid, players: JSON.parse(JSON.stringify(tA.players)), cap: tA.cap },
+    teamB: { tid: tradeB.tid, players: JSON.parse(JSON.stringify(tB.players)), cap: tB.cap },
+  };
+
+  // Move players: A's players go to B, B's players go to A
+  tradeA.players.forEach(p => {
+    tA.players = tA.players.filter(x => x.id !== p.id);
+    tB.players.push(p);
+  });
+  tradeB.players.forEach(p => {
+    tB.players = tB.players.filter(x => x.id !== p.id);
+    tA.players.push(p);
+  });
+
+  // Move cap
+  if (tradeA.cap) { tA.cap -= tradeA.cap; tB.cap += tradeA.cap; }
+  if (tradeB.cap) { tB.cap -= tradeB.cap; tA.cap += tradeB.cap; }
+
+  // Build summary string
+  const aItems = [
+    ...tradeA.players.map(p => p.name),
+    ...tradeA.picks.map(pk => pk.label),
+    ...(tradeA.cap ? [`$${tradeA.cap} cap`] : []),
+  ];
+  const bItems = [
+    ...tradeB.players.map(p => p.name),
+    ...tradeB.picks.map(pk => pk.label),
+    ...(tradeB.cap ? [`$${tradeB.cap} cap`] : []),
+  ];
+  const summary = { teamA: tA.name, teamB: tB.name, aGives: aItems, bGives: bItems };
+
+  tradeHistory.unshift({ snapshot, summary });
+  renderTradeLog();
+
+  // Refresh dependent views
+  if (currentTeam === tradeA.tid || currentTeam === tradeB.tid) {
+    updateCap(); renderTable(); renderLineup();
+  }
+  if (currentView === 'league') setLeagueSort(leagueSort);
+  if (currentView === 'available') renderAvailView();
+
+  clearTrade();
+}
+
+function undoTrade(idx) {
+  const entry = tradeHistory[idx];
+  if (!entry) return;
+  const { snapshot } = entry;
+  // Restore players and cap
+  LEAGUE_DATA.teams[snapshot.teamA.tid].players = snapshot.teamA.players;
+  LEAGUE_DATA.teams[snapshot.teamA.tid].cap = snapshot.teamA.cap;
+  LEAGUE_DATA.teams[snapshot.teamB.tid].players = snapshot.teamB.players;
+  LEAGUE_DATA.teams[snapshot.teamB.tid].cap = snapshot.teamB.cap;
+  tradeHistory.splice(idx, 1);
+  renderTradeLog();
+  if (currentTeam === snapshot.teamA.tid || currentTeam === snapshot.teamB.tid) {
+    updateCap(); renderTable(); renderLineup();
+  }
+  if (currentView === 'league') setLeagueSort(leagueSort);
+  if (currentView === 'available') renderAvailView();
+}
+
+function renderTradeLog() {
+  const el = document.getElementById('tradeLog');
+  const cnt = document.getElementById('tradeLogCount');
+  cnt.textContent = `${tradeHistory.length} trade${tradeHistory.length !== 1 ? 's' : ''}`;
+  if (!tradeHistory.length) {
+    el.innerHTML = '<div class="trade-log-empty">No trades recorded yet.</div>';
+    return;
+  }
+  el.innerHTML = tradeHistory.map(({ summary }, i) => `
+    <div class="trade-log-item">
+      <div class="trade-log-num">${i + 1}</div>
+      <div class="trade-log-body">
+        <div class="trade-log-teams">${summary.teamA} ⇄ ${summary.teamB}</div>
+        <div><strong>${summary.teamA} gave:</strong> ${summary.aGives.join(', ') || '—'}</div>
+        <div><strong>${summary.teamB} gave:</strong> ${summary.bGives.join(', ') || '—'}</div>
+      </div>
+      <button class="trade-log-undo" onclick="undoTrade(${i})">↺ Undo</button>
+    </div>`).join('');
+}
 
 // ─── SIDEBAR RESIZE ──────────────────────────────────────────────────────────
 // Sidebar resize
