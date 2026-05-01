@@ -52,6 +52,8 @@
   .cap-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 3px; }
   .cap-val { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; color: var(--text); }
   .cap-val.ok { color: var(--green); } .cap-val.warn { color: var(--orange); } .cap-val.over { color: var(--red); }
+  .cap-bar-wrap { margin-top: 6px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .cap-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; }
 
   /* LINEUP SECTION */
   .lineup-section { display: flex; flex-direction: column; gap: 4px; }
@@ -94,9 +96,27 @@
 
   /* TABLE AREA */
   .table-area { flex: 1; overflow-y: auto; padding: 20px; }
-  .roster-ghost-logo { position: fixed; pointer-events: none; z-index: 0; opacity: 0.15; object-fit: contain; width: 420px; height: 420px; transform: translate(-50%, -50%); transition: opacity 0.3s; }
-  .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-  .pos-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .avail-search-wrap { position: relative; flex: 1; min-width: 160px; max-width: 280px; }
+  .avail-search { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 6px 10px 6px 30px; border-radius: 8px; outline: none; }
+  .avail-search:focus { border-color: var(--accent); }
+  .avail-search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 12px; pointer-events: none; }
+
+  .table-header-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; }
+  .table-header-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
+  .avail-table-header { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; }
+
+  /* Contract tooltip */
+  .contract-tip { position: relative; display: inline-block; cursor: default; }
+  .contract-tip .tip-box { display: none; position: absolute; right: 0; top: calc(100% + 6px); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 16px rgba(0,0,0,0.4); min-width: 140px; }
+  .contract-tip:hover .tip-box { display: block; }
+  .tip-row { display: flex; justify-content: space-between; gap: 20px; padding: 2px 0; color: var(--text2); }
+  .tip-row.tip-header { color: var(--text3); font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 2px; }
+  .tip-row.tip-yr-past { color: var(--text3); text-decoration: line-through; }
+  .tip-row.tip-yr-current { color: var(--text2); font-weight: 600; }
+  .tip-yr-final { color: var(--red); }
+  .tip-yr-penult { color: var(--orange); }
+  .tip-yr-gold { color: var(--accent); }  .pos-filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .pos-btn { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; }
   .pos-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
   .sort-row { display: flex; gap: 6px; align-items: center; }
@@ -104,8 +124,6 @@
   .sort-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text2); cursor: pointer; }
   .sort-btn.active { border-color: var(--accent2); color: var(--accent2); }
 
-  .table-header-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; }
-  .table-header-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
   .th-num { text-align: right; }
   .player-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 9px 12px; border-radius: 8px; cursor: pointer; transition: background 0.1s; align-items: center; border: 1px solid transparent; margin-bottom: 2px; }
   .player-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
@@ -114,11 +132,10 @@
   .player-row.no-click { cursor: default; }
   .player-row.no-click:hover { background: transparent; }
   .proj-year-cell { font-size: 11px; font-weight: 600; text-align: right; padding-right: 4px; }
-  .proj-ok { color: var(--green); }
+
   .proj-final { color: var(--red); }
   .proj-penult { color: var(--orange); }
   .proj-warn { color: var(--accent); }
-  .proj-over { color: #ff5c5c; }
   .proj-empty { color: var(--text3); font-size: 10px; }
   #projToggle.active { background: rgba(74,158,255,0.15); border-color: var(--accent2); color: var(--accent2); }
   .th-sortable { cursor: pointer; user-select: none; white-space: nowrap; }
@@ -137,7 +154,7 @@
   .td-num { text-align: right; font-size: 13px; color: var(--text2); }
   .td-salary { text-align: right; font-size: 13px; font-weight: 600; color: var(--accent); }
   .td-contract { text-align: right; font-size: 12px; color: var(--text2); }
-  .final-yr { font-size: 10px; color: var(--orange); display: block; }
+
   .empty-state { text-align: center; color: var(--text3); padding: 60px 20px; font-size: 14px; }
 
   /* LEAGUE VIEW */
@@ -182,7 +199,6 @@
   .source-fa { background: rgba(62,207,110,0.15); color: var(--green); }
   .source-cut { background: rgba(144,152,168,0.12); color: var(--text2); }
   .source-rookie { background: rgba(232,200,74,0.18); color: var(--accent); }
-  .avail-table-header { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; }
   .avail-row { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 9px 12px; border-radius: 8px; align-items: center; margin-bottom: 2px; }
   .avail-row:hover { background: var(--surface2); }
   .ranked-only-label { display: flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text2); background: transparent; transition: all 0.15s; user-select: none; }
@@ -231,6 +247,7 @@
     body { font-size: 13px; }
     .main { flex-direction: column; height: auto; min-height: 100vh; }
     .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+    .sidebar.mobile-hidden { display: none; }
     .content { flex: 1; min-height: 60vh; }
     .view-toggle { gap: 4px; padding: 8px; flex-wrap: wrap; }
     .view-btn { padding: 6px 10px; font-size: 11px; }
@@ -265,6 +282,7 @@
     <select id="teamPicker" onchange="selectTeam(this.value)">
       <option value="">— Select a team —</option>
     </select>
+    <button id="shareLinkBtn" onclick="copyShareLink()" style="padding:7px 13px;font-size:11px;font-weight:600;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap;" title="Copy shareable link for current team's keepers">🔗 Share</button>
     <div class="view-toggle">
       <button class="view-btn active" onclick="setView('roster')">Roster</button>
       <button class="view-btn" onclick="setView('league')">All Keepers</button>
@@ -283,7 +301,7 @@
     </div>
 
     <div class="cap-grid">
-      <div class="cap-card full"><div class="cap-label">Auction Budget</div><div class="cap-val" id="capTotal">—</div></div>
+      <div class="cap-card full"><div class="cap-label">Auction Budget</div><div class="cap-val" id="capTotal">—</div><div class="cap-bar-wrap"><div class="cap-bar-fill" id="capBar" style="width:0%"></div></div></div>
       <div class="cap-card"><div class="cap-label">Kept</div><div class="cap-val" id="capSpent">$0</div></div>
       <div class="cap-card"><div class="cap-label">Remaining</div><div class="cap-val ok" id="capRemain">—</div></div>
       <div class="cap-card"><div class="cap-label">Keepers</div><div class="cap-val" id="keepCount">0</div></div>
@@ -313,7 +331,6 @@
 
   <!-- ROSTER VIEW -->
   <div class="table-area" id="rosterView">
-    <img id="rosterGhostLogo" class="roster-ghost-logo" src="" alt="" style="display:none;">
     <div class="controls">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
         <div class="pos-filters" id="rosterPosFilters">
@@ -361,6 +378,10 @@
       </div>
     </div>
     <div class="avail-controls">
+      <div class="avail-search-wrap">
+        <span class="avail-search-icon">🔍</span>
+        <input type="text" id="availSearch" class="avail-search" placeholder="Search players..." oninput="renderAvailView()">
+      </div>
       <div class="source-filters">
         <label class="ranked-only-label">
           <input type="checkbox" id="rankedOnly" checked onchange="renderAvailView()">
@@ -468,9 +489,41 @@ for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
   picker.appendChild(o);
 }
 
-function contractStr(cy) {
-  const [yr, max] = cy.split('/').map(Number);
-  return cy + (yr === max ? '<span class="final-yr">final yr</span>' : '');
+function contractStr(cy, salary, pos, color) {
+  try {
+    const [yr, maxYr] = cy.split('/').map(Number);
+    const isTaxi = maxYr === 6;
+    const isRookie = maxYr >= 5 && !isTaxi;
+    const costs = getContractCosts(salary, yr, maxYr, isTaxi, isRookie);
+    // costs[0] = current year (2026), costs[1..] = future years
+    const CURRENT_YEAR = 2026;
+    // Past years: yr-1 years before current, going back to year 1 of contract
+    // We need to reconstruct past costs from base
+    const base = costs[0] - (isTaxi ? [0,0,3,9,18,30] : isRookie ? [0,3,9,18,30] : [0,3,9])[yr-1];
+    const cum  = isTaxi ? [0,0,3,9,18,30] : isRookie ? [0,3,9,18,30] : [0,3,9];
+    const rows = [];
+    rows.push(`<div class="tip-row tip-header"><span>Year</span><span>Salary</span></div>`);
+    // Past years (yr 1 through yr-1 of contract)
+    for (let i = 1; i < yr; i++) {
+      const pastSal = base + (cum[i-1] ?? cum[cum.length-1]);
+      const pastCalYear = CURRENT_YEAR - (yr - i);
+      rows.push(`<div class="tip-row tip-yr-past"><span>${pastCalYear}</span><span>$${pastSal}</span></div>`);
+    }
+    // Current year
+    rows.push(`<div class="tip-row tip-yr-current"><span>${CURRENT_YEAR} ←</span><span>$${costs[0]}</span></div>`);
+    // Future years
+    const futureYrs = maxYr - yr; // number of future years
+    const finalCalYr = CURRENT_YEAR + futureYrs;
+    const penultCalYr = futureYrs > 1 ? finalCalYr - 1 : null;
+    costs.slice(1).forEach((cost, i) => {
+      const calYr = CURRENT_YEAR + 1 + i;
+      const cls = calYr === finalCalYr ? 'tip-yr-final' : calYr === penultCalYr ? 'tip-yr-penult' : 'tip-yr-gold';
+      rows.push(`<div class="tip-row ${cls}"><span>${calYr}</span><span>$${cost}</span></div>`);
+    });
+    return `<span class="contract-tip"${color ? ` style="color:${color}"` : ''}>${cy}<span class="tip-box">${rows.join('')}</span></span>`;
+  } catch(e) {
+    return cy;
+  }
 }
 
 // Full auto-assign: fill all slots from scratch using best kept players.
@@ -533,8 +586,8 @@ function setView(v) {
   document.getElementById('leagueView').style.display = v === 'league' ? 'block' : 'none';
   document.getElementById('availView').style.display = v === 'available' ? 'block' : 'none';
   document.getElementById('draftView').style.display = v === 'draft' ? 'flex' : 'none';
-  const ghost = document.getElementById('rosterGhostLogo');
-  if (ghost) ghost.style.display = (v === 'roster' && currentTeam && LEAGUE_DATA.teams[currentTeam]?.logo) ? 'block' : 'none';
+  // On mobile, hide the sidebar for non-roster views
+  document.getElementById('sidebar').classList.toggle('mobile-hidden', v !== 'roster');
   if (v === 'league') { setLeagueSort(leagueSort); }
   if (v === 'available') renderAvailView();
   if (v === 'draft') renderDraftView();
@@ -551,8 +604,6 @@ function selectTeam(tid) {
   identity.innerHTML = t.logo
     ? `<img class="team-logo" src="${t.logo}" alt="${t.name}"><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`
     : `<div class="team-logo-placeholder"></div><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`;
-  const ghost = document.getElementById('rosterGhostLogo');
-  if (t.logo) { ghost.src = t.logo; ghost.style.display = 'block'; if (window._positionGhost) window._positionGhost(); } else { ghost.style.display = 'none'; }
   document.getElementById('lineupSection').style.display = 'block';
   autoAssignLineup(tid);
   updateCap(); renderTable(); renderLineup();
@@ -591,6 +642,14 @@ function updateCap() {
   const mb = document.getElementById('maxBid');
   mb.textContent = '$' + maxBid;
   mb.className = 'cap-val ' + (maxBid <= 1 ? 'over' : maxBid < 10 ? 'warn' : 'ok');
+
+  // Cap progress bar
+  const bar = document.getElementById('capBar');
+  if (bar && t.cap > 0) {
+    const pct = Math.min(100, Math.round((spent / t.cap) * 100));
+    bar.style.width = pct + '%';
+    bar.style.background = remain < 0 ? 'var(--red)' : remain < 20 ? 'var(--orange)' : 'var(--accent)';
+  }
 }
 
 function toggle(id) {
@@ -1108,7 +1167,7 @@ function renderTable() {
       <div class="td-num">${p.ecr && p.ecr < 999 ? p.ecr : '—'}</div>
       <div class="td-num">${p.pts > 0 ? p.pts.toFixed(1) : '—'}</div>
       <div class="td-salary">$${p.salary}</div>
-      <div class="td-contract">${isDrafted ? `<span style="color:var(--orange);">${isReleased ? '—' : currentTaxiRookieIds.has(p.id) ? '1/6' : '1/5'}</span>` : contractStr(p.contract)}</div>
+      <div class="td-contract">${isDrafted && isReleased ? '—' : isDrafted ? contractStr(onTaxi ? '1/6' : '1/5', p.salary, p.pos, 'var(--orange)') : contractStr(p.contract, p.salary, p.pos)}</div>
       ${projCols}
     </div>`;
   }).join('');
@@ -1228,6 +1287,8 @@ function renderAvailView() {
   let players = [...availMap.values()];
   if (availFilter !== 'ALL') players = players.filter(p => p.pos === availFilter);
   if (rankedOnly) players = players.filter(p => (p.ecr && p.ecr < 999) || p.rookieRank);
+  const searchQ = (document.getElementById('availSearch')?.value || '').toLowerCase().trim();
+  if (searchQ) players = players.filter(p => p.name.toLowerCase().includes(searchQ) || p.team.toLowerCase().includes(searchQ));
   players.sort((a, b) => {
     if (availSort === 'ecr') return ((a.ecr || 999) - (b.ecr || 999)) * availSortDir;
     if (availSort === 'pos') {
@@ -1649,20 +1710,70 @@ Promise.all([loadDraftState(), loadRosterState()]).then(() => {
   if (currentView === 'league') renderLeagueView();
 });
 
+// ─── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  // Don't fire if typing in an input/select
+  if (['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) return;
+  const teams = Object.keys(LEAGUE_DATA.teams);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    if (!currentTeam) { selectTeam(teams[0]); document.getElementById('teamPicker').value = teams[0]; return; }
+    const idx = teams.indexOf(currentTeam);
+    const next = e.key === 'ArrowRight' ? (idx + 1) % teams.length : (idx - 1 + teams.length) % teams.length;
+    selectTeam(teams[next]);
+    document.getElementById('teamPicker').value = teams[next];
+  }
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    const views = ['roster','league','available','draft'];
+    const idx = views.indexOf(currentView);
+    const next = e.key === 'ArrowDown' ? (idx + 1) % views.length : (idx - 1 + views.length) % views.length;
+    setView(views[next]);
+  }
+});
+
+// ─── SHAREABLE LINK ─────────────────────────────────────────────────────────
+function buildShareUrl() {
+  if (!currentTeam) return null;
+  const sel = [...allSelections[currentTeam]];
+  const params = new URLSearchParams({ team: currentTeam, kept: sel.join(',') });
+  return window.location.origin + window.location.pathname + '?' + params.toString();
+}
+
+function copyShareLink() {
+  const url = buildShareUrl();
+  if (!url) return;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('shareLinkBtn');
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+  });
+}
+
+// Load state from URL on startup
+(function loadFromUrl() {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    const tid = p.get('team');
+    const kept = p.get('kept');
+    if (tid && LEAGUE_DATA.teams[tid] && kept) {
+      const keptSet = new Set(kept.split(',').filter(Boolean));
+      allSelections[tid] = keptSet;
+      document.getElementById('teamPicker').value = tid;
+      selectTeam(tid);
+    }
+  } catch(e) {}
+})();
+
+// ─── SIDEBAR RESIZE ──────────────────────────────────────────────────────────
 // Sidebar resize
 (function() {
   const sidebar = document.getElementById('sidebar');
   const resizer = document.getElementById('sidebarResizer');
   let startX, startW;
-
-  function positionGhost() {
-    const ghost = document.getElementById('rosterGhostLogo');
-    if (!ghost || ghost.style.display === 'none') return;
-    const sw = sidebar.offsetWidth;
-    ghost.style.left = (sw + (window.innerWidth - sw) / 2) + 'px';
-    ghost.style.top = '50%';
-  }
-
   resizer.addEventListener('mousedown', e => {
     startX = e.clientX;
     startW = sidebar.offsetWidth;
@@ -1675,7 +1786,6 @@ Promise.all([loadDraftState(), loadRosterState()]).then(() => {
     if (!resizer.classList.contains('dragging')) return;
     const newW = Math.min(600, Math.max(220, startW + (e.clientX - startX)));
     sidebar.style.width = newW + 'px';
-    positionGhost();
   });
   document.addEventListener('mouseup', () => {
     if (!resizer.classList.contains('dragging')) return;
@@ -1683,12 +1793,13 @@ Promise.all([loadDraftState(), loadRosterState()]).then(() => {
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
   });
-
-  // Initial position and on resize
-  window.addEventListener('resize', positionGhost);
-  // Expose for use when team is selected
-  window._positionGhost = positionGhost;
 })();
 </script>
+
+<footer style="background:var(--surface);border-top:1px solid var(--border);padding:14px 24px;text-align:center;">
+  <p style="font-size:11px;color:var(--text3);line-height:1.6;max-width:900px;margin:0 auto;">
+    Footballpalooza 2026 Keeper Builder is an unofficial fantasy football tool intended solely for private, non-commercial use by league members. Player names, team names, and statistical data are used for informational purposes only. This application is not affiliated with, endorsed by, or sponsored by the NFL, any NFL team, My Fantasy League (MFL), or any other professional sports organization. All NFL team names, logos, and related marks are the property of their respective owners. Fantasy sports participation may be subject to applicable federal, state, and local laws. &copy; 2026 Footballpalooza. All rights reserved.
+  </p>
+</footer>
 </body>
 </html>
