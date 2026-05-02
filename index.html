@@ -130,6 +130,9 @@
   .player-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
   .player-row:hover { background: var(--surface2); }
   .player-row.selected { background: rgba(232,200,74,0.07); border-color: rgba(232,200,74,0.25); }
+  .player-row.deselected { opacity: 0.5; }
+  .player-row.proj-mode { min-width: fit-content; width: 100%; }
+  .table-header-row.proj-mode { min-width: fit-content; width: 100%; }
   .player-row.no-click { cursor: default; }
   .player-row.no-click:hover { background: transparent; }
   .proj-year-cell { font-size: 11px; font-weight: 600; text-align: right; padding-right: 4px; }
@@ -155,6 +158,8 @@
   .td-num { text-align: right; font-size: 13px; color: var(--text2); }
   .td-salary { text-align: right; font-size: 13px; font-weight: 600; color: var(--accent); }
   .td-contract { text-align: right; font-size: 12px; color: var(--text2); }
+  .td-pts { }  /* hidden on mobile via media query */
+  .td-pos-rk { }  /* hidden at 480px via media query */
 
   .empty-state { text-align: center; color: var(--text3); padding: 60px 20px; font-size: 14px; }
 
@@ -338,8 +343,19 @@
     .header { padding: 10px 14px; gap: 10px; }
     .header-controls { gap: 6px; }
     .header-title img { height: 28px; }
-    .table-header-row, .player-row { grid-template-columns: 26px 1fr 38px 36px 50px 44px; }
+
+    /* Roster table: check / name / POS / OVR / Salary — 5 cols, no pts, no contract */
+    .table-header-row { grid-template-columns: 26px 1fr 42px 42px 48px; }
+    .table-header-row.proj-mode { grid-template-columns: 26px 1fr 42px 42px 48px repeat(5, 46px); }
+    .player-row { grid-template-columns: 26px 1fr 42px 42px 48px; }
+    .player-row.proj-mode { grid-template-columns: 26px 1fr 42px 42px 48px repeat(5, 46px); }
+    .td-pts { display: none; }
     .td-contract { display: none; }
+    .td-salary { font-size: 11px; }
+
+    /* Proj mode: scroll wrapper so alignment stays correct */
+    .table-area { overflow-x: auto; }
+
     .cap-panel { flex-wrap: wrap; gap: 8px; }
     .cap-item { flex: 1 1 40%; }
     .league-grid { grid-template-columns: 1fr; }
@@ -347,7 +363,12 @@
     .source-check-label, .ranked-only-label { padding: 5px 8px; font-size: 11px; }
     .pos-filters { gap: 4px; }
     .pos-btn { padding: 5px 9px; font-size: 11px; }
-    .draft-pick-team { width: 110px; }
+
+    /* Draft board: logo only, hide team name */
+    .draft-pick-team { width: 34px; }
+    .draft-pick-team-name { display: none; }
+    .draft-pick-via { font-size: 9px; }
+
     .team-card { padding: 12px; }
     .draft-board-col { max-height: none; overflow: visible; }
     .draft-pool-col { max-height: none; overflow: visible; }
@@ -358,7 +379,12 @@
     .draft-board-col { width: 100%; border-right: none; border-bottom: none; }
   }
   @media (max-width: 480px) {
-    .table-header-row, .player-row { grid-template-columns: 26px 1fr 36px 44px; }
+    /* At 480px drop POS RK col: check / name / OVR / Salary */
+    .table-header-row { grid-template-columns: 26px 1fr 42px 48px; }
+    .table-header-row.proj-mode { grid-template-columns: 26px 1fr 42px 48px repeat(5, 46px); }
+    .player-row { grid-template-columns: 26px 1fr 42px 48px; }
+    .player-row.proj-mode { grid-template-columns: 26px 1fr 42px 48px repeat(5, 46px); }
+    .td-pos-rk { display: none; }
     .draft-pick-via { display: none; }
     .cap-item { flex: 1 1 45%; }
     .view-btn { padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; }
@@ -368,7 +394,7 @@
 <body>
 
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.00</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.01</span></span></div>
   <div class="header-controls">
     <label>Team</label>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -1276,19 +1302,19 @@ function toggleProjection() {
   const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
   if (showProjection) {
     header.innerHTML = `<div></div><div>Player</div>
-      <div class="th-num th-sortable sort-active" id="rsort-pos" onclick="setSort('pos')">POS</div>
+      <div class="th-num th-sortable td-pos-rk sort-active" id="rsort-pos" onclick="setSort('pos')">POS</div>
       <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
-      <div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
+      <div class="th-num th-sortable td-pts" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
       <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
-      <div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>
+      <div class="th-num th-sortable td-contract" id="rsort-contract" onclick="setSort('contract')">Contract</div>
       ${yearCols}`;
   } else {
     header.innerHTML = `<div></div><div>Player</div>
-      <div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')">POS</div>
+      <div class="th-num th-sortable td-pos-rk" id="rsort-pos" onclick="setSort('pos')">POS</div>
       <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
-      <div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
+      <div class="th-num th-sortable td-pts" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
       <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
-      <div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>`;
+      <div class="th-num th-sortable td-contract" id="rsort-contract" onclick="setSort('contract')">Contract</div>`;
   }
   renderTable();
 }
@@ -1396,9 +1422,9 @@ function renderTable() {
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
         <div><div class="player-name">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}${p._via ? `<span class="contract-tip" style="font-size:9px;color:var(--text3);cursor:help;margin-left:3px;">via ${p._via}<span class="tip-box"><div class="via-tip-title">📋 Trade</div><div class="via-tip-line">Acquired from <strong>${p._via}</strong></div>${p._tradeDate ? `<div class="via-tip-line" style="color:var(--text3);">${p._tradeDate}</div>` : ''}</span></span>` : ''}</div></div>
       </div>
-      <div class="td-num" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>
+      <div class="td-num td-pos-rk" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>
       <div class="td-num">${p.ecr && p.ecr < 999 ? p.ecr : '—'}</div>
-      <div class="td-num">${p.pts > 0 ? p.pts.toFixed(1) : '—'}</div>
+      <div class="td-num td-pts">${p.pts > 0 ? p.pts.toFixed(1) : '—'}</div>
       <div class="td-salary">$${p.salary}</div>
       <div class="td-contract">${isDrafted && isReleased ? '—' : isDrafted ? contractStr(onTaxi ? '1/6' : '1/5', p.salary, p.pos, 'var(--orange)') : contractStr(p.contract, p.salary, p.pos)}</div>
       ${projCols}
