@@ -107,7 +107,7 @@
   .avail-search:focus { border-color: var(--accent); }
   .avail-search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 12px; pointer-events: none; }
 
-  .table-header-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; }
+  .table-header-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; min-width: max-content; }
   .table-header-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
   .avail-table-header { display: grid; grid-template-columns: 1fr 52px 48px 82px; padding: 0 12px 8px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); margin-bottom: 4px; position: sticky; top: 0; background: var(--bg); z-index: 2; padding-top: 4px; min-width: 420px; }
   .avail-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -130,17 +130,17 @@
   .sort-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text2); cursor: pointer; }
   .sort-btn.active { border-color: var(--accent2); color: var(--accent2); }
 
-  .th-num { text-align: right; }
+  .th-num { text-align: right; display: flex; align-items: center; justify-content: flex-end; }
   .player-row { display: grid; grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px; padding: 9px 12px; border-radius: 8px; cursor: pointer; transition: background 0.1s; align-items: center; border: 1px solid transparent; margin-bottom: 2px; }
   .player-row.proj-mode { grid-template-columns: 32px 1fr 52px 48px 82px 62px 72px repeat(5, 52px); }
   .player-row:hover { background: var(--surface2); }
   .player-row.selected { background: rgba(232,200,74,0.07); border-color: rgba(232,200,74,0.25); }
   .player-row.deselected { opacity: 0.5; }
-  .player-row.proj-mode { min-width: fit-content; width: 100%; }
-  .table-header-row.proj-mode { min-width: fit-content; width: 100%; }
+  .player-row.proj-mode { min-width: max-content; }
+  .table-header-row.proj-mode { min-width: max-content; }
   .player-row.no-click { cursor: default; }
   .player-row.no-click:hover { background: transparent; }
-  .proj-year-cell { font-size: 11px; font-weight: 600; text-align: right; padding-right: 4px; }
+  .proj-year-cell { font-size: 11px; font-weight: 600; text-align: right; padding-right: 0; display: flex; align-items: center; justify-content: flex-end; }
 
   .proj-final { color: var(--red); }
   .proj-penult { color: var(--orange); }
@@ -160,7 +160,7 @@
   .pos-DEF { background: rgba(144,152,168,0.15); color: #9098a8; }
   .player-name { font-size: 13px; font-weight: 500; color: var(--text); }
   .player-team { font-size: 11px; color: var(--text3); }
-  .td-num { text-align: right; font-size: 13px; color: var(--text2); }
+  .td-num { text-align: right; font-size: 13px; color: var(--text2); display: flex; align-items: center; justify-content: flex-end; }
   .td-salary { text-align: right; font-size: 13px; font-weight: 600; color: var(--accent); }
   .td-contract { text-align: right; font-size: 12px; color: var(--text2); }
   .td-pts { }  /* hidden on mobile via media query */
@@ -399,7 +399,7 @@
 <body>
 
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.06</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.07</span></span></div>
   <div class="header-controls">
     <label>Team</label>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -1308,21 +1308,17 @@ function toggleProjection() {
   const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
   const isMobile = window.innerWidth <= 768;
   const isTiny = window.innerWidth <= 480;
+  // Build header cells matching exact grid columns for current screen size
+  const baseCells = isTiny
+    ? `<div></div><div>Player</div><div class="th-num" id="rsort-ecr" onclick="setSort('ecr')" style="cursor:pointer;">OVR</div><div class="th-num" id="rsort-salary" onclick="setSort('salary')" style="cursor:pointer;">Salary</div>`
+    : isMobile
+      ? `<div></div><div>Player</div><div class="th-num" id="rsort-pos" onclick="setSort('pos')" style="cursor:pointer;">POS</div><div class="th-num" id="rsort-ecr" onclick="setSort('ecr')" style="cursor:pointer;">OVR</div><div class="th-num" id="rsort-salary" onclick="setSort('salary')" style="cursor:pointer;">Salary</div>`
+      : `<div></div><div>Player</div><div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')">POS</div><div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div><div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div><div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div><div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>`;
+
   if (showProjection) {
-    header.innerHTML = `<div></div><div>Player</div>
-      ${isTiny ? '' : `<div class="th-num th-sortable td-pos-rk" id="rsort-pos" onclick="setSort('pos')">POS</div>`}
-      <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
-      ${isMobile ? '' : `<div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>`}
-      <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
-      ${isMobile ? '' : `<div class="th-num th-sortable td-contract" id="rsort-contract" onclick="setSort('contract')">Contract</div>`}
-      ${yearCols}`;
+    header.innerHTML = baseCells + yearCols;
   } else {
-    header.innerHTML = `<div></div><div>Player</div>
-      ${isTiny ? '' : `<div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')">POS</div>`}
-      <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
-      ${isMobile ? '' : `<div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>`}
-      <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
-      ${isMobile ? '' : `<div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>`}`;
+    header.innerHTML = baseCells;
   }
   renderTable();
 }
