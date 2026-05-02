@@ -399,7 +399,7 @@
 <body>
 
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.07</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.08</span></span></div>
   <div class="header-controls">
     <label>Team</label>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -475,11 +475,6 @@
     </div>
     <div class="table-header-row" id="rosterTableHeader">
       <div></div><div>Player</div>
-      <div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')" title="Sort by position">POS</div>
-      <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')" title="Sort by overall rank">OVR</div>
-      <div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')" title="Sort by 2025 points">2025 Pts</div>
-      <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')" title="Sort by salary">Salary</div>
-      <div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')" title="Sort by contract">Contract</div>
     </div>
     <div id="playerTable"><div class="empty-state">Select a team from the dropdown above.</div></div>
   </div>
@@ -868,6 +863,7 @@ function selectTeam(tid) {
     ? `<img class="team-logo" src="${t.logo}" alt="${t.name}"><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`
     : `<div class="team-logo-placeholder"></div><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`;
   document.getElementById('lineupSection').style.display = 'block';
+  buildRosterHeader();
   autoAssignLineup(tid);
   updateCap(); renderTable(); renderLineup();
   if (currentView === 'available') renderAvailView();
@@ -1298,28 +1294,26 @@ function getYearSalaries(salary, contract, pos) {
 let showProjection = false;
 const PROJ_YEARS = [2027, 2028, 2029, 2030, 2031];
 
-function toggleProjection() {
-  showProjection = !showProjection;
-  const btn = document.getElementById('projToggle');
-  btn.classList.toggle('active', showProjection);
-  // Update header
+function buildRosterHeader() {
   const header = document.getElementById('rosterTableHeader');
+  if (!header) return;
   header.classList.toggle('proj-mode', showProjection);
-  const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
   const isMobile = window.innerWidth <= 768;
   const isTiny = window.innerWidth <= 480;
-  // Build header cells matching exact grid columns for current screen size
+  const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
   const baseCells = isTiny
     ? `<div></div><div>Player</div><div class="th-num" id="rsort-ecr" onclick="setSort('ecr')" style="cursor:pointer;">OVR</div><div class="th-num" id="rsort-salary" onclick="setSort('salary')" style="cursor:pointer;">Salary</div>`
     : isMobile
       ? `<div></div><div>Player</div><div class="th-num" id="rsort-pos" onclick="setSort('pos')" style="cursor:pointer;">POS</div><div class="th-num" id="rsort-ecr" onclick="setSort('ecr')" style="cursor:pointer;">OVR</div><div class="th-num" id="rsort-salary" onclick="setSort('salary')" style="cursor:pointer;">Salary</div>`
       : `<div></div><div>Player</div><div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')">POS</div><div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div><div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div><div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div><div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>`;
+  header.innerHTML = showProjection ? baseCells + yearCols : baseCells;
+}
 
-  if (showProjection) {
-    header.innerHTML = baseCells + yearCols;
-  } else {
-    header.innerHTML = baseCells;
-  }
+function toggleProjection() {
+  showProjection = !showProjection;
+  const btn = document.getElementById('projToggle');
+  btn.classList.toggle('active', showProjection);
+  buildRosterHeader();
   renderTable();
 }
 
@@ -2700,6 +2694,10 @@ document.addEventListener('click', e => {
     resizer.classList.remove('dragging');
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
+  });
+
+  window.addEventListener('resize', () => {
+    if (currentTeam && currentView === 'roster') { buildRosterHeader(); renderTable(); }
   });
 })();
 </script>
