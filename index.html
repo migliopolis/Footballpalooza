@@ -403,7 +403,7 @@
 <body>
 
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.09</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.10</span></span></div>
   <div class="header-controls">
     <label>Team</label>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -1322,8 +1322,12 @@ function buildRosterHeader() {
       scrollWrap.remove();
     }
   }
-  const isMobile = window.innerWidth <= 768;
-  const isTiny = window.innerWidth <= 480;
+
+  // Compute once and store on window so renderTable uses the same values
+  window._rosterBreakpoint = window.innerWidth <= 480 ? 'tiny' : window.innerWidth <= 768 ? 'mobile' : 'desktop';
+  const isMobile = window._rosterBreakpoint !== 'desktop';
+  const isTiny = window._rosterBreakpoint === 'tiny';
+
   const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
   const baseCells = isTiny
     ? `<div></div><div>Player</div><div class="th-num" id="rsort-ecr" onclick="setSort('ecr')" style="cursor:pointer;">OVR</div><div class="th-num" id="rsort-salary" onclick="setSort('salary')" style="cursor:pointer;">Salary</div>`
@@ -1348,8 +1352,10 @@ function posRankNum(s) {
 
 function renderTable() {
   const el = document.getElementById('playerTable');
-  const isMobile = window.innerWidth <= 768;
-  const isTiny = window.innerWidth <= 480;
+  // Use the same breakpoint computed in buildRosterHeader to guarantee sync
+  const bp = window._rosterBreakpoint || (window.innerWidth <= 480 ? 'tiny' : window.innerWidth <= 768 ? 'mobile' : 'desktop');
+  const isMobile = bp !== 'desktop';
+  const isTiny = bp === 'tiny';
   if (!currentTeam) { el.innerHTML = '<div class="empty-state">Select a team above.</div>'; return; }
   const t = LEAGUE_DATA.teams[currentTeam];
   const sel = allSelections[currentTeam];
@@ -2721,6 +2727,7 @@ document.addEventListener('click', e => {
   });
 
   window.addEventListener('resize', () => {
+    window._rosterBreakpoint = null; // force recalc
     if (currentTeam && currentView === 'roster') { buildRosterHeader(); renderTable(); }
   });
 })();
