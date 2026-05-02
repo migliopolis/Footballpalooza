@@ -136,8 +136,8 @@
   .player-row:hover { background: var(--surface2); }
   .player-row.selected { background: rgba(232,200,74,0.07); border-color: rgba(232,200,74,0.25); }
   .player-row.deselected { opacity: 0.5; }
-  .player-row.proj-mode { min-width: max-content; }
-  .table-header-row.proj-mode { min-width: max-content; }
+  .player-row.proj-mode { min-width: max-content; width: max-content; }
+  .table-header-row.proj-mode { min-width: max-content; width: max-content; }
   .player-row.no-click { cursor: default; }
   .player-row.no-click:hover { background: transparent; }
   .proj-year-cell { font-size: 11px; font-weight: 600; text-align: right; padding-right: 0; display: flex; align-items: center; justify-content: flex-end; }
@@ -310,6 +310,10 @@
   .dc-r7 { color: #8b2e2e; }
   .dc-udfa { color: #3a3f4a; font-style: italic; }
 
+  .roster-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .roster-table-scroll .table-header-row,
+  .roster-table-scroll #playerTable { min-width: max-content; }
+
   .draft-round-header { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); padding: 10px 16px 4px; }
   .draft-pick-row { display: flex; align-items: center; gap: 10px; padding: 7px 16px; border-radius: 0; transition: background 0.1s; border-bottom: 1px solid rgba(42,45,53,0.5); }
   .draft-pick-row.on-clock { background: rgba(232,200,74,0.08); border-left: 3px solid var(--accent); }
@@ -359,7 +363,7 @@
     .td-salary { font-size: 11px; }
 
     /* Proj mode: scroll wrapper so alignment stays correct */
-    .table-area { overflow-x: auto; }
+    .table-area { overflow-x: hidden; }
 
     .cap-panel { flex-wrap: wrap; gap: 8px; }
     .cap-item { flex: 1 1 40%; }
@@ -399,7 +403,7 @@
 <body>
 
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.08</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.09</span></span></div>
   <div class="header-controls">
     <label>Team</label>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -477,7 +481,6 @@
       <div></div><div>Player</div>
     </div>
     <div id="playerTable"><div class="empty-state">Select a team from the dropdown above.</div></div>
-  </div>
 
   <!-- LEAGUE VIEW -->
   <div class="league-view" id="leagueView" style="display:none;">
@@ -1298,6 +1301,27 @@ function buildRosterHeader() {
   const header = document.getElementById('rosterTableHeader');
   if (!header) return;
   header.classList.toggle('proj-mode', showProjection);
+
+  // Wrap header+table in scroll div when proj-mode, unwrap when not
+  const playerTable = document.getElementById('playerTable');
+  const parent = header.parentNode;
+  let scrollWrap = parent.querySelector('.roster-table-scroll');
+
+  if (showProjection) {
+    if (!scrollWrap) {
+      scrollWrap = document.createElement('div');
+      scrollWrap.className = 'roster-table-scroll';
+      parent.insertBefore(scrollWrap, header);
+      scrollWrap.appendChild(header);
+      scrollWrap.appendChild(playerTable);
+    }
+  } else {
+    if (scrollWrap) {
+      parent.insertBefore(header, scrollWrap);
+      parent.insertBefore(playerTable, scrollWrap);
+      scrollWrap.remove();
+    }
+  }
   const isMobile = window.innerWidth <= 768;
   const isTiny = window.innerWidth <= 480;
   const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
