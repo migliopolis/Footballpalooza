@@ -399,7 +399,7 @@
 <body>
 
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.05</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.06</span></span></div>
   <div class="header-controls">
     <label>Team</label>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -559,6 +559,7 @@
     <div class="draft-board-col" id="draftBoardCol">
       <div class="draft-col-header">
         <span class="draft-col-title">Draft Board</span>
+        <span style="font-size:11px;color:var(--accent);font-weight:600;letter-spacing:0.3px;">📅 June 23 · 12PM EST</span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <select id="draftTeamFilter" onchange="renderDraftBoard()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 8px;border-radius:7px;cursor:pointer;outline:none;max-width:140px;">
             <option value="">All Teams</option>
@@ -1305,21 +1306,23 @@ function toggleProjection() {
   const header = document.getElementById('rosterTableHeader');
   header.classList.toggle('proj-mode', showProjection);
   const yearCols = PROJ_YEARS.map(y => `<div class="th-num" style="color:var(--text3)">${y}</div>`).join('');
+  const isMobile = window.innerWidth <= 768;
+  const isTiny = window.innerWidth <= 480;
   if (showProjection) {
     header.innerHTML = `<div></div><div>Player</div>
-      <div class="th-num th-sortable td-pos-rk sort-active" id="rsort-pos" onclick="setSort('pos')">POS</div>
+      ${isTiny ? '' : `<div class="th-num th-sortable td-pos-rk" id="rsort-pos" onclick="setSort('pos')">POS</div>`}
       <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
-      <div class="th-num th-sortable td-pts" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
+      ${isMobile ? '' : `<div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>`}
       <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
-      <div class="th-num th-sortable td-contract" id="rsort-contract" onclick="setSort('contract')">Contract</div>
+      ${isMobile ? '' : `<div class="th-num th-sortable td-contract" id="rsort-contract" onclick="setSort('contract')">Contract</div>`}
       ${yearCols}`;
   } else {
     header.innerHTML = `<div></div><div>Player</div>
-      <div class="th-num th-sortable td-pos-rk" id="rsort-pos" onclick="setSort('pos')">POS</div>
+      ${isTiny ? '' : `<div class="th-num th-sortable" id="rsort-pos" onclick="setSort('pos')">POS</div>`}
       <div class="th-num th-sortable" id="rsort-ecr" onclick="setSort('ecr')">OVR</div>
-      <div class="th-num th-sortable td-pts" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>
+      ${isMobile ? '' : `<div class="th-num th-sortable" id="rsort-pts" onclick="setSort('pts')">2025 Pts</div>`}
       <div class="th-num th-sortable" id="rsort-salary" onclick="setSort('salary')">Salary</div>
-      <div class="th-num th-sortable td-contract" id="rsort-contract" onclick="setSort('contract')">Contract</div>`;
+      ${isMobile ? '' : `<div class="th-num th-sortable" id="rsort-contract" onclick="setSort('contract')">Contract</div>`}`;
   }
   renderTable();
 }
@@ -1331,6 +1334,8 @@ function posRankNum(s) {
 
 function renderTable() {
   const el = document.getElementById('playerTable');
+  const isMobile = window.innerWidth <= 768;
+  const isTiny = window.innerWidth <= 480;
   if (!currentTeam) { el.innerHTML = '<div class="empty-state">Select a team above.</div>'; return; }
   const t = LEAGUE_DATA.teams[currentTeam];
   const sel = allSelections[currentTeam];
@@ -1427,11 +1432,11 @@ function renderTable() {
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
         <div><div class="player-name">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}${p._via ? `<span class="contract-tip" style="font-size:9px;color:var(--text3);cursor:help;margin-left:3px;">via ${p._via}<span class="tip-box"><div class="via-tip-title">📋 Trade</div><div class="via-tip-line">Acquired from <strong>${p._via}</strong></div>${p._tradeDate ? `<div class="via-tip-line" style="color:var(--text3);">${p._tradeDate}</div>` : ''}</span></span>` : ''}</div></div>
       </div>
-      <div class="td-num td-pos-rk" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>
+      ${isTiny ? '' : `<div class="td-num" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>`}
       <div class="td-num">${p.ecr && p.ecr < 999 ? p.ecr : '—'}</div>
-      <div class="td-num td-pts">${p.pts > 0 ? p.pts.toFixed(1) : '—'}</div>
+      ${isMobile ? '' : `<div class="td-num">${p.pts > 0 ? p.pts.toFixed(1) : '—'}</div>`}
       <div class="td-salary">$${p.salary}</div>
-      <div class="td-contract">${isDrafted && isReleased ? '—' : isDrafted ? contractStr(onTaxi ? '1/6' : '1/5', p.salary, p.pos, 'var(--orange)') : contractStr(p.contract, p.salary, p.pos)}</div>
+      ${isMobile ? '' : `<div class="td-contract">${isDrafted && isReleased ? '—' : isDrafted ? contractStr(onTaxi ? '1/6' : '1/5', p.salary, p.pos, 'var(--orange)') : contractStr(p.contract, p.salary, p.pos)}</div>`}
       ${projCols}
     </div>`;
   }).join('');
