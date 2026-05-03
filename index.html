@@ -843,7 +843,15 @@ function setView(v) {
   const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades' };
   document.querySelectorAll('.view-btn').forEach(b =>
     b.classList.toggle('active', b.textContent.trim() === labels[v]));
-  document.getElementById('rosterView').style.display = v === 'roster' ? 'block' : 'none';
+  // rosterView is the scroll container for all views — never hide it
+  // just show/hide the roster-specific inner elements
+  const rosterControls = document.querySelector('#rosterView .controls');
+  const rosterHeader = document.getElementById('rosterTableHeader');
+  const playerTable = document.getElementById('playerTable');
+  const isRoster = v === 'roster';
+  if (rosterControls) rosterControls.style.display = isRoster ? '' : 'none';
+  if (rosterHeader) rosterHeader.style.display = isRoster ? '' : 'none';
+  if (playerTable) playerTable.style.display = isRoster ? '' : 'none';
   document.getElementById('leagueView').style.display = v === 'league' ? 'block' : 'none';
   document.getElementById('availView').style.display = v === 'available' ? 'block' : 'none';
   document.getElementById('draftView').style.display = v === 'draft' ? 'flex' : 'none';
