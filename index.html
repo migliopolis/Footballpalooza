@@ -39,10 +39,11 @@
   .view-btn { padding: 8px 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; background: transparent; border: none; color: var(--text2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .view-btn.active { background: var(--accent); color: #000; }
 
-  .main { display: flex; min-height: calc(100vh - 61px); }
+  .main { display: flex; flex: 1; min-height: 0; overflow: hidden; }
 
   /* SIDEBAR */
-  .sidebar { width: 300px; min-width: 220px; max-width: 600px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; position: relative; }
+  .sidebar { width: 300px; min-width: 220px; max-width: 600px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; position: relative; scrollbar-width: none; -ms-overflow-style: none; }
+  .sidebar::-webkit-scrollbar { display: none; }
   .sidebar-resizer { position: absolute; top: 0; right: -3px; width: 6px; height: 100%; cursor: col-resize; z-index: 10; background: transparent; transition: background 0.15s; }
   .sidebar-resizer:hover, .sidebar-resizer.dragging { background: var(--accent); opacity: 0.5; }
   .team-identity { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; min-height: 72px; }
@@ -401,7 +402,7 @@
 </style>
 </head>
 <body>
-
+<div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
   <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.10</span></span></div>
   <div class="header-controls">
@@ -2733,10 +2734,10 @@ document.addEventListener('click', e => {
 })();
 </script>
 
-<footer style="background:var(--surface);border-top:1px solid var(--border);padding:14px 24px;text-align:center;">
-  <p style="font-size:11px;color:var(--text3);line-height:1.6;max-width:900px;margin:0 auto;">
-    Footballpalooza 2026 Keeper Builder is an unofficial fantasy football tool intended solely for private, non-commercial use by league members. Player names, team names, and statistical data are used for informational purposes only. This application is not affiliated with, endorsed by, or sponsored by the NFL, any NFL team, My Fantasy League (MFL), or any other professional sports organization. All NFL team names, logos, and related marks are the property of their respective owners. Fantasy sports participation may be subject to applicable federal, state, and local laws. &copy; 2026 Footballpalooza. All rights reserved.
-  </p>
+</div><!-- end app shell -->
+
+<footer style="padding:16px 24px;text-align:center;border-top:1px solid var(--border);background:var(--surface);">
+  <p style="font-size:11px;color:var(--text3);line-height:1.6;max-width:900px;margin:0 auto;">Footballpalooza 2026 Keeper Builder is an unofficial fantasy football tool intended solely for private, non-commercial use by league members. Player names, team names, and statistical data are used for informational purposes only. Not affiliated with, endorsed by, or sponsored by the NFL, any NFL team, My Fantasy League (MFL), or any other professional sports organization. All NFL team names, logos, and related marks are the property of their respective owners. Fantasy sports participation may be subject to applicable federal, state, and local laws. &copy; 2026 Footballpalooza. All rights reserved.</p>
 </footer>
 </body>
 </html>
