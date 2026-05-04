@@ -411,7 +411,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.10</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.11</span></span></div>
   <div class="header-controls">
     <label>Team</label>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -578,10 +578,8 @@
         <span class="draft-col-title">Draft Board</span>
         <span style="font-size:11px;color:var(--accent);font-weight:600;letter-spacing:0.3px;">📅 June 23 · 12PM EST</span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <select id="draftTeamFilter" onchange="renderDraftBoard()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 8px;border-radius:7px;cursor:pointer;outline:none;max-width:140px;">
-            <option value="">All Teams</option>
-          </select>
-          <button class="reset-btn" style="width:auto;padding:6px 14px;background:rgba(74,158,255,0.15);border-color:var(--accent2);color:var(--accent2);" onclick="runMockDraft()">⚡ Mock Draft</button>
+          <button class="reset-btn" id="mockMyPicksBtn" style="width:auto;padding:6px 14px;background:rgba(232,200,74,0.12);border-color:var(--accent);color:var(--accent);" onclick="runMockDraft('myteam')" title="Select your team above, then auto-fill all other teams — make your own picks manually">⚡ Mock My Picks</button>
+          <button class="reset-btn" style="width:auto;padding:6px 14px;background:rgba(74,158,255,0.15);border-color:var(--accent2);color:var(--accent2);" onclick="runMockDraft('full')" title="Auto-fill every pick for all teams">⚡ Full Mock</button>
           <button class="reset-btn" style="width:auto;padding:6px 14px;" onclick="resetDraft()">↺ Reset</button>
         </div>
       </div>
@@ -738,7 +736,6 @@ let lineupDisplay = 'rank'; // 'rank' or 'salary'
 
 // Populate team dropdown
 const picker = document.getElementById('teamPicker');
-const draftTeamPicker = document.getElementById('draftTeamFilter');
 // Add division headers to team picker
 let lastDiv = '';
 for (const tid of DIVISION_ORDER) {
@@ -754,18 +751,12 @@ for (const tid of DIVISION_ORDER) {
   const o = document.createElement('option');
   o.value = tid; o.textContent = t.name;
   picker.lastChild.appendChild(o);
-  const o2 = document.createElement('option');
-  o2.value = tid; o2.textContent = t.name;
-  draftTeamPicker.appendChild(o2);
 }
 // dummy loop replacement
 for (const [tid, t] of []) {
   const o = document.createElement('option');
   o.value = tid; o.textContent = t.name;
   picker.appendChild(o);
-  const o2 = document.createElement('option');
-  o2.value = tid; o2.textContent = t.name;
-  draftTeamPicker.appendChild(o2);
 }
 
 function contractStr(cy, salary, pos, color) {
@@ -2048,14 +2039,20 @@ async function resetDraft() {
 function renderDraftBoard() {
   const el = document.getElementById('draftBoard');
   const nextIdx = getNextPickIndex();
-  const filterTid = document.getElementById('draftTeamFilter')?.value || '';
+
+  // Keep Mock My Picks button label in sync with selected team
+  const mockBtn = document.getElementById('mockMyPicksBtn');
+  if (mockBtn) {
+    const t = currentTeam ? LEAGUE_DATA.teams[currentTeam] : null;
+    mockBtn.textContent = t ? ('⚡ Mock My Picks · ' + t.name) : '⚡ Mock My Picks';
+    mockBtn.title = t
+      ? ('Auto-fill all other teams — make ' + t.name + '\'s picks manually')
+      : 'Select your team above first';
+  }
   let html = '';
   let lastRound = 0;
 
   DRAFT_ORDER.forEach((slot, i) => {
-    // Apply team filter — skip picks not belonging to this team
-    if (filterTid && slot.franchise !== filterTid) return;
-
     if (slot.round !== lastRound) {
       html += `<div class="draft-round-header">Round ${slot.round}</div>`;
       lastRound = slot.round;
@@ -2064,6 +2061,7 @@ function renderDraftBoard() {
     const pid = draftPicks[i];
     const isOnClock = i === nextIdx;
     const isDrafted = !!pid;
+    const isMyTeam = currentTeam && slot.franchise === currentTeam;
 
     // Find player if drafted
     let player = null;
@@ -2090,12 +2088,12 @@ function renderDraftBoard() {
       }
     }
 
-    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}">
+    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}" ${isMyTeam ? 'style="border-left:2px solid var(--accent);"' : ''}>
       <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
       <div class="draft-pick-team">
         ${logoHtml}
         <div>
-          <div class="draft-pick-team-name">${team?.name || slot.franchise}</div>
+          <div class="draft-pick-team-name">${team?.name || slot.franchise}${isMyTeam ? ' <span style="font-size:9px;font-weight:700;padding:1px 5px;background:rgba(232,200,74,0.15);border-radius:3px;color:var(--accent);">YOU</span>' : ''}</div>
           ${viaHtml}
         </div>
       </div>
@@ -2174,12 +2172,19 @@ function renderDraftView() {
 }
 
 // ─── MOCK DRAFT ──────────────────────────────────────────────────────────────
-async function runMockDraft() {
+async function runMockDraft(mode) {
   function gaussianRandom() {
     let u = 0, v = 0;
     while (u === 0) u = Math.random();
     while (v === 0) v = Math.random();
     return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  // In myteam mode, require a team to be selected
+  const myTeam = (mode === 'myteam') ? currentTeam : null;
+  if (mode === 'myteam' && !currentTeam) {
+    alert('Select your team from the dropdown first, then use Mock My Picks.');
+    return;
   }
 
   // Always start fresh — clear all picks and released state
@@ -2204,14 +2209,19 @@ async function runMockDraft() {
     taxiAssignments[tid] = ['', '', '', ''];
   }
 
-  // Fill all pick slots in order from the sorted pool
+  // Fill pick slots — in myteam mode, skip the selected team's picks (leave for manual)
   let poolIdx = 0;
   for (let i = 0; i < DRAFT_ORDER.length; i++) {
+    if (poolIdx >= pool.length) break;
+    const fid = DRAFT_ORDER[i].franchise;
+    // Skip this team's slots in myteam mode — owner will pick manually
+    if (myTeam && fid === myTeam) continue;
+    // Advance past any already-assigned players (safety)
+    while (poolIdx < pool.length && draftPicks.includes(pool[poolIdx].id)) poolIdx++;
     if (poolIdx >= pool.length) break;
     const pid = pool[poolIdx].id;
     draftPicks[i] = pid;
     // Auto-assign to taxi
-    const fid = DRAFT_ORDER[i].franchise;
     const taxi = taxiAssignments[fid];
     const emptySlot = taxi.indexOf('');
     if (emptySlot !== -1) taxi[emptySlot] = pid;
@@ -3240,14 +3250,20 @@ async function resetDraft() {
 function renderDraftBoard() {
   const el = document.getElementById('draftBoard');
   const nextIdx = getNextPickIndex();
-  const filterTid = document.getElementById('draftTeamFilter')?.value || '';
+
+  // Keep Mock My Picks button label in sync with selected team
+  const mockBtn = document.getElementById('mockMyPicksBtn');
+  if (mockBtn) {
+    const t = currentTeam ? LEAGUE_DATA.teams[currentTeam] : null;
+    mockBtn.textContent = t ? ('⚡ Mock My Picks · ' + t.name) : '⚡ Mock My Picks';
+    mockBtn.title = t
+      ? ('Auto-fill all other teams — make ' + t.name + '\'s picks manually')
+      : 'Select your team above first';
+  }
   let html = '';
   let lastRound = 0;
 
   DRAFT_ORDER.forEach((slot, i) => {
-    // Apply team filter — skip picks not belonging to this team
-    if (filterTid && slot.franchise !== filterTid) return;
-
     if (slot.round !== lastRound) {
       html += `<div class="draft-round-header">Round ${slot.round}</div>`;
       lastRound = slot.round;
@@ -3256,6 +3272,7 @@ function renderDraftBoard() {
     const pid = draftPicks[i];
     const isOnClock = i === nextIdx;
     const isDrafted = !!pid;
+    const isMyTeam = currentTeam && slot.franchise === currentTeam;
 
     // Find player if drafted
     let player = null;
@@ -3282,12 +3299,12 @@ function renderDraftBoard() {
       }
     }
 
-    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}">
+    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}" ${isMyTeam ? 'style="border-left:2px solid var(--accent);"' : ''}>
       <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
       <div class="draft-pick-team">
         ${logoHtml}
         <div>
-          <div class="draft-pick-team-name">${team?.name || slot.franchise}</div>
+          <div class="draft-pick-team-name">${team?.name || slot.franchise}${isMyTeam ? ' <span style="font-size:9px;font-weight:700;padding:1px 5px;background:rgba(232,200,74,0.15);border-radius:3px;color:var(--accent);">YOU</span>' : ''}</div>
           ${viaHtml}
         </div>
       </div>
@@ -3366,12 +3383,19 @@ function renderDraftView() {
 }
 
 // ─── MOCK DRAFT ──────────────────────────────────────────────────────────────
-async function runMockDraft() {
+async function runMockDraft(mode) {
   function gaussianRandom() {
     let u = 0, v = 0;
     while (u === 0) u = Math.random();
     while (v === 0) v = Math.random();
     return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  // In myteam mode, require a team to be selected
+  const myTeam = (mode === 'myteam') ? currentTeam : null;
+  if (mode === 'myteam' && !currentTeam) {
+    alert('Select your team from the dropdown first, then use Mock My Picks.');
+    return;
   }
 
   // Always start fresh — clear all picks and released state
@@ -3396,14 +3420,19 @@ async function runMockDraft() {
     taxiAssignments[tid] = ['', '', '', ''];
   }
 
-  // Fill all pick slots in order from the sorted pool
+  // Fill pick slots — in myteam mode, skip the selected team's picks (leave for manual)
   let poolIdx = 0;
   for (let i = 0; i < DRAFT_ORDER.length; i++) {
+    if (poolIdx >= pool.length) break;
+    const fid = DRAFT_ORDER[i].franchise;
+    // Skip this team's slots in myteam mode — owner will pick manually
+    if (myTeam && fid === myTeam) continue;
+    // Advance past any already-assigned players (safety)
+    while (poolIdx < pool.length && draftPicks.includes(pool[poolIdx].id)) poolIdx++;
     if (poolIdx >= pool.length) break;
     const pid = pool[poolIdx].id;
     draftPicks[i] = pid;
     // Auto-assign to taxi
-    const fid = DRAFT_ORDER[i].franchise;
     const taxi = taxiAssignments[fid];
     const emptySlot = taxi.indexOf('');
     if (emptySlot !== -1) taxi[emptySlot] = pid;
