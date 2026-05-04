@@ -413,16 +413,6 @@
 <div class="header">
   <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.11</span></span></div>
   <div class="header-controls">
-    <label>Team</label>
-    <div style="display:flex;align-items:center;gap:6px;">
-      <button onclick="navigateTeam(-1)" style="padding:6px 10px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;" title="Previous team">‹</button>
-      <select id="teamPicker" onchange="selectTeam(this.value)" style="flex:1;">
-      <option value="">— Select a team —</option>
-    </select>
-      <button onclick="navigateTeam(1)" style="padding:6px 10px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;" title="Next team">›</button>
-    </div>
-    <button onclick="saveRosterFile()" style="padding:7px 13px;font-size:11px;font-weight:600;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap;" title="Save your keeper selections to a file">💾 Save</button>
-    <label style="padding:7px 13px;font-size:11px;font-weight:600;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap;" title="Load previously saved keeper selections">📂 Load<input type="file" accept=".json" onchange="loadRosterFile(event)" style="display:none;"></label>
     <div class="view-toggle">
       <button class="view-btn active" onclick="setView('roster')">Roster</button>
       <button class="view-btn" onclick="setView('league')">All Keepers</button>
@@ -436,6 +426,20 @@
 <div class="main">
   <div class="sidebar" id="sidebar">
     <div class="sidebar-resizer" id="sidebarResizer"></div>
+    <!-- Team picker lives in sidebar -->
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;align-items:center;gap:5px;">
+        <button onclick="navigateTeam(-1)" style="padding:5px 9px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;flex-shrink:0;" title="Previous team">‹</button>
+        <select id="teamPicker" onchange="selectTeam(this.value)" style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 10px;border-radius:8px;cursor:pointer;outline:none;">
+          <option value="">— Select a team —</option>
+        </select>
+        <button onclick="navigateTeam(1)" style="padding:5px 9px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;flex-shrink:0;" title="Next team">›</button>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="saveRosterFile()" style="flex:1;padding:6px 10px;font-size:11px;font-weight:600;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;" title="Save keeper selections to file">💾 Save</button>
+        <label style="flex:1;padding:6px 10px;font-size:11px;font-weight:600;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;text-align:center;" title="Load previously saved selections">📂 Load<input type="file" accept=".json" onchange="loadRosterFile(event)" style="display:none;"></label>
+      </div>
+    </div>
     <div class="team-identity" id="teamIdentity">
       <div class="team-logo-placeholder"></div>
       <div><div class="team-identity-name" style="color:var(--text3);">No team selected</div><div class="team-identity-sub">Pick a team above</div></div>
@@ -578,7 +582,10 @@
         <span class="draft-col-title">Draft Board</span>
         <span style="font-size:11px;color:var(--accent);font-weight:600;letter-spacing:0.3px;">📅 June 23 · 12PM EST</span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <button class="reset-btn" id="mockMyPicksBtn" style="width:auto;padding:6px 14px;background:rgba(232,200,74,0.12);border-color:var(--accent);color:var(--accent);" onclick="runMockDraft('myteam')" title="Select your team above, then auto-fill all other teams — make your own picks manually">⚡ Mock My Picks</button>
+          <select id="draftTeamFilter" onchange="renderDraftBoard()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 8px;border-radius:7px;cursor:pointer;outline:none;max-width:140px;">
+            <option value="">All Teams</option>
+          </select>
+          <button class="reset-btn" id="mockMyPicksBtn" style="width:auto;padding:6px 14px;background:rgba(232,200,74,0.12);border-color:var(--accent);color:var(--accent);" onclick="runMockDraft('myteam')" title="Auto-fill all other teams; you pick for your team">⚡ Mock My Picks</button>
           <button class="reset-btn" style="width:auto;padding:6px 14px;background:rgba(74,158,255,0.15);border-color:var(--accent2);color:var(--accent2);" onclick="runMockDraft('full')" title="Auto-fill every pick for all teams">⚡ Full Mock</button>
           <button class="reset-btn" style="width:auto;padding:6px 14px;" onclick="resetDraft()">↺ Reset</button>
         </div>
@@ -736,6 +743,7 @@ let lineupDisplay = 'rank'; // 'rank' or 'salary'
 
 // Populate team dropdown
 const picker = document.getElementById('teamPicker');
+const draftTeamPicker = document.getElementById('draftTeamFilter');
 // Add division headers to team picker
 let lastDiv = '';
 for (const tid of DIVISION_ORDER) {
@@ -751,12 +759,18 @@ for (const tid of DIVISION_ORDER) {
   const o = document.createElement('option');
   o.value = tid; o.textContent = t.name;
   picker.lastChild.appendChild(o);
+  const o2 = document.createElement('option');
+  o2.value = tid; o2.textContent = t.name;
+  draftTeamPicker.appendChild(o2);
 }
 // dummy loop replacement
 for (const [tid, t] of []) {
   const o = document.createElement('option');
   o.value = tid; o.textContent = t.name;
   picker.appendChild(o);
+  const o2 = document.createElement('option');
+  o2.value = tid; o2.textContent = t.name;
+  draftTeamPicker.appendChild(o2);
 }
 
 function contractStr(cy, salary, pos, color) {
@@ -884,9 +898,13 @@ function selectTeam(tid) {
     ? `<img class="team-logo" src="${t.logo}" alt="${t.name}"><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`
     : `<div class="team-logo-placeholder"></div><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`;
   document.getElementById('lineupSection').style.display = 'block';
+  // Update Mock My Picks button label to reflect new team
+  const mockBtn = document.getElementById('mockMyPicksBtn');
+  if (mockBtn) mockBtn.textContent = '⚡ Mock My Picks · ' + t.name;
   buildRosterHeader();
   autoAssignLineup(tid);
   updateCap(); renderTable(); renderLineup();
+  if (currentView === 'draft') renderDraftBoard(); // refresh YOU highlights + board filter
   if (currentView === 'available') { auctionValues = null; const btn = document.getElementById('genAuctionBtn'); if(btn) btn.textContent = '⚡ Generate Auction Values'; renderAvailView(); }
 }
 
@@ -1976,11 +1994,14 @@ function setDraftFilter(f) {
   renderDraftPool();
 }
 
+let mockMode = null; // 'myteam' | 'full' | null — tracks active mock mode
+
 async function draftPlayer(pid) {
   const nextIdx = getNextPickIndex();
   if (nextIdx === -1) return;
+  // In myteam mode, the next pick must belong to the user's team
+  if (mockMode === 'myteam' && currentTeam && DRAFT_ORDER[nextIdx].franchise !== currentTeam) return;
   draftPicks[nextIdx] = pid;
-  // Auto-assign to first empty taxi slot for the team that made the pick
   const fid = DRAFT_ORDER[nextIdx].franchise;
   const taxi = taxiAssignments[fid];
   const emptySlot = taxi.indexOf('');
@@ -1989,6 +2010,8 @@ async function draftPlayer(pid) {
   if (currentTeam && fid === currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
   try { await saveDraftState(); } catch(e) {}
+  // Continue animating other teams' picks after user makes theirs
+  if (mockMode === 'myteam') continueMockAfterPick();
 }
 
 async function undoPick(idx) {
@@ -2028,6 +2051,8 @@ async function resetDraft() {
     return;
   }
   if (btn) { btn.dataset.confirming = ''; btn.textContent = '↺ Reset'; btn.style.borderColor = ''; btn.style.color = ''; }
+  mockMode = null;
+  mockDraftAbort = true;
   draftPicks = new Array(DRAFT_ORDER.length).fill('');
   releasedDraftRookies = new Set();
   for (const tid of Object.keys(taxiAssignments)) taxiAssignments[tid] = ['', '', '', ''];
@@ -2039,20 +2064,20 @@ async function resetDraft() {
 function renderDraftBoard() {
   const el = document.getElementById('draftBoard');
   const nextIdx = getNextPickIndex();
-
-  // Keep Mock My Picks button label in sync with selected team
+  const filterTid = document.getElementById('draftTeamFilter')?.value || '';
+  // Update Mock My Picks label to reflect selected team
   const mockBtn = document.getElementById('mockMyPicksBtn');
-  if (mockBtn) {
-    const t = currentTeam ? LEAGUE_DATA.teams[currentTeam] : null;
-    mockBtn.textContent = t ? ('⚡ Mock My Picks · ' + t.name) : '⚡ Mock My Picks';
-    mockBtn.title = t
-      ? ('Auto-fill all other teams — make ' + t.name + '\'s picks manually')
-      : 'Select your team above first';
+  if (mockBtn && currentTeam) {
+    const t = LEAGUE_DATA.teams[currentTeam];
+    if (t) mockBtn.textContent = '⚡ Mock My Picks · ' + t.name;
   }
   let html = '';
   let lastRound = 0;
 
   DRAFT_ORDER.forEach((slot, i) => {
+    // Apply team filter — skip picks not belonging to this team
+    if (filterTid && slot.franchise !== filterTid) return;
+
     if (slot.round !== lastRound) {
       html += `<div class="draft-round-header">Round ${slot.round}</div>`;
       lastRound = slot.round;
@@ -2061,7 +2086,7 @@ function renderDraftBoard() {
     const pid = draftPicks[i];
     const isOnClock = i === nextIdx;
     const isDrafted = !!pid;
-    const isMyTeam = currentTeam && slot.franchise === currentTeam;
+    const isMyTeam = !!(currentTeam && slot.franchise === currentTeam);
 
     // Find player if drafted
     let player = null;
@@ -2088,12 +2113,15 @@ function renderDraftBoard() {
       }
     }
 
-    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}" ${isMyTeam ? 'style="border-left:2px solid var(--accent);"' : ''}>
+    const youBadge = isMyTeam ? ' <span style="font-size:9px;font-weight:700;padding:1px 5px;background:rgba(232,200,74,0.18);border-radius:3px;color:var(--accent);">YOU</span>' : '';
+    const rowStyle = isMyTeam ? ' style="border-left:3px solid var(--accent);padding-left:13px;"' : '';
+
+    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}"${rowStyle}>
       <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
       <div class="draft-pick-team">
         ${logoHtml}
         <div>
-          <div class="draft-pick-team-name">${team?.name || slot.franchise}${isMyTeam ? ' <span style="font-size:9px;font-weight:700;padding:1px 5px;background:rgba(232,200,74,0.15);border-radius:3px;color:var(--accent);">YOU</span>' : ''}</div>
+          <div class="draft-pick-team-name">${team?.name || slot.franchise}${youBadge}</div>
           ${viaHtml}
         </div>
       </div>
@@ -2172,6 +2200,8 @@ function renderDraftView() {
 }
 
 // ─── MOCK DRAFT ──────────────────────────────────────────────────────────────
+let mockDraftAbort = false; // flag to cancel an in-progress animated mock
+
 async function runMockDraft(mode) {
   function gaussianRandom() {
     let u = 0, v = 0;
@@ -2180,55 +2210,160 @@ async function runMockDraft(mode) {
     return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
   }
 
-  // In myteam mode, require a team to be selected
+  // In myteam mode, require a selected team
   const myTeam = (mode === 'myteam') ? currentTeam : null;
-  if (mode === 'myteam' && !currentTeam) {
-    alert('Select your team from the dropdown first, then use Mock My Picks.');
+  if (mode === 'myteam' && !myTeam) {
+    alert('Select your team from the sidebar first, then use Mock My Picks.');
     return;
   }
 
-  // Always start fresh — clear all picks and released state
+  mockMode = mode;
+  // Abort any running animated mock
+  mockDraftAbort = true;
+  await new Promise(r => setTimeout(r, 60)); // let any running loop notice the flag
+  mockDraftAbort = false;
+
+  // Always start fresh
   draftPicks = new Array(DRAFT_ORDER.length).fill('');
   releasedDraftRookies = new Set();
+  for (const tid of Object.keys(LEAGUE_DATA.teams)) taxiAssignments[tid] = ['', '', '', ''];
 
-  // Build pool of all ranked rookies
+  // Build & shuffle ranked pool
   const pool = LEAGUE_DATA.freeAgents
     .filter(p => p.rookie && p.draftAvg != null)
     .map(p => ({ ...p }));
-
-  // Assign each player a single simulated rank for this run
-  for (const p of pool) {
-    p._simRank = Math.max(0.1, p.draftAvg + (p.draftStd || 5) * gaussianRandom());
-  }
-
-  // Sort by simulated rank
+  for (const p of pool) p._simRank = Math.max(0.1, p.draftAvg + (p.draftStd || 5) * gaussianRandom());
   pool.sort((a, b) => a._simRank - b._simRank);
 
-  // Reset all taxi assignments since draft is fresh
-  for (const tid of Object.keys(LEAGUE_DATA.teams)) {
-    taxiAssignments[tid] = ['', '', '', ''];
+  if (mode === 'full') {
+    // Full mock — fill everything instantly
+    let poolIdx = 0;
+    for (let i = 0; i < DRAFT_ORDER.length; i++) {
+      if (poolIdx >= pool.length) break;
+      const pid = pool[poolIdx++].id;
+      draftPicks[i] = pid;
+      const fid = DRAFT_ORDER[i].franchise;
+      const taxi = taxiAssignments[fid];
+      const slot = taxi.indexOf(''); if (slot !== -1) taxi[slot] = pid;
+    }
+    renderDraftView();
+    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+    if (currentView === 'league') renderLeagueView();
+    try { await saveDraftState(); } catch(e) {}
+    return;
   }
 
-  // Fill pick slots — in myteam mode, skip the selected team's picks (leave for manual)
+  // ── myteam mode: animated, pick-by-pick ──────────────────────────────────
+  // Pre-assign sim picks for all non-user slots
+  const simPicks = {}; // pickIdx -> playerId
   let poolIdx = 0;
+  const usedIds = new Set();
   for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (poolIdx >= pool.length) break;
     const fid = DRAFT_ORDER[i].franchise;
-    // Skip this team's slots in myteam mode — owner will pick manually
-    if (myTeam && fid === myTeam) continue;
-    // Advance past any already-assigned players (safety)
-    while (poolIdx < pool.length && draftPicks.includes(pool[poolIdx].id)) poolIdx++;
+    if (fid === myTeam) continue; // user picks these manually
+    while (poolIdx < pool.length && usedIds.has(pool[poolIdx].id)) poolIdx++;
     if (poolIdx >= pool.length) break;
-    const pid = pool[poolIdx].id;
-    draftPicks[i] = pid;
-    // Auto-assign to taxi
-    const taxi = taxiAssignments[fid];
-    const emptySlot = taxi.indexOf('');
-    if (emptySlot !== -1) taxi[emptySlot] = pid;
+    simPicks[i] = pool[poolIdx].id;
+    usedIds.add(pool[poolIdx].id);
     poolIdx++;
   }
 
-  renderDraftView();
+  renderDraftView(); // show empty board
+
+  // Animate through picks up to (not including) the first user pick
+  for (let i = 0; i < DRAFT_ORDER.length; i++) {
+    if (mockDraftAbort) return;
+    const fid = DRAFT_ORDER[i].franchise;
+
+    if (fid === myTeam) {
+      // It's the user's pick — stop and let them choose from the pool
+      renderDraftView(); // re-render so on-clock row is visible
+      if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+      try { await saveDraftState(); } catch(e) {}
+      return; // user picks via draftPlayer(); that will call continueMockAfterPick()
+    }
+
+    // Auto-pick for this team
+    const pid = simPicks[i];
+    if (!pid) continue;
+    draftPicks[i] = pid;
+    const taxi = taxiAssignments[fid];
+    const slot = taxi.indexOf(''); if (slot !== -1) taxi[slot] = pid;
+
+    renderDraftView();
+    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+
+    // 500ms delay between picks
+    await new Promise(r => setTimeout(r, 500));
+    if (mockDraftAbort) return;
+  }
+
+  // All picks done
+  if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+  if (currentView === 'league') renderLeagueView();
+  try { await saveDraftState(); } catch(e) {}
+}
+
+// Called after the user makes their own pick during a myteam mock — continues animating
+// until the next user pick (or end of draft).
+let _mockSimPicks = {}; // persists between user picks in a session
+async function continueMockAfterPick() {
+  const myTeam = currentTeam;
+  if (!myTeam) return;
+  mockDraftAbort = false;
+
+  // Rebuild sim picks for any remaining unfilled non-user slots
+  // We need to know what players are still available
+  const usedIds = new Set(draftPicks.filter(Boolean));
+
+  // Build ordered pool of remaining ranked rookies
+  const pool = LEAGUE_DATA.freeAgents
+    .filter(p => p.rookie && p.draftAvg != null && !usedIds.has(p.id))
+    .map(p => ({ ...p }))
+    .sort((a, b) => (a.draftAvg || 999) - (b.draftAvg || 999));
+
+  // Assign sim picks to remaining empty non-user slots in order
+  let poolIdx = 0;
+  const simPicks = {};
+  for (let i = 0; i < DRAFT_ORDER.length; i++) {
+    if (draftPicks[i]) continue; // already filled
+    const fid = DRAFT_ORDER[i].franchise;
+    if (fid === myTeam) continue; // user picks
+    while (poolIdx < pool.length && (draftPicks.includes(pool[poolIdx].id) || usedIds.has(pool[poolIdx].id))) poolIdx++;
+    if (poolIdx >= pool.length) break;
+    simPicks[i] = pool[poolIdx].id;
+    usedIds.add(pool[poolIdx].id);
+    poolIdx++;
+  }
+
+  // Animate from current position
+  const start = draftPicks.indexOf(''); // first empty slot
+  for (let i = start === -1 ? DRAFT_ORDER.length : start; i < DRAFT_ORDER.length; i++) {
+    if (mockDraftAbort) return;
+    if (draftPicks[i]) continue; // already filled (user's picks)
+    const fid = DRAFT_ORDER[i].franchise;
+
+    if (fid === myTeam) {
+      // Pause at next user pick
+      renderDraftView();
+      if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+      try { await saveDraftState(); } catch(e) {}
+      return;
+    }
+
+    const pid = simPicks[i];
+    if (!pid) continue;
+    draftPicks[i] = pid;
+    const taxi = taxiAssignments[fid];
+    const slot = taxi.indexOf(''); if (slot !== -1) taxi[slot] = pid;
+
+    renderDraftView();
+    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+
+    await new Promise(r => setTimeout(r, 500));
+    if (mockDraftAbort) return;
+  }
+
   if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
   try { await saveDraftState(); } catch(e) {}
@@ -3190,8 +3325,8 @@ function setDraftFilter(f) {
 async function draftPlayer(pid) {
   const nextIdx = getNextPickIndex();
   if (nextIdx === -1) return;
+  if (mockMode === 'myteam' && currentTeam && DRAFT_ORDER[nextIdx].franchise !== currentTeam) return;
   draftPicks[nextIdx] = pid;
-  // Auto-assign to first empty taxi slot for the team that made the pick
   const fid = DRAFT_ORDER[nextIdx].franchise;
   const taxi = taxiAssignments[fid];
   const emptySlot = taxi.indexOf('');
@@ -3200,6 +3335,7 @@ async function draftPlayer(pid) {
   if (currentTeam && fid === currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
   try { await saveDraftState(); } catch(e) {}
+  if (mockMode === 'myteam') continueMockAfterPick();
 }
 
 async function undoPick(idx) {
@@ -3250,20 +3386,14 @@ async function resetDraft() {
 function renderDraftBoard() {
   const el = document.getElementById('draftBoard');
   const nextIdx = getNextPickIndex();
-
-  // Keep Mock My Picks button label in sync with selected team
-  const mockBtn = document.getElementById('mockMyPicksBtn');
-  if (mockBtn) {
-    const t = currentTeam ? LEAGUE_DATA.teams[currentTeam] : null;
-    mockBtn.textContent = t ? ('⚡ Mock My Picks · ' + t.name) : '⚡ Mock My Picks';
-    mockBtn.title = t
-      ? ('Auto-fill all other teams — make ' + t.name + '\'s picks manually')
-      : 'Select your team above first';
-  }
+  const filterTid = document.getElementById('draftTeamFilter')?.value || '';
   let html = '';
   let lastRound = 0;
 
   DRAFT_ORDER.forEach((slot, i) => {
+    // Apply team filter — skip picks not belonging to this team
+    if (filterTid && slot.franchise !== filterTid) return;
+
     if (slot.round !== lastRound) {
       html += `<div class="draft-round-header">Round ${slot.round}</div>`;
       lastRound = slot.round;
@@ -3272,7 +3402,6 @@ function renderDraftBoard() {
     const pid = draftPicks[i];
     const isOnClock = i === nextIdx;
     const isDrafted = !!pid;
-    const isMyTeam = currentTeam && slot.franchise === currentTeam;
 
     // Find player if drafted
     let player = null;
@@ -3299,12 +3428,12 @@ function renderDraftBoard() {
       }
     }
 
-    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}" ${isMyTeam ? 'style="border-left:2px solid var(--accent);"' : ''}>
+    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}">
       <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
       <div class="draft-pick-team">
         ${logoHtml}
         <div>
-          <div class="draft-pick-team-name">${team?.name || slot.franchise}${isMyTeam ? ' <span style="font-size:9px;font-weight:700;padding:1px 5px;background:rgba(232,200,74,0.15);border-radius:3px;color:var(--accent);">YOU</span>' : ''}</div>
+          <div class="draft-pick-team-name">${team?.name || slot.franchise}</div>
           ${viaHtml}
         </div>
       </div>
@@ -3383,67 +3512,8 @@ function renderDraftView() {
 }
 
 // ─── MOCK DRAFT ──────────────────────────────────────────────────────────────
-async function runMockDraft(mode) {
-  function gaussianRandom() {
-    let u = 0, v = 0;
-    while (u === 0) u = Math.random();
-    while (v === 0) v = Math.random();
-    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-  }
-
-  // In myteam mode, require a team to be selected
-  const myTeam = (mode === 'myteam') ? currentTeam : null;
-  if (mode === 'myteam' && !currentTeam) {
-    alert('Select your team from the dropdown first, then use Mock My Picks.');
-    return;
-  }
-
-  // Always start fresh — clear all picks and released state
-  draftPicks = new Array(DRAFT_ORDER.length).fill('');
-  releasedDraftRookies = new Set();
-
-  // Build pool of all ranked rookies
-  const pool = LEAGUE_DATA.freeAgents
-    .filter(p => p.rookie && p.draftAvg != null)
-    .map(p => ({ ...p }));
-
-  // Assign each player a single simulated rank for this run
-  for (const p of pool) {
-    p._simRank = Math.max(0.1, p.draftAvg + (p.draftStd || 5) * gaussianRandom());
-  }
-
-  // Sort by simulated rank
-  pool.sort((a, b) => a._simRank - b._simRank);
-
-  // Reset all taxi assignments since draft is fresh
-  for (const tid of Object.keys(LEAGUE_DATA.teams)) {
-    taxiAssignments[tid] = ['', '', '', ''];
-  }
-
-  // Fill pick slots — in myteam mode, skip the selected team's picks (leave for manual)
-  let poolIdx = 0;
-  for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (poolIdx >= pool.length) break;
-    const fid = DRAFT_ORDER[i].franchise;
-    // Skip this team's slots in myteam mode — owner will pick manually
-    if (myTeam && fid === myTeam) continue;
-    // Advance past any already-assigned players (safety)
-    while (poolIdx < pool.length && draftPicks.includes(pool[poolIdx].id)) poolIdx++;
-    if (poolIdx >= pool.length) break;
-    const pid = pool[poolIdx].id;
-    draftPicks[i] = pid;
-    // Auto-assign to taxi
-    const taxi = taxiAssignments[fid];
-    const emptySlot = taxi.indexOf('');
-    if (emptySlot !== -1) taxi[emptySlot] = pid;
-    poolIdx++;
-  }
-
-  renderDraftView();
-  if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-  if (currentView === 'league') renderLeagueView();
-  try { await saveDraftState(); } catch(e) {}
-}
+// (second copy — delegates to primary runMockDraft above)
+// async function runMockDraft — defined earlier in this file
 
 // Initialize on load
 Promise.all([loadDraftState(), loadRosterState()]).then(() => {
