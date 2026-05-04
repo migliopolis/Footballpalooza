@@ -551,7 +551,17 @@
         <div>Player</div>
         <div class="th-num th-sortable" id="asort-pos" onclick="setAvailSort('pos')" title="Sort by position rank">POS ▲</div>
         <div class="th-num th-sortable" id="asort-ecr" onclick="setAvailSort('ecr')" title="Sort by overall rank">OVR</div>
-        <div class="th-num" id="auctionValHeader" style="display:none;color:var(--accent2);">Est. $</div>
+        <div class="th-num" id="auctionValHeader" style="display:none;color:var(--accent2);position:relative;cursor:help;" title="">
+          Est. $
+          <div style="display:none;position:absolute;right:0;top:calc(100% + 8px);width:280px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:11px;font-weight:400;color:var(--text2);text-align:left;z-index:50;line-height:1.6;letter-spacing:0;text-transform:none;box-shadow:0 4px 20px rgba(0,0,0,0.5);" id="auctionTip">
+            <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px;">How Est. $ is calculated</div>
+            <div style="margin-bottom:8px;">Values are generated using real FBP historical auction data (2016–2022) combined with three factors:</div>
+            <div style="margin-bottom:5px;"><span style="color:var(--text);font-weight:600;">1. Available rank</span> — an exponential decay curve fitted to actual FBP results prices the Nth best available player at each position. The curve drops steeply because most of the money concentrates in the top few players.</div>
+            <div style="margin-bottom:5px;"><span style="color:var(--text);font-weight:600;">2. Global rank quality</span> — a player's actual overall ranking acts as a ceiling and quality check. A fringe RB24 as the best available RB won't fetch elite money; a true RB1 will. The blend shifts based on how elite the player actually is.</div>
+            <div style="margin-bottom:8px;"><span style="color:var(--text);font-weight:600;">3. Rookie premium</span> — rookies on long-term contracts command a bonus, especially elite RBs who contribute immediately.</div>
+            <div style="color:var(--text3);font-size:10px;">Noise and occasional overpay are added to simulate real auction variance. Click Reroll for a different draw.</div>
+          </div>
+        </div>
       </div>
       <div id="availTable"></div>
     </div>
@@ -723,7 +733,7 @@ for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
 }
 
 let currentTeam = null, currentFilter = 'ALL', currentSort = 'salary', sortDir = -1;
-let currentView = 'roster', availFilter = new Set(), leagueSort = 'pos', availSort = 'ecr', availSortDir = 1;
+let currentView = 'roster', availFilter = new Set(), leagueSort = 'pos', availSort = 'ecr', availSortDir = 1, auctionValues = null;
 let lineupDisplay = 'rank'; // 'rank' or 'salary'
 
 // Populate team dropdown
@@ -1580,126 +1590,6 @@ function renderLeagueView() {
   }).join('');
 }
 
-// ─── AUCTION VALUE GENERATOR ─────────────────────────────────────────────────
-let auctionValues = null; // null = not generated yet
-
-function generateAuctionValues() {
-  const newVals = {};
-
-  // Build set of kept and drafted IDs
-  const keptIds = new Set();
-  for (const sel of Object.values(allSelections)) for (const id of sel) keptIds.add(id);
-  const draftedIds = new Set();
-  DRAFT_ORDER.forEach((slot, i) => { if (draftPicks[i] && !releasedDraftRookies.has(i)) draftedIds.add(draftPicks[i]); });
-
-  // Build full available player list per position
-  const byPos = { QB: [], RB: [], WR: [], TE: [], DEF: [] };
-
-  for (const p of LEAGUE_DATA.freeAgents) {
-    if (keptIds.has(p.id) || draftedIds.has(p.id)) continue;
-    const posRkNum = parseInt((p.posRank || '').replace(/\D/g,'')) || 999;
-    if (posRkNum < 999 && byPos[p.pos]) {
-      byPos[p.pos].push({ id: p.id, posRkNum, rookie: !!p.rookie, rookieRank: p.rookieRank || null, ecr: p.ecr || 999 });
-    }
-  }
-  for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
-    const sel = allSelections[tid];
-    for (const p of t.players) {
-      if (!sel.has(p.id)) {
-        const posRkNum = parseInt((p.posRank || '').replace(/\D/g,'')) || 999;
-        if (posRkNum < 999 && byPos[p.pos]) {
-          byPos[p.pos].push({ id: p.id, posRkNum, rookie: !!p.rookie, rookieRank: null, ecr: p.ecr || 999 });
-        }
-      }
-    }
-  }
-
-  for (const [pos, players] of Object.entries(byPos)) {
-    // Sort by ECR so "best available" order is correct
-    players.sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
-
-    const total = players.length;
-
-    // Position-specific hard caps (absolute maximum any player fetches)
-    // Based on FBP history: CMC $63, Robinson $63, Gibbs $55; Chase/Jefferson ~$65; QB tops ~$49
-    const hardCap = { RB: 68, WR: 65, TE: 32, QB: 49, DEF: 10 }[pos] || 30;
-
-    // Normal pool depth — if fewer available, top players command more
-    const normalDepth = { RB: 18, WR: 18, QB: 10, TE: 10, DEF: 6 }[pos] || 12;
-
-    players.forEach((p, idx) => {
-      // --- BASE VALUE: blend absolute rank with available rank ---
-      // Bidders respond to scarcity in the room: the 2nd best available WR
-      // gets bid up toward WR2 money regardless of whether he's actually WR6.
-      // Weight: 65% available rank, 35% absolute rank — available rank dominates.
-      const availRank = idx + 1;
-      const availVal  = getMarketValue(pos, availRank);
-      const absVal    = getMarketValue(pos, p.posRkNum);
-      let baseVal = availVal * 0.65 + absVal * 0.35;
-
-      // --- SCARCITY: if pool is thinner than normal, top players get bid up ---
-      // Only boosts — never penalizes a deep pool
-      let scarcityBoost = 1.0;
-      if (total < normalDepth) {
-        const thinness = (normalDepth - total) / normalDepth; // 0=normal, 1=empty
-        // Best available gets the biggest boost, tapering down the depth chart
-        const posBoost = idx === 0 ? thinness * 0.45
-                       : idx === 1 ? thinness * 0.25
-                       : idx <= 4  ? thinness * 0.12
-                       : thinness * 0.05;
-        scarcityBoost = 1.0 + posBoost;
-      }
-      // The best available always gets a modest "must-have" premium
-      if (idx === 0) scarcityBoost = Math.max(scarcityBoost, 1.12);
-      if (idx === 1) scarcityBoost = Math.max(scarcityBoost, 1.05);
-
-      // --- ROOKIE PREMIUM ---
-      let rookieMult = 1.0;
-      if (p.rookie) {
-        const rRank = p.rookieRank || 99;
-        const premiums = {
-          RB: [1.65, 1.45, 1.45, 1.28, 1.28, 1.18, 1.18, 1.10, 1.10, 1.06, 1.06, 1.04, 1.04],
-          WR: [1.30, 1.20, 1.20, 1.12, 1.12, 1.08, 1.08, 1.05, 1.05, 1.03, 1.03, 1.02, 1.02],
-          TE: [1.25, 1.15, 1.15, 1.08, 1.08, 1.04, 1.04],
-          QB: [1.12, 1.08, 1.05, 1.05, 1.03],
-        };
-        const tbl = premiums[pos] || [1.0];
-        rookieMult = tbl[Math.min(rRank - 1, tbl.length - 1)] || tbl[tbl.length - 1];
-        if (idx === 0) rookieMult = Math.min(rookieMult * 1.15, 2.0);
-      }
-
-      // --- NOISE: tight at the top, more variance lower down ---
-      const noise = (Math.random() + Math.random() + Math.random() - 1.5);
-      const tierFactor = baseVal >= 40 ? 0.10
-                       : baseVal >= 25 ? 0.15
-                       : baseVal >= 12 ? 0.25
-                       : baseVal >= 6  ? 0.38
-                       : 0.50;
-
-      // --- OCCASIONAL OVERPAY ---
-      const isTierBreak = idx > 0 && (players[idx-1].posRkNum + 4) < p.posRkNum;
-      const overpayChance = idx === 0 ? 0.28 : isTierBreak ? 0.18 : 0.06;
-      const overpay = Math.random() < overpayChance ? (Math.random() * baseVal * 0.40) : 0;
-
-      const raw = baseVal * scarcityBoost * rookieMult * (1 + noise * tierFactor) + overpay;
-      // Apply hard cap then floor at $1
-      const val = Math.max(1, Math.min(hardCap, Math.round(raw)));
-      newVals[p.id] = val;
-    });
-  }
-
-  auctionValues = newVals;
-
-  // Update button to show reroll indicator
-  const btn = document.getElementById('genAuctionBtn');
-  if (btn) btn.textContent = '🎲 Reroll Auction Values';
-
-  // Show auction val header
-  const hdr = document.getElementById('auctionValHeader');
-  if (hdr) hdr.style.display = '';
-
-  renderAvailView();
-}
 
 function setAvailSort(s) {
   const dir = availSortDir === 1 ? ' ▲' : ' ▼';
@@ -2888,6 +2778,1383 @@ document.addEventListener('click', e => {
     window._rosterBreakpoint = null; // force recalc
     if (currentTeam && currentView === 'roster') { buildRosterHeader(); renderTable(); }
   });
+
+
+// ─── AUCTION VALUE GENERATOR ─────────────────────────────────────────
+
+// Tooltip show/hide for Est. $ header
+function setAvailSort(s) {
+  const dir = availSortDir === 1 ? ' ▲' : ' ▼';
+  const keys = ['pos','ecr'];
+  keys.forEach(k => {
+    const el = document.getElementById('asort-' + k);
+    if (!el) return;
+    const labels = { pos: 'POS', ecr: 'OVR' };
+    el.textContent = labels[k] + (k === s ? dir : '');
+    el.classList.toggle('sort-active', k === s);
+  });
+  renderAvailView();
+}
+
+function renderAvailView() {
+  const showFA = document.getElementById('showFA').checked;
+  const showCUT = document.getElementById('showCUT').checked;
+  const rankedOnly = document.getElementById('rankedOnly').checked;
+  const showRookies = document.getElementById('showRookies').checked;
+  const keptIds = new Set();
+  for (const sel of Object.values(allSelections)) for (const id of sel) keptIds.add(id);
+
+  // Build set of all drafted rookie IDs currently on a team (not released to pool)
+  const draftedRookieIds = new Set();
+  DRAFT_ORDER.forEach((slot, i) => {
+    if (draftPicks[i] && !releasedDraftRookies.has(i)) draftedRookieIds.add(draftPicks[i]);
+  });
+
+  const availMap = new Map();
+  for (const p of LEAGUE_DATA.freeAgents) {
+    if (keptIds.has(p.id)) continue;
+    if (draftedRookieIds.has(p.id)) continue; // on a team's roster, not available
+    // Check if this rookie was drafted then released back to pool via undoPick
+    const releasedPickIdx = p.rookie ? [...releasedDraftRookies].find(i => draftPicks[i] === p.id) : undefined;
+    const isReleasedToPool = releasedPickIdx !== undefined && !draftPicks[releasedPickIdx];
+    if (isReleasedToPool) {
+      availMap.set(p.id, { ...p, pts: p.pts || 0, source: 'cut', fromTeam: LEAGUE_DATA.teams[DRAFT_ORDER[releasedPickIdx].franchise]?.name || '', releasedRookie: true });
+    } else if (p.rookie && showRookies) {
+      availMap.set(p.id, { ...p, pts: p.pts || 0, source: 'fa', fromTeam: null });
+    } else if (!p.rookie && showFA) {
+      availMap.set(p.id, { ...p, pts: p.pts || 0, source: 'fa', fromTeam: null });
+    }
+  }
+  if (showCUT) {
+    // Cut keepers from team rosters
+    for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
+      const sel = allSelections[tid];
+      for (const p of t.players) {
+        if (!sel.has(p.id)) availMap.set(p.id, { id: p.id, name: p.name, pos: p.pos, team: p.team, pts: p.pts, ecr: p.ecr, posRank: p.posRank, rookie: false, source: 'cut', fromTeam: t.name });
+      }
+    }
+    // Cut drafted rookies (cut on roster page, pick still held — not in FA pool)
+    for (const pickIdx of releasedDraftRookies) {
+      const pid = draftPicks[pickIdx];
+      if (!pid) continue; // truly pool-released, already handled above
+      const player = LEAGUE_DATA.freeAgents.find(x => x.id === pid);
+      if (!player || availMap.has(pid)) continue;
+      const tid = DRAFT_ORDER[pickIdx].franchise;
+      const teamName = LEAGUE_DATA.teams[tid]?.name || '';
+      availMap.set(pid, { ...player, source: 'cut', fromTeam: teamName, rookie: true, cutRookie: true });
+    }
+  }
+
+  let players = [...availMap.values()];
+  if (availFilter.size > 0) players = players.filter(p => availFilter.has(p.pos));
+  if (rankedOnly) players = players.filter(p => (p.ecr && p.ecr < 999) || p.rookieRank);
+  const searchQ = (document.getElementById('availSearch')?.value || '').toLowerCase().trim();
+  if (searchQ) players = players.filter(p => p.name.toLowerCase().includes(searchQ) || p.team.toLowerCase().includes(searchQ));
+  players.sort((a, b) => {
+    if (availSort === 'ecr') return ((a.ecr || 999) - (b.ecr || 999)) * availSortDir;
+    if (availSort === 'pos') {
+      const posOrd = { QB: 0, RB: 1, WR: 2, TE: 3, DEF: 4 };
+      const posCmp = (posOrd[a.pos] ?? 9) - (posOrd[b.pos] ?? 9);
+      if (posCmp !== 0) return posCmp;
+      // Within same position, sort by posRank number
+      const aNum = parseInt((a.posRank || '').replace(/\D/g, '')) || 999;
+      const bNum = parseInt((b.posRank || '').replace(/\D/g, '')) || 999;
+      return (aNum - bNum) * availSortDir;
+    }
+    if (availSort === 'name') return a.name.localeCompare(b.name) * availSortDir;
+    if (availSort === 'pos') return ((POS_ORDER[a.pos] ?? 9) - (POS_ORDER[b.pos] ?? 9)) || ((a.ecr || 999) - (b.ecr || 999));
+    return 0;
+  });
+
+  const hasAuction = !!auctionValues;
+  const tableHeader = document.querySelector('.avail-table-header');
+  if (tableHeader) tableHeader.classList.toggle('auction-mode', hasAuction);
+  const auctionHdr = document.getElementById('auctionValHeader');
+  if (auctionHdr) auctionHdr.style.display = hasAuction ? '' : 'none';
+
+  document.getElementById('availCount').textContent = `${players.length} player${players.length !== 1 ? 's' : ''}`;
+  const el = document.getElementById('availTable');
+  if (!players.length) { el.innerHTML = '<div class="empty-state">No players match current filters.</div>'; return; }
+
+  el.innerHTML = players.map(p => {
+    const badge = p.releasedRookie || p.cutRookie
+      ? `<span class="source-badge source-cut">CUT</span><span class="source-badge source-rookie">R</span>`
+      : p.source === 'cut'
+        ? `<span class="source-badge source-cut">CUT</span>${p.rookie ? '<span class="source-badge source-rookie">R</span>' : ''}`
+        : p.rookie
+          ? `<span class="source-badge source-rookie">R</span>`
+          : `<span class="source-badge source-fa">FA</span>`;
+    const sub = (p.source === 'cut' || p.releasedRookie) ? ` · was ${p.fromTeam}` : '';
+    const ecrDisplay = p.ecr && p.ecr < 999 ? p.ecr : '—';
+    const posRankDisplay = p.posRank && p.posRank.length > 2 ? p.posRank : '—';
+    const fromTeamStr = (p.source === 'cut' || p.releasedRookie) ? p.fromTeam : p.team;
+    const auctionVal = hasAuction && auctionValues[p.id] != null
+      ? `<div class="td-num" style="color:var(--accent2);font-weight:600;">$${auctionValues[p.id]}</div>`
+      : hasAuction ? `<div class="td-num" style="color:var(--text3);">—</div>` : '';
+    return `<div class="avail-row${hasAuction ? ' auction-mode' : ''}">
+      <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
+        <span class="pos-badge pos-${p.pos}">${p.pos}</span>
+        <span class="player-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</span>
+        ${badge}
+        <span class="player-team" style="white-space:nowrap;flex-shrink:0;">${fromTeamStr}</span>
+      </div>
+      <div class="td-num" style="font-size:11px;color:var(--text2);">${posRankDisplay}</div>
+      <div class="td-num">${ecrDisplay}</div>
+      ${auctionVal}
+    </div>`;
+  }).join('');
+}
+// ─── ROOKIE DRAFT ────────────────────────────────────────────────────────────
+
+// Trade history for draft picks that changed hands — keyed by "round.pick"
+const PICK_TRADE_HISTORY = {
+  // R1 P7 — Hauk Tua's 1st now owned by Fist of the Magi (via Thots & Players)
+  '1.7': {
+    current: 'The Fist of the Magi',
+    original: 'Hauk Tua',
+    transactions: [
+      { date: 'Jun 24, 2025', desc: 'Hauk Tua gave 2026 R1 + 3.07 to Thots & Players for 1.12' },
+      { date: 'Nov 26, 2025', desc: 'Thots & Players gave Hauk Tua R1 (+ Penix, Thomas Jr., $8) to The Fist of the Magi for Josh Allen + Davante Adams' },
+    ]
+  },
+  // R1 P8 — Bullish on da Bears' 1st now owned by Son of Tinactin
+  '1.8': {
+    current: 'Son of Tinactin',
+    original: 'Bullish on da Bears',
+    transactions: [
+      { date: 'Oct 15, 2025', desc: 'Bullish on da Bears gave 2026 R1 to Son of Tinactin for A.J. Brown' },
+    ]
+  },
+  // R1 P11 — Wholey Club's 1st now owned by Fully Cooked
+  '1.11': {
+    current: 'Fully Cooked',
+    original: 'Wholey Club',
+    transactions: [
+      { date: 'Nov 25, 2025', desc: 'Wholey Club gave 2026 R1 + R3 + $10 to Fully Cooked for James Cook' },
+    ]
+  },
+  // R2 P8 — Bullish on da Bears' 2nd now owned by Hauk Tua
+  '2.8': {
+    current: 'Hauk Tua',
+    original: 'Bullish on da Bears',
+    transactions: [
+      { date: 'Jun 13, 2025', desc: 'Bullish on da Bears gave 2026 R2 + Drake Maye + Rashee Rice + 2.06 to Hauk Tua for Caleb Williams' },
+    ]
+  },
+  // R2 P9 — MR. FROBOT's 2nd now owned by Jesus Christ College (via Wholey Club → Bears → Frobot → JCC)
+  '2.9': {
+    current: 'Jesus Christ College',
+    original: 'MR. FROBOT',
+    transactions: [
+      { date: 'Nov 5, 2025', desc: 'Wholey Club gave 2026 R2 (Wholey) to Bullish on da Bears for Kenneth Walker' },
+      { date: 'Nov 26, 2025', desc: 'Bullish on da Bears gave 2026 R2 (Wholey) to MR. FROBOT for Gainwell Kenneth' },
+      { date: 'Nov 26, 2025', desc: 'MR. FROBOT gave 2026 R2 (MR. FROBOT — their own) to Jesus Christ College (pick traded in separate deal)' },
+    ]
+  },
+  // R2 P11 — Wholey Club's 2nd now owned by MR. FROBOT (via Wholey → Bears → Frobot)
+  '2.11': {
+    current: 'MR. FROBOT',
+    original: 'Wholey Club',
+    transactions: [
+      { date: 'Nov 5, 2025', desc: 'Wholey Club gave 2026 R2 to Bullish on da Bears for Kenneth Walker' },
+      { date: 'Nov 26, 2025', desc: 'Bullish on da Bears gave 2026 R2 (Wholey) to MR. FROBOT for Gainwell Kenneth' },
+    ]
+  },
+  // R3 P9 — MR. FROBOT's 3rd now owned by Fully Cooked
+  '3.9': {
+    current: 'Fully Cooked',
+    original: 'MR. FROBOT',
+    transactions: [
+      { date: 'Nov 26, 2025', desc: 'MR. FROBOT gave 2026 R3 + $5 to Fully Cooked for Joe Burrow' },
+    ]
+  },
+  // R3 P11 — Wholey Club's 3rd now owned by Fully Cooked
+  '3.11': {
+    current: 'Fully Cooked',
+    original: 'Wholey Club',
+    transactions: [
+      { date: 'Nov 25, 2025', desc: 'Wholey Club gave 2026 R1 + R3 + $10 to Fully Cooked for James Cook' },
+    ]
+  },
+  // R3 P12 — Mailing It In's 3rd now owned by Jesus Christ College
+  '3.12': {
+    current: 'Jesus Christ College',
+    original: 'Mailing It In',
+    transactions: [
+      { date: 'Nov 18, 2025', desc: 'Mailing It In gave 2026 R3 to Fairfax High School for Emanuel Wilson' },
+      { date: 'Nov 26, 2025', desc: 'Fairfax High School (now Jesus Christ College) holds this pick' },
+    ]
+  },
+};
+
+const DRAFT_ORDER = [{"overall":1,"round":1,"pick":1,"franchise":"0006","via":""},{"overall":2,"round":1,"pick":2,"franchise":"0012","via":""},{"overall":3,"round":1,"pick":3,"franchise":"0008","via":""},{"overall":4,"round":1,"pick":4,"franchise":"0004","via":""},{"overall":5,"round":1,"pick":5,"franchise":"0005","via":""},{"overall":6,"round":1,"pick":6,"franchise":"0010","via":""},{"overall":7,"round":1,"pick":7,"franchise":"0005","via":"Hauk Tua"},{"overall":8,"round":1,"pick":8,"franchise":"0008","via":"Bullish on da Bears"},{"overall":9,"round":1,"pick":9,"franchise":"0007","via":""},{"overall":10,"round":1,"pick":10,"franchise":"0001","via":""},{"overall":11,"round":1,"pick":11,"franchise":"0004","via":"Wholey Club"},{"overall":12,"round":1,"pick":12,"franchise":"0009","via":""},{"overall":13,"round":2,"pick":1,"franchise":"0006","via":""},{"overall":14,"round":2,"pick":2,"franchise":"0012","via":""},{"overall":15,"round":2,"pick":3,"franchise":"0008","via":""},{"overall":16,"round":2,"pick":4,"franchise":"0004","via":""},{"overall":17,"round":2,"pick":5,"franchise":"0005","via":""},{"overall":18,"round":2,"pick":6,"franchise":"0010","via":""},{"overall":19,"round":2,"pick":7,"franchise":"0003","via":""},{"overall":20,"round":2,"pick":8,"franchise":"0003","via":"Bullish on da Bears"},{"overall":21,"round":2,"pick":9,"franchise":"0006","via":"MR. FROBOT"},{"overall":22,"round":2,"pick":10,"franchise":"0001","via":""},{"overall":23,"round":2,"pick":11,"franchise":"0007","via":"Wholey Club"},{"overall":24,"round":2,"pick":12,"franchise":"0009","via":""},{"overall":25,"round":3,"pick":1,"franchise":"0006","via":""},{"overall":26,"round":3,"pick":2,"franchise":"0012","via":""},{"overall":27,"round":3,"pick":3,"franchise":"0008","via":""},{"overall":28,"round":3,"pick":4,"franchise":"0004","via":""},{"overall":29,"round":3,"pick":5,"franchise":"0005","via":""},{"overall":30,"round":3,"pick":6,"franchise":"0010","via":""},{"overall":31,"round":3,"pick":7,"franchise":"0003","via":""},{"overall":32,"round":3,"pick":8,"franchise":"0002","via":""},{"overall":33,"round":3,"pick":9,"franchise":"0004","via":"MR. FROBOT"},{"overall":34,"round":3,"pick":10,"franchise":"0001","via":""},{"overall":35,"round":3,"pick":11,"franchise":"0004","via":"Wholey Club"},{"overall":36,"round":3,"pick":12,"franchise":"0006","via":"Mailing It In"},{"overall":37,"round":4,"pick":1,"franchise":"0006","via":""},{"overall":38,"round":4,"pick":2,"franchise":"0012","via":""},{"overall":39,"round":4,"pick":3,"franchise":"0008","via":""},{"overall":40,"round":4,"pick":4,"franchise":"0004","via":""},{"overall":41,"round":4,"pick":5,"franchise":"0005","via":""},{"overall":42,"round":4,"pick":6,"franchise":"0010","via":""},{"overall":43,"round":4,"pick":7,"franchise":"0003","via":""},{"overall":44,"round":4,"pick":8,"franchise":"0002","via":""},{"overall":45,"round":4,"pick":9,"franchise":"0007","via":""},{"overall":46,"round":4,"pick":10,"franchise":"0001","via":""},{"overall":47,"round":4,"pick":11,"franchise":"0011","via":""},{"overall":48,"round":4,"pick":12,"franchise":"0009","via":""}];
+
+// draftPicks: array of playerId strings (or '' for empty), indexed by overall pick - 1
+let draftPicks = new Array(DRAFT_ORDER.length).fill('');
+let draftFilter = 'ALL';
+
+// Rookie salary scale per position for round 1 (positional order within round)
+const ROOKIE_SALARY_SCALE = {
+  RB: [35, 25, 20, 15, 10, 5, 4],
+  WR: [15, 12, 10, 8, 6, 5, 4],
+  TE: [6, 5, 4, 4, 4, 4, 4],
+  QB: [6, 5, 4, 4, 4, 4, 4],
+};
+const ROUND_FLAT_SALARY = { 1: null, 2: 3, 3: 2, 4: 1 };
+
+function calcRookieSalary(pickIdx) {
+  const slot = DRAFT_ORDER[pickIdx];
+  const round = slot.round;
+  if (round > 1) return ROUND_FLAT_SALARY[round];
+
+  // Round 1: find positional order among all round 1 picks made before this one
+  const pid = draftPicks[pickIdx];
+  if (!pid) return null;
+  const player = LEAGUE_DATA.freeAgents.find(p => p.id === pid);
+  if (!player) return null;
+  const pos = player.pos;
+  const scale = ROOKIE_SALARY_SCALE[pos] || [4];
+
+  // Count how many players of same position were picked in round 1 before this pick
+  let posCount = 0;
+  for (let i = 0; i < pickIdx; i++) {
+    if (DRAFT_ORDER[i].round !== 1) continue;
+    if (!draftPicks[i]) continue;
+    const p2 = LEAGUE_DATA.freeAgents.find(p => p.id === draftPicks[i]);
+    if (p2 && p2.pos === pos) posCount++;
+  }
+  return scale[Math.min(posCount, scale.length - 1)];
+}
+
+function getRookieSalaryForTeam(tid) {
+  let total = 0;
+  DRAFT_ORDER.forEach((slot, i) => {
+    if (slot.franchise === tid && draftPicks[i] && !releasedDraftRookies.has(i)) {
+      total += calcRookieSalary(i) || 0;
+    }
+  });
+  return total;
+}
+
+const DRAFT_STORAGE_VERSION = 'v3';
+
+// Load draft state from storage
+async function loadDraftState() {
+  try {
+    const result = await window.storage.get('draft-picks');
+    if (result && result.value) {
+      const saved = JSON.parse(result.value);
+      // Check version — if no version key, it's stale data, start fresh
+      if (saved.version === DRAFT_STORAGE_VERSION && Array.isArray(saved.picks) && saved.picks.length === DRAFT_ORDER.length) {
+        draftPicks = saved.picks;
+      } else {
+        // Stale or old format — clear it
+        await window.storage.set('draft-picks', JSON.stringify({ version: DRAFT_STORAGE_VERSION, picks: draftPicks }));
+      }
+    }
+  } catch(e) {}
+  try {
+    const result2 = await window.storage.get('draft-released');
+    if (result2 && result2.value) {
+      const saved = JSON.parse(result2.value);
+      if (Array.isArray(saved)) releasedDraftRookies = new Set(saved);
+    }
+  } catch(e) {}
+  try {
+    const result3 = await window.storage.get('draft-taxi');
+    if (result3 && result3.value) {
+      const saved = JSON.parse(result3.value);
+      for (const tid of Object.keys(taxiAssignments)) {
+        if (Array.isArray(saved[tid])) taxiAssignments[tid] = saved[tid];
+      }
+    }
+  } catch(e) {}
+}
+
+async function saveDraftState() {
+  try { await window.storage.set('draft-picks', JSON.stringify({ version: DRAFT_STORAGE_VERSION, picks: draftPicks })); } catch(e) {}
+  try { await window.storage.set('draft-released', JSON.stringify([...releasedDraftRookies])); } catch(e) {}
+  try { await window.storage.set('draft-taxi', JSON.stringify(taxiAssignments)); } catch(e) {}
+}
+
+// Save/load keeper selections across all teams
+async function saveRosterState() {
+  const toSave = {};
+  for (const [tid, sel] of Object.entries(allSelections)) {
+    toSave[tid] = [...sel];
+  }
+  try { await window.storage.set('roster-selections', JSON.stringify(toSave)); } catch(e) {}
+}
+
+async function loadRosterState() {
+  try {
+    const result = await window.storage.get('roster-selections');
+    if (result && result.value) {
+      const saved = JSON.parse(result.value);
+      for (const [tid, ids] of Object.entries(saved)) {
+        if (allSelections[tid]) allSelections[tid] = new Set(ids);
+      }
+    }
+  } catch(e) {}
+}
+
+// Set of pick indices where the owner released the drafted rookie back to FA pool
+let releasedDraftRookies = new Set();
+
+async function releaseDraftedRookie(pickIdxStr) {
+  const pickIdx = parseInt(pickIdxStr);
+  const pid = draftPicks[pickIdx];
+  if (!pid) return;
+  releasedDraftRookies.add(pickIdx);
+  // Clear from taxi assignments
+  if (currentTeam) {
+    const assignments = taxiAssignments[currentTeam];
+    for (let i = 0; i < TAXI_SLOTS; i++) {
+      if (assignments[i] === pid) assignments[i] = '';
+    }
+  }
+  updateCap();
+  renderTable();
+  renderLineup();
+  if (currentView === 'available') renderAvailView();
+  if (currentView === 'draft') renderDraftView();
+  if (currentView === 'league') renderLeagueView();
+  try { await saveDraftState(); } catch(e) {}
+}
+
+function getNextPickIndex() {
+  return draftPicks.findIndex(p => p === '');
+}
+
+function getDraftedPlayerIds() {
+  // Returns IDs of drafted players still on taxi (not released back to pool)
+  return new Set(draftPicks.filter((p, i) => p !== '' && !releasedDraftRookies.has(i)));
+}
+
+function getDraftedPlayersByTeam(tid) {
+  const result = [];
+  DRAFT_ORDER.forEach((slot, i) => {
+    if (slot.franchise === tid && draftPicks[i] && !releasedDraftRookies.has(i)) {
+      const pid = draftPicks[i];
+      const player = LEAGUE_DATA.freeAgents.find(x => x.id === pid)
+                  || Object.values(LEAGUE_DATA.teams).flatMap(t => t.players).find(x => x.id === pid);
+      if (player) result.push({ player, pickIdx: i, salary: calcRookieSalary(i) || 0 });
+    }
+  });
+  return result;
+}
+
+function getRookiePool() {
+  // All rookie FA players not yet drafted
+  const drafted = getDraftedPlayerIds();
+  return LEAGUE_DATA.freeAgents
+    .filter(p => p.rookie && !drafted.has(p.id))
+    .sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
+}
+
+function setMobileDraftTab(tab) {
+  const board = document.getElementById('draftBoardCol');
+  const pool = document.getElementById('draftPoolCol');
+  const btnBoard = document.getElementById('mobileDraftBtnBoard');
+  const btnPool = document.getElementById('mobileDraftBtnPool');
+  if (tab === 'board') {
+    board.classList.remove('mobile-draft-hidden');
+    pool.classList.add('mobile-draft-hidden');
+    btnBoard.classList.add('active');
+    btnPool.classList.remove('active');
+  } else {
+    pool.classList.remove('mobile-draft-hidden');
+    board.classList.add('mobile-draft-hidden');
+    btnPool.classList.add('active');
+    btnBoard.classList.remove('active');
+  }
+}
+
+function setDraftFilter(f) {
+  draftFilter = f;
+  document.querySelectorAll('#draftPosFilters .pos-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent.trim() === (f === 'ALL' ? 'All' : f)));
+  renderDraftPool();
+}
+
+async function draftPlayer(pid) {
+  const nextIdx = getNextPickIndex();
+  if (nextIdx === -1) return;
+  draftPicks[nextIdx] = pid;
+  // Auto-assign to first empty taxi slot for the team that made the pick
+  const fid = DRAFT_ORDER[nextIdx].franchise;
+  const taxi = taxiAssignments[fid];
+  const emptySlot = taxi.indexOf('');
+  if (emptySlot !== -1) taxi[emptySlot] = pid;
+  renderDraftView();
+  if (currentTeam && fid === currentTeam) { updateCap(); renderTable(); renderLineup(); }
+  if (currentView === 'league') renderLeagueView();
+  try { await saveDraftState(); } catch(e) {}
+}
+
+async function undoPick(idx) {
+  const pid = draftPicks[idx];
+  if (!pid) return;
+  draftPicks[idx] = '';
+  releasedDraftRookies.delete(idx);
+  // Remove from taxi if present
+  const fid = DRAFT_ORDER[idx].franchise;
+  const taxi = taxiAssignments[fid];
+  for (let i = 0; i < TAXI_SLOTS; i++) {
+    if (taxi[i] === pid) taxi[i] = '';
+  }
+  renderDraftView();
+  if (currentTeam && fid === currentTeam) { updateCap(); renderTable(); renderLineup(); }
+  if (currentView === 'league') renderLeagueView();
+  if (currentView === 'available') renderAvailView();
+  try { await saveDraftState(); } catch(e) {}
+}
+
+async function resetDraft() {
+  const btn = event?.target;
+  if (btn && btn.dataset.confirming !== 'true') {
+    btn.dataset.confirming = 'true';
+    const orig = btn.textContent;
+    btn.textContent = 'Sure?';
+    btn.style.borderColor = 'var(--red)';
+    btn.style.color = 'var(--red)';
+    setTimeout(() => {
+      if (btn.dataset.confirming === 'true') {
+        btn.dataset.confirming = '';
+        btn.textContent = orig;
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }
+    }, 3000);
+    return;
+  }
+  if (btn) { btn.dataset.confirming = ''; btn.textContent = '↺ Reset'; btn.style.borderColor = ''; btn.style.color = ''; }
+  draftPicks = new Array(DRAFT_ORDER.length).fill('');
+  releasedDraftRookies = new Set();
+  for (const tid of Object.keys(taxiAssignments)) taxiAssignments[tid] = ['', '', '', ''];
+  renderDraftView();
+  if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+  try { await saveDraftState(); } catch(e) {}
+}
+
+function renderDraftBoard() {
+  const el = document.getElementById('draftBoard');
+  const nextIdx = getNextPickIndex();
+  const filterTid = document.getElementById('draftTeamFilter')?.value || '';
+  let html = '';
+  let lastRound = 0;
+
+  DRAFT_ORDER.forEach((slot, i) => {
+    // Apply team filter — skip picks not belonging to this team
+    if (filterTid && slot.franchise !== filterTid) return;
+
+    if (slot.round !== lastRound) {
+      html += `<div class="draft-round-header">Round ${slot.round}</div>`;
+      lastRound = slot.round;
+    }
+    const team = LEAGUE_DATA.teams[slot.franchise];
+    const pid = draftPicks[i];
+    const isOnClock = i === nextIdx;
+    const isDrafted = !!pid;
+
+    // Find player if drafted
+    let player = null;
+    if (pid) {
+      player = LEAGUE_DATA.freeAgents.find(x => x.id === pid)
+            || Object.values(LEAGUE_DATA.teams).flatMap(t => t.players).find(x => x.id === pid);
+    }
+
+    const logoHtml = team?.logo
+      ? `<img class="draft-pick-logo" src="${team.logo}" alt="">`
+      : `<div class="draft-pick-logo-ph"></div>`;
+
+    let viaHtml = '';
+    if (slot.via) {
+      const key = `${slot.round}.${slot.pick}`;
+      const hist = PICK_TRADE_HISTORY[key];
+      if (hist) {
+        const tipLines = hist.transactions.map(t =>
+          `<div class="via-tip-line"><span style="color:var(--text3);font-size:10px;">${t.date}</span><br>${t.desc}</div>`
+        ).join('');
+        viaHtml = `<div class="draft-pick-via">via ${slot.via}<span class="via-tip"><div class="via-tip-title">📋 Trade History</div>${tipLines}</span></div>`;
+      } else {
+        viaHtml = `<div class="draft-pick-via">via ${slot.via}</div>`;
+      }
+    }
+
+    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}">
+      <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
+      <div class="draft-pick-team">
+        ${logoHtml}
+        <div>
+          <div class="draft-pick-team-name">${team?.name || slot.franchise}</div>
+          ${viaHtml}
+        </div>
+      </div>
+      ${isDrafted && player
+        ? `<div class="draft-pick-player">
+            <div class="draft-pick-player-name">${player.name}${releasedDraftRookies.has(i) ? ' <span class="source-badge source-cut" style="font-size:8px;">REL</span>' : ''}</div>
+            <div class="draft-pick-player-pos">${player.rookiePosRank || player.posRank || player.pos} · $${calcRookieSalary(i)}</div>
+          </div>
+          <button class="draft-pick-undo" onclick="undoPick(${i})" title="Undo pick">✕</button>`
+        : isOnClock
+          ? `<div class="draft-pick-empty">— On the clock —</div>`
+          : `<div class="draft-pick-empty">—</div>`
+      }
+    </div>`;
+  });
+
+  el.innerHTML = html;
+
+  // Scroll to on-clock pick
+  if (nextIdx !== -1) {
+    const rows = el.querySelectorAll('.draft-pick-row');
+    if (rows[nextIdx]) rows[nextIdx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+}
+
+function renderDraftPool() {
+  const el = document.getElementById('draftPool');
+  const drafted = getDraftedPlayerIds();
+  let players = LEAGUE_DATA.freeAgents.filter(p => p.rookie);
+  if (draftFilter !== 'ALL') players = players.filter(p => p.pos === draftFilter);
+  // Sort by rookieRank first, then unranked at bottom
+  players.sort((a, b) => (a.rookieRank || 9999) - (b.rookieRank || 9999));
+
+  const nextIdx = getNextPickIndex();
+  const draftDone = nextIdx === -1;
+
+  if (!players.length) {
+    el.innerHTML = '<div class="empty-state">No rookies available.</div>';
+    return;
+  }
+
+  el.innerHTML = players.map(p => {
+    const isDrafted = drafted.has(p.id);
+    const clickable = !isDrafted && !draftDone;
+    const posRkDisplay = p.rookiePosRank || '—';
+    const dynRkDisplay = p.rookieRank || '—';
+    let dcBadge;
+    if (p.nflRound && p.nflPick) {
+      const cls = `dc-r${p.nflRound}`;
+      const rp = String(p.nflRoundPick || p.nflPick).padStart(2, '0');
+      dcBadge = `<span class="${cls}" style="font-size:11px;font-weight:700;">${p.nflRound}.${rp}</span>`;
+    } else {
+      dcBadge = `<span class="dc-udfa" style="font-size:10px;">UDFA</span>`;
+    }
+    const overallDisplay = p.nflPick ? `<span style="color:var(--text3);font-size:11px;">${p.nflPick}</span>` : '';
+    return `<div class="draft-pool-row ${isDrafted ? 'drafted' : ''}"
+        ${clickable ? `onclick="draftPlayer('${p.id}')" title="Draft ${p.name}"` : ''}>
+      <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
+        <span class="pos-badge pos-${p.pos}">${p.pos}</span>
+        <span class="player-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</span>
+        <span class="player-team" style="white-space:nowrap;flex-shrink:0;">${p.team}</span>
+        <span class="source-badge source-rookie" style="flex-shrink:0;">R</span>
+        ${dcBadge}
+        ${isDrafted ? '<span class="source-badge source-cut" style="flex-shrink:0;">DRAFTED</span>' : ''}
+      </div>
+      <div class="td-num" style="font-size:11px;color:var(--text2);">${posRkDisplay}</div>
+      <div class="td-num" style="font-size:12px;">${dynRkDisplay}</div>
+      <div class="td-num">${overallDisplay}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDraftView() {
+  renderDraftBoard();
+  renderDraftPool();
+}
+
+// ─── MOCK DRAFT ──────────────────────────────────────────────────────────────
+async function runMockDraft() {
+  function gaussianRandom() {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  // Always start fresh — clear all picks and released state
+  draftPicks = new Array(DRAFT_ORDER.length).fill('');
+  releasedDraftRookies = new Set();
+
+  // Build pool of all ranked rookies
+  const pool = LEAGUE_DATA.freeAgents
+    .filter(p => p.rookie && p.draftAvg != null)
+    .map(p => ({ ...p }));
+
+  // Assign each player a single simulated rank for this run
+  for (const p of pool) {
+    p._simRank = Math.max(0.1, p.draftAvg + (p.draftStd || 5) * gaussianRandom());
+  }
+
+  // Sort by simulated rank
+  pool.sort((a, b) => a._simRank - b._simRank);
+
+  // Reset all taxi assignments since draft is fresh
+  for (const tid of Object.keys(LEAGUE_DATA.teams)) {
+    taxiAssignments[tid] = ['', '', '', ''];
+  }
+
+  // Fill all pick slots in order from the sorted pool
+  let poolIdx = 0;
+  for (let i = 0; i < DRAFT_ORDER.length; i++) {
+    if (poolIdx >= pool.length) break;
+    const pid = pool[poolIdx].id;
+    draftPicks[i] = pid;
+    // Auto-assign to taxi
+    const fid = DRAFT_ORDER[i].franchise;
+    const taxi = taxiAssignments[fid];
+    const emptySlot = taxi.indexOf('');
+    if (emptySlot !== -1) taxi[emptySlot] = pid;
+    poolIdx++;
+  }
+
+  renderDraftView();
+  if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+  if (currentView === 'league') renderLeagueView();
+  try { await saveDraftState(); } catch(e) {}
+}
+
+// Initialize on load
+Promise.all([loadDraftState(), loadRosterState()]).then(() => {
+  if (currentTeam) { autoAssignLineup(currentTeam); updateCap(); renderTable(); renderLineup(); }
+  if (currentView === 'draft') renderDraftView();
+  if (currentView === 'league') renderLeagueView();
+});
+
+function navigateTeam(dir) {
+  const teams = DIVISION_ORDER.filter(tid => LEAGUE_DATA.teams[tid]);
+  if (!currentTeam) { selectTeam(teams[0]); document.getElementById('teamPicker').value = teams[0]; return; }
+  const idx = teams.indexOf(currentTeam);
+  const next = (idx + dir + teams.length) % teams.length;
+  selectTeam(teams[next]);
+  document.getElementById('teamPicker').value = teams[next];
+}
+
+// ─── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  // Don't fire if typing in an input/select
+  if (['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) return;
+  const teams = DIVISION_ORDER.filter(tid => LEAGUE_DATA.teams[tid]);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    if (!currentTeam) { selectTeam(teams[0]); document.getElementById('teamPicker').value = teams[0]; return; }
+    const idx = teams.indexOf(currentTeam);
+    const next = e.key === 'ArrowRight' ? (idx + 1) % teams.length : (idx - 1 + teams.length) % teams.length;
+    selectTeam(teams[next]);
+    document.getElementById('teamPicker').value = teams[next];
+  }
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    const views = ['roster','league','available','draft'];
+    const idx = views.indexOf(currentView);
+    const next = e.key === 'ArrowDown' ? (idx + 1) % views.length : (idx - 1 + views.length) % views.length;
+    setView(views[next]);
+  }
+});
+
+// ─── SAVE / LOAD ROSTER FILE ────────────────────────────────────────────────
+function saveRosterFile() {
+  const data = {
+    version: 1,
+    savedAt: new Date().toISOString(),
+    selections: {},
+    teamCaps: {},
+    draftPicks: [...draftPicks],
+    releasedDraftRookies: [...releasedDraftRookies],
+    taxiAssignments: JSON.parse(JSON.stringify(taxiAssignments)),
+    lineupAssignments: JSON.parse(JSON.stringify(lineupAssignments)),
+  };
+  for (const [tid, sel] of Object.entries(allSelections)) {
+    data.selections[tid] = [...sel];
+  }
+  for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
+    data.teamCaps[tid] = t.cap;
+    // Save traded player rosters too
+    data[`players_${tid}`] = t.players.map(p => p.id);
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `fbp-keepers-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadRosterFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.version || !data.selections) throw new Error('Invalid file');
+      // Restore selections
+      for (const [tid, ids] of Object.entries(data.selections)) {
+        if (allSelections[tid]) allSelections[tid] = new Set(ids);
+      }
+      // Restore caps
+      if (data.teamCaps) {
+        for (const [tid, cap] of Object.entries(data.teamCaps)) {
+          if (LEAGUE_DATA.teams[tid]) LEAGUE_DATA.teams[tid].cap = cap;
+        }
+      }
+      // Restore draft state
+      if (data.draftPicks) data.draftPicks.forEach((v, i) => { draftPicks[i] = v; });
+      if (data.releasedDraftRookies) releasedDraftRookies = new Set(data.releasedDraftRookies);
+      if (data.taxiAssignments) Object.assign(taxiAssignments, data.taxiAssignments);
+      if (data.lineupAssignments) Object.assign(lineupAssignments, data.lineupAssignments);
+      // Refresh current view
+      if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
+      if (currentView === 'league') renderLeagueView();
+      if (currentView === 'available') renderAvailView();
+      if (currentView === 'draft') renderDraftView();
+      alert('Roster loaded successfully!');
+    } catch(err) {
+      alert('Could not load file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = ''; // reset so same file can be reloaded
+}
+
+// ─── TRADE SIMULATOR ─────────────────────────────────────────────────────────
+
+// 2027 picks: traded as "Team X's 2027 Xth Round" — no pick number since order unknown
+// Generated dynamically per team in the picker
+
+// Trade state
+let tradeA = { tid: '', players: [], picks: [], cap: 0 };
+let tradeB = { tid: '', players: [], picks: [], cap: 0 };
+let pickerSide = 'A';
+let pickerTab = 'player';
+let tradeHistory = []; // [{snapshot, summary}]
+
+// Populate team dropdowns
+(function initTradeView() {
+  const selA = document.getElementById('tradeTeamA');
+  const selB = document.getElementById('tradeTeamB');
+  let lastDivT = '';
+  for (const tid of DIVISION_ORDER) {
+    const t = LEAGUE_DATA.teams[tid];
+    if (!t) continue;
+    const div = DIVISIONS[tid];
+    [selA, selB].forEach(sel => {
+      if (div !== lastDivT) {
+        const og = document.createElement('optgroup');
+        og.label = div;
+        sel.appendChild(og);
+      }
+      const o = document.createElement('option');
+      o.value = tid; o.textContent = t.name;
+      sel.lastChild.appendChild(o);
+    });
+    lastDivT = div;
+  }
+})();
+
+function getSide(side) { return side === 'A' ? tradeA : tradeB; }
+
+function renderTradeSide(side) {
+  const sel = document.getElementById(`tradeTeam${side}`);
+  const state = getSide(side);
+  state.tid = sel.value;
+  state.players = [];
+  state.picks = [];
+  state.cap = 0;
+  // Update logo
+  const logoEl = document.getElementById(`tradeLogo${side}`);
+  const t = LEAGUE_DATA.teams[state.tid];
+  if (logoEl) {
+    if (t?.logo) {
+      logoEl.outerHTML = `<img id="tradeLogo${side}" class="trade-team-logo" src="${t.logo}" alt="${t.name}">`;
+    } else {
+      logoEl.className = 'trade-team-logo-ph';
+      logoEl.innerHTML = '';
+    }
+  }
+  renderTradeItems(side);
+  updateTradeAcceptBtn();
+}
+
+function renderTradeItems(side) {
+  const state = getSide(side);
+  const el = document.getElementById(`tradeItems${side}`);
+  if (!state.players.length && !state.picks.length && !state.cap) {
+    el.innerHTML = `<div style="color:var(--text3);font-size:12px;padding:8px 0;">${state.tid ? 'Add items using the buttons below.' : 'Select a team, then add items below.'}</div>`;
+    return;
+  }
+
+  // Sort players by pos/rank
+  const sortedPlayers = [...state.players].sort((a, b) => {
+    const posCmp = (POS_ORDER[a.pos] ?? 9) - (POS_ORDER[b.pos] ?? 9);
+    if (posCmp !== 0) return posCmp;
+    const aRk = parseInt((a.posRank || '').replace(/\D/g,'')) || 999;
+    const bRk = parseInt((b.posRank || '').replace(/\D/g,'')) || 999;
+    return aRk - bRk;
+  });
+
+  // Sort picks by year then round (higher round = less valuable = later)
+  const sortedPicks = [...state.picks].sort((a, b) =>
+    (a.year - b.year) || (a.round - b.round)
+  );
+
+  let html = '';
+  sortedPlayers.forEach((p, i) => {
+    const origIdx = state.players.indexOf(p);
+    html += `<div class="trade-item">
+      <span class="pos-badge pos-${p.pos}" style="font-size:9px;padding:2px 4px;">${p.pos}</span>
+      <span class="trade-item-label">${p.name}</span>
+      <span class="trade-item-sub">$${p.salary} · ${p.contract}</span>
+      <button class="trade-remove" onclick="removeTradeItem('${side}','player',${origIdx})">✕</button>
+    </div>`;
+  });
+  sortedPicks.forEach((pk, i) => {
+    const origIdx = state.picks.indexOf(pk);
+    html += `<div class="trade-item">
+      <span style="font-size:10px;font-weight:700;color:var(--accent2);min-width:28px;">📋</span>
+      <span class="trade-item-label">${pk.label}</span>
+      <button class="trade-remove" onclick="removeTradeItem('${side}','pick',${origIdx})">✕</button>
+    </div>`;
+  });
+  if (state.cap) {
+    html += `<div class="trade-item">
+      <span style="font-size:10px;font-weight:700;color:var(--accent2);min-width:28px;">💰</span>
+      <span class="trade-item-label">$${state.cap} auction budget</span>
+      <button class="trade-remove" onclick="removeTradeItem('${side}','cap',0)">✕</button>
+    </div>`;
+  }
+  el.innerHTML = html;
+  updateTradeAcceptBtn();
+}
+
+function removeTradeItem(side, type, idx) {
+  const state = getSide(side);
+  if (type === 'player') state.players.splice(idx, 1);
+  else if (type === 'pick') state.picks.splice(idx, 1);
+  else if (type === 'cap') state.cap = 0;
+  renderTradeItems(side);
+}
+
+function updateTradeAcceptBtn() {
+  const btn = document.getElementById('tradeAcceptBtn');
+  const hasA = tradeA.tid && (tradeA.players.length || tradeA.picks.length || tradeA.cap);
+  const hasB = tradeB.tid && (tradeB.players.length || tradeB.picks.length || tradeB.cap);
+  const diffTeams = tradeA.tid && tradeB.tid && tradeA.tid !== tradeB.tid;
+  btn.disabled = !(hasA && hasB && diffTeams);
+}
+
+// ─── PICKER MODAL ──────────────────────────────────────────────────────────
+function openPicker(side, tab) {
+  const state = getSide(side);
+  if (!state.tid) { alert('Select a team first.'); return; }
+  pickerSide = side;
+  pickerTab = tab;
+  document.getElementById('tradePickerOverlay').classList.add('open');
+  document.getElementById('tradePickerSearch').value = '';
+  document.getElementById('tradePickerSearchWrap').style.display = tab === 'cap' ? 'none' : 'block';
+  document.getElementById('tradePickerTitle').textContent =
+    tab === 'player' ? 'Add Player' : tab === 'pick' ? 'Add Draft Pick' : 'Add Cap Money';
+  renderPickerList();
+}
+
+function closePicker(e) {
+  if (!e || e.target === document.getElementById('tradePickerOverlay')) {
+    document.getElementById('tradePickerOverlay').classList.remove('open');
+  }
+}
+
+function setPickerTab(tab) {
+  pickerTab = tab;
+  document.querySelectorAll('.trade-picker-tab').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(tab)));
+  document.getElementById('tradePickerSearch').value = '';
+  document.getElementById('tradePickerSearchWrap').style.display = tab === 'cap' ? 'none' : 'block';
+  renderPickerList();
+}
+
+function renderPickerList() {
+  const state = getSide(pickerSide);
+  const el = document.getElementById('tradePickerList');
+  const q = document.getElementById('tradePickerSearch').value.toLowerCase().trim();
+  const team = LEAGUE_DATA.teams[state.tid];
+
+  if (pickerTab === 'player') {
+    const addedIds = new Set(state.players.map(p => p.id));
+    const players = team.players
+      .filter(p => !q || p.name.toLowerCase().includes(q) || p.pos.toLowerCase().includes(q))
+      .sort((a, b) => {
+        const posCmp = (POS_ORDER[a.pos] ?? 9) - (POS_ORDER[b.pos] ?? 9);
+        if (posCmp !== 0) return posCmp;
+        const aRk = parseInt((a.posRank || '').replace(/\D/g,'')) || 999;
+        const bRk = parseInt((b.posRank || '').replace(/\D/g,'')) || 999;
+        return aRk - bRk;
+      });
+    el.innerHTML = players.map(p => {
+      const added = addedIds.has(p.id);
+      return `<div class="trade-picker-item ${added ? 'already-added' : ''}" onclick="addTradePlayer('${p.id}')">
+        <span class="pos-badge pos-${p.pos}" style="font-size:9px;padding:2px 4px;">${p.pos}</span>
+        <span class="trade-picker-item-label">${p.name}</span>
+        <span class="trade-picker-item-sub">$${p.salary} · ${p.contract}</span>
+        ${added ? '<span style="font-size:10px;color:var(--accent);margin-left:auto;">✓ tap to remove</span>' : ''}
+      </div>`;
+    }).join('') || '<div style="padding:20px;text-align:center;color:var(--text3);">No players found.</div>';
+
+  } else if (pickerTab === 'pick') {
+    const addedLabels = new Set(state.picks.map(pk => pk.label));
+
+    // 2026 remaining fantasy draft picks owned by this team
+    const my2026 = DRAFT_ORDER
+      .filter((slot, i) => slot.franchise === state.tid && !draftPicks[i])
+      .map(slot => ({
+        year: 2026, round: slot.round, pick: slot.pick,
+        label: `2026 Round ${slot.round} Pick ${slot.pick}`,
+        specific: true
+      }));
+
+    // 2027 picks: own 4 rounds + any acquired picks in ownedPicks
+    const ordinals = ['1st', '2nd', '3rd', '4th'];
+    const acquiredPicks = (ownedPicks[state.tid] || []).map(pk => ({ ...pk, specific: false }));
+    const my2027 = ordinals.map((ord, i) => ({
+      year: 2027, round: i + 1,
+      label: `2027 ${ord} Round (${LEAGUE_DATA.teams[state.tid]?.name || ''})`,
+      specific: false
+    }));
+    // Don't double-count picks already in ownedPicks
+    const allOwn2027 = [...my2027, ...acquiredPicks.filter(pk => pk.year === 2027 && !my2027.find(o => o.label === pk.label))];
+
+    const allPicks = [...my2026, ...allOwn2027]
+      .filter(pk => !q || pk.label.toLowerCase().includes(q));
+
+    const sections = [
+      { header: '2026 Picks (specific)', items: allPicks.filter(p => p.specific) },
+      { header: '2027 Picks — Own', items: allPicks.filter(p => !p.specific && p.year === 2027 && !p.via) },
+      { header: '2027 Picks — Acquired', items: allPicks.filter(p => !p.specific && p.year === 2027 && p.via) },
+    ];
+
+    el.innerHTML = sections.map(sec => {
+      if (!sec.items.length) return '';
+      return `<div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;padding:8px 16px 4px;">${sec.header}</div>` +
+        sec.items.map(pk => {
+          const added = addedLabels.has(pk.label);
+          return `<div class="trade-picker-item ${added ? 'already-added' : ''}" onclick="addTradePick(${JSON.stringify(pk).replace(/"/g,'&quot;')})">
+            <span style="font-size:10px;font-weight:700;color:${pk.year === 2026 ? 'var(--accent)' : 'var(--accent2)'};width:40px;">${pk.year}</span>
+            <span class="trade-picker-item-label">${pk.label}</span>
+            ${added ? '<span style="font-size:10px;color:var(--accent);margin-left:auto;">✓ tap to remove</span>' : ''}
+          </div>`;
+        }).join('');
+    }).join('') || '<div style="padding:20px;text-align:center;color:var(--text3);">No picks found.</div>';
+
+  } else if (pickerTab === 'cap') {
+    const maxCap = team.cap;
+    el.innerHTML = `
+      <div style="padding:20px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">How much auction budget is included?</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <span style="color:var(--accent);font-size:20px;font-weight:700;">$</span>
+          <input type="number" id="capInput" min="1" max="${maxCap}" value="${state.cap || 10}"
+            style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:18px;font-weight:700;padding:8px 12px;border-radius:8px;outline:none;width:100%;">
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Team budget: $${maxCap}</div>
+        <button onclick="addTradeCap()" style="width:100%;padding:10px;background:var(--accent);color:#000;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;">Add Cap Money</button>
+      </div>`;
+  }
+}
+
+function addTradePlayer(pid) {
+  const state = getSide(pickerSide);
+  const team = LEAGUE_DATA.teams[state.tid];
+  const existing = state.players.findIndex(p => p.id === pid);
+  if (existing !== -1) {
+    state.players.splice(existing, 1);
+  } else {
+    const player = team.players.find(p => p.id === pid);
+    if (player) state.players.push(player);
+  }
+  renderTradeItems(pickerSide);
+  renderPickerList();
+}
+
+function addTradePick(pk) {
+  const state = getSide(pickerSide);
+  const existing = state.picks.findIndex(p => p.label === pk.label);
+  if (existing !== -1) {
+    state.picks.splice(existing, 1);
+  } else {
+    state.picks.push(pk);
+  }
+  renderTradeItems(pickerSide);
+  renderPickerList();
+}
+
+function addTradeCap() {
+  const val = parseInt(document.getElementById('capInput')?.value) || 0;
+  if (val <= 0) return;
+  const state = getSide(pickerSide);
+  state.cap = val;
+  renderTradeItems(pickerSide);
+  document.getElementById('tradePickerOverlay').classList.remove('open');
+}
+
+function clearTrade() {
+  tradeA = { tid: tradeA.tid, players: [], picks: [], cap: 0 };
+  tradeB = { tid: tradeB.tid, players: [], picks: [], cap: 0 };
+  renderTradeItems('A');
+  renderTradeItems('B');
+  updateTradeAcceptBtn();
+}
+
+// ─── ACCEPT TRADE ──────────────────────────────────────────────────────────
+function acceptTrade() {
+  const tA = LEAGUE_DATA.teams[tradeA.tid];
+  const tB = LEAGUE_DATA.teams[tradeB.tid];
+
+  // Snapshot for undo
+  const snapshot = {
+    teamA: { tid: tradeA.tid, players: JSON.parse(JSON.stringify(tA.players)), cap: tA.cap, sel: new Set(allSelections[tradeA.tid]), picks: JSON.parse(JSON.stringify(ownedPicks[tradeA.tid] || [])) },
+    teamB: { tid: tradeB.tid, players: JSON.parse(JSON.stringify(tB.players)), cap: tB.cap, sel: new Set(allSelections[tradeB.tid]), picks: JSON.parse(JSON.stringify(ownedPicks[tradeB.tid] || [])) },
+  };
+
+  // Move players: A's players go to B, B's players go to A
+  // Auto-select on arrival (default to kept)
+  tradeA.players.forEach(p => {
+    tA.players = tA.players.filter(x => x.id !== p.id);
+    allSelections[tradeA.tid].delete(p.id);
+    const arriving = { ...p, _via: tA.name, _tradeDate: new Date().toLocaleDateString() };
+    tB.players.push(arriving);
+    allSelections[tradeB.tid].add(p.id);
+  });
+  tradeB.players.forEach(p => {
+    tB.players = tB.players.filter(x => x.id !== p.id);
+    allSelections[tradeB.tid].delete(p.id);
+    const arriving = { ...p, _via: tB.name, _tradeDate: new Date().toLocaleDateString() };
+    tA.players.push(arriving);
+    allSelections[tradeA.tid].add(p.id);
+  });
+
+  // Move cap
+  if (tradeA.cap) { tA.cap -= tradeA.cap; tB.cap += tradeA.cap; }
+  if (tradeB.cap) { tB.cap -= tradeB.cap; tA.cap += tradeB.cap; }
+
+  // Transfer draft picks
+  tradeA.picks.forEach(pk => {
+    if (!ownedPicks[tradeA.tid]) ownedPicks[tradeA.tid] = [];
+    if (!ownedPicks[tradeB.tid]) ownedPicks[tradeB.tid] = [];
+    ownedPicks[tradeA.tid] = ownedPicks[tradeA.tid].filter(p => p.label !== pk.label);
+    ownedPicks[tradeB.tid].push({ ...pk, via: LEAGUE_DATA.teams[tradeA.tid].name });
+  });
+  tradeB.picks.forEach(pk => {
+    if (!ownedPicks[tradeB.tid]) ownedPicks[tradeB.tid] = [];
+    if (!ownedPicks[tradeA.tid]) ownedPicks[tradeA.tid] = [];
+    ownedPicks[tradeB.tid] = ownedPicks[tradeB.tid].filter(p => p.label !== pk.label);
+    ownedPicks[tradeA.tid].push({ ...pk, via: LEAGUE_DATA.teams[tradeB.tid].name });
+  });
+
+  // Build summary string
+  const aItems = [
+    ...tradeA.players.map(p => p.name),
+    ...tradeA.picks.map(pk => pk.label),
+    ...(tradeA.cap ? [`$${tradeA.cap} cap`] : []),
+  ];
+  const bItems = [
+    ...tradeB.players.map(p => p.name),
+    ...tradeB.picks.map(pk => pk.label),
+    ...(tradeB.cap ? [`$${tradeB.cap} cap`] : []),
+  ];
+  const summary = { teamA: tA.name, teamB: tB.name, aGives: aItems, bGives: bItems };
+
+  tradeHistory.unshift({ snapshot, summary });
+  renderTradeLog();
+
+  // Auto-assign lineup for affected teams
+  autoAssignLineup(tradeA.tid);
+  autoAssignLineup(tradeB.tid);
+
+  // Always refresh cap display — it's always visible in sidebar
+  if (currentTeam === tradeA.tid || currentTeam === tradeB.tid) {
+    updateCap(); renderTable(); renderLineup();
+  } else {
+    if (currentTeam) updateCap();
+  }
+  if (currentView === 'league') setLeagueSort(leagueSort);
+  if (currentView === 'available') renderAvailView();
+
+  clearTrade();
+}
+
+function undoTrade(idx) {
+  const entry = tradeHistory[idx];
+  if (!entry) return;
+  const { snapshot } = entry;
+  LEAGUE_DATA.teams[snapshot.teamA.tid].players = snapshot.teamA.players;
+  LEAGUE_DATA.teams[snapshot.teamA.tid].cap = snapshot.teamA.cap;
+  allSelections[snapshot.teamA.tid] = snapshot.teamA.sel;
+  if (snapshot.teamA.picks) ownedPicks[snapshot.teamA.tid] = snapshot.teamA.picks;
+  LEAGUE_DATA.teams[snapshot.teamB.tid].players = snapshot.teamB.players;
+  LEAGUE_DATA.teams[snapshot.teamB.tid].cap = snapshot.teamB.cap;
+  allSelections[snapshot.teamB.tid] = snapshot.teamB.sel;
+  if (snapshot.teamB.picks) ownedPicks[snapshot.teamB.tid] = snapshot.teamB.picks;
+  tradeHistory.splice(idx, 1);
+  renderTradeLog();
+  if (currentTeam === snapshot.teamA.tid || currentTeam === snapshot.teamB.tid) {
+    updateCap(); renderTable(); renderLineup();
+  }
+  if (currentView === 'league') setLeagueSort(leagueSort);
+  if (currentView === 'available') renderAvailView();
+}
+
+function renderTradeLog() {
+  const el = document.getElementById('tradeLog');
+  const cnt = document.getElementById('tradeLogCount');
+  cnt.textContent = `${tradeHistory.length} trade${tradeHistory.length !== 1 ? 's' : ''}`;
+  if (!tradeHistory.length) {
+    el.innerHTML = '<div class="trade-log-empty">No trades recorded yet.</div>';
+    return;
+  }
+  el.innerHTML = tradeHistory.map(({ summary }, i) => `
+    <div class="trade-log-item">
+      <div class="trade-log-num">${i + 1}</div>
+      <div class="trade-log-body">
+        <div class="trade-log-teams">${summary.teamA} ⇄ ${summary.teamB}</div>
+        <div><strong>${summary.teamA} gave:</strong> ${summary.aGives.join(', ') || '—'}</div>
+        <div><strong>${summary.teamB} gave:</strong> ${summary.bGives.join(', ') || '—'}</div>
+      </div>
+      <button class="trade-log-undo" onclick="undoTrade(${i})">↺ Undo</button>
+    </div>`).join('');
+}
+
+// ─── MOBILE TOOLTIP TAP SUPPORT ─────────────────────────────────────────────
+// On touch devices, hover doesn't fire. Allow tap to toggle tooltip visibility.
+document.addEventListener('click', e => {
+  const tip = e.target.closest('.contract-tip, .draft-pick-via');
+  if (tip) {
+    // Close all other open tips first
+    document.querySelectorAll('.contract-tip.tip-open, .draft-pick-via.tip-open').forEach(el => {
+      if (el !== tip) el.classList.remove('tip-open');
+    });
+    tip.classList.toggle('tip-open');
+    e.stopPropagation();
+  } else {
+    // Tap outside closes all
+    document.querySelectorAll('.contract-tip.tip-open, .draft-pick-via.tip-open').forEach(el => el.classList.remove('tip-open'));
+  }
+});
+
+// ─── SIDEBAR RESIZE ──────────────────────────────────────────────────────────
+// Sidebar resize
+(function() {
+  const sidebar = document.getElementById('sidebar');
+  const resizer = document.getElementById('sidebarResizer');
+  let startX, startW;
+  resizer.addEventListener('mousedown', e => {
+    startX = e.clientX;
+    startW = sidebar.offsetWidth;
+    resizer.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!resizer.classList.contains('dragging')) return;
+    const newW = Math.min(600, Math.max(220, startW + (e.clientX - startX)));
+    sidebar.style.width = newW + 'px';
+  });
+  document.addEventListener('mouseup', () => {
+    if (!resizer.classList.contains('dragging')) return;
+    resizer.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+
+  window.addEventListener('resize', () => {
+    window._rosterBreakpoint = null; // force recalc
+    if (currentTeam && currentView === 'roster') { buildRosterHeader(); renderTable(); }
+  });
+
+function initAuctionTip() {
+  const hdr = document.getElementById('auctionValHeader');
+  const tip = document.getElementById('auctionTip');
+  if (!hdr || !tip) return;
+  hdr.addEventListener('mouseenter', () => tip.style.display = 'block');
+  hdr.addEventListener('mouseleave', () => tip.style.display = 'none');
+}
+
+// Exponential decay curve fitted to real FBP auction data (2016-2022).
+// Prices the Nth best AVAILABLE player at a position.
+const AVAIL_CURVE = {
+  RB:  { max: 65.3, decay: 0.128 },
+  WR:  { max: 45.4, decay: 0.157 },
+  QB:  { max: 28.0, decay: 0.352 },
+  TE:  { max: 26.6, decay: 0.585 },
+  DEF: { max: 7.0,  decay: 0.45  },
+};
+function availCurve(pos, rank) {
+  const c = AVAIL_CURVE[pos] || { max: 15, decay: 0.30 };
+  return Math.max(1, (c.max - 1) * Math.exp(-c.decay * (rank - 1)) + 1);
+}
+
+// Quality ceiling: realistic max bid for a player of this global rank.
+// A RB24 won't fetch elite money even if every other RB is kept.
+function qualityCeiling(pos, globalRank) {
+  const tiers = {
+    RB:  [[3,68],[5,56],[8,46],[10,38],[15,26],[20,18],[25,14],[32,10],[99,7]],
+    WR:  [[3,62],[5,50],[8,40],[12,32],[18,26],[25,20],[36,14],[99,9]],
+    QB:  [[2,32],[4,26],[6,18],[8,14],[12,10],[20,7],[99,4]],
+    TE:  [[1,40],[3,22],[5,16],[8,10],[12,7],[99,4]],
+    DEF: [[2,8],[4,5],[99,3]],
+  };
+  const t = tiers[pos] || [[10,15],[99,5]];
+  for (const [thresh, cap] of t) { if (globalRank <= thresh) return cap; }
+  return t[t.length-1][1];
+}
+
+// Quality scalar 0.0 (fringe) to 1.0 (elite).
+// Drives how much available rank vs global rank dominates the blend.
+const QS_THRESH = {
+  RB:  { elite: 5,  fringe: 32 },
+  WR:  { elite: 5,  fringe: 36 },
+  QB:  { elite: 3,  fringe: 20 },
+  TE:  { elite: 2,  fringe: 14 },
+  DEF: { elite: 1,  fringe: 6  },
+};
+function qualityScalar(pos, globalRank) {
+  const t = QS_THRESH[pos] || { elite: 4, fringe: 20 };
+  if (globalRank <= t.elite)  return 1.0;
+  if (globalRank >= t.fringe) return 0.0;
+  return 1.0 - (globalRank - t.elite) / (t.fringe - t.elite);
+}
+
+// Minimum floor: best available always fetches at least this much.
+function availFloor(pos, availRank) {
+  const floors = {
+    RB:  [0, 10, 7, 5, 4, 3],
+    WR:  [0, 10, 7, 5, 4, 3],
+    QB:  [0,  7, 4, 3],
+    TE:  [0,  7, 4, 3],
+    DEF: [0,  4, 3, 2],
+  };
+  const f = floors[pos] || [0, 3, 2, 1];
+  return f[Math.min(availRank, f.length - 1)] || 1;
+}
+
+function generateAuctionValues() {
+  const newVals = {};
+
+  const keptIds = new Set();
+  for (const sel of Object.values(allSelections)) for (const id of sel) keptIds.add(id);
+  const draftedIds = new Set();
+  DRAFT_ORDER.forEach((slot, i) => { if (draftPicks[i] && !releasedDraftRookies.has(i)) draftedIds.add(draftPicks[i]); });
+
+  const byPos = { QB: [], RB: [], WR: [], TE: [], DEF: [] };
+  for (const p of LEAGUE_DATA.freeAgents) {
+    if (keptIds.has(p.id) || draftedIds.has(p.id)) continue;
+    const posRkNum = parseInt((p.posRank || '').replace(/\D/g,'')) || 999;
+    if (posRkNum < 999 && byPos[p.pos]) {
+      byPos[p.pos].push({ id: p.id, posRkNum, rookie: !!p.rookie, rookieRank: p.rookieRank || null, ecr: p.ecr || 999 });
+    }
+  }
+  for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
+    const sel = allSelections[tid];
+    for (const p of t.players) {
+      if (!sel.has(p.id)) {
+        const posRkNum = parseInt((p.posRank || '').replace(/\D/g,'')) || 999;
+        if (posRkNum < 999 && byPos[p.pos]) {
+          byPos[p.pos].push({ id: p.id, posRkNum, rookie: !!p.rookie, rookieRank: null, ecr: p.ecr || 999 });
+        }
+      }
+    }
+  }
+
+  const normalDepth = { RB: 18, WR: 18, QB: 10, TE: 10, DEF: 6 };
+  const hardCap     = { RB: 68, WR: 65, TE: 40, QB: 32, DEF: 10 };
+
+  for (const [pos, players] of Object.entries(byPos)) {
+    players.sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
+    const total = players.length;
+    const depth = normalDepth[pos] || 12;
+    const cap   = hardCap[pos] || 25;
+
+    players.forEach((p, idx) => {
+      const availRank = idx + 1;
+      const qs        = qualityScalar(pos, p.posRkNum);
+
+      // 1. Available-rank curve value, capped by quality ceiling
+      const rawAvail    = availCurve(pos, availRank);
+      const qceil       = qualityCeiling(pos, p.posRkNum);
+      const cappedAvail = Math.min(rawAvail, qceil);
+
+      // 2. Global rank standalone value (same curve, global rank as input)
+      const globalVal = availCurve(pos, p.posRkNum);
+
+      // 3. Dynamic blend: elite players price off available rank; fringe off global rank
+      const availWeight  = 0.15 + 0.55 * qs;
+      const globalWeight = 1.0 - availWeight;
+      let base = cappedAvail * availWeight + globalVal * globalWeight;
+
+      // 4. Best-available premium (quality-scaled so fringe aRB1 doesn't get inflated)
+      if (availRank === 1) base *= (1.0 + 0.10 * qs);
+      else if (availRank === 2) base *= (1.0 + 0.04 * qs);
+
+      // 5. Scarcity: thin pool boosts top players, scaled by quality
+      if (total < depth) {
+        const thinness    = (depth - total) / depth;
+        const scarcityAdd = availRank === 1 ? thinness * 0.40
+                          : availRank === 2 ? thinness * 0.20
+                          : availRank <= 5  ? thinness * 0.10
+                          : thinness * 0.04;
+        base *= (1.0 + scarcityAdd * qs);
+      }
+
+      // 6. Rookie premium
+      let rookieMult = 1.0;
+      if (p.rookie) {
+        const rRank = p.rookieRank || 99;
+        const premiums = {
+          RB:  [1.55, 1.40, 1.40, 1.25, 1.25, 1.15, 1.15, 1.08, 1.08, 1.05, 1.05, 1.03, 1.03],
+          WR:  [1.28, 1.18, 1.18, 1.10, 1.10, 1.07, 1.07, 1.04, 1.04, 1.02, 1.02, 1.01, 1.01],
+          TE:  [1.22, 1.12, 1.12, 1.07, 1.07, 1.03, 1.03],
+          QB:  [1.10, 1.06, 1.04, 1.04, 1.02],
+        };
+        const tbl = premiums[pos] || [1.0];
+        rookieMult = tbl[Math.min(rRank - 1, tbl.length - 1)] || tbl[tbl.length - 1];
+        if (availRank === 1) rookieMult = Math.min(rookieMult * 1.12, 1.9);
+      }
+      base *= rookieMult;
+
+      // 7. Noise (tight at top, wider at bottom)
+      const noise      = (Math.random() + Math.random() + Math.random() - 1.5);
+      const tierFactor = base >= 40 ? 0.09 : base >= 25 ? 0.13 : base >= 12 ? 0.22 : base >= 6 ? 0.34 : 0.48;
+      base *= (1 + noise * tierFactor);
+
+      // 8. Occasional overpay
+      const isTierBreak   = idx > 0 && (players[idx-1].posRkNum + 4) < p.posRkNum;
+      const overpayChance = availRank === 1 ? 0.25 : isTierBreak ? 0.15 : 0.05;
+      if (Math.random() < overpayChance) base += Math.random() * base * 0.35;
+
+      // 9. Floor then hard cap
+      const floor = availFloor(pos, availRank);
+      newVals[p.id] = Math.max(floor, Math.min(cap, Math.round(base)));
+    });
+  }
+
+  auctionValues = newVals;
+
+  // Update button to show reroll indicator
+  const btn = document.getElementById('genAuctionBtn');
+  if (btn) btn.textContent = '🎲 Reroll Auction Values';
+
+  // Show auction val header and init tooltip
+  const hdr = document.getElementById('auctionValHeader');
+  if (hdr) { hdr.style.display = ''; initAuctionTip(); }
+
+  renderAvailView();
+}
+
+  // Expose auction functions to global scope for onclick handlers
+  window.generateAuctionValues = generateAuctionValues;
+  window.initAuctionTip = initAuctionTip;
+})();
+
 })();
 </script>
 
