@@ -411,14 +411,24 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.11</span></span></div>
-    <div class="header-controls">
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.10</span></span></div>
+  <div class="header-controls">
+    <label>Team</label>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <button onclick="navigateTeam(-1)" style="padding:6px 10px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;" title="Previous team">‹</button>
+      <select id="teamPicker" onchange="selectTeam(this.value)" style="flex:1;">
+      <option value="">— Select a team —</option>
+    </select>
+      <button onclick="navigateTeam(1)" style="padding:6px 10px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;" title="Next team">›</button>
+    </div>
+    <button onclick="saveRosterFile()" style="padding:7px 13px;font-size:11px;font-weight:600;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap;" title="Save your keeper selections to a file">💾 Save</button>
+    <label style="padding:7px 13px;font-size:11px;font-weight:600;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap;" title="Load previously saved keeper selections">📂 Load<input type="file" accept=".json" onchange="loadRosterFile(event)" style="display:none;"></label>
     <div class="view-toggle">
       <button class="view-btn active" onclick="setView('roster')">Roster</button>
       <button class="view-btn" onclick="setView('league')">All Keepers</button>
       <button class="view-btn" onclick="setView('available')">Available</button>
       <button class="view-btn" onclick="setView('draft')">Rookie Draft</button>
-      <button class="view-btn" onclick="setView('trade')">&#x21C4; Trades</button>
+      <button class="view-btn" onclick="setView('trade')">⇄ Trades</button>
     </div>
   </div>
 </div>
@@ -426,19 +436,6 @@
 <div class="main">
   <div class="sidebar" id="sidebar">
     <div class="sidebar-resizer" id="sidebarResizer"></div>
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <div style="display:flex;align-items:center;gap:5px;">
-        <button onclick="navigateTeam(-1)" style="padding:5px 9px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;flex-shrink:0;" title="Previous team">&#x2039;</button>
-        <select id="teamPicker" onchange="selectTeam(this.value)" style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 10px;border-radius:8px;cursor:pointer;outline:none;">
-          <option value="">&#x2014; Select a team &#x2014;</option>
-        </select>
-        <button onclick="navigateTeam(1)" style="padding:5px 9px;font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;line-height:1;flex-shrink:0;" title="Next team">&#x203A;</button>
-      </div>
-      <div style="display:flex;gap:6px;">
-        <button onclick="saveRosterFile()" style="flex:1;padding:6px 10px;font-size:11px;font-weight:600;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;" title="Save keeper selections to file">&#x1F4BE; Save</button>
-        <label style="flex:1;padding:6px 10px;font-size:11px;font-weight:600;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;text-align:center;" title="Load previously saved selections">&#x1F4C2; Load<input type="file" accept=".json" onchange="loadRosterFile(event)" style="display:none;"></label>
-      </div>
-    </div>
     <div class="team-identity" id="teamIdentity">
       <div class="team-logo-placeholder"></div>
       <div><div class="team-identity-name" style="color:var(--text3);">No team selected</div><div class="team-identity-sub">Pick a team above</div></div>
@@ -514,7 +511,10 @@
         <div class="avail-title">Available at Auction</div>
         <div class="avail-count" id="availCount">— players</div>
       </div>
-      <button id="genAuctionBtn" onclick="generateAuctionValues()" style="padding:8px 16px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid var(--accent2);background:rgba(74,158,255,0.12);color:var(--accent2);cursor:pointer;transition:all 0.15s;white-space:nowrap;align-self:flex-start;" title="Generate hypothetical auction values based on historical league data. These are estimates only — not official values.">⚡ Generate Auction Values</button>
+      <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
+        <button id="genAuctionBtn" onclick="generateAuctionValues()" style="padding:8px 16px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid var(--accent2);background:rgba(74,158,255,0.12);color:var(--accent2);cursor:pointer;transition:all 0.15s;white-space:nowrap;" title="Generate hypothetical auction values based on historical league data. These are estimates only — not official values.">⚡ Generate Auction Values</button>
+        <button id="resetAuctionBtn" onclick="resetAuctionValues()" style="display:none;padding:8px 16px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap;" title="Clear all auction values">↺ Reset Values</button>
+      </div>
     </div>
     <div class="avail-controls">
       <div class="avail-search-wrap">
@@ -584,8 +584,7 @@
           <select id="draftTeamFilter" onchange="renderDraftBoard()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 8px;border-radius:7px;cursor:pointer;outline:none;max-width:140px;">
             <option value="">All Teams</option>
           </select>
-          <button class="reset-btn" id="mockMyPicksBtn" style="width:auto;padding:6px 14px;background:rgba(232,200,74,0.12);border-color:var(--accent);color:var(--accent);" onclick="runMockDraft('myteam')" title="Auto-fill all other teams; you pick for your team">⚡ Mock My Picks</button>
-          <button class="reset-btn" style="width:auto;padding:6px 14px;background:rgba(74,158,255,0.15);border-color:var(--accent2);color:var(--accent2);" onclick="runMockDraft('full')" title="Auto-fill every pick for all teams">⚡ Full Mock</button>
+          <button class="reset-btn" style="width:auto;padding:6px 14px;background:rgba(74,158,255,0.15);border-color:var(--accent2);color:var(--accent2);" onclick="runMockDraft()">⚡ Mock Draft</button>
           <button class="reset-btn" style="width:auto;padding:6px 14px;" onclick="resetDraft()">↺ Reset</button>
         </div>
       </div>
@@ -738,6 +737,7 @@ for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
 
 let currentTeam = null, currentFilter = 'ALL', currentSort = 'salary', sortDir = -1;
 let currentView = 'roster', availFilter = new Set(), leagueSort = 'pos', availSort = 'ecr', availSortDir = 1, auctionValues = null;
+let customAuctionValues = {}; // pid -> custom $ amount, persists across rerolls until reset
 let lineupDisplay = 'rank'; // 'rank' or 'salary'
 
 // Populate team dropdown
@@ -897,12 +897,9 @@ function selectTeam(tid) {
     ? `<img class="team-logo" src="${t.logo}" alt="${t.name}"><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`
     : `<div class="team-logo-placeholder"></div><div><div class="team-identity-name">${t.name}</div><div class="team-identity-sub">${t.owner || ''}</div><div class="team-identity-sub">$${t.cap} auction budget</div></div>`;
   document.getElementById('lineupSection').style.display = 'block';
-  const mockBtn = document.getElementById('mockMyPicksBtn');
-  if (mockBtn) mockBtn.textContent = '⚡ Mock My Picks · ' + t.name;
   buildRosterHeader();
   autoAssignLineup(tid);
   updateCap(); renderTable(); renderLineup();
-  if (currentView === 'draft') renderDraftBoard();
   if (currentView === 'available') { auctionValues = null; const btn = document.getElementById('genAuctionBtn'); if(btn) btn.textContent = '⚡ Generate Auction Values'; renderAvailView(); }
 }
 
@@ -1703,9 +1700,19 @@ function renderAvailView() {
     const ecrDisplay = p.ecr && p.ecr < 999 ? p.ecr : '—';
     const posRankDisplay = p.posRank && p.posRank.length > 2 ? p.posRank : '—';
     const fromTeamStr = (p.source === 'cut' || p.releasedRookie) ? p.fromTeam : p.team;
-    const auctionVal = hasAuction && auctionValues[p.id] != null
-      ? `<div class="td-num" style="color:var(--accent2);font-weight:600;">$${auctionValues[p.id]}</div>`
-      : hasAuction ? `<div class="td-num" style="color:var(--text3);">—</div>` : '';
+    let auctionVal = '';
+    if (hasAuction) {
+      const isCustom = customAuctionValues[p.id] != null;
+      const dispVal = isCustom ? customAuctionValues[p.id] : auctionValues[p.id];
+      if (dispVal != null) {
+        const color = isCustom ? 'var(--green)' : 'var(--accent2)';
+        auctionVal = `<div class="td-num" style="cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)">
+          <span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span>
+        </div>`;
+      } else {
+        auctionVal = `<div class="td-num" style="color:var(--text3);cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)">—</div>`;
+      }
+    }
     return `<div class="avail-row${hasAuction ? ' auction-mode' : ''}">
       <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
@@ -1992,12 +1999,11 @@ function setDraftFilter(f) {
   renderDraftPool();
 }
 
-let mockMode = null;
 async function draftPlayer(pid) {
   const nextIdx = getNextPickIndex();
   if (nextIdx === -1) return;
-  if (mockMode === 'myteam' && currentTeam && DRAFT_ORDER[nextIdx].franchise !== currentTeam) return;
   draftPicks[nextIdx] = pid;
+  // Auto-assign to first empty taxi slot for the team that made the pick
   const fid = DRAFT_ORDER[nextIdx].franchise;
   const taxi = taxiAssignments[fid];
   const emptySlot = taxi.indexOf('');
@@ -2006,7 +2012,6 @@ async function draftPlayer(pid) {
   if (currentTeam && fid === currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
   try { await saveDraftState(); } catch(e) {}
-  if (mockMode === 'myteam') continueMockAfterPick();
 }
 
 async function undoPick(idx) {
@@ -2046,7 +2051,6 @@ async function resetDraft() {
     return;
   }
   if (btn) { btn.dataset.confirming = ''; btn.textContent = '↺ Reset'; btn.style.borderColor = ''; btn.style.color = ''; }
-  mockMode = null; mockDraftAbort = true;
   draftPicks = new Array(DRAFT_ORDER.length).fill('');
   releasedDraftRookies = new Set();
   for (const tid of Object.keys(taxiAssignments)) taxiAssignments[tid] = ['', '', '', ''];
@@ -2059,8 +2063,6 @@ function renderDraftBoard() {
   const el = document.getElementById('draftBoard');
   const nextIdx = getNextPickIndex();
   const filterTid = document.getElementById('draftTeamFilter')?.value || '';
-  const _mb = document.getElementById('mockMyPicksBtn');
-  if (_mb) { const _t = currentTeam ? LEAGUE_DATA.teams[currentTeam] : null; _mb.textContent = _t ? ('\u26a1 Mock My Picks \u00b7 ' + _t.name) : '\u26a1 Mock My Picks'; }
   let html = '';
   let lastRound = 0;
 
@@ -2076,7 +2078,6 @@ function renderDraftBoard() {
     const pid = draftPicks[i];
     const isOnClock = i === nextIdx;
     const isDrafted = !!pid;
-    const isMyTeam = !!(currentTeam && slot.franchise === currentTeam);
 
     // Find player if drafted
     let player = null;
@@ -2103,14 +2104,12 @@ function renderDraftBoard() {
       }
     }
 
-    const youBadge = isMyTeam ? ' <span style="font-size:9px;font-weight:700;padding:1px 5px;background:rgba(232,200,74,0.18);border-radius:3px;color:var(--accent);">YOU</span>' : '';
-    const myBorder = isMyTeam ? ' style="border-left:3px solid var(--accent);padding-left:13px;"' : '';
-    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}"${myBorder}>
+    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}">
       <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
       <div class="draft-pick-team">
         ${logoHtml}
         <div>
-          <div class="draft-pick-team-name">${team?.name || slot.franchise}${youBadge}</div>
+          <div class="draft-pick-team-name">${team?.name || slot.franchise}</div>
           ${viaHtml}
         </div>
       </div>
@@ -2189,7 +2188,7 @@ function renderDraftView() {
 }
 
 // ─── MOCK DRAFT ──────────────────────────────────────────────────────────────
-async function runMockDraft(mode) {
+async function runMockDraft() {
   function gaussianRandom() {
     let u = 0, v = 0;
     while (u === 0) u = Math.random();
@@ -2208,9 +2207,7 @@ async function runMockDraft(mode) {
 
   // Assign each player a single simulated rank for this run
   for (const p of pool) {
-    const noise = gaussianRandom();
-    const rawRank = p.draftAvg + (p.draftStd || 5) * noise;
-    p._simRank = Math.max(p.draftAvg * 0.4, rawRank); // floor at 40% of avg — prevents outliers going 1st
+    p._simRank = Math.max(0.1, p.draftAvg + (p.draftStd || 5) * gaussianRandom());
   }
 
   // Sort by simulated rank
@@ -2221,118 +2218,21 @@ async function runMockDraft(mode) {
     taxiAssignments[tid] = ['', '', '', ''];
   }
 
-  mockMode = mode;
-  mockDraftAbort = true;
-  await new Promise(r => setTimeout(r, 60));
-  mockDraftAbort = false;
-
-  const myTeam = (mode === 'myteam') ? currentTeam : null;
-  if (mode === 'myteam' && !myTeam) {
-    alert('Select your team from the sidebar first, then use Mock My Picks.');
-    mockMode = null;
-    return;
-  }
-
-  if (mode === 'full') {
-    // Full mock: fill everything instantly
-    let pi = 0;
-    for (let i = 0; i < DRAFT_ORDER.length; i++) {
-      if (pi >= pool.length) break;
-      const pid = pool[pi++].id;
-      draftPicks[i] = pid;
-      const fid = DRAFT_ORDER[i].franchise;
-      const taxi = taxiAssignments[fid];
-      const s = taxi.indexOf(''); if (s !== -1) taxi[s] = pid;
-    }
-    renderDraftView();
-    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-    if (currentView === 'league') renderLeagueView();
-    try { await saveDraftState(); } catch(e) {}
-    return;
-  }
-
-  // myteam: pre-assign simulated picks for all non-user slots
-  const usedIds = new Set();
-  const simPicks = {};
-  let pi2 = 0;
+  // Fill all pick slots in order from the sorted pool
+  let poolIdx = 0;
   for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (DRAFT_ORDER[i].franchise === myTeam) continue;
-    while (pi2 < pool.length && usedIds.has(pool[pi2].id)) pi2++;
-    if (pi2 >= pool.length) break;
-    simPicks[i] = pool[pi2].id;
-    usedIds.add(pool[pi2].id);
-    pi2++;
+    if (poolIdx >= pool.length) break;
+    const pid = pool[poolIdx].id;
+    draftPicks[i] = pid;
+    // Auto-assign to taxi
+    const fid = DRAFT_ORDER[i].franchise;
+    const taxi = taxiAssignments[fid];
+    const emptySlot = taxi.indexOf('');
+    if (emptySlot !== -1) taxi[emptySlot] = pid;
+    poolIdx++;
   }
 
   renderDraftView();
-
-  // Animate picks 500ms apart up to user's first pick
-  for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (mockDraftAbort) return;
-    const fid = DRAFT_ORDER[i].franchise;
-    if (fid === myTeam) {
-      // User's turn — leave on-clock, wait for manual pick
-      renderDraftView();
-      if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-      try { await saveDraftState(); } catch(e) {}
-      return;
-    }
-    const pid = simPicks[i];
-    if (!pid) continue;
-    draftPicks[i] = pid;
-    const taxi = taxiAssignments[fid];
-    const s = taxi.indexOf(''); if (s !== -1) taxi[s] = pid;
-    renderDraftView();
-    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-    await new Promise(r => setTimeout(r, 500));
-    if (mockDraftAbort) return;
-  }
-  if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-  if (currentView === 'league') renderLeagueView();
-  try { await saveDraftState(); } catch(e) {}
-}
-
-let mockDraftAbort = false;
-
-// Continues animated mock after user makes their pick
-async function continueMockAfterPick() {
-  const myTeam = currentTeam;
-  if (!myTeam) return;
-  mockDraftAbort = false;
-  const usedIds = new Set(draftPicks.filter(Boolean));
-  const pool2 = LEAGUE_DATA.freeAgents
-    .filter(p => p.rookie && p.draftAvg != null && !usedIds.has(p.id))
-    .sort((a, b) => (a.draftAvg || 999) - (b.draftAvg || 999));
-  let pi = 0;
-  const simPicks = {};
-  for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (draftPicks[i] || DRAFT_ORDER[i].franchise === myTeam) continue;
-    while (pi < pool2.length && (draftPicks.includes(pool2[pi].id) || usedIds.has(pool2[pi].id))) pi++;
-    if (pi >= pool2.length) break;
-    simPicks[i] = pool2[pi].id;
-    usedIds.add(pool2[pi].id);
-    pi++;
-  }
-  for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (mockDraftAbort) return;
-    if (draftPicks[i]) continue;
-    const fid = DRAFT_ORDER[i].franchise;
-    if (fid === myTeam) {
-      renderDraftView();
-      if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-      try { await saveDraftState(); } catch(e) {}
-      return;
-    }
-    const pid = simPicks[i];
-    if (!pid) continue;
-    draftPicks[i] = pid;
-    const taxi = taxiAssignments[fid];
-    const s = taxi.indexOf(''); if (s !== -1) taxi[s] = pid;
-    renderDraftView();
-    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-    await new Promise(r => setTimeout(r, 500));
-    if (mockDraftAbort) return;
-  }
   if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
   try { await saveDraftState(); } catch(e) {}
@@ -3002,9 +2902,19 @@ function renderAvailView() {
     const ecrDisplay = p.ecr && p.ecr < 999 ? p.ecr : '—';
     const posRankDisplay = p.posRank && p.posRank.length > 2 ? p.posRank : '—';
     const fromTeamStr = (p.source === 'cut' || p.releasedRookie) ? p.fromTeam : p.team;
-    const auctionVal = hasAuction && auctionValues[p.id] != null
-      ? `<div class="td-num" style="color:var(--accent2);font-weight:600;">$${auctionValues[p.id]}</div>`
-      : hasAuction ? `<div class="td-num" style="color:var(--text3);">—</div>` : '';
+    let auctionVal = '';
+    if (hasAuction) {
+      const isCustom = customAuctionValues[p.id] != null;
+      const dispVal = isCustom ? customAuctionValues[p.id] : auctionValues[p.id];
+      if (dispVal != null) {
+        const color = isCustom ? 'var(--green)' : 'var(--accent2)';
+        auctionVal = `<div class="td-num" style="cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)">
+          <span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span>
+        </div>`;
+      } else {
+        auctionVal = `<div class="td-num" style="color:var(--text3);cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)">—</div>`;
+      }
+    }
     return `<div class="avail-row${hasAuction ? ' auction-mode' : ''}">
       <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
@@ -3291,12 +3201,11 @@ function setDraftFilter(f) {
   renderDraftPool();
 }
 
-let mockMode = null;
 async function draftPlayer(pid) {
   const nextIdx = getNextPickIndex();
   if (nextIdx === -1) return;
-  if (mockMode === 'myteam' && currentTeam && DRAFT_ORDER[nextIdx].franchise !== currentTeam) return;
   draftPicks[nextIdx] = pid;
+  // Auto-assign to first empty taxi slot for the team that made the pick
   const fid = DRAFT_ORDER[nextIdx].franchise;
   const taxi = taxiAssignments[fid];
   const emptySlot = taxi.indexOf('');
@@ -3305,7 +3214,6 @@ async function draftPlayer(pid) {
   if (currentTeam && fid === currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
   try { await saveDraftState(); } catch(e) {}
-  if (mockMode === 'myteam') continueMockAfterPick();
 }
 
 async function undoPick(idx) {
@@ -3345,7 +3253,6 @@ async function resetDraft() {
     return;
   }
   if (btn) { btn.dataset.confirming = ''; btn.textContent = '↺ Reset'; btn.style.borderColor = ''; btn.style.color = ''; }
-  mockMode = null; mockDraftAbort = true;
   draftPicks = new Array(DRAFT_ORDER.length).fill('');
   releasedDraftRookies = new Set();
   for (const tid of Object.keys(taxiAssignments)) taxiAssignments[tid] = ['', '', '', ''];
@@ -3358,8 +3265,6 @@ function renderDraftBoard() {
   const el = document.getElementById('draftBoard');
   const nextIdx = getNextPickIndex();
   const filterTid = document.getElementById('draftTeamFilter')?.value || '';
-  const _mb = document.getElementById('mockMyPicksBtn');
-  if (_mb) { const _t = currentTeam ? LEAGUE_DATA.teams[currentTeam] : null; _mb.textContent = _t ? ('\u26a1 Mock My Picks \u00b7 ' + _t.name) : '\u26a1 Mock My Picks'; }
   let html = '';
   let lastRound = 0;
 
@@ -3375,7 +3280,6 @@ function renderDraftBoard() {
     const pid = draftPicks[i];
     const isOnClock = i === nextIdx;
     const isDrafted = !!pid;
-    const isMyTeam = !!(currentTeam && slot.franchise === currentTeam);
 
     // Find player if drafted
     let player = null;
@@ -3402,14 +3306,12 @@ function renderDraftBoard() {
       }
     }
 
-    const youBadge = isMyTeam ? ' <span style="font-size:9px;font-weight:700;padding:1px 5px;background:rgba(232,200,74,0.18);border-radius:3px;color:var(--accent);">YOU</span>' : '';
-    const myBorder = isMyTeam ? ' style="border-left:3px solid var(--accent);padding-left:13px;"' : '';
-    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}"${myBorder}>
+    html += `<div class="draft-pick-row ${isOnClock ? 'on-clock' : ''} ${isDrafted ? 'drafted' : ''}">
       <div class="draft-pick-num">${slot.round}.${String(slot.pick).padStart(2,'0')}</div>
       <div class="draft-pick-team">
         ${logoHtml}
         <div>
-          <div class="draft-pick-team-name">${team?.name || slot.franchise}${youBadge}</div>
+          <div class="draft-pick-team-name">${team?.name || slot.franchise}</div>
           ${viaHtml}
         </div>
       </div>
@@ -3488,7 +3390,7 @@ function renderDraftView() {
 }
 
 // ─── MOCK DRAFT ──────────────────────────────────────────────────────────────
-async function runMockDraft(mode) {
+async function runMockDraft() {
   function gaussianRandom() {
     let u = 0, v = 0;
     while (u === 0) u = Math.random();
@@ -3507,9 +3409,7 @@ async function runMockDraft(mode) {
 
   // Assign each player a single simulated rank for this run
   for (const p of pool) {
-    const noise = gaussianRandom();
-    const rawRank = p.draftAvg + (p.draftStd || 5) * noise;
-    p._simRank = Math.max(p.draftAvg * 0.4, rawRank); // floor at 40% of avg — prevents outliers going 1st
+    p._simRank = Math.max(0.1, p.draftAvg + (p.draftStd || 5) * gaussianRandom());
   }
 
   // Sort by simulated rank
@@ -3520,118 +3420,21 @@ async function runMockDraft(mode) {
     taxiAssignments[tid] = ['', '', '', ''];
   }
 
-  mockMode = mode;
-  mockDraftAbort = true;
-  await new Promise(r => setTimeout(r, 60));
-  mockDraftAbort = false;
-
-  const myTeam = (mode === 'myteam') ? currentTeam : null;
-  if (mode === 'myteam' && !myTeam) {
-    alert('Select your team from the sidebar first, then use Mock My Picks.');
-    mockMode = null;
-    return;
-  }
-
-  if (mode === 'full') {
-    // Full mock: fill everything instantly
-    let pi = 0;
-    for (let i = 0; i < DRAFT_ORDER.length; i++) {
-      if (pi >= pool.length) break;
-      const pid = pool[pi++].id;
-      draftPicks[i] = pid;
-      const fid = DRAFT_ORDER[i].franchise;
-      const taxi = taxiAssignments[fid];
-      const s = taxi.indexOf(''); if (s !== -1) taxi[s] = pid;
-    }
-    renderDraftView();
-    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-    if (currentView === 'league') renderLeagueView();
-    try { await saveDraftState(); } catch(e) {}
-    return;
-  }
-
-  // myteam: pre-assign simulated picks for all non-user slots
-  const usedIds = new Set();
-  const simPicks = {};
-  let pi2 = 0;
+  // Fill all pick slots in order from the sorted pool
+  let poolIdx = 0;
   for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (DRAFT_ORDER[i].franchise === myTeam) continue;
-    while (pi2 < pool.length && usedIds.has(pool[pi2].id)) pi2++;
-    if (pi2 >= pool.length) break;
-    simPicks[i] = pool[pi2].id;
-    usedIds.add(pool[pi2].id);
-    pi2++;
+    if (poolIdx >= pool.length) break;
+    const pid = pool[poolIdx].id;
+    draftPicks[i] = pid;
+    // Auto-assign to taxi
+    const fid = DRAFT_ORDER[i].franchise;
+    const taxi = taxiAssignments[fid];
+    const emptySlot = taxi.indexOf('');
+    if (emptySlot !== -1) taxi[emptySlot] = pid;
+    poolIdx++;
   }
 
   renderDraftView();
-
-  // Animate picks 500ms apart up to user's first pick
-  for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (mockDraftAbort) return;
-    const fid = DRAFT_ORDER[i].franchise;
-    if (fid === myTeam) {
-      // User's turn — leave on-clock, wait for manual pick
-      renderDraftView();
-      if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-      try { await saveDraftState(); } catch(e) {}
-      return;
-    }
-    const pid = simPicks[i];
-    if (!pid) continue;
-    draftPicks[i] = pid;
-    const taxi = taxiAssignments[fid];
-    const s = taxi.indexOf(''); if (s !== -1) taxi[s] = pid;
-    renderDraftView();
-    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-    await new Promise(r => setTimeout(r, 500));
-    if (mockDraftAbort) return;
-  }
-  if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-  if (currentView === 'league') renderLeagueView();
-  try { await saveDraftState(); } catch(e) {}
-}
-
-let mockDraftAbort = false;
-
-// Continues animated mock after user makes their pick
-async function continueMockAfterPick() {
-  const myTeam = currentTeam;
-  if (!myTeam) return;
-  mockDraftAbort = false;
-  const usedIds = new Set(draftPicks.filter(Boolean));
-  const pool2 = LEAGUE_DATA.freeAgents
-    .filter(p => p.rookie && p.draftAvg != null && !usedIds.has(p.id))
-    .sort((a, b) => (a.draftAvg || 999) - (b.draftAvg || 999));
-  let pi = 0;
-  const simPicks = {};
-  for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (draftPicks[i] || DRAFT_ORDER[i].franchise === myTeam) continue;
-    while (pi < pool2.length && (draftPicks.includes(pool2[pi].id) || usedIds.has(pool2[pi].id))) pi++;
-    if (pi >= pool2.length) break;
-    simPicks[i] = pool2[pi].id;
-    usedIds.add(pool2[pi].id);
-    pi++;
-  }
-  for (let i = 0; i < DRAFT_ORDER.length; i++) {
-    if (mockDraftAbort) return;
-    if (draftPicks[i]) continue;
-    const fid = DRAFT_ORDER[i].franchise;
-    if (fid === myTeam) {
-      renderDraftView();
-      if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-      try { await saveDraftState(); } catch(e) {}
-      return;
-    }
-    const pid = simPicks[i];
-    if (!pid) continue;
-    draftPicks[i] = pid;
-    const taxi = taxiAssignments[fid];
-    const s = taxi.indexOf(''); if (s !== -1) taxi[s] = pid;
-    renderDraftView();
-    if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
-    await new Promise(r => setTimeout(r, 500));
-    if (mockDraftAbort) return;
-  }
   if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
   if (currentView === 'league') renderLeagueView();
   try { await saveDraftState(); } catch(e) {}
@@ -4358,11 +4161,18 @@ function generateAuctionValues() {
     });
   }
 
+  // Custom values override generated ones — they survive rerolls
+  for (const [pid, val] of Object.entries(customAuctionValues)) {
+    newVals[pid] = val;
+  }
+
   auctionValues = newVals;
 
-  // Update button to show reroll indicator
+  // Update buttons
   const btn = document.getElementById('genAuctionBtn');
   if (btn) btn.textContent = '🎲 Reroll Auction Values';
+  const resetBtn = document.getElementById('resetAuctionBtn');
+  if (resetBtn) resetBtn.style.display = '';
 
   // Show auction val header and init tooltip
   const hdr = document.getElementById('auctionValHeader');
@@ -4371,8 +4181,49 @@ function generateAuctionValues() {
   renderAvailView();
 }
 
+function resetAuctionValues() {
+  auctionValues = null;
+  customAuctionValues = {};
+  const btn = document.getElementById('genAuctionBtn');
+  if (btn) btn.textContent = '⚡ Generate Auction Values';
+  const resetBtn = document.getElementById('resetAuctionBtn');
+  if (resetBtn) resetBtn.style.display = 'none';
+  const hdr = document.getElementById('auctionValHeader');
+  if (hdr) hdr.style.display = 'none';
+  renderAvailView();
+}
+
+function startAuctionEdit(pid, cell) {
+  const isCustom = customAuctionValues[pid] != null;
+  const currentVal = isCustom ? customAuctionValues[pid] : (auctionValues && auctionValues[pid] != null ? auctionValues[pid] : '');
+  cell.innerHTML = `<input type="number" min="1" max="999" value="${currentVal}"
+    style="width:54px;background:var(--surface2);border:1px solid var(--green);color:var(--green);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:2px 5px;border-radius:5px;outline:none;text-align:right;"
+    onblur="commitAuctionEdit('${pid}', this)"
+    onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){cancelAuctionEdit('${pid}');}">`;
+  const input = cell.querySelector('input');
+  if (input) { input.focus(); input.select(); }
+}
+
+function commitAuctionEdit(pid, input) {
+  const raw = parseInt(input.value);
+  if (!isNaN(raw) && raw >= 1) {
+    customAuctionValues[pid] = Math.min(999, raw);
+  } else {
+    delete customAuctionValues[pid];
+  }
+  renderAvailView();
+}
+
+function cancelAuctionEdit(pid) {
+  renderAvailView();
+}
+
   // Expose auction functions to global scope for onclick handlers
   window.generateAuctionValues = generateAuctionValues;
+  window.resetAuctionValues = resetAuctionValues;
+  window.startAuctionEdit = startAuctionEdit;
+  window.commitAuctionEdit = commitAuctionEdit;
+  window.cancelAuctionEdit = cancelAuctionEdit;
   window.initAuctionTip = initAuctionTip;
 })();
 
