@@ -288,16 +288,18 @@
   }
 
   /* DRAFT VIEW */
-  .draft-view { display: flex; flex: 1; min-height: 0; overflow: hidden; }
-  .draft-board-col { width: 380px; flex-shrink: 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .draft-pool-col { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .draft-col-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 10px; gap: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .draft-view { display: flex; flex: 1; min-height: 0; overflow: hidden; height: calc(100vh - 120px); }
+  .draft-board-col { width: 380px; flex-shrink: 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+  .draft-pool-col { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+  .draft-col-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 10px; gap: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; flex-shrink: 0; }
   .draft-col-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--accent); }
-  #draftBoard { overflow-y: auto; flex: 1; padding: 8px 0; }
+  #draftBoard { overflow-y: auto; flex: 1; padding: 8px 0; scrollbar-width: none; -ms-overflow-style: none; }
+  #draftBoard::-webkit-scrollbar { display: none; }
   #draftPool { padding: 4px 0; }
   .draft-pool-header { display: grid; grid-template-columns: 1fr 52px 52px 72px; padding: 8px 20px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); align-items: center; min-width: 480px; }
 
-  .draft-pool-scroll { overflow: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; }
+  .draft-pool-scroll { overflow: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; scrollbar-width: none; -ms-overflow-style: none; }
+  .draft-pool-scroll::-webkit-scrollbar { display: none; }
   .draft-pool-row { display: grid; grid-template-columns: 1fr 52px 52px 72px; padding: 8px 20px; border-radius: 0; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(42,45,53,0.5); transition: background 0.1s; min-width: 480px; }
   .draft-pool-row:hover { background: var(--surface2); }
   .draft-pool-row.drafted { opacity: 0.3; pointer-events: none; }
@@ -382,13 +384,15 @@
     .draft-pick-via { font-size: 9px; }
 
     .team-card { padding: 12px; }
-    .draft-board-col { max-height: none; overflow: visible; }
-    .draft-pool-col { max-height: none; overflow: visible; }
+    .draft-board-col { max-height: none; }
+    .draft-pool-col { max-height: none; }
     .draft-board-col.mobile-draft-hidden { display: none; }
     .draft-pool-col.mobile-draft-hidden { display: none; }
     .mobile-draft-toggle { display: flex; }
-    .draft-view { flex-direction: column; }
+    .draft-view { flex-direction: column; height: auto; }
     .draft-board-col { width: 100%; border-right: none; border-bottom: none; }
+    #draftBoard { max-height: 70vh; }
+    .draft-pool-scroll { max-height: 70vh; }
   }
   @media (max-width: 768px) {
     /* Release outer shell constraint on mobile so sidebar can expand naturally */
@@ -1586,7 +1590,7 @@ function renderLeagueView() {
             ? (p.posRank || '—')
             : (p.posRank || '—');
           return `<div class="team-card-player">
-            <div class="tcp-left"><span class="pos-badge pos-${p.pos}">${p.pos}</span><span class="tcp-name">${p.name}${p._drafted && p._onTaxi ? ' <span style="font-size:9px;color:var(--orange);">TX</span>' : ''} <span style="font-size:10px;color:var(--text3);">${p.team}</span></span></div>
+            <div class="tcp-left"><span class="pos-badge pos-${p.pos}">${p.pos}</span><span class="tcp-name">${p.name}${(p._drafted || p.rookie) ? ' <span style="font-size:9px;font-weight:700;padding:1px 4px;background:rgba(126,200,227,0.18);border-radius:3px;color:#7ec8e3;letter-spacing:0.3px;">R</span>' : ''}${p._drafted && p._onTaxi ? ' <span style="font-size:9px;color:var(--orange);">TX</span>' : ''} <span style="font-size:10px;color:var(--text3);">${p.team}</span></span></div>
             <div style="display:flex;gap:12px;align-items:center;">
               <span class="tcp-pts" style="font-size:11px;color:var(--text2);min-width:42px;text-align:right;">${rankDisplay}</span>
               <span class="tcp-salary" style="min-width:36px;text-align:right;">$${p.salary}</span>
