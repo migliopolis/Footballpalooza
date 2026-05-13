@@ -303,6 +303,12 @@
   .draft-pool-row { display: grid; grid-template-columns: 1fr 52px 52px 72px; padding: 8px 20px; border-radius: 0; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(42,45,53,0.5); transition: background 0.1s; min-width: 480px; }
   .draft-pool-row:hover { background: var(--surface2); }
   .draft-pool-row.drafted { opacity: 0.3; pointer-events: none; }
+  .pool-row-wrap { position: relative; }
+  .pool-row-tip { display: none; position: absolute; left: 20px; top: 100%; z-index: 200; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 11px; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.5); pointer-events: none; min-width: 160px; }
+  .pool-row-wrap:hover .pool-row-tip { display: block; }
+  .pool-row-tip-name { font-weight: 700; color: var(--text); margin-bottom: 4px; font-size: 12px; }
+  .pool-row-tip-salary { color: var(--green); font-weight: 700; font-size: 13px; }
+  .pool-row-tip-note { color: var(--text3); font-size: 10px; margin-top: 2px; }
 
   /* Draft capital color by round - green (high) to red (low) */
   .dc-r1 { color: #3ecf6e; font-weight: 700; }
@@ -1834,6 +1840,44 @@ const ROOKIE_SALARY_SCALE = {
 };
 const ROUND_FLAT_SALARY = { 1: null, 2: 3, 3: 2, 4: 1 };
 
+// Calculate the salary a player would receive if drafted at the NEXT available round-1 pick,
+// based on how many of their position have already been drafted in round 1.
+// Used for the live hover tooltip in the draft pool.
+function getCurrentRookieSalary(player) {
+  if (!player) return null;
+  const pos = player.pos;
+  const scale = ROOKIE_SALARY_SCALE[pos] || [4];
+
+  // Find the next open pick slot index
+  const nextIdx = getNextPickIndex();
+
+  // Which round is the next pick in?
+  const nextSlot = nextIdx !== -1 ? DRAFT_ORDER[nextIdx] : null;
+  const nextRound = nextSlot ? nextSlot.round : null;
+
+  if (nextRound === null) return null; // draft over
+
+  if (nextRound > 1) {
+    // Flat rate for rounds 2+
+    const flat = ROUND_FLAT_SALARY[nextRound] ?? 1;
+    return { salary: flat, note: `Rd ${nextRound} flat rate` };
+  }
+
+  // Round 1: count how many of this position have already been drafted in round 1
+  let posCount = 0;
+  for (let i = 0; i < draftPicks.length; i++) {
+    if (!draftPicks[i]) continue;
+    if (DRAFT_ORDER[i].round !== 1) continue;
+    const drafted = LEAGUE_DATA.freeAgents.find(p => p.id === draftPicks[i]);
+    if (drafted && drafted.pos === pos) posCount++;
+  }
+
+  const salary = scale[Math.min(posCount, scale.length - 1)];
+  const ordinals = ['1st','2nd','3rd','4th','5th','6th','7th'];
+  const ord = ordinals[posCount] || `${posCount+1}th`;
+  return { salary, note: `${ord} ${pos} off the board` };
+}
+
 function calcRookieSalary(pickIdx) {
   const slot = DRAFT_ORDER[pickIdx];
   const round = slot.round;
@@ -2183,8 +2227,12 @@ function renderDraftPool() {
       dcBadge = `<span class="dc-udfa" style="font-size:10px;">UDFA</span>`;
     }
     const overallDisplay = p.nflPick ? `<span style="color:var(--text3);font-size:11px;">${p.nflPick}</span>` : '';
-    return `<div class="draft-pool-row ${isDrafted ? 'drafted' : ''}"
-        ${clickable ? `onclick="draftPlayer('${p.id}')" title="Draft ${p.name}"` : ''}>
+    const salEst = (!isDrafted && !draftDone) ? getCurrentRookieSalary(p) : null;
+    const tipHtml = salEst
+      ? `<div class="pool-row-tip"><div class="pool-row-tip-name">${p.name}</div><div class="pool-row-tip-salary">$${salEst.salary}<span style="font-size:10px;font-weight:400;color:var(--text3);"> / yr</span></div><div class="pool-row-tip-note">${salEst.note}</div></div>`
+      : '';
+    return `<div class="pool-row-wrap"><div class="draft-pool-row ${isDrafted ? 'drafted' : ''}"
+        ${clickable ? `onclick="draftPlayer('${p.id}')"` : ''}>
       <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
         <span class="player-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</span>
@@ -2196,7 +2244,7 @@ function renderDraftPool() {
       <div class="td-num" style="font-size:11px;color:var(--text2);">${posRkDisplay}</div>
       <div class="td-num" style="font-size:12px;">${dynRkDisplay}</div>
       <div class="td-num">${overallDisplay}</div>
-    </div>`;
+    </div>${tipHtml}</div>`;
   }).join('');
 }
 
@@ -3484,8 +3532,12 @@ function renderDraftPool() {
       dcBadge = `<span class="dc-udfa" style="font-size:10px;">UDFA</span>`;
     }
     const overallDisplay = p.nflPick ? `<span style="color:var(--text3);font-size:11px;">${p.nflPick}</span>` : '';
-    return `<div class="draft-pool-row ${isDrafted ? 'drafted' : ''}"
-        ${clickable ? `onclick="draftPlayer('${p.id}')" title="Draft ${p.name}"` : ''}>
+    const salEst = (!isDrafted && !draftDone) ? getCurrentRookieSalary(p) : null;
+    const tipHtml = salEst
+      ? `<div class="pool-row-tip"><div class="pool-row-tip-name">${p.name}</div><div class="pool-row-tip-salary">$${salEst.salary}<span style="font-size:10px;font-weight:400;color:var(--text3);"> / yr</span></div><div class="pool-row-tip-note">${salEst.note}</div></div>`
+      : '';
+    return `<div class="pool-row-wrap"><div class="draft-pool-row ${isDrafted ? 'drafted' : ''}"
+        ${clickable ? `onclick="draftPlayer('${p.id}')"` : ''}>
       <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
         <span class="player-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</span>
@@ -3497,7 +3549,7 @@ function renderDraftPool() {
       <div class="td-num" style="font-size:11px;color:var(--text2);">${posRkDisplay}</div>
       <div class="td-num" style="font-size:12px;">${dynRkDisplay}</div>
       <div class="td-num">${overallDisplay}</div>
-    </div>`;
+    </div>${tipHtml}</div>`;
   }).join('');
 }
 
