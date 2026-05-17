@@ -421,7 +421,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;">v1.13</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v1.14</span></span></div>
   <div class="header-controls">
     <div class="view-toggle">
       <button class="view-btn active" onclick="setView('roster')">Roster</button>
@@ -681,6 +681,54 @@
     </div>
   </div>
 
+  <div id="changelogView" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+    <div style="padding:20px 28px 14px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+      <button onclick="setView('roster')" style="background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;">&#8592; Back</button>
+      <div><div style="font-size:16px;font-weight:700;">Changelog</div><div style="font-size:11px;color:var(--text3);margin-top:1px;">Footballpalooza 2026 Keeper Builder</div></div>
+    </div>
+    <div style="flex:1;overflow-y:auto;min-height:0;scrollbar-width:none;padding:20px 28px;max-width:700px;">
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--accent);">v1.14</span><span style="font-size:11px;color:var(--text3);">May 2026</span><span style="font-size:10px;font-weight:600;padding:1px 7px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span></div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
+          <li>Salary ladder hover tip added to <strong>Roster</strong> and <strong>All Keepers</strong> pages</li>
+          <li>Version number is now clickable &mdash; opens this changelog</li>
+          <li>Rankings: team filter now shows free agents alongside selected team roster</li>
+          <li>Rankings: rostered rookie salaries display from draft data</li>
+          <li>Rankings: salary ladder tooltip uses commas for long tied-player lists</li>
+          <li>Rankings: tooltip flips upward near bottom of viewport</li>
+          <li>Tier breaks from FantasyPros rankings injected into Overall view</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--text2);">v1.13</span><span style="font-size:11px;color:var(--text3);">May 2026</span></div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
+          <li>Rankings: live roster status reflects keeper cuts and trades in real time</li>
+          <li>Rankings: salary ladder tooltip with &#9650; above / &#9679; current / &#9660; below hierarchy</li>
+          <li>Rankings: team logo shown alongside owner name</li>
+          <li>Rankings: CONTRACT alignment and CONTRACT&#8594;STATUS spacing fixed</li>
+          <li>Rankings: Rostered / Free Agent checkboxes + team dropdown filter added</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--text2);">v1.12</span><span style="font-size:11px;color:var(--text3);">May 2026</span></div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
+          <li>New <strong>Rankings</strong> page with Overall / Rookies Only tabs, position filter, salary, contract, owner columns</li>
+          <li>All player ECR and posRank updated from new FantasyPros CSV; NFL team updates applied</li>
+          <li>R badge added to rookies on All Keepers; draft board / rookie pool scroll independently</li>
+          <li>Countdown timer to FBP Rookie Draft (June 23, 12pm EST) + rankings date in header</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--text2);">v1.11</span><span style="font-size:11px;color:var(--text3);">Early 2026</span></div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
+          <li>Rookie draft pool salary hover tip shows current price based on live draft state</li>
+          <li>Salary color coding; mock draft Gaussian randomization from FantasyPros ADP</li>
+          <li>Mock My Picks / Full Mock modes; YOU badge; taxi squad; dollar surplus valuation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
   <div class="trade-view" id="tradeView" style="display:none;">
     <div class="trade-builder">
       <!-- SIDE A -->
@@ -932,7 +980,7 @@ function autoAssignLineup(tid) {
 
 function setView(v) {
   currentView = v;
-  const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades', rankings: 'Rankings' };
+  const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades', rankings: 'Rankings', changelog: 'Changelog' };
   document.querySelectorAll('.view-btn').forEach(b =>
     b.classList.toggle('active', b.textContent.trim() === labels[v]));
   // rosterView is the scroll container for all views — never hide it
@@ -949,6 +997,7 @@ function setView(v) {
   document.getElementById('draftView').style.display = v === 'draft' ? 'flex' : 'none';
   document.getElementById('tradeView').style.display = v === 'trade' ? 'flex' : 'none';
   document.getElementById('rankingsView').style.display = v === 'rankings' ? 'flex' : 'none';
+  document.getElementById('changelogView').style.display = v === 'changelog' ? 'flex' : 'none';
   // On mobile, hide the sidebar for non-roster views
   document.getElementById('sidebar').classList.toggle('mobile-hidden', v !== 'roster');
   if (v === 'league') { setLeagueSort(leagueSort); }
@@ -1521,6 +1570,7 @@ function renderTable() {
     }
     return 0;
   });
+  const _salRankMapRoster = (typeof buildSalaryRankMap !== 'undefined') ? buildSalaryRankMap() : {};
   el.innerHTML = players.map(p => {
     const isDrafted = p._drafted;
     const isReleased = p._released;
@@ -1575,7 +1625,7 @@ function renderTable() {
       ${isTiny ? '' : `<div class="td-num" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>`}
       <div class="td-num">${p.ecr && p.ecr < 999 ? p.ecr : '—'}</div>
       ${isMobile ? '' : `<div class="td-num">${p.pts > 0 ? p.pts.toFixed(1) : '—'}</div>`}
-      <div class="td-salary">$${p.salary}</div>
+      <div class="td-salary" style="position:relative;">${(typeof rkSalaryTip !== "undefined" && p.salary) ? rkSalaryTip(p.salary, _salRankMapRoster[p.id]) : "$" + p.salary}</div>
       ${isMobile ? '' : `<div class="td-contract">${isDrafted && isReleased ? '—' : isDrafted ? contractStr(onTaxi ? '1/6' : '1/5', p.salary, p.pos, 'var(--orange)') : contractStr(p.contract, p.salary, p.pos)}</div>`}
       ${projCols}
     </div>`;
@@ -1647,6 +1697,7 @@ function renderLeagueView() {
     const remain = t.cap - spent;
     const capClass = remain < 0 ? 'over' : remain < 20 ? 'warn' : 'ok';
     const logoHtml = t.logo ? `<img class="team-card-logo" src="${t.logo}" alt="${t.name}">` : `<div class="team-card-logo-ph"></div>`;
+    const _salRankMapLeague = (typeof buildSalaryRankMap !== 'undefined') ? buildSalaryRankMap() : {};
     const playerRows = allPlayers.length
       ? allPlayers.map(p => {
           const rankDisplay = p._drafted
@@ -1654,9 +1705,9 @@ function renderLeagueView() {
             : (p.posRank || '—');
           return `<div class="team-card-player">
             <div class="tcp-left"><span class="pos-badge pos-${p.pos}">${p.pos}</span><span class="tcp-name">${p.name}${(p._drafted || p.rookie) ? ' <span style="font-size:9px;font-weight:700;padding:1px 4px;background:rgba(126,200,227,0.18);border-radius:3px;color:#7ec8e3;letter-spacing:0.3px;">R</span>' : ''}${p._drafted && p._onTaxi ? ' <span style="font-size:9px;color:var(--orange);">TX</span>' : ''} <span style="font-size:10px;color:var(--text3);">${p.team}</span></span></div>
-            <div style="display:flex;gap:12px;align-items:center;">
+            <div style="display:flex;gap:12px;align-items:center;overflow:visible;position:relative;">
               <span class="tcp-pts" style="font-size:11px;color:var(--text2);min-width:42px;text-align:right;">${rankDisplay}</span>
-              <span class="tcp-salary" style="min-width:36px;text-align:right;">$${p.salary}</span>
+              <span class="tcp-salary" style="min-width:36px;text-align:right;position:relative;">${(typeof rkSalaryTip !== "undefined" && p.salary) ? rkSalaryTip(p.salary, _salRankMapLeague[p.id]) : "$" + p.salary}</span>
             </div>
           </div>`;
         }).join('')
