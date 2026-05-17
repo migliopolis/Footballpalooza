@@ -4670,44 +4670,54 @@ function buildRosterStatusMap() {
 }
 
 function buildSalaryRankMap() {
-  // Collect all rostered players by position with name
+  // Collect ALL players by position — both kept AND cut — so cut players
+  // appear in the salary ladder context rows with a cut:true flag.
   const byPos = {};
-  Object.values(LEAGUE_DATA.teams).forEach(team => {
+
+  Object.entries(LEAGUE_DATA.teams).forEach(([tid, team]) => {
+    const sel = (typeof allSelections !== 'undefined' && allSelections[tid])
+      ? allSelections[tid] : new Set(team.players.map(p => p.id));
     team.players.forEach(p => {
       if (p.pos === 'DEF') return;
       if (!byPos[p.pos]) byPos[p.pos] = [];
       const nameParts = p.name.split(', ');
       const displayName = nameParts.length === 2 ? nameParts[1] + ' ' + nameParts[0] : p.name;
-      byPos[p.pos].push({ id: p.id, salary: p.salary, name: displayName });
+      const isCut = !sel.has(p.id);
+      byPos[p.pos].push({ id: p.id, salary: p.salary, name: displayName, cut: isCut });
     });
   });
 
   Object.values(byPos).forEach(arr => arr.sort((a, b) => b.salary - a.salary));
 
-  // Assign dense ranks with tie detection, store full sorted array for context rows
+  // Dense ranks based on KEPT players only (cut players don't count toward rank total)
   const rankMap = {};
   Object.entries(byPos).forEach(([pos, arr]) => {
-    const total = arr.length;
-    // Build dense rank lookup: index in arr -> dense rank
-    const denseRanks = [];
-    let rank = 1, i = 0;
-    while (i < arr.length) {
-      const sal = arr[i].salary;
-      let j = i;
-      while (j < arr.length && arr[j].salary === sal) j++;
-      for (let k = i; k < j; k++) denseRanks[k] = rank;
-      rank += (j - i);
-      i = j;
+    const keptArr = arr.filter(p => !p.cut);
+    const total = keptArr.length;
+
+    // Build dense ranks on kept players only
+    const keptRankByIdx = new Map(); // arr index -> dense rank
+    let rank = 1, ki = 0;
+    const keptIdxs = arr.map((p, i) => p.cut ? null : i).filter(i => i !== null);
+    let ri = 0;
+    while (ri < keptIdxs.length) {
+      const sal = arr[keptIdxs[ri]].salary;
+      let rj = ri;
+      while (rj < keptIdxs.length && arr[keptIdxs[rj]].salary === sal) rj++;
+      for (let k = ri; k < rj; k++) keptRankByIdx.set(keptIdxs[k], rank);
+      rank += (rj - ri);
+      ri = rj;
     }
 
     arr.forEach((p, idx) => {
-      const tiedWith = arr.filter((t, ti) => t.id !== p.id && t.salary === p.salary);
+      if (p.cut) return; // cut players not in rankMap (no rank entry needed)
+      const tiedWith = arr.filter(t => !t.cut && t.id !== p.id && t.salary === p.salary);
       rankMap[p.id] = {
-        rank: denseRanks[idx],
+        rank: keptRankByIdx.get(idx) || rank,
         total,
         pos,
-        idx,           // position in sorted array
-        sortedArr: arr, // full sorted list for neighbor lookup
+        idx,
+        sortedArr: arr, // includes cut players for ladder context
         tiedWith,
       };
     });
@@ -4733,35 +4743,44 @@ function rkSalaryTip(salary, salRankInfo) {
   const rows = [];
   rows.push(`<div style="display:flex;justify-content:space-between;padding:0 0 5px 0;margin-bottom:3px;border-bottom:1px solid rgba(255,255,255,0.1);"><span style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text3);text-transform:uppercase;">${pos} salary ladder</span><span style="font-size:10px;font-weight:700;color:var(--text3);">${rankDisplay}</span></div>`);
 
-  // Collect unique salary groups above (up to 2)
+  // Collect unique salary groups above (up to 2) — skip all-cut groups
   const aboveGroups = [];
   let ai = idx - 1;
   while (ai >= 0 && aboveGroups.length < 2) {
     const groupSal = sortedArr[ai].salary;
     if (!aboveGroups.length || aboveGroups[aboveGroups.length-1].salary !== groupSal) {
       const members = sortedArr.filter(p => p.salary === groupSal);
-      aboveGroups.push({ salary: groupSal, names: members.map(m => m.name) });
+      aboveGroups.push({ salary: groupSal, members });
     }
     ai--;
   }
-  aboveGroups.reverse(); // show highest first
+  aboveGroups.reverse();
 
   // Style: above = muted blue-grey with ▲, current = white bold, below = muted warm grey with ▼
   const aboveStyle = 'color:#6a7fa8;font-size:11px;';
   const belowStyle = 'color:#5a5a6e;font-size:11px;';
 
   aboveGroups.forEach(g => {
-    const nameStr = g.names.join(', ');
-    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;"><span style="${aboveStyle};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">▲ ${nameStr}</span><span style="${aboveStyle};flex-shrink:0;">$${g.salary}</span></div>`);
+    const nameStr = g.members.map(m => m.cut
+      ? `<span style="color:#a04040;text-decoration:line-through;">${m.name}</span>`
+      : `<span>${m.name}</span>`
+    ).join('<span style="color:#555;">, </span>');
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;"><span style="${aboveStyle};overflow:hidden;flex:1;white-space:nowrap;">▲ ${nameStr}</span><span style="${aboveStyle};flex-shrink:0;">$${g.salary}</span></div>`);
   });
 
   // Current player row — white, bold, highlighted
   let currentName = sortedArr[idx] ? sortedArr[idx].name : '';
   if (n > 0) {
-    const allNames = [currentName, ...tiedWith.map(t => t.name)];
-    currentName = allNames.join(', ');
+    const tieNameStr = [
+      `<span style="color:#fff;">${currentName}</span>`,
+      ...tiedWith.map(t => t.cut
+        ? `<span style="color:#a04040;text-decoration:line-through;">${t.name}</span>`
+        : `<span style="color:#fff;">${t.name}</span>`)
+    ].join('<span style="color:#666;">, </span>');
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="font-weight:700;font-size:12px;overflow:hidden;flex:1;white-space:nowrap;">● ${tieNameStr}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
+  } else {
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="color:#fff;font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">● ${currentName}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
   }
-  rows.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="color:#fff;font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">● ${currentName}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
 
   // Collect unique salary groups below (up to 2)
   const belowGroups = [];
@@ -4771,14 +4790,17 @@ function rkSalaryTip(salary, salRankInfo) {
     const groupSal = sortedArr[bi].salary;
     if (!belowGroups.length || belowGroups[belowGroups.length-1].salary !== groupSal) {
       const members = sortedArr.filter(p => p.salary === groupSal);
-      belowGroups.push({ salary: groupSal, names: members.map(m => m.name) });
+      belowGroups.push({ salary: groupSal, members });
     }
     bi++;
   }
 
   belowGroups.forEach(g => {
-    const nameStr = g.names.join(', ');
-    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;"><span style="${belowStyle};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">▼ ${nameStr}</span><span style="${belowStyle};flex-shrink:0;">$${g.salary}</span></div>`);
+    const nameStr = g.members.map(m => m.cut
+      ? `<span style="color:#804040;text-decoration:line-through;">${m.name}</span>`
+      : `<span>${m.name}</span>`
+    ).join('<span style="color:#444;">, </span>');
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;"><span style="${belowStyle};overflow:hidden;flex:1;white-space:nowrap;">▼ ${nameStr}</span><span style="${belowStyle};flex-shrink:0;">$${g.salary}</span></div>`);
   });
 
   return `<span class="contract-tip rk-sal-tip" style="color:var(--green);font-weight:700;cursor:help;font-size:12px;">$${salary}<span class="tip-box" style="left:0;right:auto;min-width:240px;padding:8px 12px;">${rows.join('')}</span></span>`;
