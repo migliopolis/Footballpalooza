@@ -421,7 +421,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v1.14</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v1.18</span></span></div>
   <div class="header-controls">
     <div class="view-toggle">
       <button class="view-btn active" onclick="setView('roster')">Roster</button>
@@ -430,6 +430,7 @@
       <button class="view-btn" onclick="setView('draft')">Rookie Draft</button>
       <button class="view-btn" onclick="setView('trade')">⇄ Trades</button>
       <button class="view-btn" onclick="setView('rankings')">Rankings</button>
+      <button class="view-btn" onclick="setView('analytics')">&#9685; Analytics</button>
     </div>
   </div>
 </div>
@@ -686,47 +687,77 @@
       <button onclick="setView('roster')" style="background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;">&#8592; Back</button>
       <div><div style="font-size:16px;font-weight:700;">Changelog</div><div style="font-size:11px;color:var(--text3);margin-top:1px;">Footballpalooza 2026 Keeper Builder</div></div>
     </div>
-    <div style="flex:1;overflow-y:auto;min-height:0;scrollbar-width:none;padding:20px 28px;max-width:700px;">
-      <div style="margin-bottom:24px;">
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--accent);">v1.14</span><span style="font-size:11px;color:var(--text3);">May 2026</span><span style="font-size:10px;font-weight:600;padding:1px 7px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span></div>
-        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
-          <li>Salary ladder hover tip added to <strong>Roster</strong> and <strong>All Keepers</strong> pages</li>
-          <li>Version number is now clickable &mdash; opens this changelog</li>
-          <li>Rankings: team filter now shows free agents alongside selected team roster</li>
-          <li>Rankings: rostered rookie salaries display from draft data</li>
-          <li>Rankings: salary ladder tooltip uses commas for long tied-player lists</li>
-          <li>Rankings: tooltip flips upward near bottom of viewport</li>
-          <li>Tier breaks from FantasyPros rankings injected into Overall view</li>
-        </ul>
+    <div style="flex:1;overflow-y:auto;min-height:0;scrollbar-width:none;padding:20px 28px;max-width:720px;">
+
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v1.18</span>
+          <span style="font-size:11px;color:var(--text3);">May 2026</span>
+          <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0 0 6px;color:var(--text2);font-size:12px;line-height:1.6;">Value Map upgrades: player search highlights matching dots by last name. Positional tier bands shade the top 12, 24, and 36 players per position so you can quickly identify which tier a player falls in. ECR axis now starts at 1. Team dropdown filters the map to any single roster. Market rate curves smoother and flatten to $1 by ECR 140&ndash;160.</p>
       </div>
-      <div style="margin-bottom:24px;">
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--text2);">v1.13</span><span style="font-size:11px;color:var(--text3);">May 2026</span></div>
-        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
-          <li>Rankings: live roster status reflects keeper cuts and trades in real time</li>
-          <li>Rankings: salary ladder tooltip with &#9650; above / &#9679; current / &#9660; below hierarchy</li>
-          <li>Rankings: team logo shown alongside owner name</li>
-          <li>Rankings: CONTRACT alignment and CONTRACT&#8594;STATUS spacing fixed</li>
-          <li>Rankings: Rostered / Free Agent checkboxes + team dropdown filter added</li>
-        </ul>
+
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v1.17</span>
+          <span style="font-size:11px;color:var(--text3);">May 2026</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Analytics overhaul. Salary Ladder simplified to a clean multi-position view with shared Y-axis and position filter. Value Map gained per-position market rate curves showing the theoretical spending arc from peak salary down to ~$1. League Overview cards expanded on hover to rank all 12 teams by positional spend.</p>
       </div>
-      <div style="margin-bottom:24px;">
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--text2);">v1.12</span><span style="font-size:11px;color:var(--text3);">May 2026</span></div>
-        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
-          <li>New <strong>Rankings</strong> page with Overall / Rookies Only tabs, position filter, salary, contract, owner columns</li>
-          <li>All player ECR and posRank updated from new FantasyPros CSV; NFL team updates applied</li>
-          <li>R badge added to rookies on All Keepers; draft board / rookie pool scroll independently</li>
-          <li>Countdown timer to FBP Rookie Draft (June 23, 12pm EST) + rankings date in header</li>
-        </ul>
+
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v1.16</span>
+          <span style="font-size:11px;color:var(--text3);">May 2026</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">League Overview polished: sort by any position moves that position&rsquo;s bar to the front, position cards show full 12-team rankings on hover, team abbreviations replace truncated names. Salary tooltip in cards matches the styled hover tips used elsewhere.</p>
       </div>
-      <div style="margin-bottom:24px;">
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;color:var(--text2);">v1.11</span><span style="font-size:11px;color:var(--text3);">Early 2026</span></div>
-        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--text2);font-size:12px;line-height:1.5;">
-          <li>Rookie draft pool salary hover tip shows current price based on live draft state</li>
-          <li>Salary color coding; mock draft Gaussian randomization from FantasyPros ADP</li>
-          <li>Mock My Picks / Full Mock modes; YOU badge; taxi squad; dollar surplus valuation</li>
-        </ul>
+
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v1.14 &ndash; v1.15</span>
+          <span style="font-size:11px;color:var(--text3);">May 2026</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Salary ladder tooltip extended to Roster and All Keepers pages. Cut players appear in faded strikethrough in the ladder. Drafted rookies show their assigned salary everywhere. Tooltip left-justified, names no longer clip. Version number became clickable, opening this changelog.</p>
       </div>
+
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v1.13</span>
+          <span style="font-size:11px;color:var(--text3);">May 2026</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Rankings page added: sortable overall and rookie-only views with salary, contract, ECR, roster status, and owner columns. Salary ladder tooltip shows peer salary rank with ▲/●/▼ context. Filtering by team, position, and free agent status. Live roster status reflects real-time keeper cuts and trades.</p>
+      </div>
+
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v1.12</span>
+          <span style="font-size:11px;color:var(--text3);">May 2026</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">FantasyPros rankings refresh: all ECR and positional ranks updated, NFL team signings applied (Njoku &rarr; LAC, etc.). Countdown timer to the FBP Rookie Draft added to the header. R badge on rookies in All Keepers. Draft board and rookie pool now scroll independently.</p>
+      </div>
+
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v1.11</span>
+          <span style="font-size:11px;color:var(--text3);">Early 2026</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Rookie draft pool salary hover tip shows live current price as picks are made. Mock draft uses Gaussian randomization from FantasyPros ADP data. Mock My Picks and Full Mock modes, YOU badge, taxi squad support, dollar surplus keeper valuation.</p>
+      </div>
+
     </div>
+  </div>
+
+  <div id="analyticsView" style="display:none;flex:1;flex-direction:column;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;">
+    <!-- Analytics sub-nav -->
+    <div style="display:flex;align-items:center;gap:6px;padding:10px 20px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;background:var(--surface);">
+      <button class="pos-btn active" id="anTab-league" onclick="setAnalyticsTab('league')">League Overview</button>
+      <button class="pos-btn" id="anTab-salary" onclick="setAnalyticsTab('salary')">Salary Ladder</button>
+      <button class="pos-btn" id="anTab-scatter" onclick="setAnalyticsTab('scatter')">Value Map</button>
+      <button class="pos-btn" id="anTab-contract" onclick="setAnalyticsTab('contract')">Contract Expiry</button>
+    </div>
+    <div id="analyticsContent" style="flex:1;padding:20px 24px;min-width:0;"></div>
   </div>
 
   <div class="trade-view" id="tradeView" style="display:none;">
@@ -980,7 +1011,7 @@ function autoAssignLineup(tid) {
 
 function setView(v) {
   currentView = v;
-  const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades', rankings: 'Rankings', changelog: 'Changelog' };
+  const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades', rankings: 'Rankings', changelog: 'Changelog', analytics: 'Analytics' };
   document.querySelectorAll('.view-btn').forEach(b =>
     b.classList.toggle('active', b.textContent.trim() === labels[v]));
   // rosterView is the scroll container for all views — never hide it
@@ -998,6 +1029,7 @@ function setView(v) {
   document.getElementById('tradeView').style.display = v === 'trade' ? 'flex' : 'none';
   document.getElementById('rankingsView').style.display = v === 'rankings' ? 'flex' : 'none';
   document.getElementById('changelogView').style.display = v === 'changelog' ? 'flex' : 'none';
+  document.getElementById('analyticsView').style.display = v === 'analytics' ? 'flex' : 'none';
   // On mobile, hide the sidebar for non-roster views
   document.getElementById('sidebar').classList.toggle('mobile-hidden', v !== 'roster');
   if (v === 'league') { setLeagueSort(leagueSort); }
@@ -1805,6 +1837,7 @@ function renderAvailView() {
   });
 
   const hasAuction = !!auctionValues;
+  const _auctionRankMap = (hasAuction && typeof buildAuctionRankMap !== 'undefined') ? buildAuctionRankMap(auctionValues, players) : null;
   const tableHeader = document.querySelector('.avail-table-header');
   if (tableHeader) tableHeader.classList.toggle('auction-mode', hasAuction);
   const auctionHdr = document.getElementById('auctionValHeader');
@@ -1832,7 +1865,10 @@ function renderAvailView() {
       const dispVal = isCustom ? customAuctionValues[p.id] : auctionValues[p.id];
       if (dispVal != null) {
         const color = isCustom ? 'var(--green)' : 'var(--accent2)';
-        auctionVal = `<div class="td-num" style="cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)"><span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span></div>`;
+        const tipHtml = (!isCustom && typeof rkAuctionTip !== 'undefined' && _auctionRankMap)
+          ? (rkAuctionTip(dispVal, _auctionRankMap[p.id]) || `<span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span>`)
+          : `<span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span>`;
+        auctionVal = `<div class="td-num" style="cursor:pointer;position:relative;" onclick="startAuctionEdit('${p.id}', this)">${tipHtml}</div>`;
       } else {
         auctionVal = `<div class="td-num" style="color:var(--text3);cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)">—</div>`;
       }
@@ -3148,6 +3184,7 @@ function renderAvailView() {
   });
 
   const hasAuction = !!auctionValues;
+  const _auctionRankMap = (hasAuction && typeof buildAuctionRankMap !== 'undefined') ? buildAuctionRankMap(auctionValues, players) : null;
   const tableHeader = document.querySelector('.avail-table-header');
   if (tableHeader) tableHeader.classList.toggle('auction-mode', hasAuction);
   const auctionHdr = document.getElementById('auctionValHeader');
@@ -3175,7 +3212,10 @@ function renderAvailView() {
       const dispVal = isCustom ? customAuctionValues[p.id] : auctionValues[p.id];
       if (dispVal != null) {
         const color = isCustom ? 'var(--green)' : 'var(--accent2)';
-        auctionVal = `<div class="td-num" style="cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)"><span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span></div>`;
+        const tipHtml = (!isCustom && typeof rkAuctionTip !== 'undefined' && _auctionRankMap)
+          ? (rkAuctionTip(dispVal, _auctionRankMap[p.id]) || `<span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span>`)
+          : `<span style="color:${color};font-weight:600;border-bottom:1px dashed ${color};">$${dispVal}</span>`;
+        auctionVal = `<div class="td-num" style="cursor:pointer;position:relative;" onclick="startAuctionEdit('${p.id}', this)">${tipHtml}</div>`;
       } else {
         auctionVal = `<div class="td-num" style="color:var(--text3);cursor:pointer;" onclick="startAuctionEdit('${p.id}', this)">—</div>`;
       }
@@ -4672,7 +4712,14 @@ function buildRosterStatusMap() {
 function buildSalaryRankMap() {
   // Collect ALL players by position — both kept AND cut — so cut players
   // appear in the salary ladder context rows with a cut:true flag.
+  // Also includes rookies drafted in the current session via draftPicks.
   const byPos = {};
+
+  // Helper: convert "Last, First" -> "First Last"
+  function toDisplay(n) {
+    const p = n.split(', ');
+    return p.length === 2 ? p[1] + ' ' + p[0] : n;
+  }
 
   Object.entries(LEAGUE_DATA.teams).forEach(([tid, team]) => {
     const sel = (typeof allSelections !== 'undefined' && allSelections[tid])
@@ -4680,12 +4727,26 @@ function buildSalaryRankMap() {
     team.players.forEach(p => {
       if (p.pos === 'DEF') return;
       if (!byPos[p.pos]) byPos[p.pos] = [];
-      const nameParts = p.name.split(', ');
-      const displayName = nameParts.length === 2 ? nameParts[1] + ' ' + nameParts[0] : p.name;
       const isCut = !sel.has(p.id);
-      byPos[p.pos].push({ id: p.id, salary: p.salary, name: displayName, cut: isCut });
+      byPos[p.pos].push({ id: p.id, salary: p.salary, name: toDisplay(p.name), cut: isCut });
     });
   });
+
+  // Add rookies drafted in the current session (not yet in LEAGUE_DATA.teams)
+  if (typeof draftPicks !== 'undefined' && typeof calcRookieSalary !== 'undefined') {
+    draftPicks.forEach((pid, i) => {
+      if (!pid) return;
+      if (typeof releasedDraftRookies !== 'undefined' && releasedDraftRookies.has(i)) return;
+      // Skip if already in map from LEAGUE_DATA.teams
+      const alreadyIn = Object.values(byPos).some(arr => arr.some(p => p.id === pid));
+      if (alreadyIn) return;
+      const player = LEAGUE_DATA.freeAgents.find(p => p.id === pid);
+      if (!player || player.pos === 'DEF') return;
+      const sal = calcRookieSalary(i) || 0;
+      if (!byPos[player.pos]) byPos[player.pos] = [];
+      byPos[player.pos].push({ id: pid, salary: sal, name: toDisplay(player.name), cut: false });
+    });
+  }
 
   Object.values(byPos).forEach(arr => arr.sort((a, b) => b.salary - a.salary));
 
@@ -4695,11 +4756,9 @@ function buildSalaryRankMap() {
     const keptArr = arr.filter(p => !p.cut);
     const total = keptArr.length;
 
-    // Build dense ranks on kept players only
-    const keptRankByIdx = new Map(); // arr index -> dense rank
-    let rank = 1, ki = 0;
+    const keptRankByIdx = new Map();
     const keptIdxs = arr.map((p, i) => p.cut ? null : i).filter(i => i !== null);
-    let ri = 0;
+    let rank = 1, ri = 0;
     while (ri < keptIdxs.length) {
       const sal = arr[keptIdxs[ri]].salary;
       let rj = ri;
@@ -4710,14 +4769,14 @@ function buildSalaryRankMap() {
     }
 
     arr.forEach((p, idx) => {
-      if (p.cut) return; // cut players not in rankMap (no rank entry needed)
+      if (p.cut) return;
       const tiedWith = arr.filter(t => !t.cut && t.id !== p.id && t.salary === p.salary);
       rankMap[p.id] = {
         rank: keptRankByIdx.get(idx) || rank,
         total,
         pos,
         idx,
-        sortedArr: arr, // includes cut players for ladder context
+        sortedArr: arr,
         tiedWith,
       };
     });
@@ -4743,9 +4802,11 @@ function rkSalaryTip(salary, salRankInfo) {
   const rows = [];
   rows.push(`<div style="display:flex;justify-content:space-between;padding:0 0 5px 0;margin-bottom:3px;border-bottom:1px solid rgba(255,255,255,0.1);"><span style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text3);text-transform:uppercase;">${pos} salary ladder</span><span style="font-size:10px;font-weight:700;color:var(--text3);">${rankDisplay}</span></div>`);
 
-  // Collect unique salary groups above (up to 2) — skip all-cut groups
+  // Collect unique salary groups above (up to 2).
+  // Start from the first index BEFORE the current salary tier (skip all tied peers).
   const aboveGroups = [];
   let ai = idx - 1;
+  while (ai >= 0 && sortedArr[ai].salary === salary) ai--; // skip current tier
   while (ai >= 0 && aboveGroups.length < 2) {
     const groupSal = sortedArr[ai].salary;
     if (!aboveGroups.length || aboveGroups[aboveGroups.length-1].salary !== groupSal) {
@@ -4765,7 +4826,7 @@ function rkSalaryTip(salary, salRankInfo) {
       ? `<span style="color:#a04040;text-decoration:line-through;">${m.name}</span>`
       : `<span>${m.name}</span>`
     ).join('<span style="color:#555;">, </span>');
-    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;"><span style="${aboveStyle};overflow:hidden;flex:1;white-space:nowrap;">▲ ${nameStr}</span><span style="${aboveStyle};flex-shrink:0;">$${g.salary}</span></div>`);
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;align-items:baseline;"><span style="${aboveStyle};flex:1;">▲ ${nameStr}</span><span style="${aboveStyle};flex-shrink:0;padding-left:10px;">$${g.salary}</span></div>`);
   });
 
   // Current player row — white, bold, highlighted
@@ -4779,7 +4840,7 @@ function rkSalaryTip(salary, salRankInfo) {
           : `<span style="color:#fff;">${t.name}</span>`)
       ].join('<span style="color:#666;">, </span>')
     : `<span style="color:#fff;">${currentName}</span>`;
-  rows.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="color:#fff;font-weight:700;font-size:12px;overflow:hidden;flex:1;white-space:nowrap;">&#9679; ${currentNameHtml}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
+  rows.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="color:#fff;font-weight:700;font-size:12px;flex:1;">&#9679; ${currentNameHtml}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
 
   // Collect unique salary groups below (up to 2)
   const belowGroups = [];
@@ -4799,10 +4860,10 @@ function rkSalaryTip(salary, salRankInfo) {
       ? `<span style="color:#804040;text-decoration:line-through;">${m.name}</span>`
       : `<span>${m.name}</span>`
     ).join('<span style="color:#444;">, </span>');
-    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;"><span style="${belowStyle};overflow:hidden;flex:1;white-space:nowrap;">▼ ${nameStr}</span><span style="${belowStyle};flex-shrink:0;">$${g.salary}</span></div>`);
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;align-items:baseline;"><span style="${belowStyle};flex:1;">▼ ${nameStr}</span><span style="${belowStyle};flex-shrink:0;padding-left:10px;">$${g.salary}</span></div>`);
   });
 
-  return `<span class="contract-tip rk-sal-tip" style="color:var(--green);font-weight:700;cursor:help;font-size:12px;">$${salary}<span class="tip-box" style="left:0;right:auto;min-width:240px;padding:8px 12px;">${rows.join('')}</span></span>`;
+  return `<span class="contract-tip rk-sal-tip" style="color:var(--green);font-weight:700;cursor:help;font-size:12px;">$${salary}<span class="tip-box" style="right:0;left:auto;min-width:260px;max-width:340px;padding:8px 12px;white-space:normal;">${rows.join('')}</span></span>`;
 }
 
 function renderRankingsView() {
@@ -4985,11 +5046,870 @@ function populateRkTeamDropdown() {
   sel.dataset.populated = '1';
 }
 
+// ─── AUCTION VALUE LADDER ────────────────────────────────────────────────────
+function buildAuctionRankMap(auctionVals, players) {
+  // Build sorted position groups from generated auction values
+  const byPos = {};
+  players.forEach(p => {
+    if (!auctionVals || auctionVals[p.id] == null) return;
+    if (p.pos === 'DEF') return;
+    if (!byPos[p.pos]) byPos[p.pos] = [];
+    const nameParts = p.name.split(', ');
+    const displayName = nameParts.length === 2 ? nameParts[1] + ' ' + nameParts[0] : p.name;
+    byPos[p.pos].push({ id: p.id, salary: auctionVals[p.id], name: displayName, cut: false });
+  });
+
+  Object.values(byPos).forEach(arr => arr.sort((a, b) => b.salary - a.salary));
+
+  const rankMap = {};
+  Object.entries(byPos).forEach(([pos, arr]) => {
+    const total = arr.length;
+    const denseRanks = [];
+    let rank = 1, i = 0;
+    while (i < arr.length) {
+      const sal = arr[i].salary;
+      let j = i;
+      while (j < arr.length && arr[j].salary === sal) j++;
+      for (let k = i; k < j; k++) denseRanks[k] = rank;
+      rank += (j - i);
+      i = j;
+    }
+    arr.forEach((p, idx) => {
+      const tiedWith = arr.filter(t => t.id !== p.id && t.salary === p.salary);
+      rankMap[p.id] = { rank: denseRanks[idx], total, pos, idx, sortedArr: arr, tiedWith };
+    });
+  });
+  return rankMap;
+}
+
+function rkAuctionTip(val, salRankInfo) {
+  if (!val || !salRankInfo) return null;
+  const { rank, total, pos, idx, sortedArr = [], tiedWith = [] } = salRankInfo;
+  const n = tiedWith.length;
+  const rankLabel = rank === 1 ? `Top ${pos} value` : `${rkOrdinal(rank)} best ${pos} value`;
+  const rankDisplay = n > 0 ? `T-${rank}/${total}` : `${rank}/${total}`;
+  const aboveStyle = 'color:#6a7fa8;font-size:11px;';
+  const belowStyle = 'color:#5a5a6e;font-size:11px;';
+
+  const rows = [];
+  rows.push(`<div style="display:flex;justify-content:space-between;padding:0 0 5px 0;margin-bottom:3px;border-bottom:1px solid rgba(255,255,255,0.1);"><span style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text3);text-transform:uppercase;">${pos} auction values</span><span style="font-size:10px;font-weight:700;color:var(--text3);">${rankDisplay}</span></div>`);
+
+  // Above groups (up to 2)
+  const aboveGroups = [];
+  let ai = idx - 1;
+  while (ai >= 0 && sortedArr[ai].salary === val) ai--;
+  while (ai >= 0 && aboveGroups.length < 2) {
+    const gSal = sortedArr[ai].salary;
+    if (!aboveGroups.length || aboveGroups[aboveGroups.length-1].salary !== gSal) {
+      aboveGroups.push({ salary: gSal, members: sortedArr.filter(p => p.salary === gSal) });
+    }
+    ai--;
+  }
+  aboveGroups.reverse();
+  aboveGroups.forEach(g => {
+    const nameStr = g.members.map(m => `<span>${m.name}</span>`).join('<span style="color:#555;">, </span>');
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;align-items:baseline;"><span style="${aboveStyle};flex:1;">▲ ${nameStr}</span><span style="${aboveStyle};flex-shrink:0;padding-left:10px;">$${g.salary}</span></div>`);
+  });
+
+  // Current row
+  const currentName = sortedArr[idx] ? sortedArr[idx].name : '';
+  const currentNameHtml = n > 0
+    ? [`<span style="color:#fff;">${currentName}</span>`, ...tiedWith.map(t => `<span style="color:#fff;">${t.name}</span>`)].join('<span style="color:#666;">, </span>')
+    : `<span style="color:#fff;">${currentName}</span>`;
+  rows.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="color:#fff;font-weight:700;font-size:12px;flex:1;">&#9679; ${currentNameHtml}</span><span style="color:var(--accent2);font-weight:700;font-size:12px;flex-shrink:0;">$${val}</span></div>`);
+
+  // Below groups (up to 2)
+  const belowGroups = [];
+  let bi = idx + 1;
+  while (bi < sortedArr.length && sortedArr[bi].salary === val) bi++;
+  while (bi < sortedArr.length && belowGroups.length < 2) {
+    const gSal = sortedArr[bi].salary;
+    if (!belowGroups.length || belowGroups[belowGroups.length-1].salary !== gSal) {
+      belowGroups.push({ salary: gSal, members: sortedArr.filter(p => p.salary === gSal) });
+    }
+    bi++;
+  }
+  belowGroups.forEach(g => {
+    const nameStr = g.members.map(m => `<span>${m.name}</span>`).join('<span style="color:#444;">, </span>');
+    rows.push(`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px;align-items:baseline;"><span style="${belowStyle};flex:1;">▼ ${nameStr}</span><span style="${belowStyle};flex-shrink:0;padding-left:10px;">$${g.salary}</span></div>`);
+  });
+
+  return `<span class="contract-tip rk-sal-tip" style="color:var(--accent2);font-weight:600;border-bottom:1px dashed var(--accent2);cursor:help;font-size:inherit;"><span class="tip-box" style="right:0;left:auto;min-width:260px;max-width:340px;padding:8px 12px;white-space:normal;">${rows.join('')}</span>$${val}</span>`;
+}
+
+// ─── ANALYTICS PAGE ─────────────────────────────────────────────────────────
+let analyticsTab = 'league';
+
+function setAnalyticsTab(tab) {
+  analyticsTab = tab;
+  ['league','salary','scatter','contract'].forEach(t => {
+    const el = document.getElementById('anTab-' + t);
+    if (el) el.classList.toggle('active', t === tab);
+  });
+  renderAnalytics();
+}
+
+function getAnalyticsData() {
+  const posColors = { QB: '#4a9eff', RB: '#3ecf6e', WR: '#af82ff', TE: '#ff8c3a' };
+  const positions = ['QB','RB','WR','TE'];
+  const players = [];
+  Object.entries(LEAGUE_DATA.teams).forEach(([tid, team]) => {
+    const sel = (typeof allSelections !== 'undefined' && allSelections[tid])
+      ? allSelections[tid] : new Set(team.players.map(p => p.id));
+    team.players.forEach(p => {
+      if (p.pos === 'DEF' || !sel.has(p.id)) return;
+      const nameParts = p.name.split(', ');
+      const displayName = nameParts.length === 2 ? nameParts[1] + ' ' + nameParts[0] : p.name;
+      try {
+        const [yr, mx] = p.contract.split('/').map(Number);
+        players.push({ ...p, displayName, teamName: team.name, logo: team.logo || '',
+          contractYr: yr, contractMax: mx, yearsLeft: mx - yr, color: posColors[p.pos] || '#888' });
+      } catch(e) {}
+    });
+  });
+  if (typeof draftPicks !== 'undefined') {
+    draftPicks.forEach((pid, i) => {
+      if (!pid || (typeof releasedDraftRookies !== 'undefined' && releasedDraftRookies.has(i))) return;
+      const slot = DRAFT_ORDER[i];
+      const team = LEAGUE_DATA.teams[slot.franchise];
+      if (!team) return;
+      const p = LEAGUE_DATA.freeAgents.find(x => x.id === pid);
+      if (!p || p.pos === 'DEF') return;
+      const sal = (typeof calcRookieSalary !== 'undefined') ? (calcRookieSalary(i) || 0) : 0;
+      const nameParts = p.name.split(', ');
+      const displayName = nameParts.length === 2 ? nameParts[1] + ' ' + nameParts[0] : p.name;
+      players.push({ ...p, displayName, teamName: team.name, logo: team.logo || '',
+        salary: sal, contract: '1/6', contractYr: 1, contractMax: 6, yearsLeft: 5,
+        color: posColors[p.pos] || '#888' });
+    });
+  }
+  const byTeam = {};
+  players.forEach(p => {
+    if (!byTeam[p.teamName]) byTeam[p.teamName] = { name: p.teamName, logo: p.logo, total: 0, byPos: {QB:0,RB:0,WR:0,TE:0}, players: [], expiring: 0 };
+    byTeam[p.teamName].total += p.salary;
+    byTeam[p.teamName].byPos[p.pos] = (byTeam[p.teamName].byPos[p.pos] || 0) + p.salary;
+    byTeam[p.teamName].players.push(p);
+    if (p.yearsLeft === 0) byTeam[p.teamName].expiring++;
+  });
+  return { players, byTeam, posColors, positions };
+}
+
+let anTipEl = null;
+function anShowTip(e, html) {
+  if (!anTipEl) {
+    anTipEl = document.createElement('div');
+    anTipEl.style.cssText = 'position:fixed;z-index:9999;background:#1e2026;border:1px solid #2a2d35;border-radius:8px;padding:8px 12px;font-size:11px;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.6);max-width:220px;line-height:1.5;font-family:DM Sans,sans-serif;';
+    document.body.appendChild(anTipEl);
+  }
+  anTipEl.innerHTML = html;
+  anTipEl.style.display = 'block';
+  anMoveTip(e);
+}
+function anMoveTip(e) {
+  if (!anTipEl) return;
+  const x = e.clientX + 14, y = e.clientY - 10;
+  const w = anTipEl.offsetWidth, h = anTipEl.offsetHeight;
+  anTipEl.style.left = (x + w > window.innerWidth - 10 ? e.clientX - w - 10 : x) + 'px';
+  anTipEl.style.top  = (y + h > window.innerHeight - 10 ? y - h : y) + 'px';
+}
+function anHideTip() { if (anTipEl) anTipEl.style.display = 'none'; }
+
+function svgEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  if (attrs) Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k, v));
+  return el;
+}
+function svgText(x, y, text, attrs) {
+  const el = svgEl('text', Object.assign({ x, y }, attrs || {}));
+  el.textContent = String(text);
+  return el;
+}
+
+function renderLeagueOverview(container, data) {
+  const { byTeam, posColors, positions } = data;
+
+  const TEAM_ABBR = {
+    'Bullish on da Bears': 'Bears',    'Fully Cooked': 'F. Cooked',
+    'Hauk Tua': 'Hauk Tua',            'Hold Timers': 'Hold Timers',
+    'Jesus Christ College': 'JCC',     'MR. FROBOT': 'MR. FROBOT',
+    'Mailing It In': 'Mailing It In',  'Son of Tinactin': 'Tinactin',
+    'Sour Grapes': 'Sour Grapes',      'The Fist of the Magi': 'Fist/Magi',
+    'Thots & Players': 'Thots',        'Wholey Club': 'Wholey Club',
+  };
+  function abbr(name) { return TEAM_ABBR[name] || name; }
+
+  const posTotals = {QB:0,RB:0,WR:0,TE:0};
+  let grandTotal = 0;
+  const teamList = Object.values(byTeam);
+  // Ensure ALL 12 teams appear even if some have $0 at a position
+  const allTeamNames = Object.values(data.byTeam).map(t=>t.name);
+  teamList.forEach(t => positions.forEach(pos => {
+    const v = t.byPos[pos]||0; posTotals[pos]+=v; grandTotal+=v;
+  }));
+  const avgTeam = (grandTotal/12).toFixed(0);
+
+  // ── Summary cards ──
+  const cardsWrap = document.createElement('div');
+  cardsWrap.style.cssText = 'display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px;';
+
+  const posStats = positions.map(pos => {
+    // All 12 teams, $0 for those without anyone at this position
+    const sorted = teamList.slice().sort((a,b)=>(b.byPos[pos]||0)-(a.byPos[pos]||0));
+    const vals = teamList.map(t=>t.byPos[pos]||0).filter(v=>v>0);
+    const avgVal = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
+    const pct = grandTotal ? (posTotals[pos]/grandTotal*100).toFixed(1) : '0';
+    return { pos, total:posTotals[pos], pct, sorted, avgVal };
+  });
+
+  posStats.forEach(({ pos, total, pct, sorted, avgVal }) => {
+    const c = posColors[pos];
+    const topTeam = sorted[0];
+    const botTeam = sorted[sorted.length-1];
+    const maxVal = topTeam ? (topTeam.byPos[pos]||0) : 1;
+
+    // All 12 teams in ranked order — $0 for teams not spending at this position
+    const rankingRows = sorted.map((t, i) => {
+      const val = t.byPos[pos]||0;
+      const barPct = maxVal > 0 ? (val/maxVal*100).toFixed(0) : 0;
+      // Build player list for hover on the salary value
+      const posPlayers = (t.players||[]).filter(p=>p.pos===pos).sort((a,b)=>b.salary-a.salary);
+      const playerTip = posPlayers.length
+        ? posPlayers.map(p=>`${p.displayName} $${p.salary}`).join(' · ')
+        : '';
+      return `<div style="display:flex;align-items:center;gap:6px;padding:2px 0;">
+        <span style="font-size:9px;color:#555d6b;width:12px;text-align:right;flex-shrink:0;">${i+1}</span>
+        <div style="flex:1;background:#2a2d35;border-radius:2px;height:4px;overflow:hidden;">
+          <div style="width:${barPct}%;height:100%;background:${val>0?c:'transparent'};border-radius:2px;"></div>
+        </div>
+        <span style="font-size:10px;color:${val>0?'#9098a8':'#3a3d45'};width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;">${abbr(t.name)}</span>
+        <span class="an-sal-hover" style="font-size:10px;color:${val>0?'#e8c84a':'#555d6b'};font-weight:600;flex-shrink:0;width:28px;text-align:right;${val>0?'cursor:help;':''}" data-tip="${playerTip.replace(/"/g,'&quot;')}">$${val}</span>
+      </div>`;
+    }).join('');
+
+    const card = document.createElement('div');
+    card.style.cssText = `background:#1e2026;border:1px solid #2a2d35;border-top:3px solid ${c};border-radius:8px;padding:12px 14px;cursor:pointer;position:relative;transition:box-shadow 0.15s;`;
+    card.innerHTML = `
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px;">
+        <span style="font-size:11px;font-weight:700;letter-spacing:1px;color:${c};text-transform:uppercase;">${pos}</span>
+        <span style="font-size:10px;color:#555d6b;">${pct}%</span>
+      </div>
+      <div style="font-size:24px;font-weight:700;color:#f0f0f0;line-height:1;margin-bottom:7px;">$${total}</div>
+      <div style="display:flex;flex-direction:column;gap:3px;font-size:10px;color:#9098a8;border-top:1px solid #2a2d35;padding-top:6px;">
+        <div style="display:flex;justify-content:space-between;"><span>Most</span><span style="color:${c};font-weight:600;">${abbr(topTeam?topTeam.name:'—')} <span style="color:#e8c84a;">$${topTeam?topTeam.byPos[pos]||0:0}</span></span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Avg</span><span style="color:#f0f0f0;font-weight:600;">$${avgVal}</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Least</span><span style="color:#555d6b;">$${botTeam?botTeam.byPos[pos]||0:0}</span></div>
+        <div style="font-size:9px;color:#555d6b;margin-top:3px;text-align:center;">hover to expand ↓</div>
+      </div>
+      <div class="an-expand" style="display:none;border-top:1px solid #2a2d35;margin-top:8px;padding-top:8px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-bottom:6px;">All teams — ${pos} spend</div>
+        ${rankingRows}
+      </div>`;
+
+    card.addEventListener('mouseenter', () => { card.querySelector('.an-expand').style.display='block'; card.style.boxShadow=`0 0 0 1px ${c}44`; });
+    card.addEventListener('mouseleave', () => { card.querySelector('.an-expand').style.display='none'; card.style.boxShadow=''; });
+    card.addEventListener('click', () => { sortKey=pos; Object.values(sortBtns).forEach(b=>b.classList.remove('active')); if(sortBtns[pos]) sortBtns[pos].classList.add('active'); draw(); });
+    cardsWrap.appendChild(card);
+  });
+
+  // League totals card
+  const topSpender = teamList.slice().sort((a,b)=>b.total-a.total)[0];
+  const botSpender  = teamList.slice().sort((a,b)=>a.total-b.total)[0];
+  const allTeamRows = teamList.slice().sort((a,b)=>b.total-a.total).map((t,i)=>{
+    const barPct = topSpender ? (t.total/(topSpender.total||1)*100).toFixed(0) : 0;
+    return `<div style="display:flex;align-items:center;gap:6px;padding:2px 0;">
+      <span style="font-size:9px;color:#555d6b;width:12px;text-align:right;flex-shrink:0;">${i+1}</span>
+      <div style="flex:1;background:#2a2d35;border-radius:2px;height:4px;overflow:hidden;">
+        <div style="width:${barPct}%;height:100%;background:#e8c84a;border-radius:2px;"></div>
+      </div>
+      <span style="font-size:10px;color:#9098a8;width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;">${abbr(t.name)}</span>
+      <span style="font-size:10px;color:#e8c84a;font-weight:600;flex-shrink:0;width:28px;text-align:right;">$${t.total}</span>
+    </div>`;
+  }).join('');
+  const totCard = document.createElement('div');
+  totCard.style.cssText = 'background:#1e2026;border:1px solid #2a2d35;border-top:3px solid #e8c84a;border-radius:8px;padding:12px 14px;cursor:default;position:relative;transition:box-shadow 0.15s;';
+  totCard.innerHTML = `
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px;">
+      <span style="font-size:11px;font-weight:700;letter-spacing:1px;color:#e8c84a;text-transform:uppercase;">League</span>
+      <span style="font-size:10px;color:#555d6b;">total</span>
+    </div>
+    <div style="font-size:24px;font-weight:700;color:#f0f0f0;line-height:1;margin-bottom:7px;">$${grandTotal}</div>
+    <div style="display:flex;flex-direction:column;gap:3px;font-size:10px;color:#9098a8;border-top:1px solid #2a2d35;padding-top:6px;">
+      <div style="display:flex;justify-content:space-between;"><span>Highest</span><span style="color:#e8c84a;font-weight:600;">${abbr(topSpender?topSpender.name:'—')} $${topSpender?topSpender.total:0}</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Team avg</span><span style="color:#f0f0f0;font-weight:600;">$${avgTeam}</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Lowest</span><span style="color:#555d6b;">$${botSpender?botSpender.total:0}</span></div>
+      <div style="font-size:9px;color:#555d6b;margin-top:3px;text-align:center;">hover to expand ↓</div>
+    </div>
+    <div class="an-expand" style="display:none;border-top:1px solid #2a2d35;margin-top:8px;padding-top:8px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-bottom:6px;">All teams — total spend</div>
+      ${allTeamRows}
+    </div>`;
+  totCard.addEventListener('mouseenter', () => { totCard.querySelector('.an-expand').style.display='block'; totCard.style.boxShadow='0 0 0 1px #e8c84a44'; });
+  totCard.addEventListener('mouseleave', () => { totCard.querySelector('.an-expand').style.display='none'; totCard.style.boxShadow=''; });
+  cardsWrap.appendChild(totCard);
+  container.appendChild(cardsWrap);
+
+  // ── Controls bar ──
+  const ctrlBar = document.createElement('div');
+  ctrlBar.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;';
+  const sortLbl = document.createElement('span');
+  sortLbl.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;';
+  sortLbl.textContent = 'Sort:';
+  ctrlBar.appendChild(sortLbl);
+
+  let sortKey = 'total';
+  const sortBtns = {};
+  [['total','Total'],['QB','QB'],['RB','RB'],['WR','WR'],['TE','TE']].forEach(([key,label]) => {
+    const btn = document.createElement('button');
+    btn.className = 'pos-btn'+(key==='total'?' active':'');
+    btn.textContent = label;
+    btn.addEventListener('click', () => { sortKey=key; Object.values(sortBtns).forEach(b=>b.classList.remove('active')); btn.classList.add('active'); draw(); });
+    sortBtns[key]=btn; ctrlBar.appendChild(btn);
+  });
+
+  const sep = document.createElement('div');
+  sep.style.cssText = 'width:1px;height:18px;background:#2a2d35;margin:0 4px;';
+  ctrlBar.appendChild(sep);
+  const showLbl = document.createElement('span');
+  showLbl.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;';
+  showLbl.textContent = 'Show:';
+  ctrlBar.appendChild(showLbl);
+
+  const visPos = {QB:true,RB:true,WR:true,TE:true};
+  positions.forEach(pos => {
+    const lbl = document.createElement('label');
+    lbl.style.cssText = `display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;font-weight:600;color:${posColors[pos]};user-select:none;`;
+    const cb = document.createElement('input');
+    cb.type='checkbox'; cb.checked=true;
+    cb.style.cssText=`accent-color:${posColors[pos]};width:12px;height:12px;`;
+    cb.addEventListener('change',()=>{visPos[pos]=cb.checked;draw();});
+    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(pos));
+    ctrlBar.appendChild(lbl);
+  });
+  container.appendChild(ctrlBar);
+
+  const svgWrap = document.createElement('div');
+  container.appendChild(svgWrap);
+
+  function draw() {
+    svgWrap.innerHTML = '';
+    let activePosArr = positions.filter(p=>visPos[p]);
+    if (sortKey!=='total' && activePosArr.includes(sortKey)) {
+      activePosArr = [sortKey,...activePosArr.filter(p=>p!==sortKey)];
+    }
+    const teams = Object.values(byTeam).map(team=>({
+      ...team,
+      filteredTotal: activePosArr.reduce((s,p)=>s+(team.byPos[p]||0),0)
+    })).sort((a,b)=>sortKey==='total'
+      ? b.filteredTotal-a.filteredTotal
+      : (b.byPos[sortKey]||0)-(a.byPos[sortKey]||0)
+    );
+
+    const maxSal = Math.max(...teams.map(t=>t.filteredTotal),1);
+    const BAR_H=20, GAP=5, PAD_L=168, PAD_R=58, PAD_T=26, PAD_B=20;
+    const svgW=820, svgH=PAD_T+teams.length*(BAR_H+GAP)+PAD_B+14;
+    const barMaxW=svgW-PAD_L-PAD_R;
+    const svg=svgEl('svg',{viewBox:`0 0 ${svgW} ${svgH}`,style:'width:100%;height:auto;font-family:DM Sans,sans-serif;'});
+
+    [0,50,100,150,200,250,300,350].filter(v=>v<=maxSal+20).forEach(v=>{
+      const x=PAD_L+(v/maxSal)*barMaxW;
+      if(x>svgW-PAD_R+4) return;
+      svg.appendChild(svgEl('line',{x1:x,y1:PAD_T-8,x2:x,y2:svgH-PAD_B,stroke:'#2a2d35','stroke-width':1}));
+      svg.appendChild(svgText(x,PAD_T-10,'$'+v,{'font-size':'9',fill:'#555d6b','text-anchor':'middle'}));
+    });
+
+    teams.forEach((team,i) => {
+      const y=PAD_T+i*(BAR_H+GAP);
+      if(team.logo) svg.appendChild(svgEl('image',{href:team.logo,x:PAD_L-30,y:y+BAR_H/2-9,width:18,height:18}));
+      svg.appendChild(svgText(PAD_L-36,y+BAR_H/2+4,team.name,{'font-size':'11',fill:'#9098a8','text-anchor':'end','font-weight':'500'}));
+
+      let xOff=0;
+      activePosArr.forEach(pos => {
+        const val=team.byPos[pos]||0;
+        if(!val) return;
+        const segW=(val/maxSal)*barMaxW;
+        const color=posColors[pos];
+        const posPlayers=team.players.filter(p=>p.pos===pos).sort((a,b)=>b.salary-a.salary);
+
+        // Top stripe
+        svg.appendChild(svgEl('rect',{x:PAD_L+xOff,y,width:segW,height:2,fill:color,opacity:'1','pointer-events':'none'}));
+
+        // Per-player sub-rects
+        let cumW=0;
+        posPlayers.forEach((p,pi) => {
+          const pW=(p.salary/maxSal)*barMaxW;
+          const baseOpacity=0.5+0.5*(1-pi/Math.max(posPlayers.length-1,1));
+          const prect=svgEl('rect',{x:PAD_L+xOff+cumW,y:y+2,width:pW,height:BAR_H-2,fill:color,opacity:baseOpacity,style:'cursor:pointer;'});
+
+          // Build the tooltip: all players listed, ACTIVE player gets ► indicator and bold white
+          function buildTip(activeIdx) {
+            const rows = posPlayers.map((pp,ppi) => {
+              const isActive = ppi === activeIdx;
+              return `<div style="display:flex;align-items:center;gap:6px;padding:${isActive?'2px 0':'1px 0'};">
+                <span style="width:10px;text-align:center;font-size:10px;color:${color};flex-shrink:0;">${isActive?'►':''}</span>
+                <span style="font-size:11px;${isActive?`color:#fff;font-weight:700;`:'color:#9098a8;'}flex:1;">${pp.displayName}</span>
+                <span style="font-size:11px;${isActive?`color:#e8c84a;font-weight:700;`:'color:#555d6b;'}flex-shrink:0;">$${pp.salary}</span>
+              </div>`;
+            }).join('');
+            return `<div style="margin-bottom:5px;"><strong style="color:${color};">${pos}</strong> <span style="color:#9098a8;font-size:10px;">· ${team.name}</span></div>${rows}<div style="margin-top:5px;padding-top:5px;border-top:1px solid #2a2d35;display:flex;justify-content:space-between;font-size:10px;"><span style="color:#9098a8;">Total ${pos}</span><span style="color:#e8c84a;font-weight:700;">$${val}</span></div>`;
+          }
+
+          prect.addEventListener('mouseenter', e => { prect.setAttribute('opacity','1'); anShowTip(e, buildTip(pi)); });
+          prect.addEventListener('mousemove', anMoveTip);
+          prect.addEventListener('mouseleave', () => { prect.setAttribute('opacity',baseOpacity); anHideTip(); });
+          svg.appendChild(prect);
+          if(pi<posPlayers.length-1) svg.appendChild(svgEl('line',{x1:PAD_L+xOff+cumW+pW,y1:y+3,x2:PAD_L+xOff+cumW+pW,y2:y+BAR_H-1,stroke:'rgba(0,0,0,0.4)','stroke-width':1,'pointer-events':'none'}));
+          cumW+=pW;
+        });
+        if(segW>28) svg.appendChild(svgText(PAD_L+xOff+segW/2,y+BAR_H/2+5,'$'+val,{'font-size':'9',fill:'rgba(0,0,0,0.8)','text-anchor':'middle','font-weight':'700','pointer-events':'none'}));
+        xOff+=segW;
+      });
+      svg.appendChild(svgText(PAD_L+(team.filteredTotal/maxSal)*barMaxW+5,y+BAR_H/2+4,'$'+team.filteredTotal,{'font-size':'11',fill:'#f0f0f0','font-weight':'600'}));
+    });
+
+    let legX=PAD_L;
+    activePosArr.forEach(pos=>{
+      svg.appendChild(svgEl('rect',{x:legX,y:svgH-11,width:8,height:8,fill:posColors[pos],rx:2}));
+      svg.appendChild(svgText(legX+11,svgH-4,pos,{'font-size':'9',fill:'#9098a8'}));
+      legX+=34;
+    });
+    svgWrap.appendChild(svg);
+  }
+
+  draw();
+}
+
+
+function renderSalaryLadder(container, data) {
+  const { players, posColors, positions } = data;
+  const posOrder = ['QB','RB','WR','TE'];
+
+  // ── Position filter only ──
+  const ctrl = document.createElement('div');
+  ctrl.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;';
+
+  const showLbl = document.createElement('span');
+  showLbl.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;';
+  showLbl.textContent = 'Show:';
+  ctrl.appendChild(showLbl);
+
+  const visPos = {QB:true, RB:true, WR:true, TE:true};
+  positions.forEach(pos => {
+    const lbl = document.createElement('label');
+    lbl.style.cssText = `display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;font-weight:600;color:${posColors[pos]};user-select:none;`;
+    const cb = document.createElement('input'); cb.type='checkbox'; cb.checked=true;
+    cb.style.cssText = `accent-color:${posColors[pos]};width:12px;height:12px;`;
+    cb.addEventListener('change', () => { visPos[pos]=cb.checked; draw(); });
+    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(pos));
+    ctrl.appendChild(lbl);
+  });
+
+  const slSep = document.createElement('div');
+  slSep.style.cssText = 'width:1px;height:18px;background:#2a2d35;margin:0 4px;';
+  ctrl.appendChild(slSep);
+
+  const slTeamSel = document.createElement('select');
+  slTeamSel.style.cssText = 'background:#1e2026;border:1px solid #2a2d35;color:#9098a8;font-family:DM Sans,sans-serif;font-size:12px;padding:4px 8px;border-radius:8px;outline:none;cursor:pointer;';
+  const slAllOpt = document.createElement('option'); slAllOpt.value='ALL'; slAllOpt.textContent='All Teams';
+  slTeamSel.appendChild(slAllOpt);
+  Object.values(data.byTeam).map(t=>t.name).sort().forEach(name => {
+    const opt = document.createElement('option'); opt.value=name; opt.textContent=name;
+    slTeamSel.appendChild(opt);
+  });
+  slTeamSel.addEventListener('change', draw);
+  ctrl.appendChild(slTeamSel);
+
+  container.appendChild(ctrl);
+
+  const svgWrap = document.createElement('div');
+  container.appendChild(svgWrap);
+  const note = document.createElement('p');
+  note.style.cssText = 'margin-top:10px;font-size:11px;color:#555d6b;';
+  note.textContent = 'Each dot = one rostered player. Hover for details.';
+  container.appendChild(note);
+
+  function buildDotTip(p) {
+    const color = posColors[p.pos];
+    return `<strong style="color:${color};">${p.displayName}</strong><br><span style="color:#9098a8;">${p.teamName}</span><br><span style="color:#e8c84a;font-weight:700;">$${p.salary}</span> · ${p.contract}${p.ecr&&p.ecr<900?`<br><span style="color:#555d6b;">ECR ${p.ecr}${p.posRank?' · '+p.posRank:''}</span>`:''}`;
+  }
+
+  function draw() {
+    svgWrap.innerHTML = '';
+    const activePosArr = posOrder.filter(p => visPos[p]);
+    if (!activePosArr.length) return;
+
+    const allPlayers = activePosArr.flatMap(pos => players.filter(p => p.pos===pos));
+    if (!allPlayers.length) return;
+
+    const globalMax = Math.max(...allPlayers.map(p => p.salary));
+    const W=540, H=500, PT=24, PB=38, PL=58, PR=110;
+    const bW=W-PL-PR, cH=H-PT-PB;
+
+    const svg = svgEl('svg', {viewBox:`0 0 ${W} ${H}`,style:'width:100%;max-width:620px;height:auto;font-family:DM Sans,sans-serif;overflow:visible;'});
+
+    // Background
+    svg.appendChild(svgEl('rect',{x:PL,y:PT,width:bW,height:cH,fill:'rgba(255,255,255,0.015)',rx:4}));
+
+    // Y-axis grid + labels
+    const step = globalMax<=30?5:globalMax<=60?10:15;
+    for (let s=0; s<=globalMax; s+=step) {
+      const y = PT+cH-(s/globalMax)*cH;
+      svg.appendChild(svgEl('line',{x1:PL,y1:y,x2:PL+bW,y2:y,stroke:'#2a2d35','stroke-width':1}));
+      svg.appendChild(svgText(PL-6,y+3,'$'+s,{'font-size':'9',fill:'#555d6b','text-anchor':'end'}));
+    }
+
+    // Axis label
+    const axLabel = svgText(PL-30, PT+cH/2, 'Salary', {'font-size':'10',fill:'#555d6b','text-anchor':'middle',transform:`rotate(-90,${PL-30},${PT+cH/2})`});
+    svg.appendChild(axLabel);
+
+    // Position lanes — each pos gets equal width slice
+    const laneW = bW / activePosArr.length;
+
+    activePosArr.forEach((pos, li) => {
+      const pp = players.filter(p => p.pos===pos);
+      const color = posColors[pos];
+      const laneX = PL + li*laneW;
+
+      // Vertical lane divider
+      if (li > 0) svg.appendChild(svgEl('line',{x1:laneX,y1:PT,x2:laneX,y2:PT+cH,stroke:'#2a2d35','stroke-width':1,'stroke-dasharray':'3 4'}));
+
+      // Group by salary
+      const salGroups = {};
+      pp.forEach(p => { (salGroups[p.salary]=salGroups[p.salary]||[]).push(p); });
+      const slFilter = slTeamSel.value;
+
+      Object.entries(salGroups).forEach(([sal,group]) => {
+        const y = PT+cH-(Number(sal)/globalMax)*cH;
+        const spread = Math.min(laneW/(group.length+1), 13);
+        const startX = laneX+laneW/2-spread*(group.length-1)/2;
+        group.forEach((p,gi) => {
+          const cx = startX+gi*spread;
+          const isMatch = slFilter==='ALL' || p.teamName===slFilter;
+          const baseOpacity = slFilter==='ALL' ? 0.82 : (isMatch ? 1 : 0.12);
+          const baseR = isMatch ? 5 : 4;
+          const dot = svgEl('circle',{cx,cy:y,r:baseR,fill:color,style:'cursor:pointer;',opacity:baseOpacity});
+          dot.addEventListener('mouseenter',e=>{dot.setAttribute('r',baseR+2);dot.setAttribute('opacity','1');anShowTip(e,buildDotTip(p));});
+          dot.addEventListener('mousemove',anMoveTip);
+          dot.addEventListener('mouseleave',()=>{dot.setAttribute('r',baseR);dot.setAttribute('opacity',baseOpacity);anHideTip();});
+          svg.appendChild(dot);
+        });
+      });
+
+      // Position label at bottom of lane
+      svg.appendChild(svgText(laneX+laneW/2, PT+cH+18, pos, {'font-size':'12','font-weight':'700',fill:color,'text-anchor':'middle','font-family':'Bebas Neue,sans-serif','letter-spacing':'1.5'}));
+    });
+
+    // Legend (top-right)
+    activePosArr.forEach((pos,li) => {
+      const ly = PT+6+li*18;
+      svg.appendChild(svgEl('circle',{cx:W-PR+14,cy:ly,r:'5',fill:posColors[pos]}));
+      svg.appendChild(svgText(W-PR+22,ly+4,pos,{'font-size':'11','font-weight':'700',fill:posColors[pos]}));
+    });
+
+    svgWrap.appendChild(svg);
+  }
+
+  draw();
+}
+
+
+function renderValueMap(container, data) {
+  const { players, posColors, byTeam } = data;
+  const ranked = players.filter(p => p.ecr && p.ecr < 300 && p.salary > 0);
+  const W=760, H=460, P={t:28,r:24,b:50,l:62};
+  const cW=W-P.l-P.r, cH=H-P.t-P.b;
+  const maxECR = Math.max(...ranked.map(p=>p.ecr), 1);
+  const maxSal = Math.max(...ranked.map(p=>p.salary), 1);
+
+  // ── Controls row 1: position filters + market curves + team filter ──
+  const ctrl = document.createElement('div');
+  ctrl.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;';
+
+  const showLbl = document.createElement('span');
+  showLbl.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;';
+  showLbl.textContent = 'Show:';
+  ctrl.appendChild(showLbl);
+
+  const visPos = {QB:true,RB:true,WR:true,TE:true};
+  ['QB','RB','WR','TE'].forEach(pos => {
+    const lbl = document.createElement('label');
+    lbl.style.cssText=`display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;font-weight:600;color:${posColors[pos]};user-select:none;`;
+    const cb = document.createElement('input'); cb.type='checkbox'; cb.checked=true;
+    cb.style.cssText=`accent-color:${posColors[pos]};width:12px;height:12px;`;
+    cb.addEventListener('change',()=>{visPos[pos]=cb.checked;drawMap();});
+    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(pos));
+    ctrl.appendChild(lbl);
+  });
+
+  const sep1 = document.createElement('div');
+  sep1.style.cssText='width:1px;height:18px;background:#2a2d35;margin:0 4px;';
+  ctrl.appendChild(sep1);
+
+  let showCurve=true;
+  const curveBtn=document.createElement('button');
+  curveBtn.className='pos-btn active';
+  curveBtn.textContent='Market Curves';
+  curveBtn.addEventListener('click',()=>{showCurve=!showCurve;curveBtn.classList.toggle('active',showCurve);drawMap();});
+  ctrl.appendChild(curveBtn);
+
+  const sep2=document.createElement('div');
+  sep2.style.cssText='width:1px;height:18px;background:#2a2d35;margin:0 4px;';
+  ctrl.appendChild(sep2);
+
+  // Team filter
+  const teamSel=document.createElement('select');
+  teamSel.style.cssText='background:#1e2026;border:1px solid #2a2d35;color:#9098a8;font-family:DM Sans,sans-serif;font-size:12px;padding:4px 8px;border-radius:8px;outline:none;cursor:pointer;';
+  const allOpt=document.createElement('option'); allOpt.value='ALL'; allOpt.textContent='All Teams';
+  teamSel.appendChild(allOpt);
+  Object.values(data.byTeam).map(t=>t.name).sort().forEach(name=>{
+    const opt=document.createElement('option'); opt.value=name; opt.textContent=name;
+    teamSel.appendChild(opt);
+  });
+  teamSel.addEventListener('change',drawMap);
+  ctrl.appendChild(teamSel);
+  container.appendChild(ctrl);
+
+  // ── Controls row 2: player search ──
+  const ctrl2=document.createElement('div');
+  ctrl2.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:14px;';
+  const searchLbl=document.createElement('span');
+  searchLbl.style.cssText='font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;';
+  searchLbl.textContent='Find:';
+  ctrl2.appendChild(searchLbl);
+
+  const searchInput=document.createElement('input');
+  searchInput.type='text';
+  searchInput.placeholder='Search player...';
+  searchInput.style.cssText='background:#1e2026;border:1px solid #2a2d35;color:#f0f0f0;font-family:DM Sans,sans-serif;font-size:12px;padding:5px 10px;border-radius:8px;outline:none;width:180px;';
+  searchInput.addEventListener('input',drawMap);
+  ctrl2.appendChild(searchInput);
+  const clearBtn=document.createElement('button');
+  clearBtn.textContent='✕';
+  clearBtn.style.cssText='background:none;border:none;color:#555d6b;font-size:13px;cursor:pointer;padding:0 4px;';
+  clearBtn.addEventListener('click',()=>{searchInput.value='';drawMap();});
+  ctrl2.appendChild(clearBtn);
+  const searchNote=document.createElement('span');
+  searchNote.id='vm-search-note';
+  searchNote.style.cssText='font-size:11px;color:#9098a8;';
+  ctrl2.appendChild(searchNote);
+  container.appendChild(ctrl2);
+
+  const svgWrap=document.createElement('div');
+  container.appendChild(svgWrap);
+
+  // ── Market rate curves ──
+  const CURVES={
+    RB:{peak:65,startECR:2, k:0.0273},
+    WR:{peak:50,startECR:3, k:0.0256},
+    QB:{peak:30,startECR:24,k:0.0238},
+    TE:{peak:30,startECR:21,k:0.0216},
+  };
+
+  function buildCurvePath(pos){
+    const {peak,startECR,k}=CURVES[pos];
+    const pts=[];
+    for(let ecr=startECR;ecr<=maxECR+10;ecr+=2){
+      pts.push({ecr,sal:Math.max(1,peak*Math.exp(-k*(ecr-startECR)))});
+    }
+    const toX=ecr=>P.l+(ecr/maxECR)*cW;
+    const toY=sal=>P.t+cH-(Math.min(sal,maxSal)/maxSal)*cH;
+    const sparse=pts.filter((_,i)=>i%3===0||i===0||i===pts.length-1);
+    let d=`M${toX(sparse[0].ecr).toFixed(1)},${toY(sparse[0].sal).toFixed(1)}`;
+    for(let i=1;i<sparse.length;i++){
+      const p0=sparse[Math.max(0,i-2)],p1=sparse[i-1],p2=sparse[i],p3=sparse[Math.min(sparse.length-1,i+1)];
+      const cp1x=(toX(p1.ecr)+(toX(p2.ecr)-toX(p0.ecr))*0.16).toFixed(1);
+      const cp1y=(toY(p1.sal)+(toY(p2.sal)-toY(p0.sal))*0.16).toFixed(1);
+      const cp2x=(toX(p2.ecr)-(toX(p3.ecr)-toX(p1.ecr))*0.16).toFixed(1);
+      const cp2y=(toY(p2.sal)-(toY(p3.sal)-toY(p1.sal))*0.16).toFixed(1);
+      d+=`C${cp1x},${cp1y} ${cp2x},${cp2y} ${toX(p2.ecr).toFixed(1)},${toY(p2.sal).toFixed(1)}`;
+    }
+    return{d,labelX:toX(startECR),labelY:toY(peak)};
+  }
+
+  function drawMap(){
+    svgWrap.innerHTML='';
+    const teamFilter=teamSel.value;
+    const searchQ=searchInput.value.trim().toLowerCase();
+
+    // Build visible set with highlight logic
+    let visPlayers=ranked.filter(p=>visPos[p.pos]);
+    if(teamFilter!=='ALL') visPlayers=visPlayers.filter(p=>p.teamName===teamFilter);
+
+    let highlighted=new Set();
+    if(searchQ){
+      visPlayers.forEach(p=>{if(p.displayName.toLowerCase().includes(searchQ)||p.teamName.toLowerCase().includes(searchQ)) highlighted.add(p.id);});
+      document.getElementById('vm-search-note').textContent=highlighted.size>0?`${highlighted.size} match${highlighted.size>1?'es':''}`:' — no matches';
+    } else {
+      document.getElementById('vm-search-note').textContent='';
+    }
+
+    const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,style:'width:100%;height:auto;font-family:DM Sans,sans-serif;overflow:visible;'});
+
+    // Zone labels
+    svg.appendChild(svgText(P.l+18,P.t+18,'OVERPAID',{'font-size':'9',fill:'rgba(255,79,79,0.2)','font-weight':'700','letter-spacing':'1.5'}));
+    svg.appendChild(svgText(P.l+cW-12,P.t+cH-8,'VALUE PICKS',{'font-size':'9',fill:'rgba(62,207,110,0.2)','font-weight':'700','letter-spacing':'1.5','text-anchor':'end'}));
+
+    // Grid lines
+    [0,50,100,150,200,250].forEach(ecr=>{
+      const x=P.l+((ecr||1)/maxECR)*cW;  // start at 1 not 0
+      svg.appendChild(svgEl('line',{x1:x,y1:P.t,x2:x,y2:P.t+cH,stroke:'#2a2d35','stroke-width':1}));
+      svg.appendChild(svgText(x,P.t+cH+14,ecr===0?1:ecr,{'font-size':'9',fill:'#555d6b','text-anchor':'middle'}));
+    });
+    [0,20,40,60,80].forEach(sal=>{
+      if(sal>maxSal+5)return;
+      const y=P.t+cH-(sal/maxSal)*cH;
+      svg.appendChild(svgEl('line',{x1:P.l,y1:y,x2:P.l+cW,y2:y,stroke:'#2a2d35','stroke-width':1}));
+      svg.appendChild(svgText(P.l-6,y+3,'$'+sal,{'font-size':'9',fill:'#555d6b','text-anchor':'end'}));
+    });
+    svg.appendChild(svgText(P.l+cW/2,H-8,'ECR Rank (lower = better)',{'font-size':'10',fill:'#9098a8','text-anchor':'middle'}));
+    svg.appendChild(svgText(14,P.t+cH/2,'Salary ($)',{'font-size':'10',fill:'#9098a8','text-anchor':'middle',transform:`rotate(-90,14,${P.t+cH/2})`}));
+
+    // Market curves
+    if(showCurve){
+      ['RB','WR','QB','TE'].forEach(pos=>{
+        if(!visPos[pos])return;
+        const color=posColors[pos];
+        const{d,labelX,labelY}=buildCurvePath(pos);
+        svg.appendChild(svgEl('path',{d,stroke:color,fill:'none','stroke-width':'1.8',opacity:'0.4'}));
+        svg.appendChild(svgText(labelX+2,labelY-7,pos,{'font-size':'8','font-weight':'700',fill:color,opacity:'0.6'}));
+      });
+    }
+
+    // Dots — non-highlighted dimmed when search active
+    const hasSearch=searchQ.length>0;
+    visPlayers.forEach(p=>{
+      const cx=P.l+(p.ecr/maxECR)*cW;
+      const cy=P.t+cH-(p.salary/maxSal)*cH;
+      const isHl=highlighted.has(p.id);
+      const r=p.yearsLeft>=3?5.5:p.yearsLeft===2?4.5:3.5;
+      const baseR=hasSearch&&!isHl?r*0.75:r;
+      const baseOpacity=hasSearch?(isHl?1:0.15):0.75;
+      const dot=svgEl('circle',{cx,cy,r:baseR,fill:posColors[p.pos],opacity:baseOpacity,style:'cursor:pointer;'});
+      dot.addEventListener('mouseenter',e=>{dot.setAttribute('opacity','1');dot.setAttribute('r',baseR+2);
+        anShowTip(e,`<strong style="color:${posColors[p.pos]};">${p.displayName}</strong><br>${p.teamName}<br><span style="color:#e8c84a;font-weight:700;">$${p.salary}</span> · ECR ${p.ecr} · ${p.contract}`);});
+      dot.addEventListener('mousemove',anMoveTip);
+      dot.addEventListener('mouseleave',()=>{dot.setAttribute('opacity',baseOpacity);dot.setAttribute('r',baseR);anHideTip();});
+      svg.appendChild(dot);
+
+      // Label matched dots
+      if(isHl){
+        const label=svgEl('text',{x:cx,y:cy-baseR-4,'text-anchor':'middle','font-size':'9','font-weight':'700',fill:posColors[p.pos],'pointer-events':'none'});
+        label.textContent=p.displayName.split(' ').slice(-1)[0];
+        svg.appendChild(label);
+      }
+    });
+
+    const leg=document.createElement('div');
+    leg.style.cssText='display:flex;gap:14px;margin-top:6px;flex-wrap:wrap;font-size:11px;color:#9098a8;align-items:center;';
+    ['QB','RB','WR','TE'].forEach(pos=>{
+      leg.innerHTML+=`<span style="display:flex;align-items:center;gap:5px;"><svg width="10" height="10"><circle cx="5" cy="5" r="4" fill="${posColors[pos]}"/></svg>${pos}</span>`;
+    });
+    leg.innerHTML+='<span style="color:#555d6b;margin-left:10px;font-size:10px;">Curves = market rate · Dot size = contract years left</span>';
+    svgWrap.appendChild(svg);
+    svgWrap.appendChild(leg);
+  }
+
+  drawMap();
+}
+
+
+function renderContractExpiry(container, data) {
+  const { byTeam } = data;
+  const teams = Object.values(byTeam).sort((a,b) => a.name.localeCompare(b.name));
+  const years = [2026,2027,2028,2029,2030,2031];
+  const matrix = {};
+  teams.forEach(team => {
+    matrix[team.name] = {};
+    years.forEach(yr => { matrix[team.name][yr] = { count:0, salary:0, players:[] }; });
+    team.players.forEach(p => {
+      const finalYr = 2025 + (p.contractMax - p.contractYr + 1);
+      if (matrix[team.name][finalYr]) {
+        matrix[team.name][finalYr].count++;
+        matrix[team.name][finalYr].salary += p.salary;
+        matrix[team.name][finalYr].players.push(p);
+      }
+    });
+  });
+  let maxCell = 0;
+  teams.forEach(t => years.forEach(yr => { maxCell = Math.max(maxCell, matrix[t.name][yr].salary); }));
+
+  const CW=82, CH=40, NW=152, HH=34;
+  const svgW = NW + years.length*CW + 16;
+  const svgH = HH + teams.length*CH + 16;
+  const svg = svgEl('svg', { viewBox:`0 0 ${svgW} ${svgH}`, style:'width:100%;height:auto;font-family:DM Sans,sans-serif;' });
+
+  years.forEach((yr,ci) => {
+    svg.appendChild(svgText(NW+ci*CW+CW/2, HH-8, yr, { 'font-size':'11', 'font-weight':'700', fill:'#9098a8', 'text-anchor':'middle' }));
+  });
+
+  teams.forEach((team, ri) => {
+    const y = HH + ri*CH;
+    if (team.logo) svg.appendChild(svgEl('image', { href:team.logo, x:2, y:y+CH/2-10, width:20, height:20 }));
+    svg.appendChild(svgText(26, y+CH/2+4, team.name, { 'font-size':'10', fill:'#9098a8' }));
+    years.forEach((yr, ci) => {
+      const cell = matrix[team.name][yr];
+      const x = NW + ci*CW;
+      const alpha = maxCell > 0 ? (cell.salary/maxCell)*0.7 + (cell.count>0?0.08:0) : 0;
+      const rect = svgEl('rect', { x:x+2, y:y+3, width:CW-4, height:CH-6,
+        fill: cell.count>0 ? `rgba(232,100,60,${alpha})` : 'rgba(255,255,255,0.02)', rx:4, style:'cursor:pointer;' });
+      if (cell.count > 0) {
+        const names = cell.players.slice(0,4).map(p=>`${p.displayName} ($${p.salary})`).join('<br>');
+        const more = cell.players.length>4 ? `<br><span style="color:#555d6b;">+${cell.players.length-4} more</span>` : '';
+        rect.addEventListener('mouseenter', e => anShowTip(e, `<strong style="color:#e8c84a;">${team.name}</strong> · ${yr}<br>${names}${more}<br><span style="color:#ff8c3a;font-weight:700;">$${cell.salary} expiring</span>`));
+        rect.addEventListener('mousemove', anMoveTip);
+        rect.addEventListener('mouseleave', anHideTip);
+        svg.appendChild(rect);
+        const intensity = maxCell > 0 ? cell.salary/maxCell : 0;
+        svg.appendChild(svgText(x+CW/2, y+CH/2-2, '$'+cell.salary, { 'font-size':'10', 'font-weight':'700', fill:intensity>0.35?'#fff':'#e88c60', 'text-anchor':'middle', 'pointer-events':'none' }));
+        svg.appendChild(svgText(x+CW/2, y+CH/2+10, cell.count+(cell.count>1?' players':' player'), { 'font-size':'8', fill:intensity>0.35?'rgba(255,255,255,0.65)':'#9098a8', 'text-anchor':'middle', 'pointer-events':'none' }));
+      } else {
+        svg.appendChild(rect);
+      }
+    });
+  });
+  container.appendChild(svg);
+  const note = document.createElement('p');
+  note.style.cssText = 'margin-top:10px;font-size:11px;color:#555d6b;';
+  note.textContent = 'Heat intensity = salary expiring that year. Hover for player breakdown.';
+  container.appendChild(note);
+}
+
+function renderAnalytics() {
+  const container = document.getElementById('analyticsContent');
+  if (!container) return;
+  container.innerHTML = '';
+  const data = getAnalyticsData();
+  const title = document.createElement('div');
+  title.style.cssText = 'font-family:Bebas Neue,sans-serif;font-size:18px;letter-spacing:2px;color:#e8c84a;margin-bottom:16px;';
+  const titles = { league:'LEAGUE SALARY OVERVIEW', salary:'POSITION SALARY LADDER', scatter:'SALARY vs. RANK — VALUE MAP', contract:'CONTRACT EXPIRY HEAT MAP' };
+  title.textContent = titles[analyticsTab] || 'ANALYTICS';
+  container.appendChild(title);
+  if (analyticsTab === 'league')    renderLeagueOverview(container, data);
+  else if (analyticsTab === 'salary')  renderSalaryLadder(container, data);
+  else if (analyticsTab === 'scatter') renderValueMap(container, data);
+  else if (analyticsTab === 'contract') renderContractExpiry(container, data);
+}
+
 // Wire up search
 document.addEventListener('DOMContentLoaded', () => {
   const rkSearch = document.getElementById('rkSearch');
   if (rkSearch) rkSearch.addEventListener('input', () => { if (currentView === 'rankings') renderRankingsView(); });
 });
+
+// Card salary hover — styled tooltip for .an-sal-hover spans
+document.addEventListener('mouseover', function(e) {
+  const el = e.target.closest('.an-sal-hover');
+  if (!el || !el.dataset.tip || !el.dataset.tip.trim()) return;
+  // Build styled tip from pipe-delimited "Name $X · Contract" entries
+  const lines = el.dataset.tip.split(' · ').filter(Boolean);
+  const html = lines.map(line => {
+    const m = line.match(/^(.+?) (\$\d+)(?:\s·\s(.+))?$/);
+    if (m) return `<div style="display:flex;justify-content:space-between;gap:12px;padding:1px 0;"><span style="color:#f0f0f0;">${m[1]}</span><span style="color:#e8c84a;font-weight:600;flex-shrink:0;">${m[2]}</span></div>`;
+    return `<div style="color:#9098a8;padding:1px 0;">${line}</div>`;
+  }).join('');
+  anShowTip(e, html || el.dataset.tip);
+});
+document.addEventListener('mousemove', function(e) { if (e.target.closest('.an-sal-hover')) anMoveTip(e); });
+document.addEventListener('mouseout', function(e) { if (e.target.closest('.an-sal-hover')) anHideTip(); });
 
 // Salary tip flip-up: check if tip-box would clip below viewport; if so, open upward
 document.addEventListener('mouseover', function(e) {
@@ -5001,12 +5921,14 @@ document.addEventListener('mouseover', function(e) {
   box.style.bottom = '';
   box.style.display = 'block';
   const rect = box.getBoundingClientRect();
-  if (rect.bottom > window.innerHeight - 20) {
-    box.style.top = 'auto';
-    box.style.bottom = 'calc(100% + 6px)';
-  } else {
-    box.style.top = '';
-    box.style.bottom = '';
+  const flipUp = rect.bottom > window.innerHeight - 20;
+  box.style.top = flipUp ? 'auto' : '';
+  box.style.bottom = flipUp ? 'calc(100% + 6px)' : '';
+  // Also check left overflow — if tip extends past left edge, shift right
+  const rect2 = box.getBoundingClientRect();
+  if (rect2.left < 8) {
+    box.style.right = 'auto';
+    box.style.left = '0';
   }
   box.style.display = '';
 });
