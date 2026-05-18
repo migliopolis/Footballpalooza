@@ -4770,17 +4770,16 @@ function rkSalaryTip(salary, salRankInfo) {
 
   // Current player row — white, bold, highlighted
   let currentName = sortedArr[idx] ? sortedArr[idx].name : '';
-  if (n > 0) {
-    const tieNameStr = [
-      `<span style="color:#fff;">${currentName}</span>`,
-      ...tiedWith.map(t => t.cut
-        ? `<span style="color:#a04040;text-decoration:line-through;">${t.name}</span>`
-        : `<span style="color:#fff;">${t.name}</span>`)
-    ].join('<span style="color:#666;">, </span>');
-    rows.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="font-weight:700;font-size:12px;overflow:hidden;flex:1;white-space:nowrap;">● ${tieNameStr}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
-  } else {
-    rows.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="color:#fff;font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">● ${currentName}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
-  }
+  // Build current-player name HTML — always uses inline spans so cut tied teammates show in red
+  const currentNameHtml = n > 0
+    ? [
+        `<span style="color:#fff;">${currentName}</span>`,
+        ...tiedWith.map(t => t.cut
+          ? `<span style="color:#a04040;text-decoration:line-through;">${t.name}</span>`
+          : `<span style="color:#fff;">${t.name}</span>`)
+      ].join('<span style="color:#666;">, </span>')
+    : `<span style="color:#fff;">${currentName}</span>`;
+  rows.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.06);margin:1px 0;gap:8px;"><span style="color:#fff;font-weight:700;font-size:12px;overflow:hidden;flex:1;white-space:nowrap;">&#9679; ${currentNameHtml}</span><span style="color:var(--green);font-weight:700;font-size:12px;flex-shrink:0;">$${salary}</span></div>`);
 
   // Collect unique salary groups below (up to 2)
   const belowGroups = [];
