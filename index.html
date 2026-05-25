@@ -421,14 +421,17 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v1.20</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.0</span></span></div>
   <div class="header-controls">
-    <div class="view-toggle">
-      <button class="view-btn active" onclick="setView('roster')">Roster</button>
+    <div class="view-toggle" style="display:flex;align-items:center;gap:2px;">
+      <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
+      <div style="width:1px;height:18px;background:rgba(255,255,255,0.1);margin:0 6px;flex-shrink:0;"></div>
+      <button class="view-btn" onclick="setView('roster')">Roster</button>
       <button class="view-btn" onclick="setView('league')">All Keepers</button>
       <button class="view-btn" onclick="setView('available')">Available</button>
       <button class="view-btn" onclick="setView('draft')">Rookie Draft</button>
       <button class="view-btn" onclick="setView('trade')">⇄ Trades</button>
+      <div style="width:1px;height:18px;background:rgba(255,255,255,0.1);margin:0 6px;flex-shrink:0;"></div>
       <button class="view-btn" onclick="setView('rankings')">Rankings</button>
       <button class="view-btn" onclick="setView('analytics')">&#9685; Analytics</button>
     </div>
@@ -436,6 +439,8 @@
 </div>
 <div id="draft-countdown-bar" style="background:linear-gradient(90deg,#12122a 0%,#1a1a35 100%);border-bottom:1px solid #2a2a4a;padding:5px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-size:11px;color:#8888aa;">&#128202; Rankings updated: <span style="color:#7ec8e3;font-weight:600;">May 20, 2026</span></div><div style="font-size:11px;color:#8888aa;">&#127944; FBP Rookie Draft: <span id="draft-timer" style="color:#f0c040;font-weight:700;font-family:monospace;letter-spacing:1px;">loading...</span></div></div>
 
+<div id="guided-strip" style="display:none;"></div>
+<div id="homeView" style="display:none;position:absolute;inset:0;overflow-y:auto;z-index:10;background:var(--bg);"></div>
 <div class="main">
   <div class="sidebar" id="sidebar">
     <div class="sidebar-resizer" id="sidebarResizer"></div>
@@ -692,7 +697,7 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v1.20</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.0</span>
           <span style="font-size:11px;color:var(--text3);">May 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
         </div>
@@ -936,7 +941,7 @@ for (const [tid, t] of Object.entries(LEAGUE_DATA.teams)) {
 }
 
 let currentTeam = null, currentFilter = 'ALL', currentSort = 'salary', sortDir = -1;
-let currentView = 'roster', availFilter = new Set(), leagueSort = 'pos', availSort = 'ecr', availSortDir = 1, auctionValues = null;
+let currentView = 'home', availFilter = new Set(), leagueSort = 'pos', availSort = 'ecr', availSortDir = 1, auctionValues = null;
 let customAuctionValues = {};
 let lineupDisplay = 'rank'; // 'rank' or 'salary'
 
@@ -1062,7 +1067,7 @@ function autoAssignLineup(tid) {
 
 function setView(v) {
   currentView = v;
-  const labels = { roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades', rankings: 'Rankings', changelog: 'Changelog', analytics: 'Analytics' };
+  const labels = { home: '🏠 Home', roster: 'Roster', league: 'All Keepers', available: 'Available', draft: 'Rookie Draft', trade: '⇄ Trades', rankings: 'Rankings', changelog: 'Changelog', analytics: 'Analytics' };
   document.querySelectorAll('.view-btn').forEach(b =>
     b.classList.toggle('active', b.textContent.trim() === labels[v]));
   // rosterView is the scroll container for all views — never hide it
@@ -1074,6 +1079,7 @@ function setView(v) {
   if (rosterControls) rosterControls.style.display = isRoster ? '' : 'none';
   if (rosterHeader) rosterHeader.style.display = isRoster ? '' : 'none';
   if (playerTable) playerTable.style.display = isRoster ? '' : 'none';
+  document.getElementById('homeView').style.display = v === 'home' ? 'block' : 'none';
   document.getElementById('leagueView').style.display = v === 'league' ? 'block' : 'none';
   document.getElementById('availView').style.display = v === 'available' ? 'block' : 'none';
   document.getElementById('draftView').style.display = v === 'draft' ? 'flex' : 'none';
@@ -1083,6 +1089,9 @@ function setView(v) {
   document.getElementById('analyticsView').style.display = v === 'analytics' ? 'flex' : 'none';
   // On mobile, hide the sidebar for non-roster views
   document.getElementById('sidebar').classList.toggle('mobile-hidden', v !== 'roster');
+  document.querySelector('.main').style.display = v === 'home' ? 'none' : '';
+  if (v === 'home') renderHomePage();
+  renderGuidedStrip();
   if (v === 'league') { setLeagueSort(leagueSort); }
   if (v === 'available') renderAvailView();
   if (v === 'draft') renderDraftView();
@@ -1709,7 +1718,7 @@ function renderTable() {
       <div class="check-cell">${isSelected ? '✓' : '✕'}</div>
       <div class="player-name-cell">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
-        <div><div class="player-name">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}${waveBadge}${redHatBadge}${p.ecrChange ? `<span style="font-size:10px;font-weight:700;color:${p.ecrChange>0?'#3ecf6e':'#ff4f4f'};margin-left:2px;" title="${p.ecrChange>0?'Rose':'Fell'} ${Math.abs(p.ecrChange)} spots since last update">${p.ecrChange>0?'▲':'▼'}</span>` : ''}${p._via ? `<span class="contract-tip" style="font-size:9px;color:var(--text3);cursor:help;margin-left:3px;">via ${p._via}<span class="tip-box"><div class="via-tip-title">📋 Trade</div><div class="via-tip-line">Acquired from <strong>${p._via}</strong></div>${p._tradeDate ? `<div class="via-tip-line" style="color:var(--text3);">${p._tradeDate}</div>` : ''}</span></span>` : ''}</div></div>
+        <div style="display:flex;align-items:center;gap:4px;"><button onclick="openTradeWithPlayer('${p.id}','${currentTeam}','A')" title="Trade away ${p.name}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);padding:0 2px;line-height:1;flex-shrink:0;opacity:0.5;" onmouseenter="this.style.opacity='1';this.style.color='var(--accent)'" onmouseleave="this.style.opacity='0.5';this.style.color='var(--text3)'">⇄</button><div class="player-name">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}${waveBadge}${redHatBadge}${p.ecrChange ? `<span style="font-size:10px;font-weight:700;color:${p.ecrChange>0?'#3ecf6e':'#ff4f4f'};margin-left:2px;" title="${p.ecrChange>0?'Rose':'Fell'} ${Math.abs(p.ecrChange)} spots since last update">${p.ecrChange>0?'▲':'▼'}</span>` : ''}${p._via ? `<span class="contract-tip" style="font-size:9px;color:var(--text3);cursor:help;margin-left:3px;">via ${p._via}<span class="tip-box"><div class="via-tip-title">📋 Trade</div><div class="via-tip-line">Acquired from <strong>${p._via}</strong></div>${p._tradeDate ? `<div class="via-tip-line" style="color:var(--text3);">${p._tradeDate}</div>` : ''}</span></span>` : ''}</div></div>
       </div>
       ${isTiny ? '' : `<div class="td-num" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>`}
       <div class="td-num">${p.ecr && p.ecr < 999 ? p.ecr : '—'}</div>
@@ -1947,7 +1956,7 @@ function renderAvailView() {
       <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
         <span class="player-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</span>
-        ${badge}${redHatBadge}
+        ${badge}${redHatBadge}${p.source !== 'fa' ? `<button onclick="openTradeWithPlayer('${p.id}','${p.tid || Object.keys(LEAGUE_DATA.teams).find(k=>LEAGUE_DATA.teams[k].players.some(pl=>pl.id==='${p.id}'))}', currentTeam && Object.keys(LEAGUE_DATA.teams).find(k=>LEAGUE_DATA.teams[k].players.some(pl=>pl.id==='${p.id}'))===currentTeam?'A':'B')" title="Open trade" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);padding:0 2px;opacity:0.5;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.5'">⇄</button>` : ''}
         <span class="player-team" style="white-space:nowrap;flex-shrink:0;">${fromTeamStr}</span>
       </div>
       <div class="td-num" style="font-size:11px;color:var(--text2);">${posRankDisplay}</div>
@@ -2740,6 +2749,566 @@ function resetAllRosters() {
   alert('All rosters reset to default.');
 }
 
+
+// ─── OFFSEASON STATE ──────────────────────────────────────────────────────────
+const OFFSEASON_STATE_KEY = 'fbp-offseason-state-v1';
+
+function getOffseasonState() {
+  try {
+    const raw = localStorage.getItem(OFFSEASON_STATE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { teamId: null, mode: null, phase: 'pre-draft', draftComplete: false, keepersLocked: false, lastVisited: null };
+}
+
+function saveOffseasonState(patch) {
+  const state = { ...getOffseasonState(), ...patch, lastVisited: Date.now() };
+  try { localStorage.setItem(OFFSEASON_STATE_KEY, JSON.stringify(state)); } catch(e) {}
+  return state;
+}
+
+// ─── HOME PAGE ────────────────────────────────────────────────────────────────
+function renderHomePage() {
+  const el = document.getElementById('homeView');
+  if (!el) return;
+  const state = getOffseasonState();
+  el.innerHTML = '';
+
+  // ── Styles injected once ──
+  if (!document.getElementById('home-styles')) {
+    const s = document.createElement('style');
+    s.id = 'home-styles';
+    s.textContent = `
+      .home-wrap { min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:40px 20px 60px; box-sizing:border-box; background: radial-gradient(ellipse at 20% 10%, rgba(232,200,74,0.07) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(62,207,110,0.05) 0%, transparent 50%), var(--bg); }
+      .home-logo { height:56px; width:auto; margin-bottom:8px; }
+      .home-tagline { font-size:11px; letter-spacing:2px; color:var(--text3); text-transform:uppercase; margin-bottom:48px; }
+      .home-section-title { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text3); margin-bottom:14px; text-align:center; }
+      .team-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; max-width:760px; width:100%; margin-bottom:48px; }
+      @media(max-width:600px){ .team-grid { grid-template-columns:repeat(4,1fr); } }
+      .team-tile { display:flex; flex-direction:column; align-items:center; gap:6px; padding:10px 6px; border-radius:10px; border:2px solid transparent; cursor:pointer; transition:all 0.15s; background:var(--surface); }
+      .team-tile:hover { border-color:var(--border); background:var(--surface2); }
+      .team-tile.selected { border-color:var(--accent); background:rgba(232,200,74,0.08); }
+      .team-tile img { width:44px; height:44px; object-fit:contain; }
+      .team-tile-name { font-size:9px; font-weight:700; color:var(--text3); text-align:center; line-height:1.2; letter-spacing:0.3px; }
+      .team-tile.selected .team-tile-name { color:var(--accent); }
+      .mode-cards { display:flex; gap:16px; max-width:760px; width:100%; flex-wrap:wrap; justify-content:center; margin-bottom:32px; }
+      .mode-card { flex:1; min-width:220px; max-width:340px; padding:24px; border-radius:14px; border:1px solid var(--border); background:var(--surface); cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+      .mode-card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:0 8px 32px rgba(232,200,74,0.1); }
+      .mode-card.mode-primary { border-color:rgba(232,200,74,0.4); background:rgba(232,200,74,0.05); }
+      .mode-card-icon { font-size:28px; margin-bottom:12px; }
+      .mode-card-title { font-size:15px; font-weight:700; color:var(--text1); margin-bottom:6px; font-family:'Bebas Neue',sans-serif; letter-spacing:1px; }
+      .mode-card-desc { font-size:12px; color:var(--text3); line-height:1.5; }
+      .mode-card-badge { position:absolute; top:12px; right:12px; font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; background:rgba(232,200,74,0.2); color:var(--accent); letter-spacing:0.5px; }
+      .progress-bar { max-width:760px; width:100%; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px 24px; }
+      .progress-title { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--text3); margin-bottom:16px; }
+      .progress-steps { display:flex; flex-direction:column; gap:10px; }
+      .progress-step { display:flex; align-items:center; gap:12px; }
+      .step-icon { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+      .step-icon.done { background:rgba(62,207,110,0.2); color:#3ecf6e; }
+      .step-icon.active { background:rgba(232,200,74,0.2); color:var(--accent); }
+      .step-icon.future { background:var(--surface2); color:var(--text3); }
+      .step-label { font-size:12px; font-weight:600; color:var(--text2); }
+      .step-label.done { color:var(--text3); text-decoration:line-through; }
+      .step-label.active { color:var(--accent); }
+      .step-action { margin-left:auto; font-size:11px; font-weight:700; padding:4px 12px; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--text2); cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+      .step-action:hover { border-color:var(--accent); color:var(--accent); }
+      .home-resume-btn { margin-top:16px; width:100%; padding:12px; border-radius:10px; border:none; background:var(--accent); color:#000; font-size:13px; font-weight:700; cursor:pointer; letter-spacing:0.5px; font-family:'Bebas Neue',sans-serif; transition:opacity 0.15s; }
+      .home-resume-btn:hover { opacity:0.85; }
+    `;
+    document.head.appendChild(s);
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = 'home-wrap';
+
+  // ── Logo ──
+  const logoImg = document.createElement('img');
+  logoImg.src = 'https://raw.githubusercontent.com/migliopolis/Footballpalooza/main/logos/FBP_Logo_Gold.png';
+  logoImg.className = 'home-logo';
+  logoImg.alt = 'Footballpalooza';
+  wrap.appendChild(logoImg);
+
+  const tagline = document.createElement('div');
+  tagline.className = 'home-tagline';
+  tagline.textContent = '2026 Keeper Builder';
+  wrap.appendChild(tagline);
+
+  // ── Pick Your Team ──
+  const teamTitle = document.createElement('div');
+  teamTitle.className = 'home-section-title';
+  teamTitle.textContent = state.teamId ? `Your Team: ${LEAGUE_DATA.teams[state.teamId]?.name}` : 'Pick Your Team';
+  wrap.appendChild(teamTitle);
+
+  const grid = document.createElement('div');
+  grid.className = 'team-grid';
+
+  Object.entries(LEAGUE_DATA.teams)
+    .sort((a,b) => a[1].name.localeCompare(b[1].name))
+    .forEach(([tid, team]) => {
+      const tile = document.createElement('div');
+      tile.className = 'team-tile' + (state.teamId === tid ? ' selected' : '');
+      const img = document.createElement('img');
+      img.src = team.logo || '';
+      img.alt = team.name;
+      img.onerror = () => img.style.display = 'none';
+      const name = document.createElement('div');
+      name.className = 'team-tile-name';
+      name.textContent = team.name;
+      tile.appendChild(img);
+      tile.appendChild(name);
+      tile.addEventListener('click', () => {
+        saveOffseasonState({ teamId: tid });
+        selectTeam(tid);
+        document.querySelectorAll('.team-tile').forEach(t => t.classList.remove('selected'));
+        tile.classList.add('selected');
+        teamTitle.textContent = `Your Team: ${team.name}`;
+        // Update mode cards to be actionable
+        renderModeSection();
+      });
+      grid.appendChild(tile);
+    });
+  wrap.appendChild(grid);
+
+  // ── Mode Cards ──
+  const modeWrap = document.createElement('div');
+  modeWrap.id = 'home-mode-section';
+  wrap.appendChild(modeWrap);
+
+  function renderModeSection() {
+    modeWrap.innerHTML = '';
+    const modeTitle = document.createElement('div');
+    modeTitle.className = 'home-section-title';
+    modeTitle.textContent = 'Choose Your Mode';
+    modeWrap.appendChild(modeTitle);
+
+    const cards = document.createElement('div');
+    cards.className = 'mode-cards';
+
+    // Simulate Off-Season card
+    const simCard = document.createElement('div');
+    simCard.className = 'mode-card mode-primary';
+    const _simPhoto = getRandomPhotoUrl();
+    simCard.innerHTML = `
+      ${_simPhoto ? `<img src="${_simPhoto}" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0.08;border-radius:13px;pointer-events:none;">` : ''}
+      <div class="mode-card-badge">GUIDED</div>
+      <div class="mode-card-icon">🏈</div>
+      <div class="mode-card-title">Simulate Off-Season</div>
+      <div class="mode-card-desc">Step-by-step guided walkthrough: rookie draft, keeper day, cut simulation, and league preview heading into the auction.</div>
+    `;
+    simCard.addEventListener('click', () => {
+      if (!state.teamId && !getOffseasonState().teamId) {
+        alert('Pick your team first!');
+        return;
+      }
+      saveOffseasonState({ mode: 'guided' });
+      renderOffseasonProgress(wrap);
+    });
+
+    // Sandbox card
+    const sandCard = document.createElement('div');
+    sandCard.className = 'mode-card';
+    // Pick a different photo than the sim card
+    let _sandPhoto = getRandomPhotoUrl();
+    if (_sandPhoto && _simPhoto === _sandPhoto && PLAYER_PHOTO_FILES.length > 1) {
+      while (_sandPhoto === _simPhoto) _sandPhoto = getRandomPhotoUrl();
+    }
+    sandCard.innerHTML = `
+      ${_sandPhoto ? `<img src="${_sandPhoto}" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0.08;border-radius:13px;pointer-events:none;">` : ''}
+      <div class="mode-card-icon">🔧</div>
+      <div class="mode-card-title">Sandbox Mode</div>
+      <div class="mode-card-desc">Jump straight into the tools. Full access to every feature — rosters, trades, draft, analytics — no guided steps.</div>
+    `;
+    sandCard.addEventListener('click', () => {
+      saveOffseasonState({ mode: 'sandbox' });
+      const tid = getOffseasonState().teamId;
+      if (tid) selectTeam(tid);
+      setView('roster');
+    });
+
+    cards.appendChild(simCard);
+    cards.appendChild(sandCard);
+    modeWrap.appendChild(cards);
+
+    // Resume / Restart buttons if in progress
+    const s = getOffseasonState();
+    if (s.mode === 'guided' && s.lastVisited) {
+      const resumeBtn = document.createElement('button');
+      resumeBtn.className = 'home-resume-btn';
+      resumeBtn.textContent = '↩ Resume Off-Season In Progress';
+      resumeBtn.addEventListener('click', () => renderOffseasonProgress(wrap));
+      modeWrap.appendChild(resumeBtn);
+
+      const restartBtn = document.createElement('button');
+      restartBtn.style.cssText = 'margin-top:8px;width:100%;max-width:760px;padding:9px;border-radius:10px;border:1px solid rgba(255,79,79,0.3);background:transparent;color:#ff4f4f;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;font-family:inherit;';
+      restartBtn.textContent = '↺ Restart Off-Season';
+      restartBtn.addEventListener('click', () => {
+        if (!confirm('Restart the off-season? This clears all guided progress (draft, keepers locked, cuts) but keeps your roster selections.')) return;
+        saveOffseasonState({ mode: null, phase: 'pre-draft', draftComplete: false, keepersLocked: false, cutsSimulated: false, previewViewed: false, lastVisited: null });
+        renderHomePage();
+      });
+      modeWrap.appendChild(restartBtn);
+    }
+  }
+
+  renderModeSection();
+  el.appendChild(wrap);
+}
+
+// ─── OFFSEASON PROGRESS VIEW ─────────────────────────────────────────────────
+function renderOffseasonProgress(wrap) {
+  // Replace mode cards area with progress tracker
+  const existing = document.getElementById('home-progress-section');
+  if (existing) existing.remove();
+  const modeSection = document.getElementById('home-mode-section');
+  if (modeSection) modeSection.remove();
+
+  const state = getOffseasonState();
+
+  const prog = document.createElement('div');
+  prog.id = 'home-progress-section';
+  prog.style.cssText = 'max-width:760px;width:100%;display:flex;flex-direction:column;gap:16px;';
+
+  // Progress bar
+  const progBar = document.createElement('div');
+  progBar.className = 'progress-bar';
+
+  const progTitle = document.createElement('div');
+  progTitle.className = 'progress-title';
+  progTitle.textContent = '📋 Off-Season Progress';
+  progBar.appendChild(progTitle);
+
+  const steps = [
+    { key: 'draft',    label: 'Rookie Draft (Jun 23)',  icon: '📋', view: 'draft',    done: state.draftComplete },
+    { key: 'keepers',  label: 'Set Your Keepers',       icon: '🔒', view: 'roster',   done: state.keepersLocked },
+    { key: 'cuts',     label: 'Simulate League Cuts',   icon: '✂',  view: 'analytics',done: state.cutsSimulated },
+    { key: 'preview',  label: 'League Preview',         icon: '👁',  view: 'league',  done: state.previewViewed },
+  ];
+
+  const stepsWrap = document.createElement('div');
+  stepsWrap.className = 'progress-steps';
+
+  steps.forEach((step, i) => {
+    const row = document.createElement('div');
+    row.className = 'progress-step';
+
+    const icon = document.createElement('div');
+    const isDone = step.done;
+    const isNext = !isDone && steps.slice(0,i).every(s => s.done || s.optional);
+    icon.className = 'step-icon ' + (isDone ? 'done' : isNext ? 'active' : 'future');
+    icon.textContent = isDone ? '✓' : step.icon;
+
+    const label = document.createElement('span');
+    label.className = 'step-label ' + (isDone ? 'done' : isNext ? 'active' : '');
+    label.textContent = step.label + (step.optional ? ' (optional)' : '');
+
+    const btn = document.createElement('button');
+    btn.className = 'step-action';
+    btn.textContent = isDone ? 'Revisit' : isNext ? 'Start →' : 'Open';
+    btn.addEventListener('click', () => {
+      if (step.key === 'keepers' && !state.draftComplete) {
+        if (!confirm('Draft not marked complete yet. Continue to Roster anyway?')) return;
+      }
+      if (step.key === 'keepers') {
+        saveOffseasonState({ mode: 'guided' });
+        const tid = getOffseasonState().teamId;
+        if (tid) selectTeam(tid);
+      }
+      if (step.key === 'cuts') {
+        setView('analytics');
+        // Switch to Value Map tab
+        setTimeout(() => {
+          const vmBtn = document.querySelector('[onclick*="scatter"]') || document.querySelector('.analytics-tab-btn');
+          if (vmBtn) vmBtn.click();
+        }, 300);
+        return;
+      }
+      setView(step.view);
+    });
+
+    row.appendChild(icon);
+    row.appendChild(label);
+    row.appendChild(btn);
+    stepsWrap.appendChild(row);
+  });
+
+  progBar.appendChild(stepsWrap);
+
+  // Mark draft complete button
+  if (!state.draftComplete) {
+    const markBtn = document.createElement('button');
+    markBtn.style.cssText = 'margin-top:16px;padding:8px 16px;border-radius:8px;border:1px solid rgba(62,207,110,0.4);background:rgba(62,207,110,0.08);color:#3ecf6e;font-size:11px;font-weight:700;cursor:pointer;width:100%;';
+    markBtn.textContent = '✓ Mark Rookie Draft as Complete';
+    markBtn.addEventListener('click', () => {
+      saveOffseasonState({ draftComplete: true });
+      renderOffseasonProgress(wrap);
+    });
+    progBar.appendChild(markBtn);
+  }
+
+  if (!state.keepersLocked) {
+    const lockBtn = document.createElement('button');
+    lockBtn.style.cssText = 'margin-top:8px;padding:8px 16px;border-radius:8px;border:1px solid rgba(232,200,74,0.4);background:rgba(232,200,74,0.08);color:var(--accent);font-size:11px;font-weight:700;cursor:pointer;width:100%;';
+    lockBtn.textContent = '🔒 Mark Keepers as Locked';
+    lockBtn.addEventListener('click', () => {
+      saveOffseasonState({ keepersLocked: true });
+      renderOffseasonProgress(wrap);
+    });
+    progBar.appendChild(lockBtn);
+  }
+
+  prog.appendChild(progBar);
+
+  // Back to mode selection
+  const backBtn = document.createElement('button');
+  backBtn.style.cssText = 'padding:8px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;align-self:center;';
+  backBtn.textContent = '← Back to Mode Selection';
+  backBtn.addEventListener('click', () => { prog.remove(); renderHomePage(); });
+  prog.appendChild(backBtn);
+
+  wrap.appendChild(prog);
+}
+
+
+
+// ─── PLAYER PHOTOS ───────────────────────────────────────────────────────────
+const PLAYER_PHOTOS_BASE = 'https://raw.githubusercontent.com/migliopolis/Footballpalooza/main/players/';
+// Photos will be loaded dynamically — we pick 2 random indices for the mode cards
+// Since we can't browse the folder, we'll try loading and fallback gracefully
+// Filename format: populated from folder listing when available
+// For now store known filenames — update as needed
+const PLAYER_PHOTO_FILES = [
+  'Achane.jpg',
+  'aj-brown-2.jpg',
+  'Barkley.jpg',
+  'Bijan_07.jpg',
+  'Caleb_01.jpg',
+  'JaMarr Chase.jpg',
+  'JamyrGibbs.jpg',
+  'JDaniels.jpg',
+  'Jefferson.jpg',
+  'JustinHerbert.jpg',
+  'Mahomes.jpg',
+  'PukaNacua.jpg',
+];
+
+function getRandomPhotoUrl() {
+  if (!PLAYER_PHOTO_FILES.length) return null;
+  return PLAYER_PHOTOS_BASE + PLAYER_PHOTO_FILES[Math.floor(Math.random() * PLAYER_PHOTO_FILES.length)];
+}
+
+// ─── GUIDED MODE STRIP ────────────────────────────────────────────────────────
+const GUIDED_STEPS = [
+  { key: 'draft',   icon: '📋', label: 'Draft',      view: 'draft',     stateKey: 'draftComplete' },
+  { key: 'keepers', icon: '🔒', label: 'Keepers',    view: 'roster',    stateKey: 'keepersLocked' },
+  { key: 'cuts',    icon: '✂',  label: 'Cuts',       view: 'analytics', stateKey: 'cutsSimulated' },
+  { key: 'preview', icon: '👁', label: 'Preview',    view: 'league',    stateKey: 'previewViewed' },
+];
+
+function renderGuidedStrip() {
+  const strip = document.getElementById('guided-strip');
+  if (!strip) return;
+  const state = getOffseasonState();
+  if (state.mode !== 'guided' || currentView === 'home') {
+    strip.style.display = 'none';
+    return;
+  }
+  strip.style.display = 'block';
+  strip.innerHTML = '';
+  strip.style.cssText = 'background:linear-gradient(90deg,#0e1020 0%,#131525 100%);border-bottom:1px solid rgba(232,200,74,0.2);padding:5px 14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;';
+
+  const label = document.createElement('span');
+  label.style.cssText = 'font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(232,200,74,0.6);margin-right:4px;white-space:nowrap;';
+  label.textContent = '⚑ Off-Season:';
+  strip.appendChild(label);
+
+  GUIDED_STEPS.forEach((step, i) => {
+    const isDone = step.stateKey ? state[step.stateKey] : false;
+    const isCurrent = currentView === step.view || (step.view === 'analytics' && currentView === 'analytics');
+    const prevDone = i === 0 || GUIDED_STEPS.slice(0,i).every(s => s.optional || (s.stateKey && state[s.stateKey]));
+    const isNext = !isDone && prevDone && !isCurrent;
+
+    // Separator
+    if (i > 0) {
+      const sep = document.createElement('span');
+      sep.style.cssText = 'color:rgba(255,255,255,0.15);font-size:10px;';
+      sep.textContent = '›';
+      strip.appendChild(sep);
+    }
+
+    const btn = document.createElement('button');
+    let bg = 'transparent';
+    let color = 'rgba(144,152,168,0.6)';
+    let border = 'transparent';
+    let fw = '600';
+    if (isDone) { color = '#3ecf6e'; }
+    else if (isCurrent) { bg = 'rgba(232,200,74,0.12)'; color = '#e8c84a'; border = 'rgba(232,200,74,0.3)'; }
+    else if (isNext) { color = '#c8d0e0'; }
+
+    btn.style.cssText = `font-size:10px;font-weight:${fw};padding:2px 8px;border-radius:5px;border:1px solid ${border};background:${bg};color:${color};cursor:pointer;white-space:nowrap;transition:all 0.15s;font-family:inherit;`;
+    btn.title = isDone ? `${step.label} ✓ (click to revisit)` : `Go to ${step.label}`;
+
+    const checkmark = isDone ? ' ✓' : '';
+    btn.textContent = `${step.icon} ${step.label}${checkmark}`;
+
+    btn.addEventListener('click', () => setView(step.view));
+    strip.appendChild(btn);
+  });
+
+  // Exit guided mode button
+  const exitBtn = document.createElement('button');
+  exitBtn.style.cssText = 'margin-left:auto;font-size:9px;padding:2px 8px;border-radius:5px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(144,152,168,0.5);cursor:pointer;font-family:inherit;';
+  exitBtn.textContent = '✕ Exit Guided';
+  exitBtn.addEventListener('click', () => {
+    saveOffseasonState({ mode: 'sandbox' });
+    renderGuidedStrip();
+    removeGuidedBanners();
+  });
+  strip.appendChild(exitBtn);
+
+  // Inject contextual banners into current page
+  injectGuidedBanner(state);
+}
+
+function removeGuidedBanners() {
+  document.querySelectorAll('.guided-banner').forEach(el => el.remove());
+}
+
+function injectGuidedBanner(state) {
+  removeGuidedBanners();
+  if (!state || state.mode !== 'guided') return;
+
+  // ── Draft page banner ──
+  if (currentView === 'draft') {
+    const draftCol = document.getElementById('draftBoardCol');
+    if (draftCol && !state.draftComplete) {
+      const banner = buildGuidedBanner(
+        '📋 Complete your rookie draft, then mark it done to continue the off-season.',
+        'Mark Draft Complete →',
+        () => {
+          saveOffseasonState({ draftComplete: true });
+          renderGuidedStrip();
+          injectGuidedBanner(getOffseasonState());
+        }
+      );
+      draftCol.insertBefore(banner, draftCol.firstChild);
+    } else if (draftCol && state.draftComplete) {
+      const banner = buildGuidedBanner(
+        '✅ Draft complete! Next step: set your keepers on the Roster page.',
+        'Go to Keepers →',
+        () => setView('roster'),
+        '#3ecf6e'
+      );
+      draftCol.insertBefore(banner, draftCol.firstChild);
+    }
+  }
+
+  // ── Roster page banner ──
+  if (currentView === 'roster') {
+    const playerTable = document.getElementById('playerTable');
+    if (playerTable && !state.keepersLocked) {
+      const banner = buildGuidedBanner(
+        '🔒 Remove players you\'re not keeping, then lock your roster to continue.',
+        'Lock Keepers →',
+        () => {
+          saveOffseasonState({ keepersLocked: true });
+          renderGuidedStrip();
+          injectGuidedBanner(getOffseasonState());
+        }
+      );
+      playerTable.parentNode.insertBefore(banner, playerTable);
+    } else if (playerTable && state.keepersLocked) {
+      const banner = buildGuidedBanner(
+        '✅ Keepers locked! Next: simulate league cuts on the Value Map.',
+        'Go to Value Map →',
+        () => { setView('analytics'); },
+        '#3ecf6e'
+      );
+      playerTable.parentNode.insertBefore(banner, playerTable);
+    }
+  }
+
+  // ── Analytics / Value Map banner ──
+  if (currentView === 'analytics' && !state.cutsSimulated) {
+    const analyticsContent = document.getElementById('analyticsContent');
+    if (analyticsContent) {
+      const banner = buildGuidedBanner(
+        '✂ Use the Release Wave to flag overpaid players across the league, then release them.',
+        'Mark Cuts Complete →',
+        () => {
+          saveOffseasonState({ cutsSimulated: true });
+          renderGuidedStrip();
+          injectGuidedBanner(getOffseasonState());
+        }
+      );
+      analyticsContent.parentNode.insertBefore(banner, analyticsContent);
+    }
+  }
+
+  // ── League / All Keepers banner ──
+  if (currentView === 'league' && !state.previewViewed) {
+    saveOffseasonState({ previewViewed: true });
+    renderGuidedStrip();
+    const leagueView = document.getElementById('leagueView');
+    if (leagueView) {
+      const banner = buildGuidedBanner(
+        '👁 League preview — rosters set, auction coming. Review every team below.',
+        '✓ Preview Viewed',
+        () => {
+          injectGuidedBanner(getOffseasonState());
+        },
+        '#3ecf6e'
+      );
+      leagueView.insertBefore(banner, leagueView.firstChild);
+    }
+  }
+}
+
+function buildGuidedBanner(text, btnText, onAction, accentColor) {
+  const color = accentColor || '#e8c84a';
+  const banner = document.createElement('div');
+  banner.className = 'guided-banner';
+  banner.style.cssText = `display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 14px;margin-bottom:10px;border-radius:8px;border:1px solid ${color}33;background:${color}0d;flex-wrap:wrap;`;
+
+  const msg = document.createElement('span');
+  msg.style.cssText = `font-size:11px;color:${color};flex:1;min-width:0;`;
+  msg.textContent = text;
+
+  const btn = document.createElement('button');
+  btn.style.cssText = `font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;border:1px solid ${color}66;background:${color}1a;color:${color};cursor:pointer;white-space:nowrap;font-family:inherit;`;
+  btn.textContent = btnText;
+  btn.addEventListener('click', onAction);
+
+  banner.appendChild(msg);
+  banner.appendChild(btn);
+  return banner;
+}
+
+
+// ─── TRADE QUICK-LAUNCH ──────────────────────────────────────────────────────
+function openTradeWithPlayer(playerId, teamId, side) {
+  // side: 'A' = player you want to trade AWAY (your team)
+  //       'B' = player you want to trade FOR (other team)
+  setView('trade');
+  setTimeout(() => {
+    const state = side === 'A' ? tradeA : tradeB;
+    const sel = document.getElementById('tradeTeam' + side);
+    if (!sel) return;
+    sel.value = teamId;
+    state.tid = teamId;
+    state.players = [];
+    state.picks = [];
+    state.cap = 0;
+    // Find the player object
+    const team = LEAGUE_DATA.teams[teamId];
+    if (team) {
+      const p = team.players.find(pl => pl.id === playerId);
+      if (p) state.players.push(p);
+    }
+    renderTradeSide(side);
+    renderTradeItems(side);
+  }, 150);
+}
+
 // ─── TRADE SIMULATOR ─────────────────────────────────────────────────────────
 
 // 2027 picks: traded as "Team X's 2027 Xth Round" — no pick number since order unknown
@@ -2970,7 +3539,7 @@ function renderPickerList() {
     const maxCap = team.cap;
     el.innerHTML = `
       <div style="padding:20px;">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">How much auction budget is included?</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">How much auction budget is included?</div></div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
           <span style="color:var(--accent);font-size:20px;font-weight:700;">$</span>
           <input type="number" id="capInput" min="1" max="${maxCap}" value="${state.cap || 10}"
@@ -3321,7 +3890,7 @@ function renderAvailView() {
       <div style="display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
         <span class="player-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</span>
-        ${badge}${redHatBadge}
+        ${badge}${redHatBadge}${p.source !== 'fa' ? `<button onclick="openTradeWithPlayer('${p.id}','${p.tid || Object.keys(LEAGUE_DATA.teams).find(k=>LEAGUE_DATA.teams[k].players.some(pl=>pl.id==='${p.id}'))}', currentTeam && Object.keys(LEAGUE_DATA.teams).find(k=>LEAGUE_DATA.teams[k].players.some(pl=>pl.id==='${p.id}'))===currentTeam?'A':'B')" title="Open trade" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);padding:0 2px;opacity:0.5;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.5'">⇄</button>` : ''}
         <span class="player-team" style="white-space:nowrap;flex-shrink:0;">${fromTeamStr}</span>
       </div>
       <div class="td-num" style="font-size:11px;color:var(--text2);">${posRankDisplay}</div>
@@ -6627,6 +7196,13 @@ function renderAnalytics() {
 
 // Wire up search
 document.addEventListener('DOMContentLoaded', () => {
+  // Restore offseason state and load home view
+  const _oState = getOffseasonState();
+  if (_oState.teamId && LEAGUE_DATA.teams[_oState.teamId]) {
+    selectTeam(_oState.teamId);
+  }
+  setView('home');
+
   const rkSearch = document.getElementById('rkSearch');
   if (rkSearch) rkSearch.addEventListener('input', () => { if (currentView === 'rankings') renderRankingsView(); });
 });
