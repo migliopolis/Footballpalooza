@@ -1718,7 +1718,7 @@ function renderTable() {
       <div class="check-cell">${isSelected ? '✓' : '✕'}</div>
       <div class="player-name-cell">
         <span class="pos-badge pos-${p.pos}">${p.pos}</span>
-        <div style="display:flex;align-items:center;gap:4px;"><button onclick="openTradeWithPlayer('${p.id}','${currentTeam}','A')" title="Trade away ${p.name}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);padding:0 2px;line-height:1;flex-shrink:0;opacity:0.5;" onmouseenter="this.style.opacity='1';this.style.color='var(--accent)'" onmouseleave="this.style.opacity='0.5';this.style.color='var(--text3)'">⇄</button><div class="player-name">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}${waveBadge}${redHatBadge}${p.ecrChange ? `<span style="font-size:10px;font-weight:700;color:${p.ecrChange>0?'#3ecf6e':'#ff4f4f'};margin-left:2px;" title="${p.ecrChange>0?'Rose':'Fell'} ${Math.abs(p.ecrChange)} spots since last update">${p.ecrChange>0?'▲':'▼'}</span>` : ''}${p._via ? `<span class="contract-tip" style="font-size:9px;color:var(--text3);cursor:help;margin-left:3px;">via ${p._via}<span class="tip-box"><div class="via-tip-title">📋 Trade</div><div class="via-tip-line">Acquired from <strong>${p._via}</strong></div>${p._tradeDate ? `<div class="via-tip-line" style="color:var(--text3);">${p._tradeDate}</div>` : ''}</span></span>` : ''}</div></div>
+        <div style="display:flex;align-items:center;gap:4px;"><button onclick="openTradeWithPlayer('${p.id}','${currentTeam}','A')" title="Trade away ${p.name}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);padding:0 2px;line-height:1;flex-shrink:0;opacity:0.5;" onmouseenter="this.style.opacity='1';this.style.color='var(--accent)'" onmouseleave="this.style.opacity='0.5';this.style.color='var(--text3)'">⇄</button><div class="player-name" data-player-id="${p.id}" style="cursor:default;">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team}</span> ${rBadge}${txBadge}${waveBadge}${redHatBadge}${p.ecrChange ? `<span style="font-size:10px;font-weight:700;color:${p.ecrChange>0?'#3ecf6e':'#ff4f4f'};margin-left:2px;" title="${p.ecrChange>0?'Rose':'Fell'} ${Math.abs(p.ecrChange)} spots since last update">${p.ecrChange>0?'▲':'▼'}</span>` : ''}${p._via ? `<span class="contract-tip" style="font-size:9px;color:var(--text3);cursor:help;margin-left:3px;">via ${p._via}<span class="tip-box"><div class="via-tip-title">📋 Trade</div><div class="via-tip-line">Acquired from <strong>${p._via}</strong></div>${p._tradeDate ? `<div class="via-tip-line" style="color:var(--text3);">${p._tradeDate}</div>` : ''}</span></span>` : ''}</div></div>
       </div>
       ${isTiny ? '' : `<div class="td-num" style="font-size:11px;color:var(--text2);">${p.posRank || '—'}</div>`}
       <div class="td-num">${p.ecr && p.ecr < 999 ? p.ecr : '—'}</div>
@@ -1728,6 +1728,12 @@ function renderTable() {
       ${projCols}
     </div>`;
   }).join('');
+
+  // Blurb tooltip delegation on player names in roster table
+  el.querySelectorAll('[data-player-id]').forEach(nameEl => {
+    const pid = nameEl.getAttribute('data-player-id');
+    attachBlurbTip(nameEl, pid);
+  });
 
   // Wave flag click delegation — release player directly from roster
   el.querySelectorAll('[data-release-id]').forEach(span => {
@@ -3283,6 +3289,48 @@ function buildGuidedBanner(text, btnText, onAction, accentColor) {
   return banner;
 }
 
+
+
+// ─── PLAYER BLURBS ───────────────────────────────────────────────────────────
+let playerBlurbs = {};
+const BLURBS_URL = 'https://raw.githubusercontent.com/migliopolis/Footballpalooza/main/players/blurbs.json';
+
+(async function loadBlurbs() {
+  try {
+    const res = await fetch(BLURBS_URL);
+    if (res.ok) playerBlurbs = await res.json();
+  } catch(e) {}
+})();
+
+function getBlurb(playerId) { return playerBlurbs[playerId] || null; }
+
+let _blurbTip = null;
+function ensureBlurbTip() {
+  if (_blurbTip) return _blurbTip;
+  _blurbTip = document.createElement('div');
+  _blurbTip.style.cssText = 'position:fixed;z-index:9999;max-width:280px;background:#1a1d27;border:1px solid rgba(232,200,74,0.3);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.55;color:#c8d0e0;pointer-events:none;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.5);';
+  document.body.appendChild(_blurbTip);
+  return _blurbTip;
+}
+function showBlurbTip(e, text) {
+  const tip = ensureBlurbTip();
+  tip.textContent = text;
+  tip.style.display = 'block';
+  positionBlurbTip(e);
+}
+function positionBlurbTip(e) {
+  const tip = ensureBlurbTip();
+  const x = e.clientX + 14, y = e.clientY - 10;
+  const tipW = 280, tipH = tip.offsetHeight || 80;
+  tip.style.left = (x + tipW > window.innerWidth ? x - tipW - 28 : x) + 'px';
+  tip.style.top  = (y + tipH > window.innerHeight ? y - tipH : y) + 'px';
+}
+function hideBlurbTip() { ensureBlurbTip().style.display = 'none'; }
+function attachBlurbTip(el, playerId) {
+  el.addEventListener('mouseenter', e => { const b = getBlurb(playerId); if (b) showBlurbTip(e, b); });
+  el.addEventListener('mousemove', positionBlurbTip);
+  el.addEventListener('mouseleave', hideBlurbTip);
+}
 
 // ─── TRADE QUICK-LAUNCH ──────────────────────────────────────────────────────
 function openTradeWithPlayer(playerId, teamId, side) {
