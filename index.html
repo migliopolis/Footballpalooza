@@ -172,9 +172,12 @@
 
   /* LEAGUE VIEW */
   .league-view { padding: 24px; flex: 1; overflow-y: auto; }
+  @media(max-width:768px){ .league-view { padding: 10px 8px; } }
   .league-view-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--accent); margin-bottom: 20px; }
   .league-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+  @media(max-width:768px){ .league-grid { grid-template-columns: 1fr; gap: 10px; } }
   .team-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  @media(max-width:768px){ .team-card-body { padding: 8px 10px !important; } .team-card-header { padding: 10px !important; } }
   .team-card-header { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface2); border-bottom: 1px solid var(--border); }
   .team-card-logo { width: 36px; height: 36px; object-fit: contain; border-radius: 4px; flex-shrink: 0; }
   .team-card-logo-ph { width: 36px; height: 36px; background: var(--border); border-radius: 4px; flex-shrink: 0; }
@@ -182,18 +185,19 @@
   .team-card-cap { font-family: 'Bebas Neue', sans-serif; font-size: 16px; }
   .team-card-cap.ok { color: var(--green); } .team-card-cap.warn { color: var(--orange); } .team-card-cap.over { color: var(--red); }
   .team-card-body { padding: 10px 14px; }
-  .team-card-player { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .team-card-player { display: grid; grid-template-columns: 1fr 44px 44px; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; gap: 4px; }
   .team-card-player:last-child { border-bottom: none; }
-  .tcp-left { display: flex; align-items: center; gap: 6px; }
-  .tcp-name { color: var(--text); font-weight: 500; }
-  .tcp-pts { color: var(--text3); font-size: 11px; }
-  .tcp-salary { color: var(--accent); font-weight: 600; font-size: 12px; }
+  .tcp-left { display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; }
+  .tcp-name { color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tcp-pts { color: var(--text3); font-size: 11px; text-align: right; }
+  .tcp-salary { color: var(--accent); font-weight: 600; font-size: 12px; text-align: right; }
   .team-card-empty { color: var(--text3); font-size: 12px; text-align: center; padding: 12px 0; }
   .team-card-totals { display: flex; justify-content: space-between; padding: 8px 14px; background: var(--surface2); border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); }
   .team-card-totals strong { color: var(--text); }
 
   /* AVAILABLE VIEW */
   .avail-view { padding: 24px; flex: 1; overflow-y: auto; }
+  @media(max-width:768px){ .avail-view { padding: 10px 8px; } }
   .avail-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
   .avail-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--accent); margin-bottom: 4px; }
   .avail-count { font-size: 12px; color: var(--text3); }
@@ -410,7 +414,14 @@
     body > div { height: auto !important; overflow: visible !important; }
     .table-area { overflow-y: visible !important; }
   }
+  @media (max-width: 768px) {
+    /* Rankings page: simplified mobile columns */
+    #rkTableHeader { display: none !important; }
+    .analytics-content-wrap { padding: 10px 8px !important; }
+  }
   @media (max-width: 480px) {
+    #rkHeader { padding: 10px 8px !important; }
+    #rkTableBody { padding: 0 !important; }
     .header { flex-wrap:wrap; }
     .header-controls { flex-wrap:wrap; justify-content:flex-end; }
     /* At 480px drop POS RK col: check / name / OVR / Salary */
@@ -522,12 +533,12 @@
   <!-- LEAGUE VIEW -->
   <div class="league-view" id="leagueView" style="display:none;">
     <div class="league-view-title">All Keepers — League Wide</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
-      <span style="font-size:11px;color:var(--text3);">Sort by:</span>
-      <div class="view-toggle" style="border-radius:6px;">
-        <button class="view-btn active" id="lsort-pos" onclick="setLeagueSort('pos')">Position</button>
-        <button class="view-btn" id="lsort-pts" onclick="setLeagueSort('pts')">Rank</button>
-        <button class="view-btn" id="lsort-salary" onclick="setLeagueSort('salary')">Salary</button>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:nowrap;">
+      <span style="font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0;">Sort:</span>
+      <div class="view-toggle" style="border-radius:6px;display:flex;flex-wrap:nowrap;">
+        <button class="view-btn active" id="lsort-pos" onclick="setLeagueSort('pos')" style="white-space:nowrap;">Position</button>
+        <button class="view-btn" id="lsort-pts" onclick="setLeagueSort('pts')" style="white-space:nowrap;">Rank</button>
+        <button class="view-btn" id="lsort-salary" onclick="setLeagueSort('salary')" style="white-space:nowrap;">Salary</button>
       </div>
     </div>
     <div class="league-grid" id="leagueGrid"></div>
@@ -641,7 +652,7 @@
   </div>
 
   <!-- TRADE VIEW -->
-  <div id="rankingsView" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+  <div id="rankingsView" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;padding:0;">
     <!-- Top bar: filters + search -->
     <div style="display:flex;align-items:center;gap:8px;padding:10px 20px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;background:var(--surface);">
       <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
@@ -794,7 +805,7 @@
       <button class="pos-btn" id="anTab-scatter" onclick="setAnalyticsTab('scatter')">Value Map</button>
       <button class="pos-btn" id="anTab-contract" onclick="setAnalyticsTab('contract')">Contract Expiry</button>
     </div>
-    <div id="analyticsContent" style="flex:1;padding:20px 24px;min-width:0;"></div>
+    <div id="analyticsContent" style="flex:1;padding:20px 24px;min-width:0;" class="analytics-content-wrap"></div>
   </div>
 
   <div class="trade-view" id="tradeView" style="display:none;">
@@ -1832,10 +1843,8 @@ function renderLeagueView() {
             : (p.posRank || '—');
           return `<div class="team-card-player">
             <div class="tcp-left"><span class="pos-badge pos-${p.pos}">${p.pos}</span><span class="tcp-name">${p.name}${(p._drafted || p.rookie) ? ' <span style="font-size:9px;font-weight:700;padding:1px 4px;background:rgba(126,200,227,0.18);border-radius:3px;color:#7ec8e3;letter-spacing:0.3px;">R</span>' : ''}${p._drafted && p._onTaxi ? ' <span style="font-size:9px;color:var(--orange);">TX</span>' : ''} <span style="font-size:10px;color:var(--text3);">${p.team}</span></span></div>
-            <div style="display:flex;gap:12px;align-items:center;overflow:visible;position:relative;">
-              <span class="tcp-pts" style="font-size:11px;color:var(--text2);min-width:42px;text-align:right;">${rankDisplay}</span>
-              <span class="tcp-salary" style="min-width:36px;text-align:right;position:relative;">${(typeof rkSalaryTip !== "undefined" && p.salary) ? rkSalaryTip(p.salary, _salRankMapLeague[p.id]) : "$" + p.salary}</span>
-            </div>
+            <span class="tcp-pts" style="font-size:11px;color:var(--text2);text-align:right;">${rankDisplay}</span>
+            <span class="tcp-salary" style="text-align:right;position:relative;">${(typeof rkSalaryTip !== "undefined" && p.salary) ? rkSalaryTip(p.salary, _salRankMapLeague[p.id]) : "$" + p.salary}</span>
           </div>`;
         }).join('')
       : '<div class="team-card-empty">No keepers</div>';
@@ -5623,7 +5632,10 @@ function renderRankingsView() {
   const searchQ = (searchEl ? searchEl.value : '').toLowerCase().trim();
   const rosterMap = buildRosterStatusMap();
   const salRankMap = buildSalaryRankMap();
-  const COLS = '44px 60px 1fr 46px 54px 68px 60px 64px 16px 110px 1fr';
+  const isMobileRk = window.innerWidth <= 768;
+  const COLS = isMobileRk
+    ? '36px 52px 1fr 48px 56px'  // mobile: rank, posRk, name, salary, contract
+    : '44px 60px 1fr 46px 54px 68px 60px 64px 16px 110px 1fr';
 
   let players = [];
 
@@ -5758,18 +5770,18 @@ function renderRankingsView() {
         ? `<div style="display:flex;align-items:center;gap:0;min-width:0;">${logoEl}<span style="font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${rInfo.owner}</span></div>`
         : '';
 
-      return `<div style="display:grid;grid-template-columns:${COLS};padding:7px 20px;border-bottom:1px solid rgba(42,45,53,0.5);align-items:center;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
+      return `<div style="display:grid;grid-template-columns:${COLS};padding:7px ${isMobileRk?'10px':'20px'};border-bottom:1px solid rgba(42,45,53,0.5);align-items:center;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
         <div style="font-size:12px;font-weight:700;color:var(--text2);">${rank}</div>
         <div style="font-size:11px;color:${posColor};font-weight:600;">${posRk}</div>
         <div style="font-size:13px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><span data-player-id="${p.id}">${displayName}</span>${rookieBadge}${changeBadge}${p.redHat?'<span style="font-size:11px;margin-left:2px;filter:hue-rotate(120deg) saturate(2);" title="League restricted player">🧢</span>':''}</div>
-        <div style="text-align:center;"><span style="font-size:10px;font-weight:700;padding:2px 5px;background:${posColor}22;border-radius:3px;color:${posColor};">${p.pos}</span></div>
-        <div style="text-align:center;">${nflCell}</div>
-        <div style="text-align:right;padding-right:6px;font-size:12px;color:var(--text2);">${pts}</div>
+        ${isMobileRk ? '' : `<div style="text-align:center;"><span style="font-size:10px;font-weight:700;padding:2px 5px;background:${posColor}22;border-radius:3px;color:${posColor};">${p.pos}</span></div>`}
+        ${isMobileRk ? '' : `<div style="text-align:center;">${nflCell}</div>`}
+        ${isMobileRk ? '' : `<div style="text-align:right;padding-right:6px;font-size:12px;color:var(--text2);">${pts}</div>`}
         <div style="text-align:right;padding-right:4px;position:relative;">${salHtml}</div>
         <div style="position:relative;padding-left:6px;overflow:visible;">${conHtml}</div>
-        <div></div>
-        <div>${statusHtml}</div>
-        <div style="overflow:hidden;min-width:0;">${ownerHtml}</div>
+        ${isMobileRk ? '' : '<div></div>'}
+        ${isMobileRk ? '' : `<div>${statusHtml}</div>`}
+        ${isMobileRk ? '' : `<div style="overflow:hidden;min-width:0;">${ownerHtml}</div>`}
       </div>`;
     } catch(rowErr) {
       return ''; // skip broken rows silently
@@ -6009,7 +6021,7 @@ function renderLeagueOverview(container, data) {
 
   // ── TICKER ──
   const ticker = document.createElement('div');
-  ticker.style.cssText='display:flex;align-items:stretch;background:#12131a;border:1px solid #2a2d35;border-radius:10px;overflow:hidden;margin-bottom:14px;';
+  ticker.style.cssText='display:flex;align-items:stretch;background:#12131a;border:1px solid #2a2d35;border-radius:10px;overflow:hidden;margin-bottom:14px;flex-wrap:wrap;';
   const tickerKeys = ['TOTAL',...positions];
   const tCells=[];
   tickerKeys.forEach((key,i)=>{
@@ -6024,8 +6036,8 @@ function renderLeagueOverview(container, data) {
       if(!topT || !topT.logo) return '';
       return `<img src="${topT.logo}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(2.8);width:48px;height:48px;object-fit:contain;opacity:0.07;pointer-events:none;filter:grayscale(0.3);">`;
     })();
-    cell.style.cssText=`flex:1;padding:10px 16px;border-right:${i<tickerKeys.length-1?'1px solid #2a2d35':'none'};cursor:pointer;border-bottom:2px solid transparent;transition:background 0.15s,border-color 0.15s;position:relative;overflow:hidden;`;
-    cell.innerHTML=topLogoHtml+`<div style="position:relative;font-size:9px;font-weight:700;letter-spacing:1.2px;color:${color};text-transform:uppercase;margin-bottom:3px;">${key}</div><div style="position:relative;font-size:20px;font-weight:700;color:#f0f0f0;line-height:1;">$${val}</div>`;
+    cell.style.cssText=`flex:1;min-width:80px;padding:8px 10px;border-right:${i<tickerKeys.length-1?'1px solid #2a2d35':'none'};cursor:pointer;border-bottom:2px solid transparent;transition:background 0.15s,border-color 0.15s;position:relative;overflow:hidden;`;
+    cell.innerHTML=topLogoHtml+`<div style="position:relative;font-size:9px;font-weight:700;letter-spacing:1.2px;color:${color};text-transform:uppercase;margin-bottom:3px;">${key}</div><div style="position:relative;font-size:16px;font-weight:700;color:#f0f0f0;line-height:1;white-space:nowrap;">$${val}</div>`;
     cell.addEventListener('mouseenter',()=>{ if(cell.dataset.active!=='1') cell.style.background='rgba(255,255,255,0.03)'; });
     cell.addEventListener('mouseleave',()=>{ if(cell.dataset.active!=='1') cell.style.background=''; });
     cell.addEventListener('click',()=>{
@@ -6075,6 +6087,13 @@ function renderLeagueOverview(container, data) {
     // 4-column grid: Q1=Teams, Q2=TopEarners, Q3=SalaryLadder, Q4=BestAvailable
     const grid=document.createElement('div');
     grid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0 1px;background:#1e2026;border:1px solid #1e2026;border-radius:8px;overflow:hidden;';
+    // Responsive grid: 2-col on tablet, 1-col on mobile
+    if(window.innerWidth<=600){
+      grid.style.gridTemplateColumns='1fr';
+      grid.style.gap='1px 0';
+    } else if(window.innerWidth<=900){
+      grid.style.gridTemplateColumns='1fr 1fr';
+    }
     panel.appendChild(grid);
 
     function makeColOuter(title, detailLabel){
@@ -6324,8 +6343,15 @@ function renderLeagueOverview(container, data) {
 
 
   // ── CHART CONTROLS ──
+  // Two-row controls on mobile: Sort row + Filter row
+  const ctrlWrap=document.createElement('div');
+  ctrlWrap.style.cssText='display:flex;flex-direction:column;gap:6px;margin-bottom:10px;';
   const ctrlBar=document.createElement('div');
-  ctrlBar.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;';
+  ctrlBar.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;';
+  const ctrlBar2=document.createElement('div');
+  ctrlBar2.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:nowrap;';
+  ctrlWrap.appendChild(ctrlBar);
+  ctrlWrap.appendChild(ctrlBar2);
   const sLbl=document.createElement('span'); sLbl.style.cssText='font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;'; sLbl.textContent='Sort:'; ctrlBar.appendChild(sLbl);
   let sortKey='total';
   const sortBtns={};
@@ -6334,16 +6360,15 @@ function renderLeagueOverview(container, data) {
     btn.addEventListener('click',()=>{ sortKey=key; Object.values(sortBtns).forEach(b=>b.classList.remove('active')); btn.classList.add('active'); drawChart(); });
     sortBtns[key]=btn; ctrlBar.appendChild(btn);
   });
-  const sep=document.createElement('div'); sep.style.cssText='width:1px;height:18px;background:#2a2d35;margin:0 4px;'; ctrlBar.appendChild(sep);
-  const shLbl=document.createElement('span'); shLbl.style.cssText='font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;'; shLbl.textContent='Show:'; ctrlBar.appendChild(shLbl);
+  const shLbl=document.createElement('span'); shLbl.style.cssText='font-size:10px;font-weight:700;letter-spacing:0.8px;color:#555d6b;text-transform:uppercase;margin-right:2px;'; shLbl.textContent='Show:'; ctrlBar2.appendChild(shLbl);
   const visPos={QB:true,RB:true,WR:true,TE:true};
   positions.forEach(pos=>{
     const lbl=document.createElement('label'); lbl.style.cssText=`display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;font-weight:600;color:${posColors[pos]};user-select:none;`;
     const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=true; cb.style.cssText=`accent-color:${posColors[pos]};width:12px;height:12px;`;
     cb.addEventListener('change',()=>{visPos[pos]=cb.checked;drawChart();});
-    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(pos)); ctrlBar.appendChild(lbl);
+    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(pos)); ctrlBar2.appendChild(lbl);
   });
-  container.appendChild(ctrlBar);
+  container.appendChild(ctrlWrap);
 
   const svgWrap=document.createElement('div');
   container.appendChild(svgWrap);
@@ -6355,7 +6380,7 @@ function renderLeagueOverview(container, data) {
     const teams=Object.values(byTeam).map(t=>({...t,ft:ap.reduce((s,p)=>s+(t.byPos[p]||0),0)}))
       .sort((a,b)=>sortKey==='total'?b.ft-a.ft:(b.byPos[sortKey]||0)-(a.byPos[sortKey]||0));
     const maxSal=Math.max(...teams.map(t=>t.ft),1);
-    const BH=20,G=5,PL=168,PR=58,PT=26,PB=20,SW=820;
+    const BH=20,G=5,PL=window.innerWidth<=480?100:168,PR=58,PT=26,PB=20,SW=Math.max(320,Math.min(820,(svgWrap.offsetWidth||820)-4));
     const SH=PT+teams.length*(BH+G)+PB+14,bW=SW-PL-PR;
     const svg=svgEl('svg',{viewBox:`0 0 ${SW} ${SH}`,style:'width:100%;height:auto;font-family:DM Sans,sans-serif;'});
     [0,50,100,150,200,250,300,350].filter(v=>v<=maxSal+20).forEach(v=>{
@@ -6540,7 +6565,8 @@ function renderSalaryLadder(container, data) {
 function renderValueMap(container, data) {
   const { players, posColors, byTeam } = data;
   const ranked = players.filter(p => p.ecr && p.ecr < 300 && p.salary > 0);
-  const _mapW = Math.max(280, Math.min(760, (svgWrap.offsetWidth||760) - 4));
+  const _rawW = svgWrap.getBoundingClientRect().width || svgWrap.offsetWidth || svgWrap.parentElement?.offsetWidth || 760;
+  const _mapW = Math.max(280, Math.min(760, _rawW - 4));
   const W=_mapW, H=Math.round(_mapW * 0.605), P={t:28,r:24,b:50,l:62};
   const cW=W-P.l-P.r, cH=H-P.t-P.b;
   const maxECR = Math.max(...ranked.map(p=>p.ecr), 1);
@@ -7193,7 +7219,8 @@ Released players can be restored via the Roster page — select the team and cli
     });
   }
 
-  drawMap();
+  // Defer first draw so container has rendered dimensions
+  requestAnimationFrame(() => drawMap());
 }
 
 
