@@ -1729,12 +1729,6 @@ function renderTable() {
     </div>`;
   }).join('');
 
-  // Blurb tooltip delegation on player names in roster table
-  el.querySelectorAll('[data-player-id]').forEach(nameEl => {
-    const pid = nameEl.getAttribute('data-player-id');
-    attachBlurbTip(nameEl, pid);
-  });
-
   // Wave flag click delegation — release player directly from roster
   el.querySelectorAll('[data-release-id]').forEach(span => {
     span.addEventListener('click', e => {
@@ -1746,6 +1740,8 @@ function renderTable() {
       updateCap(); renderTable(); renderLineup();
     });
   });
+
+  // Blurb tooltips handled by document-level delegation
 
   // Draft picks section
   const my2026 = DRAFT_ORDER
@@ -3292,7 +3288,7 @@ function buildGuidedBanner(text, btnText, onAction, accentColor) {
 
 
 // ─── PLAYER BLURBS ───────────────────────────────────────────────────────────
-let playerBlurbs = {};
+let playerBlurbs = {"16161":"The RB1 heading into 2026 after a historic 2025 \u2014 2,298 scrimmage yards, 11 TDs, and a league-leading 366 touches across 17 games. The only player in NFL history with 1,400 rushing yards and 800+ receiving yards in the same season. Contracted at $63 in year 4 of 5 \u2014 about $2 below fair market for what is arguably the best back in football.","16211":"The WR1 in fantasy in 2025 \u2014 129 catches, 1,715 yards, 10 TDs on 166 targets across 16 games, the highest receiving yards-per-game average in NFL history. Matthew Stafford and Sean McVay likely back in LA make Nacua's situation as clean as it gets. a steal at $19 in year 4 of 5, over $31 below what the curve suggests he should cost.","16185":"Put together one of the great WR seasons in recent memory in 2025 \u2014 119 catches, 1,793 receiving yards (NFL-high), 10 TDs, and a Super Bowl ring in Seattle. WR2 in total fantasy scoring, averaging 21.2 PPG. contracted at $34 in year 4 of 6, a meaningful discount for the focal point of the Seahawks' passing attack.","16162":"Posted 1,839 scrimmage yards and 18 TDs in 2025 \u2014 the most touchdowns of any running back in the NFL. His 22.7 PPR points per game was a career high and ranked second overall at any position. contracted at $55 in year 4 of 5, roughly fair value for a player with legitimate RB1 ceiling every week.","15287":"Finished WR4 in 2025 fantasy scoring and is firmly in the elite tier heading into 2026. A model of consistency in Detroit's high-powered offense, St. Brown enters the final year of a six-year deal at $33. good value on the books \u2014 he's $13 below market \u2014 but the expiring contract makes this a pivotal season.","13130":"Still the gold standard at running back despite turning 30 in 2026. Entering year 2 of 3 at $63, he's $6 above the curve \u2014 a modest premium for a player whose floor remains elite even as questions about his age and touch count grow. The bet on sustaining the window; how that plays out depends on CMC's health.","14832":"Posted another dominant season in Dallas with Prescott healthy and Pickens pulling attention away. Firmly in the WR4-6 conversation heading into 2026. contracted at $48 in year 2 of 3, only $4 above curve \u2014 essentially fair value for one of the most complete receivers in the game.","14836":"The case for Justin Jefferson as the best receiver in football is easy to make \u2014 elite separation, yards after catch, and quarterback-proof production. But at $68 in year 2 of 3 he's $25 above his market curve, the largest premium on any kept receiver. Elite money on the books for elite production; the contract year ahead is the real question.","14802":"RB4 coming off a big 2025 season that justified his $56 auction price. Now at $59 in year 2 of 3, just $7 above the market curve \u2014 essentially fair value for a top-5 back. Both sides are reportedly having productive conversations about his future. The anchor of that backfield and one of the more interesting contract situations in the league.","15290":"The WR8 in PPR format heading into 2026 after another elite season in Houston's high-volume offense. Nico Collins has become one of the more reliable weekly starters in the league. contracted at $32 in the final year of a 6-year deal \u2014 $8 below curve, excellent value heading into a contract year.","16615":"The Giants' WR1 and a legitimate breakout threat in year 3 of 5. Ranked WR9 heading into 2026 after steadily improving production in New York. On the books at $21 \u2014 over $16 below what the curve says he should cost. One of the best value contracts in the league at this ECR.","16167":"Career year in 2025 \u2014 1,838 scrimmage yards, 12 TDs, PFF's RB1 overall. Now in year 4 of 5 at $23, a staggering $22.60 below his market curve. One of the best value contracts in the league and arguably in the league. Some uncertainty around Miami's QB situation heading into 2026 but Achane's volume should keep him elite regardless.","16194":"Back healthy and among the league's premier slot receivers, Rice is the WR10 heading into 2026 in the Chiefs' high-powered offense. contracted at $21 in year 4 of 5 \u2014 over $15 below curve. A buy-low who quietly became one of the best value keepers in the league.","15762":"Landed in Dallas alongside Dak Prescott and CeeDee Lamb and immediately produced as a legitimate WR1. WR11 heading into 2026 at just 24 years old. contracted at $24 in year 2 of 3 \u2014 about $11 below what the market would pay. The best contract on their roster with one year until free agency.","17042":"The Las Vegas Raiders' star RB and a legitimate RB6 in fantasy heading into 2026. Jeanty had a dominant rookie season and is contracted at $38 in year 2 of 5 \u2014 $4 below curve. Multi-year cost control on a player already ascending toward the top tier.","15715":"Posted a career-high 309 carries and 14 TDs in 2025, finishing as fantasy's RB6 in points per game despite being drafted around RB13. James Cook entered his prime and the Bills leaned heavily on him. contracted at $38 in year 5 of 6 \u2014 nearly fair value for the production he's delivering.","15754":"The WR14 in fantasy heading into 2026 after a quietly excellent season in New Orleans. Chris Olave is in year 2 of 3 at just $11 \u2014 over $21 below his market curve. One of the most underpaid contracts in the entire league. Whoever retains him is in a strong position.","16641":"The TE2 overall heading into 2026, Brock Bowers put together one of the great tight end seasons in recent memory as a rookie. Now in year 3 of 6 at $9 \u2014 over $21 below curve. An absolute steal at this price \u2014 arguably the best tight end value in the league on a long-term deal.","16181":"Chase Brown emerged as Cincinnati's featured back and has climbed to RB8 in fantasy heading into 2026. Consistent volume and solid efficiency make him a reliable starter. on the books at $21 in year 4 of 6 \u2014 nearly $17 below curve, excellent long-term value.","14104":"The WR12 heading into 2026 despite being in the final year of his deal in Philadelphia. AJ Brown remains elite when healthy but his contract situation and final year status make him one of the more volatile keepers in the league. on the books at $42 \u2014 $12 above curve \u2014 and will need a big season to justify the price.","13589":"The QB1 in fantasy for the second straight year, Josh Allen remains the most valuable quarterback in the game \u2014 elite rushing upside, big arm, command of one of the best offenses in the NFL. Acquired via trade last offseason, currently at $24 in year 2 of 3 \u2014 a bargain at $6 below curve for the top player at his position.","17044":"The Chargers' RB1 emerging as one of the more exciting backs in football heading into year 2. Omarion Hampton is already RB9 in early 2026 rankings and in a high-usage role in LA. contracted at $28 in year 2 of 5 \u2014 $7 below curve \u2014 with four more years of control ahead.","17071":"Finished his rookie season as WR14 \u2014 ahead of schedule by most measures. One year into a five-year deal at $18, McMillan is Carolina's unquestioned WR1 at 6'4\" with exceptional catch radius. on the books at $10 below his market curve. The cornerstone piece of the roster going forward.","13604":"Back-to-back championship runs in Philadelphia and still putting up elite numbers as the RB10. On the books at $68 in year 2 of 3 \u2014 $35 above curve, the largest absolute overpay on any roster. Barkley is worth it on the field; whether that dollar premium can be sustained long-term is the real question.","13593":"The QB2 in fantasy coming off another MVP-caliber season in Baltimore. Lamar Jackson's dual-threat upside makes him uniquely valuable and nearly impossible to replace at auction. contracted at $37 in the final year of a 3-year deal \u2014 $10 above curve. A contract year for the reigning best player in football.","15753":"Now in the Jets' improved passing attack, Garrett Wilson continues to be one of the most technically gifted receivers in the league. WR15 heading into 2026. contracted at $17 in year 2 of 3 \u2014 nearly $9 below curve, excellent value for a player with clear upside.","15282":"DeVonta Smith remains one of the sharpest route runners in the NFL, providing reliable production in Philadelphia's still-potent offense. WR16 heading into 2026. contracted at $16 in year 2 of 3 \u2014 $9 below curve.","16580":"The QB3 heading into 2026 after a breakout second season in New England. Drake Maye has the arm talent and mobility to challenge Josh Allen at the top of the position long-term. contracted at $6 in year 3 of 6 \u2014 nearly $18 below curve. The best young QB contract in the league.","16627":"Los Angeles Chargers WR who quietly put together one of the more efficient seasons at the position. Ladd McConkey is WR18 heading into 2026 in a pass-heavy offense. contracted at $14 in year 3 of 5 \u2014 $8 below curve, solid value.","14073":"Josh Jacobs continues to produce as the Packers' featured back, ranking RB13 heading into 2026. Solid floor every week in Green Bay's balanced offense. on the books at $54 in year 2 of 3 \u2014 $28 above curve, the most significant overpay on their roster.","17104":"The TE3 heading into 2026 after a standout rookie season in Chicago. Colston Loveland is widely regarded as one of the best values at the position going forward. contracted at $6 in year 2 of 6 \u2014 $15 below curve, exceptional long-term value.","16190":"The WR19 heading into 2026 in Baltimore's productive passing game. Zay Flowers provides consistent production and red-zone value in a balanced Ravens offense. contracted at $13 in year 4 of 6 \u2014 $7 below curve.","17070":"A standout rookie in Chicago's offense, Luther Burden is already the WR20 heading into year 2. One of the best value contracts in the league at $3 in year 2 of 6 \u2014 $17 below curve. Multi-year cost control available on a rising star.","15284":"Jaylen Waddle moved to Denver this offseason and is WR21 heading into 2026. Still only 26 years old, his receiving ability in space makes him dangerous in any scheme. contracted at $19 in year 2 of 3 \u2014 essentially at fair value.","12626":"Derrick Henry is still a force at RB14 heading into 2026, defying every age-related expectation in Baltimore. But at $53 in year 2 of 3, he's $31 above his market curve \u2014 one of the largest absolute overpays in the league. Vintage prices on the books for a player heading into his age-32 season.","15708":"Breece Hall remains one of the more dynamic backs in the league when healthy, ranking RB15 heading into 2026 in the Jets' improving offense. contracted at $26 in year 2 of 3 \u2014 $4 above curve, modest premium for the production.","14777":"The QB4 in fantasy, Joe Burrow remains one of the most dangerous quarterbacks in football when healthy. His injury history is the only concern. contracted at $14 in year 2 of 3 \u2014 $5 below curve, solid value if he stays on the field.","17081":"Tampa Bay's emerging WR1, Emeka Egbuka is the WR24 heading into year 2 and a prime breakout candidate. contracted at $13 in year 2 of 5 \u2014 $4 below curve, with four more years of control ahead.","15253":"Travis Etienne landed in New Orleans and has established himself as a reliable every-down back. RB16 heading into 2026. contracted at $13 in year 2 of 3 \u2014 $7 below curve, solid value.","15710":"Kyren Williams is the Rams' primary back and a consistent fantasy starter, ranking RB17 heading into 2026. contracted at $20 in year 5 of 6 \u2014 essentially at fair value with one year left after this.","11671":"Mike Evans is the WR25 heading into year 2 in San Francisco. Still a red-zone threat with reliable hands, but the age (33) and supporting cast questions in SF provide legitimate concerns. contracted at $8 in year 2 of 3 \u2014 $7 below curve, low-risk value.","15756":"Jameson Williams is WR26 heading into 2026 after a breakout season in Detroit. Big-play threat with elite speed. contracted at $29 in year 2 of 3 \u2014 $14 above curve, a real overpay unless the big plays keep coming.","16598":"Bucky Irving emerged as Tampa Bay's featured back and is RB19 heading into year 3. contracted at $14 in the final year of a 3-year deal \u2014 $3 below curve, modest value in a contract year.","16581":"The QB5 heading into 2026 after a strong third season in Washington. Jayden Daniels has elite dual-threat upside and three more years on a deal that costs just $14. Essentially market rate for a franchise quarterback \u2014 one of the better QB values in the league.","17102":"Tyler Warren is the Colts' young TE and already TE4 heading into year 2. contracted at $6 in year 2 of 5 \u2014 $9 below curve, significant value on a long-term contract for a player still ascending."};;;;
 const BLURBS_URL = 'https://raw.githubusercontent.com/migliopolis/Footballpalooza/main/players/blurbs.json';
 
 (async function loadBlurbs() {
@@ -3302,35 +3298,32 @@ const BLURBS_URL = 'https://raw.githubusercontent.com/migliopolis/Footballpalooz
   } catch(e) {}
 })();
 
-function getBlurb(playerId) { return playerBlurbs[playerId] || null; }
+function getBlurb(playerId) { return playerBlurbs[String(playerId)] || null; }
 
-let _blurbTip = null;
-function ensureBlurbTip() {
-  if (_blurbTip) return _blurbTip;
-  _blurbTip = document.createElement('div');
-  _blurbTip.style.cssText = 'position:fixed;z-index:9999;max-width:280px;background:#1a1d27;border:1px solid rgba(232,200,74,0.3);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.55;color:#c8d0e0;pointer-events:none;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.5);';
-  document.body.appendChild(_blurbTip);
-  return _blurbTip;
-}
-function showBlurbTip(e, text) {
-  const tip = ensureBlurbTip();
-  tip.textContent = text;
-  tip.style.display = 'block';
-  positionBlurbTip(e);
-}
-function positionBlurbTip(e) {
-  const tip = ensureBlurbTip();
-  const x = e.clientX + 14, y = e.clientY - 10;
-  const tipW = 280, tipH = tip.offsetHeight || 80;
-  tip.style.left = (x + tipW > window.innerWidth ? x - tipW - 28 : x) + 'px';
-  tip.style.top  = (y + tipH > window.innerHeight ? y - tipH : y) + 'px';
-}
-function hideBlurbTip() { ensureBlurbTip().style.display = 'none'; }
-function attachBlurbTip(el, playerId) {
-  el.addEventListener('mouseenter', e => { const b = getBlurb(playerId); if (b) showBlurbTip(e, b); });
-  el.addEventListener('mousemove', positionBlurbTip);
-  el.addEventListener('mouseleave', hideBlurbTip);
-}
+// Single document-level tooltip — no per-element listeners needed
+const _blurbTip = document.createElement('div');
+_blurbTip.style.cssText = 'position:fixed;z-index:9999;max-width:300px;background:#1a1d27;border:1px solid rgba(232,200,74,0.35);border-radius:9px;padding:10px 14px;font-size:11px;line-height:1.6;color:#c8d0e0;pointer-events:none;display:none;box-shadow:0 8px 28px rgba(0,0,0,0.55);';
+document.addEventListener('DOMContentLoaded', () => document.body.appendChild(_blurbTip));
+
+document.addEventListener('mouseover', e => {
+  const el = e.target.closest('[data-player-id]');
+  if (!el) { _blurbTip.style.display = 'none'; return; }
+  const b = getBlurb(el.getAttribute('data-player-id'));
+  if (!b) { _blurbTip.style.display = 'none'; return; }
+  _blurbTip.textContent = b;
+  _blurbTip.style.display = 'block';
+});
+document.addEventListener('mousemove', e => {
+  if (_blurbTip.style.display === 'none') return;
+  const x = e.clientX + 16, y = e.clientY - 12;
+  const tw = 300, th = _blurbTip.offsetHeight || 80;
+  _blurbTip.style.left = (x + tw > window.innerWidth  ? e.clientX - tw - 16 : x) + 'px';
+  _blurbTip.style.top  = (y + th > window.innerHeight ? e.clientY - th - 12 : y) + 'px';
+});
+document.addEventListener('mouseout', e => {
+  if (!e.target.closest('[data-player-id]')) _blurbTip.style.display = 'none';
+});
+function attachBlurbTip() {} // no-op — document delegation handles everything
 
 // ─── TRADE QUICK-LAUNCH ──────────────────────────────────────────────────────
 function openTradeWithPlayer(playerId, teamId, side) {
