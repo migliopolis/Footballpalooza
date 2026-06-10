@@ -969,8 +969,8 @@ function recomputeWaveFlagged() {
       if (!CURVES[p.pos] || !p.ecr || p.ecr >= 900) return;
       const {peak, startECR, k} = CURVES[p.pos];
       const curveVal = Math.max(1, peak * Math.exp(-k * (p.ecr - startECR)));
-      // Exact same formula as SVG wave rendering in drawMap
-      const overhead = maxSal * 3 * waveToleranceGlobal;
+      // Same formula as SVG wave: interpolate from chart top to curve
+      const overhead = maxSal * waveToleranceGlobal;
       const waveVal = curveVal + overhead;
       if (p.salary > waveVal) waveGlobalFlagged.add(p.id);
     });
@@ -6975,33 +6975,37 @@ function renderValueMap(container, data) {
   // Use global wave state so slider persists across tab switches
   let waveTolerance = waveToleranceGlobal;
   const waveRow = document.createElement('div');
-  waveRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:6px 12px;background:#1a1c22;border-radius:10px;border:1px solid #2a2d35;flex-wrap:wrap;';
+  waveRow.style.cssText = 'display:flex;align-items:center;gap:6px;padding:5px 10px;background:rgba(18,20,26,0.92);border-radius:8px;border:1px solid #2a2d35;backdrop-filter:blur(4px);width:fit-content;';
+
+  // Sync waveTolerance with stored slider position on rebuild
+  waveTolerance = 1 - (waveSliderValueGlobal / 100);
 
   const waveLbl = document.createElement('span');
-  waveLbl.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:0.8px;color:#ff4f4f;text-transform:uppercase;white-space:nowrap;';
+  waveLbl.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:0.8px;color:#ff4f4f;text-transform:uppercase;white-space:nowrap;flex-shrink:0;';
   waveLbl.textContent = '🌊 Release Wave';
   waveRow.appendChild(waveLbl);
 
+  // Slider takes all available space between label and controls
   const waveSlider = document.createElement('input');
   waveSlider.type = 'range';
   waveSlider.min = '0'; waveSlider.max = '100'; waveSlider.value = String(waveSliderValueGlobal);
-  waveSlider.style.cssText = 'width:140px;flex-shrink:0;accent-color:#ff4f4f;cursor:pointer;direction:rtl;';
+  waveSlider.style.cssText = 'width:90px;flex-shrink:0;accent-color:#ff4f4f;cursor:pointer;';
   waveRow.appendChild(waveSlider);
 
   const waveValLbl = document.createElement('span');
-  waveValLbl.style.cssText = 'font-size:11px;color:#9098a8;white-space:nowrap;min-width:60px;';
+  waveValLbl.style.cssText = 'font-size:11px;color:#9098a8;white-space:nowrap;min-width:52px;text-align:right;flex-shrink:0;';
   const _sv = waveSliderValueGlobal;
-  waveValLbl.textContent = _sv === 0 ? 'Off' : _sv === 100 ? 'Max Cut' : `${_sv}%`;
+  waveValLbl.textContent = _sv <= 0 ? 'Off' : _sv >= 100 ? 'Max Cut' : `${_sv}%`;
   waveRow.appendChild(waveValLbl);
 
   const waveCountLbl = document.createElement('span');
-  waveCountLbl.style.cssText = 'font-size:11px;font-weight:700;color:#ff4f4f;white-space:nowrap;';
+  waveCountLbl.style.cssText = 'font-size:11px;font-weight:700;color:#ff4f4f;white-space:nowrap;flex-shrink:0;';
   waveCountLbl.textContent = '';
   waveRow.appendChild(waveCountLbl);
 
   const releaseBtn = document.createElement('button');
   releaseBtn.textContent = '✂ Release Flagged';
-  releaseBtn.style.cssText = 'padding:4px 12px;font-size:11px;font-weight:700;border-radius:7px;border:1px solid rgba(255,79,79,0.5);background:rgba(255,79,79,0.12);color:#ff4f4f;cursor:pointer;display:none;white-space:nowrap;';
+  releaseBtn.style.cssText = 'padding:4px 12px;font-size:11px;font-weight:700;border-radius:7px;border:1px solid rgba(255,79,79,0.5);background:rgba(255,79,79,0.12);color:#ff4f4f;cursor:pointer;display:none;white-space:nowrap;flex-shrink:0;';
   waveRow.appendChild(releaseBtn);
 
   waveSlider.addEventListener('input', () => {
@@ -7010,9 +7014,6 @@ function renderValueMap(container, data) {
     waveToleranceGlobal = waveTolerance;
     waveSliderValueGlobal = v;
     recomputeWaveFlagged();
-    // Refresh visible pages so flags update immediately
-    if (typeof renderTable === 'function' && currentTeam) renderTable();
-    if (currentView === 'league' && typeof renderLeagueView === 'function') renderLeagueView();
     if (v === 0) {
       waveValLbl.textContent = 'Off';
     } else if (v === 100) {
@@ -7043,6 +7044,10 @@ Released players can be restored via the Roster page — select the team and cli
     // Reset wave globals
     waveToleranceGlobal = 1.0;
     waveSliderValueGlobal = 0;
+    waveTolerance = 1.0;
+    waveToleranceGlobal = 1.0;
+    waveSlider.value = '0';
+    waveValLbl.textContent = 'Off';
     waveGlobalFlagged.clear();
     waveLockedIds.clear();
     // Full analytics re-render so ranked array rebuilds fresh from updated allSelections
@@ -7051,7 +7056,7 @@ Released players can be restored via the Roster page — select the team and cli
     if (currentTeam) { updateCap(); renderTable(); renderLineup(); }
   });
 
-  container.appendChild(waveRow);
+  // waveRow will be overlaid on the map — appended after svgWrap exists
 
   // Helper: return flagged players from global set with metadata for confirmation dialog
   function getFlaggedPlayers() {
@@ -7075,9 +7080,18 @@ Released players can be restored via the Roster page — select the team and cli
   // ── Map + side panel wrapper ──
   const mapRow=document.createElement('div');
   mapRow.style.cssText='display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;';
+  const svgOuter=document.createElement('div');
+  svgOuter.style.cssText='flex:1;min-width:0;position:relative;';
   const svgWrap=document.createElement('div');
-  svgWrap.style.cssText='flex:1;min-width:0;';
-  mapRow.appendChild(svgWrap);
+  svgWrap.style.cssText='width:100%;';
+  // Overlay the wave slider in the top-left corner of the map
+  waveRow.style.position='absolute';
+  waveRow.style.top='6px';
+  waveRow.style.left='6px';
+  waveRow.style.zIndex='10';
+  svgOuter.appendChild(svgWrap);
+  svgOuter.appendChild(waveRow);
+  mapRow.appendChild(svgOuter);
   const sidePanel=document.createElement('div');
   sidePanel.style.cssText='width:190px;flex-shrink:0;background:#1a1c22;border:1px solid #2a2d35;border-radius:10px;padding:10px 0;overflow:visible;';
   if(window.innerWidth<=600){sidePanel.style.width='100%';sidePanel.style.flexShrink='1';}
@@ -7229,7 +7243,9 @@ Released players can be restored via the Roster page — select the team and cli
           // Scale overhead to maxSal*2 so wave descends full chart height over 0-100% slider
           // overhead = maxSal * 3 * tolerance so wave enters chart around 67% slider
           // and descends to curve at 100% — giving meaningful travel across full range
-          const overhead = maxSal * 3 * waveTolerance;
+          // Wave interpolates linearly from chart top (tolerance=1) to curve (tolerance=0)
+          // At slider=1% wave barely enters top-right; at 100% wave = market curve
+          const overhead = maxSal * waveTolerance;
           const waveVal = curveVal + overhead;
           if (waveVal > maxWaveY) maxWaveY = waveVal;
         });
