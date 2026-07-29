@@ -439,7 +439,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.10</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.11</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -718,9 +718,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.10</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.11</span>
           <span style="font-size:11px;color:var(--text3);">July 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Fixed a bug on the Roster (lineup) page where a rookie parked on the taxi squad was also being listed as a bench player at the same time — the bench list wasn't excluding taxi'd players. Each rookie now appears in exactly one place: bench or taxi, never both.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.10</span>
+          <span style="font-size:11px;color:var(--text3);">July 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Fixed Open/Max Bid not updating when moving a rookie from the active lineup onto the taxi squad — their starter slot wasn't being cleared, so a background validation check silently reverted the taxi assignment. Moving a player to taxi now correctly frees up the active roster spot they left behind.</p>
       </div>
@@ -1425,17 +1432,24 @@ function renderLineup() {
   // Set of IDs currently assigned to starter slots
   const startedIds = new Set(Object.values(assignments).filter(id => id !== ''));
 
-  // Bench = kept players not in any starter slot
-  const bench = kept.filter(p => !startedIds.has(p.id));
-  bench.sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
-
-  // Compute taxi state before rendering starters (needed for TX marker)
+  // Compute taxi state before building bench (a taxi'd rookie is still "kept"
+  // via `sel`, so it must be excluded here too or it renders as both a bench
+  // row and a taxi row at once).
   const taxiSlotIds = getTaxiAssignments(currentTeam);
   const taxiSet = new Set(taxiSlotIds.filter(Boolean));
   const currentTaxiIds = taxiSet;
 
-  // Bench rookies — drafted rookies NOT on taxi and NOT in starter slots
-  const benchRookies = draftedByTeam.filter(e => !taxiSet.has(e.player.id) && !startedIds.has(e.player.id));
+  // Bench = kept players not in any starter slot and not on taxi
+  const bench = kept.filter(p => !startedIds.has(p.id) && !taxiSet.has(p.id));
+  bench.sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
+
+  // Bench rookies — drafted rookies NOT on taxi and NOT in starter slots.
+  // (Rookies are already included in `kept`/`bench` above since they live in
+  // `sel` like any other player; this only adds ones NOT already covered —
+  // in practice none, since draftedByTeam is a subset of `kept` — kept only
+  // as a safety net in case a rookie isn't yet reflected in `sel`.)
+  const benchIds = new Set(bench.map(p => p.id));
+  const benchRookies = draftedByTeam.filter(e => !taxiSet.has(e.player.id) && !startedIds.has(e.player.id) && !benchIds.has(e.player.id));
 
   let html = '';
 
@@ -3165,7 +3179,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.10 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.11 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
