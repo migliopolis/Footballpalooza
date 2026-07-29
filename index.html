@@ -439,7 +439,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.9</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.10</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -718,9 +718,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.9</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.10</span>
           <span style="font-size:11px;color:var(--text3);">July 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Fixed Open/Max Bid not updating when moving a rookie from the active lineup onto the taxi squad — their starter slot wasn't being cleared, so a background validation check silently reverted the taxi assignment. Moving a player to taxi now correctly frees up the active roster spot they left behind.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.9</span>
+          <span style="font-size:11px;color:var(--text3);">July 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Rookie handling overhaul: keeping/cutting a drafted rookie now works exactly like any other roster player (no more separate behavior), and fixed a bug where cutting a rookie could render it twice on the Roster page. Cap sidebar no longer double-counts rookie salaries against the budget. Keepers now shows every kept player (rookies included, regardless of taxi status); Open now correctly reflects only the 18 active roster spots, excluding anyone parked on taxi. Same fix applied to the All Keepers page, which had the identical double-counting issue.</p>
       </div>
@@ -1565,7 +1572,22 @@ function onTaxiChange(slotIdx, playerId) {
   const oldId = assignments[slotIdx];
   if (oldId) { const p = teamPlayers.find(p => p.id === oldId); if (p && p.draftedPick) p.contract = '1/5'; }
   assignments[slotIdx] = playerId;
-  if (playerId) { const p = teamPlayers.find(p => p.id === playerId); if (p && p.draftedPick) p.contract = '1/6'; }
+  if (playerId) {
+    const p = teamPlayers.find(p => p.id === playerId);
+    if (p && p.draftedPick) p.contract = '1/6';
+    // A player can't be an active starter and on taxi at once — clear their
+    // starter slot here (getTaxiAssignments would otherwise treat this taxi
+    // assignment as invalid and silently revert it on the next render, since
+    // it never got cleared from the lineup).
+    const lineupAssign = lineupAssignments[currentTeam];
+    const overrides = manualOverrides[currentTeam];
+    for (const key in lineupAssign) {
+      if (lineupAssign[key] === playerId) {
+        lineupAssign[key] = '';
+        overrides.delete(key);
+      }
+    }
+  }
   renderLineup();
   renderTable();
   updateCap();
@@ -3143,7 +3165,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.9 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.10 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
