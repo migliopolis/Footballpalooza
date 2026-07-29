@@ -439,7 +439,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.6</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.7</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -718,9 +718,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.6</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.7</span>
           <span style="font-size:11px;color:var(--text3);">July 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Fixed the cap sidebar on the Roster page: Keepers and Open now correctly exclude rookies parked on the taxi squad and rookies you've cut, and both counts (plus Max Bid) refresh immediately when you move a player between the taxi squad and the active lineup.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.6</span>
+          <span style="font-size:11px;color:var(--text3);">July 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Fixed a bug on the Roster page where drafted rookies were being listed twice — once from the team roster and once from the drafted-rookies list. Each rookie now appears exactly once.</p>
       </div>
@@ -1208,16 +1215,19 @@ function updateCap() {
   const spent = keeperSpent + rookieSpent;
   const remain = t.cap - spent;
 
-  // Count bench rookies — drafted rookies not on taxi and not in starters
+  // Drafted rookies are merged directly into t.players (and so into `sel`,
+  // since every roster player starts out kept — see allSelections init).
+  // Rookies parked on taxi don't occupy an active roster spot, and rookies
+  // the owner has cut still show on the roster page but shouldn't count as
+  // filled either, so both need to be excluded here.
   const taxiIds = new Set((taxiAssignments[currentTeam] || []).filter(Boolean));
-  const starterIds = new Set(Object.values(lineupAssignments[currentTeam] || {}).filter(Boolean));
-  const draftedEntries = getDraftedPlayersByTeam(currentTeam);
-  const benchRookieCount = draftedEntries.filter(e =>
-    !taxiIds.has(e.player.id) && !starterIds.has(e.player.id)
-  ).length;
+  const rosteredRookies = getRosteredDraftRookies(currentTeam);
+  const releasedRookieIds = new Set(
+    rosteredRookies.filter(e => releasedDraftRookies.has(e.pickIdx)).map(e => e.player.id)
+  );
 
-  // Keepers kept + bench rookies = filled spots; taxi rookies don't count
-  const filledSpots = sel.size + benchRookieCount;
+  // Filled spots = kept players, minus rookies on taxi, minus cut rookies.
+  const filledSpots = [...sel].filter(id => !taxiIds.has(id) && !releasedRookieIds.has(id)).length;
   const openSpots = Math.max(0, ROSTER_SIZE - filledSpots);
 
   document.getElementById('capSpent').textContent = '$' + spent;
@@ -1330,6 +1340,7 @@ function onLineupChange(slotKey, newId) {
 
   renderLineup();
   renderTable();
+  updateCap();
 }
 
 function resetSelections() {
@@ -3115,7 +3126,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.6 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.7 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
