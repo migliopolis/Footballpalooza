@@ -439,7 +439,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.11</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.12</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -718,9 +718,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.11</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.12</span>
           <span style="font-size:11px;color:var(--text3);">July 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Removed the last of the old separate rookie-bench mechanism — bench rookies now use the exact same click-to-release and R-badge logic as veterans (this fixes an R badge that briefly disappeared for benched rookies after the previous fix). Verified with automated tests: releasing a rookie from the roster table or the bench both correctly remove them from the kept list with no visual duplicates left behind.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.11</span>
+          <span style="font-size:11px;color:var(--text3);">July 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Fixed a bug on the Roster (lineup) page where a rookie parked on the taxi squad was also being listed as a bench player at the same time — the bench list wasn't excluding taxi'd players. Each rookie now appears in exactly one place: bench or taxi, never both.</p>
       </div>
@@ -1439,17 +1446,11 @@ function renderLineup() {
   const taxiSet = new Set(taxiSlotIds.filter(Boolean));
   const currentTaxiIds = taxiSet;
 
-  // Bench = kept players not in any starter slot and not on taxi
+  // Bench = kept players not in any starter slot and not on taxi. Rookies are
+  // treated exactly like any other kept player here (they live in `sel` like
+  // veterans do) — no separate rookie-only bench list needed.
   const bench = kept.filter(p => !startedIds.has(p.id) && !taxiSet.has(p.id));
   bench.sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
-
-  // Bench rookies — drafted rookies NOT on taxi and NOT in starter slots.
-  // (Rookies are already included in `kept`/`bench` above since they live in
-  // `sel` like any other player; this only adds ones NOT already covered —
-  // in practice none, since draftedByTeam is a subset of `kept` — kept only
-  // as a safety net in case a rookie isn't yet reflected in `sel`.)
-  const benchIds = new Set(bench.map(p => p.id));
-  const benchRookies = draftedByTeam.filter(e => !taxiSet.has(e.player.id) && !startedIds.has(e.player.id) && !benchIds.has(e.player.id));
 
   let html = '';
 
@@ -1478,12 +1479,11 @@ function renderLineup() {
     </div>`;
   }
 
-  // Bench
-  const benchRookiePlayers = benchRookies.map(e => ({
-    ...e.player, salary: e.salary, _pickIdx: e.pickIdx, _isRookie: true
-  }));
-  const allBench = [...bench, ...benchRookiePlayers];
-  allBench.sort((a, b) => (a.ecr || 999) - (b.ecr || 999));
+  // Bench — rookies render exactly like veterans here: same toggle() click
+  // handler, same "click to release" tooltip. Only the R badge distinguishes
+  // them, driven by the player's own `rookie` flag rather than a separate
+  // rookie-only bench list.
+  const allBench = bench;
 
   html += `<div class="lineup-divider">Bench</div>`;
   const benchSlots = ROSTER_SIZE - STARTER_SLOTS.length; // 10
@@ -1491,16 +1491,14 @@ function renderLineup() {
     const p = allBench[i];
     const benchInfo = p
       ? (lineupDisplay === 'salary'
-          ? `${p.pos} · $${p.salary}${p._isRookie ? ' · ' + (taxiSet.has(p.id) ? '1/6' : '1/5') : ' · ' + p.contract}`
+          ? `${p.pos} · $${p.salary} · ${p.contract}`
           : `${p.posRank || p.pos} · OVR ${p.ecr < 999 ? p.ecr : '—'}`)
       : '';
-    const rBadge = p?._isRookie ? ` <span class="source-badge source-rookie">R</span>` : '';
+    const rBadge = p?.rookie ? ` <span class="source-badge source-rookie">R</span>` : '';
     html += `<div class="lineup-row">
       <span class="lineup-slot-label slot-B">B</span>
       ${p
-        ? p._isRookie
-          ? `<div class="bench-player" onclick="releaseDraftedRookie('${p._pickIdx}')" title="Click to release to FA pool">${p.name}${rBadge} <span style="color:var(--text3);font-size:10px;">${p.team} · ${benchInfo}</span></div>`
-          : `<div class="bench-player" onclick="toggle('${p.id}')" title="Click to release">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team} · ${benchInfo}</span></div>`
+        ? `<div class="bench-player" onclick="toggle('${p.id}')" title="Click to release">${p.name}${rBadge} <span style="color:var(--text3);font-size:10px;">${p.team} · ${benchInfo}</span></div>`
         : `<div class="bench-empty">—</div>`}
     </div>`;
   }
@@ -1510,14 +1508,12 @@ function renderLineup() {
     for (let i = benchSlots; i < allBench.length; i++) {
       const p = allBench[i];
       const benchInfo = lineupDisplay === 'salary'
-        ? `${p.pos} · $${p.salary}${p._isRookie ? ' · ' + (taxiSet.has(p.id) ? '1/6' : '1/5') : ' · ' + p.contract}`
+        ? `${p.pos} · $${p.salary} · ${p.contract}`
         : `${p.posRank || p.pos} · OVR ${p.ecr < 999 ? p.ecr : '—'}`;
-      const rBadge = p._isRookie ? ` <span class="source-badge source-rookie">R</span>` : '';
+      const rBadge = p.rookie ? ` <span class="source-badge source-rookie">R</span>` : '';
       html += `<div class="lineup-row">
         <span class="lineup-slot-label slot-B" style="opacity:0.5;">+</span>
-        ${p._isRookie
-          ? `<div class="bench-player" onclick="releaseDraftedRookie('${p._pickIdx}')" title="Click to release to FA pool" style="border-color:var(--orange);opacity:0.7;">${p.name}${rBadge} <span style="color:var(--text3);font-size:10px;">${p.team} · ${benchInfo}</span></div>`
-          : `<div class="bench-player" onclick="toggle('${p.id}')" title="Click to release" style="border-color:var(--orange);opacity:0.7;">${p.name} <span style="color:var(--text3);font-size:10px;">${p.team} · ${benchInfo}</span></div>`}
+        <div class="bench-player" onclick="toggle('${p.id}')" title="Click to release" style="border-color:var(--orange);opacity:0.7;">${p.name}${rBadge} <span style="color:var(--text3);font-size:10px;">${p.team} · ${benchInfo}</span></div>
       </div>`;
     }
   }
@@ -3179,7 +3175,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.11 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.12 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
