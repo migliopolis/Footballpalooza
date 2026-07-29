@@ -439,7 +439,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.5</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.6</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -718,9 +718,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.5</span>
-          <span style="font-size:11px;color:var(--text3);">June 2026</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.6</span>
+          <span style="font-size:11px;color:var(--text3);">July 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Fixed a bug on the Roster page where drafted rookies were being listed twice — once from the team roster and once from the drafted-rookies list. Each rookie now appears exactly once.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.5</span>
+          <span style="font-size:11px;color:var(--text3);">June 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Rounds 3 &amp; 4 locked in with actual draft results (all 48 picks locked). Trade corrections: 3.01 and 3.12 → MR. FROBOT; 4.05 → Hauk Tua via The Fist of the Magi; Tyler Allgeier moved to Jesus Christ College. All 48 drafted rookies on team rosters (taxi 1/6 contracts). Hauk Tua −$1 / The Fist of the Magi +$1 auction budget. Keeper deadline Aug 23 12pm EST. Mock draft removed — draft board is read-only. Taxi squad reads from roster; contracts update live.</p>
       </div>
@@ -1717,7 +1724,9 @@ function renderTable() {
   ];
   const draftedIds = new Set(draftedPlayers.map(p => p.id));
 
-  let players = [...t.players, ...draftedPlayers];
+  // t.players already contains drafted rookies once the draft locks them onto the
+  // roster, so exclude those ids here to avoid listing each rookie twice.
+  let players = [...t.players.filter(p => !draftedIds.has(p.id)), ...draftedPlayers];
   if (currentFilter !== 'ALL') players = players.filter(p => p.pos === currentFilter);
   players.sort((a, b) => {
     if (currentSort === 'pos') {
@@ -3106,7 +3115,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.5 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.6 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
