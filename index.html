@@ -448,7 +448,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.18</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.19</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -736,9 +736,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.18</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.19</span>
           <span style="font-size:11px;color:var(--text3);">August 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">New Career Stats card on the Player Page shows every season a player has on record — rushing/receiving/passing lines by year, position-specific columns, sourced live from ESPN. Like blurbs, this loads from a separate file (stats.json) so it doesn't bloat the main app, and quietly shows nothing for players without stats coverage yet (mostly true rookies with zero NFL games) rather than breaking. Initial coverage: ~140 of the most fantasy-relevant players, with more addable over time.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.18</span>
+          <span style="font-size:11px;color:var(--text3);">August 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Player Pages now show a real headshot photo next to the player's name, pulled from ESPN. Coverage is strongest for starters and rostered fantasy-relevant players (roughly 380 players have a photo mapped); deep bench and free-agent names without a match simply show no photo — nothing breaks, the layout just falls back cleanly.</p>
       </div>
@@ -1600,9 +1607,51 @@ function renderPlayerView(id) {
     <div style="font-size:13px;line-height:1.7;color:var(--text2);">${blurb}</div>
   </div>` : '';
 
-  // Order: quick facts live in the header · Scouting Report first (who is this player)
-  // · salary/roster context next · deeper analytics (value map, salary ladder) last
-  body.innerHTML = header + blurbCard + teamFitCard + contractCard + curveCard + ladderCard;
+  // ── Career Stats card — season-by-season, position-specific columns ──
+  const pStats = getStats(id);
+  let statsCard = '';
+  if (pStats && pStats.seasons && pStats.seasons.length) {
+    const seasons = pStats.seasons.slice().reverse(); // most recent season first
+    const statPos = pStats.pos || p.pos;
+    const dash = v => (v === undefined || v === null) ? '—' : v;
+    let cols, rows;
+    if (statPos === 'QB') {
+      cols = ['Year','GP','Cmp/Att','Pass Yds','Pass TD','INT','Rtg','Rush Yds','Rush TD'];
+      rows = seasons.map(s => {
+        const ps = s.pass || {}, rs = s.rush || {};
+        return [s.yr, dash(s.gp), (ps.cmp != null && ps.att != null) ? `${ps.cmp}/${ps.att}` : '—',
+          dash(ps.yds), dash(ps.td), dash(ps.int), dash(ps.rtg), dash(rs.yds), dash(rs.td)];
+      });
+    } else if (statPos === 'RB') {
+      cols = ['Year','GP','Att','Rush Yds','Avg','Rush TD','Rec','Rec Yds','Rec TD'];
+      rows = seasons.map(s => {
+        const rs = s.rush || {}, cs = s.rec || {};
+        return [s.yr, dash(s.gp), dash(rs.att), dash(rs.yds), dash(rs.avg), dash(rs.td), dash(cs.rec), dash(cs.yds), dash(cs.td)];
+      });
+    } else {
+      cols = ['Year','GP','Rec','Tgt','Rec Yds','Avg','Rec TD'];
+      rows = seasons.map(s => {
+        const cs = s.rec || {};
+        return [s.yr, dash(s.gp), dash(cs.rec), dash(cs.tgt), dash(cs.yds), dash(cs.avg), dash(cs.td)];
+      });
+    }
+    const headHtml = cols.map(c => `<th style="text-align:${c==='Year'?'left':'right'};padding:5px 8px;font-size:10px;color:var(--text3);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;">${c}</th>`).join('');
+    const bodyHtml = rows.map(r => `<tr>${r.map((v,i) => `<td style="text-align:${i===0?'left':'right'};padding:5px 8px;font-size:12px;color:${i===0?'var(--text)':'var(--text2)'};font-weight:${i===0?'600':'400'};white-space:nowrap;">${v}</td>`).join('')}</tr>`).join('');
+    statsCard = `<div class="pp-card">
+      <div class="pp-card-title">Career Stats</div>
+      <div style="overflow-x:auto;">
+        <table style="border-collapse:collapse;width:100%;min-width:${cols.length*66}px;">
+          <thead><tr>${headHtml}</tr></thead>
+          <tbody>${bodyHtml}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  // Order: quick facts live in the header · Scouting Report + Career Stats first (who is this
+  // player, what have they done) · salary/roster context next · deeper analytics (value map,
+  // salary ladder) last
+  body.innerHTML = header + blurbCard + statsCard + teamFitCard + contractCard + curveCard + ladderCard;
 }
 
 function selectTeam(tid) {
@@ -3562,7 +3611,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.18 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.19 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
@@ -3913,6 +3962,22 @@ const BLURBS_URL = 'https://raw.githubusercontent.com/migliopolis/Footballpalooz
 })();
 
 function getBlurb(playerId) { return playerBlurbs[String(playerId)] || null; }
+
+// ─── PLAYER CAREER STATS ─────────────────────────────────────────────────────
+// Loaded from a separate JSON file (same pattern as blurbs above) so career
+// stats can grow over time without bloating this HTML file. Falls back to no
+// stats shown if the fetch fails (offline, file not yet uploaded, etc).
+let playerStats = {};
+const STATS_URL = 'https://raw.githubusercontent.com/migliopolis/Footballpalooza/main/players/stats.json';
+
+(async function loadStats() {
+  try {
+    const res = await fetch(STATS_URL);
+    if (res.ok) playerStats = await res.json();
+  } catch(e) {}
+})();
+
+function getStats(playerId) { return playerStats[String(playerId)] || null; }
 
 // Single document-level tooltip — no per-element listeners needed
 const _blurbTip = document.createElement('div');
