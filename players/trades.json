@@ -1,0 +1,216 @@
+[
+  {
+    "date": "2023-09-26",
+    "season": 2023,
+    "teamA": "0001",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Former Player #15289"
+      },
+      {
+        "type": "pick",
+        "label": "2024 Round 4 pick (via Thots & Players)"
+      }
+    ],
+    "teamB": "0002",
+    "teamB_gave": [
+      {
+        "type": "pick",
+        "label": "2024 Round 2 pick (via Bullish on da Bears)"
+      }
+    ]
+  },
+  {
+    "date": "2023-10-26",
+    "season": 2023,
+    "teamA": "0007",
+    "teamA_gave": [],
+    "teamB": "0010",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Waller, Darren"
+      }
+    ]
+  },
+  {
+    "date": "2023-10-27",
+    "season": 2023,
+    "teamA": "0001",
+    "teamA_gave": [],
+    "teamB": "0012",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Goff, Jared"
+      }
+    ]
+  },
+  {
+    "date": "2023-10-31",
+    "season": 2023,
+    "teamA": "0001",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Goff, Jared"
+      }
+    ],
+    "teamB": "0010",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Burrow, Joe"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-01",
+    "season": 2023,
+    "teamA": "0004",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Former Player #14208"
+      }
+    ],
+    "teamB": "0003",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Stroud, CJ"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-02",
+    "season": 2023,
+    "teamA": "0002",
+    "teamA_gave": [
+      {
+        "type": "pick",
+        "label": "2024 Round 3 pick (via Bullish on da Bears)"
+      }
+    ],
+    "teamB": "0006",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Former Player #14799"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-02",
+    "season": 2023,
+    "teamA": "0004",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Former Player #14136"
+      }
+    ],
+    "teamB": "0011",
+    "teamB_gave": [
+      {
+        "type": "pick",
+        "label": "2024 Round 2 pick (via Wholey Club)"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-14",
+    "season": 2023,
+    "teamA": "0007",
+    "teamA_gave": [
+      {
+        "type": "pick",
+        "label": "2024 Round 3 pick (via MR. FROBOT)"
+      }
+    ],
+    "teamB": "0005",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Njoku, David"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-15",
+    "season": 2023,
+    "teamA": "0002",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Purdy, Brock"
+      }
+    ],
+    "teamB": "0005",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Swift, DAndre"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-29",
+    "season": 2023,
+    "teamA": "0008",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Allen, Josh"
+      }
+    ],
+    "teamB": "0003",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Flowers, Zay"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-30",
+    "season": 2023,
+    "teamA": "0008",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Stevenson, Rhamondre"
+      },
+      {
+        "type": "pick",
+        "label": "2024 Round 3 pick (via Son of Tinactin)"
+      }
+    ],
+    "teamB": "0012",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Reed, Jayden"
+      }
+    ]
+  },
+  {
+    "date": "2023-11-30",
+    "season": 2023,
+    "teamA": "0006",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Adams, Davante"
+      }
+    ],
+    "teamB": "0001",
+    "teamB_gave": [
+      {
+        "type": "pick",
+        "label": "2024 Round 2 pick (via Bullish on da Bears)"
+      }
+    ]
+  }
+]
