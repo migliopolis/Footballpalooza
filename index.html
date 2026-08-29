@@ -448,7 +448,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.24</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.25</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -736,9 +736,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.24</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.25</span>
           <span style="font-size:11px;color:var(--text3);">August 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Added the missing Hauk Tua → The Fist of the Magi $1 cash-for-pick trade (June 2026) to League Trade History. The Auction Budget Ledger now reconciles all 12 teams exactly against the $200 baseline with zero unexplained cash.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.24</span>
+          <span style="font-size:11px;color:var(--text3);">August 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">League Trade History replaced with the real, verified trade log — 13 trades from the Oct-Nov 2025 trade window, pulled directly from MFL records with players, picks, and auction cash all included ("Fairfax High School" resolved to Jesus Christ College's current name). New Auction Budget Ledger table on the Trades page reconciles each team's current auction budget against real cash trades, so the deviation from the $200 baseline is fully traceable — no more guessing where a team's cap number came from.</p>
       </div>
@@ -3682,7 +3689,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.24 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.25 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
