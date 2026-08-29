@@ -448,7 +448,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.23</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v2.24</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -736,11 +736,18 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.23</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v2.24</span>
           <span style="font-size:11px;color:var(--text3);">August 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
         </div>
-        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Full rankings refresh from FantasyPros (280 players updated) with movement indicators showing who rose or fell since the last update. Keeper deadline moved to Aug 30, 12pm EST. New League Trade History section on the Trades page — real completed trades pulled from MFL league records (2023 season so far, players/picks resolved to names), separate from the in-session Trade Simulator log above it.</p>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">League Trade History replaced with the real, verified trade log — 13 trades from the Oct-Nov 2025 trade window, pulled directly from MFL records with players, picks, and auction cash all included ("Fairfax High School" resolved to Jesus Christ College's current name). New Auction Budget Ledger table on the Trades page reconciles each team's current auction budget against real cash trades, so the deviation from the $200 baseline is fully traceable — no more guessing where a team's cap number came from.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v2.23</span>
+          <span style="font-size:11px;color:var(--text3);">August 2026</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Full rankings refresh from FantasyPros (280 players updated) with movement indicators showing who rose or fell since the last update. Keeper deadline moved to Aug 30, 12pm EST. New League Trade History section on the Trades page — real completed trades pulled from MFL league records, separate from the in-session Trade Simulator log above it.</p>
       </div>
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
@@ -1059,6 +1066,7 @@
         <span class="trade-log-title">LEAGUE TRADE HISTORY</span>
         <span style="font-size:11px;color:var(--text3);">Real trades, from league records</span>
       </div>
+      <div id="tradeBudgetLedger"></div>
       <div id="tradeHistoryList"><div class="trade-log-empty">Loading trade history…</div></div>
     </div>
   </div>
@@ -3674,7 +3682,7 @@ function renderHomePage() {
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v2.23 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v2.24 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
@@ -4060,18 +4068,18 @@ const HISTORY_URL = 'https://raw.githubusercontent.com/migliopolis/Footballpaloo
 function getTeamHistory(playerId) { return teamHistory[String(playerId)] || null; }
 
 // ─── LEAGUE TRADE HISTORY ──────────────────────────────────────────────────
-// Real completed trades pulled from MFL transaction logs (separate file, same
-// pattern as blurbs/stats/history). Currently covers the 2023 season only —
-// more seasons can be appended over time. Distinct from the in-session
-// "Trade Log" in the Trade Simulator above, which only tracks trades built
-// with that tool right now.
+// Real completed trades pulled directly from MFL league records (separate
+// file, same pattern as blurbs/stats/history). Covers the 2025-season trade
+// window (Oct-Nov 2025) ahead of the 2026 auction. Distinct from the
+// in-session "Trade Log" in the Trade Simulator above, which only tracks
+// trades built with that tool right now.
 let leagueTradeArchive = [];
 const TRADES_URL = 'https://raw.githubusercontent.com/migliopolis/Footballpalooza/main/players/trades.json';
 
 (async function loadLeagueTradeArchive() {
   try {
     const res = await fetch(TRADES_URL);
-    if (res.ok) { leagueTradeArchive = await res.json(); renderLeagueTradeArchive(); }
+    if (res.ok) { leagueTradeArchive = await res.json(); renderLeagueTradeArchive(); renderTradeBudgetLedger(); }
   } catch(e) {}
 })();
 
@@ -4083,8 +4091,10 @@ function renderLeagueTradeArchive() {
   el.innerHTML = sorted.map(t => {
     const teamA = LEAGUE_DATA.teams[t.teamA], teamB = LEAGUE_DATA.teams[t.teamB];
     const nameA = teamA ? teamA.name : t.teamA, nameB = teamB ? teamB.name : t.teamB;
+    const iconFor = i => i.type === 'cash' ? '💰' : (i.type === 'pick' ? '🎟️' : '👤');
+    const styleFor = i => i.type === 'cash' ? 'color:#2ecc71;font-weight:700;' : 'color:var(--text2);';
     const itemsHtml = items => items.length
-      ? items.map(i => `<div style="font-size:11.5px;color:var(--text2);padding:2px 0;">${i.type === 'pick' ? '🎟️' : '👤'} ${i.label}</div>`).join('')
+      ? items.map(i => `<div style="font-size:11.5px;${styleFor(i)}padding:2px 0;">${iconFor(i)} ${i.label}</div>`).join('')
       : '<div style="font-size:11.5px;color:var(--text3);padding:2px 0;">(nothing)</div>';
     return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:8px;">
       <div style="font-size:10px;color:var(--text3);margin-bottom:8px;">${t.date} · ${t.season} season</div>
@@ -4100,6 +4110,47 @@ function renderLeagueTradeArchive() {
       </div>
     </div>`;
   }).join('');
+}
+
+// Reconciles real auction-cash trades against each team's current auction
+// budget (LEAGUE_DATA.teams[tid].cap), so owners can see exactly why their
+// budget sits where it does relative to the $200 baseline.
+function renderTradeBudgetLedger() {
+  const el = document.getElementById('tradeBudgetLedger');
+  if (!el) return;
+  const BASELINE = 200;
+  const net = {};
+  leagueTradeArchive.forEach(t => {
+    (t.teamA_gave || []).forEach(i => { if (i.type === 'cash') { net[t.teamA] = (net[t.teamA] || 0) - i.amount; net[t.teamB] = (net[t.teamB] || 0) + i.amount; } });
+    (t.teamB_gave || []).forEach(i => { if (i.type === 'cash') { net[t.teamB] = (net[t.teamB] || 0) - i.amount; net[t.teamA] = (net[t.teamA] || 0) + i.amount; } });
+  });
+  const tids = Object.keys(LEAGUE_DATA.teams).sort((a,b) => (LEAGUE_DATA.teams[a].name||'').localeCompare(LEAGUE_DATA.teams[b].name||''));
+  const rows = tids.map(tid => {
+    const team = LEAGUE_DATA.teams[tid];
+    const cap = team.cap != null ? team.cap : BASELINE;
+    const delta = net[tid] || 0;
+    const expected = BASELINE + delta;
+    const untraced = cap - expected;
+    const deltaStr = delta === 0 ? '—' : (delta > 0 ? `+$${delta}` : `-$${Math.abs(delta)}`);
+    const untracedStr = untraced === 0 ? '' : ` <span style="color:var(--text3);">(${untraced > 0 ? '+' : ''}$${untraced} unexplained)</span>`;
+    return `<tr>
+      <td style="padding:5px 10px;font-size:11.5px;color:var(--text1);">${team.name}</td>
+      <td style="padding:5px 10px;font-size:11.5px;text-align:center;color:${delta === 0 ? 'var(--text3)' : (delta > 0 ? '#2ecc71' : '#e74c3c')};">${deltaStr}</td>
+      <td style="padding:5px 10px;font-size:11.5px;text-align:center;font-weight:700;color:var(--text1);">$${cap}${untracedStr}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML = `
+    <div style="font-size:11px;font-weight:700;color:var(--text2);margin:2px 0 6px;">AUCTION BUDGET LEDGER — $${BASELINE} baseline, adjusted by real cash trades above</div>
+    <div style="overflow-x:auto;margin-bottom:14px;">
+      <table style="width:100%;border-collapse:collapse;background:var(--surface2);border:1px solid var(--border);border-radius:9px;overflow:hidden;">
+        <thead><tr style="border-bottom:1px solid var(--border);">
+          <th style="padding:5px 10px;font-size:10px;text-align:left;color:var(--text3);">Team</th>
+          <th style="padding:5px 10px;font-size:10px;text-align:center;color:var(--text3);">Net Cash Traded</th>
+          <th style="padding:5px 10px;font-size:10px;text-align:center;color:var(--text3);">Current Budget</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
 }
 
 // Single document-level tooltip — no per-element listeners needed
