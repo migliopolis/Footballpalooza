@@ -272,5 +272,24 @@
         "label": "A.J. Brown (PHI WR)"
       }
     ]
+  },
+  {
+    "date": "2026-06-24",
+    "season": 2026,
+    "teamA": "0003",
+    "teamA_gave": [
+      {
+        "type": "cash",
+        "label": "$1 Auction Cash",
+        "amount": 1
+      }
+    ],
+    "teamB": "0005",
+    "teamB_gave": [
+      {
+        "type": "pick",
+        "label": "2026 Draft Pick 4.05 (own)"
+      }
+    ]
   }
 ]
