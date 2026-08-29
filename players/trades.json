@@ -1,215 +1,275 @@
 [
   {
-    "date": "2023-09-26",
-    "season": 2023,
-    "teamA": "0001",
+    "date": "2025-11-27",
+    "season": 2025,
+    "teamA": "0003",
     "teamA_gave": [
       {
         "type": "player",
-        "label": "Former Player #15289"
+        "label": "Audric Estime (NOS RB)"
       },
       {
-        "type": "pick",
-        "label": "2024 Round 4 pick (via Thots & Players)"
+        "type": "cash",
+        "label": "$2 Auction Cash (2026)",
+        "amount": 2
       }
     ],
-    "teamB": "0002",
+    "teamB": "0008",
     "teamB_gave": [
       {
-        "type": "pick",
-        "label": "2024 Round 2 pick (via Bullish on da Bears)"
+        "type": "player",
+        "label": "Cleveland Browns (DEF)"
       }
     ]
   },
   {
-    "date": "2023-10-26",
-    "season": 2023,
-    "teamA": "0007",
-    "teamA_gave": [],
-    "teamB": "0010",
-    "teamB_gave": [
-      {
-        "type": "player",
-        "label": "Waller, Darren"
-      }
-    ]
-  },
-  {
-    "date": "2023-10-27",
-    "season": 2023,
-    "teamA": "0001",
-    "teamA_gave": [],
-    "teamB": "0012",
-    "teamB_gave": [
-      {
-        "type": "player",
-        "label": "Goff, Jared"
-      }
-    ]
-  },
-  {
-    "date": "2023-10-31",
-    "season": 2023,
-    "teamA": "0001",
-    "teamA_gave": [
-      {
-        "type": "player",
-        "label": "Goff, Jared"
-      }
-    ],
-    "teamB": "0010",
-    "teamB_gave": [
-      {
-        "type": "player",
-        "label": "Burrow, Joe"
-      }
-    ]
-  },
-  {
-    "date": "2023-11-01",
-    "season": 2023,
-    "teamA": "0004",
-    "teamA_gave": [
-      {
-        "type": "player",
-        "label": "Former Player #14208"
-      }
-    ],
-    "teamB": "0003",
-    "teamB_gave": [
-      {
-        "type": "player",
-        "label": "Stroud, CJ"
-      }
-    ]
-  },
-  {
-    "date": "2023-11-02",
-    "season": 2023,
+    "date": "2025-11-26",
+    "season": 2025,
     "teamA": "0002",
     "teamA_gave": [
       {
+        "type": "player",
+        "label": "Tyjae Spears (TEN RB)"
+      },
+      {
         "type": "pick",
-        "label": "2024 Round 3 pick (via Bullish on da Bears)"
+        "label": "2027 Round 3 Pick (own)"
       }
     ],
     "teamB": "0006",
     "teamB_gave": [
       {
         "type": "player",
-        "label": "Former Player #14799"
+        "label": "Jalen Hurts (PHI QB)"
       }
     ]
   },
   {
-    "date": "2023-11-02",
-    "season": 2023,
+    "date": "2025-11-26",
+    "season": 2025,
+    "teamA": "0007",
+    "teamA_gave": [
+      {
+        "type": "pick",
+        "label": "2026 Round 3 Pick (own)"
+      },
+      {
+        "type": "cash",
+        "label": "$5 Auction Cash (2026)",
+        "amount": 5
+      }
+    ],
+    "teamB": "0004",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Joe Burrow (CIN QB)"
+      }
+    ]
+  },
+  {
+    "date": "2025-11-26",
+    "season": 2025,
+    "teamA": "0001",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Michael Penix Jr. (ATL QB)"
+      },
+      {
+        "type": "player",
+        "label": "Brian Thomas Jr. (JAC WR)"
+      },
+      {
+        "type": "pick",
+        "label": "2026 Round 1 Pick (via Hauk Tua)"
+      },
+      {
+        "type": "cash",
+        "label": "$8 Auction Cash (2026)",
+        "amount": 8
+      }
+    ],
+    "teamB": "0005",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Josh Allen (BUF QB)"
+      },
+      {
+        "type": "player",
+        "label": "Davante Adams (LAR WR)"
+      }
+    ]
+  },
+  {
+    "date": "2025-11-26",
+    "season": 2025,
+    "teamA": "0007",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Kenneth Gainwell (PIT RB)"
+      }
+    ],
+    "teamB": "0002",
+    "teamB_gave": [
+      {
+        "type": "pick",
+        "label": "2026 Round 2 Pick (via Wholey Club)"
+      }
+    ]
+  },
+  {
+    "date": "2025-11-25",
+    "season": 2025,
     "teamA": "0004",
     "teamA_gave": [
       {
         "type": "player",
-        "label": "Former Player #14136"
+        "label": "James Cook (BUF RB)"
       }
     ],
     "teamB": "0011",
     "teamB_gave": [
       {
         "type": "pick",
-        "label": "2024 Round 2 pick (via Wholey Club)"
+        "label": "2026 Round 1 Pick (own)"
+      },
+      {
+        "type": "pick",
+        "label": "2026 Round 3 Pick (own)"
+      },
+      {
+        "type": "cash",
+        "label": "$10 Auction Cash",
+        "amount": 10
       }
     ]
   },
   {
-    "date": "2023-11-14",
-    "season": 2023,
+    "date": "2025-11-18",
+    "season": 2025,
+    "teamA": "0009",
+    "teamA_gave": [
+      {
+        "type": "pick",
+        "label": "2026 Round 3 Pick (own)"
+      }
+    ],
+    "teamB": "0006",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Emanuel Wilson (GB RB)"
+      }
+    ]
+  },
+  {
+    "date": "2025-11-05",
+    "season": 2025,
     "teamA": "0007",
     "teamA_gave": [
       {
         "type": "pick",
-        "label": "2024 Round 3 pick (via MR. FROBOT)"
+        "label": "2026 Round 2 Pick (own)"
       }
     ],
-    "teamB": "0005",
+    "teamB": "0006",
     "teamB_gave": [
       {
         "type": "player",
-        "label": "Njoku, David"
+        "label": "DK Metcalf (PIT WR)"
       }
     ]
   },
   {
-    "date": "2023-11-15",
-    "season": 2023,
+    "date": "2025-11-05",
+    "season": 2025,
     "teamA": "0002",
     "teamA_gave": [
       {
         "type": "player",
-        "label": "Purdy, Brock"
-      }
-    ],
-    "teamB": "0005",
-    "teamB_gave": [
-      {
-        "type": "player",
-        "label": "Swift, DAndre"
-      }
-    ]
-  },
-  {
-    "date": "2023-11-29",
-    "season": 2023,
-    "teamA": "0008",
-    "teamA_gave": [
-      {
-        "type": "player",
-        "label": "Allen, Josh"
+        "label": "Travis Kelce (KC TE)"
       }
     ],
     "teamB": "0003",
     "teamB_gave": [
       {
         "type": "player",
-        "label": "Flowers, Zay"
+        "label": "Rhamondre Stevenson (NE RB)"
       }
     ]
   },
   {
-    "date": "2023-11-30",
-    "season": 2023,
+    "date": "2025-11-05",
+    "season": 2025,
+    "teamA": "0011",
+    "teamA_gave": [
+      {
+        "type": "pick",
+        "label": "2026 Round 2 Pick (own)"
+      }
+    ],
+    "teamB": "0002",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Kenneth Walker III (SEA RB)"
+      }
+    ]
+  },
+  {
+    "date": "2025-10-22",
+    "season": 2025,
     "teamA": "0008",
     "teamA_gave": [
       {
         "type": "player",
-        "label": "Stevenson, Rhamondre"
-      },
-      {
-        "type": "pick",
-        "label": "2024 Round 3 pick (via Son of Tinactin)"
+        "label": "Kayshon Boutte (NE WR)"
       }
     ],
-    "teamB": "0012",
+    "teamB": "0004",
     "teamB_gave": [
       {
         "type": "player",
-        "label": "Reed, Jayden"
+        "label": "Elic Ayomanor (TEN WR)"
       }
     ]
   },
   {
-    "date": "2023-11-30",
-    "season": 2023,
-    "teamA": "0006",
+    "date": "2025-10-21",
+    "season": 2025,
+    "teamA": "0007",
     "teamA_gave": [
       {
         "type": "player",
-        "label": "Adams, Davante"
+        "label": "Travis Kelce (KC TE)"
       }
     ],
-    "teamB": "0001",
+    "teamB": "0002",
     "teamB_gave": [
       {
         "type": "pick",
-        "label": "2024 Round 2 pick (via Bullish on da Bears)"
+        "label": "2027 Round 2 Pick (own)"
+      }
+    ]
+  },
+  {
+    "date": "2025-10-15",
+    "season": 2025,
+    "teamA": "0002",
+    "teamA_gave": [
+      {
+        "type": "pick",
+        "label": "2026 Round 1 Pick (own)"
+      }
+    ],
+    "teamB": "0008",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "A.J. Brown (PHI WR)"
       }
     ]
   }
