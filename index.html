@@ -448,7 +448,7 @@
 <body>
 <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
 <div class="header">
-  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v3.0</span></span></div>
+  <div class="header-title"><img src="logos/FBP_Logo_Gold.png" alt="Footballpalooza" style="height:36px;width:auto;vertical-align:middle;"> <span>2026 KEEPER BUILDER <span style="font-size:11px;color:var(--text3);letter-spacing:0.5px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;" onclick="setView('changelog')" title="View changelog">v3.1</span></span></div>
   <div class="header-controls">
     <div class="view-toggle" style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">
       <button class="view-btn active" onclick="setView('home')">🏠 Home</button>
@@ -464,7 +464,7 @@
     </div>
   </div>
 </div>
-<div id="draft-countdown-bar" style="background:linear-gradient(90deg,#12122a 0%,#1a1a35 100%);border-bottom:1px solid #2a2a4a;padding:5px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-size:11px;color:#8888aa;">&#128202; Rankings updated: <span style="color:#7ec8e3;font-weight:600;">August 28, 2026</span></div><div style="font-size:11px;color:#8888aa;">&#127944; FBP Keeper Deadline: <span id="draft-timer" style="color:#f0c040;font-weight:700;font-family:monospace;letter-spacing:1px;">loading...</span></div></div>
+<div id="draft-countdown-bar" style="background:linear-gradient(90deg,#12122a 0%,#1a1a35 100%);border-bottom:1px solid #2a2a4a;padding:5px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-size:11px;color:#8888aa;">&#128202; Rankings updated: <span style="color:#7ec8e3;font-weight:600;">August 28, 2026</span></div><div style="font-size:11px;color:#8888aa;">&#127944; 2026 Auction: <span id="draft-timer" style="color:#f0c040;font-weight:700;font-family:monospace;letter-spacing:1px;">loading...</span></div></div>
 
 <div id="guided-strip" style="display:none;"></div>
 <div id="homeView" style="display:none;position:absolute;inset:0;overflow-y:auto;z-index:10;background:var(--bg);"></div>
@@ -736,9 +736,16 @@
 
       <div style="margin-bottom:28px;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-          <span style="font-size:15px;font-weight:700;color:var(--accent);">v3.0</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);">v3.1</span>
           <span style="font-size:11px;color:var(--text3);">August 2026</span>
           <span style="font-size:10px;font-weight:600;padding:1px 8px;background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.3);border-radius:10px;color:var(--accent);">Current</span>
+        </div>
+        <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Countdown now points to the 2026 Auction — 12pm EST, Sep 6, 2026. Home page simplified: it's just a team picker now — pick your team and you're straight into the app. Removed "Simulate Off-Season" and "Sandbox Mode" as separate choices; there's only one way in.</p>
+      </div>
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+          <span style="font-size:15px;font-weight:700;color:var(--text2);">v3.0</span>
+          <span style="font-size:11px;color:var(--text3);">August 2026</span>
         </div>
         <p style="margin:0;color:var(--text2);font-size:12px;line-height:1.6;">Keeper day: every roster has been purged down to the final locked-in keepers — 154 players across 12 teams, everyone else moved to free agency. Released players keep their release history (prior team, salary, contract) so it's visible on their Player Page and in the Available page's CUT list — "why" and "at what cost" stays on the record instead of disappearing. Fixed a real bug along the way: kept defenses (Texans, Seahawks) were silently showing "—" instead of their actual salary on the Roster page, for every team, not just this one — now shows correctly. Also fixed the Roster page's POS column sort, which wasn't actually reversing order on a second click. All five sortable columns (Position, Overall, 2025 Pts, Salary, Contract) now toggle ascending/descending correctly.</p>
       </div>
@@ -3706,102 +3713,16 @@ function renderHomePage() {
       tile.addEventListener('click', () => {
         saveOffseasonState({ teamId: tid });
         selectTeam(tid);
-        document.querySelectorAll('.team-tile').forEach(t => t.classList.remove('selected'));
-        tile.classList.add('selected');
-        teamTitle.textContent = `Your Team: ${team.name}`;
-        // Update mode cards to be actionable
-        renderModeSection();
+        setView('roster');
       });
       grid.appendChild(tile);
     });
   wrap.appendChild(grid);
 
-  // ── Mode Cards ──
-  const modeWrap = document.createElement('div');
-  modeWrap.id = 'home-mode-section';
-  wrap.appendChild(modeWrap);
-
-  function renderModeSection() {
-    modeWrap.innerHTML = '';
-    const modeTitle = document.createElement('div');
-    modeTitle.className = 'home-section-title';
-    modeTitle.textContent = 'Choose Your Mode';
-    modeWrap.appendChild(modeTitle);
-
-    const cards = document.createElement('div');
-    cards.className = 'mode-cards';
-
-    // Simulate Off-Season card
-    const simCard = document.createElement('div');
-    simCard.className = 'mode-card mode-primary';
-    const _simPhoto = getRandomPhotoUrl();
-    simCard.innerHTML = `
-      ${_simPhoto ? `<img src="${_simPhoto}" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0.08;border-radius:13px;pointer-events:none;">` : ''}
-      <div class="mode-card-badge">GUIDED</div>
-      <div class="mode-card-icon">🏈</div>
-      <div class="mode-card-title">Simulate Off-Season</div>
-      <div class="mode-card-desc">Step-by-step guided walkthrough: rookie draft, keeper day, cut simulation, and league preview heading into the auction.</div>
-    `;
-    simCard.addEventListener('click', () => {
-      if (!state.teamId && !getOffseasonState().teamId) {
-        alert('Pick your team first!');
-        return;
-      }
-      saveOffseasonState({ mode: 'guided' });
-      renderOffseasonProgress(wrap);
-    });
-
-    // Sandbox card
-    const sandCard = document.createElement('div');
-    sandCard.className = 'mode-card';
-    // Pick a different photo than the sim card
-    let _sandPhoto = getRandomPhotoUrl();
-    if (_sandPhoto && _simPhoto === _sandPhoto && PLAYER_PHOTO_FILES.length > 1) {
-      while (_sandPhoto === _simPhoto) _sandPhoto = getRandomPhotoUrl();
-    }
-    sandCard.innerHTML = `
-      ${_sandPhoto ? `<img src="${_sandPhoto}" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0.08;border-radius:13px;pointer-events:none;">` : ''}
-      <div class="mode-card-icon">🔧</div>
-      <div class="mode-card-title">Sandbox Mode</div>
-      <div class="mode-card-desc">Jump straight into the tools. Full access to every feature — rosters, trades, draft, analytics — no guided steps.</div>
-    `;
-    sandCard.addEventListener('click', () => {
-      saveOffseasonState({ mode: 'sandbox' });
-      const tid = getOffseasonState().teamId;
-      if (tid) selectTeam(tid);
-      setView('roster');
-    });
-
-    cards.appendChild(simCard);
-    cards.appendChild(sandCard);
-    modeWrap.appendChild(cards);
-
-    // Resume / Restart buttons if in progress
-    const s = getOffseasonState();
-    if (s.mode === 'guided' && s.lastVisited) {
-      const resumeBtn = document.createElement('button');
-      resumeBtn.className = 'home-resume-btn';
-      resumeBtn.textContent = '↩ Resume Off-Season In Progress';
-      resumeBtn.addEventListener('click', () => renderOffseasonProgress(wrap));
-      modeWrap.appendChild(resumeBtn);
-
-      const restartBtn = document.createElement('button');
-      restartBtn.style.cssText = 'margin-top:8px;width:100%;max-width:760px;padding:9px;border-radius:10px;border:1px solid rgba(255,79,79,0.3);background:transparent;color:#ff4f4f;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;font-family:inherit;';
-      restartBtn.textContent = '↺ Restart Off-Season';
-      restartBtn.addEventListener('click', () => {
-        if (!confirm('Restart the off-season? This clears all guided progress (draft, keepers locked, cuts) but keeps your roster selections.')) return;
-        saveOffseasonState({ mode: null, phase: 'pre-draft', draftComplete: false, keepersLocked: false, cutsSimulated: false, previewViewed: false, lastVisited: null });
-        renderHomePage();
-      });
-      modeWrap.appendChild(restartBtn);
-    }
-  }
-
-  renderModeSection();
   // Version footer
   const vFooter = document.createElement('div');
   vFooter.style.cssText = 'margin-top:32px;font-size:10px;color:#3a3f4a;letter-spacing:1px;text-align:center;cursor:pointer;';
-  vFooter.textContent = 'v3.0 · Footballpalooza Keeper Builder';
+  vFooter.textContent = 'v3.1 · Footballpalooza Keeper Builder';
   vFooter.title = 'View changelog';
   vFooter.addEventListener('click', () => setView('changelog'));
   wrap.appendChild(vFooter);
@@ -6500,13 +6421,13 @@ function cancelAuctionEdit(pid) {
 </footer>
 <script>
 (function() {
-  var draftTime = new Date('2026-08-30T16:00:00Z'); // Aug 30 12pm EST = 16:00 UTC
+  var draftTime = new Date('2026-09-06T16:00:00Z'); // Sep 6 12pm EST = 16:00 UTC
   function updateTimer() {
     var el = document.getElementById('draft-timer');
     if (!el) return;
     var diff = draftTime - new Date();
     if (diff <= 0) {
-      el.textContent = 'KEEPER DAY!';
+      el.textContent = 'AUCTION DAY!';
       el.style.color = '#00ff88';
       return;
     }
