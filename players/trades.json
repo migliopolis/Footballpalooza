@@ -291,5 +291,32 @@
         "label": "2026 Draft Pick 4.05 (own)"
       }
     ]
+  },
+  {
+    "date": "2026-08-30",
+    "season": 2026,
+    "teamA": "0008",
+    "teamA_gave": [
+      {
+        "type": "player",
+        "label": "Isaiah Likely (NYG TE)"
+      },
+      {
+        "type": "pick",
+        "label": "2027 Round 3 Pick (own)"
+      },
+      {
+        "type": "cash",
+        "label": "$3 Auction Cash (2026)",
+        "amount": 3
+      }
+    ],
+    "teamB": "0006",
+    "teamB_gave": [
+      {
+        "type": "player",
+        "label": "Jonathon Brooks (CAR RB)"
+      }
+    ]
   }
 ]
