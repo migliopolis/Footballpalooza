@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FBP Rookie Pricer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}
+/* Layout: sticky control bar (pick + filters), then a single-column board of priced rookies; tapping a row expands its detail in place. */
+:root{
+  --bg:#f5f6f3; --surface:#ffffff; --fg:#1d2420; --muted:#5d6862; --line:#d9ded9;
+  --accent:#2f6b4f; --accent-soft:#e3efe8; --chip:#eef1ec; --warn:#8a5a12;
+  --qb:#7a4fa0; --rb:#2f6b4f; --wr:#1f5f8b; --te:#9a5b1e;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141917; --surface:#1b211e; --fg:#e4e9e5; --muted:#99a49e; --line:#2d3531;
+  --accent:#7cc39f; --accent-soft:#22362c; --chip:#232b27; --warn:#e0b45a;
+  --qb:#c39be6; --rb:#7cc39f; --wr:#7fb6e0; --te:#e3a467; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141917; --surface:#1b211e; --fg:#e4e9e5; --muted:#99a49e; --line:#2d3531;
+  --accent:#7cc39f; --accent-soft:#22362c; --chip:#232b27; --warn:#e0b45a;
+  --qb:#c39be6; --rb:#7cc39f; --wr:#7fb6e0; --te:#e3a467; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 40px;display:flex;flex-direction:column;gap:14px}
+header h1{font-family:var(--display);font-weight:700;font-size:2rem;margin:0;letter-spacing:.01em}
+.status{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:.85rem;margin-top:2px}
+.badge{font:600 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:var(--chip);color:var(--warn)}
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
+.pickrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pickrow label{font:600 .75rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.stepper button{border:0;background:transparent;color:var(--fg);font:600 1.2rem var(--body);width:40px;height:40px;cursor:pointer}
+.stepper button:disabled{opacity:.35;cursor:default}
+.stepper select{border:0;background:transparent;color:var(--fg);font:700 1.35rem var(--display);height:40px;padding:0 6px;cursor:pointer;text-align:center}
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .82rem var(--body);padding:5px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.filters input,.filters select{font:400 .9rem var(--body);padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);min-width:0}
+.filters input{flex:1 1 140px}
+button:focus-visible,select:focus-visible,input:focus-visible,.row:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.board{display:flex;flex-direction:column;gap:6px}
+.row{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;cursor:pointer}
+.row.gone{opacity:.55}
+.pos{font:600 .72rem var(--mono);padding:3px 6px;border-radius:4px;color:var(--bg);min-width:2.4em;text-align:center}
+.pos.QB{background:var(--qb)}.pos.RB{background:var(--rb)}.pos.WR{background:var(--wr)}.pos.TE{background:var(--te)}
+.who{min-width:0}
+.who b{font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who span{color:var(--muted);font-size:.82rem}
+.price{font:700 1.7rem var(--display);font-variant-numeric:tabular-nums;text-align:right}
+.detail{grid-column:1 / -1;border-top:1px solid var(--line);margin-top:8px;padding-top:10px;display:flex;flex-direction:column;gap:12px;cursor:default}
+.detail h3{font:600 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.math{font:400 .85rem var(--mono);overflow-x:auto;white-space:nowrap;background:var(--chip);padding:8px 10px;border-radius:6px}
+.years{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center;font-variant-numeric:tabular-nums}
+.years div{background:var(--chip);border-radius:6px;padding:6px 2px}
+.years small{display:block;color:var(--muted);font-size:.72rem}
+.years b{font:700 1.15rem var(--display)}
+.strip{overflow-x:auto}
+.strip table{border-collapse:collapse;font:400 .78rem var(--mono);font-variant-numeric:tabular-nums}
+.strip th,.strip td{padding:3px 5px;text-align:center;border:1px solid var(--line);white-space:nowrap}
+.strip th{color:var(--muted);font-weight:500}
+.strip .me{background:var(--accent-soft);font-weight:600;color:var(--fg)}
+.hint{color:var(--muted);font-size:.82rem}
+.empty,.error{color:var(--muted);text-align:center;padding:24px 8px}
+footer{color:var(--muted);font-size:.8rem;max-width:65ch}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>FBP Rookie Pricer</h1>
+    <div class="status"><span class="badge" id="mode">Projected</span><span id="asof">Loading players…</span></div>
+  </header>
+
+  <div class="controls">
+    <div class="pickrow">
+      <label for="pick">Your pick</label>
+      <div class="stepper">
+        <button id="prev" aria-label="Previous pick">−</button>
+        <select id="pick"></select>
+        <button id="next" aria-label="Next pick">+</button>
+      </div>
+      <span class="hint" id="pickhint"></span>
+    </div>
+    <div class="filters" role="group" aria-label="Filter by position">
+      <button class="chip" data-pos="ALL" aria-pressed="true">All</button>
+      <button class="chip" data-pos="QB" aria-pressed="false">QB</button>
+      <button class="chip" data-pos="RB" aria-pressed="false">RB</button>
+      <button class="chip" data-pos="WR" aria-pressed="false">WR</button>
+      <button class="chip" data-pos="TE" aria-pressed="false">TE</button>
+      <select id="sort" aria-label="Sort">
+        <option value="adp">Mock order</option>
+        <option value="price">Price, high to low</option>
+        <option value="nfl">NFL pick</option>
+      </select>
+      <input id="q" type="search" placeholder="Search players" aria-label="Search players">
+    </div>
+  </div>
+
+  <div class="board" id="board"><div class="empty">Loading…</div></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+let CFG=null, DATA=null, slot=6, posFilter='ALL', sortBy='adp', query='', open=null;
+try{const s=+localStorage.getItem('fbp-pricer-slot'); if(s>=0&&s<24) slot=s;}catch(e){}
+
+const slotLabel=i=>`${Math.floor(i/12)+1}.${String(i%12+1).padStart(2,'0')}`;
+const nflLabel=p=>p>=CFG.undraftedPick?'Undrafted':`${Math.ceil(p/32)}.${String((p-1)%32+1).padStart(2,'0')}`;
+function interp(a,p){
+  if(p<=a[0][0]) return a[0][1];
+  if(p>=a[a.length-1][0]) return a[a.length-1][1];
+  for(let i=0;i<a.length-1;i++){const[p0,f0]=a[i],[p1,f1]=a[i+1]; if(p<=p1) return f0+(f1-f0)*(p-p0)/(p1-p0);}
+}
+function price(pl,i){
+  const c=CFG.positions[pl.pos]; const nf=interp(c.nfl,pl.nflPick||CFG.undraftedPick); const ff=c.fbp[i];
+  const raw=c.max*nf*ff; return {nf,ff,raw,max:c.max,val:Math.max(CFG.minimumRounds1to2,Math.floor(raw+0.5))};
+}
+function contract(start){let s=start,out=[s];CFG.escalators.forEach(e=>{s+=e;out.push(s)});return out;}
+
+function render(){
+  document.getElementById('pick').value=slot;
+  document.getElementById('prev').disabled=slot===0;
+  document.getElementById('next').disabled=slot===23;
+  document.getElementById('pickhint').textContent=`Prices below are what each player costs if you take him at ${slotLabel(slot)}.`;
+  let list=DATA.players.filter(p=>(posFilter==='ALL'||p.pos===posFilter)&&(!query||p.name.toLowerCase().includes(query)));
+  const pr=new Map(list.map(p=>[p,price(p,slot)]));
+  if(sortBy==='price') list.sort((a,b)=>pr.get(b).val-pr.get(a).val||a.adp-b.adp);
+  else if(sortBy==='nfl') list.sort((a,b)=>a.nflPick-b.nflPick);
+  else list.sort((a,b)=>a.adp-b.adp);
+  const board=document.getElementById('board');
+  if(!list.length){board.innerHTML='<div class="empty">No players match. Clear the search or pick another position.</div>';return;}
+  board.innerHTML=list.map(p=>{
+    const r=pr.get(p), gone=p.adp<slot+1-1.5, isOpen=open===p.name;
+    return `<div class="row${gone?' gone':''}" tabindex="0" data-name="${p.name.replace(/"/g,'&quot;')}" aria-expanded="${isOpen}">
+      <span class="pos ${p.pos}">${p.pos}</span>
+      <div class="who"><b>${p.name}</b><span>${p.school} · NFL ${nflLabel(p.nflPick)} · Mock ${p.adp<=24?slotLabel(Math.round(p.adp)-1):'3rd rd+'}${gone?' · usually gone by your pick':''}</span></div>
+      <span class="price">$${r.val}</span>
+      ${isOpen?detail(p,r):''}
+    </div>`;}).join('');
+}
+function detail(p,r){
+  const c=contract(r.val);
+  const strip=[...Array(24)].map((_,i)=>price(p,i).val);
+  const floor=r.raw<CFG.minimumRounds1to2-0.5?` → $${CFG.minimumRounds1to2} minimum`:'';
+  const head=strip.map((_,i)=>`<th${i===slot?' class="me"':''}>${slotLabel(i)}</th>`).join('');
+  const cells=strip.map((v,i)=>`<td${i===slot?' class="me"':''}>$${v}</td>`).join('');
+  return `<div class="detail">
+    <div><h3>How the price is set</h3><div class="math">$${r.max} max × ${r.nf.toFixed(3)} (NFL ${nflLabel(p.nflPick)}) × ${r.ff.toFixed(3)} (FBP ${slotLabel(slot)}) = ${r.raw.toFixed(2)}${floor} → $${r.val}</div></div>
+    <div><h3>5-year rookie contract</h3><div class="years">${c.map((v,i)=>`<div><small>Year ${i+1}</small><b>$${v}</b></div>`).join('')}</div></div>
+    <div><h3>His price at every pick</h3><div class="strip"><table><tr>${head}</tr><tr>${cells}</tr></table></div></div>
+  </div>`;
+}
+function toggle(row){if(!row||!row.dataset.name) return; open=open===row.dataset.name?null:row.dataset.name; render();}
+
+async function init(){
+  try{
+    const [cfg,data]=await Promise.all([fetch('pricing.json').then(r=>{if(!r.ok)throw 0;return r.json()}),fetch('players.json').then(r=>{if(!r.ok)throw 0;return r.json()})]);
+    CFG=cfg; DATA=data;
+  }catch(e){document.getElementById('board').innerHTML='<div class="error">The player list didn’t load. Refresh the page to try again.</div>';return;}
+  const sel=document.getElementById('pick');
+  sel.innerHTML=[...Array(24)].map((_,i)=>`<option value="${i}">${slotLabel(i)}</option>`).join('');
+  document.getElementById('mode').textContent=DATA.mode==='final'?'Final':'Projected';
+  const d=new Date(DATA.asOf+'T12:00:00');
+  document.getElementById('asof').textContent=`${DATA.season} rookie class · updated ${d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · ${DATA.players.length} players`;
+  document.getElementById('foot').textContent=(DATA.mode==='final'?'':'Projected prices use mock-draft estimates of each player’s NFL pick and will change after the NFL draft. ')+'Price = position max × NFL factor × FBP factor, with a $3 minimum in rounds 1–2. Contract years add $3, $6, $9 and $12.';
+  sel.onchange=()=>{slot=+sel.value;save();render();};
+  document.getElementById('prev').onclick=()=>{if(slot>0){slot--;save();render();}};
+  document.getElementById('next').onclick=()=>{if(slot<23){slot++;save();render();}};
+  document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{posFilter=b.dataset.pos;document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));render();});
+  document.getElementById('sort').onchange=e=>{sortBy=e.target.value;render();};
+  document.getElementById('q').oninput=e=>{query=e.target.value.trim().toLowerCase();render();};
+  const board=document.getElementById('board');
+  board.addEventListener('click',e=>{if(e.target.closest('.detail'))return;toggle(e.target.closest('.row'));});
+  board.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('row')){e.preventDefault();toggle(e.target);}});
+  render();
+}
+function save(){try{localStorage.setItem('fbp-pricer-slot',slot)}catch(e){}}
+init();
+</script>
+</body>
+</html>

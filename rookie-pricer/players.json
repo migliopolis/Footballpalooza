@@ -1,0 +1,225 @@
+{
+ "season": 2027,
+ "mode": "projected",
+ "asOf": "2026-10-19",
+ "note": "NFL picks are projections averaged from FanSided, Sharp Football and CBS Sports mocks plus the PFF big board. Rookie-draft order (adp) is averaged from RotoBaller, DLF and RotoStreetJournal superflex mocks. Replace nflPick with the real overall pick after the NFL draft.",
+ "players": [
+  {
+   "name": "Jeremiah Smith",
+   "pos": "WR",
+   "school": "Ohio State",
+   "adp": 1.0,
+   "nflPick": 2
+  },
+  {
+   "name": "Arch Manning",
+   "pos": "QB",
+   "school": "Texas",
+   "adp": 3.7,
+   "nflPick": 1
+  },
+  {
+   "name": "Cam Coleman",
+   "pos": "WR",
+   "school": "Texas",
+   "adp": 4.3,
+   "nflPick": 6
+  },
+  {
+   "name": "Dante Moore",
+   "pos": "QB",
+   "school": "Oregon",
+   "adp": 6.3,
+   "nflPick": 6
+  },
+  {
+   "name": "Ahmad Hardy",
+   "pos": "RB",
+   "school": "Missouri",
+   "adp": 8.0,
+   "nflPick": 24
+  },
+  {
+   "name": "Charlie Becker",
+   "pos": "WR",
+   "school": "Indiana",
+   "adp": 9.0,
+   "nflPick": 32
+  },
+  {
+   "name": "Jadan Baugh",
+   "pos": "RB",
+   "school": "Florida",
+   "adp": 9.0,
+   "nflPick": 40
+  },
+  {
+   "name": "Julian Sayin",
+   "pos": "QB",
+   "school": "Ohio State",
+   "adp": 9.7,
+   "nflPick": 26
+  },
+  {
+   "name": "CJ Carr",
+   "pos": "QB",
+   "school": "Notre Dame",
+   "adp": 11.0,
+   "nflPick": 27
+  },
+  {
+   "name": "Nick Marsh",
+   "pos": "WR",
+   "school": "Indiana",
+   "adp": 11.7,
+   "nflPick": 50
+  },
+  {
+   "name": "Ryan Coleman-Williams",
+   "pos": "WR",
+   "school": "Alabama",
+   "adp": 12.0,
+   "nflPick": 36
+  },
+  {
+   "name": "Darian Mensah",
+   "pos": "QB",
+   "school": "Miami",
+   "adp": 13.3,
+   "nflPick": 28
+  },
+  {
+   "name": "Kewan Lacy",
+   "pos": "RB",
+   "school": "Ole Miss",
+   "adp": 13.3,
+   "nflPick": 38
+  },
+  {
+   "name": "Nate Frazier",
+   "pos": "RB",
+   "school": "Georgia",
+   "adp": 14.7,
+   "nflPick": 111
+  },
+  {
+   "name": "Jamari Johnson",
+   "pos": "TE",
+   "school": "Oregon",
+   "adp": 16.7,
+   "nflPick": 28
+  },
+  {
+   "name": "KJ Duff",
+   "pos": "WR",
+   "school": "Rutgers",
+   "adp": 17.0,
+   "nflPick": 32
+  },
+  {
+   "name": "Trey'Dez Green",
+   "pos": "TE",
+   "school": "LSU",
+   "adp": 17.7,
+   "nflPick": 28
+  },
+  {
+   "name": "Bryant Wesco Jr.",
+   "pos": "WR",
+   "school": "Clemson",
+   "adp": 20.7,
+   "nflPick": 103
+  },
+  {
+   "name": "Drew Mestemaker",
+   "pos": "QB",
+   "school": "Oklahoma State",
+   "adp": 20.7,
+   "nflPick": 20
+  },
+  {
+   "name": "Jayden Maiava",
+   "pos": "QB",
+   "school": "USC",
+   "adp": 22.7,
+   "nflPick": 57
+  },
+  {
+   "name": "Justice Haynes",
+   "pos": "RB",
+   "school": "Georgia Tech",
+   "adp": 23.3,
+   "nflPick": 120
+  },
+  {
+   "name": "Mario Craver",
+   "pos": "WR",
+   "school": "Texas A&M",
+   "adp": 23.3,
+   "nflPick": 66
+  },
+  {
+   "name": "Isaac Brown",
+   "pos": "RB",
+   "school": "Louisville",
+   "adp": 24.0,
+   "nflPick": 113
+  },
+  {
+   "name": "Mark Fletcher Jr.",
+   "pos": "RB",
+   "school": "Miami",
+   "adp": 25.7,
+   "nflPick": 33
+  },
+  {
+   "name": "Trinidad Chambliss",
+   "pos": "QB",
+   "school": "Ole Miss",
+   "adp": 25.7,
+   "nflPick": 40
+  },
+  {
+   "name": "Deuce Alexander",
+   "pos": "WR",
+   "school": "Ole Miss",
+   "adp": 26.0,
+   "nflPick": 120
+  },
+  {
+   "name": "LaNorris Sellers",
+   "pos": "QB",
+   "school": "South Carolina",
+   "adp": 26.7,
+   "nflPick": 48
+  },
+  {
+   "name": "TJ Moore",
+   "pos": "WR",
+   "school": "Clemson",
+   "adp": 27.3,
+   "nflPick": 120
+  },
+  {
+   "name": "Ryan Wingo",
+   "pos": "WR",
+   "school": "Texas",
+   "adp": 27.7,
+   "nflPick": 56
+  },
+  {
+   "name": "Duce Robinson",
+   "pos": "WR",
+   "school": "Florida State",
+   "adp": 28.0,
+   "nflPick": 42
+  },
+  {
+   "name": "Omarion Miller",
+   "pos": "WR",
+   "school": "Arizona State",
+   "adp": 28.0,
+   "nflPick": 78
+  }
+ ]
+}
