@@ -2,7 +2,7 @@
  "season": 2027,
  "mode": "projected",
  "asOf": "2026-10-19",
- "note": "NFL picks are projections averaged from FanSided, Sharp Football and CBS Sports mocks plus the PFF big board. Rookie-draft order (adp) is averaged from RotoBaller, DLF and RotoStreetJournal superflex mocks. Replace nflPick with the real overall pick after the NFL draft.",
+ "note": "NFL picks are projections averaged from FanSided first-round mock, Sharp Football too-early mock, CBS Sports mock 4.0 (via SportsGrid) plus the PFF early top 150. Rookie-draft order (adp) is averaged from RotoBaller superflex mock, RotoStreetJournal 2-round superflex mock, DLF superflex mock (round 1 only).",
  "players": [
   {
    "name": "Jeremiah Smith",
