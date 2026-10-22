@@ -1,0 +1,899 @@
+{
+ "note": "FBP rookie drafts, rounds 1-2. paid = salary under the scale in force that year (2021-23 pick-based: 45/37/30/25/20/16/12/10/8/7/6/5, then $4 for 2.01-2.06 and $3 for 2.07-2.12; 2024-26 positional scale, from the salary records). nflPick = overall NFL draft pick (260 = undrafted).",
+ "years": {
+  "2021": {
+   "scale": "pick-based scale",
+   "picks": [
+    {
+     "name": "Najee Harris",
+     "pos": "RB",
+     "nflPick": 24,
+     "paid": 45
+    },
+    {
+     "name": "Javonte Williams",
+     "pos": "RB",
+     "nflPick": 35,
+     "paid": 37
+    },
+    {
+     "name": "Travis Etienne",
+     "pos": "RB",
+     "nflPick": 25,
+     "paid": 30
+    },
+    {
+     "name": "Trey Sermon",
+     "pos": "RB",
+     "nflPick": 88,
+     "paid": 25
+    },
+    {
+     "name": "Ja'Marr Chase",
+     "pos": "WR",
+     "nflPick": 5,
+     "paid": 20
+    },
+    {
+     "name": "Kyle Pitts",
+     "pos": "TE",
+     "nflPick": 4,
+     "paid": 16
+    },
+    {
+     "name": "Michael Carter",
+     "pos": "RB",
+     "nflPick": 107,
+     "paid": 12
+    },
+    {
+     "name": "DeVonta Smith",
+     "pos": "WR",
+     "nflPick": 10,
+     "paid": 10
+    },
+    {
+     "name": "Jaylen Waddle",
+     "pos": "WR",
+     "nflPick": 6,
+     "paid": 8
+    },
+    {
+     "name": "Rashod Bateman",
+     "pos": "WR",
+     "nflPick": 27,
+     "paid": 7
+    },
+    {
+     "name": "Elijah Moore",
+     "pos": "WR",
+     "nflPick": 34,
+     "paid": 6
+    },
+    {
+     "name": "Rondale Moore",
+     "pos": "WR",
+     "nflPick": 49,
+     "paid": 5
+    },
+    {
+     "name": "Terrace Marshall",
+     "pos": "WR",
+     "nflPick": 59,
+     "paid": 4
+    },
+    {
+     "name": "Justin Fields",
+     "pos": "QB",
+     "nflPick": 11,
+     "paid": 4
+    },
+    {
+     "name": "Trey Lance",
+     "pos": "QB",
+     "nflPick": 3,
+     "paid": 4
+    },
+    {
+     "name": "Trevor Lawrence",
+     "pos": "QB",
+     "nflPick": 1,
+     "paid": 4
+    },
+    {
+     "name": "Zach Wilson",
+     "pos": "QB",
+     "nflPick": 2,
+     "paid": 4
+    },
+    {
+     "name": "Kenneth Gainwell",
+     "pos": "RB",
+     "nflPick": 150,
+     "paid": 4
+    },
+    {
+     "name": "Amon-Ra St. Brown",
+     "pos": "WR",
+     "nflPick": 112,
+     "paid": 3
+    },
+    {
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "nflPick": 126,
+     "paid": 3
+    },
+    {
+     "name": "Rhamondre Stevenson",
+     "pos": "RB",
+     "nflPick": 120,
+     "paid": 3
+    },
+    {
+     "name": "Elijah Mitchell",
+     "pos": "RB",
+     "nflPick": 194,
+     "paid": 3
+    },
+    {
+     "name": "Pat Freiermuth",
+     "pos": "TE",
+     "nflPick": 55,
+     "paid": 3
+    },
+    {
+     "name": "Dee Eskridge",
+     "pos": "WR",
+     "nflPick": 56,
+     "paid": 3
+    }
+   ]
+  },
+  "2022": {
+   "scale": "pick-based scale",
+   "picks": [
+    {
+     "name": "Breece Hall",
+     "pos": "RB",
+     "nflPick": 36,
+     "paid": 45
+    },
+    {
+     "name": "Kenneth Walker III",
+     "pos": "RB",
+     "nflPick": 41,
+     "paid": 37
+    },
+    {
+     "name": "Drake London",
+     "pos": "WR",
+     "nflPick": 8,
+     "paid": 30
+    },
+    {
+     "name": "Garrett Wilson",
+     "pos": "WR",
+     "nflPick": 10,
+     "paid": 25
+    },
+    {
+     "name": "James Cook",
+     "pos": "RB",
+     "nflPick": 63,
+     "paid": 20
+    },
+    {
+     "name": "Rachaad White",
+     "pos": "RB",
+     "nflPick": 91,
+     "paid": 16
+    },
+    {
+     "name": "Chris Olave",
+     "pos": "WR",
+     "nflPick": 11,
+     "paid": 12
+    },
+    {
+     "name": "Christian Watson",
+     "pos": "WR",
+     "nflPick": 34,
+     "paid": 10
+    },
+    {
+     "name": "Skyy Moore",
+     "pos": "WR",
+     "nflPick": 54,
+     "paid": 8
+    },
+    {
+     "name": "Jameson Williams",
+     "pos": "WR",
+     "nflPick": 12,
+     "paid": 7
+    },
+    {
+     "name": "Treylon Burks",
+     "pos": "WR",
+     "nflPick": 18,
+     "paid": 6
+    },
+    {
+     "name": "Isaiah Spiller",
+     "pos": "RB",
+     "nflPick": 123,
+     "paid": 5
+    },
+    {
+     "name": "Dameon Pierce",
+     "pos": "RB",
+     "nflPick": 107,
+     "paid": 4
+    },
+    {
+     "name": "George Pickens",
+     "pos": "WR",
+     "nflPick": 52,
+     "paid": 4
+    },
+    {
+     "name": "Jahan Dotson",
+     "pos": "WR",
+     "nflPick": 16,
+     "paid": 4
+    },
+    {
+     "name": "Brian Robinson",
+     "pos": "RB",
+     "nflPick": 98,
+     "paid": 4
+    },
+    {
+     "name": "Tyler Allgeier",
+     "pos": "RB",
+     "nflPick": 151,
+     "paid": 4
+    },
+    {
+     "name": "David Bell",
+     "pos": "WR",
+     "nflPick": 99,
+     "paid": 4
+    },
+    {
+     "name": "Zamir White",
+     "pos": "RB",
+     "nflPick": 122,
+     "paid": 3
+    },
+    {
+     "name": "Pierre Strong Jr.",
+     "pos": "RB",
+     "nflPick": 127,
+     "paid": 3
+    },
+    {
+     "name": "John Metchie",
+     "pos": "WR",
+     "nflPick": 44,
+     "paid": 3
+    },
+    {
+     "name": "Hassan Haskins",
+     "pos": "RB",
+     "nflPick": 131,
+     "paid": 3
+    },
+    {
+     "name": "Jalen Tolbert",
+     "pos": "WR",
+     "nflPick": 88,
+     "paid": 3
+    },
+    {
+     "name": "Kenny Pickett",
+     "pos": "QB",
+     "nflPick": 20,
+     "paid": 3
+    }
+   ]
+  },
+  "2023": {
+   "scale": "pick-based scale",
+   "picks": [
+    {
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "nflPick": 8,
+     "paid": 45
+    },
+    {
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "nflPick": 12,
+     "paid": 37
+    },
+    {
+     "name": "Zach Charbonnet",
+     "pos": "RB",
+     "nflPick": 52,
+     "paid": 30
+    },
+    {
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "nflPick": 20,
+     "paid": 25
+    },
+    {
+     "name": "Kendre Miller",
+     "pos": "RB",
+     "nflPick": 71,
+     "paid": 20
+    },
+    {
+     "name": "Tyjae Spears",
+     "pos": "RB",
+     "nflPick": 81,
+     "paid": 16
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "nflPick": 163,
+     "paid": 12
+    },
+    {
+     "name": "Quentin Johnston",
+     "pos": "WR",
+     "nflPick": 21,
+     "paid": 10
+    },
+    {
+     "name": "Dalton Kincaid",
+     "pos": "TE",
+     "nflPick": 25,
+     "paid": 8
+    },
+    {
+     "name": "Anthony Richardson",
+     "pos": "QB",
+     "nflPick": 4,
+     "paid": 7
+    },
+    {
+     "name": "Jordan Addison",
+     "pos": "WR",
+     "nflPick": 23,
+     "paid": 6
+    },
+    {
+     "name": "De'Von Achane",
+     "pos": "RB",
+     "nflPick": 84,
+     "paid": 5
+    },
+    {
+     "name": "Roschon Johnson",
+     "pos": "RB",
+     "nflPick": 115,
+     "paid": 4
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "nflPick": 22,
+     "paid": 4
+    },
+    {
+     "name": "Marvin Mims",
+     "pos": "WR",
+     "nflPick": 63,
+     "paid": 4
+    },
+    {
+     "name": "Jonathan Mingo",
+     "pos": "WR",
+     "nflPick": 39,
+     "paid": 4
+    },
+    {
+     "name": "Tank Bigsby",
+     "pos": "RB",
+     "nflPick": 88,
+     "paid": 4
+    },
+    {
+     "name": "Israel Abanikanda",
+     "pos": "RB",
+     "nflPick": 143,
+     "paid": 4
+    },
+    {
+     "name": "Rashee Rice",
+     "pos": "WR",
+     "nflPick": 55,
+     "paid": 3
+    },
+    {
+     "name": "Zach Evans",
+     "pos": "RB",
+     "nflPick": 215,
+     "paid": 3
+    },
+    {
+     "name": "Bryce Young",
+     "pos": "QB",
+     "nflPick": 1,
+     "paid": 3
+    },
+    {
+     "name": "Sam LaPorta",
+     "pos": "TE",
+     "nflPick": 34,
+     "paid": 3
+    },
+    {
+     "name": "DeWayne McBride",
+     "pos": "RB",
+     "nflPick": 222,
+     "paid": 3
+    },
+    {
+     "name": "Josh Downs",
+     "pos": "WR",
+     "nflPick": 79,
+     "paid": 3
+    }
+   ]
+  },
+  "2024": {
+   "scale": "positional scale",
+   "picks": [
+    {
+     "name": "Marvin Harrison Jr.",
+     "pos": "WR",
+     "nflPick": 4,
+     "paid": 15
+    },
+    {
+     "name": "Malik Nabers",
+     "pos": "WR",
+     "nflPick": 6,
+     "paid": 12
+    },
+    {
+     "name": "Rome Odunze",
+     "pos": "WR",
+     "nflPick": 9,
+     "paid": 10
+    },
+    {
+     "name": "Xavier Worthy",
+     "pos": "WR",
+     "nflPick": 28,
+     "paid": 8
+    },
+    {
+     "name": "Jonathon Brooks",
+     "pos": "RB",
+     "nflPick": 46,
+     "paid": 35
+    },
+    {
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "nflPick": 13,
+     "paid": 6
+    },
+    {
+     "name": "Trey Benson",
+     "pos": "RB",
+     "nflPick": 66,
+     "paid": 25
+    },
+    {
+     "name": "Caleb Williams",
+     "pos": "QB",
+     "nflPick": 1,
+     "paid": 6
+    },
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "nflPick": 2,
+     "paid": 6
+    },
+    {
+     "name": "Brian Thomas Jr.",
+     "pos": "WR",
+     "nflPick": 23,
+     "paid": 6
+    },
+    {
+     "name": "Ladd McConkey",
+     "pos": "WR",
+     "nflPick": 34,
+     "paid": 5
+    },
+    {
+     "name": "Blake Corum",
+     "pos": "RB",
+     "nflPick": 83,
+     "paid": 20
+    },
+    {
+     "name": "MarShawn Lloyd",
+     "pos": "RB",
+     "nflPick": 88,
+     "paid": 3
+    },
+    {
+     "name": "Keon Coleman",
+     "pos": "WR",
+     "nflPick": 33,
+     "paid": 3
+    },
+    {
+     "name": "J.J. McCarthy",
+     "pos": "QB",
+     "nflPick": 10,
+     "paid": 3
+    },
+    {
+     "name": "Jaylen Wright",
+     "pos": "RB",
+     "nflPick": 120,
+     "paid": 3
+    },
+    {
+     "name": "Bo Nix",
+     "pos": "QB",
+     "nflPick": 12,
+     "paid": 3
+    },
+    {
+     "name": "Ben Sinnott",
+     "pos": "TE",
+     "nflPick": 53,
+     "paid": 3
+    },
+    {
+     "name": "Ricky Pearsall",
+     "pos": "WR",
+     "nflPick": 31,
+     "paid": 3
+    },
+    {
+     "name": "Xavier Legette",
+     "pos": "WR",
+     "nflPick": 32,
+     "paid": 3
+    },
+    {
+     "name": "Adonai Mitchell",
+     "pos": "WR",
+     "nflPick": 52,
+     "paid": 3
+    },
+    {
+     "name": "Ja'Lynn Polk",
+     "pos": "WR",
+     "nflPick": 37,
+     "paid": 3
+    },
+    {
+     "name": "Roman Wilson",
+     "pos": "WR",
+     "nflPick": 84,
+     "paid": 3
+    },
+    {
+     "name": "Drake Maye",
+     "pos": "QB",
+     "nflPick": 3,
+     "paid": 3
+    }
+   ]
+  },
+  "2025": {
+   "scale": "positional scale",
+   "picks": [
+    {
+     "name": "Ashton Jeanty",
+     "pos": "RB",
+     "nflPick": 6,
+     "paid": 35
+    },
+    {
+     "name": "Omarion Hampton",
+     "pos": "RB",
+     "nflPick": 22,
+     "paid": 25
+    },
+    {
+     "name": "TreVeyon Henderson",
+     "pos": "RB",
+     "nflPick": 38,
+     "paid": 20
+    },
+    {
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "nflPick": 8,
+     "paid": 15
+    },
+    {
+     "name": "Travis Hunter",
+     "pos": "WR",
+     "nflPick": 2,
+     "paid": 12
+    },
+    {
+     "name": "Emeka Egbuka",
+     "pos": "WR",
+     "nflPick": 19,
+     "paid": 10
+    },
+    {
+     "name": "Quinshon Judkins",
+     "pos": "RB",
+     "nflPick": 36,
+     "paid": 15
+    },
+    {
+     "name": "Kaleb Johnson",
+     "pos": "RB",
+     "nflPick": 83,
+     "paid": 10
+    },
+    {
+     "name": "RJ Harvey",
+     "pos": "RB",
+     "nflPick": 60,
+     "paid": 5
+    },
+    {
+     "name": "Matthew Golden",
+     "pos": "WR",
+     "nflPick": 23,
+     "paid": 8
+    },
+    {
+     "name": "Jack Bech",
+     "pos": "WR",
+     "nflPick": 58,
+     "paid": 6
+    },
+    {
+     "name": "Colston Loveland",
+     "pos": "TE",
+     "nflPick": 10,
+     "paid": 6
+    },
+    {
+     "name": "Tyler Warren",
+     "pos": "TE",
+     "nflPick": 14,
+     "paid": 3
+    },
+    {
+     "name": "Cam Ward",
+     "pos": "QB",
+     "nflPick": 1,
+     "paid": 3
+    },
+    {
+     "name": "Luther Burden",
+     "pos": "WR",
+     "nflPick": 39,
+     "paid": 3
+    },
+    {
+     "name": "Cam Skattebo",
+     "pos": "RB",
+     "nflPick": 105,
+     "paid": 3
+    },
+    {
+     "name": "Tre Harris",
+     "pos": "WR",
+     "nflPick": 55,
+     "paid": 3
+    },
+    {
+     "name": "Jayden Higgins",
+     "pos": "WR",
+     "nflPick": 34,
+     "paid": 3
+    },
+    {
+     "name": "Bhayshul Tuten",
+     "pos": "RB",
+     "nflPick": 104,
+     "paid": 3
+    },
+    {
+     "name": "Jaxson Dart",
+     "pos": "QB",
+     "nflPick": 25,
+     "paid": 3
+    },
+    {
+     "name": "Kyle Williams",
+     "pos": "WR",
+     "nflPick": 69,
+     "paid": 3
+    },
+    {
+     "name": "Terrance Ferguson",
+     "pos": "TE",
+     "nflPick": 46,
+     "paid": 3
+    },
+    {
+     "name": "Tahj Brooks",
+     "pos": "RB",
+     "nflPick": 193,
+     "paid": 3
+    },
+    {
+     "name": "Mason Taylor",
+     "pos": "TE",
+     "nflPick": 42,
+     "paid": 3
+    }
+   ]
+  },
+  "2026": {
+   "scale": "positional scale",
+   "picks": [
+    {
+     "name": "Jeremiyah Love",
+     "pos": "RB",
+     "nflPick": 3,
+     "paid": 35
+    },
+    {
+     "name": "Makai Lemon",
+     "pos": "WR",
+     "nflPick": 20,
+     "paid": 15
+    },
+    {
+     "name": "Carnell Tate",
+     "pos": "WR",
+     "nflPick": 4,
+     "paid": 12
+    },
+    {
+     "name": "Jadarian Price",
+     "pos": "RB",
+     "nflPick": 32,
+     "paid": 25
+    },
+    {
+     "name": "Jordyn Tyson",
+     "pos": "WR",
+     "nflPick": 8,
+     "paid": 10
+    },
+    {
+     "name": "KC Concepcion",
+     "pos": "WR",
+     "nflPick": 24,
+     "paid": 8
+    },
+    {
+     "name": "Kenyon Sadiq",
+     "pos": "TE",
+     "nflPick": 16,
+     "paid": 6
+    },
+    {
+     "name": "Fernando Mendoza",
+     "pos": "QB",
+     "nflPick": 1,
+     "paid": 6
+    },
+    {
+     "name": "Omar Cooper Jr.",
+     "pos": "WR",
+     "nflPick": 30,
+     "paid": 6
+    },
+    {
+     "name": "Eli Stowers",
+     "pos": "TE",
+     "nflPick": 54,
+     "paid": 5
+    },
+    {
+     "name": "Denzel Boston",
+     "pos": "WR",
+     "nflPick": 39,
+     "paid": 5
+    },
+    {
+     "name": "Chris Bell",
+     "pos": "WR",
+     "nflPick": 94,
+     "paid": 4
+    },
+    {
+     "name": "Jonah Coleman",
+     "pos": "RB",
+     "nflPick": 108,
+     "paid": 3
+    },
+    {
+     "name": "Antonio Williams",
+     "pos": "WR",
+     "nflPick": 71,
+     "paid": 3
+    },
+    {
+     "name": "Germie Bernard",
+     "pos": "WR",
+     "nflPick": 47,
+     "paid": 3
+    },
+    {
+     "name": "Mike Washington Jr.",
+     "pos": "RB",
+     "nflPick": 122,
+     "paid": 3
+    },
+    {
+     "name": "Nicholas Singleton",
+     "pos": "RB",
+     "nflPick": 165,
+     "paid": 3
+    },
+    {
+     "name": "Emmett Johnson",
+     "pos": "RB",
+     "nflPick": 161,
+     "paid": 3
+    },
+    {
+     "name": "De'Zhaun Stribling",
+     "pos": "WR",
+     "nflPick": 33,
+     "paid": 3
+    },
+    {
+     "name": "Demond Claiborne",
+     "pos": "RB",
+     "nflPick": 198,
+     "paid": 3
+    },
+    {
+     "name": "Oscar Delp",
+     "pos": "TE",
+     "nflPick": 73,
+     "paid": 3
+    },
+    {
+     "name": "Kaytron Allen",
+     "pos": "RB",
+     "nflPick": 187,
+     "paid": 3
+    },
+    {
+     "name": "Ty Simpson",
+     "pos": "QB",
+     "nflPick": 13,
+     "paid": 3
+    },
+    {
+     "name": "Chris Brazzell II",
+     "pos": "WR",
+     "nflPick": 83,
+     "paid": 3
+    }
+   ]
+  }
+ }
+}

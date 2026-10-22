@@ -66,6 +66,43 @@ button:focus-visible,select:focus-visible,input:focus-visible,.row:focus-visible
 .hint{color:var(--muted);font-size:.82rem}
 .empty,.error{color:var(--muted);text-align:center;padding:24px 8px}
 footer{color:var(--muted);font-size:.8rem;max-width:65ch}
+.views{display:flex;gap:6px;border-bottom:1px solid var(--line)}
+.views button{border:0;border-bottom:3px solid transparent;background:transparent;color:var(--muted);font:600 .95rem var(--body);padding:8px 4px;margin-right:12px;cursor:pointer}
+.views button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+details.settings{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+details.settings summary{cursor:pointer;font-weight:600;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+details.settings summary span{font-weight:400;color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px 20px;margin-top:12px}
+.slider{display:flex;flex-direction:column;gap:4px;min-width:0}
+.slider label{display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+.slider label b{font:700 1.3rem var(--display);font-variant-numeric:tabular-nums}
+.slider label b.changed{color:var(--warn)}
+.slider input{width:100%;accent-color:var(--accent)}
+.slider small{color:var(--muted);font-size:.75rem}
+.setrow{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .82rem var(--body);padding:6px 12px;border-radius:8px;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.views button:focus-visible,.btn:focus-visible,.slider input:focus-visible,.hist tr.p:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.histhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.histhead label{font:600 .75rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.histhead select{font:700 1.2rem var(--display);padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tot{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-variant-numeric:tabular-nums}
+.tot small{display:block;color:var(--muted);font:600 .7rem var(--body);letter-spacing:.08em;text-transform:uppercase}
+.tot b{font:700 1.35rem var(--display)}
+.tot span{display:block;font-size:.85rem}
+.up{color:var(--warn)}.down{color:var(--accent)}.same{color:var(--muted)}
+.histwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.hist{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.88rem}
+.hist th,.hist td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.hist td.who{white-space:normal;min-width:9em}
+.hist td.who .pos{margin-right:6px;display:inline-block}
+.hist th{color:var(--muted);font:600 .72rem var(--body);letter-spacing:.06em;text-transform:uppercase}
+.hist .n{text-align:right}
+.hist tr.round td{background:var(--chip);color:var(--muted);font:600 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase}
+.hist tr.p{cursor:pointer}
+.hist tr.p td.newp{font-weight:700}
+.hist tr.math td{background:var(--chip);font:400 .8rem var(--mono);color:var(--fg)}
 </style>
 </head>
 <body>
@@ -76,6 +113,21 @@ footer{color:var(--muted);font-size:.8rem;max-width:65ch}
     <div class="status"><span class="badge" id="mode">Projected</span><span id="asof">Loading players…</span></div>
   </header>
 
+  <div class="views" role="tablist" aria-label="View">
+    <button role="tab" id="v-board" aria-selected="true" aria-controls="boardview">Price board</button>
+    <button role="tab" id="v-hist" aria-selected="false" aria-controls="histview">Past drafts</button>
+  </div>
+
+  <details class="settings" id="settings">
+    <summary>Position max <span id="maxsum"></span></summary>
+    <div class="sliders" id="sliders"></div>
+    <div class="setrow">
+      <button class="btn" id="reset">Reset to proposal</button>
+      <span class="hint">Slider changes only affect prices on your screen. The official numbers stay in the league settings.</span>
+    </div>
+  </details>
+
+  <section id="boardview" role="tabpanel" aria-labelledby="v-board" style="display:flex;flex-direction:column;gap:14px">
   <div class="controls">
     <div class="pickrow">
       <label for="pick">Your pick</label>
@@ -102,13 +154,29 @@ footer{color:var(--muted);font-size:.8rem;max-width:65ch}
   </div>
 
   <div class="board" id="board"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section id="histview" role="tabpanel" aria-labelledby="v-hist" hidden style="flex-direction:column;gap:12px">
+    <div class="histhead">
+      <label for="hyear">Draft</label>
+      <select id="hyear"></select>
+      <span class="hint" id="hnote"></span>
+    </div>
+    <div class="totals" id="htotals"></div>
+    <div class="histwrap"><table class="hist" id="htable"></table></div>
+    <p class="hint">Tap a row to see how the new price is set.</p>
+  </section>
 
   <footer id="foot"></footer>
 </div>
 
 <script>
-let CFG=null, DATA=null, slot=6, posFilter='ALL', sortBy='adp', query='', open=null;
-try{const s=+localStorage.getItem('fbp-pricer-slot'); if(s>=0&&s<24) slot=s;}catch(e){}
+let CFG=null, DATA=null, HIST=null, slot=0, posFilter='ALL', sortBy='adp', query='', open=null;
+let view='board', histYear=null, histOpen=null, MAXO={};
+const RANGE={RB:[10,50],WR:[5,30],QB:[5,30],TE:[3,20]};
+try{const raw=localStorage.getItem('fbp-pricer-slot'); const s=raw===null?NaN:+raw; if(s>=0&&s<24) slot=s;}catch(e){}
+try{MAXO=JSON.parse(localStorage.getItem('fbp-pricer-max')||'{}')||{};}catch(e){MAXO={};}
+const maxFor=pos=>(pos in MAXO)?MAXO[pos]:CFG.positions[pos].max;
 
 const slotLabel=i=>`${Math.floor(i/12)+1}.${String(i%12+1).padStart(2,'0')}`;
 const nflLabel=p=>p>=CFG.undraftedPick?'Undrafted':`${Math.ceil(p/32)}.${String((p-1)%32+1).padStart(2,'0')}`;
@@ -119,8 +187,61 @@ function interp(a,p){
 }
 function price(pl,i){
   const c=CFG.positions[pl.pos]; const nf=interp(c.nfl,pl.nflPick||CFG.undraftedPick); const ff=c.fbp[i];
-  const raw=c.max*nf*ff; return {nf,ff,raw,max:c.max,val:Math.max(CFG.minimumRounds1to2,Math.floor(raw+0.5))};
+  const mx=maxFor(pl.pos); const raw=mx*nf*ff; return {nf,ff,raw,max:mx,val:Math.max(CFG.minimumRounds1to2,Math.floor(raw+0.5))};
 }
+const money=v=>(v<0?'−$':'+$')+Math.abs(v);
+function diffSpan(d){return d===0?'<span class="same">—</span>':`<span class="${d>0?'up':'down'}">${money(d)}</span>`;}
+
+function buildSliders(){
+  const ps=Object.keys(CFG.positions);
+  document.getElementById('sliders').innerHTML=ps.map(p=>{const [lo,hi]=RANGE[p]||[1,60];
+    return `<div class="slider"><label for="max-${p}"><span class="pos ${p}">${p}</span><b id="maxv-${p}">$${maxFor(p)}</b></label>
+      <input type="range" id="max-${p}" min="${lo}" max="${hi}" step="1" value="${maxFor(p)}" aria-label="${p} max salary">
+      <small>Proposal: $${CFG.positions[p].max}</small></div>`;}).join('');
+  ps.forEach(p=>document.getElementById('max-'+p).addEventListener('input',e=>{
+    const v=+e.target.value; if(v===CFG.positions[p].max) delete MAXO[p]; else MAXO[p]=v;
+    saveMax(); updateMaxUI(); rerender();}));
+  document.getElementById('reset').onclick=()=>{MAXO={};saveMax();updateMaxUI();rerender();};
+  updateMaxUI();
+}
+function updateMaxUI(){
+  const ps=Object.keys(CFG.positions), custom=ps.some(p=>p in MAXO);
+  ps.forEach(p=>{const b=document.getElementById('maxv-'+p); b.textContent='$'+maxFor(p); b.classList.toggle('changed',p in MAXO); document.getElementById('max-'+p).value=maxFor(p);});
+  document.getElementById('maxsum').textContent=ps.map(p=>`${p} $${maxFor(p)}`).join(' · ')+(custom?' (custom)':'');
+  document.getElementById('reset').disabled=!custom;
+}
+function saveMax(){try{localStorage.setItem('fbp-pricer-max',JSON.stringify(MAXO))}catch(e){}}
+function rerender(){view==='board'?render():renderHist();}
+
+function setView(v){
+  view=v;
+  document.getElementById('v-board').setAttribute('aria-selected',v==='board');
+  document.getElementById('v-hist').setAttribute('aria-selected',v==='hist');
+  document.getElementById('boardview').hidden=v!=='board';
+  const hv=document.getElementById('histview'); hv.hidden=v!=='hist'; hv.style.display=v==='hist'?'flex':'';
+  rerender();
+}
+
+function renderHist(){
+  const tbl=document.getElementById('htable');
+  if(!HIST){tbl.innerHTML='<tr><td class="empty">Past drafts didn’t load. Refresh the page to try again.</td></tr>';document.getElementById('htotals').innerHTML='';return;}
+  const Y=HIST.years[histYear];
+  document.getElementById('hnote').textContent=`“Paid” is what each pick cost under the ${Y.scale} used in ${histYear}. “New” is the same player at the same pick under the current settings.`;
+  const tot={r1:[0,0],r2:[0,0]};
+  let rows='<thead><tr><th>Pick</th><th>Player</th><th>NFL</th><th class="n">Paid</th><th class="n">New</th><th class="n">+/−</th></tr></thead><tbody>';
+  Y.picks.forEach((p,i)=>{
+    if(i===0||i===12) rows+=`<tr class="round"><td colspan="6">Round ${i===0?1:2}</td></tr>`;
+    const r=price(p,i), d=r.val-p.paid, t=i<12?tot.r1:tot.r2; t[0]+=p.paid; t[1]+=r.val;
+    const key=histYear+'-'+i;
+    rows+=`<tr class="p" tabindex="0" data-k="${key}" aria-expanded="${histOpen===key}"><td>${slotLabel(i)}</td><td class="who"><span class="pos ${p.pos}">${p.pos}</span>${p.name}</td><td>${nflLabel(p.nflPick)}</td><td class="n">$${p.paid}</td><td class="n newp">$${r.val}</td><td class="n">${diffSpan(d)}</td></tr>`;
+    if(histOpen===key){const floor=r.raw<CFG.minimumRounds1to2-0.5?` → $${CFG.minimumRounds1to2} minimum`:'';
+      rows+=`<tr class="math"><td colspan="6" style="white-space:normal">$${r.max} max × ${r.nf.toFixed(3)} (NFL ${nflLabel(p.nflPick)}) × ${r.ff.toFixed(3)} (FBP ${slotLabel(i)}) = ${r.raw.toFixed(2)}${floor} → $${r.val}</td></tr>`;}
+  });
+  tbl.innerHTML=rows+'</tbody>';
+  const box=(label,[a,b])=>`<div class="tot"><small>${label}</small><b>$${a} → $${b}</b>${diffSpan(b-a)}</div>`;
+  document.getElementById('htotals').innerHTML=box('Round 1',tot.r1)+box('Round 2',tot.r2)+box('Rounds 1–2',[tot.r1[0]+tot.r2[0],tot.r1[1]+tot.r2[1]]);
+}
+function toggleHist(tr){if(!tr||!tr.dataset.k)return; histOpen=histOpen===tr.dataset.k?null:tr.dataset.k; renderHist();}
 function contract(start){let s=start,out=[s];CFG.escalators.forEach(e=>{s+=e;out.push(s)});return out;}
 
 function render(){
@@ -172,13 +293,28 @@ async function init(){
   sel.onchange=()=>{slot=+sel.value;save();render();};
   document.getElementById('prev').onclick=()=>{if(slot>0){slot--;save();render();}};
   document.getElementById('next').onclick=()=>{if(slot<23){slot++;save();render();}};
-  document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{posFilter=b.dataset.pos;document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));render();});
+  document.querySelectorAll('.filters .chip').forEach(b=>b.onclick=()=>{posFilter=b.dataset.pos;document.querySelectorAll('.filters .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));render();});
   document.getElementById('sort').onchange=e=>{sortBy=e.target.value;render();};
   document.getElementById('q').oninput=e=>{query=e.target.value.trim().toLowerCase();render();};
   const board=document.getElementById('board');
   board.addEventListener('click',e=>{if(e.target.closest('.detail'))return;toggle(e.target.closest('.row'));});
   board.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('row')){e.preventDefault();toggle(e.target);}});
+  Object.keys(MAXO).forEach(p=>{const v=+MAXO[p]; if(!CFG.positions[p]||!Number.isFinite(v)) delete MAXO[p]; else MAXO[p]=v;});
+  buildSliders();
+  document.getElementById('v-board').onclick=()=>setView('board');
+  document.getElementById('v-hist').onclick=()=>setView('hist');
+  const ht=document.getElementById('htable');
+  ht.addEventListener('click',e=>toggleHist(e.target.closest('tr.p')));
+  ht.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('tr.p')){e.preventDefault();toggleHist(e.target);}});
   render();
+  try{HIST=await fetch('history.json').then(r=>{if(!r.ok)throw 0;return r.json()});}catch(e){HIST=null;}
+  if(HIST){
+    const yrs=Object.keys(HIST.years).sort().reverse(); histYear=yrs[0];
+    const ys=document.getElementById('hyear');
+    ys.innerHTML=yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
+    ys.onchange=()=>{histYear=ys.value;histOpen=null;renderHist();};
+  }
+  if(view==='hist') renderHist();
 }
 function save(){try{localStorage.setItem('fbp-pricer-slot',slot)}catch(e){}}
 init();
