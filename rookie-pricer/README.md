@@ -14,11 +14,16 @@ Owners pick their FBP draft slot and see what each rookie would cost there.
 
 ## Updating the mocks
 
-1. Edit `sources.json`: replace or add entries in `rookieMocks` (ordered pick lists), `nflMocks` (player → overall pick), and `bigBoard` (player → rank). Add any new player's position to `positions` and school to `schools`. Update `asOf`.
+1. Edit `sources.json`. Add each new source to `rookieSources` (an ordered list of players) or `nflSources` (player → big-board rank for `"type": "board"`, or player → mock-draft slot for `"type": "mock"`), with its `date`. Consensus sources that already average many mocks get `"weight": 3`. Add any new player's position to `positions` and school to `schools`. Set `asOf` to today.
 2. Run `python3 build_players.py` from this folder.
 3. Commit `sources.json` and `players.json`. GitHub Pages rebuilds in a minute or two.
 
-How the averaging works is described at the top of `build_players.py`.
+Old sources can stay in the file. Anything older than 60 days is ignored, and newer sources count more (a 30-day-old source counts half as much as today's). How the averaging works is described at the top of `build_players.py`.
+
+### Suggested sources
+- NFL draft capital: the NFL Mock Draft Database consensus big board, which averages dozens of boards and hundreds of mocks and refreshes daily.
+- Rookie order: recent superflex rookie rankings and mocks (NFL Mock Draft Database superflex rookie rankings, DLF, DraftSharks, RotoBaller).
+- Refresh monthly during the season, after the January declaration deadline, after the Combine, weekly in April, then enter real picks after the draft.
 
 ## After the NFL draft
 
