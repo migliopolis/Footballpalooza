@@ -1,37 +1,38 @@
 {
  "season": 2027,
  "default": 200,
- "note": "Hand-maintained 2027 auction budgets. Every team starts at the default; add one entry to adjustments for each trade or penalty that moves auction dollars (negative amounts reduce a budget).",
- "adjustments": [
+ "note": "Hand-maintained 2027 auction budgets. Every team starts at the default. Add each trade that moves auction cash to trades (cash: dollars gained or lost per team; terms: one line per side, shown on hover). Use adjustments for anything else, such as penalties.",
+ "trades": [
   {
-   "date": "2026-10-24",
-   "team": "0008",
-   "amount": -2,
-   "note": "Trades to date"
+   "cash": {
+    "0001": 2,
+    "0008": -2
+   },
+   "terms": [
+    "Thots & Players gave up Bryce Young (CAR QB), Adonai Mitchell (NYJ WR)",
+    "Son of Tinactin gave up Tucker Kraft (GB TE), 2027 Round 4 pick, $2 of 2027 auction cash"
+   ]
   },
   {
-   "date": "2026-10-24",
-   "team": "0001",
-   "amount": -8,
-   "note": "Trades to date"
+   "cash": {
+    "0004": -10,
+    "0011": 10
+   },
+   "terms": [
+    "Fully Cooked gave up 2027 Round 1 pick, $10 of 2027 auction cash",
+    "Wholey Club gave up James Cook (BUF RB)"
+   ]
   },
   {
-   "date": "2026-10-24",
-   "team": "0012",
-   "amount": 10,
-   "note": "Trades to date"
-  },
-  {
-   "date": "2026-10-24",
-   "team": "0011",
-   "amount": 10,
-   "note": "Trades to date"
-  },
-  {
-   "date": "2026-10-24",
-   "team": "0004",
-   "amount": -10,
-   "note": "Trades to date"
+   "cash": {
+    "0001": -10,
+    "0012": 10
+   },
+   "terms": [
+    "Thots & Players gave up 2027 Round 2 pick, $10 of 2027 auction cash",
+    "Sour Grapes gave up Christian McCaffrey (SF RB)"
+   ]
   }
- ]
+ ],
+ "adjustments": []
 }

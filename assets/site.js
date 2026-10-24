@@ -10,7 +10,8 @@
   const pts = v => Number(v).toFixed(1);
   function budget(id) {
     const B = state.budgets; if (!B) return null;
-    const adj = (B.adjustments || []).filter(x => x.team === id);
+    const adj = (B.adjustments || []).filter(x => x.team === id).map(x => ({ amount: Number(x.amount || 0), note: x.note || '' }));
+    (B.trades || []).forEach(tr => { if (tr.cash && id in tr.cash) adj.push({ amount: Number(tr.cash[id]), note: 'Trade:\n' + (tr.terms || []).map(l => '• ' + l).join('\n') }); });
     return { total: (B.default || 200) + adj.reduce((s, x) => s + Number(x.amount || 0), 0), adj };
   }
 
@@ -72,7 +73,7 @@
         ${rows.map(t => `<tr><td class="t">${chip(t.id, { after: t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '' })}</td>
           <td>${t.w}-${t.l}-${t.t}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td>${gb(t.gb)}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
           <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${pts(t.pp)}</td>
-          <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount > 0 ? '+' : ''}${x.amount} ${x.note || ''}`).join('; ') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
+          <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount < 0 ? '−' : '+'}$${Math.abs(x.amount)} ${x.note}`).join('\n\n') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
         </tbody></table></div>`;
     }).join('');
 
@@ -159,6 +160,19 @@
       const again = document.querySelector('.rtab[aria-pressed="true"]');
       if (again) { const s2 = again.closest('section'); window.scrollBy(0, s2.getBoundingClientRect().top - y); again.focus(); }
     });
+    // tap a budget to see the trades behind it (phones have no hover)
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; document.body.appendChild(tip);
+    document.addEventListener('click', e => {
+      const td = e.target.closest('td.bud');
+      if (!td || !td.title || (!tip.hidden && tip.dataset.for === td.title)) { tip.hidden = true; tip.dataset.for = ''; return; }
+      tip.textContent = td.title; tip.dataset.for = td.title; tip.hidden = false;
+      const r = td.getBoundingClientRect(), w = Math.min(340, window.innerWidth - 32);
+      tip.style.width = w + 'px';
+      tip.style.left = Math.max(16, Math.min(r.right - w, window.innerWidth - w - 16)) + 'px';
+      const below = r.bottom + 6 + tip.offsetHeight < window.innerHeight;
+      tip.style.top = (below ? r.bottom + 6 : Math.max(8, r.top - 6 - tip.offsetHeight)) + 'px';
+    });
+    window.addEventListener('scroll', () => { tip.hidden = true; }, { passive: true });
     route();
   }
   init();

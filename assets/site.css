@@ -138,3 +138,5 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .tbl td.bud{font-weight:600}
 .tbl td.bud.chg{color:var(--red)}
 .tbl td.bud.up{color:var(--ok)}
+.tbl td.bud.chg,.tbl td.bud.up{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.tip{position:fixed;z-index:20;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.18);padding:10px 12px;font-size:.8rem;line-height:1.45;white-space:pre-line}
