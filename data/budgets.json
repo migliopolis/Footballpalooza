@@ -2,5 +2,36 @@
  "season": 2027,
  "default": 200,
  "note": "Hand-maintained 2027 auction budgets. Every team starts at the default; add one entry to adjustments for each trade or penalty that moves auction dollars (negative amounts reduce a budget).",
- "adjustments": []
+ "adjustments": [
+  {
+   "date": "2026-10-24",
+   "team": "0008",
+   "amount": -2,
+   "note": "Trades to date"
+  },
+  {
+   "date": "2026-10-24",
+   "team": "0001",
+   "amount": -8,
+   "note": "Trades to date"
+  },
+  {
+   "date": "2026-10-24",
+   "team": "0012",
+   "amount": 10,
+   "note": "Trades to date"
+  },
+  {
+   "date": "2026-10-24",
+   "team": "0011",
+   "amount": 10,
+   "note": "Trades to date"
+  },
+  {
+   "date": "2026-10-24",
+   "team": "0004",
+   "amount": -10,
+   "note": "Trades to date"
+  }
+ ]
 }

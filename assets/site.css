@@ -137,3 +137,4 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .rtab:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 .tbl td.bud{font-weight:600}
 .tbl td.bud.chg{color:var(--red)}
+.tbl td.bud.up{color:var(--ok)}
