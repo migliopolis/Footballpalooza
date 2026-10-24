@@ -1,0 +1,88 @@
+{
+ "league": {
+  "name": "FOOTBALLPALOOZA 2026",
+  "lastRegularSeasonWeek": "14",
+  "standingsSort": "PCT,PTS,",
+  "divisions": {
+   "count": "3",
+   "division": [
+    {
+     "id": "00",
+     "name": "West"
+    },
+    {
+     "name": "Central",
+     "id": "01"
+    },
+    {
+     "name": "East",
+     "id": "02"
+    }
+   ]
+  },
+  "franchises": {
+   "franchise": [
+    {
+     "id": "0001",
+     "name": "Thots & Players",
+     "division": "00"
+    },
+    {
+     "id": "0002",
+     "name": "Bullish on da Bears",
+     "division": "02"
+    },
+    {
+     "id": "0003",
+     "name": "Hauk Tua ",
+     "division": "01"
+    },
+    {
+     "id": "0004",
+     "name": "Fully Cooked",
+     "division": "00"
+    },
+    {
+     "id": "0005",
+     "name": "The Fist of the Magi",
+     "division": "01"
+    },
+    {
+     "id": "0006",
+     "name": "Jesus Christ College",
+     "division": "02"
+    },
+    {
+     "id": "0007",
+     "name": "MR. FROBOT",
+     "division": "01"
+    },
+    {
+     "id": "0008",
+     "name": "Son of Tinactin",
+     "division": "02"
+    },
+    {
+     "id": "0009",
+     "name": "Mailing It In",
+     "division": "00"
+    },
+    {
+     "id": "0010",
+     "name": "Hold Timers",
+     "division": "01"
+    },
+    {
+     "id": "0011",
+     "name": "Wholey Club",
+     "division": "02"
+    },
+    {
+     "id": "0012",
+     "name": "Sour Grapes",
+     "division": "00"
+    }
+   ]
+  }
+ }
+}

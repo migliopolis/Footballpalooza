@@ -1,0 +1,17 @@
+{
+ "note": "Hand-maintained. Chip rule: primary = chip background, secondary = chip text; white-primary teams (COOK, HOLD) get a secondary-colored border.",
+ "teams": {
+  "0001": {"abbr": "THOT", "primary": "#111111", "secondary": "#EEC816"},
+  "0002": {"abbr": "BEAR", "primary": "#081F2C", "secondary": "#DC4405"},
+  "0003": {"abbr": "HKTA", "primary": "#86D2F5", "secondary": "#286DB6"},
+  "0004": {"abbr": "COOK", "primary": "#FFFFFF", "secondary": "#146836"},
+  "0005": {"abbr": "WIZ",  "primary": "#F2D97B", "secondary": "#16160F"},
+  "0006": {"abbr": "JCC",  "primary": "#7E150F", "secondary": "#BE760F"},
+  "0007": {"abbr": "FRO",  "primary": "#F6D540", "secondary": "#17140F"},
+  "0008": {"abbr": "SOT",  "primary": "#561D2C", "secondary": "#FFFFFF"},
+  "0009": {"abbr": "MAIL", "primary": "#082256", "secondary": "#A7ADAF"},
+  "0010": {"abbr": "HOLD", "primary": "#FFFFFF", "secondary": "#C4602D"},
+  "0011": {"abbr": "WC",   "primary": "#23A699", "secondary": "#131314"},
+  "0012": {"abbr": "SGR",  "primary": "#7DC242", "secondary": "#23132D"}
+ }
+}

@@ -1,0 +1,41 @@
+name: Refresh league data
+
+on:
+  schedule:
+    - cron: '0 15 * * 2'   # Tuesdays 15:00 UTC (8 AM Pacific), after Monday night games
+  workflow_dispatch:        # "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch from MFL
+        env:
+          MFL_APIKEY: ${{ secrets.MFL_APIKEY }}
+        run: python scripts/refresh_mfl.py
+      - name: Compute standings, playoff picture and draft order
+        run: python scripts/league_now.py
+      - name: Check the computation
+        run: python tests/test_league_now.py
+      - name: Commit changed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes"
+          else
+            git commit -m "Weekly data refresh"
+            git push
+          fi

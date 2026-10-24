@@ -1,0 +1,369 @@
+{
+ "season": "FOOTBALLPALOOZA 2026",
+ "generated": "2026-10-24T22:46:30+00:00",
+ "weeksPlayed": 6,
+ "lastRegularSeasonWeek": 14,
+ "divisions": [
+  {
+   "id": "00",
+   "name": "West"
+  },
+  {
+   "id": "01",
+   "name": "Central"
+  },
+  {
+   "id": "02",
+   "name": "East"
+  }
+ ],
+ "standings": [
+  {
+   "id": "0009",
+   "name": "Mailing It In",
+   "division": "00",
+   "w": 4,
+   "l": 1,
+   "t": 1,
+   "pct": 0.75,
+   "pf": 748.6,
+   "pa": 620.5,
+   "pp": 869.9,
+   "allPlayW": 42,
+   "allPlayL": 23,
+   "allPlayT": 1,
+   "streak": "W4",
+   "divisionName": "West",
+   "divisionRank": 1,
+   "seed": 1
+  },
+  {
+   "id": "0005",
+   "name": "The Fist of the Magi",
+   "division": "01",
+   "w": 4,
+   "l": 2,
+   "t": 0,
+   "pct": 0.667,
+   "pf": 794.9,
+   "pa": 711.4,
+   "pp": 826.0,
+   "allPlayW": 48,
+   "allPlayL": 18,
+   "allPlayT": 0,
+   "streak": "L1",
+   "divisionName": "Central",
+   "divisionRank": 1,
+   "seed": 2
+  },
+  {
+   "id": "0001",
+   "name": "Thots & Players",
+   "division": "00",
+   "w": 4,
+   "l": 2,
+   "t": 0,
+   "pct": 0.667,
+   "pf": 781.1,
+   "pa": 718.0,
+   "pp": 926.4,
+   "allPlayW": 46,
+   "allPlayL": 20,
+   "allPlayT": 0,
+   "streak": "W1",
+   "divisionName": "West",
+   "divisionRank": 2,
+   "seed": 4
+  },
+  {
+   "id": "0004",
+   "name": "Fully Cooked",
+   "division": "00",
+   "w": 4,
+   "l": 2,
+   "t": 0,
+   "pct": 0.667,
+   "pf": 780.1,
+   "pa": 689.2,
+   "pp": 864.3,
+   "allPlayW": 49,
+   "allPlayL": 17,
+   "allPlayT": 0,
+   "streak": "W2",
+   "divisionName": "West",
+   "divisionRank": 3,
+   "seed": 5
+  },
+  {
+   "id": "0002",
+   "name": "Bullish on da Bears",
+   "division": "02",
+   "w": 4,
+   "l": 2,
+   "t": 0,
+   "pct": 0.667,
+   "pf": 603.5,
+   "pa": 653.5,
+   "pp": 724.3,
+   "allPlayW": 25,
+   "allPlayL": 41,
+   "allPlayT": 0,
+   "streak": "L1",
+   "divisionName": "East",
+   "divisionRank": 1,
+   "seed": 3
+  },
+  {
+   "id": "0010",
+   "name": "Hold Timers",
+   "division": "01",
+   "w": 3,
+   "l": 3,
+   "t": 0,
+   "pct": 0.5,
+   "pf": 725.4,
+   "pa": 609.0,
+   "pp": 785.4,
+   "allPlayW": 39,
+   "allPlayL": 27,
+   "allPlayT": 0,
+   "streak": "W1",
+   "divisionName": "Central",
+   "divisionRank": 3,
+   "seed": null
+  },
+  {
+   "id": "0003",
+   "name": "Hauk Tua",
+   "division": "01",
+   "w": 3,
+   "l": 3,
+   "t": 0,
+   "pct": 0.5,
+   "pf": 681.8,
+   "pa": 675.7,
+   "pp": 827.6,
+   "allPlayW": 32,
+   "allPlayL": 34,
+   "allPlayT": 0,
+   "streak": "L1",
+   "divisionName": "Central",
+   "divisionRank": 2,
+   "seed": null
+  },
+  {
+   "id": "0008",
+   "name": "Son of Tinactin",
+   "division": "02",
+   "w": 2,
+   "l": 3,
+   "t": 1,
+   "pct": 0.417,
+   "pf": 544.6,
+   "pa": 595.6,
+   "pp": 694.4,
+   "allPlayW": 17,
+   "allPlayL": 48,
+   "allPlayT": 1,
+   "streak": "W2",
+   "divisionName": "East",
+   "divisionRank": 2,
+   "seed": null
+  },
+  {
+   "id": "0007",
+   "name": "MR. FROBOT",
+   "division": "01",
+   "w": 2,
+   "l": 4,
+   "t": 0,
+   "pct": 0.333,
+   "pf": 748.4,
+   "pa": 771.6,
+   "pp": 867.1,
+   "allPlayW": 39,
+   "allPlayL": 27,
+   "allPlayT": 0,
+   "streak": "L2",
+   "divisionName": "Central",
+   "divisionRank": 4,
+   "seed": 6
+  },
+  {
+   "id": "0012",
+   "name": "Sour Grapes",
+   "division": "00",
+   "w": 2,
+   "l": 4,
+   "t": 0,
+   "pct": 0.333,
+   "pf": 603.3,
+   "pa": 694.3,
+   "pp": 762.7,
+   "allPlayW": 24,
+   "allPlayL": 42,
+   "allPlayT": 0,
+   "streak": "W1",
+   "divisionName": "West",
+   "divisionRank": 4,
+   "seed": null
+  },
+  {
+   "id": "0011",
+   "name": "Wholey Club",
+   "division": "02",
+   "w": 2,
+   "l": 4,
+   "t": 0,
+   "pct": 0.333,
+   "pf": 562.4,
+   "pa": 754.2,
+   "pp": 750.3,
+   "allPlayW": 16,
+   "allPlayL": 50,
+   "allPlayT": 0,
+   "streak": "L2",
+   "divisionName": "East",
+   "divisionRank": 3,
+   "seed": null
+  },
+  {
+   "id": "0006",
+   "name": "Jesus Christ College",
+   "division": "02",
+   "w": 1,
+   "l": 5,
+   "t": 0,
+   "pct": 0.167,
+   "pf": 590.9,
+   "pa": 672.0,
+   "pp": 792.7,
+   "allPlayW": 18,
+   "allPlayL": 48,
+   "allPlayT": 0,
+   "streak": "L5",
+   "divisionName": "East",
+   "divisionRank": 4,
+   "seed": null
+  }
+ ],
+ "seeds": [
+  {
+   "id": "0009",
+   "via": "division",
+   "tiebreak": null,
+   "divisionTiebreak": null,
+   "seed": 1
+  },
+  {
+   "id": "0005",
+   "via": "division",
+   "tiebreak": "total points",
+   "divisionTiebreak": null,
+   "seed": 2
+  },
+  {
+   "id": "0002",
+   "via": "division",
+   "tiebreak": null,
+   "divisionTiebreak": null,
+   "seed": 3
+  },
+  {
+   "id": "0001",
+   "via": "wild card",
+   "tiebreak": "total points",
+   "seed": 4
+  },
+  {
+   "id": "0004",
+   "via": "wild card",
+   "tiebreak": null,
+   "seed": 5
+  },
+  {
+   "id": "0007",
+   "via": "all-play wins",
+   "tiebreak": "total points",
+   "seed": 6
+  }
+ ],
+ "draftOrder": [
+  {
+   "id": "0008",
+   "basis": "lowest potential points",
+   "tiebreak": null,
+   "pick": 1
+  },
+  {
+   "id": "0011",
+   "basis": "lowest potential points",
+   "tiebreak": null,
+   "pick": 2
+  },
+  {
+   "id": "0012",
+   "basis": "lowest potential points",
+   "tiebreak": null,
+   "pick": 3
+  },
+  {
+   "id": "0010",
+   "basis": "lowest potential points",
+   "tiebreak": null,
+   "pick": 4
+  },
+  {
+   "id": "0006",
+   "basis": "lowest potential points",
+   "tiebreak": null,
+   "pick": 5
+  },
+  {
+   "id": "0003",
+   "basis": "lowest potential points",
+   "tiebreak": null,
+   "pick": 6
+  },
+  {
+   "id": "0007",
+   "basis": "seed 6, projected round-1 loser (worse seed)",
+   "tiebreak": null,
+   "pick": 7
+  },
+  {
+   "id": "0004",
+   "basis": "seed 5, projected round-1 loser",
+   "tiebreak": null,
+   "pick": 8
+  },
+  {
+   "id": "0001",
+   "basis": "seed 4, projected 4th place",
+   "tiebreak": null,
+   "pick": 9
+  },
+  {
+   "id": "0002",
+   "basis": "seed 3, projected 3rd place",
+   "tiebreak": null,
+   "pick": 10
+  },
+  {
+   "id": "0005",
+   "basis": "seed 2, projected runner-up",
+   "tiebreak": null,
+   "pick": 11
+  },
+  {
+   "id": "0009",
+   "basis": "seed 1, projected champion",
+   "tiebreak": null,
+   "pick": 12
+  }
+ ],
+ "notes": [
+  "Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.",
+  "Picks 7-12 are projected by seed until the playoffs are played."
+ ]
+}
