@@ -92,8 +92,7 @@ h2.sec small{font:400 .8rem var(--body);text-transform:none;letter-spacing:0;col
 .bub .gb{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.8rem;text-align:right}
 
 /* tables */
-.divs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media (max-width:980px){.divs{grid-template-columns:minmax(0,1fr)}}
+.divs{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
 .tbl-wrap{overflow-x:auto}
 table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.86rem}
 .tbl caption{text-align:left;font:600 .95rem var(--display);text-transform:uppercase;letter-spacing:.05em;padding:10px 12px 4px}
@@ -104,14 +103,17 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .tbl td.t{max-width:13rem}
 .tbl td.t .team{max-width:100%}
 .pill{flex:none}
-@media (min-width:981px){.tbl .hide-sm{display:none}}
 @media (max-width:520px){.tbl .hide-sm{display:none}.tbl td.t{max-width:11rem}}
 .pill{display:inline-block;flex:none;font:600 .66rem var(--body);letter-spacing:.04em;padding:1px 6px;border-radius:999px;background:var(--red-soft);color:var(--red);margin-left:6px;vertical-align:1px}
 .pill.wc{background:var(--sky-soft);color:var(--fg)}
 
 /* draft order */
-.order{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (max-width:640px){.order{grid-template-columns:minmax(0,1fr)}}
+.order{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,auto);grid-auto-flow:column}
+.order li:nth-child(-n+6){border-right:1px solid var(--line)}
+@media (max-width:640px){.order{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-flow:row}.order li:nth-child(-n+6){border-right:0}}
+.order li.traded .why{color:var(--fg)}
+.r2{margin:8px 2px 0;font-size:.82rem;color:var(--muted)}
+.r2 b{color:var(--fg);font-variant-numeric:tabular-nums}
 .order li{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:2px 8px;padding:9px 12px;border-bottom:1px solid var(--line);align-items:center}
 .order .pk{font:700 1.05rem var(--display);color:var(--red);grid-row:span 2}
 .order .why{font-size:.78rem;color:var(--muted)}

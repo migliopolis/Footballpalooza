@@ -161,6 +161,37 @@ def build(folder):
     for i, d in enumerate(draft, 1):
         d['pick'] = i
 
+    # division record and games back of the division leader
+    div_rec = {t: [0, 0, 0] for t in teams}
+    for _, a, sa, b, sb in games:
+        if teams[a]['division'] and teams[a]['division'] == teams[b]['division']:
+            for me, mine, theirs in ((a, sa, sb), (b, sb, sa)):
+                div_rec[me][0 if mine > theirs else 1 if mine < theirs else 2] += 1
+    leader = {d['id']: teams[winners[d['id']][0]] for d in divisions}
+    for t in teams.values():
+        L = leader[t['division']]
+        t['divRecord'] = '-'.join(str(x) for x in div_rec[t['id']])
+        t['gb'] = ((L['w'] - t['w']) + (t['l'] - L['l'])) / 2
+        gp = t['w'] + t['l'] + t['t']
+        t['avgPf'] = round(t['pf'] / gp, 1) if gp else 0.0
+
+    # current owners of next year's picks (trades), from MFL futureDraftPicks
+    draft_year = None
+    yr = ''.join(ch for ch in league.get('name', '') if ch.isdigit())[-4:]
+    if yr:
+        draft_year = str(int(yr) + 1)
+    owners = {}
+    fdp_path = os.path.join(folder, 'futureDraftPicks.json')
+    if draft_year and os.path.exists(fdp_path):
+        fdp = load(folder, 'futureDraftPicks').get('futureDraftPicks', {})
+        for f in as_list(fdp.get('franchise')):
+            for p in as_list(f.get('futureDraftPick')):
+                if p.get('year') == draft_year:
+                    owners[(int(p['round']), p['originalPickFor'])] = f['id']
+    for d in draft:
+        d['owner'] = owners.get((1, d['id']), d['id'])
+    round2 = [{'pick': d['pick'], 'id': d['id'], 'owner': owners.get((2, d['id']), d['id'])} for d in draft]
+
     seed_of = {s['id']: s['seed'] for s in seeds}
     table = []
     for t in teams.values():
@@ -176,7 +207,10 @@ def build(folder):
         'divisions': divisions,
         'standings': table,
         'seeds': seeds,
+        'draftYear': draft_year,
         'draftOrder': draft,
+        'draftOrderRound2': round2,
+        'pickOwnersKnown': bool(owners),
         'notes': ['Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.',
                   'Picks 7-12 are projected by seed until the playoffs are played.'],
     }

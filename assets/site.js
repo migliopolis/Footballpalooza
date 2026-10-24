@@ -59,19 +59,29 @@
 
     const divTables = d.divisions.map(dv => {
       const rows = d.standings.filter(t => t.division === dv.id).sort((a, b) => a.divisionRank - b.divisionRank);
+      const gb = v => v <= 0 ? '—' : (Number.isInteger(v) ? v : v.toFixed(1));
       return `<div class="card tbl-wrap"><table class="tbl"><caption>${esc(dv.name)}</caption>
-        <thead><tr><th>Team</th><th>W-L-T</th><th>PF</th><th class="hide-sm">PA</th><th title="All-play wins">AP W</th><th class="hide-sm">Strk</th></tr></thead><tbody>
+        <thead><tr><th>Team</th><th>W-L-T</th><th class="hide-sm">Pct</th><th>GB</th><th class="hide-sm" title="Division record">Div</th>
+          <th>PF</th><th class="hide-sm">PA</th><th class="hide-sm" title="Points per game">Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
+          <th title="All-play record: results against every team, every week">All-play</th><th class="hide-sm">Strk</th></tr></thead><tbody>
         ${rows.map(t => `<tr><td class="t">${chip(t.id, { after: t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '' })}</td>
-          <td>${t.w}-${t.l}-${t.t}</td><td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td>${t.allPlayW}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('')}
+          <td>${t.w}-${t.l}-${t.t}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td>${gb(t.gb)}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
+          <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${pts(t.pp)}</td>
+          <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('')}
         </tbody></table></div>`;
     }).join('');
 
+    const nm = id => (by[id] || {}).name || id;
     const order = d.draftOrder.map(p => {
-      const t = by[p.id];
-      const why = p.pick <= 6 ? `Lowest potential points (${pts(t.pp)})${p.tiebreak ? ` · tiebreak on ${p.tiebreak}` : ''}`
-                              : p.basis.charAt(0).toUpperCase() + p.basis.slice(1);
-      return `<li class="${p.pick > 6 ? 'po' : ''}"><span class="pk">1.${String(p.pick).padStart(2, '0')}</span>${chip(p.id)}<span class="why">${esc(why)}</span></li>`;
+      const t = by[p.id], owner = p.owner || p.id, traded = owner !== p.id;
+      let why = p.pick <= 6 ? `Lowest potential points (${pts(t.pp)})${p.tiebreak ? ` · tiebreak on ${p.tiebreak}` : ''}`
+                            : p.basis.charAt(0).toUpperCase() + p.basis.slice(1);
+      if (traded) why = `Via ${nm(p.id)} · ${why.charAt(0).toLowerCase() + why.slice(1)}`;
+      return `<li class="${p.pick > 6 ? 'po' : ''}${traded ? ' traded' : ''}"><span class="pk">1.${String(p.pick).padStart(2, '0')}</span>${chip(owner)}<span class="why">${esc(why)}</span></li>`;
     }).join('');
+    const r2 = (d.draftOrderRound2 || []).filter(p => p.owner !== p.id);
+    const r2txt = r2.length ? `<p class="r2">Round 2 picks that changed hands: ${r2.map(p => `<b>2.${String(p.pick).padStart(2, '0')}</b> ${esc(nm(p.owner))} (via ${esc(nm(p.id))})`).join(' · ')}</p>` : '';
+    const ownNote = d.pickOwnersKnown ? 'traded picks show their current owner' : 'pick trades not loaded yet';
 
     return `
       <div class="pagehead"><h1>League Now</h1>
@@ -85,8 +95,8 @@
         <section><h2 class="sec">Bracket</h2><div class="card">${bracket}</div></section>
       </div>
       <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div></section>
-      <section><h2 class="sec">Projected rookie draft order <small>picks 7–12 assume higher seeds win</small></h2>
-        <ol class="card order">${order}</ol></section>`;
+      <section><h2 class="sec">Projected ${esc(d.draftYear || '')} rookie draft order <small>picks 7–12 assume higher seeds win · ${ownNote}</small></h2>
+        <ol class="card order">${order}</ol>${r2txt}</section>`;
   }
 
   /* ---------- placeholders ---------- */
