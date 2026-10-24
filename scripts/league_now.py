@@ -190,7 +190,8 @@ def build(folder):
                     owners[(int(p['round']), p['originalPickFor'])] = f['id']
     for d in draft:
         d['owner'] = owners.get((1, d['id']), d['id'])
-    round2 = [{'pick': d['pick'], 'id': d['id'], 'owner': owners.get((2, d['id']), d['id'])} for d in draft]
+    rounds = {str(r): [{'pick': d['pick'], 'id': d['id'], 'owner': owners.get((r, d['id']), d['id'])} for d in draft]
+              for r in (1, 2, 3, 4)}
 
     seed_of = {s['id']: s['seed'] for s in seeds}
     table = []
@@ -209,7 +210,7 @@ def build(folder):
         'seeds': seeds,
         'draftYear': draft_year,
         'draftOrder': draft,
-        'draftOrderRound2': round2,
+        'draftRounds': rounds,
         'pickOwnersKnown': bool(owners),
         'notes': ['Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.',
                   'Picks 7-12 are projected by seed until the playoffs are played.'],

@@ -23,7 +23,7 @@ print('all checks passed')
 # traded picks (MFL futureDraftPicks, Oct 24 2026)
 own = {x['id']: x['owner'] for x in d['draftOrder']}
 assert own['0009'] == '0008' and own['0004'] == '0011', own
-r2 = {x['id']: x['owner'] for x in d['draftOrderRound2']}
+r2 = {x['id']: x['owner'] for x in d['draftRounds']['2']}
 assert r2['0001'] == '0012' and r2['0002'] == '0007', r2
 cen = {t['id']: t for t in d['standings']}
 assert cen['0003']['gb'] == 1.0 and cen['0003']['divRecord'] == '1-1-0', cen['0003']

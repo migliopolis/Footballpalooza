@@ -128,3 +128,12 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .foot{color:var(--muted);font-size:.8rem;padding-top:6px;padding-bottom:28px;border-top:1px solid var(--line)}
 .foot p{margin:6px 0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* round tabs and budgets */
+.rtabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.rtab{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .85rem var(--body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.rtab[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.rtab .tc{font-weight:500;font-size:.72rem;opacity:.75;margin-left:2px}
+.rtab:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.tbl td.bud{font-weight:600}
+.tbl td.bud.chg{color:var(--red)}

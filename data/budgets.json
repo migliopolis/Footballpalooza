@@ -1,0 +1,6 @@
+{
+ "season": 2027,
+ "default": 200,
+ "note": "Hand-maintained 2027 auction budgets. Every team starts at the default; add one entry to adjustments for each trade or penalty that moves auction dollars (negative amounts reduce a budget).",
+ "adjustments": []
+}
