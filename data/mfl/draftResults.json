@@ -1,0 +1,398 @@
+{
+ "draftResults": {
+  "draftUnit": {
+   "draftPick": [
+    {
+     "comments": "<3",
+     "franchise": "0006",
+     "pick": "01",
+     "player": "17472",
+     "round": "01",
+     "timestamp": "1782230427"
+    },
+    {
+     "comments": "[Pick made by Commissioner.] ",
+     "franchise": "0012",
+     "pick": "02",
+     "player": "17499",
+     "round": "01",
+     "timestamp": "1782232228"
+    },
+    {
+     "comments": "[Pick made from Pre-Draft List] ",
+     "franchise": "0008",
+     "pick": "03",
+     "player": "17497",
+     "round": "01",
+     "timestamp": "1782232228"
+    },
+    {
+     "comments": "",
+     "franchise": "0004",
+     "pick": "04",
+     "player": "17473",
+     "round": "01",
+     "timestamp": "1782236980"
+    },
+    {
+     "comments": "[Pick made from Pre-Draft List] ",
+     "franchise": "0005",
+     "pick": "05",
+     "player": "17498",
+     "round": "01",
+     "timestamp": "1782236980"
+    },
+    {
+     "comments": "",
+     "franchise": "0010",
+     "pick": "06",
+     "player": "17501",
+     "round": "01",
+     "timestamp": "1782237624"
+    },
+    {
+     "comments": "[Pick traded from Hauk Tua .\nPick made from Pre-Draft List] ",
+     "franchise": "0005",
+     "pick": "07",
+     "player": "17543",
+     "round": "01",
+     "timestamp": "1782237624"
+    },
+    {
+     "comments": "[Pick traded from Bullish on da Bears.\nPick made by Commissioner.] ",
+     "franchise": "0008",
+     "pick": "08",
+     "player": "17462",
+     "round": "01",
+     "timestamp": "1782240215"
+    },
+    {
+     "comments": "",
+     "franchise": "0007",
+     "pick": "09",
+     "player": "17502",
+     "round": "01",
+     "timestamp": "1782242103"
+    },
+    {
+     "comments": "[Pick made by Commissioner.] ",
+     "franchise": "0001",
+     "pick": "10",
+     "player": "17544",
+     "round": "01",
+     "timestamp": "1782242487"
+    },
+    {
+     "comments": "[Pick traded from Wholey Club.] ",
+     "franchise": "0004",
+     "pick": "11",
+     "player": "17500",
+     "round": "01",
+     "timestamp": "1782243571"
+    },
+    {
+     "comments": "",
+     "franchise": "0009",
+     "pick": "12",
+     "player": "17506",
+     "round": "01",
+     "timestamp": "1782243850"
+    },
+    {
+     "comments": "",
+     "franchise": "0006",
+     "pick": "01",
+     "player": "17477",
+     "round": "02",
+     "timestamp": "1782246800"
+    },
+    {
+     "comments": "",
+     "franchise": "0012",
+     "pick": "02",
+     "player": "17512",
+     "round": "02",
+     "timestamp": "1782247359"
+    },
+    {
+     "comments": "",
+     "franchise": "0008",
+     "pick": "03",
+     "player": "17503",
+     "round": "02",
+     "timestamp": "1782254388"
+    },
+    {
+     "comments": "",
+     "franchise": "0004",
+     "pick": "04",
+     "player": "17482",
+     "round": "02",
+     "timestamp": "1782259668"
+    },
+    {
+     "comments": "[Pick made from Pre-Draft List] ",
+     "franchise": "0005",
+     "pick": "05",
+     "player": "17476",
+     "round": "02",
+     "timestamp": "1782259668"
+    },
+    {
+     "comments": "",
+     "franchise": "0010",
+     "pick": "06",
+     "player": "17474",
+     "round": "02",
+     "timestamp": "1782263776"
+    },
+    {
+     "comments": "",
+     "franchise": "0003",
+     "pick": "07",
+     "player": "17514",
+     "round": "02",
+     "timestamp": "1782265438"
+    },
+    {
+     "comments": "[Pick traded from Bullish on da Bears.] ",
+     "franchise": "0003",
+     "pick": "08",
+     "player": "17481",
+     "round": "02",
+     "timestamp": "1782265458"
+    },
+    {
+     "comments": "[Pick traded from MR. FROBOT.] ",
+     "franchise": "0006",
+     "pick": "09",
+     "player": "17567",
+     "round": "02",
+     "timestamp": "1782267268"
+    },
+    {
+     "comments": "[Pick made by Commissioner.] ",
+     "franchise": "0001",
+     "pick": "10",
+     "player": "17478",
+     "round": "02",
+     "timestamp": "1782267641"
+    },
+    {
+     "comments": "[Pick traded from Wholey Club.] ",
+     "franchise": "0007",
+     "pick": "11",
+     "player": "17463",
+     "round": "02",
+     "timestamp": "1782267946"
+    },
+    {
+     "comments": "",
+     "franchise": "0009",
+     "pick": "12",
+     "player": "17509",
+     "round": "02",
+     "timestamp": "1782268780"
+    },
+    {
+     "comments": "[Pick traded from Jesus Christ College.] ",
+     "franchise": "0007",
+     "pick": "01",
+     "player": "17511",
+     "round": "03",
+     "timestamp": "1782313777"
+    },
+    {
+     "comments": "[Pick made from Pre-Draft List] ",
+     "franchise": "0012",
+     "pick": "02",
+     "player": "17599",
+     "round": "03",
+     "timestamp": "1782313777"
+    },
+    {
+     "comments": "",
+     "franchise": "0008",
+     "pick": "03",
+     "player": "17607",
+     "round": "03",
+     "timestamp": "1782317222"
+    },
+    {
+     "comments": "",
+     "franchise": "0004",
+     "pick": "04",
+     "player": "17507",
+     "round": "03",
+     "timestamp": "1782319667"
+    },
+    {
+     "comments": "",
+     "franchise": "0005",
+     "pick": "05",
+     "player": "17520",
+     "round": "03",
+     "timestamp": "1782327946"
+    },
+    {
+     "comments": "",
+     "franchise": "0010",
+     "pick": "06",
+     "player": "17505",
+     "round": "03",
+     "timestamp": "1782332144"
+    },
+    {
+     "comments": "",
+     "franchise": "0003",
+     "pick": "07",
+     "player": "17652",
+     "round": "03",
+     "timestamp": "1782335224"
+    },
+    {
+     "comments": "",
+     "franchise": "0002",
+     "pick": "08",
+     "player": "17508",
+     "round": "03",
+     "timestamp": "1782338116"
+    },
+    {
+     "comments": "[Pick traded from MR. FROBOT.] ",
+     "franchise": "0004",
+     "pick": "09",
+     "player": "17519",
+     "round": "03",
+     "timestamp": "1782343504"
+    },
+    {
+     "comments": "[Pick made by Commissioner.] ",
+     "franchise": "0001",
+     "pick": "10",
+     "player": "17547",
+     "round": "03",
+     "timestamp": "1782346490"
+    },
+    {
+     "comments": "[Pick traded from Wholey Club.\nPick made from Pre-Draft List] ",
+     "franchise": "0004",
+     "pick": "11",
+     "player": "17627",
+     "round": "03",
+     "timestamp": "1782346490"
+    },
+    {
+     "comments": "[Pick traded from Mailing It In.\nPick traded from Jesus Christ College.] ",
+     "franchise": "0007",
+     "pick": "12",
+     "player": "17485",
+     "round": "03",
+     "timestamp": "1782347117"
+    },
+    {
+     "comments": "",
+     "franchise": "0006",
+     "pick": "01",
+     "player": "17518",
+     "round": "04",
+     "timestamp": "1782348727"
+    },
+    {
+     "comments": "",
+     "franchise": "0012",
+     "pick": "02",
+     "player": "17517",
+     "round": "04",
+     "timestamp": "1782349909"
+    },
+    {
+     "comments": "[Pick made from Pre-Draft List] ",
+     "franchise": "0008",
+     "pick": "03",
+     "player": "17475",
+     "round": "04",
+     "timestamp": "1782349909"
+    },
+    {
+     "comments": "[Pick made from Pre-Draft List] ",
+     "franchise": "0004",
+     "pick": "04",
+     "player": "17521",
+     "round": "04",
+     "timestamp": "1782349909"
+    },
+    {
+     "comments": "[Pick traded from The Fist of the Magi.] ",
+     "franchise": "0003",
+     "pick": "05",
+     "player": "17685",
+     "round": "04",
+     "timestamp": "1782351713"
+    },
+    {
+     "comments": "[Timer expired: Pick skipped\nReplacement pick made by Commissioner.] ",
+     "franchise": "0010",
+     "pick": "06",
+     "player": "17529",
+     "round": "04",
+     "timestamp": "1782401221"
+    },
+    {
+     "comments": "",
+     "franchise": "0003",
+     "pick": "07",
+     "player": "17468",
+     "round": "04",
+     "timestamp": "1782402534"
+    },
+    {
+     "comments": "",
+     "franchise": "0002",
+     "pick": "08",
+     "player": "17466",
+     "round": "04",
+     "timestamp": "1782403091"
+    },
+    {
+     "comments": "[Pick made from Pre-Draft List] ",
+     "franchise": "0007",
+     "pick": "09",
+     "player": "17548",
+     "round": "04",
+     "timestamp": "1782403091"
+    },
+    {
+     "comments": "[Pick made by Commissioner.] ",
+     "franchise": "0001",
+     "pick": "10",
+     "player": "17528",
+     "round": "04",
+     "timestamp": "1782404554"
+    },
+    {
+     "comments": "",
+     "franchise": "0011",
+     "pick": "11",
+     "player": "17542",
+     "round": "04",
+     "timestamp": "1782405032"
+    },
+    {
+     "comments": "",
+     "franchise": "0009",
+     "pick": "12",
+     "player": "17504",
+     "round": "04",
+     "timestamp": "1782410045"
+    }
+   ],
+   "draftType": "SAME",
+   "round1DraftOrder": "0006,0012,0008,0004,0005,0010,0005,0008,0007,0001,0004,0009,",
+   "static_url": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_LEAGUE_draft_results.xml",
+   "unit": "LEAGUE"
+  }
+ },
+ "encoding": "utf-8",
+ "version": "1.0"
+}

@@ -1,0 +1,515 @@
+{
+ "auctionResults": {
+  "auctionUnit": {
+   "auction": [
+    {
+     "franchise": "0012",
+     "lastBidTime": "1788714732",
+     "player": "13130",
+     "timeStarted": "1788714677",
+     "winningBid": "51"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788714751",
+     "player": "15761",
+     "timeStarted": "1788714751",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0004",
+     "lastBidTime": "1788714864",
+     "player": "15794",
+     "timeStarted": "1788714775",
+     "winningBid": "20"
+    },
+    {
+     "franchise": "0006",
+     "lastBidTime": "1788715015",
+     "player": "15281",
+     "timeStarted": "1788714894",
+     "winningBid": "62"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788715123",
+     "player": "13299",
+     "timeStarted": "1788715047",
+     "winningBid": "11"
+    },
+    {
+     "franchise": "0005",
+     "lastBidTime": "1788715237",
+     "player": "12626",
+     "timeStarted": "1788715149",
+     "winningBid": "44"
+    },
+    {
+     "franchise": "0010",
+     "lastBidTime": "1788715307",
+     "player": "11244",
+     "timeStarted": "1788715269",
+     "winningBid": "5"
+    },
+    {
+     "franchise": "0005",
+     "lastBidTime": "1788715930",
+     "player": "13593",
+     "timeStarted": "1788715337",
+     "winningBid": "14"
+    },
+    {
+     "franchise": "0002",
+     "lastBidTime": "1788716013",
+     "player": "13604",
+     "timeStarted": "1788715958",
+     "winningBid": "58"
+    },
+    {
+     "franchise": "0003",
+     "lastBidTime": "1788716137",
+     "player": "14836",
+     "timeStarted": "1788716038",
+     "winningBid": "46"
+    },
+    {
+     "franchise": "0004",
+     "lastBidTime": "1788716171",
+     "player": "13116",
+     "timeStarted": "1788716159",
+     "winningBid": "2"
+    },
+    {
+     "franchise": "0004",
+     "lastBidTime": "1788716318",
+     "player": "15711",
+     "timeStarted": "1788716201",
+     "winningBid": "66"
+    },
+    {
+     "franchise": "0010",
+     "lastBidTime": "1788716467",
+     "player": "15751",
+     "timeStarted": "1788716349",
+     "winningBid": "50"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788716492",
+     "player": "17171",
+     "timeStarted": "1788716492",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0007",
+     "lastBidTime": "1788716582",
+     "player": "14835",
+     "timeStarted": "1788716513",
+     "winningBid": "23"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788716699",
+     "player": "15756",
+     "timeStarted": "1788716614",
+     "winningBid": "22"
+    },
+    {
+     "franchise": "0001",
+     "lastBidTime": "1788716744",
+     "player": "13674",
+     "timeStarted": "1788716731",
+     "winningBid": "2"
+    },
+    {
+     "franchise": "0003",
+     "lastBidTime": "1788716767",
+     "player": "13590",
+     "timeStarted": "1788716767",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0010",
+     "lastBidTime": "1788716907",
+     "player": "14797",
+     "timeStarted": "1788716794",
+     "winningBid": "30"
+    },
+    {
+     "franchise": "0005",
+     "lastBidTime": "1788716959",
+     "player": "0511",
+     "timeStarted": "1788716939",
+     "winningBid": "3"
+    },
+    {
+     "franchise": "0004",
+     "lastBidTime": "1788716992",
+     "player": "0504",
+     "timeStarted": "1788716992",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0008",
+     "lastBidTime": "1788717096",
+     "player": "15708",
+     "timeStarted": "1788717014",
+     "winningBid": "41"
+    },
+    {
+     "franchise": "0003",
+     "lastBidTime": "1788717156",
+     "player": "0528",
+     "timeStarted": "1788717129",
+     "winningBid": "5"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788717351",
+     "player": "13635",
+     "timeStarted": "1788717270",
+     "winningBid": "18"
+    },
+    {
+     "franchise": "0005",
+     "lastBidTime": "1788717460",
+     "player": "11675",
+     "timeStarted": "1788717382",
+     "winningBid": "15"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788717549",
+     "player": "16214",
+     "timeStarted": "1788717486",
+     "winningBid": "13"
+    },
+    {
+     "franchise": "0001",
+     "lastBidTime": "1788717582",
+     "player": "0524",
+     "timeStarted": "1788717582",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0012",
+     "lastBidTime": "1788717711",
+     "player": "15261",
+     "timeStarted": "1788717636",
+     "winningBid": "15"
+    },
+    {
+     "franchise": "0003",
+     "lastBidTime": "1788718161",
+     "player": "16169",
+     "timeStarted": "1788718115",
+     "winningBid": "11"
+    },
+    {
+     "franchise": "0005",
+     "lastBidTime": "1788718194",
+     "player": "14073",
+     "timeStarted": "1788718194",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0004",
+     "lastBidTime": "1788718223",
+     "player": "13592",
+     "timeStarted": "1788718223",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788718392",
+     "player": "16614",
+     "timeStarted": "1788718245",
+     "winningBid": "22"
+    },
+    {
+     "franchise": "0008",
+     "lastBidTime": "1788718551",
+     "player": "14109",
+     "timeStarted": "1788718509",
+     "winningBid": "12"
+    },
+    {
+     "franchise": "0007",
+     "lastBidTime": "1788718635",
+     "player": "16192",
+     "timeStarted": "1788718577",
+     "winningBid": "12"
+    },
+    {
+     "franchise": "0007",
+     "lastBidTime": "1788718920",
+     "player": "0514",
+     "timeStarted": "1788718910",
+     "winningBid": "2"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788719033",
+     "player": "15742",
+     "timeStarted": "1788718941",
+     "winningBid": "30"
+    },
+    {
+     "franchise": "0002",
+     "lastBidTime": "1788719104",
+     "player": "16164",
+     "timeStarted": "1788719064",
+     "winningBid": "6"
+    },
+    {
+     "franchise": "0002",
+     "lastBidTime": "1788719137",
+     "player": "15799",
+     "timeStarted": "1788719137",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788719195",
+     "player": "14085",
+     "timeStarted": "1788719169",
+     "winningBid": "15"
+    },
+    {
+     "franchise": "0004",
+     "lastBidTime": "1788719217",
+     "player": "14102",
+     "timeStarted": "1788719217",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0008",
+     "lastBidTime": "1788719268",
+     "player": "15972",
+     "timeStarted": "1788719242",
+     "winningBid": "13"
+    },
+    {
+     "franchise": "0012",
+     "lastBidTime": "1788719300",
+     "player": "0531",
+     "timeStarted": "1788719291",
+     "winningBid": "3"
+    },
+    {
+     "franchise": "0006",
+     "lastBidTime": "1788719344",
+     "player": "14800",
+     "timeStarted": "1788719321",
+     "winningBid": "16"
+    },
+    {
+     "franchise": "0005",
+     "lastBidTime": "1788719414",
+     "player": "13319",
+     "timeStarted": "1788719365",
+     "winningBid": "9"
+    },
+    {
+     "franchise": "0012",
+     "lastBidTime": "1788719450",
+     "player": "16150",
+     "timeStarted": "1788719436",
+     "winningBid": "2"
+    },
+    {
+     "franchise": "0001",
+     "lastBidTime": "1788719506",
+     "player": "17075",
+     "timeStarted": "1788719479",
+     "winningBid": "5"
+    },
+    {
+     "franchise": "0008",
+     "lastBidTime": "1788719572",
+     "player": "13163",
+     "timeStarted": "1788719532",
+     "winningBid": "12"
+    },
+    {
+     "franchise": "0002",
+     "lastBidTime": "1788719600",
+     "player": "13630",
+     "timeStarted": "1788719600",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788719691",
+     "player": "15721",
+     "timeStarted": "1788719626",
+     "winningBid": "12"
+    },
+    {
+     "franchise": "0012",
+     "lastBidTime": "1788719751",
+     "player": "16187",
+     "timeStarted": "1788719724",
+     "winningBid": "6"
+    },
+    {
+     "franchise": "0012",
+     "lastBidTime": "1788719803",
+     "player": "16165",
+     "timeStarted": "1788719771",
+     "winningBid": "11"
+    },
+    {
+     "franchise": "0006",
+     "lastBidTime": "1788719829",
+     "player": "16608",
+     "timeStarted": "1788719829",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788719854",
+     "player": "14136",
+     "timeStarted": "1788719854",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788719878",
+     "player": "0509",
+     "timeStarted": "1788719878",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0007",
+     "lastBidTime": "1788719899",
+     "player": "16684",
+     "timeStarted": "1788719899",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0004",
+     "lastBidTime": "1788719980",
+     "player": "16747",
+     "timeStarted": "1788719928",
+     "winningBid": "9"
+    },
+    {
+     "franchise": "0008",
+     "lastBidTime": "1788720010",
+     "player": "16213",
+     "timeStarted": "1788720010",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0006",
+     "lastBidTime": "1788720030",
+     "player": "14861",
+     "timeStarted": "1788720030",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788720057",
+     "player": "16186",
+     "timeStarted": "1788720057",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788720075",
+     "player": "14059",
+     "timeStarted": "1788720075",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0007",
+     "lastBidTime": "1788720103",
+     "player": "17047",
+     "timeStarted": "1788720103",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0006",
+     "lastBidTime": "1788720122",
+     "player": "17048",
+     "timeStarted": "1788720122",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788720178",
+     "player": "12186",
+     "timeStarted": "1788720141",
+     "winningBid": "6"
+    },
+    {
+     "franchise": "0007",
+     "lastBidTime": "1788720225",
+     "player": "14783",
+     "timeStarted": "1788720197",
+     "winningBid": "11"
+    },
+    {
+     "franchise": "0011",
+     "lastBidTime": "1788720270",
+     "player": "15716",
+     "timeStarted": "1788720256",
+     "winningBid": "2"
+    },
+    {
+     "franchise": "0006",
+     "lastBidTime": "1788720291",
+     "player": "16757",
+     "timeStarted": "1788720291",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788720308",
+     "player": "14127",
+     "timeStarted": "1788720308",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0007",
+     "lastBidTime": "1788720335",
+     "player": "16184",
+     "timeStarted": "1788720335",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0006",
+     "lastBidTime": "1788720357",
+     "player": "0510",
+     "timeStarted": "1788720357",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788720382",
+     "player": "14833",
+     "timeStarted": "1788720382",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788720415",
+     "player": "0507",
+     "timeStarted": "1788720415",
+     "winningBid": "1"
+    },
+    {
+     "franchise": "0009",
+     "lastBidTime": "1788720439",
+     "player": "0518",
+     "timeStarted": "1788720439",
+     "winningBid": "1"
+    }
+   ],
+   "unit": "LEAGUE"
+  }
+ },
+ "encoding": "utf-8",
+ "version": "1.0"
+}

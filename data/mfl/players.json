@@ -1,0 +1,4880 @@
+{
+ "fetched": "2026-10-24T23:11:05+00:00",
+ "fields": [
+  "name",
+  "position",
+  "team"
+ ],
+ "players": {
+  "0501": [
+   "Bills, Buffalo",
+   "Def",
+   "BUF"
+  ],
+  "0502": [
+   "Colts, Indianapolis",
+   "Def",
+   "IND"
+  ],
+  "0503": [
+   "Dolphins, Miami",
+   "Def",
+   "MIA"
+  ],
+  "0504": [
+   "Patriots, New England",
+   "Def",
+   "NEP"
+  ],
+  "0505": [
+   "Jets, New York",
+   "Def",
+   "NYJ"
+  ],
+  "0506": [
+   "Bengals, Cincinnati",
+   "Def",
+   "CIN"
+  ],
+  "0507": [
+   "Browns, Cleveland",
+   "Def",
+   "CLE"
+  ],
+  "0508": [
+   "Titans, Tennessee",
+   "Def",
+   "TEN"
+  ],
+  "0509": [
+   "Jaguars, Jacksonville",
+   "Def",
+   "JAC"
+  ],
+  "0510": [
+   "Steelers, Pittsburgh",
+   "Def",
+   "PIT"
+  ],
+  "0511": [
+   "Broncos, Denver",
+   "Def",
+   "DEN"
+  ],
+  "0512": [
+   "Chiefs, Kansas City",
+   "Def",
+   "KCC"
+  ],
+  "0513": [
+   "Raiders, Las Vegas",
+   "Def",
+   "LVR"
+  ],
+  "0514": [
+   "Chargers, Los Angeles",
+   "Def",
+   "LAC"
+  ],
+  "0515": [
+   "Seahawks, Seattle",
+   "Def",
+   "SEA"
+  ],
+  "0516": [
+   "Cowboys, Dallas",
+   "Def",
+   "DAL"
+  ],
+  "0517": [
+   "Giants, New York",
+   "Def",
+   "NYG"
+  ],
+  "0518": [
+   "Eagles, Philadelphia",
+   "Def",
+   "PHI"
+  ],
+  "0519": [
+   "Cardinals, Arizona",
+   "Def",
+   "ARI"
+  ],
+  "0520": [
+   "Commanders, Washington",
+   "Def",
+   "WAS"
+  ],
+  "0521": [
+   "Bears, Chicago",
+   "Def",
+   "CHI"
+  ],
+  "0522": [
+   "Lions, Detroit",
+   "Def",
+   "DET"
+  ],
+  "0523": [
+   "Packers, Green Bay",
+   "Def",
+   "GBP"
+  ],
+  "0524": [
+   "Vikings, Minnesota",
+   "Def",
+   "MIN"
+  ],
+  "0525": [
+   "Buccaneers, Tampa Bay",
+   "Def",
+   "TBB"
+  ],
+  "0526": [
+   "Falcons, Atlanta",
+   "Def",
+   "ATL"
+  ],
+  "0527": [
+   "Panthers, Carolina",
+   "Def",
+   "CAR"
+  ],
+  "0528": [
+   "Rams, Los Angeles",
+   "Def",
+   "LAR"
+  ],
+  "0529": [
+   "Saints, New Orleans",
+   "Def",
+   "NOS"
+  ],
+  "0530": [
+   "49ers, San Francisco",
+   "Def",
+   "SFO"
+  ],
+  "0531": [
+   "Ravens, Baltimore",
+   "Def",
+   "BAL"
+  ],
+  "0532": [
+   "Texans, Houston",
+   "Def",
+   "HOU"
+  ],
+  "10313": [
+   "Dalton, Andy",
+   "QB",
+   "ATL"
+  ],
+  "10413": [
+   "Taylor, Tyrod",
+   "QB",
+   "GBP"
+  ],
+  "10700": [
+   "Cousins, Kirk",
+   "QB",
+   "LVR"
+  ],
+  "10703": [
+   "Wilson, Russell",
+   "QB",
+   "FA"
+  ],
+  "10948": [
+   "Keenum, Case",
+   "QB",
+   "CHI"
+  ],
+  "11150": [
+   "Smith, Geno",
+   "QB",
+   "NYJ"
+  ],
+  "11222": [
+   "Allen, Keenan",
+   "WR",
+   "IND"
+  ],
+  "11225": [
+   "Patterson, Cordarrelle",
+   "RB",
+   "FA"
+  ],
+  "11232": [
+   "Hopkins, DeAndre",
+   "WR",
+   "FA"
+  ],
+  "11244": [
+   "Kelce, Travis",
+   "TE",
+   "KCC"
+  ],
+  "11247": [
+   "Ertz, Zach",
+   "TE",
+   "PHI"
+  ],
+  "11367": [
+   "Juszczyk, Kyle",
+   "RB",
+   "SFO"
+  ],
+  "11640": [
+   "Bridgewater, Teddy",
+   "QB",
+   "FA"
+  ],
+  "11644": [
+   "Carr, Derek",
+   "QB",
+   "FA"
+  ],
+  "11671": [
+   "Evans, Mike",
+   "WR",
+   "SFO"
+  ],
+  "11674": [
+   "Cooks, Brandin",
+   "WR",
+   "SFO"
+  ],
+  "11675": [
+   "Adams, Davante",
+   "WR",
+   "LAR"
+  ],
+  "11679": [
+   "Beckham, Odell",
+   "WR",
+   "MIN"
+  ],
+  "11760": [
+   "Garoppolo, Jimmy",
+   "QB",
+   "LAR"
+  ],
+  "11938": [
+   "Thielen, Adam",
+   "WR",
+   "FA"
+  ],
+  "12140": [
+   "Winston, Jameis",
+   "QB",
+   "NYG"
+  ],
+  "12141": [
+   "Mariota, Marcus",
+   "QB",
+   "WAS"
+  ],
+  "12155": [
+   "Abdullah, Ameer",
+   "RB",
+   "JAC"
+  ],
+  "12175": [
+   "Cooper, Amari",
+   "WR",
+   "FA"
+  ],
+  "12181": [
+   "Agholor, Nelson",
+   "WR",
+   "FA"
+  ],
+  "12186": [
+   "Diggs, Stefon",
+   "WR",
+   "WAS"
+  ],
+  "12187": [
+   "Lockett, Tyler",
+   "WR",
+   "FA"
+  ],
+  "12188": [
+   "Dorsett, Phillip",
+   "WR",
+   "LVR"
+  ],
+  "12263": [
+   "Waller, Darren",
+   "TE",
+   "CAR"
+  ],
+  "12325": [
+   "Burton, Michael",
+   "RB",
+   "CLE"
+  ],
+  "12381": [
+   "Siemian, Trevor",
+   "QB",
+   "FA"
+  ],
+  "12394": [
+   "Carter, DeAndre",
+   "WR",
+   "DET"
+  ],
+  "12447": [
+   "Mostert, Raheem",
+   "RB",
+   "FA"
+  ],
+  "12476": [
+   "Heinicke, Taylor",
+   "QB",
+   "FA"
+  ],
+  "12608": [
+   "Winchester, James",
+   "TE",
+   "KCC"
+  ],
+  "12610": [
+   "Wentz, Carson",
+   "QB",
+   "MIN"
+  ],
+  "12611": [
+   "Goff, Jared",
+   "QB",
+   "DET"
+  ],
+  "12616": [
+   "Brissett, Jacoby",
+   "QB",
+   "ARI"
+  ],
+  "12620": [
+   "Prescott, Dak",
+   "QB",
+   "DAL"
+  ],
+  "12621": [
+   "Allen, Brandon",
+   "QB",
+   "FA"
+  ],
+  "12623": [
+   "Driskel, Jeff",
+   "QB",
+   "WAS"
+  ],
+  "12625": [
+   "Elliott, Ezekiel",
+   "RB",
+   "FA"
+  ],
+  "12626": [
+   "Henry, Derrick",
+   "RB",
+   "BAL"
+  ],
+  "12645": [
+   "Treadwell, Laquon",
+   "WR",
+   "IND"
+  ],
+  "12650": [
+   "Boyd, Tyler",
+   "WR",
+   "FA"
+  ],
+  "12658": [
+   "Shepard, Sterling",
+   "WR",
+   "NYJ"
+  ],
+  "12676": [
+   "Henry, Hunter",
+   "TE",
+   "NEP"
+  ],
+  "12677": [
+   "Hooper, Austin",
+   "TE",
+   "ATL"
+  ],
+  "12678": [
+   "Higbee, Tyler",
+   "TE",
+   "LAR"
+  ],
+  "12680": [
+   "Vannett, Nick",
+   "TE",
+   "BAL"
+  ],
+  "12773": [
+   "Moore, Chris",
+   "WR",
+   "BAL"
+  ],
+  "12785": [
+   "Robinson, Demarcus",
+   "WR",
+   "SFO"
+  ],
+  "12801": [
+   "Hill, Tyreek",
+   "WR",
+   "FA"
+  ],
+  "12923": [
+   "Ham, C.J.",
+   "RB",
+   "FA"
+  ],
+  "12930": [
+   "Chosen, Robbie",
+   "WR",
+   "WAS"
+  ],
+  "12955": [
+   "Manhertz, Chris",
+   "TE",
+   "NYG"
+  ],
+  "13066": [
+   "Raymond, Kalif",
+   "WR",
+   "CHI"
+  ],
+  "13113": [
+   "Watson, Deshaun",
+   "QB",
+   "CLE"
+  ],
+  "13115": [
+   "Trubisky, Mitchell",
+   "QB",
+   "TEN"
+  ],
+  "13116": [
+   "Mahomes, Patrick",
+   "QB",
+   "KCC"
+  ],
+  "13119": [
+   "Dobbs, Joshua",
+   "QB",
+   "DET"
+  ],
+  "13124": [
+   "Rush, Cooper",
+   "QB",
+   "FA"
+  ],
+  "13128": [
+   "Cook, Dalvin",
+   "RB",
+   "FA"
+  ],
+  "13130": [
+   "McCaffrey, Christian",
+   "RB",
+   "SFO"
+  ],
+  "13131": [
+   "Mixon, Joe",
+   "RB",
+   "FA"
+  ],
+  "13132": [
+   "Kamara, Alvin",
+   "RB",
+   "NOS"
+  ],
+  "13133": [
+   "Perine, Samaje",
+   "RB",
+   "CIN"
+  ],
+  "13134": [
+   "Foreman, D'Onta",
+   "RB",
+   "FA"
+  ],
+  "13138": [
+   "Hunt, Kareem",
+   "RB",
+   "FA"
+  ],
+  "13139": [
+   "Williams, Jamaal",
+   "RB",
+   "FA"
+  ],
+  "13143": [
+   "McNichols, Jeremy",
+   "RB",
+   "WAS"
+  ],
+  "13146": [
+   "Conner, James",
+   "RB",
+   "ARI"
+  ],
+  "13148": [
+   "Ogunbowale, Dare",
+   "RB",
+   "HOU"
+  ],
+  "13154": [
+   "Williams, Mike",
+   "WR",
+   "FA"
+  ],
+  "13156": [
+   "Smith-Schuster, JuJu",
+   "WR",
+   "FA"
+  ],
+  "13157": [
+   "Samuel, Curtis",
+   "WR",
+   "FA"
+  ],
+  "13163": [
+   "Godwin, Chris",
+   "WR",
+   "TBB"
+  ],
+  "13164": [
+   "Kupp, Cooper",
+   "WR",
+   "SEA"
+  ],
+  "13168": [
+   "Reynolds, Josh",
+   "WR",
+   "NYJ"
+  ],
+  "13172": [
+   "Brown, Noah",
+   "WR",
+   "FA"
+  ],
+  "13176": [
+   "Jones, Zay",
+   "WR",
+   "FA"
+  ],
+  "13189": [
+   "Engram, Evan",
+   "TE",
+   "DEN"
+  ],
+  "13192": [
+   "Njoku, David",
+   "TE",
+   "LAC"
+  ],
+  "13193": [
+   "Smith, Jonnu",
+   "TE",
+   "GBP"
+  ],
+  "13236": [
+   "Everett, Gerald",
+   "TE",
+   "FA"
+  ],
+  "13246": [
+   "Alie-Cox, Mo",
+   "TE",
+   "IND"
+  ],
+  "13289": [
+   "Hollins, Mack",
+   "WR",
+   "NEP"
+  ],
+  "13299": [
+   "Kittle, George",
+   "TE",
+   "SFO"
+  ],
+  "13308": [
+   "Agnew, Jamal",
+   "WR",
+   "FA"
+  ],
+  "13315": [
+   "Saubert, Eric",
+   "TE",
+   "SEA"
+  ],
+  "13316": [
+   "Taylor, Trent",
+   "WR",
+   "FA"
+  ],
+  "13319": [
+   "Jones, Aaron",
+   "RB",
+   "MIN"
+  ],
+  "13348": [
+   "Moore, David",
+   "WR",
+   "CAR"
+  ],
+  "13377": [
+   "Patrick, Tim",
+   "WR",
+   "NYJ"
+  ],
+  "13404": [
+   "Ekeler, Austin",
+   "RB",
+   "WAS"
+  ],
+  "13418": [
+   "Bourne, Kendrick",
+   "WR",
+   "ARI"
+  ],
+  "13424": [
+   "Hill, Taysom",
+   "TE",
+   "FA"
+  ],
+  "13427": [
+   "Tonyan, Robert",
+   "TE",
+   "PIT"
+  ],
+  "13455": [
+   "Ricard, Patrick",
+   "RB",
+   "NYG"
+  ],
+  "13488": [
+   "Pascal, Zach",
+   "WR",
+   "FA"
+  ],
+  "13589": [
+   "Allen, Josh",
+   "QB",
+   "BUF"
+  ],
+  "13590": [
+   "Mayfield, Baker",
+   "QB",
+   "TBB"
+  ],
+  "13592": [
+   "Darnold, Sam",
+   "QB",
+   "SEA"
+  ],
+  "13593": [
+   "Jackson, Lamar",
+   "QB",
+   "BAL"
+  ],
+  "13595": [
+   "Rudolph, Mason",
+   "QB",
+   "PIT"
+  ],
+  "13598": [
+   "White, Mike",
+   "QB",
+   "FA"
+  ],
+  "13604": [
+   "Barkley, Saquon",
+   "RB",
+   "PHI"
+  ],
+  "13610": [
+   "Chubb, Nick",
+   "RB",
+   "FA"
+  ],
+  "13622": [
+   "Hines, Nyheim",
+   "RB",
+   "NOS"
+  ],
+  "13629": [
+   "Ridley, Calvin",
+   "WR",
+   "TEN"
+  ],
+  "13630": [
+   "Sutton, Courtland",
+   "WR",
+   "DEN"
+  ],
+  "13632": [
+   "Lazard, Allen",
+   "WR",
+   "FA"
+  ],
+  "13633": [
+   "Kirk, Christian",
+   "WR",
+   "SFO"
+  ],
+  "13634": [
+   "Pettis, Dante",
+   "WR",
+   "SFO"
+  ],
+  "13635": [
+   "Moore, D.J.",
+   "WR",
+   "BUF"
+  ],
+  "13638": [
+   "Berrios, Braxton",
+   "WR",
+   "NYG"
+  ],
+  "13641": [
+   "McCloud, Ray-Ray",
+   "WR",
+   "FA"
+  ],
+  "13652": [
+   "Wilson, Cedrick",
+   "WR",
+   "FA"
+  ],
+  "13668": [
+   "Chark, D.J.",
+   "WR",
+   "FA"
+  ],
+  "13669": [
+   "Turner, Malik",
+   "WR",
+   "SFO"
+  ],
+  "13671": [
+   "Andrews, Mark",
+   "TE",
+   "BAL"
+  ],
+  "13672": [
+   "Gesicki, Mike",
+   "TE",
+   "CIN"
+  ],
+  "13674": [
+   "Goedert, Dallas",
+   "TE",
+   "PHI"
+  ],
+  "13675": [
+   "Conklin, Tyler",
+   "TE",
+   "DET"
+  ],
+  "13676": [
+   "Smythe, Durham",
+   "TE",
+   "BAL"
+  ],
+  "13678": [
+   "Thomas, Ian",
+   "TE",
+   "LVR"
+  ],
+  "13680": [
+   "Hurst, Hayden",
+   "TE",
+   "FA"
+  ],
+  "13726": [
+   "Edmonds, Chase",
+   "RB",
+   "WAS"
+  ],
+  "13753": [
+   "Akins, Jordan",
+   "TE",
+   "JAC"
+  ],
+  "13763": [
+   "Dissly, Will",
+   "TE",
+   "FA"
+  ],
+  "13772": [
+   "Schultz, Dalton",
+   "TE",
+   "HOU"
+  ],
+  "13776": [
+   "Watson, Justin",
+   "WR",
+   "HOU"
+  ],
+  "13793": [
+   "Valdes-Scantling, Marquez",
+   "WR",
+   "PIT"
+  ],
+  "13809": [
+   "Gage, Russell",
+   "WR",
+   "SFO"
+  ],
+  "13850": [
+   "Edwards, Gus",
+   "RB",
+   "FA"
+  ],
+  "13862": [
+   "Cracraft, River",
+   "WR",
+   "FA"
+  ],
+  "13879": [
+   "Allen, Kyle",
+   "QB",
+   "BUF"
+  ],
+  "13893": [
+   "Sherfield, Trent",
+   "WR",
+   "BUF"
+  ],
+  "13919": [
+   "Firkser, Anthony",
+   "TE",
+   "FA"
+  ],
+  "13940": [
+   "Mundt, Johnny",
+   "TE",
+   "PHI"
+  ],
+  "13963": [
+   "Hodge, KhaDarel",
+   "WR",
+   "FA"
+  ],
+  "13968": [
+   "Mullens, Nick",
+   "QB",
+   "JAC"
+  ],
+  "13988": [
+   "Dwelley, Ross",
+   "TE",
+   "CAR"
+  ],
+  "13994": [
+   "Brown, Pharaoh",
+   "TE",
+   "IND"
+  ],
+  "14017": [
+   "Wilson, Jeffery",
+   "RB",
+   "MIA"
+  ],
+  "14056": [
+   "Murray, Kyler",
+   "QB",
+   "MIN"
+  ],
+  "14057": [
+   "Lock, Drew",
+   "QB",
+   "SEA"
+  ],
+  "14059": [
+   "Jones, Daniel",
+   "QB",
+   "IND"
+  ],
+  "14060": [
+   "Jackson, Tyree",
+   "TE",
+   "WAS"
+  ],
+  "14062": [
+   "Grier, Will",
+   "QB",
+   "FA"
+  ],
+  "14063": [
+   "Stidham, Jarrett",
+   "QB",
+   "DEN"
+  ],
+  "14065": [
+   "Rypien, Brett",
+   "QB",
+   "TBB"
+  ],
+  "14067": [
+   "Minshew, Gardner",
+   "QB",
+   "ARI"
+  ],
+  "14069": [
+   "Stick, Easton",
+   "QB",
+   "TBB"
+  ],
+  "14071": [
+   "Montgomery, David",
+   "RB",
+   "HOU"
+  ],
+  "14073": [
+   "Jacobs, Josh",
+   "RB",
+   "GBP"
+  ],
+  "14076": [
+   "Williams, Trayveon",
+   "RB",
+   "FA"
+  ],
+  "14079": [
+   "Sanders, Miles",
+   "RB",
+   "FA"
+  ],
+  "14080": [
+   "Singletary, Devin",
+   "RB",
+   "NYG"
+  ],
+  "14081": [
+   "Gaskin, Myles",
+   "RB",
+   "FA"
+  ],
+  "14083": [
+   "Homer, Travis",
+   "RB",
+   "PIT"
+  ],
+  "14085": [
+   "Pollard, Tony",
+   "RB",
+   "TEN"
+  ],
+  "14086": [
+   "Hill, Justice",
+   "RB",
+   "BAL"
+  ],
+  "14095": [
+   "Johnson, Ty",
+   "RB",
+   "BUF"
+  ],
+  "14102": [
+   "Metcalf, DK",
+   "WR",
+   "PIT"
+  ],
+  "14104": [
+   "Brown, A.J.",
+   "WR",
+   "NEP"
+  ],
+  "14105": [
+   "Brown, Marquise",
+   "WR",
+   "PHI"
+  ],
+  "14108": [
+   "Dortch, Greg",
+   "WR",
+   "BUF"
+  ],
+  "14109": [
+   "McLaurin, Terry",
+   "WR",
+   "WAS"
+  ],
+  "14110": [
+   "Sills, David",
+   "WR",
+   "TBB"
+  ],
+  "14112": [
+   "Campbell, Parris",
+   "WR",
+   "FA"
+  ],
+  "14113": [
+   "Hardman, Mecole",
+   "WR",
+   "IND"
+  ],
+  "14118": [
+   "Humphrey, Lil'Jordan",
+   "WR",
+   "DEN"
+  ],
+  "14120": [
+   "Jennings, Gary",
+   "WR",
+   "LAC"
+  ],
+  "14122": [
+   "Slayton, Darius",
+   "WR",
+   "FA"
+  ],
+  "14123": [
+   "Renfrow, Hunter",
+   "WR",
+   "FA"
+  ],
+  "14127": [
+   "Meyers, Jakobi",
+   "WR",
+   "JAC"
+  ],
+  "14136": [
+   "Samuel, Deebo",
+   "WR",
+   "SFO"
+  ],
+  "14137": [
+   "Fant, Noah",
+   "TE",
+   "NOS"
+  ],
+  "14138": [
+   "Hockenson, T.J.",
+   "TE",
+   "MIN"
+  ],
+  "14141": [
+   "Smith, Irv",
+   "TE",
+   "FA"
+  ],
+  "14143": [
+   "Knox, Dawson",
+   "TE",
+   "BUF"
+  ],
+  "14146": [
+   "Sample, Drew",
+   "TE",
+   "CIN"
+  ],
+  "14208": [
+   "Johnson, Diontae",
+   "WR",
+   "FA"
+  ],
+  "14209": [
+   "Oliver, Josh",
+   "TE",
+   "MIN"
+  ],
+  "14223": [
+   "Mattison, Alexander",
+   "RB",
+   "MIA"
+  ],
+  "14239": [
+   "Moreau, Foster",
+   "TE",
+   "HOU"
+  ],
+  "14280": [
+   "Miller, Scotty",
+   "WR",
+   "CHI"
+  ],
+  "14315": [
+   "Dulin, Ashton",
+   "WR",
+   "IND"
+  ],
+  "14319": [
+   "Beck, Andrew",
+   "RB",
+   "NYJ"
+  ],
+  "14331": [
+   "Johnson, D'Ernest",
+   "RB",
+   "FA"
+  ],
+  "14341": [
+   "Parham, Donald",
+   "TE",
+   "PIT"
+  ],
+  "14358": [
+   "Browning, Jake",
+   "QB",
+   "LAC"
+  ],
+  "14359": [
+   "Johnson, Jakob",
+   "RB",
+   "HOU"
+  ],
+  "14370": [
+   "Hudson, Tanner",
+   "TE",
+   "CIN"
+  ],
+  "14420": [
+   "Ingold, Alec",
+   "RB",
+   "LAC"
+  ],
+  "14486": [
+   "Montgomery, D.J.",
+   "WR",
+   "IND"
+  ],
+  "14503": [
+   "Kennedy, Tom",
+   "WR",
+   "DET"
+  ],
+  "14548": [
+   "Bachman, Alex",
+   "WR",
+   "LAR"
+  ],
+  "14555": [
+   "Olszewski, Gunner",
+   "WR",
+   "NYG"
+  ],
+  "14592": [
+   "Zaccheaus, Olamide",
+   "WR",
+   "ATL"
+  ],
+  "14613": [
+   "Sims, Steven",
+   "WR",
+   "ARI"
+  ],
+  "14727": [
+   "Reynolds, Craig",
+   "RB",
+   "WAS"
+  ],
+  "14777": [
+   "Burrow, Joe",
+   "QB",
+   "CIN"
+  ],
+  "14778": [
+   "Tagovailoa, Tua",
+   "QB",
+   "ATL"
+  ],
+  "14779": [
+   "Herbert, Justin",
+   "QB",
+   "LAC"
+  ],
+  "14782": [
+   "Love, Jordan",
+   "QB",
+   "GBP"
+  ],
+  "14783": [
+   "Hurts, Jalen",
+   "QB",
+   "PHI"
+  ],
+  "14789": [
+   "Huntley, Tyler",
+   "QB",
+   "BAL"
+  ],
+  "14797": [
+   "Swift, D'Andre",
+   "RB",
+   "CHI"
+  ],
+  "14798": [
+   "Moss, Zack",
+   "RB",
+   "FA"
+  ],
+  "14799": [
+   "Akers, Cam",
+   "RB",
+   "FA"
+  ],
+  "14800": [
+   "Dobbins, J.K.",
+   "RB",
+   "DEN"
+  ],
+  "14802": [
+   "Taylor, Jonathan",
+   "RB",
+   "IND"
+  ],
+  "14803": [
+   "Edwards-Helaire, Clyde",
+   "RB",
+   "KCC"
+  ],
+  "14805": [
+   "Dillon, AJ",
+   "RB",
+   "CAR"
+  ],
+  "14811": [
+   "Ahmed, Salvon",
+   "RB",
+   "CHI"
+  ],
+  "14815": [
+   "Dallas, DeeJay",
+   "RB",
+   "FA"
+  ],
+  "14817": [
+   "Taylor, Patrick",
+   "RB",
+   "FA"
+  ],
+  "14823": [
+   "Dowdle, Rico",
+   "RB",
+   "PIT"
+  ],
+  "14832": [
+   "Lamb, CeeDee",
+   "WR",
+   "DAL"
+  ],
+  "14833": [
+   "Jeudy, Jerry",
+   "WR",
+   "CLE"
+  ],
+  "14834": [
+   "Ruggs, Henry",
+   "WR",
+   "FA"
+  ],
+  "14835": [
+   "Higgins, Tee",
+   "WR",
+   "CIN"
+  ],
+  "14836": [
+   "Jefferson, Justin",
+   "WR",
+   "MIN"
+  ],
+  "14838": [
+   "Shenault, Laviska",
+   "WR",
+   "FA"
+  ],
+  "14839": [
+   "Reagor, Jalen",
+   "WR",
+   "MIA"
+  ],
+  "14840": [
+   "Aiyuk, Brandon",
+   "WR",
+   "SFO"
+  ],
+  "14841": [
+   "Claypool, Chase",
+   "WR",
+   "FA"
+  ],
+  "14842": [
+   "Pittman, Michael",
+   "WR",
+   "PIT"
+  ],
+  "14845": [
+   "Davis, Gabriel",
+   "WR",
+   "BUF"
+  ],
+  "14847": [
+   "Duvernay, Devin",
+   "WR",
+   "ARI"
+  ],
+  "14848": [
+   "Proche, James",
+   "WR",
+   "CLE"
+  ],
+  "14849": [
+   "Hodgins, Isaiah",
+   "WR",
+   "PIT"
+  ],
+  "14852": [
+   "Gibson, Antonio",
+   "RB",
+   "FA"
+  ],
+  "14857": [
+   "Peoples-Jones, Donovan",
+   "WR",
+   "FA"
+  ],
+  "14858": [
+   "Jefferson, Van",
+   "WR",
+   "WAS"
+  ],
+  "14860": [
+   "Jennings, Jauan",
+   "WR",
+   "MIN"
+  ],
+  "14861": [
+   "Johnson, Juwan",
+   "TE",
+   "NOS"
+  ],
+  "14864": [
+   "Johnson, Tyler",
+   "WR",
+   "NYJ"
+  ],
+  "14867": [
+   "Kmet, Cole",
+   "TE",
+   "CHI"
+  ],
+  "14870": [
+   "Trautman, Adam",
+   "TE",
+   "DEN"
+  ],
+  "14871": [
+   "Parkinson, Colby",
+   "TE",
+   "LAR"
+  ],
+  "14873": [
+   "Okwuegbunam, Albert",
+   "TE",
+   "LVR"
+  ],
+  "14875": [
+   "Bryant, Harrison",
+   "TE",
+   "FA"
+  ],
+  "14876": [
+   "Deguara, Josiah",
+   "TE",
+   "SEA"
+  ],
+  "14974": [
+   "Mooney, Darnell",
+   "WR",
+   "NYG"
+  ],
+  "14977": [
+   "Osborn, K.J.",
+   "WR",
+   "TEN"
+  ],
+  "14984": [
+   "Woerner, Charlie",
+   "TE",
+   "ATL"
+  ],
+  "14992": [
+   "Watkins, Quez",
+   "WR",
+   "IND"
+  ],
+  "15035": [
+   "Wolford, John",
+   "QB",
+   "MIN"
+  ],
+  "15041": [
+   "Cager, Lawrence",
+   "TE",
+   "FA"
+  ],
+  "15097": [
+   "McKeon, Sean",
+   "TE",
+   "FA"
+  ],
+  "15103": [
+   "Gilliam, Reggie",
+   "RB",
+   "NEP"
+  ],
+  "15109": [
+   "Westbrook-Ikhine, Nick",
+   "WR",
+   "IND"
+  ],
+  "15237": [
+   "Lawrence, Trevor",
+   "QB",
+   "JAC"
+  ],
+  "15238": [
+   "Fields, Justin",
+   "QB",
+   "KCC"
+  ],
+  "15239": [
+   "Wilson, Zach",
+   "QB",
+   "NOS"
+  ],
+  "15240": [
+   "Lance, Trey",
+   "QB",
+   "LAC"
+  ],
+  "15241": [
+   "Jones, Mac",
+   "QB",
+   "SFO"
+  ],
+  "15242": [
+   "Trask, Kyle",
+   "QB",
+   "DAL"
+  ],
+  "15244": [
+   "Franks, Feleipe",
+   "TE",
+   "CAR"
+  ],
+  "15248": [
+   "Buechele, Shane",
+   "QB",
+   "BUF"
+  ],
+  "15250": [
+   "Ehlinger, Sam",
+   "QB",
+   "DEN"
+  ],
+  "15252": [
+   "Mills, Davis",
+   "QB",
+   "HOU"
+  ],
+  "15253": [
+   "Etienne, Travis",
+   "RB",
+   "NOS"
+  ],
+  "15254": [
+   "Harris, Najee",
+   "RB",
+   "FA"
+  ],
+  "15255": [
+   "Gainwell, Kenneth",
+   "RB",
+   "TBB"
+  ],
+  "15256": [
+   "Williams, Javonte",
+   "RB",
+   "DAL"
+  ],
+  "15257": [
+   "Sermon, Trey",
+   "RB",
+   "ATL"
+  ],
+  "15258": [
+   "Carter, Michael",
+   "RB",
+   "TEN"
+  ],
+  "15259": [
+   "Stevenson, Rhamondre",
+   "RB",
+   "NEP"
+  ],
+  "15260": [
+   "Patterson, Jaret",
+   "RB",
+   "CLE"
+  ],
+  "15261": [
+   "Hubbard, Chuba",
+   "RB",
+   "CAR"
+  ],
+  "15262": [
+   "Jefferson, Jermar",
+   "RB",
+   "FA"
+  ],
+  "15263": [
+   "Mitchell, Elijah",
+   "RB",
+   "PHI"
+  ],
+  "15271": [
+   "Herbert, Khalil",
+   "RB",
+   "ATL"
+  ],
+  "15281": [
+   "Chase, Ja'Marr",
+   "WR",
+   "CIN"
+  ],
+  "15282": [
+   "Smith, DeVonta",
+   "WR",
+   "PHI"
+  ],
+  "15284": [
+   "Waddle, Jaylen",
+   "WR",
+   "DEN"
+  ],
+  "15285": [
+   "Wallace, Tylan",
+   "WR",
+   "CLE"
+  ],
+  "15287": [
+   "St. Brown, Amon-Ra",
+   "WR",
+   "DET"
+  ],
+  "15288": [
+   "Moore, Elijah",
+   "WR",
+   "PHI"
+  ],
+  "15289": [
+   "Toney, Kadarius",
+   "WR",
+   "FA"
+  ],
+  "15290": [
+   "Collins, Nico",
+   "WR",
+   "HOU"
+  ],
+  "15292": [
+   "Brown, Dyami",
+   "WR",
+   "WAS"
+  ],
+  "15293": [
+   "Bateman, Rashod",
+   "WR",
+   "BAL"
+  ],
+  "15301": [
+   "Atwell, Tutu",
+   "WR",
+   "LAR"
+  ],
+  "15302": [
+   "Eskridge, Dee",
+   "WR",
+   "MIA"
+  ],
+  "15303": [
+   "Fehoko, Simi",
+   "WR",
+   "ARI"
+  ],
+  "15308": [
+   "Marshall, Terrace",
+   "WR",
+   "FA"
+  ],
+  "15319": [
+   "Palmer, Joshua",
+   "WR",
+   "BUF"
+  ],
+  "15329": [
+   "Pitts, Kyle",
+   "TE",
+   "ATL"
+  ],
+  "15330": [
+   "Jordan, Brevin",
+   "TE",
+   "HOU"
+  ],
+  "15331": [
+   "Freiermuth, Pat",
+   "TE",
+   "PIT"
+  ],
+  "15332": [
+   "Tremble, Tommy",
+   "TE",
+   "CAR"
+  ],
+  "15334": [
+   "Long, Hunter",
+   "TE",
+   "ARI"
+  ],
+  "15335": [
+   "Farrell, Luke",
+   "TE",
+   "SFO"
+  ],
+  "15337": [
+   "Gray, Noah",
+   "TE",
+   "KCC"
+  ],
+  "15341": [
+   "Morris, Quintin",
+   "TE",
+   "JAC"
+  ],
+  "15344": [
+   "Bates, John",
+   "TE",
+   "WAS"
+  ],
+  "15414": [
+   "Nwangwu, Kene",
+   "RB",
+   "NYJ"
+  ],
+  "15419": [
+   "Granson, Kylen",
+   "TE",
+   "TEN"
+  ],
+  "15434": [
+   "Smith-Marsette, Ihmir",
+   "WR",
+   "CAR"
+  ],
+  "15454": [
+   "Williams, Avery",
+   "RB",
+   "NYJ"
+  ],
+  "15462": [
+   "Brightwell, Gary",
+   "RB",
+   "FA"
+  ],
+  "15491": [
+   "Skowronek, Ben",
+   "WR",
+   "PIT"
+  ],
+  "15535": [
+   "Kinsey, Mason",
+   "WR",
+   "FA"
+  ],
+  "15541": [
+   "Stoll, Jack",
+   "TE",
+   "SFO"
+  ],
+  "15589": [
+   "White, Cody",
+   "WR",
+   "LVR"
+  ],
+  "15604": [
+   "Zylstra, Shane",
+   "TE",
+   "NEP"
+  ],
+  "15620": [
+   "Myarick, Chris",
+   "TE",
+   "LVR"
+  ],
+  "15626": [
+   "Wright, Brock",
+   "TE",
+   "DET"
+  ],
+  "15650": [
+   "Prentice, Adam",
+   "RB",
+   "DEN"
+  ],
+  "15671": [
+   "Bandy, Michael",
+   "WR",
+   "DEN"
+  ],
+  "15692": [
+   "Pickett, Kenny",
+   "QB",
+   "CAR"
+  ],
+  "15693": [
+   "Howell, Sam",
+   "QB",
+   "DAL"
+  ],
+  "15694": [
+   "Willis, Malik",
+   "QB",
+   "MIA"
+  ],
+  "15696": [
+   "Zappe, Bailey",
+   "QB",
+   "NYJ"
+  ],
+  "15697": [
+   "Ridder, Desmond",
+   "QB",
+   "FA"
+  ],
+  "15698": [
+   "Purdy, Brock",
+   "QB",
+   "SFO"
+  ],
+  "15699": [
+   "Thompson, Skylar",
+   "QB",
+   "BAL"
+  ],
+  "15702": [
+   "McKee, Tanner",
+   "QB",
+   "PHI"
+  ],
+  "15708": [
+   "Hall, Breece",
+   "RB",
+   "NYJ"
+  ],
+  "15710": [
+   "Williams, Kyren",
+   "RB",
+   "LAR"
+  ],
+  "15711": [
+   "Walker III, Kenneth",
+   "RB",
+   "KCC"
+  ],
+  "15712": [
+   "Allgeier, Tyler",
+   "RB",
+   "ARI"
+  ],
+  "15713": [
+   "Ford, Jerome",
+   "RB",
+   "ARI"
+  ],
+  "15714": [
+   "White, Zamir",
+   "RB",
+   "NOS"
+  ],
+  "15715": [
+   "Cook, James",
+   "RB",
+   "BUF"
+  ],
+  "15716": [
+   "Robinson, Brian",
+   "RB",
+   "ATL"
+  ],
+  "15717": [
+   "Pierce, Dameon",
+   "RB",
+   "PHI"
+  ],
+  "15718": [
+   "Badie, Tyler",
+   "RB",
+   "DEN"
+  ],
+  "15720": [
+   "Haskins, Hassan",
+   "RB",
+   "NEP"
+  ],
+  "15721": [
+   "White, Rachaad",
+   "RB",
+   "WAS"
+  ],
+  "15723": [
+   "Chandler, Ty",
+   "RB",
+   "NOS"
+  ],
+  "15726": [
+   "Rivers, Ronnie",
+   "RB",
+   "LAR"
+  ],
+  "15727": [
+   "Knight, Bam",
+   "RB",
+   "ARI"
+  ],
+  "15730": [
+   "Goodson, Tyler",
+   "RB",
+   "DAL"
+  ],
+  "15733": [
+   "Strong Jr., Pierre",
+   "RB",
+   "GBP"
+  ],
+  "15734": [
+   "Ingram, Keaontay",
+   "RB",
+   "KCC"
+  ],
+  "15738": [
+   "Davis, Malik",
+   "RB",
+   "DAL"
+  ],
+  "15742": [
+   "Warren, Jaylen",
+   "RB",
+   "PIT"
+  ],
+  "15743": [
+   "McCormick, Sincere",
+   "RB",
+   "SFO"
+  ],
+  "15749": [
+   "Pacheco, Isiah",
+   "RB",
+   "DET"
+  ],
+  "15751": [
+   "London, Drake",
+   "WR",
+   "ATL"
+  ],
+  "15752": [
+   "Burks, Treylon",
+   "WR",
+   "WAS"
+  ],
+  "15753": [
+   "Wilson, Garrett",
+   "WR",
+   "NYJ"
+  ],
+  "15754": [
+   "Olave, Chris",
+   "WR",
+   "NOS"
+  ],
+  "15755": [
+   "Dotson, Jahan",
+   "WR",
+   "ATL"
+  ],
+  "15756": [
+   "Williams, Jameson",
+   "WR",
+   "DET"
+  ],
+  "15757": [
+   "Robinson, Wan'Dale",
+   "WR",
+   "TEN"
+  ],
+  "15758": [
+   "Bell, David",
+   "WR",
+   "CLE"
+  ],
+  "15759": [
+   "Metchie, John",
+   "WR",
+   "CAR"
+  ],
+  "15761": [
+   "Shakir, Khalil",
+   "WR",
+   "BUF"
+  ],
+  "15762": [
+   "Pickens, George",
+   "WR",
+   "DAL"
+  ],
+  "15763": [
+   "Ross, Justyn",
+   "WR",
+   "FA"
+  ],
+  "15765": [
+   "Austin, Kevin",
+   "WR",
+   "NOS"
+  ],
+  "15766": [
+   "Moore, Skyy",
+   "WR",
+   "GBP"
+  ],
+  "15767": [
+   "Jones, Velus",
+   "WR",
+   "SEA"
+  ],
+  "15768": [
+   "Pierce, Alec",
+   "WR",
+   "IND"
+  ],
+  "15771": [
+   "Martin, Tay",
+   "WR",
+   "DET"
+  ],
+  "15772": [
+   "Covey, Britain",
+   "WR",
+   "PHI"
+  ],
+  "15777": [
+   "Austin III, Calvin",
+   "WR",
+   "NYG"
+  ],
+  "15779": [
+   "Doubs, Romeo",
+   "WR",
+   "NEP"
+  ],
+  "15782": [
+   "Gray, Danny",
+   "WR",
+   "PHI"
+  ],
+  "15785": [
+   "Melton, Bo",
+   "WR",
+   "GBP"
+  ],
+  "15786": [
+   "Nailor, Jalen",
+   "WR",
+   "LVR"
+  ],
+  "15787": [
+   "Thornton, Tyquan",
+   "WR",
+   "KCC"
+  ],
+  "15788": [
+   "Tolbert, Jalen",
+   "WR",
+   "MIA"
+  ],
+  "15789": [
+   "Watson, Christian",
+   "WR",
+   "GBP"
+  ],
+  "15794": [
+   "McBride, Trey",
+   "TE",
+   "ARI"
+  ],
+  "15795": [
+   "Kolar, Charlie",
+   "TE",
+   "LAC"
+  ],
+  "15796": [
+   "Ruckert, Jeremy",
+   "TE",
+   "NYJ"
+  ],
+  "15797": [
+   "Dulcich, Greg",
+   "TE",
+   "MIA"
+  ],
+  "15798": [
+   "Likely, Isaiah",
+   "TE",
+   "NYG"
+  ],
+  "15799": [
+   "Ferguson, Jake",
+   "TE",
+   "DAL"
+  ],
+  "15800": [
+   "Heyward, Connor",
+   "TE",
+   "LVR"
+  ],
+  "15802": [
+   "Otton, Cade",
+   "TE",
+   "TBB"
+  ],
+  "15803": [
+   "Turner, Cole",
+   "TE",
+   "MIA"
+  ],
+  "15804": [
+   "Calcaterra, Grant",
+   "TE",
+   "PHI"
+  ],
+  "15840": [
+   "Woods, Jelani",
+   "TE",
+   "NYJ"
+  ],
+  "15841": [
+   "Toure, Samori",
+   "WR",
+   "FA"
+  ],
+  "15873": [
+   "Bellinger, Daniel",
+   "TE",
+   "TEN"
+  ],
+  "15889": [
+   "Okonkwo, Chigoziem",
+   "TE",
+   "WAS"
+  ],
+  "15905": [
+   "Quitoriano, Teagan",
+   "TE",
+   "ARI"
+  ],
+  "15909": [
+   "Mitchell, James",
+   "TE",
+   "CAR"
+  ],
+  "15916": [
+   "Ogletree, Drew",
+   "TE",
+   "IND"
+  ],
+  "15925": [
+   "FitzPatrick, John",
+   "TE",
+   "CLE"
+  ],
+  "15929": [
+   "Kieft, Ko",
+   "TE",
+   "TBB"
+  ],
+  "15937": [
+   "Muse, Nick",
+   "TE",
+   "ATL"
+  ],
+  "15941": [
+   "Young, Dareke",
+   "WR",
+   "LVR"
+  ],
+  "15948": [
+   "Oladokun, Chris",
+   "QB",
+   "FA"
+  ],
+  "15953": [
+   "Brown, Brittain",
+   "RB",
+   "CHI"
+  ],
+  "15965": [
+   "Chestnut, Julius",
+   "RB",
+   "TEN"
+  ],
+  "15970": [
+   "Krull, Lucas",
+   "TE",
+   "DEN"
+  ],
+  "15972": [
+   "Mason, Jordan",
+   "RB",
+   "MIN"
+  ],
+  "15973": [
+   "Blackshear, Raheem",
+   "RB",
+   "FA"
+  ],
+  "15977": [
+   "Thompkins, Deven",
+   "WR",
+   "LVR"
+  ],
+  "15981": [
+   "Turpin, KaVontae",
+   "WR",
+   "DAL"
+  ],
+  "15984": [
+   "Charles, Irvin",
+   "WR",
+   "SEA"
+  ],
+  "15991": [
+   "Conner, Tanner",
+   "TE",
+   "NEP"
+  ],
+  "15995": [
+   "Turner, DJ",
+   "WR",
+   "FA"
+  ],
+  "16005": [
+   "Jones, Tim",
+   "WR",
+   "JAC"
+  ],
+  "16036": [
+   "Tonges, Jake",
+   "TE",
+   "SFO"
+  ],
+  "16037": [
+   "Baccellia, Andre",
+   "WR",
+   "FA"
+  ],
+  "16066": [
+   "Alexander, Maurice",
+   "WR",
+   "FA"
+  ],
+  "16080": [
+   "Shaheed, Rashid",
+   "WR",
+   "SEA"
+  ],
+  "16113": [
+   "Smartt, Stone",
+   "TE",
+   "NOS"
+  ],
+  "16120": [
+   "Trammell, Austin",
+   "WR",
+   "JAC"
+  ],
+  "16135": [
+   "Kalinic, Nikola",
+   "TE",
+   "CHI"
+  ],
+  "16148": [
+   "Young, Bryce",
+   "QB",
+   "CAR"
+  ],
+  "16149": [
+   "Levis, Will",
+   "QB",
+   "NYJ"
+  ],
+  "16150": [
+   "Stroud, C.J.",
+   "QB",
+   "HOU"
+  ],
+  "16151": [
+   "Hooker, Hendon",
+   "QB",
+   "TEN"
+  ],
+  "16152": [
+   "Richardson, Anthony",
+   "QB",
+   "IND"
+  ],
+  "16153": [
+   "Bennett, Stetson",
+   "QB",
+   "LAR"
+  ],
+  "16156": [
+   "Haener, Jake",
+   "QB",
+   "NYG"
+  ],
+  "16157": [
+   "Cunningham, Malik",
+   "WR",
+   "FA"
+  ],
+  "16159": [
+   "O'Connell, Aidan",
+   "QB",
+   "LVR"
+  ],
+  "16160": [
+   "Tune, Clayton",
+   "QB",
+   "FA"
+  ],
+  "16161": [
+   "Robinson, Bijan",
+   "RB",
+   "ATL"
+  ],
+  "16162": [
+   "Gibbs, Jahmyr",
+   "RB",
+   "DET"
+  ],
+  "16164": [
+   "Bigsby, Tank",
+   "RB",
+   "PHI"
+  ],
+  "16165": [
+   "Spears, Tyjae",
+   "RB",
+   "TEN"
+  ],
+  "16166": [
+   "Tucker, Sean",
+   "RB",
+   "TBB"
+  ],
+  "16167": [
+   "Achane, De'Von",
+   "RB",
+   "MIA"
+  ],
+  "16168": [
+   "Abanikanda, Israel",
+   "RB",
+   "DAL"
+  ],
+  "16169": [
+   "Charbonnet, Zach",
+   "RB",
+   "SEA"
+  ],
+  "16170": [
+   "McIntosh, Kenny",
+   "RB",
+   "FA"
+  ],
+  "16171": [
+   "Miller, Kendre",
+   "RB",
+   "NOS"
+  ],
+  "16173": [
+   "Gray, Eric",
+   "RB",
+   "CLE"
+  ],
+  "16174": [
+   "Rodriguez, Chris",
+   "RB",
+   "JAC"
+  ],
+  "16175": [
+   "Johnson, Roschon",
+   "RB",
+   "CHI"
+  ],
+  "16176": [
+   "Vaughn, Deuce",
+   "RB",
+   "HOU"
+  ],
+  "16178": [
+   "Mitchell, Keaton",
+   "RB",
+   "LAC"
+  ],
+  "16180": [
+   "Hull, Evan",
+   "RB",
+   "ARI"
+  ],
+  "16181": [
+   "Brown, Chase",
+   "RB",
+   "CIN"
+  ],
+  "16183": [
+   "Hyatt, Jalin",
+   "WR",
+   "NYG"
+  ],
+  "16184": [
+   "Reed, Jayden",
+   "WR",
+   "GBP"
+  ],
+  "16185": [
+   "Smith-Njigba, Jaxon",
+   "WR",
+   "SEA"
+  ],
+  "16186": [
+   "Addison, Jordan",
+   "WR",
+   "MIN"
+  ],
+  "16187": [
+   "Downs, Josh",
+   "WR",
+   "IND"
+  ],
+  "16188": [
+   "Johnston, Quentin",
+   "WR",
+   "LAC"
+  ],
+  "16189": [
+   "Mims, Marvin",
+   "WR",
+   "DEN"
+  ],
+  "16190": [
+   "Flowers, Zay",
+   "WR",
+   "BAL"
+  ],
+  "16191": [
+   "Tillman, Cedric",
+   "WR",
+   "NOS"
+  ],
+  "16192": [
+   "Washington, Parker",
+   "WR",
+   "JAC"
+  ],
+  "16193": [
+   "Boutte, Kayshon",
+   "WR",
+   "HOU"
+  ],
+  "16194": [
+   "Rice, Rashee",
+   "WR",
+   "KCC"
+  ],
+  "16195": [
+   "Wicks, Dontayvion",
+   "WR",
+   "PHI"
+  ],
+  "16196": [
+   "Perry, A.T.",
+   "WR",
+   "FA"
+  ],
+  "16197": [
+   "Mingo, Jonathan",
+   "WR",
+   "DAL"
+  ],
+  "16199": [
+   "Palmer, Trey",
+   "WR",
+   "NOS"
+  ],
+  "16201": [
+   "Hutchinson, Xavier",
+   "WR",
+   "HOU"
+  ],
+  "16202": [
+   "Bell, Ronnie",
+   "WR",
+   "LVR"
+  ],
+  "16203": [
+   "Jones, Charlie",
+   "WR",
+   "NYG"
+  ],
+  "16204": [
+   "Dell, Tank",
+   "WR",
+   "HOU"
+  ],
+  "16205": [
+   "Scott, Tyler",
+   "WR",
+   "LVR"
+  ],
+  "16206": [
+   "Wilson, Michael",
+   "WR",
+   "ARI"
+  ],
+  "16207": [
+   "Iosivas, Andrei",
+   "WR",
+   "CIN"
+  ],
+  "16210": [
+   "Shorter, Justin",
+   "WR",
+   "FA"
+  ],
+  "16211": [
+   "Nacua, Puka",
+   "WR",
+   "LAR"
+  ],
+  "16212": [
+   "Mayer, Michael",
+   "TE",
+   "LVR"
+  ],
+  "16213": [
+   "Kincaid, Dalton",
+   "TE",
+   "BUF"
+  ],
+  "16214": [
+   "LaPorta, Sam",
+   "TE",
+   "DET"
+  ],
+  "16215": [
+   "Musgrave, Luke",
+   "TE",
+   "GBP"
+  ],
+  "16216": [
+   "Washington, Darnell",
+   "TE",
+   "PIT"
+  ],
+  "16217": [
+   "Latu, Cameron",
+   "TE",
+   "NEP"
+  ],
+  "16218": [
+   "Durham, Payne",
+   "TE",
+   "TBB"
+  ],
+  "16219": [
+   "Allen, Davis",
+   "TE",
+   "LAR"
+  ],
+  "16220": [
+   "Mallory, Will",
+   "TE",
+   "IND"
+  ],
+  "16221": [
+   "Schoonmaker, Luke",
+   "TE",
+   "DAL"
+  ],
+  "16222": [
+   "Kraft, Tucker",
+   "TE",
+   "GBP"
+  ],
+  "16249": [
+   "Kuntz, Zack",
+   "TE",
+   "FA"
+  ],
+  "16269": [
+   "Strange, Brenton",
+   "TE",
+   "JAC"
+  ],
+  "16287": [
+   "Tucker, Tre",
+   "WR",
+   "LVR"
+  ],
+  "16299": [
+   "Davis, Derius",
+   "WR",
+   "LAC"
+  ],
+  "16312": [
+   "Whyle, Josh",
+   "TE",
+   "GBP"
+  ],
+  "16313": [
+   "Clifford, Sean",
+   "QB",
+   "CIN"
+  ],
+  "16333": [
+   "Higgins, Elijah",
+   "TE",
+   "ARI"
+  ],
+  "16335": [
+   "Matlock, Scott",
+   "RB",
+   "LAC"
+  ],
+  "16342": [
+   "Douglas, Demario",
+   "WR",
+   "NEP"
+  ],
+  "16354": [
+   "Dowell, Colton",
+   "WR",
+   "FA"
+  ],
+  "16359": [
+   "Nichols, Lew",
+   "RB",
+   "PIT"
+  ],
+  "16364": [
+   "Brooks, Jalen",
+   "WR",
+   "ARI"
+  ],
+  "16367": [
+   "Willis, Brayden",
+   "TE",
+   "SFO"
+  ],
+  "16379": [
+   "Ford-Wheaton, Bryce",
+   "WR",
+   "NYG"
+  ],
+  "16380": [
+   "Prince, Deneric",
+   "RB",
+   "NEP"
+  ],
+  "16384": [
+   "Bagent, Tyson",
+   "QB",
+   "CHI"
+  ],
+  "16385": [
+   "Demercado, Emari",
+   "RB",
+   "DAL"
+  ],
+  "16387": [
+   "Brooks, Chris",
+   "RB",
+   "GBP"
+  ],
+  "16390": [
+   "McLaughlin, Jaleel",
+   "RB",
+   "CLE"
+  ],
+  "16391": [
+   "Luepke, Hunter",
+   "RB",
+   "DAL"
+  ],
+  "16393": [
+   "Bobo, Jake",
+   "WR",
+   "SEA"
+  ],
+  "16395": [
+   "Cropper, Jalen",
+   "WR",
+   "NOS"
+  ],
+  "16403": [
+   "Tinsley, Mitchell",
+   "WR",
+   "CIN"
+  ],
+  "16413": [
+   "Heath, Malik",
+   "WR",
+   "ATL"
+  ],
+  "16416": [
+   "Gipson, Xavier",
+   "WR",
+   "PHI"
+  ],
+  "16422": [
+   "Remigio, Nikko",
+   "WR",
+   "KCC"
+  ],
+  "16423": [
+   "Brownlee, Jason",
+   "WR",
+   "NYG"
+  ],
+  "16424": [
+   "Mims, Jordan",
+   "RB",
+   "FA"
+  ],
+  "16425": [
+   "Hill, Julian",
+   "TE",
+   "NEP"
+  ],
+  "16428": [
+   "Smith, Xavier",
+   "WR",
+   "SFO"
+  ],
+  "16429": [
+   "Drummond, Dylan",
+   "WR",
+   "ATL"
+  ],
+  "16432": [
+   "Wilson, Emanuel",
+   "RB",
+   "SEA"
+  ],
+  "16441": [
+   "DeVito, Tommy",
+   "QB",
+   "NEP"
+  ],
+  "16447": [
+   "Vokolek, Travis",
+   "TE",
+   "ARI"
+  ],
+  "16451": [
+   "Shavers, Tyrell",
+   "WR",
+   "BUF"
+  ],
+  "16453": [
+   "Cooks, Elijah",
+   "WR",
+   "FA"
+  ],
+  "16474": [
+   "Adkins, Nate",
+   "TE",
+   "DEN"
+  ],
+  "16483": [
+   "Sims, Ben",
+   "TE",
+   "FA"
+  ],
+  "16496": [
+   "Russell, Brady",
+   "RB",
+   "SEA"
+  ],
+  "16499": [
+   "Blair, Chris",
+   "WR",
+   "ATL"
+  ],
+  "16523": [
+   "Wright, Owen",
+   "RB",
+   "LVR"
+  ],
+  "16533": [
+   "Jackson, Shedrick",
+   "WR",
+   "ARI"
+  ],
+  "16557": [
+   "Fisk, Tucker",
+   "TE",
+   "LAC"
+  ],
+  "16579": [
+   "Williams, Caleb",
+   "QB",
+   "CHI"
+  ],
+  "16580": [
+   "Maye, Drake",
+   "QB",
+   "NEP"
+  ],
+  "16581": [
+   "Daniels, Jayden",
+   "QB",
+   "WAS"
+  ],
+  "16582": [
+   "Nix, Bo",
+   "QB",
+   "DEN"
+  ],
+  "16583": [
+   "Penix Jr., Michael",
+   "QB",
+   "ATL"
+  ],
+  "16584": [
+   "McCarthy, J.J.",
+   "QB",
+   "NYG"
+  ],
+  "16585": [
+   "Milton, Joe",
+   "QB",
+   "PHI"
+  ],
+  "16586": [
+   "Rattler, Spencer",
+   "QB",
+   "NOS"
+  ],
+  "16587": [
+   "Hartman, Sam",
+   "QB",
+   "WAS"
+  ],
+  "16593": [
+   "Corum, Blake",
+   "RB",
+   "LAR"
+  ],
+  "16594": [
+   "Benson, Trey",
+   "RB",
+   "ARI"
+  ],
+  "16595": [
+   "Estime, Audric",
+   "RB",
+   "CLE"
+  ],
+  "16596": [
+   "Allen, Braelon",
+   "RB",
+   "NYJ"
+  ],
+  "16597": [
+   "Brooks, Jonathon",
+   "RB",
+   "CAR"
+  ],
+  "16598": [
+   "Irving, Bucky",
+   "RB",
+   "TBB"
+  ],
+  "16599": [
+   "Gore Jr., Frank",
+   "RB",
+   "BUF"
+  ],
+  "16600": [
+   "Schrader, Cody",
+   "RB",
+   "DEN"
+  ],
+  "16601": [
+   "Shipley, Will",
+   "RB",
+   "PHI"
+  ],
+  "16603": [
+   "Davis, Ray",
+   "RB",
+   "BUF"
+  ],
+  "16604": [
+   "Lloyd, MarShawn",
+   "RB",
+   "GBP"
+  ],
+  "16605": [
+   "McClellan, Jase",
+   "RB",
+   "FA"
+  ],
+  "16606": [
+   "Milton, Kendall",
+   "RB",
+   "CIN"
+  ],
+  "16608": [
+   "Holani, George",
+   "RB",
+   "SEA"
+  ],
+  "16610": [
+   "Wright, Jaylen",
+   "RB",
+   "MIA"
+  ],
+  "16612": [
+   "Steele, Carson",
+   "RB",
+   "PHI"
+  ],
+  "16613": [
+   "Laube, Dylan",
+   "RB",
+   "LVR"
+  ],
+  "16614": [
+   "Harrison Jr., Marvin",
+   "WR",
+   "HOU"
+  ],
+  "16615": [
+   "Nabers, Malik",
+   "WR",
+   "NYG"
+  ],
+  "16616": [
+   "Odunze, Rome",
+   "WR",
+   "CHI"
+  ],
+  "16617": [
+   "Coleman, Keon",
+   "WR",
+   "BUF"
+  ],
+  "16618": [
+   "Thomas Jr., Brian",
+   "WR",
+   "JAC"
+  ],
+  "16619": [
+   "Franklin, Troy",
+   "WR",
+   "DEN"
+  ],
+  "16620": [
+   "Worthy, Xavier",
+   "WR",
+   "KCC"
+  ],
+  "16621": [
+   "Walker, Devontez",
+   "WR",
+   "BAL"
+  ],
+  "16622": [
+   "Pearsall, Ricky",
+   "WR",
+   "SFO"
+  ],
+  "16623": [
+   "Rice, Brenden",
+   "WR",
+   "FA"
+  ],
+  "16624": [
+   "Thrash, Jamari",
+   "WR",
+   "LVR"
+  ],
+  "16625": [
+   "Wilson, Johnny",
+   "WR",
+   "PHI"
+  ],
+  "16626": [
+   "Mitchell, Adonai",
+   "WR",
+   "NYJ"
+  ],
+  "16627": [
+   "McConkey, Ladd",
+   "WR",
+   "LAC"
+  ],
+  "16628": [
+   "McMillan, Jalen",
+   "WR",
+   "TBB"
+  ],
+  "16629": [
+   "Wilson, Roman",
+   "WR",
+   "PIT"
+  ],
+  "16630": [
+   "Williams, Isaiah",
+   "WR",
+   "NYJ"
+  ],
+  "16631": [
+   "Polk, Ja'Lynn",
+   "WR",
+   "FA"
+  ],
+  "16632": [
+   "Burton, Jermaine",
+   "WR",
+   "FA"
+  ],
+  "16633": [
+   "Whittington, Jordan",
+   "WR",
+   "LAR"
+  ],
+  "16634": [
+   "Weaver, Xavier",
+   "WR",
+   "FA"
+  ],
+  "16635": [
+   "McCaffrey, Luke",
+   "WR",
+   "WAS"
+  ],
+  "16636": [
+   "Corley, Malachi",
+   "WR",
+   "CLE"
+  ],
+  "16637": [
+   "Baker, Javon",
+   "WR",
+   "SFO"
+  ],
+  "16639": [
+   "Legette, Xavier",
+   "WR",
+   "CAR"
+  ],
+  "16640": [
+   "Cowing, Jacob",
+   "WR",
+   "SFO"
+  ],
+  "16641": [
+   "Bowers, Brock",
+   "TE",
+   "LVR"
+  ],
+  "16642": [
+   "Stover, Cade",
+   "TE",
+   "HOU"
+  ],
+  "16643": [
+   "Sanders, Ja'Tavion",
+   "TE",
+   "CAR"
+  ],
+  "16644": [
+   "Sinnott, Ben",
+   "TE",
+   "WAS"
+  ],
+  "16645": [
+   "All, Erick",
+   "TE",
+   "CIN"
+  ],
+  "16646": [
+   "Bell, Jaheim",
+   "TE",
+   "FA"
+  ],
+  "16647": [
+   "Spann-Ford, Brevyn",
+   "TE",
+   "DAL"
+  ],
+  "16648": [
+   "Wiley, Jared",
+   "TE",
+   "KCC"
+  ],
+  "16649": [
+   "Johnson, Theo",
+   "TE",
+   "NYG"
+  ],
+  "16678": [
+   "Vaki, Sione",
+   "RB",
+   "DET"
+  ],
+  "16682": [
+   "Slovis, Kedon",
+   "QB",
+   "GBP"
+  ],
+  "16684": [
+   "Washington, Malik",
+   "WR",
+   "MIA"
+  ],
+  "16686": [
+   "Smith, Ainias",
+   "WR",
+   "FA"
+  ],
+  "16687": [
+   "Miller, Dante",
+   "RB",
+   "FA"
+  ],
+  "16688": [
+   "Guerendo, Isaac",
+   "RB",
+   "SFO"
+  ],
+  "16706": [
+   "Reiman, Tip",
+   "TE",
+   "ARI"
+  ],
+  "16723": [
+   "Barner, AJ",
+   "TE",
+   "SEA"
+  ],
+  "16732": [
+   "Gould, Anthony",
+   "WR",
+   "IND"
+  ],
+  "16746": [
+   "Ali, Rasheen",
+   "RB",
+   "BAL"
+  ],
+  "16747": [
+   "Tracy, Tyrone",
+   "RB",
+   "NYG"
+  ],
+  "16748": [
+   "Robinson, Keilan",
+   "RB",
+   "FA"
+  ],
+  "16751": [
+   "Means, Bub",
+   "WR",
+   "CLE"
+  ],
+  "16752": [
+   "Davis, Isaiah",
+   "RB",
+   "NYJ"
+  ],
+  "16757": [
+   "Vidal, Kimani",
+   "RB",
+   "LAC"
+  ],
+  "16758": [
+   "Jackson, Jha'Quan",
+   "WR",
+   "FA"
+  ],
+  "16760": [
+   "Washington, Casey",
+   "WR",
+   "CAR"
+  ],
+  "16763": [
+   "Palmer, Tejhaun",
+   "WR",
+   "FA"
+  ],
+  "16765": [
+   "McLachlan, Tanner",
+   "TE",
+   "FA"
+  ],
+  "16773": [
+   "Jordan, Jawhar",
+   "RB",
+   "HOU"
+  ],
+  "16778": [
+   "Flournoy, Ryan",
+   "WR",
+   "DAL"
+  ],
+  "16788": [
+   "Vele, Devaughn",
+   "WR",
+   "NOS"
+  ],
+  "16792": [
+   "Washington, Tahj",
+   "WR",
+   "FA"
+  ],
+  "16796": [
+   "Culp, Devin",
+   "TE",
+   "CLE"
+  ],
+  "16801": [
+   "Johnson, Cornelius",
+   "WR",
+   "FA"
+  ],
+  "16803": [
+   "Watson, Blake",
+   "RB",
+   "FA"
+  ],
+  "16806": [
+   "Cephus, Joshua",
+   "WR",
+   "JAC"
+  ],
+  "16809": [
+   "Coker, Jalen",
+   "WR",
+   "CAR"
+  ],
+  "16810": [
+   "Collier, Chris",
+   "RB",
+   "LVR"
+  ],
+  "16811": [
+   "Wiley, Michael",
+   "RB",
+   "FA"
+  ],
+  "16816": [
+   "Brooks, British",
+   "RB",
+   "HOU"
+  ],
+  "16821": [
+   "Wade, Dayton",
+   "WR",
+   "FA"
+  ],
+  "16831": [
+   "Martin-Robinson, David",
+   "TE",
+   "TEN"
+  ],
+  "16834": [
+   "Burgess, Cole",
+   "WR",
+   "PIT"
+  ],
+  "16837": [
+   "Johnson, Xavier",
+   "WR",
+   "FA"
+  ],
+  "16838": [
+   "Pline, Mason",
+   "TE",
+   "FA"
+  ],
+  "16839": [
+   "Westover, Jack",
+   "TE",
+   "WAS"
+  ],
+  "16850": [
+   "Saylors, Jacob",
+   "RB",
+   "DET"
+  ],
+  "16854": [
+   "Castles, McCallan",
+   "TE",
+   "FA"
+  ],
+  "16858": [
+   "Tipton, Mason",
+   "WR",
+   "NOS"
+  ],
+  "16864": [
+   "Washington, Carlos",
+   "RB",
+   "MIA"
+  ],
+  "16868": [
+   "Martinez, Adrian",
+   "QB",
+   "FA"
+  ],
+  "16871": [
+   "Wheeler, Ian",
+   "RB",
+   "PHI"
+  ],
+  "16877": [
+   "Davis, Kaden",
+   "WR",
+   "CHI"
+  ],
+  "16882": [
+   "Bradley, Carter",
+   "QB",
+   "FA"
+  ],
+  "16883": [
+   "Johnson, Kameron",
+   "WR",
+   "TBB"
+  ],
+  "16898": [
+   "Yankoff, Colson",
+   "TE",
+   "WAS"
+  ],
+  "16919": [
+   "Jenkins, E.J.",
+   "TE",
+   "FA"
+  ],
+  "16940": [
+   "Whiteheart, Blake",
+   "TE",
+   "CLE"
+  ],
+  "16949": [
+   "Tremayne, Brycen",
+   "WR",
+   "CAR"
+  ],
+  "16957": [
+   "Jennings, Terrell",
+   "RB",
+   "FA"
+  ],
+  "16958": [
+   "Miller, Ryan",
+   "WR",
+   "NEP"
+  ],
+  "16962": [
+   "Bates, Brenden",
+   "TE",
+   "JAC"
+  ],
+  "16975": [
+   "Oliver, Bryce",
+   "WR",
+   "HOU"
+  ],
+  "16979": [
+   "Grandy, Cam",
+   "TE",
+   "MIN"
+  ],
+  "17011": [
+   "Wayne, Jared",
+   "WR",
+   "MIA"
+  ],
+  "17030": [
+   "Ward, Cam",
+   "QB",
+   "TEN"
+  ],
+  "17031": [
+   "Sanders, Shedeur",
+   "QB",
+   "CLE"
+  ],
+  "17032": [
+   "Dart, Jaxson",
+   "QB",
+   "NYG"
+  ],
+  "17033": [
+   "Milroe, Jalen",
+   "QB",
+   "SEA"
+  ],
+  "17034": [
+   "Ewers, Quinn",
+   "QB",
+   "JAC"
+  ],
+  "17035": [
+   "Leonard, Riley",
+   "QB",
+   "IND"
+  ],
+  "17036": [
+   "Howard, Will",
+   "QB",
+   "PIT"
+  ],
+  "17037": [
+   "Gabriel, Dillon",
+   "QB",
+   "CLE"
+  ],
+  "17038": [
+   "McCord, Kyle",
+   "QB",
+   "MIA"
+  ],
+  "17039": [
+   "Shough, Tyler",
+   "QB",
+   "NOS"
+  ],
+  "17040": [
+   "Cook, Brady",
+   "QB",
+   "MIA"
+  ],
+  "17041": [
+   "Rourke, Kurtis",
+   "QB",
+   "SFO"
+  ],
+  "17042": [
+   "Jeanty, Ashton",
+   "RB",
+   "LVR"
+  ],
+  "17043": [
+   "Henderson, TreVeyon",
+   "RB",
+   "NEP"
+  ],
+  "17044": [
+   "Hampton, Omarion",
+   "RB",
+   "LAC"
+  ],
+  "17045": [
+   "Skattebo, Cam",
+   "RB",
+   "NYG"
+  ],
+  "17046": [
+   "Neal, Devin",
+   "RB",
+   "WAS"
+  ],
+  "17047": [
+   "Sampson, Dylan",
+   "RB",
+   "CLE"
+  ],
+  "17048": [
+   "Johnson, Kaleb",
+   "RB",
+   "GBP"
+  ],
+  "17049": [
+   "Smith, Brashard",
+   "RB",
+   "KCC"
+  ],
+  "17050": [
+   "Mullings, Kalel",
+   "RB",
+   "TEN"
+  ],
+  "17051": [
+   "Judkins, Quinshon",
+   "RB",
+   "CLE"
+  ],
+  "17052": [
+   "Tuten, Bhayshul",
+   "RB",
+   "JAC"
+  ],
+  "17053": [
+   "Marks, Woody",
+   "RB",
+   "HOU"
+  ],
+  "17054": [
+   "Martinez, Damien",
+   "RB",
+   "FA"
+  ],
+  "17055": [
+   "James, Jordan",
+   "RB",
+   "SFO"
+  ],
+  "17056": [
+   "Etienne, Trevor",
+   "RB",
+   "CAR"
+  ],
+  "17057": [
+   "Edwards, Donovan",
+   "RB",
+   "FA"
+  ],
+  "17058": [
+   "Brooks, Tahj",
+   "RB",
+   "CIN"
+  ],
+  "17059": [
+   "Gordon II, Ollie",
+   "RB",
+   "MIA"
+  ],
+  "17060": [
+   "Giddens, DJ",
+   "RB",
+   "IND"
+  ],
+  "17061": [
+   "Allen, LeQuint",
+   "RB",
+   "JAC"
+  ],
+  "17062": [
+   "Sanders, Raheim",
+   "RB",
+   "CLE"
+  ],
+  "17063": [
+   "Mafah, Phil",
+   "RB",
+   "NYG"
+  ],
+  "17064": [
+   "Hunter, Jarquez",
+   "RB",
+   "NOS"
+  ],
+  "17066": [
+   "Monangai, Kyle",
+   "RB",
+   "CHI"
+  ],
+  "17068": [
+   "Harvey, RJ",
+   "RB",
+   "DEN"
+  ],
+  "17069": [
+   "Blue, Jaydon",
+   "RB",
+   "PHI"
+  ],
+  "17070": [
+   "Burden, Luther",
+   "WR",
+   "CHI"
+  ],
+  "17071": [
+   "McMillan, Tetairoa",
+   "WR",
+   "CAR"
+  ],
+  "17072": [
+   "Harris, Tre",
+   "WR",
+   "LAC"
+  ],
+  "17073": [
+   "Ayomanor, Elic",
+   "WR",
+   "TEN"
+  ],
+  "17074": [
+   "Hunter, Travis",
+   "WR",
+   "JAC"
+  ],
+  "17075": [
+   "Golden, Matthew",
+   "WR",
+   "GBP"
+  ],
+  "17076": [
+   "Bond, Isaiah",
+   "WR",
+   "CLE"
+  ],
+  "17077": [
+   "Restrepo, Xavier",
+   "WR",
+   "TEN"
+  ],
+  "17078": [
+   "Bech, Jack",
+   "WR",
+   "LVR"
+  ],
+  "17079": [
+   "Johnson, Tez",
+   "WR",
+   "TBB"
+  ],
+  "17080": [
+   "Noel, Jaylin",
+   "WR",
+   "HOU"
+  ],
+  "17081": [
+   "Egbuka, Emeka",
+   "WR",
+   "TBB"
+  ],
+  "17082": [
+   "Bryant, Pat",
+   "WR",
+   "DEN"
+  ],
+  "17083": [
+   "Higgins, Jayden",
+   "WR",
+   "HOU"
+  ],
+  "17084": [
+   "White, Ricky",
+   "WR",
+   "SEA"
+  ],
+  "17086": [
+   "Royals, Jalen",
+   "WR",
+   "KCC"
+  ],
+  "17087": [
+   "Thornton, Dont'e",
+   "WR",
+   "LVR"
+  ],
+  "17088": [
+   "Wease, Theo",
+   "WR",
+   "LAC"
+  ],
+  "17089": [
+   "Wells, Antwane",
+   "WR",
+   "ATL"
+  ],
+  "17091": [
+   "Brooks, Ja'Corey",
+   "WR",
+   "FA"
+  ],
+  "17096": [
+   "Williams, Savion",
+   "WR",
+   "GBP"
+  ],
+  "17097": [
+   "Felton, Tai",
+   "WR",
+   "MIN"
+  ],
+  "17098": [
+   "Horton, Tory",
+   "WR",
+   "SEA"
+  ],
+  "17099": [
+   "Gadsden, Oronde",
+   "TE",
+   "LAC"
+  ],
+  "17100": [
+   "Nash, Nick",
+   "WR",
+   "FA"
+  ],
+  "17102": [
+   "Warren, Tyler",
+   "TE",
+   "IND"
+  ],
+  "17103": [
+   "Fannin, Harold",
+   "TE",
+   "CLE"
+  ],
+  "17104": [
+   "Loveland, Colston",
+   "TE",
+   "CHI"
+  ],
+  "17105": [
+   "Helm, Gunnar",
+   "TE",
+   "TEN"
+  ],
+  "17106": [
+   "Taylor, Mason",
+   "TE",
+   "NYJ"
+  ],
+  "17107": [
+   "Ferguson, Terrance",
+   "TE",
+   "LAR"
+  ],
+  "17108": [
+   "Arroyo, Elijah",
+   "TE",
+   "SEA"
+  ],
+  "17109": [
+   "Evans, Mitchell",
+   "TE",
+   "CAR"
+  ],
+  "17111": [
+   "Lachey, Luke",
+   "TE",
+   "FA"
+  ],
+  "17134": [
+   "Williams, Kyle",
+   "WR",
+   "NEP"
+  ],
+  "17157": [
+   "TeSlaa, Isaac",
+   "WR",
+   "DET"
+  ],
+  "17171": [
+   "Dike, Chimere",
+   "WR",
+   "TEN"
+  ],
+  "17175": [
+   "Smith, Arian",
+   "WR",
+   "NYJ"
+  ],
+  "17184": [
+   "Lane, Jaylin",
+   "WR",
+   "WAS"
+  ],
+  "17192": [
+   "Watkins, Jordan",
+   "WR",
+   "SFO"
+  ],
+  "17205": [
+   "Lambert-Smith, KeAndre",
+   "WR",
+   "LAC"
+  ],
+  "17213": [
+   "Hawes, Jackson",
+   "TE",
+   "BUF"
+  ],
+  "17215": [
+   "Ouzts, Robbie",
+   "RB",
+   "SEA"
+  ],
+  "17227": [
+   "Mertz, Graham",
+   "QB",
+   "HOU"
+  ],
+  "17231": [
+   "Bartholomew, Gavin",
+   "TE",
+   "MIN"
+  ],
+  "17232": [
+   "Wester, LaJohntay",
+   "WR",
+   "BAL"
+  ],
+  "17234": [
+   "Horn, Jimmy",
+   "WR",
+   "CLE"
+  ],
+  "17238": [
+   "Mellott, Tommy",
+   "WR",
+   "NOS"
+  ],
+  "17240": [
+   "Miller, Cam",
+   "QB",
+   "FA"
+  ],
+  "17243": [
+   "Fidone, Thomas",
+   "TE",
+   "NYG"
+  ],
+  "17253": [
+   "Lohner, Caleb",
+   "TE",
+   "DEN"
+  ],
+  "17254": [
+   "Mumpfield, Konata",
+   "WR",
+   "LAR"
+  ],
+  "17255": [
+   "Lovett, Dominic",
+   "WR",
+   "DET"
+  ],
+  "17256": [
+   "Croskey-Merritt, Jacory",
+   "RB",
+   "WAS"
+  ],
+  "17259": [
+   "Matavao, Moliki",
+   "TE",
+   "NOS"
+  ],
+  "17260": [
+   "Bergen, Junior",
+   "WR",
+   "FA"
+  ],
+  "17266": [
+   "Johnson, Montrell",
+   "RB",
+   "FA"
+  ],
+  "17267": [
+   "Larison, Lan",
+   "RB",
+   "NEP"
+  ],
+  "17268": [
+   "Briningstool, Jake",
+   "TE",
+   "KCC"
+  ],
+  "17269": [
+   "Chism, Efton",
+   "WR",
+   "NEP"
+  ],
+  "17272": [
+   "Johnson, Amar",
+   "RB",
+   "LAC"
+  ],
+  "17274": [
+   "Kiner, Corey",
+   "RB",
+   "NEP"
+  ],
+  "17275": [
+   "Neyor, Isaiah",
+   "WR",
+   "GBP"
+  ],
+  "17276": [
+   "Armstrong, Andrew",
+   "WR",
+   "KCC"
+  ],
+  "17278": [
+   "Owen, Coleman",
+   "WR",
+   "GBP"
+  ],
+  "17281": [
+   "Dippre, CJ",
+   "TE",
+   "TBB"
+  ],
+  "17282": [
+   "Brosmer, Max",
+   "QB",
+   "MIN"
+  ],
+  "17283": [
+   "Henigan, Seth",
+   "QB",
+   "FA"
+  ],
+  "17284": [
+   "Conyers, Jalin",
+   "TE",
+   "FA"
+  ],
+  "17285": [
+   "Yurosek, Ben",
+   "TE",
+   "MIN"
+  ],
+  "17289": [
+   "Jackson, Courtney",
+   "WR",
+   "FA"
+  ],
+  "17293": [
+   "Pritchett, Jamaal",
+   "WR",
+   "NYJ"
+  ],
+  "17298": [
+   "Grimm, Luke",
+   "WR",
+   "LAC"
+  ],
+  "17303": [
+   "Collins, Beaux",
+   "WR",
+   "ATL"
+  ],
+  "17305": [
+   "Moore, Jordan",
+   "WR",
+   "CIN"
+  ],
+  "17307": [
+   "Bentley, Ulysses",
+   "RB",
+   "NOS"
+  ],
+  "17308": [
+   "Uiagalelei, DJ",
+   "QB",
+   "LAC"
+  ],
+  "17309": [
+   "Davis, Joaquin",
+   "WR",
+   "FA"
+  ],
+  "17312": [
+   "Simon, Joshua",
+   "TE",
+   "WAS"
+  ],
+  "17313": [
+   "Pancol, Eli",
+   "WR",
+   "IND"
+  ],
+  "17314": [
+   "Floriea, Luke",
+   "WR",
+   "FA"
+  ],
+  "17321": [
+   "Presley, Brennan",
+   "WR",
+   "LAR"
+  ],
+  "17322": [
+   "Richardson, JP",
+   "WR",
+   "CHI"
+  ],
+  "17325": [
+   "Campbell, Dalevon",
+   "WR",
+   "FA"
+  ],
+  "17329": [
+   "Jackson, Ja'Quinden",
+   "RB",
+   "FA"
+  ],
+  "17333": [
+   "Cooper, Darius",
+   "WR",
+   "PHI"
+  ],
+  "17334": [
+   "Meeks, Jackson",
+   "WR",
+   "DET"
+  ],
+  "17336": [
+   "Marshall, Ahmani",
+   "RB",
+   "CAR"
+  ],
+  "17337": [
+   "Scott, Zavier",
+   "RB",
+   "CHI"
+  ],
+  "17348": [
+   "Carter, Nathan",
+   "RB",
+   "ATL"
+  ],
+  "17349": [
+   "Larvadain, Gage",
+   "WR",
+   "BAL"
+  ],
+  "17353": [
+   "Walker, Jahdae",
+   "WR",
+   "CHI"
+  ],
+  "17359": [
+   "Williams, Josh",
+   "RB",
+   "TBB"
+  ],
+  "17360": [
+   "Price, Myles",
+   "WR",
+   "MIN"
+  ],
+  "17375": [
+   "Mitchell-Paden, Zaire",
+   "TE",
+   "HOU"
+  ],
+  "17382": [
+   "Wright, Jacardia",
+   "RB",
+   "SEA"
+  ],
+  "17385": [
+   "Runyon, Carter",
+   "TE",
+   "LVR"
+  ],
+  "17396": [
+   "Williams, Ke'Shawn",
+   "WR",
+   "CIN"
+  ],
+  "17405": [
+   "Smith, Brandon",
+   "WR",
+   "PIT"
+  ],
+  "17407": [
+   "Rucci, Hayden",
+   "TE",
+   "LAC"
+  ],
+  "17414": [
+   "Kallerup, Nick",
+   "TE",
+   "SEA"
+  ],
+  "17416": [
+   "Jones, Jacoby",
+   "WR",
+   "FA"
+  ],
+  "17418": [
+   "Cambre, Dalen",
+   "WR",
+   "NYG"
+  ],
+  "17419": [
+   "Latu, Keleki",
+   "TE",
+   "BUF"
+  ],
+  "17439": [
+   "Cannella, Sal",
+   "TE",
+   "FA"
+  ],
+  "17444": [
+   "Keeney-James, Jakobie",
+   "WR",
+   "FA"
+  ],
+  "17446": [
+   "Jones, Jeshaun",
+   "WR",
+   "MIN"
+  ],
+  "17462": [
+   "Mendoza, Fernando",
+   "QB",
+   "LVR"
+  ],
+  "17463": [
+   "Simpson, Ty",
+   "QB",
+   "LAR"
+  ],
+  "17465": [
+   "Nussmeier, Garrett",
+   "QB",
+   "KCC"
+  ],
+  "17466": [
+   "Beck, Carson",
+   "QB",
+   "ARI"
+  ],
+  "17467": [
+   "Klubnik, Cade",
+   "QB",
+   "NYJ"
+  ],
+  "17468": [
+   "Allar, Drew",
+   "QB",
+   "PIT"
+  ],
+  "17469": [
+   "Daniels, Jalon",
+   "QB",
+   "TBB"
+  ],
+  "17470": [
+   "Altmyer, Luke",
+   "QB",
+   "DET"
+  ],
+  "17471": [
+   "Pavia, Diego",
+   "QB",
+   "FA"
+  ],
+  "17472": [
+   "Love, Jeremiyah",
+   "RB",
+   "ARI"
+  ],
+  "17473": [
+   "Price, Jadarian",
+   "RB",
+   "SEA"
+  ],
+  "17474": [
+   "Johnson, Emmett",
+   "RB",
+   "KCC"
+  ],
+  "17475": [
+   "McGowan, Seth",
+   "RB",
+   "IND"
+  ],
+  "17476": [
+   "Singleton, Nicholas",
+   "RB",
+   "TEN"
+  ],
+  "17477": [
+   "Coleman, Jonah",
+   "RB",
+   "DEN"
+  ],
+  "17478": [
+   "Allen, Kaytron",
+   "RB",
+   "MIA"
+  ],
+  "17479": [
+   "Moss, Le'Veon",
+   "RB",
+   "MIA"
+  ],
+  "17480": [
+   "Ott, Jaydn",
+   "RB",
+   "KCC"
+  ],
+  "17481": [
+   "Claiborne, Demond",
+   "RB",
+   "MIN"
+  ],
+  "17482": [
+   "Washington Jr., Mike",
+   "RB",
+   "LVR"
+  ],
+  "17483": [
+   "Hemby, Roman",
+   "RB",
+   "LVR"
+  ],
+  "17484": [
+   "Reid, Desmond",
+   "RB",
+   "FA"
+  ],
+  "17485": [
+   "Black, Kaelon",
+   "RB",
+   "SFO"
+  ],
+  "17486": [
+   "Miller, Jam",
+   "RB",
+   "ATL"
+  ],
+  "17487": [
+   "Taylor, J'Mari",
+   "RB",
+   "JAC"
+  ],
+  "17488": [
+   "Stewart, Terion",
+   "RB",
+   "FA"
+  ],
+  "17489": [
+   "Trayanum, Chip",
+   "RB",
+   "NYJ"
+  ],
+  "17490": [
+   "Whittington, Noah",
+   "RB",
+   "HOU"
+  ],
+  "17491": [
+   "Connors, Dean",
+   "RB",
+   "LAR"
+  ],
+  "17492": [
+   "Donaldson, CJ",
+   "RB",
+   "NOS"
+  ],
+  "17493": [
+   "Jones, Cash",
+   "RB",
+   "ATL"
+  ],
+  "17495": [
+   "Williams, Roydell",
+   "RB",
+   "FA"
+  ],
+  "17496": [
+   "Brown, Mel",
+   "RB",
+   "FA"
+  ],
+  "17497": [
+   "Tate, Carnell",
+   "WR",
+   "TEN"
+  ],
+  "17498": [
+   "Tyson, Jordyn",
+   "WR",
+   "NOS"
+  ],
+  "17499": [
+   "Lemon, Makai",
+   "WR",
+   "PHI"
+  ],
+  "17500": [
+   "Boston, Denzel",
+   "WR",
+   "CLE"
+  ],
+  "17501": [
+   "Concepcion, KC",
+   "WR",
+   "CLE"
+  ],
+  "17502": [
+   "Cooper Jr., Omar",
+   "WR",
+   "NYJ"
+  ],
+  "17503": [
+   "Bernard, Germie",
+   "WR",
+   "PIT"
+  ],
+  "17504": [
+   "Daniels, CJ",
+   "WR",
+   "LAR"
+  ],
+  "17505": [
+   "Sarratt, Elijah",
+   "WR",
+   "BAL"
+  ],
+  "17506": [
+   "Bell, Chris",
+   "WR",
+   "MIA"
+  ],
+  "17507": [
+   "Branch, Zachariah",
+   "WR",
+   "ATL"
+  ],
+  "17508": [
+   "Bell, Skyler",
+   "WR",
+   "BUF"
+  ],
+  "17509": [
+   "Brazzell II, Chris",
+   "WR",
+   "CAR"
+  ],
+  "17510": [
+   "Burks, Deion",
+   "WR",
+   "IND"
+  ],
+  "17511": [
+   "Fields, Malachi",
+   "WR",
+   "NYG"
+  ],
+  "17512": [
+   "Williams, Antonio",
+   "WR",
+   "WAS"
+  ],
+  "17513": [
+   "McAlister, Eric",
+   "WR",
+   "FA"
+  ],
+  "17514": [
+   "Stribling, De'Zhaun",
+   "WR",
+   "SFO"
+  ],
+  "17515": [
+   "Rivers, Eric",
+   "WR",
+   "TBB"
+  ],
+  "17516": [
+   "Anderson, Aaron",
+   "WR",
+   "FA"
+  ],
+  "17517": [
+   "Lane, Ja'Kobi",
+   "WR",
+   "BAL"
+  ],
+  "17518": [
+   "Allen, Cyrus",
+   "WR",
+   "KCC"
+  ],
+  "17519": [
+   "Lance, Bryce",
+   "WR",
+   "NOS"
+  ],
+  "17520": [
+   "Hurst, Ted",
+   "WR",
+   "TBB"
+  ],
+  "17521": [
+   "Thomas, Zavion",
+   "WR",
+   "CHI"
+  ],
+  "17522": [
+   "Roberts, Chase",
+   "WR",
+   "FA"
+  ],
+  "17523": [
+   "Caldwell, Jeff",
+   "WR",
+   "KCC"
+  ],
+  "17524": [
+   "Key, Dane",
+   "WR",
+   "DEN"
+  ],
+  "17525": [
+   "Thomas, Noah",
+   "WR",
+   "CIN"
+  ],
+  "17526": [
+   "Virgil, Reggie",
+   "WR",
+   "ARI"
+  ],
+  "17527": [
+   "Cameron, Josh",
+   "WR",
+   "JAC"
+  ],
+  "17528": [
+   "Coleman, Kevin",
+   "WR",
+   "MIA"
+  ],
+  "17529": [
+   "Thompson, Brenen",
+   "WR",
+   "LAC"
+  ],
+  "17530": [
+   "Bond, Lewis",
+   "WR",
+   "HOU"
+  ],
+  "17531": [
+   "White, Squirrel",
+   "WR",
+   "CHI"
+  ],
+  "17532": [
+   "Prentice, Kobe",
+   "WR",
+   "FA"
+  ],
+  "17535": [
+   "Pena, Trebor",
+   "WR",
+   "JAC"
+  ],
+  "17536": [
+   "Bell, Dillon",
+   "WR",
+   "MIN"
+  ],
+  "17537": [
+   "Beatty, Hank",
+   "WR",
+   "TEN"
+  ],
+  "17538": [
+   "Wallace, Harrison",
+   "WR",
+   "ARI"
+  ],
+  "17539": [
+   "Greene, Donavon",
+   "WR",
+   "FA"
+  ],
+  "17540": [
+   "Hilton Jr., Chris",
+   "WR",
+   "GBP"
+  ],
+  "17541": [
+   "Brown, Barion",
+   "WR",
+   "NOS"
+  ],
+  "17542": [
+   "Young, Colbie",
+   "WR",
+   "CIN"
+  ],
+  "17543": [
+   "Sadiq, Kenyon",
+   "TE",
+   "NYJ"
+  ],
+  "17544": [
+   "Stowers, Eli",
+   "TE",
+   "PHI"
+  ],
+  "17545": [
+   "Endries, Jack",
+   "TE",
+   "CIN"
+  ],
+  "17546": [
+   "Trigg, Michael",
+   "TE",
+   "DAL"
+  ],
+  "17547": [
+   "Klare, Max",
+   "TE",
+   "LAR"
+  ],
+  "17548": [
+   "Joly, Justin",
+   "TE",
+   "MIA"
+  ],
+  "17549": [
+   "Roush, Sam",
+   "TE",
+   "CHI"
+  ],
+  "17566": [
+   "Royer, Joe",
+   "TE",
+   "CLE"
+  ],
+  "17567": [
+   "Delp, Oscar",
+   "TE",
+   "NOS"
+  ],
+  "17591": [
+   "Boerkircher, Nate",
+   "TE",
+   "JAC"
+  ],
+  "17593": [
+   "Klein, Marlin",
+   "TE",
+   "HOU"
+  ],
+  "17599": [
+   "Douglas, Caleb",
+   "WR",
+   "MIA"
+  ],
+  "17605": [
+   "Kacmarek, Will",
+   "TE",
+   "MIA"
+  ],
+  "17607": [
+   "Raridon, Eli",
+   "TE",
+   "NEP"
+  ],
+  "17620": [
+   "Wetjen, Kaden",
+   "WR",
+   "PIT"
+  ],
+  "17627": [
+   "Hibner, Matthew",
+   "TE",
+   "BAL"
+  ],
+  "17641": [
+   "Bredeson, Max",
+   "TE",
+   "MIN"
+  ],
+  "17644": [
+   "Koziol, Tanner",
+   "TE",
+   "JAC"
+  ],
+  "17647": [
+   "Law, Kendrick",
+   "WR",
+   "DET"
+  ],
+  "17648": [
+   "Nowakowski, Riley",
+   "TE",
+   "PIT"
+  ],
+  "17651": [
+   "Cuevas, Josh",
+   "TE",
+   "BAL"
+  ],
+  "17652": [
+   "Randall, Adam",
+   "RB",
+   "BAL"
+  ],
+  "17654": [
+   "Payton, Cole",
+   "QB",
+   "PHI"
+  ],
+  "17655": [
+   "Traore, Seydou",
+   "TE",
+   "MIA"
+  ],
+  "17657": [
+   "Green, Taylen",
+   "QB",
+   "CLE"
+  ],
+  "17660": [
+   "Sharp, Bauer",
+   "TE",
+   "TBB"
+  ],
+  "17669": [
+   "Henderson, Emmanuel",
+   "WR",
+   "SEA"
+  ],
+  "17671": [
+   "Williams, C.J.",
+   "WR",
+   "JAC"
+  ],
+  "17675": [
+   "Smith, Anthony",
+   "WR",
+   "FA"
+  ],
+  "17679": [
+   "Kaliakmanis, Athan",
+   "QB",
+   "WAS"
+  ],
+  "17681": [
+   "Kanak, Jaren",
+   "TE",
+   "TEN"
+  ],
+  "17685": [
+   "Heidenreich, Eli",
+   "RB",
+   "PIT"
+  ],
+  "17696": [
+   "Ryan, Carsen",
+   "TE",
+   "CLE"
+  ],
+  "17699": [
+   "Bentley, Dallen",
+   "TE",
+   "DEN"
+  ],
+  "17702": [
+   "Morton, Behren",
+   "QB",
+   "NEP"
+  ],
+  "17706": [
+   "Benson, Malik",
+   "WR",
+   "LVR"
+  ],
+  "17707": [
+   "Sturdivant, J Michael",
+   "WR",
+   "GBP"
+  ],
+  "17708": [
+   "Owens, Kejon",
+   "RB",
+   "FA"
+  ],
+  "17709": [
+   "Henry, Robert",
+   "RB",
+   "SEA"
+  ],
+  "17710": [
+   "Gyllenborg, John Michael",
+   "TE",
+   "KCC"
+  ],
+  "17711": [
+   "Dixon, Kyle",
+   "WR",
+   "NEP"
+  ],
+  "17713": [
+   "King, Haynes",
+   "QB",
+   "CAR"
+  ],
+  "17715": [
+   "Montgomery, Tyren",
+   "WR",
+   "TEN"
+  ],
+  "17716": [
+   "Harden, TJ",
+   "RB",
+   "FA"
+  ],
+  "17717": [
+   "Booth, Davon",
+   "RB",
+   "IND"
+  ],
+  "17718": [
+   "Montgomery, Myles",
+   "RB",
+   "NEP"
+  ],
+  "17719": [
+   "Haynes, Jamal",
+   "RB",
+   "FA"
+  ],
+  "17720": [
+   "Gronowski, Mark",
+   "QB",
+   "HOU"
+  ],
+  "17723": [
+   "McCulley, Donaven",
+   "WR",
+   "FA"
+  ],
+  "17724": [
+   "Wright, Dae'Quan",
+   "TE",
+   "FA"
+  ],
+  "17729": [
+   "Jones, Rohan",
+   "TE",
+   "FA"
+  ],
+  "17732": [
+   "Smith, EJ",
+   "RB",
+   "FA"
+  ],
+  "17733": [
+   "Hudson, Jordan",
+   "WR",
+   "DAL"
+  ],
+  "17734": [
+   "Villari, Dan",
+   "TE",
+   "LAR"
+  ],
+  "17737": [
+   "Lacy, Caullin",
+   "WR",
+   "FA"
+  ],
+  "17738": [
+   "Richardson, Dominic",
+   "RB",
+   "FA"
+  ],
+  "17739": [
+   "Bennett, Coleman",
+   "RB",
+   "FA"
+  ],
+  "17741": [
+   "Rechsteiner, Brock",
+   "WR",
+   "FA"
+  ],
+  "17742": [
+   "Anthony, Vinny",
+   "WR",
+   "ATL"
+  ],
+  "17743": [
+   "Strand, Jack",
+   "QB",
+   "ATL"
+  ],
+  "17744": [
+   "Maryland, RJ",
+   "TE",
+   "FA"
+  ],
+  "17748": [
+   "Robichaux, Kye",
+   "RB",
+   "FA"
+  ],
+  "17749": [
+   "Reed, Ja'Seem",
+   "WR",
+   "CAR"
+  ],
+  "17750": [
+   "Brown, Camden",
+   "WR",
+   "DAL"
+  ],
+  "17752": [
+   "Meyers, Dohnte",
+   "WR",
+   "CIN"
+  ],
+  "17754": [
+   "Foster, Montorie",
+   "WR",
+   "SEA"
+  ],
+  "17756": [
+   "Nixon, Jaden",
+   "RB",
+   "FA"
+  ],
+  "17757": [
+   "Maclin, Ja'Mori",
+   "WR",
+   "BUF"
+  ],
+  "17759": [
+   "Dinkins, Khalil",
+   "TE",
+   "SFO"
+  ],
+  "17760": [
+   "Fagnano, Joe",
+   "QB",
+   "BAL"
+  ],
+  "17770": [
+   "Bankston, Damon",
+   "RB",
+   "GBP"
+  ],
+  "17774": [
+   "Welch, Treyton",
+   "TE",
+   "NOS"
+  ],
+  "17784": [
+   "Herman, DJ",
+   "RB",
+   "MIA"
+  ],
+  "17791": [
+   "Tyus, Anthony",
+   "RB",
+   "CAR"
+  ],
+  "17795": [
+   "Arkin, Tanner",
+   "TE",
+   "NEP"
+  ],
+  "17799": [
+   "Katsis, Kolbe",
+   "WR",
+   "DEN"
+  ],
+  "17802": [
+   "Redman, Mark",
+   "TE",
+   "GBP"
+  ],
+  "17809": [
+   "McMillan, Dontae",
+   "RB",
+   "SEA"
+  ],
+  "17811": [
+   "McClain, Malik",
+   "WR",
+   "NYJ"
+  ],
+  "5848": [
+   "Brady, Tom",
+   "QB",
+   "FA"
+  ],
+  "7394": [
+   "Rivers, Philip",
+   "QB",
+   "FA"
+  ],
+  "7836": [
+   "Rodgers, Aaron",
+   "QB",
+   "PIT"
+  ],
+  "8269": [
+   "Lewis, Marcedes",
+   "TE",
+   "DEN"
+  ],
+  "9064": [
+   "Flacco, Joe",
+   "QB",
+   "CIN"
+  ],
+  "9207": [
+   "Johnson, Josh",
+   "QB",
+   "CIN"
+  ],
+  "9431": [
+   "Stafford, Matthew",
+   "QB",
+   "LAR"
+  ]
+ }
+}

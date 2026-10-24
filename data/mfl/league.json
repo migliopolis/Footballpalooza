@@ -1,8 +1,17 @@
 {
+ "encoding": "utf-8",
  "league": {
-  "name": "FOOTBALLPALOOZA 2026",
-  "lastRegularSeasonWeek": "14",
-  "standingsSort": "PCT,PTS,",
+  "auction_kind": "live",
+  "baseURL": "https://www47.myfantasyleague.com",
+  "bbidConditional": "No",
+  "bbidIncrement": "1",
+  "bbidSeasonLimit": "100",
+  "bbidTiebreaker": "SORT",
+  "bestLineup": "No",
+  "bidIncrement": "1",
+  "commish_username": "pmiglio,smaloney",
+  "currentWaiverType": "BBID",
+  "defaultTradeExpirationDays": "3",
   "divisions": {
    "count": "3",
    "division": [
@@ -11,78 +20,431 @@
      "name": "West"
     },
     {
-     "name": "Central",
-     "id": "01"
+     "id": "01",
+     "name": "Central"
     },
     {
-     "name": "East",
-     "id": "02"
+     "id": "02",
+     "name": "East"
     }
    ]
   },
+  "draftLimitHours": "3:00",
+  "draftPlayerPool": "Rookie",
+  "draftTimer": "ONS",
+  "draftTimerSusp": "23 09",
+  "draft_kind": "email",
+  "endWeek": "18",
   "franchises": {
+   "count": "12",
    "franchise": [
     {
+     "abbrev": "THOT",
+     "auctionStartAmount": "192",
+     "bbidAvailableBalance": "23.00",
+     "cell": "3125764441",
+     "cell2": "",
+     "country": "US",
+     "division": "00",
+     "email": "pmiglio@mac.com",
+     "future_draft_picks": "FP_0001_2027_1,FP_0001_2027_3,FP_0001_2027_4,FP_0001_2028_1,FP_0001_2028_2,FP_0001_2028_3,FP_0001_2028_4,FP_0008_2027_4,",
+     "home_modules": "COLUMN=33,DRAFT_COUNTDOWN=N,AUCTION_COUNTDOWN=N,CURRENT_SYSTEM_TIME=N,TRANSACTIONS=W,DRAFT_TRACKER=N,MY_OPTIONS=N,COLUMN=66,STANDINGS=W,POWER_RANK=W,SEASON_RECORDS=W,CHAMPIONSHIP_PLAQUE=W",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_icon0001.png",
      "id": "0001",
+     "lastVisit": "1792792756",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0001.png",
+     "mail_event": "DRAFT,MSG_BOARD,ONTHECLOCK,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Thots & Players",
-     "division": "00"
+     "owner_name": "Paul Miglio",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "PT",
+     "use_advanced_editor": "Yes",
+     "use_skin": "1039",
+     "username": "pmiglio",
+     "waiverSortOrder": "10"
     },
     {
+     "abbrev": "Daa Bears",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "93.00",
+     "cell": "6304648851",
+     "cell2": "",
+     "division": "02",
+     "email": "bdavis213@gmail.com",
+     "future_draft_picks": "FP_0002_2027_1,FP_0002_2027_4,FP_0002_2028_1,FP_0002_2028_2,FP_0002_2028_3,FP_0002_2028_4,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2025/14482_franchise_icon0002.png",
      "id": "0002",
+     "lastVisit": "1792839632",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0002.png",
+     "mail_event": "DRAFT,IR,LINEUP,MFL_NEWS,ONTHECLOCK,PROMO_MESSAGES,RESULT,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Bullish on da Bears",
-     "division": "02"
+     "owner_name": "Brian Davis",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "ET",
+     "use_advanced_editor": "Yes",
+     "use_skin": "1042",
+     "username": "bdavis213",
+     "waiverSortOrder": "8"
     },
     {
+     "abbrev": "HKTA",
+     "auctionStartAmount": "197",
+     "bbidAvailableBalance": "73.00",
+     "country": "US",
+     "division": "01",
+     "email": "mfschwab@gmail.com",
+     "future_draft_picks": "FP_0003_2027_1,FP_0003_2027_2,FP_0003_2027_3,FP_0003_2027_4,FP_0003_2028_1,FP_0003_2028_2,FP_0003_2028_3,FP_0003_2028_4,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2024/14482_franchise_icon0003.png",
      "id": "0003",
+     "lastVisit": "1792787861",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0003.png",
+     "mail_event": "ONTHECLOCK,TRADE,",
      "name": "Hauk Tua ",
-     "division": "01"
+     "owner_name": "Mike Schwab",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "CT",
+     "use_advanced_editor": "Yes",
+     "username": "thezekes",
+     "waiverSortOrder": "7"
     },
     {
+     "abbrev": "COOK",
+     "auctionStartAmount": "215",
+     "bbidAvailableBalance": "15.00",
+     "cell": "3127202150",
+     "cell2": "",
+     "division": "00",
+     "email": "collindel@gmail.com",
+     "future_draft_picks": "FP_0004_2027_2,FP_0004_2027_3,FP_0004_2027_4,FP_0004_2028_1,FP_0004_2028_2,FP_0004_2028_3,FP_0004_2028_4,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2025/14482_franchise_icon0004.png",
      "id": "0004",
+     "lastVisit": "1792865426",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0004.png",
+     "mail_event": "DRAFT,IR,LINEUP,MFL_NEWS,ONTHECLOCK,PROMO_MESSAGES,RESULT,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Fully Cooked",
-     "division": "00"
+     "owner_name": "Collin Del Cuore",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "PT",
+     "use_advanced_editor": "Yes",
+     "username": "collindel",
+     "waiverSortOrder": "4"
     },
     {
+     "abbrev": "WIZ",
+     "auctionStartAmount": "209",
+     "bbidAvailableBalance": "93.00",
+     "country": "US",
+     "division": "01",
+     "email": "jmc9000@gmail.com",
+     "future_draft_picks": "FP_0005_2027_1,FP_0005_2027_2,FP_0005_2027_3,FP_0005_2027_4,FP_0005_2028_1,FP_0005_2028_2,FP_0005_2028_3,FP_0005_2028_4,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2024/14482_franchise_icon0005.png",
      "id": "0005",
+     "lastVisit": "1792606072",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0005.png",
+     "mail_event": "DRAFT,INJURY,LREMINDER,ONTHECLOCK,RESULT,",
      "name": "The Fist of the Magi",
-     "division": "01"
+     "owner_name": "John Carlson",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "CT",
+     "use_advanced_editor": "Yes",
+     "use_skin": "1038",
+     "username": "jmc9000",
+     "waiverSortOrder": "5"
     },
     {
+     "abbrev": "JCC",
+     "auctionStartAmount": "203",
+     "bbidAvailableBalance": "76.00",
+     "cell": "7732897226",
+     "cell2": "",
+     "country": "US",
+     "division": "02",
+     "email": "kenbarnard12@gmail.com",
+     "future_draft_picks": "FP_0006_2027_1,FP_0006_2027_2,FP_0006_2027_3,FP_0006_2027_4,FP_0007_2027_4,FP_0002_2027_3,FP_0006_2028_1,FP_0006_2028_2,FP_0006_2028_3,FP_0006_2028_4,FP_0008_2027_3,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_icon0006.png",
      "id": "0006",
+     "lastVisit": "1792876704",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0006.png",
+     "mail_event": "DRAFT,INJURY,IR,LINEUP,LREMINDER,ONTHECLOCK,RESULT,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Jesus Christ College",
-     "division": "02"
+     "owner_name": "Ken Barnard",
+     "phone": "773-289-7226",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "ET",
+     "use_advanced_editor": "Yes",
+     "username": "kbarnyard",
+     "waiverSortOrder": "1"
     },
     {
+     "abbrev": "FRO",
+     "auctionStartAmount": "195",
+     "bbidAvailableBalance": "66.00",
+     "country": "US",
+     "division": "01",
+     "email": "seanm.mail@gmail.com",
+     "future_draft_picks": "FP_0007_2027_1,FP_0007_2027_2,FP_0007_2027_3,FP_0002_2027_2,FP_0007_2028_1,FP_0007_2028_2,FP_0007_2028_3,FP_0007_2028_4,",
+     "home_modules": "COLUMN=100,ROSTER=N,COLUMN=33,CURRENT_SYSTEM_TIME=N,MY_OPTIONS=N,COLUMN=67,STANDINGS=W,TRANSACTIONS=W,WEEKLY_SUMMARY=W,NEXT_WEEKS_FANTASY_SCHEDULE=N,FRANCHISE_RECORDS=W,PROJECTEDLAYOFF1=W,FRANCHISE_SCHEDULE=N,MY_MATCHUP_CHART=W",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2024/14482_franchise_icon0007.png",
      "id": "0007",
+     "lastVisit": "1792790502",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0007.png",
+     "mail_event": "ARTICLE,DRAFT,MSG_BOARD,ONTHECLOCK,POLL,TBAIT,TRADE,WAIVER,",
      "name": "MR. FROBOT",
-     "division": "01"
+     "owner_name": "Sean Maloney",
+     "phone": "312-925-4334",
+     "play_audio": "No",
+     "salaryCapAmount": "",
+     "time_zone": "CT",
+     "use_advanced_editor": "Yes",
+     "use_skin": "1032",
+     "username": "smaloney",
+     "waiverSortOrder": "9"
     },
     {
+     "abbrev": "SOT",
+     "auctionStartAmount": "199",
+     "bbidAvailableBalance": "35.00",
+     "country": "US",
+     "division": "02",
+     "email": "daverivera@me.com",
+     "future_draft_picks": "FP_0008_2027_1,FP_0008_2027_2,FP_0008_2028_1,FP_0008_2028_2,FP_0008_2028_3,FP_0008_2028_4,FP_0009_2027_1,FP_0009_2027_3,",
+     "home_modules": "COLUMN=33,CURRENT_SYSTEM_TIME=N,MY_OPTIONS=N,COLUMN=67,STANDINGS=W,TRANSACTIONS=W,WEEKLY_SUMMARY=W,NEXT_WEEKS_FANTASY_SCHEDULE=N,FRANCHISE_RECORDS=W,PROJECTEDLAYOFF1=W",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2024/14482_franchise_icon0008.png",
      "id": "0008",
+     "lastVisit": "1792869000",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0008.png",
+     "mail_event": "IR,MSG_BOARD,PLAYER_NEWS,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Son of Tinactin",
-     "division": "02"
+     "owner_name": "Dave Rivera",
+     "phone": "3124045758",
+     "play_audio": "No",
+     "salaryCapAmount": "",
+     "stadium": "Yo Mama's House",
+     "time_zone": "CT",
+     "twitterUsername": "@_Rivera_Films",
+     "use_advanced_editor": "Yes",
+     "username": "tinactin",
+     "waiverSortOrder": "3"
     },
     {
+     "abbrev": "MAIL",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "82.00",
+     "cell": "7082507887",
+     "cell2": "",
+     "country": "US",
+     "division": "00",
+     "email": "mencher21@yahoo.com",
+     "future_draft_picks": "FP_0009_2027_2,FP_0009_2027_4,FP_0009_2028_1,FP_0009_2028_2,FP_0009_2028_3,FP_0009_2028_4,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2025/14482_franchise_icon0009.png",
      "id": "0009",
+     "lastVisit": "1792865926",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0009.png",
+     "mail_event": "DRAFT,IR,LINEUP,MFL_NEWS,ONTHECLOCK,PROMO_MESSAGES,RESULT,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Mailing It In",
-     "division": "00"
+     "owner_name": "Kevin Mensching",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "CT",
+     "use_advanced_editor": "Yes",
+     "username": "mencher",
+     "waiverSortOrder": "12"
     },
     {
+     "abbrev": "HOLD",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "94.00",
+     "cell": "7738173794",
+     "cell2": "",
+     "country": "US",
+     "division": "01",
+     "email": "laksone@yahoo.com",
+     "future_draft_picks": "FP_0010_2027_1,FP_0010_2027_2,FP_0010_2027_3,FP_0010_2027_4,FP_0010_2028_1,FP_0010_2028_2,FP_0010_2028_3,FP_0010_2028_4,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2024/14482_franchise_icon0010.png",
      "id": "0010",
+     "lastVisit": "1792795217",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0010.png",
+     "mail_event": "AUCTION,DRAFT,ONTHECLOCK,TRADE,",
      "name": "Hold Timers",
-     "division": "01"
+     "owner_name": "Ronnie Khoshaba",
+     "phone": "773-817-3794",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "CT",
+     "use_advanced_editor": "Yes",
+     "use_skin": "1042",
+     "username": "laksone",
+     "waiverSortOrder": "6"
     },
     {
+     "abbrev": "WC",
+     "auctionStartAmount": "190",
+     "bbidAvailableBalance": "70.00",
+     "country": "US",
+     "division": "02",
+     "email": "michaelwholey@gmail.com",
+     "future_draft_picks": "FP_0011_2027_1,FP_0011_2027_2,FP_0011_2027_3,FP_0011_2027_4,FP_0011_2028_1,FP_0011_2028_2,FP_0011_2028_3,FP_0011_2028_4,FP_0004_2027_1,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2025/14482_franchise_icon0011.png",
      "id": "0011",
+     "lastVisit": "1792714292",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0011.png",
+     "mail_event": "ARTICLE,AUCTION,DRAFT,INJURY,IR,LINEUP,LREMINDER,MFL_NEWS,MSG_BOARD,ONTHECLOCK,PLAYER_NEWS,POLL,PROMO_MESSAGES,RESULT,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Wholey Club",
-     "division": "02"
+     "owner_name": "Mike Wholey",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "ET",
+     "use_advanced_editor": "Yes",
+     "username": "wholeyclub",
+     "waiverSortOrder": "11"
     },
     {
+     "abbrev": "SGR",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "99.00",
+     "division": "00",
+     "email": "nelson.kenneth@gmail.com",
+     "future_draft_picks": "FP_0012_2027_1,FP_0012_2027_2,FP_0012_2027_3,FP_0012_2027_4,FP_0012_2028_1,FP_0012_2028_2,FP_0012_2028_3,FP_0012_2028_4,FP_0001_2027_2,",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2025/14482_franchise_icon0012.png",
      "id": "0012",
+     "lastVisit": "1792774937",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_franchise_logo0012.png",
+     "mail_event": "DRAFT,IR,LINEUP,MFL_NEWS,ONTHECLOCK,PROMO_MESSAGES,RESULT,TAXI,TBAIT,TRADE,WAIVER,",
      "name": "Sour Grapes",
-     "division": "00"
+     "owner_name": "Ken Nelson",
+     "play_audio": "Yes",
+     "salaryCapAmount": "",
+     "time_zone": "CT",
+     "use_advanced_editor": "Yes",
+     "use_skin": "1024",
+     "username": "kenwitb",
+     "waiverSortOrder": "2"
     }
    ]
-  }
- }
+  },
+  "h2h": "YES",
+  "history": {
+   "league": [
+    {
+     "url": "https://www47.myfantasyleague.com/2026/home/14482",
+     "year": "2026"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2019/home/14482",
+     "year": "2019"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2020/home/14482",
+     "year": "2020"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2021/home/14482",
+     "year": "2021"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2022/home/14482",
+     "year": "2022"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2023/home/14482",
+     "year": "2023"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2024/home/14482",
+     "year": "2024"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2025/home/14482",
+     "year": "2025"
+    }
+   ]
+  },
+  "id": "14482",
+  "includeTaxiWithSalary": "100",
+  "injuredReserve": "3",
+  "keeperType": "keeper",
+  "lastRegularSeasonWeek": "14",
+  "leagueLogo": "https://www47.myfantasyleague.com/fflnetdynamic2026/14482_league_logo.png",
+  "loadRosters": "email_draft_live_auction",
+  "lockout": "Yes",
+  "maxKeepers": "18",
+  "maxWaiverRounds": "8",
+  "minBid": "1",
+  "minKeepers": "0",
+  "mobileAlerts": "",
+  "name": "FOOTBALLPALOOZA 2026",
+  "partialLineupAllowed": "YES",
+  "playerLimitUnit": "LEAGUE",
+  "precision": "1",
+  "rosterLimits": {
+   "position": [
+    {
+     "limit": "0-6",
+     "name": "QB"
+    },
+    {
+     "limit": "0-10",
+     "name": "RB"
+    },
+    {
+     "limit": "0-10",
+     "name": "WR"
+    },
+    {
+     "limit": "0-6",
+     "name": "TE"
+    },
+    {
+     "limit": "0-4",
+     "name": "Def"
+    }
+   ]
+  },
+  "rosterSize": "18",
+  "rostersPerPlayer": "1",
+  "salaryCapAmount": "",
+  "standingsSort": "PCT,PTS,",
+  "startWeek": "1",
+  "starters": {
+   "count": "8",
+   "position": [
+    {
+     "limit": "1",
+     "name": "QB"
+    },
+    {
+     "limit": "2-3",
+     "name": "RB"
+    },
+    {
+     "limit": "2-3",
+     "name": "WR"
+    },
+    {
+     "limit": "1-2",
+     "name": "TE"
+    },
+    {
+     "limit": "1",
+     "name": "Def"
+    }
+   ]
+  },
+  "taxiSquad": "4",
+  "usesContractYear": "1",
+  "usesSalaries": "1",
+  "victoryPointsBuckets": "1 0",
+  "victoryPointsEndWeek": "14",
+  "victoryPointsLoss": "0",
+  "victoryPointsStartWeek": "1",
+  "victoryPointsTie": "0",
+  "victoryPointsWin": "1"
+ },
+ "version": "1.0"
 }
