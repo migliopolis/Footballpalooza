@@ -45,7 +45,7 @@
     }).join('');
 
     const g = (a, b, lbl) => `<div class="game">${lbl ? `<div class="lbl">${lbl}</div>` : ''}${[a, b].map(x =>
-      x ? `<div class="row" title="${esc((by[x.id] || {}).name || '')}"><span class="sd">${x.seed}</span>${chip(x.id, { name: (state.teams[x.id] || {}).abbr })}</div>` : `<div class="row"><span class="sd"></span><span class="tbd">Winner advances</span></div>`).join('')}</div>`;
+      x ? `<div class="row"><span class="sd">${x.seed}</span>${chip(x.id)}<span class="meta">${rec(by[x.id])} · ${pts(by[x.id].pf)}</span></div>` : `<div class="row"><span class="sd"></span><span class="tbd">Winner advances</span></div>`).join('')}</div>`;
     const S = n => seeds[n - 1];
     const bracket = `<div class="bracket">
       <div class="round"><h3>Week 15 · Round 1</h3>${g(S(3), S(6))}${g(S(4), S(5))}</div>
@@ -60,7 +60,8 @@
       .map(t => {
         const gb = ((s5.w - t.w) + (t.l - s5.l)) / 2;
         const apb = s6.allPlayW - t.allPlayW;
-        return `<div class="bub card">${chip(t.id)}<span class="gb">${rec(t)} · ${gb <= 0 ? 'tied for' : gb + ' GB of'} seed 5<br>${apb <= 0 ? 'tied' : apb + ' behind'} seed 6 in all-play wins</span></div>`;
+        return `<div class="seed bubrow">${chip(t.id)}<span class="rec">${rec(t)}</span>
+          <span class="via">${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts</span></div>`;
       }).join('');
 
     const divTables = d.divisions.map(dv => {
@@ -104,7 +105,7 @@
         <section><h2 class="sec">Playoff picture <small>if the season ended today</small></h2>
           <div class="card seeds">${seedRows}</div>
           <h2 class="sec" style="margin-top:16px">On the bubble</h2>
-          <div class="bubble" style="margin-top:0">${bubble}</div>
+          <div class="card seeds">${bubble}</div>
         </section>
         <section><h2 class="sec">Bracket</h2><div class="card">${bracket}</div></section>
       </div>
