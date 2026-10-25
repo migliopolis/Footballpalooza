@@ -398,3 +398,8 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-list li{padding:8px 10px 8px 6px}
 .dr-nm .dr-nfl{display:flex;align-items:center;gap:0;margin-top:1px}
 .dr-nm .dr-nfl .dr-land{margin-left:6px}
+.dr-taxi-sel{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:600;color:var(--muted);margin-top:4px}
+.dr-taxi-sel select{font:inherit;font-size:16px;font-weight:500;color:var(--fg);padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);max-width:100%}
+.dr-years div.dead{border-color:var(--red);background:var(--red-soft)}
+.dr-tot{margin:2px 0 0;font-size:.84rem;line-height:1.6}
+.dr-tot b{font-variant-numeric:tabular-nums}

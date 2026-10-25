@@ -5,7 +5,7 @@
 (() => {
   const KEY = 'fbp-mock-2027';
   const S = { cfg: null, data: null, loading: false, err: null, mode: 'mine', my: '', picks: [], custom: [],
-              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false, started: false, openP: null, taxi: new Set() };
+              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false, started: false, openP: null, taxi: new Map() };
   const DELAY = 800;   // pause between computer picks (ms)
   try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; } catch (e) {}
 
@@ -151,29 +151,67 @@
     const np = pl.nflPick || C.undraftedPick, nf = interp(c.nfl, np), ff = c.fbp[slot], raw = c.max * nf * ff;
     return { max: c.max, nf, ff, np, raw, val: price(pl, slot), floored: Math.floor(raw + 0.5) < C.minimumRounds1to2 };
   }
-  // 2027 by-laws: active rookie deal is 5 years, +$3/+$6/+$9/+$12 added year over year (+0/+3/+9/+18/+30 from base).
-  // Full season on taxi: 6 years, year 1 counts at 2/3 (rounded up; none on $1-$2), year 2 frozen at the salary, then the same escalators.
-  function contract(salary, taxi) {
-    const esc_ = S.cfg.escalators || [3, 6, 9, 12];
-    const years = [salary]; let v = salary; esc_.forEach(e => { v += e; years.push(v); });
-    if (!taxi) return years.map((v, i) => ({ v, note: i === 0 ? 'Salary' : `+$${esc_[i - 1]}` }));
-    const y1 = salary <= 2 ? salary : Math.ceil(salary * 2 / 3);
-    return [{ v: y1, note: salary <= 2 ? 'No discount on $1–$2' : `⅔ counted, $${salary - y1} deferred`, taxi: true },
-            { v: salary, note: 'Frozen' }].concat(years.slice(1).map((v, i) => ({ v, note: `+$${esc_[i]}` })));
+  // Contract scenarios, from the 2027 by-laws (Article VI) and the rookie escalators in pricing.json
+  // (+$3, +$6, +$9, +$12 year over year = +0/+3/+9/+18/+30 from the salary).
+  // Taxi discount: year 1 counts at 2/3 (rounded up) for the team holding him at the designation deadline;
+  // the other third is deferred. None on $1-$2 salaries.
+  const TAXI = [
+    ['active', 'Active roster all season'],
+    ['taxi', 'Taxi all season'],
+    ['promoted', 'Taxi, promoted mid-season'],
+    ['traded', 'Taxi, traded (stays on taxi)'],
+    ['tradedPromoted', 'Taxi, traded (buyer promotes)'],
+  ];
+  function scenario(S0, mode) {
+    const e = S.cfg.escalators || [3, 6, 9, 12];
+    const run = (start, n) => { const out = [start]; let v = start; for (let k = 0; k < n - 1; k++) { v += e[k]; out.push(v); } return out; };
+    const disc = S0 > 2, counted = disc ? Math.ceil(S0 * 2 / 3) : S0, deferred = S0 - counted, fee = Math.floor(deferred / 2);
+    const Y = (v, note, cls = '') => ({ v, note, cls });
+    const five = run(S0, 5);                      // S, +3, +9, +18, +30
+    if (mode === 'active')
+      return { mine: five.map((v, k) => Y(v, k ? `+$${e[k - 1]}` : 'Salary')), years: 5, note: 'Standard 5-year rookie contract.' };
+    if (mode === 'taxi')
+      return { mine: [Y(counted, disc ? `⅔ counted; $${deferred} deferred and forgiven` : 'No discount on $1–$2', 'tx'), Y(S0, 'Frozen')]
+                 .concat(five.slice(1).map((v, k) => Y(v, `+$${e[k]}`))), years: 6,
+               note: 'A full rookie season on taxi earns the 6th-year option: salary stays frozen in year 2, escalators start in year 3.' };
+    if (mode === 'promoted') {
+      const rows = [Y(counted, disc ? `⅔ counted at the auction; $${deferred} deferred` : 'No discount on $1–$2', 'tx')];
+      five.slice(1).forEach((v, k) => rows.push(k === 0 && deferred ? Y(v + deferred, `$${v} salary (+$${e[0]}) + $${deferred} dead cap`, 'dead') : Y(v, `+$${e[k]}`)));
+      return { mine: rows, years: 5, note: 'Promotion starts the escalators early and voids the 6th year. The deferred third becomes dead cap on your budget next season.' };
+    }
+    // traded after the designation deadline: you took the discount, so you owe the trade fee next season
+    const mine = [Y(counted, disc ? `⅔ counted; $${deferred} deferred` : 'No discount on $1–$2', 'tx'), Y(fee, fee ? `Trade fee (half of $${deferred}, rounded down)` : 'No trade fee', 'dead')];
+    const theirs = mode === 'traded'
+      ? [Y(S0, 'Frozen (still on taxi)')].concat(five.slice(1).map((v, k) => Y(v, `+$${e[k]}`)))
+      : five.slice(1).map((v, k) => Y(v, `+$${e[k]}`));
+    return { mine, theirs, years: mode === 'traded' ? 6 : 5, traded: true,
+             note: mode === 'traded'
+               ? 'You pay the fee once next season, whatever the buyer does. He keeps his 6th-year option with the new team if he stays on taxi.'
+               : 'The buyer owes no dead cap, but promoting him starts his escalators early and voids the 6th year. You still owe the trade fee.' };
   }
+  const yearsHtml = (rows, first) => `<div class="dr-years">${rows.map((y, k) => `<div class="${y.cls}"><small>${first ? `Year ${first + k}` : `Year ${k + 1}`}</small><b>$${y.v}</b><span>${y.note}</span></div>`).join('')}</div>`;
+  const totals = (rows, label) => {
+    const sum = n => rows.slice(0, n).reduce((t, y) => t + y.v, 0);
+    const three = Math.min(3, rows.length), all = rows.length;
+    return `<p class="dr-tot">${label ? `<b>${label}</b> ` : ''}Three-year total/avg: <b>$${sum(three)}</b> / <b>$${(sum(three) / three).toFixed(1).replace(/\.0$/, '')}</b><br>
+      Full deal total/avg: <b>$${sum(all)}</b> / <b>$${(sum(all) / all).toFixed(1).replace(/\.0$/, '')}</b> <small>(${all} years)</small></p>`;
+  };
   function detail(pl, slot) {
-    const b = breakdown(pl, slot), fx = n => n.toFixed(n < 1 ? 2 : 0), taxi = S.taxi.has(pl.name);
+    const b = breakdown(pl, slot), fx = n => n.toFixed(n < 1 ? 2 : 0), mode = S.taxi.get(pl.name) || 'active';
     const math = b.flat
       ? `<p class="dr-math">Round ${b.round} picks are a flat <b>$${b.val}</b>.</p>`
       : `<p class="dr-math"><span>$${b.max} ${pl.pos} max</span> × <span>${fx(b.nf)} NFL factor <small>(${pl.nflPick ? 'proj ' + nflLabel(b.np) : 'no projection, priced as undrafted'})</small></span>
           × <span>${fx(b.ff)} FBP factor <small>(${slotLabel(slot)})</small></span> = ${b.raw.toFixed(1)} → <b>$${b.val}</b>${b.floored ? ' <small>(the $3 minimum)</small>' : ''}</p>`;
-    const yrs = contract(b.val, taxi);
+    const sc = scenario(b.val, mode);
+    const opts = TAXI.map(([k, l]) => `<option value="${k}"${k === mode ? ' selected' : ''}>${l}</option>`).join('');
+    const body = sc.traded
+      ? `<h4>Your cap</h4>${yearsHtml(sc.mine)}${totals(sc.mine, 'You:')}
+         <h4>His contract with the new team</h4>${yearsHtml(sc.theirs, 2)}${totals(sc.theirs, 'New team:')}`
+      : `<h4>${sc.years}-year contract</h4>${yearsHtml(sc.mine)}${totals(sc.mine)}`;
     return `<div class="dr-detail">
       <h4>Price at ${slotLabel(slot)}</h4>${math}
-      <label class="dr-taxi"><input type="checkbox" data-dr-taxi="${escH(pl.name)}"${taxi ? ' checked' : ''}> Full season on taxi squad</label>
-      <h4>${taxi ? '6-year taxi contract' : '5-year rookie contract'}</h4>
-      <div class="dr-years">${yrs.map((y, i) => `<div class="${y.taxi ? 'tx' : ''}"><small>Year ${i + 1}</small><b>$${y.v}</b><span>${y.note}</span></div>`).join('')}</div>
-      <p class="dr-foot">Total over the deal: $${yrs.reduce((t, y) => t + y.v, 0)}${taxi ? ' (counting year 1 at ⅔)' : ''}.</p>
+      <label class="dr-taxi-sel"><span>Taxi squad</span><select data-dr-taxisel="${escH(pl.name)}">${opts}</select></label>
+      ${body}<p class="dr-foot">${sc.note}</p>
     </div>`;
   }
 
@@ -303,11 +341,10 @@
 
   /* ---- events ---- */
   function click(e, ctx) {
-    const el = e.target.closest('[data-dr],[data-dr-mode],[data-dr-pos],[data-dr-sort],[data-dr-round],[data-dr-pick],[data-dr-mtab],[data-dr-open],[data-dr-taxi]');
+    const el = e.target.closest('[data-dr],[data-dr-mode],[data-dr-pos],[data-dr-sort],[data-dr-round],[data-dr-pick],[data-dr-mtab],[data-dr-open]');
     if (!el || !S.cfg) return false;
     const ord = order(ctx.now);
     if (el.dataset.drOpen) { S.openP = S.openP === el.dataset.drOpen ? null : el.dataset.drOpen; return true; }
-    if (el.dataset.drTaxi) { const n = el.dataset.drTaxi; S.taxi.has(n) ? S.taxi.delete(n) : S.taxi.add(n); return true; }
     if (el.dataset.drMtab) { S.mtab = el.dataset.drMtab; try { localStorage.setItem('fbp-draft-tab', S.mtab); } catch (x) {} return true; }
     if (el.dataset.drMode) { stop(); S.mode = el.dataset.drMode; S.round = null; save(); }
     else if (el.dataset.drPos) S.pos = el.dataset.drPos;
@@ -341,6 +378,7 @@
     return true;
   }
   function change(e) {
+    if (e.target.dataset && e.target.dataset.drTaxisel) { S.taxi.set(e.target.dataset.drTaxisel, e.target.value); return true; }
     if (e.target.id === 'dr-mode') { stop(); S.mode = e.target.value; S.round = null; save(); return true; }
     if (e.target.id !== 'dr-my') return false;
     stop(); S.started = false; S.my = e.target.value; try { localStorage.setItem('fbp-myteam', S.my); } catch (x) {}

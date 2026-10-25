@@ -386,6 +386,13 @@
     return `<div class="card soon"><h2>${h}</h2><p>${p}</p>${extra.length ? `<ul>${extra.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}<p>Coming soon.</p></div>`;
   };
 
+  // re-render without jumping: keep the page and any scrolling lists where they were
+  function keepScroll(fn) {
+    const y = window.scrollY, boxes = ['.dr-list', '#dr-board'].map(sel => { const el = document.querySelector(sel); return [sel, el ? el.scrollTop : 0]; });
+    fn();
+    boxes.forEach(([sel, t]) => { const el = document.querySelector(sel); if (el) el.scrollTop = t; });
+    window.scrollTo(0, y);
+  }
   const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash === '#draft') route(); } });
 
   /* ---------- router ---------- */
@@ -425,11 +432,11 @@
     const hdr = () => document.documentElement.style.setProperty('--hdr-h', document.querySelector('.top').offsetHeight + 'px');
     hdr(); window.addEventListener('resize', hdr);
     app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
-    app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) { const y = window.scrollY; route(); window.scrollTo(0, y); } });
+    app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) keepScroll(route); });
     app.addEventListener('click', e => {
       if (location.hash === '#draft' && window.FBPDraft && FBPDraft.click(e, draftCtx())) {
         const el = e.target.closest('button'), key = el && [...el.attributes].find(a => a.name.startsWith('data-dr'));
-        const y = window.scrollY; route(); window.scrollTo(0, y);
+        keepScroll(route);
         if (key && e.detail === 0) { const again = document.querySelector(`[${key.name}="${CSS.escape(key.value)}"]`); if (again) again.focus({ preventScroll: true }); }
         return;
       }
