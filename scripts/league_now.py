@@ -120,12 +120,14 @@ def seed_league(teams, games, divisions):
     return seeds, winners, div_rank
 
 
-def simulate(teams, games, remaining, divisions, n_sims=20000, seed=2027):
+def simulate(teams, games, remaining, divisions, n_sims=20000, seed=2027, spread_scale=2.0):
     """Play out the rest of the regular season n_sims times and tally where everyone finishes.
 
     Scoring model: each team's weekly score is normal around its true average with the league's
     week-to-week spread. A team's true average is uncertain, so it is drawn fresh each run from an
     estimate that pulls its season average toward the league average (more pull early in the year).
+    spread_scale widens the estimated spread of true team strength; 2.0 scored best in a backtest of
+    2021-2025 (from weeks 4-12, judged under the 2027 playoff rules), where 1.0 made favorites too timid.
     remaining: [(week, a, b)] unplayed regular-season games.
     """
     import random, statistics
@@ -140,7 +142,7 @@ def simulate(teams, games, remaining, divisions, n_sims=20000, seed=2027):
         within = statistics.mean([statistics.variance(played[t]) for t in ids if len(played[t]) > 1])
         n_avg = statistics.mean(len(played[t]) for t in ids)
         between = statistics.variance([statistics.mean(played[t]) for t in ids]) - within / n_avg
-        true_var = max(between, within / 30)
+        true_var = max(between, within / 30) * spread_scale
     else:  # too early: everyone looks the same
         lg, within, true_var = (statistics.mean(allv) if allv else 110.0), 600.0, 100.0
     post = {}
