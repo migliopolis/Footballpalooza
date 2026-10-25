@@ -28,11 +28,11 @@ window.FBPRef = (() => {
   const badge = (fr, y) => { const c = champOf(y); return c && c.champion === fr ? '<span class="rf-badge gold" title="Champion">🏆</span>' : c && c.runnerup === fr ? '<span class="rf-badge">2nd</span>' : ''; };
   const lastDone = () => Math.max(...Object.keys(D.championships).map(Number));
   const years = () => D.meta.years_covered.slice().sort((a, b) => a - b);
-  const sub = (items, cur) => `<nav class="rf-sub">${items.map(([h, l]) => `<a href="${h}"${h === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+  const sub = (items, cur, seg) => `<nav class="rf-sub${seg ? ' seg' : ''}">${items.map(([h, l]) => `<a href="${h}"${h === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
   const lum = h => { h = (h || '#888').replace('#', ''); const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); return (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
 
   function nav(top) {
-    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records']], top);
+    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records']], top, true);
   }
   function head(title, extra = '') {
     const m = D.meta;
@@ -64,7 +64,7 @@ window.FBPRef = (() => {
           ${rows.map(s => `<tr>${lgCell(s.fr)}${nameCell(s.fr, y, s.name)}<td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${esc(s.all_play || '—')}</td><td>${badge(s.fr, y) || s.rank}</td></tr>`).join('')}
           </tbody></table></div></section>
         <section><h2 class="sec">Champions</h2><div class="card rf-champs">
-          ${champs.map(cy => { const c = D.championships[cy]; return `<a class="rf-champ" href="#reference/s-${cy}"><span class="yr">${cy}</span>${X.chip(c.champion, { name: nm(c.champion, +cy) })}<span class="sc">def. ${esc(nm(c.runnerup, +cy))}<br>${esc(c.score)}</span></a>`; }).join('')}
+          ${champs.map(cy => { const c = D.championships[cy]; return `<a class="rf-champ" href="#reference/s-${cy}"><span class="yr">${cy}</span>${logo(c.champion) || '<i></i>'}<span class="who"><b>${esc(nm(c.champion, +cy))}</b><small>def. ${esc(nm(c.runnerup, +cy))} · ${esc(c.score)}</small></span></a>`; }).join('')}
         </div></section>
       </div>
       <section><h2 class="sec">Franchises</h2><div class="rf-teams">
@@ -146,7 +146,7 @@ window.FBPRef = (() => {
     else if (tab === 'auction') body = auctionTable(y);
     else body = resultsHtml(y, wk);
     return head('Seasons') + nav('#reference/seasons') +
-      `<div class="rf-yrnav">${i > 0 ? `<a href="#reference/s-${ys[i - 1]}">← ${ys[i - 1]}</a>` : '<span></span>'}<h2>${y}${c ? ` · <span>${esc(nm(c.champion, y))} 🏆</span>` : live ? ' · <span>in progress</span>' : ''}</h2>${i < ys.length - 1 ? `<a href="#reference/s-${ys[i + 1]}">${ys[i + 1]} →</a>` : '<span></span>'}</div>
+      `<div class="rf-yrnav">${i > 0 ? `<a href="#reference/s-${ys[i - 1]}">← ${ys[i - 1]}</a>` : '<span></span>'}<h2>${y}${c ? `<span class="ch" title="${esc(nm(c.champion, y))}, champions">${logo(c.champion) || esc(nm(c.champion, y))}🏆</span>` : live ? '<small>in progress</small>' : ''}</h2>${i < ys.length - 1 ? `<a href="#reference/s-${ys[i + 1]}">${ys[i + 1]} →</a>` : '<span></span>'}</div>
       <section><h2 class="sec">${live ? 'Standings' : 'Final standings'}${live && D.meta.current_week ? ` <small>through week ${D.meta.current_week}</small>` : ''}</h2>
         <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>PF</th><th>PA</th><th>All-play</th></tr></thead><tbody>
         ${rows.map(s => `<tr><td>${s.rank || '—'}</td>${lgCell(s.fr)}<td class="t"><a class="rf-nm" href="#reference/f-${s.fr}">${esc(s.name)}</a>${badge(s.fr, y)}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`).join('')}
@@ -156,7 +156,7 @@ window.FBPRef = (() => {
         <div class="round"><h3>Semifinals · week ${br.semi_week}</h3>${br.semifinal_games.length ? br.semifinal_games.map(g => game(g, y)).join('') : '<p class="rf-foot">To be played.</p>'}</div>
         <div class="round"><h3>Championship · week ${br.championship_week}</h3>${br.championship_game ? game(br.championship_game, y) : '<p class="rf-foot">To be played.</p>'}</div>
       </div>` : `<div class="card rf-pad"><p class="rf-note">${live ? 'The bracket fills in here once the playoffs start. The live picture is on <a href="#now">League Now</a>.' : 'No bracket on record for this season.'}</p></div>`}</section>
-      <section>${sub([[base, 'Weekly results'], [base + '/draft', 'Rookie draft'], [base + '/auction', 'Auction']], tab === 'results' ? base : base + '/' + tab)}<div class="rf-body">${body}</div></section>`;
+      <section>${sub([[base, 'Weekly results'], [base + '/draft', 'Rookie draft'], [base + '/auction', 'Auction']], tab === 'results' ? base : base + '/' + tab, true)}<div class="rf-body">${body}</div></section>`;
   }
 
   function resultsHtml(y, wk) {
