@@ -37,15 +37,20 @@
   const taken = () => new Set(S.picks.filter(p => p && !p.unranked).map(p => p.name));
   const posPill = p => p.pos ? ` <span class="pos ${p.pos}">${p.pos}</span>` : '';
   const available = () => { const t = taken(); return pool().filter(p => !t.has(p.name)); };
+  const siteVersion = () => (window.FBP && window.FBP.version) || '';
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify({ sig: S.sig, mode: S.mode, started: S.started, picks: S.picks.map(p => p ? p.name : null), custom: S.custom })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ v: siteVersion(), sig: S.sig, mode: S.mode, started: S.started, picks: S.picks.map(p => p ? p.name : null), custom: S.custom })); } catch (e) {}
   }
   function restore(ord) {
     S.sig = ord.map(o => o.owner).join(',');
     S.picks = ord.map(() => null); S.cur = 0; S.started = false;
     try {
       const sv = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (sv && sv.picks) {
+      if (sv && sv.picks && sv.v !== siteVersion()) {
+        // a new site version: start every mock fresh (keep only the mock type)
+        S.mode = sv.mode || S.mode;
+        localStorage.removeItem(KEY);
+      } else if (sv && sv.picks) {
         S.custom = sv.custom || [];
         if (sv.sig !== S.sig) { S.note = 'The draft order changed since your last mock (new standings or a pick trade), so it was reset.'; }
         else {
