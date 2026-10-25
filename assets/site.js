@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0007';
+  const VERSION = '0.0008';
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
   try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
@@ -379,12 +379,13 @@
   const SOON = {
     reference: ['Reference', 'The FBP Reference almanac moves in here: franchise pages, every season’s standings and brackets, records, head-to-head and draft and auction history.', ['Turn on P-PPR in Settings to include the pre-2019 non-PPR seasons.']],
     offseason: ['Off-Season', 'A sandbox for next year: rosters, cap space, keeper look-ahead, free agents, the incoming rookie class and auction price predictions tuned on 2026 results.', []],
-    draft: ['Rookie Draft', 'A mock draft using the league’s actual draft order: auto-mock the whole league, make every pick yourself, or pick for your team while the rest auto-draft. Each rookie’s price shows as you go.', []],
   };
   const pageSoon = k => {
     const [h, p, extra] = SOON[k];
     return `<div class="card soon"><h2>${h}</h2><p>${p}</p>${extra.length ? `<ul>${extra.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}<p>Coming soon.</p></div>`;
   };
+
+  const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash === '#draft') route(); } });
 
   /* ---------- router ---------- */
   const TABS = ['now', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
@@ -393,6 +394,7 @@
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
+    else if (tab === 'draft') app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>';
     else if (tab === 'bylaws') {
       app.innerHTML = pageBylaws();
       if (!state.bylaws) fetch('data/bylaws.json', { cache: 'no-cache' }).then(r => r.json())
@@ -419,7 +421,14 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', route);
     app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
+    app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) { const y = window.scrollY; route(); window.scrollTo(0, y); } });
     app.addEventListener('click', e => {
+      if (location.hash === '#draft' && window.FBPDraft && FBPDraft.click(e, draftCtx())) {
+        const el = e.target.closest('button'), key = el && [...el.attributes].find(a => a.name.startsWith('data-dr'));
+        const y = window.scrollY; route(); window.scrollTo(0, y);
+        if (key && e.detail === 0) { const again = document.querySelector(`[${key.name}="${CSS.escape(key.value)}"]`); if (again) again.focus({ preventScroll: true }); }
+        return;
+      }
       const tg = e.target.closest('[data-bltoggle]'), cl = e.target.closest('[data-blclose]'), all = e.target.closest('[data-blall]');
       if (tg || cl || all) {
         if (all) {
