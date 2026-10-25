@@ -505,3 +505,10 @@ section > .rf-sub{margin:0 0 12px}
 .tbl.rf-t td.t{white-space:normal;min-width:9rem}
 @media (max-width:520px){.tbl.rf-t td.t{min-width:8rem;max-width:11.5rem}}
 @media (max-width:520px){.rf-sub + .rf-sub{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:calc(-1 * var(--gut));padding-right:var(--gut)}.rf-sub + .rf-sub::-webkit-scrollbar{display:none}.rf-sub + .rf-sub a{flex:none}}
+
+.rf-np{display:inline-block;font:600 .6rem var(--body);letter-spacing:.05em;text-transform:uppercase;padding:1px 6px;border-radius:999px;background:var(--sky-soft);color:var(--muted);vertical-align:2px;margin-left:4px}
+.rf-season.pre{background:var(--bg)}
+.rf-pre1{display:flex;align-items:center;gap:6px;font-weight:600;min-width:0}
+.rf-pre1 img{width:24px;height:24px;object-fit:contain}
+.rf-gone{font-size:.7rem;color:var(--muted);font-style:italic}
+.rf-champ small .rf-nm,.rf-season small .rf-nm{font-weight:500;color:inherit}
