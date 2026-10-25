@@ -36,11 +36,14 @@ window.FBPRef = (() => {
   let PPR = false;
   const PRE = () => (PPR && D.pre2019 ? D.pre2019.seasons : []);
   const NP = '<span class="rf-np" title="Non-PPR season, before the league moved to MFL">non-PPR</span>';
-  const preName = t => t.franchise ? `<a class="rf-nm" href="#reference/f-${t.franchise}">${esc(t.name)}</a>` : esc(t.name) + (t.former ? ' <span class="rf-gone">former team</span>' : '');
+  const preName = t => t.franchise ? `<a class="rf-nm" href="#reference/f-${t.franchise}">${esc(t.name)}</a>` : esc(t.name);
+  const preRec = fr => { const r = { w: 0, l: 0, t: 0 }; PRE().forEach(x => (x.standings || []).forEach(s => { if (s.franchise === fr) { r.w += s.w; r.l += s.l; r.t += s.t; } })); return r; };
+  const preYears = () => PRE().map(x => x.year);
+  const preSeason = y => PRE().find(x => x.year === y);
   const preTeam = t => `${t.franchise ? logo(t.franchise) : ''}${t.franchise ? `<a class="rf-nm" href="#reference/f-${t.franchise}">${esc(t.name)}</a>` : esc(t.name)}`;
   const preFin = (fr, k) => PRE().filter(x => x[k].franchise === fr).map(x => x.year);
-  const titlesOf = fr => preFin(fr, 'champion').concat(D.franchise_alltime[fr].championships);
-  const secondsOf = fr => preFin(fr, 'runnerup').concat(D.franchise_alltime[fr].runnerups);
+  const titlesOf = fr => preFin(fr, 'champion').concat(D.franchise_alltime[fr].championships).sort((a, b) => a - b);
+  const secondsOf = fr => preFin(fr, 'runnerup').concat(D.franchise_alltime[fr].runnerups).sort((a, b) => a - b);
   const firstYear = () => (PRE().length ? Math.min(...PRE().map(x => x.year)) : 2019);
 
   function nav(top) {
@@ -66,7 +69,7 @@ window.FBPRef = (() => {
     const champs = Object.keys(D.championships).sort((a, b) => b - a);
     const ids = Object.keys(D.franchises).sort((a, b) => D.franchises[a].localeCompare(D.franchises[b]));
     return head('Reference') + nav('#reference') +
-      (PRE().length ? `<p class="rf-note">P-PPR is on: titles and finishes include ${firstYear()}–2018 (non-PPR). Only the top three finishers are on record for those years, so standings, scores and records stay 2019 on.</p>` : '') +
+      (PRE().length ? `<p class="rf-note">P-PPR is on: seasons, titles and finishes include ${firstYear()}–2018 (non-PPR). Game scores and records stay 2019 on; see the blind spots at the bottom.</p>` : '') +
       `<section class="rf-tiles">
         <div class="card rf-tile"><span>Seasons</span><b>${years().length + PRE().length}</b><small>${firstYear()}–${D.meta.current_year}</small></div>
         <div class="card rf-tile"><span>Most titles</span><b>${titles[0][1]}</b><small>${most.map(t => esc(t[0])).join(', ')}</small></div>
@@ -80,21 +83,35 @@ window.FBPRef = (() => {
           </tbody></table></div></section>
         <section><h2 class="sec">Champions</h2><div class="card rf-champs">
           ${champs.map(cy => { const c = D.championships[cy]; return `<a class="rf-champ" href="#reference/s-${cy}"><span class="yr">${cy}</span>${logo(c.champion) || '<i></i>'}<span class="who"><b>${esc(nm(c.champion, +cy))}</b><small>def. ${esc(nm(c.runnerup, +cy))} · ${esc(c.score)}</small></span></a>`; }).join('')}
-          ${PRE().map(x => `<div class="rf-champ"><span class="yr">${x.year}</span>${x.champion.franchise ? logo(x.champion.franchise) : '<i></i>'}<span class="who"><b>${x.champion.franchise ? `<a class="rf-nm" href="#reference/f-${x.champion.franchise}">${esc(x.champion.name)}</a>` : esc(x.champion.name)} ${NP}</b><small>2nd ${preName(x.runnerup)} · 3rd ${preName(x.third)}</small></span></div>`).join('')}
+          ${PRE().map(x => `<div class="rf-champ"><a class="yr" href="#reference/s-${x.year}">${x.year}</a>${x.champion.franchise ? logo(x.champion.franchise) : '<i></i>'}<span class="who"><b>${x.champion.franchise ? `<a class="rf-nm" href="#reference/f-${x.champion.franchise}">${esc(x.champion.name)}</a>` : esc(x.champion.name)} ${NP}</b><small>${x.title_game ? `def. ${esc(x.runnerup.name)} · ${esc(x.title_game.score)}` : `2nd ${esc(x.runnerup.name)} · 3rd ${esc(x.third.name)}`}</small></span></div>`).join('')}
         </div></section>
       </div>
       <section><h2 class="sec">Franchises</h2><div class="rf-teams">
         ${ids.map(fr => { const a = D.franchise_alltime[fr]; return `<a class="card rf-team" href="#reference/f-${fr}">${logo(fr)}<span><b>${esc(D.franchises[fr])}</b><small>${rec(a.w, a.l, a.t)}${titlesOf(fr).length ? ` · 🏆 ${titlesOf(fr).length}` : ''}</small></span></a>`; }).join('')}
-      </div></section>`;
+      </div></section>
+      ${blindSpots()}`;
+  }
+
+  // what the pre-2019 (P-PPR) history is missing
+  function blindSpots() {
+    return `<section><h2 class="sec">P-PPR blind spots <small>what we don’t have for 2011–2018</small></h2><div class="card rf-blind"><ul>
+      <li><b>2017 and 2018 standings.</b> Only the top three are known; records and finishes for everyone else are missing.</li>
+      <li><b>The 2018 title game.</b> No score or lineups.</li>
+      <li><b>Points for and against.</b> No season totals for any pre-2019 year, so no PPG, all-play or points tiebreaks.</li>
+      <li><b>Weekly games.</b> No regular-season or playoff scores, so no brackets, head-to-head, or single-game and blowout records before 2019.</li>
+      <li><b>Auctions and rosters.</b> No player-by-player auction results or rosters before 2019 (rookie drafts started in 2021).</li>
+      <li><b>Owners who left.</b> Teams run by owners no longer in the league show by name only, not under a current franchise.</li>
+      <li><b>Different scoring.</b> Those seasons were non-PPR with kickers and defenses, so their scores don’t compare with today’s.</li>
+    </ul><p class="rf-foot">Have any of this? Send it over and it goes in.</p></div></section>`;
   }
 
   /* ---------- franchises ---------- */
   function pageFranchises() {
     const ids = Object.keys(D.franchises).sort((a, b) => D.franchise_alltime[b].win_pct - D.franchise_alltime[a].win_pct);
     return head('Franchises') + nav('#reference/franchises') +
-      `<section><h2 class="sec">All-time <small>regular season 2019 on, ranked by win%${PRE().length ? '; titles and 2nds include non-PPR years' : ''}</small></h2>
-      <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Franchise</th><th>W-L-T</th><th>Win%</th><th>Titles</th><th>2nd</th><th>Points</th><th>Seasons</th></tr></thead><tbody>
-      ${ids.map(fr => { const a = D.franchise_alltime[fr]; return `<tr>${lgCell(fr)}${nameCell(fr)}<td>${rec(a.w, a.l, a.t)}</td><td>${pct(a.win_pct)}</td><td>${titlesOf(fr).length ? '🏆 ' + titlesOf(fr).length : '—'}</td><td>${secondsOf(fr).length || '—'}</td><td>${n0(a.total_pf)}</td><td>${a.seasons_played}</td></tr>`; }).join('')}
+      `<section><h2 class="sec">All-time <small>regular season 2019 on, ranked by win%${PRE().length ? '; 2011–16 is the non-PPR record; titles and 2nds include 2011–2018' : ''}</small></h2>
+      <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Franchise</th><th>W-L-T</th><th>Win%</th>${PRE().length ? '<th>2011–16</th>' : ''}<th>Titles</th><th>2nd</th><th>Points</th><th>Seasons</th></tr></thead><tbody>
+      ${ids.map(fr => { const a = D.franchise_alltime[fr]; return `<tr>${lgCell(fr)}${nameCell(fr)}<td>${rec(a.w, a.l, a.t)}</td><td>${pct(a.win_pct)}</td>${PRE().length ? `<td>${(r => r.w + r.l ? rec(r.w, r.l, r.t) : '—')(preRec(fr))}</td>` : ''}<td>${titlesOf(fr).length ? '🏆 ' + titlesOf(fr).length : '—'}</td><td>${secondsOf(fr).length || '—'}</td><td>${n0(a.total_pf)}</td><td>${a.seasons_played}</td></tr>`; }).join('')}
       </tbody></table></div></section>`;
   }
 
@@ -120,12 +137,22 @@ window.FBPRef = (() => {
       <section><h2 class="sec">Year by year</h2>
       <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>Year</th><th class="t">Team name</th><th>Fin</th><th>W-L-T</th><th>PF</th><th>PA</th><th>All-play</th></tr></thead><tbody>
       ${seasons.map(s => `<tr><td><a class="rf-nm" href="#reference/s-${s.year}">${s.year}</a></td><td class="t">${esc(s.name)}</td><td>${badge(fr, s.year) || (s.rank ? s.rank + (s.year === D.meta.current_year && !champOf(s.year) ? '*' : '') : '—')}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`).join('')}
+      ${preRows(fr)}
       </tbody></table></div>${seasons.some(s => s.year === D.meta.current_year && !champOf(s.year)) ? `<p class="rf-foot">* ${D.meta.current_year} is in progress; that’s the current standing.</p>` : ''}</section>
       <section><h2 class="sec">Head-to-head <small>every game, playoffs included</small></h2>
       <div class="card rf-h2h">${h2h.map(([o, r]) => { const g = r.w + r.l + r.t, p = g ? (r.w + r.t / 2) / g : 0; return `<a href="#reference/f-${o}" class="rf-h2hrow">${X.chip(o, { name: D.franchises[o] })}<span class="bar"><i style="width:${(p * 100).toFixed(0)}%"></i></span><b>${rec(r.w, r.l, r.t)}</b></a>`; }).join('')}</div></section>
       <section><h2 class="sec">Rookie draft history</h2>${picksTable(D.franchise_draft_picks[fr] || [], false)}</section>`;
   }
 
+  function preRows(fr) {
+    return PRE().map(x => {
+      const s = (x.standings || []).find(r => r.franchise === fr);
+      const k = ['champion', 'runnerup', 'third'].find(k => x[k].franchise === fr);
+      if (!s && !k) return '';
+      const fin = k === 'champion' ? '<span class="rf-badge gold">🏆</span>' : k === 'runnerup' ? '<span class="rf-badge">2nd</span>' : s ? s.place : '3';
+      return `<tr class="rf-pre"><td><a class="rf-nm" href="#reference/s-${x.year}">${x.year}</a></td><td class="t">${esc((s || x[k]).name)} ${NP}</td><td>${fin}</td><td>${s ? rec(s.w, s.l, s.t) : '—'}</td><td>—</td><td>—</td><td>—</td></tr>`;
+    }).join('');
+  }
   function preNote(fr) {
     const f = PRE().flatMap(x => ['champion', 'runnerup', 'third'].filter(k => x[k].franchise === fr).map(k => `${x.year} ${k === 'champion' ? 'champion' : k === 'runnerup' ? '2nd' : '3rd'}${x[k].name !== D.franchises[fr] ? ` (as ${esc(x[k].name)})` : ''}`));
     return f.length ? `<p class="aka">Before 2019 (non-PPR): ${f.join(', ')}</p>` : '';
@@ -146,7 +173,7 @@ window.FBPRef = (() => {
     return head('Seasons') + nav('#reference/seasons') + `<section class="rf-seasons">${years().reverse().map(y => {
       const c = champOf(y);
       return `<a class="card rf-season" href="#reference/s-${y}"><b>${y}</b>${c ? `${X.chip(c.champion, { name: nm(c.champion, y) })}<small>def. ${esc(nm(c.runnerup, y))} ${esc(c.score)}</small>` : `<small>In progress${y === D.meta.current_year && D.meta.current_week ? ` · through week ${D.meta.current_week}` : ''}</small>`}</a>`;
-    }).join('')}${PRE().map(x => `<div class="card rf-season pre"><b>${x.year} ${NP}</b><span class="rf-pre1">🏆 ${preTeam(x.champion)}</span><small>2nd ${preName(x.runnerup)} · 3rd ${preName(x.third)}</small></div>`).join('')}</section>${PRE().length ? '<p class="rf-foot">Non-PPR seasons show the top three only; standings and scores for those years aren’t loaded yet.</p>' : ''}`;
+    }).join('')}${PRE().map(x => `<a class="card rf-season pre" href="#reference/s-${x.year}"><b>${x.year} ${NP}</b><span class="rf-pre1">🏆 ${x.champion.franchise ? logo(x.champion.franchise) : ''}${esc(x.champion.name)}</span><small>${x.title_game ? `def. ${esc(x.runnerup.name)} ${esc(x.title_game.score)}` : `2nd ${esc(x.runnerup.name)} · 3rd ${esc(x.third.name)}`}</small></a>`).join('')}</section>`;
   }
 
   function game(g, y, lbl) {
@@ -156,7 +183,30 @@ window.FBPRef = (() => {
     return `<div class="game">${lbl ? `<div class="lbl">${lbl}</div>` : ''}${row(g.franchiseA, g.scoreA, aw)}${row(g.franchiseB, g.scoreB, bw)}</div>`;
   }
 
+  function yearNav(y, mid) {
+    const ys = preYears().concat(years()).sort((a, b) => a - b), i = ys.indexOf(y);
+    return `<div class="rf-yrnav">${i > 0 ? `<a href="#reference/s-${ys[i - 1]}">← ${ys[i - 1]}</a>` : '<span></span>'}<h2>${y}${mid}</h2>${i < ys.length - 1 ? `<a href="#reference/s-${ys[i + 1]}">${ys[i + 1]} →</a>` : '<span></span>'}</div>`;
+  }
+  // a non-PPR season: standings (2011-16), title-game box score (2011-17), or just the top three
+  function pagePre(x) {
+    const y = x.year, c = x.champion;
+    const tm = (t, extra = '') => `${t.franchise ? `<a class="rf-nm" href="#reference/f-${t.franchise}">${esc(t.name)}</a>` : esc(t.name)}${extra}<small class="rf-by">${esc(t.owner)}</small>`;
+    const side = (o, win) => `<div class="card rf-box${win ? ' win' : ''}"><div class="rf-boxh">${o.franchise ? logo(o.franchise) : ''}<span>${tm(o)}</span><b>${n1(o.score)}</b></div>
+      <table class="tbl rf-t"><tbody>${o.lineup.map(p => `<tr><td class="rf-pos"><span class="pos ${esc(p.pos).replace('/', '')}">${esc(p.pos)}</span></td><td class="t">${esc(p.player)}<small class="rf-by">${esc(p.nfl)} ${esc(p.opp)} · ${esc(p.result)}</small></td><td>${n1(p.pts)}</td></tr>`).join('')}</tbody></table></div>`;
+    const top3 = ['champion', 'runnerup', 'third'].map((k, i) => `<div class="rf-top3row"><span class="n">${i + 1}</span>${x[k].franchise ? logo(x[k].franchise) : '<i></i>'}<span>${tm(x[k])}</span></div>`).join('');
+    return head('Seasons') + nav('#reference/seasons') +
+      yearNav(y, `<span class="ch" title="${esc(c.name)}, champions">${c.franchise ? logo(c.franchise) : esc(c.name)}🏆</span>${NP}`) +
+      (x.standings ? `<section><h2 class="sec">Final standings <small>non-PPR · finish includes the playoffs</small></h2>
+        <div class="card tbl-wrap rf-pre-st"><table class="tbl rf-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th></tr></thead><tbody>
+        ${x.standings.map(s => `<tr><td>${s.place}</td><td class="lg">${s.franchise ? logo(s.franchise) : ''}</td><td class="t">${tm(s, s.place === 1 ? ' <span class="rf-badge gold">🏆</span>' : s.place === 2 ? '<span class="rf-badge">2nd</span>' : '')}</td><td>${rec(s.w, s.l, s.t)}</td></tr>`).join('')}
+        </tbody></table></div></section>`
+        : `<section><h2 class="sec">Top three</h2><div class="card rf-top3">${top3}</div><p class="rf-foot">Full standings for ${y} aren’t on record.</p></section>`) +
+      (x.title_game ? `<section><h2 class="sec">Championship <small>${esc(x.title_game.score)}</small></h2><div class="rf-boxes">${side(x.title_game.winner, true)}${side(x.title_game.loser, false)}</div></section>`
+        : `<section><h2 class="sec">Championship</h2><p class="rf-note">No score or lineups on record for the ${y} title game.</p></section>`);
+  }
+
   function pageSeason(y, tab, wk) {
+    if (preSeason(y)) return pagePre(preSeason(y));
     const ys = years(); if (!ys.includes(y)) return pageSeasons();
     const i = ys.indexOf(y), c = champOf(y), br = D.playoff_brackets[y] || D.playoff_brackets[String(y)];
     const rows = Object.keys(D.franchises).map(fr => { const s = (D.franchise_seasons[fr] || []).find(x => x.year === y); return s && Object.assign({ fr }, s); }).filter(Boolean).sort((a, b) => a.rank - b.rank);
@@ -168,7 +218,7 @@ window.FBPRef = (() => {
     else if (tab === 'auction') body = auctionTable(y);
     else body = resultsHtml(y, wk);
     return head('Seasons') + nav('#reference/seasons') +
-      `<div class="rf-yrnav">${i > 0 ? `<a href="#reference/s-${ys[i - 1]}">← ${ys[i - 1]}</a>` : '<span></span>'}<h2>${y}${c ? `<span class="ch" title="${esc(nm(c.champion, y))}, champions">${logo(c.champion) || esc(nm(c.champion, y))}🏆</span>` : live ? '<small>in progress</small>' : ''}</h2>${i < ys.length - 1 ? `<a href="#reference/s-${ys[i + 1]}">${ys[i + 1]} →</a>` : '<span></span>'}</div>
+      yearNav(y, c ? `<span class="ch" title="${esc(nm(c.champion, y))}, champions">${logo(c.champion) || esc(nm(c.champion, y))}🏆</span>` : live ? '<small>in progress</small>' : '') + `
       <section><h2 class="sec">${live ? 'Standings' : 'Final standings'}${live && D.meta.current_week ? ` <small>through week ${D.meta.current_week}</small>` : ''}</h2>
         <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>PF</th><th>PA</th><th>All-play</th></tr></thead><tbody>
         ${rows.map(s => `<tr><td>${s.rank || '—'}</td>${lgCell(s.fr)}<td class="t"><a class="rf-nm" href="#reference/f-${s.fr}">${esc(s.name)}</a>${badge(s.fr, y)}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`).join('')}
