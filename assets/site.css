@@ -60,7 +60,7 @@ h2.sec small{font:400 .8rem var(--body);text-transform:none;letter-spacing:0;col
 /* team chip */
 .team{display:flex;align-items:center;gap:8px;min-width:0}
 .team img{width:26px;height:26px;flex:none;object-fit:contain}
-.team .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.team .nm{font-weight:600;line-height:1.2;white-space:normal;overflow-wrap:anywhere}
 .abbr{font:600 .66rem var(--mono);padding:2px 5px;border-radius:4px;flex:none;letter-spacing:.02em}
 
 /* seeds */
@@ -166,7 +166,7 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .swatch .bar img{width:26px;height:26px;object-fit:contain;flex:none;max-width:none}
 .swatch .bar b{font:700 .95rem var(--display);letter-spacing:.04em;text-transform:uppercase}
 .swatch .lbl{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 10px;font-size:.8rem;font-weight:600}
-.swatch .lbl span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.swatch .lbl span{line-height:1.25}
 .swatch .dot{width:14px;height:14px;border-radius:50%;flex:none}
 .swatch[aria-pressed="true"]{border-color:var(--fg);box-shadow:0 0 0 2px var(--fg)}
 .swatch[aria-pressed="true"] .lbl::after{content:"✓";font-weight:700}
@@ -193,7 +193,7 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .ostats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .ostats div{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 8px;display:flex;flex-direction:column;min-width:0}
 .ostats b{font:700 1.15rem/1.1 var(--display)}
-.ostats span{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ostats span{font-size:.72rem;line-height:1.25;color:var(--muted)}
 .odds h4{margin:4px 0 -2px;font:600 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .odds h4 small{font-weight:400;letter-spacing:0;text-transform:none}
 .dist{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
