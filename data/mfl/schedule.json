@@ -664,13 +664,13 @@
         "id": "0008",
         "isHome": "0",
         "result": "T",
-        "spread": "31.9"
+        "spread": "19.8"
        },
        {
         "id": "0002",
         "isHome": "1",
         "result": "T",
-        "spread": "-31.9"
+        "spread": "-19.8"
        }
       ]
      },
