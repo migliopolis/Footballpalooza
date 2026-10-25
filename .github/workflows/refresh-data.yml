@@ -2,7 +2,7 @@ name: Refresh league data
 
 on:
   schedule:
-    - cron: '0 15 * * 2'   # Tuesdays 15:00 UTC (8 AM Pacific), after Monday night games
+    - cron: '0 6 * * 2'    # Tuesdays 06:00 UTC = Monday 10 PM PST (11 PM during daylight time), after Monday night games
   workflow_dispatch:        # "Run workflow" button on the Actions tab
 
 permissions:
