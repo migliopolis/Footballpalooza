@@ -30,7 +30,7 @@ img{max-width:100%}
 .top-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:8px max(var(--gut),env(safe-area-inset-right,0px)) 6px max(var(--gut),env(safe-area-inset-left,0px))}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
-.brand img{width:36px;height:36px;border-radius:8px;flex:none}
+.brand img{width:46px;height:46px;border-radius:10px;flex:none}
 .brand span{display:flex;flex-direction:column;min-width:0}
 /* the wordmark is a mask filled with the theme's logo color, so it follows Settings > Page colors */
 .wordmark{display:block;height:clamp(20px,6vw,28px);aspect-ratio:1200/206;max-width:100%;margin:1px 0 4px;background:var(--hdr-logo);
