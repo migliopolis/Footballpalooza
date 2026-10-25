@@ -24,6 +24,11 @@ jobs:
         env:
           MFL_APIKEY: ${{ secrets.MFL_APIKEY }}
         run: python scripts/refresh_mfl.py
+      - name: Fetch from FantasyPros
+        env:
+          FANTASYPROS_APIKEY: ${{ secrets.FANTASYPROS_APIKEY }}
+        continue-on-error: true
+        run: python scripts/refresh_fantasypros.py
       - name: Compute standings, playoff picture and draft order
         run: python scripts/league_now.py
       - name: Check the computation
