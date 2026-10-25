@@ -5,8 +5,8 @@
 (() => {
   const KEY = 'fbp-mock-2027';
   const S = { cfg: null, data: null, loading: false, err: null, mode: 'mine', my: '', picks: [], custom: [],
-              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '' };
-  try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; } catch (e) {}
+              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players' };
+  try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; } catch (e) {}
 
   /* ---- price formula (same as the Rookie Pricer) ---- */
   const interp = (a, p) => {
@@ -163,27 +163,37 @@
         return `<div class="dr-haul${id === S.my && S.mode === 'mine' ? ' mine' : ''}"><div class="dr-haul-h">${chip(id)}<span>${h.length} pick${h.length > 1 ? 's' : ''} · <b>$${tot}</b></span></div>
           <ul>${h.map(x => `<li><span class="pk">${slotLabel(x.o.slot)}</span>${esc(x.p.name)}${posPill(x.p)}<span class="dr-hp">$${x.$}</span></li>`).join('')}</ul></div>`; }).join('');
 
+    const myTot = (haul[S.my] || []).reduce((t, x) => t + x.$, 0);
+    const mtabs = [['players', `Players <small>${av.length} left</small>`], ['board', `Draft board <small>${done ? 'final' : `${S.cur}/${ord.length}`}</small>`],
+                   ['hauls', `Team hauls${S.mode === 'mine' && haul[S.my] ? ` <small>you $${myTot}</small>` : ''}`]]
+      .map(([k, l]) => `<button type="button" role="tab" data-dr-mtab="${k}" aria-selected="${S.mtab === k}">${l}</button>`).join('');
     const d = S.data;
     return `<div class="pagehead"><h1>Rookie Draft</h1><span class="asof">${d.season} mock · order from Week ${now.weeksPlayed} standings · NFL picks ${d.mode === 'final' ? 'final' : 'projected'} (${esc(d.asOf)})</span></div>
       ${S.note ? `<p class="dr-note">${esc(S.note)}</p>` : ''}
       <div class="dr-controls"><div class="seg dr-modes" role="group" aria-label="Mock draft mode">${modes}</div>${teamSel}</div>
-      <div class="dr-grid">
-        <section class="card dr-clock">${clock}
-          <div class="dr-filters"><div class="seg" role="group" aria-label="Position">${posBtns}</div>
-            <div class="seg" role="group" aria-label="Sort"><button type="button" data-dr-sort="adp" aria-pressed="${S.sort === 'adp'}">Rank</button><button type="button" data-dr-sort="price" aria-pressed="${S.sort === 'price'}"${slot == null ? ' disabled' : ''}>Price</button></div></div>
-          <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
-          <p class="dr-foot">${av.length} of ${pool().length} ranked rookies left. Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
-        </section>
-        <section class="dr-boardwrap"><h2 class="sec">Draft board <small>${done ? 'final' : `pick ${S.cur + 1} of ${ord.length}`}</small></h2><ol class="card dr-board" id="dr-board">${board}</ol></section>
-      </div>
-      ${hauls ? `<section><h2 class="sec">Team hauls <small>rookie salaries from this mock</small></h2><div class="dr-hauls">${hauls}</div></section>` : ''}`;
+      <div class="dr-grid" data-mtab="${S.mtab}">
+        <section class="dr-boardwrap" data-panel="board"><h2 class="sec">Draft board <small>${done ? 'final' : `pick ${S.cur + 1} of ${ord.length}`}</small></h2><ol class="card dr-board" id="dr-board">${board}</ol></section>
+        <div class="dr-right">
+          <section class="card dr-clock">${clock}</section>
+          <div class="dr-mtabs" role="tablist" aria-label="Draft views">${mtabs}</div>
+          <section class="card dr-players" data-panel="players">
+            <div class="dr-filters"><div class="seg" role="group" aria-label="Position">${posBtns}</div>
+              <div class="seg" role="group" aria-label="Sort"><button type="button" data-dr-sort="adp" aria-pressed="${S.sort === 'adp'}">Rank</button><button type="button" data-dr-sort="price" aria-pressed="${S.sort === 'price'}"${slot == null ? ' disabled' : ''}>Price</button></div></div>
+            <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
+            <p class="dr-foot">${av.length} of ${pool().length} ranked rookies left. Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
+          </section>
+        </div>
+        <section class="dr-haulsec" data-panel="hauls"><h2 class="sec">Team hauls <small>rookie salaries from this mock</small></h2>
+          ${hauls ? `<div class="dr-hauls">${hauls}</div>` : '<p class="muted dr-empty">No picks yet. Hauls fill in as the draft goes.</p>'}</section>
+      </div>`;
   }
 
   /* ---- events ---- */
   function click(e, ctx) {
-    const el = e.target.closest('[data-dr],[data-dr-mode],[data-dr-pos],[data-dr-sort],[data-dr-round],[data-dr-pick]');
+    const el = e.target.closest('[data-dr],[data-dr-mode],[data-dr-pos],[data-dr-sort],[data-dr-round],[data-dr-pick],[data-dr-mtab]');
     if (!el || !S.cfg) return false;
     const ord = order(ctx.now);
+    if (el.dataset.drMtab) { S.mtab = el.dataset.drMtab; try { localStorage.setItem('fbp-draft-tab', S.mtab); } catch (x) {} return true; }
     if (el.dataset.drMode) { S.mode = el.dataset.drMode; S.round = null; save(); }
     else if (el.dataset.drPos) S.pos = el.dataset.drPos;
     else if (el.dataset.drSort) S.sort = el.dataset.drSort;
