@@ -181,26 +181,26 @@
 
     /* the last three teams: their odds plus a weekly pep talk */
     const PEP = [
-      ['It ain’t over till it’s over.', 'Yogi Berra', 'who never had to sweat an all-play tiebreak'],
-      ['So you’re telling me there’s a chance!', 'Lloyd Christmas, Dumb and Dumber', 'the official motto of this section'],
-      ['Fall seven times, stand up eight.', 'Japanese proverb', 'six losses is basically a warm-up'],
-      ['Hope is a good thing, maybe the best of things.', 'Andy Dufresne, The Shawshank Redemption', 'he crawled through worse than this schedule'],
-      ['You miss 100% of the shots you don’t take.', 'Wayne Gretzky', 'so start the boom-or-bust WR'],
-      ['Just keep swimming.', 'Dory, Finding Nemo', 'also a fine waiver-wire strategy'],
-      ['Tough times never last, but tough people do.', 'Robert H. Schuller', 'tough rosters, on the other hand…'],
-      ['The darkest hour is just before the dawn.', 'Proverb', 'and the all-play 6 seed is a sunrise'],
-      ['Playoffs? Don’t talk about — playoffs?!', 'Jim Mora', 'we’re talking about playoffs'],
-      ['Rome wasn’t built in a day.', 'Proverb', 'but a contender can be built in one waiver run'],
+      ['It ain’t over till it’s over.', 'Yogi Berra'],
+      ['So you’re telling me there’s a chance!', 'Lloyd Christmas, Dumb and Dumber'],
+      ['Fall seven times, stand up eight.', 'Japanese proverb'],
+      ['Hope is a good thing, maybe the best of things.', 'Andy Dufresne, The Shawshank Redemption'],
+      ['You miss 100% of the shots you don’t take.', 'Wayne Gretzky'],
+      ['Just keep swimming.', 'Dory, Finding Nemo'],
+      ['Tough times never last, but tough people do.', 'Robert H. Schuller'],
+      ['The darkest hour is just before the dawn.', 'Proverb'],
+      ['Playoffs? Don’t talk about — playoffs?!', 'Jim Mora'],
+      ['Rome wasn’t built in a day.', 'Proverb'],
     ];
     const longshots = outside.slice(3, 6).map((t, i) => {
       const gb = ((s5.w - t.w) + (t.l - s5.l)) / 2;
       const apb = s6.allPlayW - t.allPlayW;
       const o = O && O[t.id];
-      const [q, who, quip] = PEP[(d.weeksPlayed * 3 + i) % PEP.length];
+      const [q, who] = PEP[(d.weeksPlayed * 3 + i) % PEP.length];
       const odds = o ? (o.playoff >= 0.5 ? `<b>${fp(o.playoff)}</b> playoff odds` : '<b>&lt;1%</b> playoff odds · miracle territory') : '';
       return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
         <span class="via">${odds ? odds + ' · ' : ''}${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`}</span>
-        <span class="pep">“${esc(q)}” <span class="who">— ${esc(who)}, ${esc(quip)}</span></span>`, null);
+        <span class="pep">“${esc(q)}” <span class="who">— ${esc(who)}</span></span>`, null);
     }).join('');
 
     const divTables = d.divisions.map(dv => {
