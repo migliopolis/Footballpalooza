@@ -368,3 +368,4 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-status.busy::after{content:"";display:inline-block;width:.8em;height:.8em;margin-left:6px;border:2px solid var(--muted);border-top-color:transparent;border-radius:50%;vertical-align:-1px;animation:dr-spin .8s linear infinite}
 @keyframes dr-spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.dr-status.busy::after{animation:none}}
+.btn.dr-start{background:var(--accent);border-color:var(--accent);color:#fff;font-size:.95rem;padding:10px 22px}
