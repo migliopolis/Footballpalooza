@@ -24,7 +24,14 @@
     return Math.max(C.minimumRounds1to2, Math.floor(raw + 0.5));
   }
   const slotLabel = s => `${Math.floor(s / 12) + 1}.${String(s % 12 + 1).padStart(2, '0')}`;
-  const nflLabel = p => !p || p >= S.cfg.undraftedPick ? 'UDFA' : `${Math.ceil(p / 32)}.${String((p - 1) % 32 + 1).padStart(2, '0')}`;
+  // round.pick for an overall NFL pick; compensatory picks make rounds 3-7 longer than 32, so use the real order when loaded
+  function nflLabel(p) {
+    if (!p || p >= S.cfg.undraftedPick) return 'UDFA';
+    p = Math.round(p);
+    const O = S.nflOrder && S.nflOrder.picks;
+    if (O && O[p - 1]) { const r = O[p - 1].round, first = O.find(x => x.round === r).pick; return `${r}.${String(p - first + 1).padStart(2, '0')}`; }
+    return `${Math.ceil(p / 32)}.${String((p - 1) % 32 + 1).padStart(2, '0')}`;
+  }
 
   /* ---- order and state ---- */
   function order(now) {
@@ -107,9 +114,28 @@
   }
 
   /* ---- loading ---- */
+  // projected landing spot: the NFL team holding the overall pick a rookie is projected to go at
+  // (Tankathon's projected 2027 order with traded picks; logos from ESPN). Optional extras.
+  function loadLanding(rerender) {
+    Promise.all(['data/nfl-draft-order.json', 'data/espn/teams.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)))
+      .then(([o, t]) => { S.nflOrder = o; S.nflTeams = t || {}; if (o) rerender(); });
+  }
+  function landing(p) {
+    const O = S.nflOrder;
+    if (!O || !p.nflPick || p.nflPick > O.picks.length) return null;
+    const k = O.picks[Math.round(p.nflPick) - 1];
+    if (!k) return null;
+    const t = S.nflTeams[k.team] || {};
+    return { team: k.team, name: t.name || k.team, logo: t.logo || `https://a.espncdn.com/i/teamlogos/nfl/500/${k.team.toLowerCase()}.png`, from: k.from };
+  }
+  const landHtml = p => {
+    const l = landing(p);
+    return l ? `<span class="dr-land" title="Projected landing spot: ${l.name} hold pick ${Math.round(p.nflPick)}${l.from ? ` (from ${l.from})` : ''} in Tankathon's projected order"><img src="${l.logo}" alt="" loading="lazy" onerror="this.remove()">${l.team}</span>` : '';
+  };
   function load(rerender) {
     if (S.loading || S.cfg) return;
     S.loading = true;
+    loadLanding(rerender);
     Promise.all(['rookie-pricer/pricing.json', 'rookie-pricer/mock-board.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error(u); return r.json(); })))
       .then(([c, d]) => { d.players.forEach(p => { p.adp = p.rank; }); S.cfg = c; S.data = d; S.loading = false; rerender(); })
       .catch(e => { S.err = String(e); S.loading = false; rerender(); });
@@ -171,7 +197,7 @@
     const posBtns = ['ALL', 'QB', 'RB', 'WR', 'TE'].map(x => `<button type="button" data-dr-pos="${x}" aria-pressed="${S.pos === x}">${x === 'ALL' ? 'All' : x}</button>`).join('');
     const rows = list.map(({ p, $ }) => `<li>
         <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
-        <span class="dr-nm"><b>${esc(p.name)}</b><small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.nflPick ? ` · proj NFL ${nflLabel(p.nflPick)}` : (p.custom ? '' : ' · no NFL projection')}${p.custom ? ' · added by you' : ''}</small></span>
+        <span class="dr-nm"><b>${esc(p.name)}</b><small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.nflPick ? ` · proj NFL ${nflLabel(p.nflPick)}` : (p.custom ? '' : ' · no NFL projection')}${landHtml(p)}${p.custom ? ' · added by you' : ''}</small></span>
         ${$ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : ''}
         ${canPick ? `<button type="button" class="dr-go" data-dr-pick="${esc(p.name)}">Draft</button>` : ''}</li>`).join('');
     const addForm = canPick ? `<details class="dr-add"><summary>Add a rookie who isn’t listed</summary>
@@ -186,7 +212,7 @@
       return `<li class="dr-rh">Round ${r}${r > 2 ? ` <small>$${S.cfg.flatSalaryByRound[r]} each</small>` : ''}</li>` + R.map(o => {
         const i = ord.indexOf(o), p = S.picks[i], now_ = S.started && i === S.cur;
         return `<li class="${now_ ? 'now' : ''}${p ? '' : ' empty'}"><span class="pk">${slotLabel(o.slot)}</span>
-          <span class="dr-b">${chip(o.owner)}${p ? `<span class="dr-sel"><b>${esc(p.name)}</b>${posPill(p)} · $${price(p, o.slot)}</span>` : `<span class="dr-sel muted">${now_ ? 'On the clock' : '—'}</span>`}${o.owner !== o.orig ? `<small class="dr-via">via ${esc(nameOf(o.orig))}</small>` : ''}</span></li>`;
+          <span class="dr-b">${chip(o.owner)}${p ? `<span class="dr-sel"><b>${esc(p.name)}</b>${posPill(p)} · $${price(p, o.slot)}${landHtml(p)}</span>` : `<span class="dr-sel muted">${now_ ? 'On the clock' : '—'}</span>`}${o.owner !== o.orig ? `<small class="dr-via">via ${esc(nameOf(o.orig))}</small>` : ''}</span></li>`;
       }).join('');
     }).join('');
 
@@ -196,7 +222,7 @@
     const hauls = ids.filter(id => haul[id]).sort((a, b) => (a === S.my ? -1 : b === S.my ? 1 : 0) || nameOf(a).localeCompare(nameOf(b)))
       .map(id => { const h = haul[id], tot = h.reduce((s, x) => s + x.$, 0);
         return `<div class="dr-haul${id === S.my && S.mode === 'mine' ? ' mine' : ''}"><div class="dr-haul-h">${chip(id)}<span>${h.length} pick${h.length > 1 ? 's' : ''} · <b>$${tot}</b></span></div>
-          <ul>${h.map(x => `<li><span class="pk">${slotLabel(x.o.slot)}</span>${esc(x.p.name)}${posPill(x.p)}<span class="dr-hp">$${x.$}</span></li>`).join('')}</ul></div>`; }).join('');
+          <ul>${h.map(x => `<li><span class="pk">${slotLabel(x.o.slot)}</span>${esc(x.p.name)}${posPill(x.p)}${landHtml(x.p)}<span class="dr-hp">$${x.$}</span></li>`).join('')}</ul></div>`; }).join('');
 
     const myTot = (haul[S.my] || []).reduce((t, x) => t + x.$, 0);
     const mtabs = [['players', `Players <small>${av.length} left</small>`], ['board', `Draft board <small>${!S.started ? 'not started' : done ? 'final' : `${S.cur}/${ord.length}`}</small>`],
@@ -215,7 +241,7 @@
             <div class="dr-filters"><div class="seg" role="group" aria-label="Position">${posBtns}</div>
               <div class="seg" role="group" aria-label="Sort"><button type="button" data-dr-sort="adp" aria-pressed="${S.sort === 'adp'}">Rank</button><button type="button" data-dr-sort="price" aria-pressed="${S.sort === 'price'}"${slot == null ? ' disabled' : ''}>Price</button></div></div>
             <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
-            <p class="dr-foot">${av.length} of ${pool().length} rookies left. Ranks: <a href="${esc(S.data.board ? S.data.board.url : '#')}" target="_blank" rel="noopener">${esc(S.data.board ? S.data.board.name : 'rookie board')}</a>. Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
+            <p class="dr-foot">${av.length} of ${pool().length} rookies left. Ranks: <a href="${esc(S.data.board ? S.data.board.url : '#')}" target="_blank" rel="noopener">${esc(S.data.board ? S.data.board.name : 'rookie board')}</a>. ${S.nflOrder ? `Logos show each rookie’s projected landing spot from <a href="${esc(S.nflOrder.url)}" target="_blank" rel="noopener">Tankathon’s</a> projected NFL order. ` : ''}Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
           </section>
         </div>
         <section class="dr-haulsec" data-panel="hauls"><h2 class="sec">Team hauls <small>rookie salaries from this mock</small></h2>

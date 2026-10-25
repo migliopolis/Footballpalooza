@@ -27,6 +27,9 @@ jobs:
       - name: Fetch from ESPN (teams, logos, rosters and photos, injuries, news)
         continue-on-error: true
         run: python scripts/refresh_espn.py
+      - name: Fetch the projected NFL draft order (Tankathon)
+        continue-on-error: true
+        run: python scripts/refresh_tankathon.py
       - name: Link MFL players to ESPN (photos, display names, spelling report)
         continue-on-error: true
         run: python scripts/link_players.py

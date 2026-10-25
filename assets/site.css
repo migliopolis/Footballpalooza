@@ -372,3 +372,5 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 @keyframes dr-spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.dr-status.busy::after{animation:none}}
 .btn.dr-start{background:var(--accent);border-color:var(--accent);color:#fff;font-size:.95rem;padding:10px 22px}
+.dr-land{display:inline-flex;align-items:center;gap:3px;margin-left:6px;padding:0 6px 0 2px;border:1px solid var(--line);border-radius:999px;font:600 .66rem/1.6 var(--body);color:var(--fg);background:var(--surface);vertical-align:1px;white-space:nowrap}
+.dr-land img{width:15px;height:15px;object-fit:contain}

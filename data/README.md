@@ -14,6 +14,7 @@ Everything here is written by the weekly GitHub Action (`.github/workflows/refre
 | `player-links-report.json` | computed | every name disagreement: MFL ids that point to someone else, players linked by name, ESPN ids not on a roster, and players not found (FBP-rostered first) |
 | `player-overrides.json` | hand-maintained | corrections the linker applies first: `"<MFL id>": "<ESPN id>"`, or `null` to unlink |
 | `fantasypros/*.json` | FantasyPros API (`scripts/refresh_fantasypros.py`) | **off for now**: the free tier returns only the top 10 players per list |
+| `nfl-draft-order.json` | Tankathon full 2027 draft order (`scripts/refresh_tankathon.py`) | all 7 rounds (257 picks) with traded picks; the Rookie Draft uses it for each rookie's projected landing spot. Team codes match ESPN |
 | `league-now.json` | computed (`scripts/league_now.py`) | standings, seeds, tiebreaks, draft order, playoff odds |
 | `teams.json`, `budgets.json` | hand-maintained | FBP team colors and logos; 2027 auction budgets and cash trades |
 | `bylaws-2027.md` → `bylaws.json` | hand-maintained (`scripts/build_bylaws.py`) | the By-Laws tab |
