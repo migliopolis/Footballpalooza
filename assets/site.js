@@ -31,6 +31,7 @@
      Player photos and NFL logos come from ESPN's image server; the ids and lists are saved by the
      weekly refresh (see data/README.md). Use from any page, e.g.
        FBP.media.headshotFor('15253').then(url => ...)   // MFL player id -> photo URL ('' if none)
+       FBP.media.name('15253').then(n => ...)             // MFL player id -> ESPN-style display name
        FBP.media.nflLogo('KCC')                           // MFL team code -> logo URL
        FBP.data('espn/injuries').then(list => ...)        // any saved file under data/            */
   const MFL_TO_ESPN = { GBP: 'GB', JAC: 'JAX', KCC: 'KC', LVR: 'LV', NEP: 'NE', NOS: 'NO', SFO: 'SF', TBB: 'TB', WAS: 'WSH' };
@@ -38,6 +39,7 @@
   const loadData = name => (dataCache[name] = dataCache[name] ||
     fetch(`data/${name}.json`, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error(name); return r.json(); }));
   let playersById = null;
+  const displayName = n => { n = (n || '').trim(); const i = n.indexOf(','); return i > 0 ? `${n.slice(i + 1).trim()} ${n.slice(0, i).trim()}` : n; };
   const media = {
     headshot: espnId => espnId ? `https://a.espncdn.com/i/headshots/nfl/players/full/${espnId}.png` : '',
     nflAbbr: team => MFL_TO_ESPN[team] || team,
@@ -52,7 +54,16 @@
       }
       return playersById[mflId] || null;
     },
-    async headshotFor(mflId) { const p = await media.player(mflId).catch(() => null); return p ? media.headshot(p.espn_id) : ''; },
+    // the checked MFL -> ESPN link (data/player-links.json), falling back to MFL's own espn_id
+    async link(mflId) {
+      const L = await loadData('player-links').catch(() => ({ links: {} }));
+      const l = (L.links || {})[mflId];
+      if (l) return { espn: l[0], how: l[1], name: l[2] };
+      const p = await media.player(mflId).catch(() => null);
+      return p ? { espn: p.espn_id || '', how: p.espn_id ? 'mfl' : '', name: displayName(p.name) } : null;
+    },
+    async headshotFor(mflId) { const l = await media.link(mflId); return l && l.espn ? media.headshot(l.espn) : ''; },
+    async name(mflId) { const l = await media.link(mflId); return l ? l.name : ''; },   // "Patrick Mahomes II", not "Mahomes, Patrick" 
     // <img> markup that removes itself if ESPN has no photo
     img: (url, cls = 'ph', alt = '') => url ? `<img class="${cls}" src="${url}" alt="${esc(alt)}" loading="lazy" onerror="this.remove()">` : '',
   };

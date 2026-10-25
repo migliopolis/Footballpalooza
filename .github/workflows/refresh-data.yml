@@ -27,6 +27,9 @@ jobs:
       - name: Fetch from ESPN (teams, logos, rosters and photos, injuries, news)
         continue-on-error: true
         run: python scripts/refresh_espn.py
+      - name: Link MFL players to ESPN (photos, display names, spelling report)
+        continue-on-error: true
+        run: python scripts/link_players.py
       - name: Fetch from FantasyPros
         if: false   # off for now: the free API tier only returns the top 10 players per list. Delete this line to turn it back on.
         env:
