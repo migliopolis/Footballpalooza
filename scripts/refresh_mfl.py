@@ -57,7 +57,10 @@ def save(name, data):
 def players_stale(days=1):
     path = os.path.join(OUT, 'players.json')
     try:
-        stamp = json.load(open(path)).get('fetched', '')
+        saved = json.load(open(path))
+        if 'espn_id' not in saved.get('fields', []):   # older format without ESPN ids: refetch now
+            return True
+        stamp = saved.get('fetched', '')
         return datetime.now(timezone.utc) - datetime.fromisoformat(stamp) > timedelta(days=days) - timedelta(hours=2)
     except Exception:
         return True
