@@ -25,6 +25,7 @@ jobs:
           MFL_APIKEY: ${{ secrets.MFL_APIKEY }}
         run: python scripts/refresh_mfl.py
       - name: Fetch from FantasyPros
+        if: false   # off for now: the free API tier only returns the top 10 players per list. Delete this line to turn it back on.
         env:
           FANTASYPROS_APIKEY: ${{ secrets.FANTASYPROS_APIKEY }}
         continue-on-error: true
