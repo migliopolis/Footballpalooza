@@ -43,6 +43,8 @@ jobs:
         run: python scripts/league_now.py
       - name: Check the computation
         run: python tests/test_league_now.py
+      - name: Rebuild Reference history with this season's games
+        run: python scripts/build_reference.py
       - name: Commit changed data
         run: |
           git config user.name "github-actions[bot]"

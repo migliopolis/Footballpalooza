@@ -16,6 +16,8 @@ Everything here is written by the weekly GitHub Action (`.github/workflows/refre
 | `fantasypros/*.json` | FantasyPros API (`scripts/refresh_fantasypros.py`) | **off for now**: the free tier returns only the top 10 players per list |
 | `nfl-draft-order.json` | Tankathon full 2027 draft order (`scripts/refresh_tankathon.py`) | all 7 rounds (257 picks) with traded picks; the Rookie Draft uses it for each rookie's projected landing spot. Team codes match ESPN |
 | `league-now.json` | computed (`scripts/league_now.py`) | standings, seeds, tiebreaks, draft order, playoff odds |
+| `reference/history.json` | hand-maintained (moved from the migliopolis/fbpreference almanac) | frozen league history 2019 on: seasons, schedules and scores, brackets, champions, rookie draft classes, auctions |
+| `reference.json` | computed (`scripts/build_reference.py`) | the Reference tab: history plus this season's games from `mfl/`, with all-time records, head-to-head and record tables recomputed from the scores. `--check` compares against the frozen copy |
 | `teams.json`, `budgets.json` | hand-maintained | FBP team colors and logos; 2027 auction budgets and cash trades |
 | `bylaws-2027.md` → `bylaws.json` | hand-maintained (`scripts/build_bylaws.py`) | the By-Laws tab |
 

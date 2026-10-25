@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0015';
+  const VERSION = '0.0016';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -378,7 +378,6 @@
 
   /* ---------- placeholders ---------- */
   const SOON = {
-    reference: ['Reference', 'The FBP Reference almanac moves in here: franchise pages, every season’s standings and brackets, records, head-to-head and draft and auction history.', ['Turn on P-PPR in Settings to include the pre-2019 non-PPR seasons.']],
     offseason: ['Off-Season', 'A sandbox for next year: rosters, cap space, keeper look-ahead, free agents, the incoming rookie class and auction price predictions tuned on 2026 results.', []],
   };
   const pageSoon = k => {
@@ -398,11 +397,22 @@
 
   /* ---------- router ---------- */
   const TABS = ['now', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
+  const refCtx = () => ({ teams: state.teams, chip, esc, ppr: state.ppr, rerender: () => { if (location.hash.startsWith('#reference')) route(); } });
+  let lastPage = '';
   function route() {
-    const tab = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'now';
+    const parts = location.hash.slice(1).split('/');
+    const tab = TABS.includes(parts[0]) ? parts[0] : 'now';
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
+    else if (tab === 'reference') {
+      const path = parts.slice(1);
+      app.innerHTML = window.FBPRef ? FBPRef.render(refCtx(), path) : '<p class="error">The Reference section didn’t load.</p>';
+      // a new page starts at the top; switching sub-tabs (weeks, boards) keeps your place
+      const page = 'reference/' + (window.FBPRef ? FBPRef.pageKey(path) : '');
+      if (page !== lastPage && lastPage) window.scrollTo(0, 0);
+      lastPage = page;
+    }
     else if (tab === 'draft') { app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>'; if (window.FBPDraft) FBPDraft.after(); }
     else if (tab === 'bylaws') {
       app.innerHTML = pageBylaws();
@@ -411,6 +421,7 @@
         .catch(() => { app.innerHTML = '<p class="error">The by-laws didn’t load. Refresh the page to try again.</p>'; });
     }
     else app.innerHTML = pageSoon(tab);
+    if (tab !== 'reference') lastPage = tab;
     const active = document.querySelector('.tabs a[aria-current="page"]');
     if (active && active.parentElement.scrollWidth > active.parentElement.clientWidth) active.parentElement.scrollLeft = active.offsetLeft - 10;
   }
