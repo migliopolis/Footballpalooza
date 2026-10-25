@@ -243,7 +243,9 @@
       return `<li class="${open ? 'open' : ''}">
         <button type="button" class="dr-row" data-dr-open="${esc(p.name)}" aria-expanded="${open}">
           <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
-          <span class="dr-nm"><b>${esc(p.name)}</b><small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.nflPick ? ` · proj NFL ${nflLabel(p.nflPick)}` : (p.custom ? '' : ' · no NFL projection')}${landHtml(p)}${p.custom ? ' · added by you' : ''}</small></span>
+          <span class="dr-nm"><b>${esc(p.name)}</b>
+            <small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.custom ? ' · added by you' : ''}</small>
+            <small class="dr-nfl">${p.nflPick ? `NFL ${nflLabel(p.nflPick)}${landHtml(p)}` : (p.custom ? '' : 'No NFL projection')}</small></span>
           ${$ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : ''}
         </button>
         ${canPick ? `<button type="button" class="dr-go" data-dr-pick="${esc(p.name)}">Draft</button>` : ''}

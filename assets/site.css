@@ -335,7 +335,7 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:10px}
 .dr-list li{display:grid;grid-template-columns:2.4rem minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line)}
 .dr-list li:last-child{border-bottom:0}
-.dr-adp{font:600 .78rem var(--mono);color:var(--muted);text-align:right}
+.dr-adp{font:600 .8rem var(--mono);color:var(--muted);text-align:center;min-width:1.4em}
 .dr-nm{display:flex;flex-direction:column;min-width:0}
 .dr-nm b{font-weight:600;line-height:1.25}
 .dr-nm small{font-size:.75rem;color:var(--muted)}
@@ -377,7 +377,7 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 
 /* rookie rows: tap to expand pricing and contract */
 .dr-list li{grid-template-columns:minmax(0,1fr) auto}
-.dr-row{grid-column:1;display:grid;grid-template-columns:2.4rem minmax(0,1fr) auto;gap:8px;align-items:center;border:0;background:none;color:inherit;font:inherit;text-align:left;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
+.dr-row{grid-column:1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;border:0;background:none;color:inherit;font:inherit;text-align:left;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
 .dr-row:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
 .dr-list li.open{background:var(--sky-soft)}
 .dr-detail{grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;padding:4px 2px 4px;border-top:1px dashed var(--line);margin-top:4px}
@@ -395,3 +395,6 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-years span{font-size:.64rem;color:var(--muted);line-height:1.25}
 .dr-at{margin:0;font-size:.78rem;color:var(--muted)}
 .dr-at b{color:var(--fg)}
+.dr-list li{padding:8px 10px 8px 6px}
+.dr-nm .dr-nfl{display:flex;align-items:center;gap:0;margin-top:1px}
+.dr-nm .dr-nfl .dr-land{margin-left:6px}
