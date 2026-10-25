@@ -89,6 +89,8 @@
     return `<div class="pagehead"><h1>Settings</h1><span class="asof">Saved on this device only</span></div>
       <section class="card set"><h2>Page colors</h2><p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
         <div class="swatches" role="group" aria-label="Page colors">${swatches}</div></section>
+      <section class="card set"><h2>P-PPR</h2><p>Pre-PPR seasons. Off shows FBP history from 2019 on, when the league became PPR. On adds the earlier non-PPR seasons to history and records in Reference.</p>
+        <div class="seg" role="group" aria-label="P-PPR">${['off', 'on'].map(v => `<button type="button" data-ppr="${v}" aria-pressed="${state.ppr === (v === 'on')}">${v === 'on' ? 'On' : 'Off'}</button>`).join('')}</div></section>
       <section class="card set"><h2>Light or dark</h2><p>Match device follows your phone or computer’s setting.</p>
         <div class="seg" role="group" aria-label="Light or dark">${seg}</div></section>`;
   }
@@ -186,7 +188,7 @@
 
   /* ---------- placeholders ---------- */
   const SOON = {
-    reference: ['Reference', 'The FBP Reference almanac moves in here: franchise pages, every season’s standings and brackets, records, head-to-head and draft and auction history.', ['Turn on P-PPR in the header to include the pre-2019 non-PPR seasons.']],
+    reference: ['Reference', 'The FBP Reference almanac moves in here: franchise pages, every season’s standings and brackets, records, head-to-head and draft and auction history.', ['Turn on P-PPR in Settings to include the pre-2019 non-PPR seasons.']],
     offseason: ['Off-Season', 'A sandbox for next year: rosters, cap space, keeper look-ahead, free agents, the incoming rookie class and auction price predictions tuned on 2026 results.', []],
     draft: ['Rookie Draft', 'A mock draft using the league’s actual draft order: auto-mock the whole league, make every pick yourself, or pick for your team while the rest auto-draft. Each rookie’s price shows as you go.', []],
     bylaws: ['By-Laws', 'The 2027 FBP by-laws, searchable and readable on a phone.', []],
@@ -209,9 +211,6 @@
   }
 
   async function init() {
-    const t = document.getElementById('ppr-toggle');
-    t.checked = state.ppr;
-    t.addEventListener('change', () => { state.ppr = t.checked; try { localStorage.setItem('fbp-ppr', t.checked ? '1' : '0'); } catch (e) {} route(); });
     try {
       const [now, teams] = await Promise.all([
         fetch('data/league-now.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); }),
@@ -226,7 +225,13 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', route);
     app.addEventListener('click', e => {
-      const sw = e.target.closest('.swatch'), md = e.target.closest('[data-mode]');
+      const sw = e.target.closest('.swatch'), md = e.target.closest('[data-mode]'), pp = e.target.closest('[data-ppr]');
+      if (pp) {
+        state.ppr = pp.dataset.ppr === 'on'; try { localStorage.setItem('fbp-ppr', state.ppr ? '1' : '0'); } catch (x) {}
+        const y = window.scrollY; route(); window.scrollTo(0, y);
+        const again = document.querySelector(`[data-ppr="${pp.dataset.ppr}"]`); if (again) again.focus({ preventScroll: true });
+        return;
+      }
       if (sw || md) {
         if (sw) { state.themeTeam = sw.dataset.team; try { localStorage.setItem('fbp-theme-team', state.themeTeam); } catch (x) {} }
         if (md) { state.mode = md.dataset.mode; try { localStorage.setItem('fbp-mode', state.mode); } catch (x) {} }

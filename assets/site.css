@@ -34,13 +34,6 @@ img{max-width:100%}
 .brand span{display:flex;flex-direction:column;min-width:0}
 .brand b{font:700 clamp(.8rem,4.2vw,1.35rem)/1 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em;text-transform:uppercase;color:var(--hdr-fg)}
 .brand small{font-size:.75rem;color:var(--hdr-fg);opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ppr{display:flex;align-items:center;gap:6px;cursor:pointer;font:600 .8rem var(--body);color:var(--hdr-fg);flex:none}
-.ppr input{position:absolute;opacity:0;width:1px;height:1px}
-.ppr .sw{width:34px;height:20px;border-radius:999px;background:var(--hdr-bg);border:2px solid var(--hdr-fg);position:relative;transition:background .15s}
-.ppr .sw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--hdr-fg);transition:transform .15s}
-.ppr input:checked + .sw{background:var(--hdr-accent)}
-.ppr input:checked + .sw::after{transform:translateX(14px);background:var(--hdr-bg)}
-.ppr input:focus-visible + .sw{outline:2px solid var(--hdr-fg);outline-offset:2px}
 .tabs{max-width:1180px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;
   padding:0 max(10px,env(safe-area-inset-right,0px)) 0 max(10px,env(safe-area-inset-left,0px))}
 .tabs::-webkit-scrollbar{display:none}
