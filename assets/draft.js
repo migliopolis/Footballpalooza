@@ -5,7 +5,7 @@
 (() => {
   const KEY = 'fbp-mock-2027';
   const S = { cfg: null, data: null, loading: false, err: null, mode: 'mine', my: '', picks: [], custom: [],
-              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false, started: false };
+              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false, started: false, openP: null, taxi: new Set() };
   const DELAY = 800;   // pause between computer picks (ms)
   try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; } catch (e) {}
 
@@ -141,6 +141,42 @@
       .catch(e => { S.err = String(e); S.loading = false; rerender(); });
   }
 
+  const escH = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  /* ---- a rookie's price breakdown and contract (opened by tapping him) ---- */
+  function breakdown(pl, slot) {
+    const C = S.cfg, round = Math.floor(slot / 12) + 1;
+    if (round > 2) return { flat: true, round, val: price(pl, slot) };
+    const c = C.positions[pl.pos];
+    if (!c) return { flat: true, round, val: price(pl, slot) };
+    const np = pl.nflPick || C.undraftedPick, nf = interp(c.nfl, np), ff = c.fbp[slot], raw = c.max * nf * ff;
+    return { max: c.max, nf, ff, np, raw, val: price(pl, slot), floored: Math.floor(raw + 0.5) < C.minimumRounds1to2 };
+  }
+  // 2027 by-laws: active rookie deal is 5 years, +$3/+$6/+$9/+$12 added year over year (+0/+3/+9/+18/+30 from base).
+  // Full season on taxi: 6 years, year 1 counts at 2/3 (rounded up; none on $1-$2), year 2 frozen at the salary, then the same escalators.
+  function contract(salary, taxi) {
+    const esc_ = S.cfg.escalators || [3, 6, 9, 12];
+    const years = [salary]; let v = salary; esc_.forEach(e => { v += e; years.push(v); });
+    if (!taxi) return years.map((v, i) => ({ v, note: i === 0 ? 'Salary' : `+$${esc_[i - 1]}` }));
+    const y1 = salary <= 2 ? salary : Math.ceil(salary * 2 / 3);
+    return [{ v: y1, note: salary <= 2 ? 'No discount on $1–$2' : `⅔ counted, $${salary - y1} deferred`, taxi: true },
+            { v: salary, note: 'Frozen' }].concat(years.slice(1).map((v, i) => ({ v, note: `+$${esc_[i]}` })));
+  }
+  function detail(pl, slot) {
+    const b = breakdown(pl, slot), fx = n => n.toFixed(n < 1 ? 2 : 0), taxi = S.taxi.has(pl.name);
+    const math = b.flat
+      ? `<p class="dr-math">Round ${b.round} picks are a flat <b>$${b.val}</b>.</p>`
+      : `<p class="dr-math"><span>$${b.max} ${pl.pos} max</span> × <span>${fx(b.nf)} NFL factor <small>(${pl.nflPick ? 'proj ' + nflLabel(b.np) : 'no projection, priced as undrafted'})</small></span>
+          × <span>${fx(b.ff)} FBP factor <small>(${slotLabel(slot)})</small></span> = ${b.raw.toFixed(1)} → <b>$${b.val}</b>${b.floored ? ' <small>(the $3 minimum)</small>' : ''}</p>`;
+    const yrs = contract(b.val, taxi);
+    return `<div class="dr-detail">
+      <h4>Price at ${slotLabel(slot)}</h4>${math}
+      <label class="dr-taxi"><input type="checkbox" data-dr-taxi="${escH(pl.name)}"${taxi ? ' checked' : ''}> Full season on taxi squad</label>
+      <h4>${taxi ? '6-year taxi contract' : '5-year rookie contract'}</h4>
+      <div class="dr-years">${yrs.map((y, i) => `<div class="${y.taxi ? 'tx' : ''}"><small>Year ${i + 1}</small><b>$${y.v}</b><span>${y.note}</span></div>`).join('')}</div>
+      <p class="dr-foot">Total over the deal: $${yrs.reduce((t, y) => t + y.v, 0)}${taxi ? ' (counting year 1 at ⅔)' : ''}.</p>
+    </div>`;
+  }
+
   /* ---- render ---- */
   function render(ctx) {
     const { now, chip, esc, nameOf, teams } = ctx;
@@ -189,17 +225,30 @@
 
     // available players
     const av = available();
-    const slot = done ? null : cur.slot;
+    // which pick the prices are for: the pick on the clock when it's yours to make; in "my team" mode,
+    // your next pick (so before the draft starts, or while others pick, you see your own prices)
+    let slot = null, slotWhy = '';
+    if (S.mode === 'mine') {
+      const k = ord.findIndex((o, i) => i >= S.cur && o.owner === S.my);
+      if (k >= 0) { slot = ord[k].slot; slotWhy = k === S.cur && S.started ? 'your pick' : 'your next pick'; }
+      else if (!done) { slot = cur.slot; slotWhy = 'pick on the clock (you have no picks left)'; }
+    } else if (!done) { slot = cur.slot; slotWhy = S.started ? 'pick on the clock' : 'first pick'; }
     const list = av.filter(p => S.pos === 'ALL' || p.pos === S.pos)
       .map(p => ({ p, $: slot == null ? null : price(p, slot) }))
       .sort((a, b) => S.sort === 'price' && slot != null ? (b.$ - a.$) || (a.p.adp - b.p.adp) : (a.p.adp - b.p.adp));
     const canPick = S.started && !done && isMine(ord, S.cur) && !wantsAuto(ord);
     const posBtns = ['ALL', 'QB', 'RB', 'WR', 'TE'].map(x => `<button type="button" data-dr-pos="${x}" aria-pressed="${S.pos === x}">${x === 'ALL' ? 'All' : x}</button>`).join('');
-    const rows = list.map(({ p, $ }) => `<li>
-        <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
-        <span class="dr-nm"><b>${esc(p.name)}</b><small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.nflPick ? ` · proj NFL ${nflLabel(p.nflPick)}` : (p.custom ? '' : ' · no NFL projection')}${landHtml(p)}${p.custom ? ' · added by you' : ''}</small></span>
-        ${$ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : ''}
-        ${canPick ? `<button type="button" class="dr-go" data-dr-pick="${esc(p.name)}">Draft</button>` : ''}</li>`).join('');
+    const rows = list.map(({ p, $ }) => {
+      const open = S.openP === p.name;
+      return `<li class="${open ? 'open' : ''}">
+        <button type="button" class="dr-row" data-dr-open="${esc(p.name)}" aria-expanded="${open}">
+          <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
+          <span class="dr-nm"><b>${esc(p.name)}</b><small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.nflPick ? ` · proj NFL ${nflLabel(p.nflPick)}` : (p.custom ? '' : ' · no NFL projection')}${landHtml(p)}${p.custom ? ' · added by you' : ''}</small></span>
+          ${$ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : ''}
+        </button>
+        ${canPick ? `<button type="button" class="dr-go" data-dr-pick="${esc(p.name)}">Draft</button>` : ''}
+        ${open && slot != null ? detail(p, slot) : ''}</li>`;
+    }).join('');
     const addForm = canPick ? `<details class="dr-add"><summary>Add a rookie who isn’t listed</summary>
         <div class="dr-add-f"><input id="dr-add-name" placeholder="Name" autocomplete="off">
         <select id="dr-add-pos"><option>RB</option><option>WR</option><option>QB</option><option>TE</option></select>
@@ -240,6 +289,7 @@
           <section class="card dr-players" data-panel="players">
             <div class="dr-filters"><div class="seg" role="group" aria-label="Position">${posBtns}</div>
               <div class="seg" role="group" aria-label="Sort"><button type="button" data-dr-sort="adp" aria-pressed="${S.sort === 'adp'}">Rank</button><button type="button" data-dr-sort="price" aria-pressed="${S.sort === 'price'}"${slot == null ? ' disabled' : ''}>Price</button></div></div>
+            ${slot != null ? `<p class="dr-at">Prices at <b>${slotLabel(slot)}</b> · ${slotWhy}. Tap a rookie for the math and his contract.</p>` : ''}
             <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
             <p class="dr-foot">${av.length} of ${pool().length} rookies left. Ranks: <a href="${esc(S.data.board ? S.data.board.url : '#')}" target="_blank" rel="noopener">${esc(S.data.board ? S.data.board.name : 'rookie board')}</a>. ${S.nflOrder ? `Logos show each rookie’s projected landing spot from <a href="${esc(S.nflOrder.url)}" target="_blank" rel="noopener">Tankathon’s</a> projected NFL order. ` : ''}Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
           </section>
@@ -251,9 +301,11 @@
 
   /* ---- events ---- */
   function click(e, ctx) {
-    const el = e.target.closest('[data-dr],[data-dr-mode],[data-dr-pos],[data-dr-sort],[data-dr-round],[data-dr-pick],[data-dr-mtab]');
+    const el = e.target.closest('[data-dr],[data-dr-mode],[data-dr-pos],[data-dr-sort],[data-dr-round],[data-dr-pick],[data-dr-mtab],[data-dr-open],[data-dr-taxi]');
     if (!el || !S.cfg) return false;
     const ord = order(ctx.now);
+    if (el.dataset.drOpen) { S.openP = S.openP === el.dataset.drOpen ? null : el.dataset.drOpen; return true; }
+    if (el.dataset.drTaxi) { const n = el.dataset.drTaxi; S.taxi.has(n) ? S.taxi.delete(n) : S.taxi.add(n); return true; }
     if (el.dataset.drMtab) { S.mtab = el.dataset.drMtab; try { localStorage.setItem('fbp-draft-tab', S.mtab); } catch (x) {} return true; }
     if (el.dataset.drMode) { stop(); S.mode = el.dataset.drMode; S.round = null; save(); }
     else if (el.dataset.drPos) S.pos = el.dataset.drPos;
