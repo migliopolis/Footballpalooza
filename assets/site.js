@@ -1,6 +1,8 @@
 /* Footballpalooza hub: hash router, P-PPR toggle and the League Now page.
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
+  // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
+  const VERSION = '0.0001';
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set() };
   try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
@@ -260,7 +262,7 @@
       state.now = now; state.teams = teams.teams || {};
       try { state.budgets = await fetch('data/budgets.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null); } catch (e) { state.budgets = null; }
       const yr = (now.season.match(/\d{4}/) || [''])[0];
-      document.getElementById('season-label').textContent = yr ? `${yr} season · League hub` : 'League hub';
+      document.getElementById('season-label').textContent = (yr ? `${yr} season · League hub` : 'League hub') + ` · v ${VERSION}`;
     } catch (e) { state.now = null; }
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
