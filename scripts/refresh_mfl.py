@@ -26,13 +26,13 @@ EXTRA = ['rosters', 'futureDraftPicks', 'auctionResults', 'draftResults']
 PLAYER_POS = {'QB', 'RB', 'WR', 'TE', 'Def'}
 
 
-def fetch(type_, extra=None):
+def fetch(type_, extra=None, host=None):
     params = {'TYPE': type_, 'L': LEAGUE, 'JSON': '1'}
     if extra:
         params.update(extra)
     if KEY:
         params['APIKEY'] = KEY
-    url = f'https://{HOST}/{SEASON}/export?' + urllib.parse.urlencode(params)
+    url = f'https://{host or HOST}/{SEASON}/export?' + urllib.parse.urlencode(params)
     last = None
     for attempt in range(2):
         try:
@@ -77,14 +77,19 @@ def main():
                 failed_core.append(t)
         time.sleep(1.1)
     if players_stale():
+        # MFL serves the player list only from api.myfantasyleague.com. DETAILS=1 adds the
+        # ESPN id (player photos), the SportsData id, NFL draft slot, college and birthdate.
         try:
-            raw = fetch('players')
+            raw = fetch('players', {'DETAILS': '1'}, host='api.myfantasyleague.com')
             plist = raw.get('players', {}).get('player', [])
-            compact = {p['id']: [p.get('name', ''), p.get('position', ''), p.get('team', '')]
+            fields = ['name', 'position', 'team', 'espn_id', 'sportsdata_id', 'draft_year',
+                      'draft_round', 'draft_pick', 'college', 'birthdate']
+            compact = {p['id']: [p.get(f, '') for f in fields]
                        for p in plist if p.get('position') in PLAYER_POS}
             save('players', {'fetched': datetime.now(timezone.utc).isoformat(timespec='seconds'),
-                             'fields': ['name', 'position', 'team'], 'players': compact})
-            print(f'  ok   players ({len(compact)} kept)')
+                             'fields': fields, 'players': compact})
+            print(f'  ok   players ({len(compact)} kept, '
+                  f'{sum(1 for v in compact.values() if v[3])} with ESPN ids)')
         except Exception as e:
             print(f'  FAIL {e}  (kept the previous file)')
     save('_meta', {'season': SEASON, 'league': LEAGUE,

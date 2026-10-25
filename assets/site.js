@@ -27,6 +27,37 @@
     return `<span class="team">${logo}<span class="nm">${esc(name)}</span>${opts.abbr ? abbr : ''}${opts.after || ''}</span>`;
   }
 
+  /* ---------- media and reference data (for any page) ----------
+     Player photos and NFL logos come from ESPN's image server; the ids and lists are saved by the
+     weekly refresh (see data/README.md). Use from any page, e.g.
+       FBP.media.headshotFor('15253').then(url => ...)   // MFL player id -> photo URL ('' if none)
+       FBP.media.nflLogo('KCC')                           // MFL team code -> logo URL
+       FBP.data('espn/injuries').then(list => ...)        // any saved file under data/            */
+  const MFL_TO_ESPN = { GBP: 'GB', JAC: 'JAX', KCC: 'KC', LVR: 'LV', NEP: 'NE', NOS: 'NO', SFO: 'SF', TBB: 'TB', WAS: 'WSH' };
+  const dataCache = {};
+  const loadData = name => (dataCache[name] = dataCache[name] ||
+    fetch(`data/${name}.json`, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error(name); return r.json(); }));
+  let playersById = null;
+  const media = {
+    headshot: espnId => espnId ? `https://a.espncdn.com/i/headshots/nfl/players/full/${espnId}.png` : '',
+    nflAbbr: team => MFL_TO_ESPN[team] || team,
+    nflLogo: (team, dark) => team ? `https://a.espncdn.com/i/teamlogos/nfl/500${dark ? '-dark' : ''}/${media.nflAbbr(team).toLowerCase()}.png` : '',
+    async player(mflId) {   // MFL player id -> {name, position, team, espn_id, draft_year, ...}
+      if (!playersById) {
+        const d = await loadData('mfl/players');
+        playersById = {};
+        Object.entries(d.players || {}).forEach(([id, row]) => {
+          const o = {}; (d.fields || []).forEach((f, i) => { o[f] = row[i]; }); playersById[id] = o;
+        });
+      }
+      return playersById[mflId] || null;
+    },
+    async headshotFor(mflId) { const p = await media.player(mflId).catch(() => null); return p ? media.headshot(p.espn_id) : ''; },
+    // <img> markup that removes itself if ESPN has no photo
+    img: (url, cls = 'ph', alt = '') => url ? `<img class="${cls}" src="${url}" alt="${esc(alt)}" loading="lazy" onerror="this.remove()">` : '',
+  };
+  window.FBP = Object.assign(window.FBP || {}, { media, data: loadData });
+
   /* ---------- page colors (Settings) ---------- */
   const FBP_DEFAULT = { bg: '#bde2fa', fg: '#121519', hdrAccent: '#c8211a', logo: '#c8211a' };
   const hex2rgb = h => { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
