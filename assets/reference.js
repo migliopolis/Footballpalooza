@@ -51,7 +51,9 @@ window.FBPRef = (() => {
   }
   function head(title, extra = '') {
     const m = D.meta;
-    return `<div class="pagehead"><h1>${title}</h1><span class="asof">FBP history ${firstYear()}–${m.current_year}${m.current_week ? ` · ${m.current_year} through week ${m.current_week}` : ''}</span></div>${extra}`;
+    // P-PPR toggle (saved per device; the click is handled in site.js by data-ppr)
+    const tog = `<div class="rf-ppr" title="Pre-PPR: add the 2011–2018 non-PPR seasons"><span>P-PPR</span><div class="seg" role="group" aria-label="P-PPR">${['off', 'on'].map(v => `<button type="button" data-ppr="${v}" aria-pressed="${PPR === (v === 'on')}">${v === 'on' ? 'On' : 'Off'}</button>`).join('')}</div></div>`;
+    return `<div class="pagehead rf-head"><h1>${title}</h1>${tog}<span class="asof">FBP history ${firstYear()}–${m.current_year}${m.current_week ? ` · ${m.current_year} through week ${m.current_week}` : ''}</span></div>${extra}`;
   }
 
   /* ---------- home ---------- */

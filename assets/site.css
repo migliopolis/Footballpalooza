@@ -536,3 +536,9 @@ section > .rf-sub{margin:0 0 12px}
 .tbl tr.rf-pre td .rf-nm{color:var(--fg)}
 .rf-champ a.yr{text-decoration:none}
 .rf-pre-st{max-width:640px}
+
+.rf-head{align-items:center}
+.rf-head .asof{flex-basis:100%}
+.rf-ppr{display:flex;align-items:center;gap:8px;margin-left:auto}
+.rf-ppr > span{font:600 .72rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.rf-ppr .seg button{padding:5px 12px;font-size:.8rem}

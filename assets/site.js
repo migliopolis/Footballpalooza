@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0018';
+  const VERSION = '0.0019';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -135,8 +135,6 @@
     return `<div class="pagehead"><h1>Settings</h1><span class="asof">Saved on this device only</span></div>
       <section class="card set"><h2>Page colors</h2><p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
         <div class="swatches" role="group" aria-label="Page colors">${swatches}</div></section>
-      <section class="card set"><h2>P-PPR</h2><p>Pre-PPR seasons. Off shows FBP history from 2019 on, when the league became PPR. On adds the earlier non-PPR seasons to history and records in Reference.</p>
-        <div class="seg" role="group" aria-label="P-PPR">${['off', 'on'].map(v => `<button type="button" data-ppr="${v}" aria-pressed="${state.ppr === (v === 'on')}">${v === 'on' ? 'On' : 'Off'}</button>`).join('')}</div></section>
       <section class="card set"><h2>Light or dark</h2><p>Match device follows your phone or computer’s setting.</p>
         <div class="seg" role="group" aria-label="Light or dark">${seg}</div></section>`;
   }
