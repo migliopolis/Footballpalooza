@@ -288,7 +288,10 @@
         state.open.has(id) ? state.open.delete(id) : state.open.add(id);
         const y = ob.getBoundingClientRect().top; route();
         const again = document.querySelector(`[data-odds="${id}"]`);
-        if (again) { window.scrollBy(0, again.getBoundingClientRect().top - y); again.focus({ preventScroll: true }); }
+        if (again) {
+          window.scrollBy(0, again.getBoundingClientRect().top - y);
+          if (e.detail === 0) again.focus({ preventScroll: true });   // keep keyboard focus; taps and clicks leave nothing highlighted
+        }
         return;
       }
       const b = e.target.closest('.rtab'); if (!b) return;

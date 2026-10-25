@@ -181,7 +181,8 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .tm{border-bottom:1px solid var(--line)}
 .tm:last-child{border-bottom:0}
 .tm > button.seed{width:100%;border:0;border-bottom:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.tm > button.seed:hover{background:var(--sky-soft)}
+/* hover tint only on devices with a real pointer; on phones a tap leaves :hover stuck after collapsing */
+@media (hover:hover){.tm > button.seed:hover{background:var(--sky-soft)}}
 .tm > button.seed:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tm.open > button.seed{background:var(--sky-soft)}
 .car{display:inline-block;width:7px;height:7px;margin-left:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-3px) rotate(45deg);transition:transform .15s}
