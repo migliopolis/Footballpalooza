@@ -9,11 +9,7 @@ These are the v5.0 by-laws rewritten for 2027. Every change is tagged [[CHANGED]
 | Rookie salaries | Published formula (NFL draft capital × FBP pick) for rounds 1–2; maxes RB $30, WR $15, QB $12, TE $8; round 2 floor $3; rounds 3/4 = $2/$1 |
 | Taxi squad | 5th spot; taxi rookies count at two-thirds of salary; deferred third, trade fee; TS assignments final 24 hours before the auction |
 | Playoffs | Full tiebreaker ladder incl. all-play wins; 3rd-place game in Week 17; division winners always outrank wild cards |
-| Payouts | 3rd place (winner of the 3rd-place game) is paid; 4th place is not |
 | Rookie draft order | Picks 1–12 fully specified (3rd-place game decides picks 9–10) |
-| Waivers | Processing moves to 12 PM EST |
-| Trades | Veto process removed; bullying or harassing owners over trades is prohibited |
-| Removed | Grandfathered contracts, owner-vote rule for rule changes |
 | Divisions | No realignment for 2027 |
 
 # Article I – League Commissioner
@@ -26,13 +22,13 @@ $150 per team, due before the NFL season begins, paid by PayPal, Apple Pay, Zell
 
 # Article III – Prize Payout Structure
 
-Total pot $1,800 ($150 × 12 teams), less the MFL fee before payouts. Champion 50%, 2nd place 30%, 3rd place 15%, regular-season high score 5%. Percentages apply to the post-fee amount. [[NEW]] 3rd place is the winner of the Week 17 3rd-place game; 4th place is not paid.
+Total pot $1,800 ($150 × 12 teams), less the MFL fee before payouts. Champion 50%, 2nd place 30%, 3rd place 15%, regular-season high score 5%. Percentages apply to the post-fee amount. 3rd place is the winner of the Week 17 3rd-place game.
 
 # Article IV – League Setup
 
 
 - 12 teams in 3 divisions (East, Central, West), based on geography.
-- [[CHANGED]] Divisions are reviewed every 3 years (Article XIII). The 2027 review found no owner relocations, so **divisions stay as they are for 2027**.
+- Divisions are reviewed every 3 years (Article XIII). The 2027 review found no owner relocations, so **divisions stay as they are for 2027**.
 - 14-week regular season; each team plays division opponents twice and all others once.
 - 3-week playoff tournament (Weeks 15–17).
 - No set end date; owners will be notified if one is set.
@@ -197,7 +193,7 @@ Owners monitor their own rosters and salaries and notify the commissioner of err
 - [[NEW]] **QB limit:** a team may keep at most **2 veteran QBs**, plus any rookie QBs drafted in that year's rDraft. A QB who spent his rookie year on TS may be kept into Year 2, but he uses one of the 2 veteran QB spots.
 - Keeping zero players is allowed.
 
-**Jordy Nelson Rule.** [[CHANGED]] If a keeper suffers a **season-ending injury** and is placed on IR by his team after the deadline but before the auction, one such player may be dropped to regain his salary. *Was: "injured and placed on IR."*
+**Jordy Nelson Rule.** If a keeper suffers a **season-ending injury** and is placed on IR by his team after the deadline but before the auction, one such player may be dropped to regain his salary.
 
 # Article IX – Veteran Auction
 
@@ -210,7 +206,7 @@ Owners monitor their own rosters and salaries and notify the commissioner of err
 
 # Article X – Waivers
 
-- [[CHANGED]] Processing Wed–Sun weekly at **12 PM EST**, Week 1 through Week 17. *Was 11 AM EST.*
+- Processing Wed–Sun weekly at **12 PM EST**, Week 1 through Week 17.
 - 24-hour lock on dropped players.
 - **Saquon Barkley Rule:** players with season-ending injuries go on a manually curated "Can't Add List"; claims on them are voided and refunded.
 
@@ -218,8 +214,7 @@ Owners monitor their own rosters and salaries and notify the commissioner of err
 
 - A trade is live once accepted, and must be processed through the league site.
 - Conditional picks are allowed if terms are declared.
-- [[REMOVED]] Veto process. Trades are not subject to owner veto.
-- [[NEW]] Bullying or harassing any owner over a trade is not allowed.
+- Bullying or harassing any owner over a trade is not allowed.
 - Tradable assets: players (with contracts), draft picks (up to 2 years out), auction cash, FAAB dollars.
 - [[NEW]] Trades of TS rookies carry the discount and fee rules in Article VI. Teams may attach side terms to a TS trade, declared in the trade.
 
@@ -264,7 +259,6 @@ Six teams advance:
 
 - Division realignment every 3 seasons (starting 2021), based on geography. [[CHANGED]] The 2027 review is complete: no changes. Next review before the 2030 season.
 - Rookie wage scale reviewed every 3 seasons. [[CHANGED]] Replaced by the Article VI formula for 2027.
-- [[REMOVED]] Owner-vote requirement for rule changes.
 
 # Article XIV – Scoring & Standings
 
@@ -282,7 +276,7 @@ All owners field a full, legal starting lineup each week. Non-compliance: 1st, f
 
 # Article XVII – SuperFlex Implementation
 
-[[CHANGED]] SuperFlex is **in effect for 2027** (no longer a preview). The 9th starter is a SuperFlex slot (QB/RB/WR/TE). Related roster, rookie-pricing, QB-keeper and taxi changes are in Articles V, VI and VIII.
+[[CHANGED]] SuperFlex is **in effect for 2027**. The 9th starter is a SuperFlex slot (QB/RB/WR/TE). Related roster, rookie-pricing, QB-keeper and taxi changes are in Articles V, VI and VIII.
 
 # Article XVIII – Miscellaneous
 

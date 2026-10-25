@@ -236,21 +236,20 @@ details.all[open] summary{margin-bottom:6px}
 .bl-tools input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .bl-hit{margin:-8px 2px 0;font-size:.82rem;color:var(--muted)}
 .bl-list{overflow:hidden}
-details.bl > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent}
-details.bl > summary::-webkit-details-marker{display:none}
-details.bl > summary .car{margin-left:auto;flex:none;transform:translateY(-2px) rotate(45deg)}
-details.bl[open] > summary .car{transform:translateY(2px) rotate(-135deg)}
-details.bl > summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-details.bl1{border-bottom:1px solid var(--line)}
-details.bl1:last-child{border-bottom:0}
-details.bl1 > summary{padding:12px 12px 12px 10px;min-height:52px}
-details.bl1[open] > summary{background:var(--sky-soft)}
-@media (hover:hover){details.bl1 > summary:hover{background:var(--sky-soft)}}
+.bl-sum{width:100%;display:flex;align-items:center;gap:8px;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bl-sum .car{margin-left:auto;flex:none;transform:translateY(-2px) rotate(45deg)}
+.bl.open > .bl-sum .car{transform:translateY(2px) rotate(-135deg)}
+.bl-sum:focus-visible,.bl-end:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.bl1{border-bottom:1px solid var(--line)}
+.bl1:last-child{border-bottom:0}
+.bl1 > .bl-sum{padding:12px 12px 12px 10px;min-height:52px}
+.bl1.open > .bl-sum{background:var(--sky-soft)}
+@media (hover:hover){.bl1 > .bl-sum:hover{background:var(--sky-soft)}}
 .bl-num{flex:none;min-width:2.6rem;text-align:center;font:700 1rem/1 var(--display);color:var(--accent);letter-spacing:.02em}
 .bl-star{font-size:.8rem}
 .bl-name{font:600 1.08rem/1.25 var(--display);letter-spacing:.02em}
 .bl-chg{flex:none;font:600 .66rem var(--body);padding:2px 7px;border-radius:999px;background:var(--red-soft);color:var(--red);white-space:nowrap}
-.bl-body{padding:4px 14px 12px 14px;font-size:.92rem;line-height:1.55}
+.bl-body{padding:4px 14px 10px 14px;font-size:.92rem;line-height:1.55}
 .bl1 > .bl-body{padding-left:max(14px,calc(2.6rem + 18px))}
 @media (max-width:520px){.bl1 > .bl-body{padding-left:14px}}
 .bl-body p{margin:.5em 0}
@@ -259,11 +258,17 @@ details.bl1[open] > summary{background:var(--sky-soft)}
 .bl-body table{border-collapse:collapse;font-size:.84rem;font-variant-numeric:tabular-nums;margin:.5em 0;display:block;overflow-x:auto;max-width:100%}
 .bl-body th,.bl-body td{border-bottom:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top}
 .bl-body th{font:600 .7rem var(--body);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-details.bl2,details.bl3,details.bl4{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--bg)}
-details.bl2 > summary,details.bl3 > summary,details.bl4 > summary{padding:9px 11px;font-weight:600}
-details.bl2 > .bl-body,details.bl3 > .bl-body,details.bl4 > .bl-body{padding-top:0}
-details.bl3,details.bl4{background:var(--surface)}
+.bl2,.bl3,.bl4{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--bg);overflow:hidden}
+.bl3,.bl4{background:var(--surface)}
+.bl2 > .bl-sum,.bl3 > .bl-sum,.bl4 > .bl-sum{padding:9px 11px;font-weight:600}
+.bl2 > .bl-body,.bl3 > .bl-body,.bl4 > .bl-body{padding-top:0}
 .bl-t{min-width:0}
+/* collapse bar at the bottom of every open block */
+.bl-end{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:10px 0 0;padding:8px 10px;border:0;border-radius:8px;
+  background:var(--sky-soft);color:var(--fg);font:600 .78rem var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bl2 .bl-end,.bl3 .bl-end,.bl4 .bl-end{background:color-mix(in srgb,var(--sky-soft) 70%,var(--surface))}
+@media (hover:hover){.bl-end:hover{filter:brightness(.96)}}
+.bl-end .car.up{margin:0;transform:translateY(2px) rotate(-135deg)}
 .bl-tag{display:inline-block;font:700 .6rem/1.5 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:0 6px;border-radius:999px;vertical-align:1px;white-space:nowrap}
 .bl-changed{background:var(--sky-soft);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line)}
 .bl-new{background:color-mix(in srgb,var(--ok) 16%,var(--surface));color:var(--ok)}

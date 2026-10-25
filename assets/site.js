@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0003';
+  const VERSION = '0.0004';
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
   try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
@@ -257,21 +257,25 @@
   }
 
   /* ---------- By-Laws ---------- */
-  // Every heading is a <details>: articles open into sections, sections into their sub-parts.
+  // Our own disclosure blocks (not <details>): articles open into sections, sections into sub-parts.
+  // Everything starts collapsed; closing a block closes everything inside it; each open block ends
+  // with a bar that collapses it, so a long read doesn't mean scrolling back up.
   function pageBylaws() {
     const B = state.bylaws;
     if (!B) return '<p class="loading">Loading the by-laws…</p>';
     const tagHtml = tags => (tags || []).map(t => `<span class="bl-tag bl-${t}">${t[0].toUpperCase() + t.slice(1)}</span>`).join('');
-    const node = (n, path) => {
-      const id = path, open = state.blOpen.has(id) ? ' open' : '';
-      if (n.level === 1) {
-        const head = n.num ? `<span class="bl-num">${n.num}</span><span class="bl-name">${esc(n.name)}</span>`
-                           : `<span class="bl-num bl-star">2027</span><span class="bl-name">${esc(n.title)}</span>`;
-        return `<details class="bl bl1" data-bl="${id}"${open}><summary>${head}${n.changes ? `<span class="bl-chg">${n.changes} change${n.changes > 1 ? 's' : ''}</span>` : ''}<i class="car" aria-hidden="true"></i></summary>
-          <div class="bl-body">${n.html || ''}${n.children.map((c, i) => node(c, id + '.' + i)).join('')}</div></details>`;
-      }
-      return `<details class="bl bl${n.level}" data-bl="${id}"${open}><summary><span class="bl-t">${esc(n.title)}</span>${tagHtml(n.tags)}<i class="car" aria-hidden="true"></i></summary>
-        <div class="bl-body">${n.html || ''}${n.children.map((c, i) => node(c, id + '.' + i)).join('')}</div></details>`;
+    const node = (n, id) => {
+      const open = state.blOpen.has(id);
+      const label = n.num ? `Article ${n.num}` : n.title;
+      const head = n.level === 1
+        ? (n.num ? `<span class="bl-num">${n.num}</span><span class="bl-name">${esc(n.name)}</span>`
+                 : `<span class="bl-num bl-star">2027</span><span class="bl-name">${esc(n.title)}</span>`)
+          + (n.changes ? `<span class="bl-chg">${n.changes} change${n.changes > 1 ? 's' : ''}</span>` : '')
+        : `<span class="bl-t">${esc(n.title)}</span>${tagHtml(n.tags)}`;
+      return `<div class="bl bl${n.level}${open ? ' open' : ''}" data-bl="${id}">
+        <button type="button" class="bl-sum" data-bltoggle="${id}" aria-expanded="${open}">${head}<i class="car" aria-hidden="true"></i></button>
+        <div class="bl-body"${open ? '' : ' hidden'}>${n.html || ''}${n.children.map((c, k) => node(c, id + '.' + k)).join('')}
+          <button type="button" class="bl-end" data-blclose="${id}"><i class="car up" aria-hidden="true"></i>Collapse ${esc(label)}</button></div></div>`;
     };
     return `<div class="pagehead"><h1>By-Laws</h1><span class="asof">${esc(B.title)} · <b>${esc(B.edition)}</b></span></div>
       <div class="bl-tools">
@@ -279,7 +283,14 @@
         <div class="seg" role="group" aria-label="Open or close everything"><button type="button" data-blall="open">Expand all</button><button type="button" data-blall="close">Collapse all</button></div>
       </div>
       <p class="bl-hit" id="bl-hit" hidden></p>
-      <div class="card bl-list">${B.articles.map((a, i) => node(a, String(i))).join('')}</div>`;
+      <div class="card bl-list">${B.articles.map((a, k) => node(a, String(k))).join('')}</div>`;
+  }
+  function blSet(el, open, remember = true) {
+    el.classList.toggle('open', open);
+    el.querySelector(':scope > .bl-sum').setAttribute('aria-expanded', open);
+    el.querySelector(':scope > .bl-body').hidden = !open;
+    if (remember) open ? state.blOpen.add(el.dataset.bl) : state.blOpen.delete(el.dataset.bl);
+    if (!open) el.querySelectorAll('.bl.open').forEach(c => blSet(c, false, remember));   // closing a block closes what's inside
   }
   // search in place: hide articles without a match, open the parts that hold one, mark the words
   function blSearch(q) {
@@ -287,24 +298,28 @@
     list.querySelectorAll('mark.bl-m').forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
     list.normalize();
     const hit = document.getElementById('bl-hit');
-    const arts = [...list.querySelectorAll('details.bl1')];
+    const arts = [...list.querySelectorAll('.bl1')];
+    const all = [...list.querySelectorAll('.bl')];
     if (q.length < 2) {
       arts.forEach(a => { a.hidden = false; });
-      list.querySelectorAll('details.bl').forEach(dt => { dt.open = state.blOpen.has(dt.dataset.bl); });
+      all.forEach(b => blSet(b, state.blOpen.has(b.dataset.bl), false));
+      all.forEach(b => { if (state.blOpen.has(b.dataset.bl)) blSet(b, true, false); });
       hit.hidden = true; return;
     }
     const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
     let total = 0;
     arts.forEach(a => {
-      const walker = document.createTreeWalker(a, NodeFilter.SHOW_TEXT);
+      blSet(a, false, false);
+      const walker = document.createTreeWalker(a, NodeFilter.SHOW_TEXT, {   // titles count too
+        acceptNode: t => t.parentElement.closest('.bl-end, .bl-chg, .bl-tag, .bl-num') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
       const hits = [];
       while (walker.nextNode()) { const t = walker.currentNode; rx.lastIndex = 0; if (rx.test(t.nodeValue)) hits.push(t); }
       a.hidden = !hits.length;
-      a.querySelectorAll('details.bl').forEach(dt => { dt.open = false; });
-      a.open = false;
       hits.forEach(t => {
-        for (let el = t.parentElement; el && el !== list; el = el.parentElement) if (el.tagName === 'DETAILS') el.open = true;
-        const frag = document.createDocumentFragment(); let last = 0; rx.lastIndex = 0; let m;
+        const own = t.parentElement.closest('.bl'), inTitle = t.parentElement.closest('.bl-sum');
+        for (let el = inTitle ? own.parentElement.closest('.bl') : own; el; el = el.parentElement.closest('.bl')) blSet(el, true, false);
+        if (inTitle && own.classList.contains('bl1')) blSet(own, true, false);
+        const frag = document.createDocumentFragment(); let last = 0, m; rx.lastIndex = 0;
         while ((m = rx.exec(t.nodeValue))) {
           frag.append(t.nodeValue.slice(last, m.index));
           const mk = document.createElement('mark'); mk.className = 'bl-m'; mk.textContent = m[0]; frag.append(mk);
@@ -313,8 +328,9 @@
         frag.append(t.nodeValue.slice(last)); t.replaceWith(frag);
       });
     });
+    const n = arts.filter(a => !a.hidden).length;
     hit.hidden = false;
-    hit.textContent = total ? `${total} match${total > 1 ? 'es' : ''} in ${arts.filter(a => !a.hidden).length} article${arts.filter(a => !a.hidden).length > 1 ? 's' : ''}` : 'No matches';
+    hit.textContent = total ? `${total} match${total > 1 ? 'es' : ''} in ${n} article${n > 1 ? 's' : ''}` : 'No matches';
   }
 
   /* ---------- placeholders ---------- */
@@ -360,18 +376,23 @@
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', route);
-    app.addEventListener('toggle', e => {
-      const dt = e.target;
-      if (!dt.matches || !dt.matches('details.bl') || (document.getElementById('bl-q') || {}).value) return;
-      dt.open ? state.blOpen.add(dt.dataset.bl) : state.blOpen.delete(dt.dataset.bl);
-    }, true);
     app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
     app.addEventListener('click', e => {
-      const all = e.target.closest('[data-blall]');
-      if (all) {
-        const q = document.getElementById('bl-q'); if (q && q.value) { q.value = ''; blSearch(''); }
-        const open = all.dataset.blall === 'open';
-        document.querySelectorAll('.bl-list details.bl').forEach(dt => { dt.open = open; open ? state.blOpen.add(dt.dataset.bl) : state.blOpen.delete(dt.dataset.bl); });
+      const tg = e.target.closest('[data-bltoggle]'), cl = e.target.closest('[data-blclose]'), all = e.target.closest('[data-blall]');
+      if (tg || cl || all) {
+        if (all) {
+          const q = document.getElementById('bl-q'); if (q && q.value) { q.value = ''; blSearch(''); }
+          document.querySelectorAll('.bl-list .bl').forEach(b => blSet(b, all.dataset.blall === 'open')); return;
+        }
+        const el = document.querySelector(`.bl[data-bl="${(tg || cl).dataset.bltoggle || (tg || cl).dataset.blclose}"]`);
+        if (!el) return;
+        const opening = tg ? !el.classList.contains('open') : false;
+        blSet(el, opening);
+        if (cl) {   // bring the collapsed header back into view, just under the sticky site header
+          const top = el.getBoundingClientRect().top - document.querySelector('.top').offsetHeight - 8;
+          if (top < 0) window.scrollBy(0, top);
+          if (e.detail === 0) el.querySelector(':scope > .bl-sum').focus({ preventScroll: true });
+        }
         return;
       }
       const sw = e.target.closest('.swatch'), md = e.target.closest('[data-mode]'), pp = e.target.closest('[data-ppr]');

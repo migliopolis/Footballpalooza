@@ -7,7 +7,7 @@
    "title": "What changed for 2027",
    "tags": [],
    "children": [],
-   "html": "<p>These are the v5.0 by-laws rewritten for 2027. Every change is tagged <span class=\"bl-tag bl-changed\">Changed</span>, <span class=\"bl-tag bl-new\">New</span> or <span class=\"bl-tag bl-removed\">Removed</span>; untagged text is unchanged. Dates for the rookie draft, keeper deadline and auction are TBD.</p>\n<table>\n<thead>\n<tr>\n<th>Area</th>\n<th>Change for 2027</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Lineup / roster</td>\n<td>SuperFlex becomes the 9th starter; bench 11; 20 active + 3 IR + 5 taxi</td>\n</tr>\n<tr>\n<td>QB keepers</td>\n<td>Max 2 veteran QBs plus any rookie QBs from that year's rookie draft</td>\n</tr>\n<tr>\n<td>Rookie salaries</td>\n<td>Published formula (NFL draft capital × FBP pick) for rounds 1–2; maxes RB $30, WR $15, QB $12, TE $8; round 2 floor $3; rounds 3/4 = $2/$1</td>\n</tr>\n<tr>\n<td>Taxi squad</td>\n<td>5th spot; taxi rookies count at two-thirds of salary; deferred third, trade fee; TS assignments final 24 hours before the auction</td>\n</tr>\n<tr>\n<td>Playoffs</td>\n<td>Full tiebreaker ladder incl. all-play wins; 3rd-place game in Week 17; division winners always outrank wild cards</td>\n</tr>\n<tr>\n<td>Payouts</td>\n<td>3rd place (winner of the 3rd-place game) is paid; 4th place is not</td>\n</tr>\n<tr>\n<td>Rookie draft order</td>\n<td>Picks 1–12 fully specified (3rd-place game decides picks 9–10)</td>\n</tr>\n<tr>\n<td>Waivers</td>\n<td>Processing moves to 12 PM EST</td>\n</tr>\n<tr>\n<td>Trades</td>\n<td>Veto process removed; bullying or harassing owners over trades is prohibited</td>\n</tr>\n<tr>\n<td>Removed</td>\n<td>Grandfathered contracts, owner-vote rule for rule changes</td>\n</tr>\n<tr>\n<td>Divisions</td>\n<td>No realignment for 2027</td>\n</tr>\n</tbody>\n</table>",
+   "html": "<p>These are the v5.0 by-laws rewritten for 2027. Every change is tagged <span class=\"bl-tag bl-changed\">Changed</span>, <span class=\"bl-tag bl-new\">New</span> or <span class=\"bl-tag bl-removed\">Removed</span>; untagged text is unchanged. Dates for the rookie draft, keeper deadline and auction are TBD.</p>\n<table>\n<thead>\n<tr>\n<th>Area</th>\n<th>Change for 2027</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Lineup / roster</td>\n<td>SuperFlex becomes the 9th starter; bench 11; 20 active + 3 IR + 5 taxi</td>\n</tr>\n<tr>\n<td>QB keepers</td>\n<td>Max 2 veteran QBs plus any rookie QBs from that year's rookie draft</td>\n</tr>\n<tr>\n<td>Rookie salaries</td>\n<td>Published formula (NFL draft capital × FBP pick) for rounds 1–2; maxes RB $30, WR $15, QB $12, TE $8; round 2 floor $3; rounds 3/4 = $2/$1</td>\n</tr>\n<tr>\n<td>Taxi squad</td>\n<td>5th spot; taxi rookies count at two-thirds of salary; deferred third, trade fee; TS assignments final 24 hours before the auction</td>\n</tr>\n<tr>\n<td>Playoffs</td>\n<td>Full tiebreaker ladder incl. all-play wins; 3rd-place game in Week 17; division winners always outrank wild cards</td>\n</tr>\n<tr>\n<td>Rookie draft order</td>\n<td>Picks 1–12 fully specified (3rd-place game decides picks 9–10)</td>\n</tr>\n<tr>\n<td>Divisions</td>\n<td>No realignment for 2027</td>\n</tr>\n</tbody>\n</table>",
    "changes": 0
   },
   {
@@ -35,8 +35,8 @@
    "title": "Article III – Prize Payout Structure",
    "tags": [],
    "children": [],
-   "html": "<p>Total pot $1,800 ($150 × 12 teams), less the MFL fee before payouts. Champion 50%, 2nd place 30%, 3rd place 15%, regular-season high score 5%. Percentages apply to the post-fee amount. <span class=\"bl-tag bl-new\">New</span> 3rd place is the winner of the Week 17 3rd-place game; 4th place is not paid.</p>",
-   "changes": 1,
+   "html": "<p>Total pot $1,800 ($150 × 12 teams), less the MFL fee before payouts. Champion 50%, 2nd place 30%, 3rd place 15%, regular-season high score 5%. Percentages apply to the post-fee amount. 3rd place is the winner of the Week 17 3rd-place game.</p>",
+   "changes": 0,
    "num": "III",
    "name": "Prize Payout Structure"
   },
@@ -45,8 +45,8 @@
    "title": "Article IV – League Setup",
    "tags": [],
    "children": [],
-   "html": "<ul>\n<li>12 teams in 3 divisions (East, Central, West), based on geography.</li>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Divisions are reviewed every 3 years (Article XIII). The 2027 review found no owner relocations, so <strong>divisions stay as they are for 2027</strong>.</li>\n<li>14-week regular season; each team plays division opponents twice and all others once.</li>\n<li>3-week playoff tournament (Weeks 15–17).</li>\n<li>No set end date; owners will be notified if one is set.</li>\n</ul>",
-   "changes": 1,
+   "html": "<ul>\n<li>12 teams in 3 divisions (East, Central, West), based on geography.</li>\n<li>Divisions are reviewed every 3 years (Article XIII). The 2027 review found no owner relocations, so <strong>divisions stay as they are for 2027</strong>.</li>\n<li>14-week regular season; each team plays division opponents twice and all others once.</li>\n<li>3-week playoff tournament (Weeks 15–17).</li>\n<li>No set end date; owners will be notified if one is set.</li>\n</ul>",
+   "changes": 0,
    "num": "IV",
    "name": "League Setup"
   },
@@ -187,8 +187,8 @@
    "title": "Article VIII – Keeper Selection",
    "tags": [],
    "children": [],
-   "html": "<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Deadline: set by the commissioner each year (TBD). <em>Was \"typically one week before the Veteran Auction.\"</em></li>\n<li>Cap: total keepers + $1 per open roster spot must stay under the $200 salary cap. <span class=\"bl-tag bl-changed\">Changed</span> Open spots are measured against the 20-man active roster. TS rookies count toward the cap at their Article VI cost, not toward roster limits.</li>\n<li><span class=\"bl-tag bl-new\">New</span> <strong>QB limit:</strong> a team may keep at most <strong>2 veteran QBs</strong>, plus any rookie QBs drafted in that year's rDraft. A QB who spent his rookie year on TS may be kept into Year 2, but he uses one of the 2 veteran QB spots.</li>\n<li>Keeping zero players is allowed.</li>\n</ul>\n<p><strong>Jordy Nelson Rule.</strong> <span class=\"bl-tag bl-changed\">Changed</span> If a keeper suffers a <strong>season-ending injury</strong> and is placed on IR by his team after the deadline but before the auction, one such player may be dropped to regain his salary. <em>Was: \"injured and placed on IR.\"</em></p>",
-   "changes": 4,
+   "html": "<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Deadline: set by the commissioner each year (TBD). <em>Was \"typically one week before the Veteran Auction.\"</em></li>\n<li>Cap: total keepers + $1 per open roster spot must stay under the $200 salary cap. <span class=\"bl-tag bl-changed\">Changed</span> Open spots are measured against the 20-man active roster. TS rookies count toward the cap at their Article VI cost, not toward roster limits.</li>\n<li><span class=\"bl-tag bl-new\">New</span> <strong>QB limit:</strong> a team may keep at most <strong>2 veteran QBs</strong>, plus any rookie QBs drafted in that year's rDraft. A QB who spent his rookie year on TS may be kept into Year 2, but he uses one of the 2 veteran QB spots.</li>\n<li>Keeping zero players is allowed.</li>\n</ul>\n<p><strong>Jordy Nelson Rule.</strong> If a keeper suffers a <strong>season-ending injury</strong> and is placed on IR by his team after the deadline but before the auction, one such player may be dropped to regain his salary.</p>",
+   "changes": 3,
    "num": "VIII",
    "name": "Keeper Selection"
   },
@@ -207,8 +207,8 @@
    "title": "Article X – Waivers",
    "tags": [],
    "children": [],
-   "html": "<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Processing Wed–Sun weekly at <strong>12 PM EST</strong>, Week 1 through Week 17. <em>Was 11 AM EST.</em></li>\n<li>24-hour lock on dropped players.</li>\n<li><strong>Saquon Barkley Rule:</strong> players with season-ending injuries go on a manually curated \"Can't Add List\"; claims on them are voided and refunded.</li>\n</ul>",
-   "changes": 1,
+   "html": "<ul>\n<li>Processing Wed–Sun weekly at <strong>12 PM EST</strong>, Week 1 through Week 17.</li>\n<li>24-hour lock on dropped players.</li>\n<li><strong>Saquon Barkley Rule:</strong> players with season-ending injuries go on a manually curated \"Can't Add List\"; claims on them are voided and refunded.</li>\n</ul>",
+   "changes": 0,
    "num": "X",
    "name": "Waivers"
   },
@@ -217,8 +217,8 @@
    "title": "Article XI – Trades",
    "tags": [],
    "children": [],
-   "html": "<ul>\n<li>A trade is live once accepted, and must be processed through the league site.</li>\n<li>Conditional picks are allowed if terms are declared.</li>\n<li><span class=\"bl-tag bl-removed\">Removed</span> Veto process. Trades are not subject to owner veto.</li>\n<li><span class=\"bl-tag bl-new\">New</span> Bullying or harassing any owner over a trade is not allowed.</li>\n<li>Tradable assets: players (with contracts), draft picks (up to 2 years out), auction cash, FAAB dollars.</li>\n<li><span class=\"bl-tag bl-new\">New</span> Trades of TS rookies carry the discount and fee rules in Article VI. Teams may attach side terms to a TS trade, declared in the trade.</li>\n</ul>",
-   "changes": 3,
+   "html": "<ul>\n<li>A trade is live once accepted, and must be processed through the league site.</li>\n<li>Conditional picks are allowed if terms are declared.</li>\n<li>Bullying or harassing any owner over a trade is not allowed.</li>\n<li>Tradable assets: players (with contracts), draft picks (up to 2 years out), auction cash, FAAB dollars.</li>\n<li><span class=\"bl-tag bl-new\">New</span> Trades of TS rookies carry the discount and fee rules in Article VI. Teams may attach side terms to a TS trade, declared in the trade.</li>\n</ul>",
+   "changes": 1,
    "num": "XI",
    "name": "Trades"
   },
@@ -263,8 +263,8 @@
    "title": "Article XIII – Three-Year Revisit",
    "tags": [],
    "children": [],
-   "html": "<ul>\n<li>Division realignment every 3 seasons (starting 2021), based on geography. <span class=\"bl-tag bl-changed\">Changed</span> The 2027 review is complete: no changes. Next review before the 2030 season.</li>\n<li>Rookie wage scale reviewed every 3 seasons. <span class=\"bl-tag bl-changed\">Changed</span> Replaced by the Article VI formula for 2027.</li>\n<li><span class=\"bl-tag bl-removed\">Removed</span> Owner-vote requirement for rule changes.</li>\n</ul>",
-   "changes": 3,
+   "html": "<ul>\n<li>Division realignment every 3 seasons (starting 2021), based on geography. <span class=\"bl-tag bl-changed\">Changed</span> The 2027 review is complete: no changes. Next review before the 2030 season.</li>\n<li>Rookie wage scale reviewed every 3 seasons. <span class=\"bl-tag bl-changed\">Changed</span> Replaced by the Article VI formula for 2027.</li>\n</ul>",
+   "changes": 2,
    "num": "XIII",
    "name": "Three-Year Revisit"
   },
@@ -303,7 +303,7 @@
    "title": "Article XVII – SuperFlex Implementation",
    "tags": [],
    "children": [],
-   "html": "<p><span class=\"bl-tag bl-changed\">Changed</span> SuperFlex is <strong>in effect for 2027</strong> (no longer a preview). The 9th starter is a SuperFlex slot (QB/RB/WR/TE). Related roster, rookie-pricing, QB-keeper and taxi changes are in Articles V, VI and VIII.</p>",
+   "html": "<p><span class=\"bl-tag bl-changed\">Changed</span> SuperFlex is <strong>in effect for 2027</strong>. The 9th starter is a SuperFlex slot (QB/RB/WR/TE). Related roster, rookie-pricing, QB-keeper and taxi changes are in Articles V, VI and VIII.</p>",
    "changes": 1,
    "num": "XVII",
    "name": "SuperFlex Implementation"
