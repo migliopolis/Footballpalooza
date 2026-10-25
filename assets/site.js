@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0001';
+  const VERSION = '0.0002';
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set() };
   try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
@@ -112,7 +112,7 @@
       const tb = s.via === 'division' ? (s.divisionTiebreak || s.tiebreak) : s.tiebreak;
       return base + (tb ? ` · <em>won tiebreak on ${tb}</em>` : '');
     };
-    /* playoff odds panel, opened by tapping a team in Playoff picture or On the bubble */
+    /* playoff odds panel, opened by tapping a team in Playoff picture, On the bubble or Long shots */
     const O = d.odds && d.odds.teams;
     const race = new Set(seeds.map(s => s.id));
     d.standings.filter(t => !race.has(t.id)).sort((a, b) => b.pct - a.pct || b.allPlayW - a.allPlayW || b.pf - a.pf).slice(0, 3).forEach(t => race.add(t.id));
@@ -169,14 +169,39 @@
 
     const inPo = new Set(seeds.map(s => s.id));
     const s5 = by[S(5).id], s6 = by[S(6).id];
-    const bubble = d.standings.filter(t => !inPo.has(t.id))
-      .sort((a, b) => b.pct - a.pct || b.allPlayW - a.allPlayW || b.pf - a.pf).slice(0, 3)
+    const outside = d.standings.filter(t => !inPo.has(t.id))
+      .sort((a, b) => b.pct - a.pct || b.allPlayW - a.allPlayW || b.pf - a.pf);
+    const bubble = outside.slice(0, 3)
       .map(t => {
         const gb = ((s5.w - t.w) + (t.l - s5.l)) / 2;
         const apb = s6.allPlayW - t.allPlayW;
         return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
           <span class="via">${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts</span>`, null);
       }).join('');
+
+    /* the last three teams: their odds plus a weekly pep talk */
+    const PEP = [
+      ['It ain’t over till it’s over.', 'Yogi Berra', 'who never had to sweat an all-play tiebreak'],
+      ['So you’re telling me there’s a chance!', 'Lloyd Christmas, Dumb and Dumber', 'the official motto of this section'],
+      ['Fall seven times, stand up eight.', 'Japanese proverb', 'six losses is basically a warm-up'],
+      ['Hope is a good thing, maybe the best of things.', 'Andy Dufresne, The Shawshank Redemption', 'he crawled through worse than this schedule'],
+      ['You miss 100% of the shots you don’t take.', 'Wayne Gretzky', 'so start the boom-or-bust WR'],
+      ['Just keep swimming.', 'Dory, Finding Nemo', 'also a fine waiver-wire strategy'],
+      ['Tough times never last, but tough people do.', 'Robert H. Schuller', 'tough rosters, on the other hand…'],
+      ['The darkest hour is just before the dawn.', 'Proverb', 'and the all-play 6 seed is a sunrise'],
+      ['Playoffs? Don’t talk about — playoffs?!', 'Jim Mora', 'we’re talking about playoffs'],
+      ['Rome wasn’t built in a day.', 'Proverb', 'but a contender can be built in one waiver run'],
+    ];
+    const longshots = outside.slice(3, 6).map((t, i) => {
+      const gb = ((s5.w - t.w) + (t.l - s5.l)) / 2;
+      const apb = s6.allPlayW - t.allPlayW;
+      const o = O && O[t.id];
+      const [q, who, quip] = PEP[(d.weeksPlayed * 3 + i) % PEP.length];
+      const odds = o ? (o.playoff >= 0.5 ? `<b>${fp(o.playoff)}</b> playoff odds` : '<b>&lt;1%</b> playoff odds · miracle territory') : '';
+      return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
+        <span class="via">${odds ? odds + ' · ' : ''}${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`}</span>
+        <span class="pep">“${esc(q)}” <span class="who">— ${esc(who)}, ${esc(quip)}</span></span>`, null);
+    }).join('');
 
     const divTables = d.divisions.map(dv => {
       const rows = d.standings.filter(t => t.division === dv.id).sort((a, b) => a.divisionRank - b.divisionRank);
@@ -220,6 +245,8 @@
           <div class="card seeds">${seedRows}</div>
           <h2 class="sec" style="margin-top:16px">On the bubble</h2>
           <div class="card seeds">${bubble}</div>
+          ${longshots ? `<h2 class="sec" style="margin-top:16px">Long shots <small>still breathing, technically</small></h2>
+          <div class="card seeds">${longshots}</div>` : ''}
         </section>
         <section><h2 class="sec">Bracket</h2><div class="card">${bracket}</div></section>
       </div>

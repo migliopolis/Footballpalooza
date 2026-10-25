@@ -226,3 +226,6 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
 .wlist .sw{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 details.all summary{cursor:pointer;font-size:.82rem;font-weight:600;color:var(--fg);padding:2px 0}
 details.all[open] summary{margin-bottom:6px}
+.seed .via b{color:var(--fg);font-weight:600}
+.seed.bubrow .pep{grid-column:1 / 3;padding-left:34px;font-size:.8rem;font-style:italic;color:var(--fg);line-height:1.35;margin-top:2px}
+.seed .pep .who{font-style:normal;color:var(--muted)}
