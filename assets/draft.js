@@ -5,9 +5,9 @@
 (() => {
   const KEY = 'fbp-mock-2027';
   const S = { cfg: null, data: null, loading: false, err: null, mode: 'mine', my: '', picks: [], custom: [],
-              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false, started: false, openP: null, taxi: new Map() };
+              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false, started: false, openP: null, taxi: new Map(), showTaken: true, prevTurn: null };
   const DELAY = 800;   // pause between computer picks (ms)
-  try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; } catch (e) {}
+  try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; S.showTaken = localStorage.getItem('fbp-draft-taken') !== '0'; } catch (e) {}
 
   /* ---- price formula (same as the Rookie Pricer) ---- */
   const interp = (a, p) => {
@@ -228,6 +228,10 @@
     setTimeout(() => schedule(ctx), 0);
     const done = S.cur >= ord.length;
     const cur = ord[S.cur];
+    if (S.started && S.mode === 'mine' && !done) {
+      const turn = isMine(ord, S.cur) && !wantsAuto(ord);
+      if (S.prevTurn !== turn) { S.prevTurn = turn; if (S.mtab !== (turn ? 'players' : 'board')) { S.mtab = turn ? 'players' : 'board'; S.jumpTabs = true; } }
+    }
     const ids = Object.keys(teams).sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
 
     const modes = [['mine', 'Pick for my team'], ['all', 'I pick for everyone'], ['auto', 'Auto-mock the league']]
@@ -271,22 +275,26 @@
       if (k >= 0) { slot = ord[k].slot; slotWhy = k === S.cur && S.started ? 'your pick' : 'your next pick'; }
       else if (!done) { slot = cur.slot; slotWhy = 'pick on the clock (you have no picks left)'; }
     } else if (!done) { slot = cur.slot; slotWhy = S.started ? 'pick on the clock' : 'first pick'; }
-    const list = av.filter(p => S.pos === 'ALL' || p.pos === S.pos)
+    // drafted players can stay in the list (faded red, with the FBP team that took them)
+    const takenBy = new Map(); ord.forEach((o, i) => { const q = S.picks[i]; if (q && !q.unranked) takenBy.set(q.name, o); });
+    const list = (S.showTaken ? pool() : av).filter(p => S.pos === 'ALL' || p.pos === S.pos)
       .map(p => ({ p, $: slot == null ? null : price(p, slot) }))
       .sort((a, b) => S.sort === 'price' && slot != null ? (b.$ - a.$) || (a.p.adp - b.p.adp) : (a.p.adp - b.p.adp));
     const canPick = S.started && !done && isMine(ord, S.cur) && !wantsAuto(ord);
     const posBtns = ['ALL', 'QB', 'RB', 'WR', 'TE'].map(x => `<button type="button" data-dr-pos="${x}" aria-pressed="${S.pos === x}">${x === 'ALL' ? 'All' : x}</button>`).join('');
     const rows = list.map(({ p, $ }) => {
-      const open = S.openP === p.name;
-      return `<li class="${open ? 'open' : ''}">
+      const open = S.openP === p.name, by = takenBy.get(p.name);
+      const tm = by && teams[by.owner];
+      const tag = by ? `<span class="dr-taken" title="Drafted ${slotLabel(by.slot)} by ${esc(nameOf(by.owner))}">${tm && tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${slotLabel(by.slot)}</span>` : '';
+      return `<li class="${open ? 'open' : ''}${by ? ' taken' : ''}">
         <button type="button" class="dr-row" data-dr-open="${esc(p.name)}" aria-expanded="${open}">
           <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
           <span class="dr-nm"><b>${esc(p.name)}</b>
             <small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.custom ? ' · added by you' : ''}</small>
             <small class="dr-nfl">${p.nflPick ? `NFL ${nflLabel(p.nflPick)}${landHtml(p)}` : (p.custom ? '' : 'No NFL projection')}</small></span>
-          ${$ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : ''}
+          ${by ? tag : ($ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : '')}
         </button>
-        ${canPick ? `<button type="button" class="dr-go" data-dr-pick="${esc(p.name)}">Draft</button>` : ''}
+        ${canPick && !by ? `<button type="button" class="dr-go" data-dr-pick="${esc(p.name)}">Draft</button>` : ''}
         ${open && slot != null ? detail(p, slot) : ''}</li>`;
     }).join('');
     const addForm = canPick ? `<details class="dr-add"><summary>Add a rookie who isn’t listed</summary>
@@ -328,7 +336,8 @@
           <div class="dr-mtabs" role="tablist" aria-label="Draft views">${mtabs}</div>
           <section class="card dr-players" data-panel="players">
             <div class="dr-filters"><div class="seg" role="group" aria-label="Position">${posBtns}</div>
-              <div class="seg" role="group" aria-label="Sort"><button type="button" data-dr-sort="adp" aria-pressed="${S.sort === 'adp'}">Rank</button><button type="button" data-dr-sort="price" aria-pressed="${S.sort === 'price'}"${slot == null ? ' disabled' : ''}>Price</button></div></div>
+              <div class="seg" role="group" aria-label="Sort"><button type="button" data-dr-sort="adp" aria-pressed="${S.sort === 'adp'}">Rank</button><button type="button" data-dr-sort="price" aria-pressed="${S.sort === 'price'}"${slot == null ? ' disabled' : ''}>Price</button></div>
+              <label class="dr-showtaken"><input type="checkbox" id="dr-taken"${S.showTaken ? ' checked' : ''}> Show drafted</label></div>
             ${slot != null ? `<p class="dr-at">Prices at <b>${slotLabel(slot)}</b> · ${slotWhy}. Tap a rookie for the math and his contract.</p>` : ''}
             <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
             <p class="dr-foot">${av.length} of ${pool().length} rookies left. Ranks: <a href="${esc(S.data.board ? S.data.board.url : '#')}" target="_blank" rel="noopener">${esc(S.data.board ? S.data.board.name : 'rookie board')}</a>. ${S.nflOrder ? `Logos show each rookie’s projected landing spot from <a href="${esc(S.nflOrder.url)}" target="_blank" rel="noopener">Tankathon’s</a> projected NFL order. ` : ''}Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
@@ -353,7 +362,7 @@
     else if (el.dataset.drPick) { const p = available().find(x => x.name === el.dataset.drPick); if (p) { draft(ord, p); S.round = null; } }
     else {
       const a = el.dataset.dr;
-      if (a === 'start') { S.started = true; S.round = null; save(); }
+      if (a === 'start') { S.started = true; S.round = null; S.prevTurn = null; if (S.mode === 'auto') { S.mtab = 'board'; S.jumpTabs = true; } save(); }
       else if (a === 'auto1' && S.cur < ord.length) { draft(ord, autoPick(ord, S.cur)); S.round = null; }
       else if (a === 'simend') { S.simAll = true; }
       else if (a === 'pause') { stop(); }
@@ -365,7 +374,7 @@
         if (S.mode === 'auto') S.mode = 'all';
         S.round = null; save();
       }
-      else if (a === 'rerun') { stop(); S.started = true; S.picks = ord.map(() => null); S.cur = 0; S.round = null; save(); }
+      else if (a === 'rerun') { stop(); S.mtab = 'board'; S.started = true; S.picks = ord.map(() => null); S.cur = 0; S.round = null; save(); }
       else if (a === 'restart') { stop(); S.started = false; S.picks = ord.map(() => null); S.cur = 0; S.note = ''; S.round = null; save(); }
       else if (a === 'add') {
         const nm = (document.getElementById('dr-add-name').value || '').trim();
@@ -378,6 +387,7 @@
     return true;
   }
   function change(e) {
+    if (e.target.id === 'dr-taken') { S.showTaken = e.target.checked; try { localStorage.setItem('fbp-draft-taken', S.showTaken ? '1' : '0'); } catch (x) {} return true; }
     if (e.target.dataset && e.target.dataset.drTaxisel) { S.taxi.set(e.target.dataset.drTaxisel, e.target.value); return true; }
     if (e.target.id === 'dr-mode') { stop(); S.mode = e.target.value; S.round = null; save(); return true; }
     if (e.target.id !== 'dr-my') return false;
@@ -385,11 +395,28 @@
     S.picks = S.picks.map(() => null); S.cur = 0; S.round = null; save();
     return true;
   }
+  // keep the pick on the clock about a third of the way down, so the next few teams show below it
   function after() {
     const box = document.getElementById('dr-board'), now = box && box.querySelector('li.now');
-    if (!box || !now) return;
-    const top = now.offsetTop - box.offsetTop, h = box.clientHeight;
-    if (top < box.scrollTop + 40 || top > box.scrollTop + h - 80) box.scrollTop = Math.max(0, top - h / 3);
+    if (!box || !now || !S.started) return;
+    if (!window.matchMedia('(max-width:860px)').matches) {
+      S.jumpTabs = false;          // desktop: the board scrolls inside its box
+      const top = now.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+      box.scrollTo({ top: Math.max(0, top - box.clientHeight / 3), behavior: 'smooth' });
+      return;
+    }
+    if (S.jumpTabs) {                                                 // the tab just switched itself: start at the top of it
+      S.jumpTabs = false;
+      const tabs = document.querySelector('.dr-mtabs');
+      if (tabs && S.mtab !== 'board') { requestAnimationFrame(() => window.scrollTo({ top: tabs.getBoundingClientRect().top + window.scrollY - document.querySelector('.top').offsetHeight, behavior: 'smooth' })); return; }
+    }
+    if (S.mtab !== 'board') return;                                   // phones: scroll the page under the sticky header and tabs
+    requestAnimationFrame(() => {
+      const tabs = document.querySelector('.dr-mtabs');
+      const off = document.querySelector('.top').offsetHeight + (tabs ? tabs.offsetHeight : 0);
+      const target = off + (window.innerHeight - off) / 3;
+      window.scrollBy({ top: now.getBoundingClientRect().top - target, behavior: 'smooth' });
+    });
   }
   window.FBPDraft = { render, click, change, after };
 })();

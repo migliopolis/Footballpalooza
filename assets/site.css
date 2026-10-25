@@ -313,7 +313,8 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
   .dr-clock{order:1}.dr-mtabs{order:2}.dr-boardwrap,.dr-players,.dr-haulsec{order:3}
   .dr-boardwrap{position:static}
   .dr-board{max-height:none}
-  .dr-mtabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;position:sticky;top:calc(var(--hdr-h,110px) + 6px);z-index:5}
+  .dr-mtabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--bg);border-bottom:1px solid var(--line);
+    padding:6px var(--gut);margin:0 calc(-1 * var(--gut));position:sticky;top:var(--hdr-h,110px);z-index:5}
   .dr-mtabs button{border:0;background:none;color:var(--fg);font:600 .82rem/1.2 var(--body);padding:8px 4px;border-radius:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px}
   .dr-mtabs button small{font-weight:500;font-size:.68rem;color:var(--muted)}
   .dr-mtabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
@@ -403,3 +404,11 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-years div.dead{border-color:var(--red);background:var(--red-soft)}
 .dr-tot{margin:2px 0 0;font-size:.84rem;line-height:1.6}
 .dr-tot b{font-variant-numeric:tabular-nums}
+.dr-showtaken{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.dr-showtaken input{width:16px;height:16px;accent-color:var(--accent)}
+.dr-filters{align-items:center}
+.dr-list li.taken{background:color-mix(in srgb,var(--red) 10%,var(--surface))}
+.dr-list li.taken .dr-nm b{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--red) 50%,transparent)}
+.dr-taken{display:inline-flex;align-items:center;gap:4px;font:600 .74rem var(--mono);color:var(--red);white-space:nowrap}
+.dr-taken img{width:22px;height:22px;object-fit:contain}
+@media (max-width:860px){.dr-list{max-height:none;overflow:visible}}

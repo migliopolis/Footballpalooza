@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0013';
+  const VERSION = '0.0014';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -392,6 +392,7 @@
     fn();
     boxes.forEach(([sel, t]) => { const el = document.querySelector(sel); if (el) el.scrollTop = t; });
     window.scrollTo(0, y);
+    if (location.hash === '#draft' && window.FBPDraft) FBPDraft.after();   // the board follows the pick on the clock
   }
   const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash === '#draft') route(); } });
 
