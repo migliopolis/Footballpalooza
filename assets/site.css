@@ -412,3 +412,12 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-taken{display:inline-flex;align-items:center;gap:4px;font:600 .74rem var(--mono);color:var(--red);white-space:nowrap}
 .dr-taken img{width:22px;height:22px;object-fit:contain}
 @media (max-width:860px){.dr-list{max-height:none;overflow:visible}}
+.dr-taken > span{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+.dr-taken b{font:700 1rem var(--display);color:var(--fg)}
+.dr-taken small{font:600 .7rem var(--mono);color:var(--red)}
+/* phones: position / sort / show-drafted stick under the Players-Draft board-Team hauls bar */
+@media (max-width:860px){
+  .dr-players{overflow:visible}
+  .dr-players .dr-filters{position:sticky;top:calc(var(--hdr-h,110px) + var(--mtabs-h,62px));z-index:4;background:var(--surface);
+    margin:-12px -14px 0;padding:10px 14px 8px;border-bottom:1px solid var(--line);border-radius:12px 12px 0 0}
+}

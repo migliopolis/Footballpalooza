@@ -285,7 +285,7 @@
     const rows = list.map(({ p, $ }) => {
       const open = S.openP === p.name, by = takenBy.get(p.name);
       const tm = by && teams[by.owner];
-      const tag = by ? `<span class="dr-taken" title="Drafted ${slotLabel(by.slot)} by ${esc(nameOf(by.owner))}">${tm && tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${slotLabel(by.slot)}</span>` : '';
+      const tag = by ? `<span class="dr-taken" title="Drafted ${slotLabel(by.slot)} by ${esc(nameOf(by.owner))} for $${price(p, by.slot)}">${tm && tm.logo ? `<img src="${tm.logo}" alt="">` : ''}<span><b>$${price(p, by.slot)}</b><small>${slotLabel(by.slot)}</small></span></span>` : '';
       return `<li class="${open ? 'open' : ''}${by ? ' taken' : ''}">
         <button type="button" class="dr-row" data-dr-open="${esc(p.name)}" aria-expanded="${open}">
           <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
@@ -397,6 +397,8 @@
   }
   // keep the pick on the clock about a third of the way down, so the next few teams show below it
   function after() {
+    const tb = document.querySelector('.dr-mtabs');
+    if (tb) document.documentElement.style.setProperty('--mtabs-h', tb.offsetHeight + 'px');
     const box = document.getElementById('dr-board'), now = box && box.querySelector('li.now');
     if (!box || !now || !S.started) return;
     if (!window.matchMedia('(max-width:860px)').matches) {
