@@ -1,0 +1,322 @@
+{
+ "title": "FBP League By-Laws",
+ "edition": "2027 draft",
+ "articles": [
+  {
+   "level": 1,
+   "title": "What changed for 2027",
+   "tags": [],
+   "children": [],
+   "html": "<p>These are the v5.0 by-laws rewritten for 2027. Every change is tagged <span class=\"bl-tag bl-changed\">Changed</span>, <span class=\"bl-tag bl-new\">New</span> or <span class=\"bl-tag bl-removed\">Removed</span>; untagged text is unchanged. Dates for the rookie draft, keeper deadline and auction are TBD.</p>\n<table>\n<thead>\n<tr>\n<th>Area</th>\n<th>Change for 2027</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Lineup / roster</td>\n<td>SuperFlex becomes the 9th starter; bench 11; 20 active + 3 IR + 5 taxi</td>\n</tr>\n<tr>\n<td>QB keepers</td>\n<td>Max 2 veteran QBs plus any rookie QBs from that year's rookie draft</td>\n</tr>\n<tr>\n<td>Rookie salaries</td>\n<td>Published formula (NFL draft capital × FBP pick) for rounds 1–2; maxes RB $30, WR $15, QB $12, TE $8; round 2 floor $3; rounds 3/4 = $2/$1</td>\n</tr>\n<tr>\n<td>Taxi squad</td>\n<td>5th spot; taxi rookies count at two-thirds of salary; deferred third, trade fee; TS assignments final 24 hours before the auction</td>\n</tr>\n<tr>\n<td>Playoffs</td>\n<td>Full tiebreaker ladder incl. all-play wins; 3rd-place game in Week 17; division winners always outrank wild cards</td>\n</tr>\n<tr>\n<td>Payouts</td>\n<td>3rd place (winner of the 3rd-place game) is paid; 4th place is not</td>\n</tr>\n<tr>\n<td>Rookie draft order</td>\n<td>Picks 1–12 fully specified (3rd-place game decides picks 9–10)</td>\n</tr>\n<tr>\n<td>Waivers</td>\n<td>Processing moves to 12 PM EST</td>\n</tr>\n<tr>\n<td>Trades</td>\n<td>Veto process removed; bullying or harassing owners over trades is prohibited</td>\n</tr>\n<tr>\n<td>Removed</td>\n<td>Grandfathered contracts, owner-vote rule for rule changes</td>\n</tr>\n<tr>\n<td>Divisions</td>\n<td>No realignment for 2027</td>\n</tr>\n</tbody>\n</table>",
+   "changes": 0
+  },
+  {
+   "level": 1,
+   "title": "Article I – League Commissioner",
+   "tags": [],
+   "children": [],
+   "html": "<p>Paul Miglio</p>",
+   "changes": 0,
+   "num": "I",
+   "name": "League Commissioner"
+  },
+  {
+   "level": 1,
+   "title": "Article II – League Entry Fee",
+   "tags": [],
+   "children": [],
+   "html": "<p>$150 per team, due before the NFL season begins, paid by PayPal, Apple Pay, Zelle, etc. to the commissioner.</p>",
+   "changes": 0,
+   "num": "II",
+   "name": "League Entry Fee"
+  },
+  {
+   "level": 1,
+   "title": "Article III – Prize Payout Structure",
+   "tags": [],
+   "children": [],
+   "html": "<p>Total pot $1,800 ($150 × 12 teams), less the MFL fee before payouts. Champion 50%, 2nd place 30%, 3rd place 15%, regular-season high score 5%. Percentages apply to the post-fee amount. <span class=\"bl-tag bl-new\">New</span> 3rd place is the winner of the Week 17 3rd-place game; 4th place is not paid.</p>",
+   "changes": 1,
+   "num": "III",
+   "name": "Prize Payout Structure"
+  },
+  {
+   "level": 1,
+   "title": "Article IV – League Setup",
+   "tags": [],
+   "children": [],
+   "html": "<ul>\n<li>12 teams in 3 divisions (East, Central, West), based on geography.</li>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Divisions are reviewed every 3 years (Article XIII). The 2027 review found no owner relocations, so <strong>divisions stay as they are for 2027</strong>.</li>\n<li>14-week regular season; each team plays division opponents twice and all others once.</li>\n<li>3-week playoff tournament (Weeks 15–17).</li>\n<li>No set end date; owners will be notified if one is set.</li>\n</ul>",
+   "changes": 1,
+   "num": "IV",
+   "name": "League Setup"
+  },
+  {
+   "level": 1,
+   "title": "Article V – Rosters",
+   "tags": [],
+   "children": [
+    {
+     "level": 2,
+     "title": "Active roster",
+     "tags": [],
+     "children": [],
+     "html": "<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Starting lineup (9): 1 QB, 2 RB, 2 WR, 1 TE, 1 Flex (RB/WR/TE), <strong>1 SuperFlex (QB/RB/WR/TE)</strong>, 1 DST. <em>Was 8 starters, no SuperFlex.</em></li>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Bench: <strong>11 spots</strong> (must be filled after the Veteran Auction). <em>Was 10.</em> Active roster total: <strong>20</strong>. <em>Was 18.</em></li>\n</ul>",
+     "changes": 2
+    },
+    {
+     "level": 2,
+     "title": "Inactive roster",
+     "tags": [],
+     "children": [],
+     "html": "<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Taxi Squad (TS): <strong>5</strong> rookie-only spots; does not count toward position limits. <em>Was 4.</em></li>\n<li>Injured Reserve (IR): 3 slots. Eligible designations: IR, Doubtful (D), Out (O), Covid (C).</li>\n</ul>",
+     "changes": 1
+    }
+   ],
+   "changes": 3,
+   "num": "V",
+   "name": "Rosters"
+  },
+  {
+   "level": 1,
+   "title": "Article VI – Player Salaries & Contracts",
+   "tags": [],
+   "children": [
+    {
+     "level": 2,
+     "title": "Rookie Salary Scale",
+     "tags": [],
+     "children": [
+      {
+       "level": 3,
+       "title": "Rookie Salary Formula (Rounds 1–2)",
+       "tags": [
+        "new"
+       ],
+       "children": [
+        {
+         "level": 4,
+         "title": "NFL factor anchors",
+         "tags": [],
+         "children": [],
+         "html": "<p>— = no anchor at that pick; the factor slides between neighboring anchors.</p>\n<table>\n<thead>\n<tr>\n<th>NFL overall pick</th>\n<th>RB</th>\n<th>WR</th>\n<th>QB</th>\n<th>TE</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1</td>\n<td>1.00</td>\n<td>1.00</td>\n<td>1.00</td>\n<td>1.00</td>\n</tr>\n<tr>\n<td>5</td>\n<td>—</td>\n<td>1.00</td>\n<td>0.95</td>\n<td>—</td>\n</tr>\n<tr>\n<td>10</td>\n<td>0.95</td>\n<td>0.95</td>\n<td>0.90</td>\n<td>—</td>\n</tr>\n<tr>\n<td>20</td>\n<td>0.88</td>\n<td>0.90</td>\n<td>0.84</td>\n<td>—</td>\n</tr>\n<tr>\n<td>32</td>\n<td>0.78</td>\n<td>0.84</td>\n<td>0.76</td>\n<td>0.92</td>\n</tr>\n<tr>\n<td>64</td>\n<td>0.50</td>\n<td>0.70</td>\n<td>0.48</td>\n<td>0.80</td>\n</tr>\n<tr>\n<td>100</td>\n<td>0.33</td>\n<td>0.55</td>\n<td>0.30</td>\n<td>0.55</td>\n</tr>\n<tr>\n<td>150 and later</td>\n<td>0.25</td>\n<td>0.40</td>\n<td>0.20</td>\n<td>0.35</td>\n</tr>\n</tbody>\n</table>",
+         "changes": 0
+        },
+        {
+         "level": 4,
+         "title": "FBP factor by rookie-draft slot",
+         "tags": [],
+         "children": [],
+         "html": "<table>\n<thead>\n<tr>\n<th>Slot</th>\n<th>RB</th>\n<th>WR</th>\n<th>QB</th>\n<th>TE</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1.01</td>\n<td>1.00</td>\n<td>1.00</td>\n<td>1.0000</td>\n<td>1.0000</td>\n</tr>\n<tr>\n<td>1.02</td>\n<td>0.92</td>\n<td>0.92</td>\n<td>0.9636</td>\n<td>0.9773</td>\n</tr>\n<tr>\n<td>1.03</td>\n<td>0.85</td>\n<td>0.85</td>\n<td>0.9273</td>\n<td>0.9545</td>\n</tr>\n<tr>\n<td>1.04</td>\n<td>0.78</td>\n<td>0.78</td>\n<td>0.8909</td>\n<td>0.9318</td>\n</tr>\n<tr>\n<td>1.05</td>\n<td>0.72</td>\n<td>0.72</td>\n<td>0.8545</td>\n<td>0.9091</td>\n</tr>\n<tr>\n<td>1.06</td>\n<td>0.66</td>\n<td>0.66</td>\n<td>0.8182</td>\n<td>0.8864</td>\n</tr>\n<tr>\n<td>1.07</td>\n<td>0.60</td>\n<td>0.60</td>\n<td>0.7818</td>\n<td>0.8636</td>\n</tr>\n<tr>\n<td>1.08</td>\n<td>0.55</td>\n<td>0.55</td>\n<td>0.7455</td>\n<td>0.8409</td>\n</tr>\n<tr>\n<td>1.09</td>\n<td>0.50</td>\n<td>0.50</td>\n<td>0.7091</td>\n<td>0.8182</td>\n</tr>\n<tr>\n<td>1.10</td>\n<td>0.45</td>\n<td>0.45</td>\n<td>0.6727</td>\n<td>0.7955</td>\n</tr>\n<tr>\n<td>1.11</td>\n<td>0.42</td>\n<td>0.42</td>\n<td>0.6364</td>\n<td>0.7727</td>\n</tr>\n<tr>\n<td>1.12</td>\n<td>0.40</td>\n<td>0.40</td>\n<td>0.6000</td>\n<td>0.7500</td>\n</tr>\n<tr>\n<td>2.01</td>\n<td>0.38</td>\n<td>0.39</td>\n<td>0.5800</td>\n<td>0.7300</td>\n</tr>\n<tr>\n<td>2.02</td>\n<td>0.36</td>\n<td>0.38</td>\n<td>0.5636</td>\n<td>0.7091</td>\n</tr>\n<tr>\n<td>2.03</td>\n<td>0.34</td>\n<td>0.37</td>\n<td>0.5473</td>\n<td>0.6882</td>\n</tr>\n<tr>\n<td>2.04</td>\n<td>0.32</td>\n<td>0.36</td>\n<td>0.5309</td>\n<td>0.6673</td>\n</tr>\n<tr>\n<td>2.05</td>\n<td>0.30</td>\n<td>0.35</td>\n<td>0.5145</td>\n<td>0.6464</td>\n</tr>\n<tr>\n<td>2.06</td>\n<td>0.29</td>\n<td>0.34</td>\n<td>0.4982</td>\n<td>0.6255</td>\n</tr>\n<tr>\n<td>2.07</td>\n<td>0.28</td>\n<td>0.33</td>\n<td>0.4818</td>\n<td>0.6045</td>\n</tr>\n<tr>\n<td>2.08</td>\n<td>0.27</td>\n<td>0.32</td>\n<td>0.4655</td>\n<td>0.5836</td>\n</tr>\n<tr>\n<td>2.09</td>\n<td>0.26</td>\n<td>0.31</td>\n<td>0.4491</td>\n<td>0.5627</td>\n</tr>\n<tr>\n<td>2.10</td>\n<td>0.25</td>\n<td>0.30</td>\n<td>0.4327</td>\n<td>0.5418</td>\n</tr>\n<tr>\n<td>2.11</td>\n<td>0.24</td>\n<td>0.29</td>\n<td>0.4164</td>\n<td>0.5209</td>\n</tr>\n<tr>\n<td>2.12</td>\n<td>0.23</td>\n<td>0.28</td>\n<td>0.4000</td>\n<td>0.5000</td>\n</tr>\n</tbody>\n</table>\n<p>The commissioner publishes the resulting price list after the NFL Draft. If a published price differs from this formula, the formula governs.</p>",
+         "changes": 0
+        }
+       ],
+       "html": "<p>Salary = <strong>position max × NFL factor × FBP factor</strong>, rounded to the nearest dollar (half up), with a <strong>$3 minimum</strong>.</p>\n<ul>\n<li><strong>Position max:</strong> the pick-1 salary in the table above.</li>\n<li><strong>NFL factor:</strong> set by the player's overall NFL draft pick. Find the pick in the anchor table below; between two anchors the factor slides in a straight line; after the last anchor it stays flat. Undrafted players count as pick 260.</li>\n<li><strong>FBP factor:</strong> set by the player's rookie-draft slot, 1.01 through 2.12 (table below).</li>\n</ul>\n<p><em>Example:</em> a RB taken 10th overall in the NFL (factor 0.95) and 1.03 in the FBP rDraft (factor 0.85) = 30 × 0.95 × 0.85 = 24.2, which rounds to <strong>$24</strong>.</p>",
+       "changes": 1
+      }
+     ],
+     "html": "<p><span class=\"bl-tag bl-changed\">Changed</span> The 2024 positional table is <strong>removed</strong>. Rookie salary is now set by a formula combining the player's NFL draft capital with his FBP rookie-draft pick, for <strong>Rounds 1–2</strong>, capped by a position maximum:</p>\n<table>\n<thead>\n<tr>\n<th>Position</th>\n<th>Maximum (pick-1 salary)</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>RB</td>\n<td>$30</td>\n</tr>\n<tr>\n<td>WR</td>\n<td>$15</td>\n</tr>\n<tr>\n<td>QB</td>\n<td>$12</td>\n</tr>\n<tr>\n<td>TE</td>\n<td>$8</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Round 2 picks are no longer a flat $3: salaries come from the same formula and bottom out at <strong>$3</strong>.</li>\n<li>Round 3 picks = <strong>$2</strong>. Round 4 picks = <strong>$1</strong>.</li>\n</ul>",
+     "changes": 3
+    },
+    {
+     "level": 2,
+     "title": "Rookie Contracts",
+     "tags": [],
+     "children": [],
+     "html": "<ul>\n<li>Duration: 5 years, plus the 6th-year option (see Taxi Squad below).</li>\n<li>Escalators: +$3 / +$6 / +$9 / +$12 annually.</li>\n<li>Cuttable with no penalty.</li>\n<li>Promotion during the rookie year starts escalators early.</li>\n</ul>",
+     "changes": 0
+    },
+    {
+     "level": 2,
+     "title": "Veteran Contracts",
+     "tags": [],
+     "children": [],
+     "html": "<ul>\n<li>Duration: 3 years; escalators +$3 (Year 2), +$6 (Year 3); cuttable with no penalty.</li>\n<li>Waiver pickups are signed to 3-year vet contracts.</li>\n</ul>",
+     "changes": 0
+    },
+    {
+     "level": 2,
+     "title": "Taxi Squad & 6th-Year Eligibility",
+     "tags": [],
+     "children": [],
+     "html": "<ul>\n<li>Only rookies from the current rDraft are TS-eligible.</li>\n<li>A rookie who stays on TS all rookie season earns the 6th-year option.</li>\n<li>Promotion during the rookie year starts the salary escalators and voids the 6th year.</li>\n<li><strong>Frozen year-1 salary:</strong> a rookie who spends his full rookie season on TS keeps his draft salary into Year 2 (no escalator). Escalation begins in Year 3, which yields a 6-year contract.</li>\n<li><span class=\"bl-tag bl-changed\">Changed</span> TS now has <strong>5 spots</strong> (Article V).</li>\n</ul>",
+     "changes": 1
+    },
+    {
+     "level": 2,
+     "title": "Taxi Squad Salary Discount",
+     "tags": [
+      "new"
+     ],
+     "children": [],
+     "html": "<ol>\n<li><strong>Two-thirds rule.</strong> For salary-cap purposes at the auction, a TS rookie counts at <strong>two-thirds of his salary, rounded up</strong>. The remaining third is <em>deferred</em>.</li>\n<li><strong>TS designation deadline.</strong> Because the discount changes auction budgets, TS assignments must be final <strong>24 hours before the auction starts</strong>. The commissioner then adjusts each team's auction budget. A rookie not designated by the deadline is active and cannot be moved to TS later (Article IX).</li>\n<li><strong>Who takes the discount.</strong> The team holding the rookie on TS at the designation deadline. A trade before the deadline passes the discount to the buyer.</li>\n<li><strong>If he stays on TS all season,</strong> the deferred third is forgiven.</li>\n<li><strong>If he is promoted during his rookie season</strong> (even if later traded), the deferred third becomes <strong>dead cap against the discount-taker's budget the next season</strong>. Teams may agree side terms (e.g., \"if promoted post-trade, Team A owes Team B $x\").</li>\n<li><strong>Trade fee.</strong> If a team trades away a TS rookie after the deadline, it owes a fixed fee equal to <strong>the lesser half of the deferred amount (rounded down)</strong>, charged once to the discount-taker next season, regardless of what the buyer does.</li>\n<li><strong>Buyer.</strong> A team that acquires a TS rookie after the deadline received no discount. If it promotes him it owes <strong>no dead cap</strong>; it only starts escalators early and loses the 6th-year option.</li>\n<li><strong>No discount</strong> on salaries of $1–$2.</li>\n</ol>\n<table>\n<thead>\n<tr>\n<th>Rookie salary</th>\n<th>Counts at (2/3)</th>\n<th>Deferred (1/3)</th>\n<th>Trade fee</th>\n<th>Fee leakage*</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>$30</td>\n<td>$20</td>\n<td>$10</td>\n<td>$5</td>\n<td>$5</td>\n</tr>\n<tr>\n<td>$15</td>\n<td>$10</td>\n<td>$5</td>\n<td>$2</td>\n<td>$3</td>\n</tr>\n<tr>\n<td>$12</td>\n<td>$8</td>\n<td>$4</td>\n<td>$2</td>\n<td>$2</td>\n</tr>\n<tr>\n<td>$10</td>\n<td>$7</td>\n<td>$3</td>\n<td>$1</td>\n<td>$2</td>\n</tr>\n<tr>\n<td>$8</td>\n<td>$6</td>\n<td>$2</td>\n<td>$1</td>\n<td>$1</td>\n</tr>\n<tr>\n<td>$5</td>\n<td>$4</td>\n<td>$1</td>\n<td>$0</td>\n<td>$1</td>\n</tr>\n<tr>\n<td>$3</td>\n<td>$2</td>\n<td>$1</td>\n<td>$0</td>\n<td>$1</td>\n</tr>\n</tbody>\n</table>\n<p>*Leakage = deferred amount not recovered if the player is traded without promotion.</p>",
+     "changes": 1
+    },
+    {
+     "level": 2,
+     "title": "Trade Scenarios",
+     "tags": [],
+     "children": [],
+     "html": "<ul>\n<li>TS players traded between TS teams retain 6th-year eligibility if left untouched.</li>\n<li>Once promoted, they lose TS and 6th-year eligibility.</li>\n<li>See the Taxi Squad Salary Discount rules for the cap treatment of traded TS rookies.</li>\n</ul>",
+     "changes": 0
+    },
+    {
+     "level": 2,
+     "title": "Owner Responsibility",
+     "tags": [],
+     "children": [],
+     "html": "<p>Owners monitor their own rosters and salaries and notify the commissioner of errors.</p>",
+     "changes": 0
+    }
+   ],
+   "changes": 5,
+   "num": "VI",
+   "name": "Player Salaries & Contracts"
+  },
+  {
+   "level": 1,
+   "title": "Article VII – Rookie Draft (rDraft)",
+   "tags": [],
+   "children": [],
+   "html": "<ul>\n<li>Held after the NFL Draft and before the Veteran Auction. <span class=\"bl-tag bl-changed\">Changed</span> Date TBD each year. <em>Was \"typically late June.\"</em></li>\n<li>Format: 4 rounds, linear.</li>\n</ul>\n<p><span class=\"bl-tag bl-changed\">Changed</span> Order determination (picks 1–12):</p>\n<table>\n<thead>\n<tr>\n<th>Pick</th>\n<th>Team</th>\n<th>Tiebreaker</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1–6</td>\n<td>The 6 non-playoff teams, lowest Potential Points (PP) first</td>\n<td>Total points (lowest picks first), then fewest all-play wins, then coin flip</td>\n</tr>\n<tr>\n<td>7–8</td>\n<td>Round-1 playoff losers; the worse seed picks first (7)</td>\n<td>—</td>\n</tr>\n<tr>\n<td>9</td>\n<td>4th place (loser of the 3rd-place game)</td>\n<td>—</td>\n</tr>\n<tr>\n<td>10</td>\n<td>3rd place (winner of the 3rd-place game)</td>\n<td>—</td>\n</tr>\n<tr>\n<td>11</td>\n<td>Runner-up</td>\n<td>—</td>\n</tr>\n<tr>\n<td>12</td>\n<td>Champion</td>\n<td>—</td>\n</tr>\n</tbody>\n</table>",
+   "changes": 2,
+   "num": "VII",
+   "name": "Rookie Draft (rDraft)"
+  },
+  {
+   "level": 1,
+   "title": "Article VIII – Keeper Selection",
+   "tags": [],
+   "children": [],
+   "html": "<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Deadline: set by the commissioner each year (TBD). <em>Was \"typically one week before the Veteran Auction.\"</em></li>\n<li>Cap: total keepers + $1 per open roster spot must stay under the $200 salary cap. <span class=\"bl-tag bl-changed\">Changed</span> Open spots are measured against the 20-man active roster. TS rookies count toward the cap at their Article VI cost, not toward roster limits.</li>\n<li><span class=\"bl-tag bl-new\">New</span> <strong>QB limit:</strong> a team may keep at most <strong>2 veteran QBs</strong>, plus any rookie QBs drafted in that year's rDraft. A QB who spent his rookie year on TS may be kept into Year 2, but he uses one of the 2 veteran QB spots.</li>\n<li>Keeping zero players is allowed.</li>\n</ul>\n<p><strong>Jordy Nelson Rule.</strong> <span class=\"bl-tag bl-changed\">Changed</span> If a keeper suffers a <strong>season-ending injury</strong> and is placed on IR by his team after the deadline but before the auction, one such player may be dropped to regain his salary. <em>Was: \"injured and placed on IR.\"</em></p>",
+   "changes": 4,
+   "num": "VIII",
+   "name": "Keeper Selection"
+  },
+  {
+   "level": 1,
+   "title": "Article IX – Veteran Auction",
+   "tags": [],
+   "children": [],
+   "html": "<ul>\n<li>Platform: FBP League Site.</li>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Timing: TBD each year. <em>Was \"last Sunday of August.\"</em></li>\n<li>Eligibility: undrafted rookies, free agents, and players not kept.</li>\n<li>Contracts: all auction-acquired players sign 3-year contracts.</li>\n<li>Nomination order: prior season's standings; the champion nominates first.</li>\n<li><span class=\"bl-tag bl-new\">New</span> <strong>Taxi designations lock 24 hours before the auction starts.</strong> Rookies are designated to TS (or left active) by that deadline; the commissioner then adjusts each team's auction budget for the TS discount (Article VI). A rookie left on the active roster at the deadline cannot be moved to TS afterward. <em>This replaces the old practice of carrying a rookie on the active roster through the auction and moving him to TS before kickoff.</em></li>\n</ul>",
+   "changes": 2,
+   "num": "IX",
+   "name": "Veteran Auction"
+  },
+  {
+   "level": 1,
+   "title": "Article X – Waivers",
+   "tags": [],
+   "children": [],
+   "html": "<ul>\n<li><span class=\"bl-tag bl-changed\">Changed</span> Processing Wed–Sun weekly at <strong>12 PM EST</strong>, Week 1 through Week 17. <em>Was 11 AM EST.</em></li>\n<li>24-hour lock on dropped players.</li>\n<li><strong>Saquon Barkley Rule:</strong> players with season-ending injuries go on a manually curated \"Can't Add List\"; claims on them are voided and refunded.</li>\n</ul>",
+   "changes": 1,
+   "num": "X",
+   "name": "Waivers"
+  },
+  {
+   "level": 1,
+   "title": "Article XI – Trades",
+   "tags": [],
+   "children": [],
+   "html": "<ul>\n<li>A trade is live once accepted, and must be processed through the league site.</li>\n<li>Conditional picks are allowed if terms are declared.</li>\n<li><span class=\"bl-tag bl-removed\">Removed</span> Veto process. Trades are not subject to owner veto.</li>\n<li><span class=\"bl-tag bl-new\">New</span> Bullying or harassing any owner over a trade is not allowed.</li>\n<li>Tradable assets: players (with contracts), draft picks (up to 2 years out), auction cash, FAAB dollars.</li>\n<li><span class=\"bl-tag bl-new\">New</span> Trades of TS rookies carry the discount and fee rules in Article VI. Teams may attach side terms to a TS trade, declared in the trade.</li>\n</ul>",
+   "changes": 3,
+   "num": "XI",
+   "name": "Trades"
+  },
+  {
+   "level": 1,
+   "title": "Article XII – Playoffs",
+   "tags": [],
+   "children": [
+    {
+     "level": 2,
+     "title": "Qualification",
+     "tags": [],
+     "children": [],
+     "html": "<p>Six teams advance:</p>\n<ul>\n<li><strong>Seeds 1–3:</strong> the 3 division winners. The two with the best records are seeds 1 and 2 and receive a first-round bye; the third is seed 3.</li>\n<li><strong>Seeds 4–5:</strong> the two best remaining records, regardless of division.</li>\n<li><strong>Seed 6:</strong> the remaining team with the most all-play wins (record against every team each week).</li>\n<li><span class=\"bl-tag bl-new\">New</span> A division winner always outranks a wild card in seeding, regardless of record.</li>\n</ul>",
+     "changes": 1
+    },
+    {
+     "level": 2,
+     "title": "Playoff Matchups",
+     "tags": [],
+     "children": [],
+     "html": "<ul>\n<li><strong>Week 15:</strong> #4 vs #5; #3 vs #6.</li>\n<li><strong>Week 16 (semifinals, reseeded):</strong> #1 vs the lowest remaining seed; #2 vs the highest remaining seed.</li>\n<li><strong>Week 17:</strong> Championship (semifinal winners). <span class=\"bl-tag bl-new\">New</span> 3rd-place game between the two semifinal losers; the winner is 3rd place, the loser 4th.</li>\n</ul>",
+     "changes": 1
+    },
+    {
+     "level": 2,
+     "title": "Tiebreakers",
+     "tags": [
+      "changed"
+     ],
+     "children": [],
+     "html": "<p><strong>Division title.</strong> Teams in a division play each other twice.</p>\n<ul>\n<li>Two teams tied: head-to-head record. A 2–0 sweep wins. If split, total regular-season points.</li>\n<li>Three teams tied: combined head-to-head record among the three. If a team drops out, restart the process among those remaining. Still tied: total points.</li>\n<li>Still tied: all-play wins, then coin flip.</li>\n</ul>\n<p><strong>Full ladder by purpose</strong> (all-play wins count everywhere; a coin flip is always the last resort):</p>\n<table>\n<thead>\n<tr>\n<th>Purpose</th>\n<th>1st</th>\n<th>2nd</th>\n<th>3rd</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Division title</td>\n<td>Head-to-head</td>\n<td>Total points</td>\n<td>All-play wins</td>\n</tr>\n<tr>\n<td>Seeding division winners (1–3)</td>\n<td>Record</td>\n<td>Total points</td>\n<td>All-play wins</td>\n</tr>\n<tr>\n<td>Wildcards (seeds 4–5)</td>\n<td>Record</td>\n<td>Total points</td>\n<td>All-play wins</td>\n</tr>\n<tr>\n<td>Seed 6</td>\n<td>Most all-play wins</td>\n<td>Total points</td>\n<td>Record</td>\n</tr>\n<tr>\n<td>Rookie picks 1–6</td>\n<td>Lowest Potential Points</td>\n<td>Total points (lowest picks first)</td>\n<td>Fewest all-play wins</td>\n</tr>\n</tbody>\n</table>\n<p><em>Was: head-to-head, total points, all-play win percentage, coin flip, applied to everything.</em> All-play wins replace all-play win percentage.</p>",
+     "changes": 1
+    }
+   ],
+   "changes": 3,
+   "num": "XII",
+   "name": "Playoffs"
+  },
+  {
+   "level": 1,
+   "title": "Article XIII – Three-Year Revisit",
+   "tags": [],
+   "children": [],
+   "html": "<ul>\n<li>Division realignment every 3 seasons (starting 2021), based on geography. <span class=\"bl-tag bl-changed\">Changed</span> The 2027 review is complete: no changes. Next review before the 2030 season.</li>\n<li>Rookie wage scale reviewed every 3 seasons. <span class=\"bl-tag bl-changed\">Changed</span> Replaced by the Article VI formula for 2027.</li>\n<li><span class=\"bl-tag bl-removed\">Removed</span> Owner-vote requirement for rule changes.</li>\n</ul>",
+   "changes": 3,
+   "num": "XIII",
+   "name": "Three-Year Revisit"
+  },
+  {
+   "level": 1,
+   "title": "Article XIV – Scoring & Standings",
+   "tags": [],
+   "children": [],
+   "html": "<p>Scoring: see the FBP league site. Standings update live on the site.</p>",
+   "changes": 0,
+   "num": "XIV",
+   "name": "Scoring & Standings"
+  },
+  {
+   "level": 1,
+   "title": "Article XV – Salary Cap",
+   "tags": [],
+   "children": [],
+   "html": "<p>$200 cap per team. FAAB is $100 per team, separate from the cap; cap funds do not roll over into FAAB.</p>",
+   "changes": 0,
+   "num": "XV",
+   "name": "Salary Cap"
+  },
+  {
+   "level": 1,
+   "title": "Article XVI – Tanking & Lineup Compliance",
+   "tags": [],
+   "children": [],
+   "html": "<p>All owners field a full, legal starting lineup each week. Non-compliance: 1st, friendly reminder; 2nd, commissioner warning; 3rd, $10 FAAB fine; 4th, $10 auction-cash fine (next season); further instances may cost draft position or trigger commissioner review. Context and intent are considered; the goal is accountability.</p>\n<p><strong>Collusion</strong> of any kind (trade manipulation, deliberate losing) brings immediate commissioner intervention and possible removal.</p>",
+   "changes": 0,
+   "num": "XVI",
+   "name": "Tanking & Lineup Compliance"
+  },
+  {
+   "level": 1,
+   "title": "Article XVII – SuperFlex Implementation",
+   "tags": [],
+   "children": [],
+   "html": "<p><span class=\"bl-tag bl-changed\">Changed</span> SuperFlex is <strong>in effect for 2027</strong> (no longer a preview). The 9th starter is a SuperFlex slot (QB/RB/WR/TE). Related roster, rookie-pricing, QB-keeper and taxi changes are in Articles V, VI and VIII.</p>",
+   "changes": 1,
+   "num": "XVII",
+   "name": "SuperFlex Implementation"
+  },
+  {
+   "level": 1,
+   "title": "Article XVIII – Miscellaneous",
+   "tags": [],
+   "children": [],
+   "html": "<p>The commissioner may revise these by-laws as necessary. Questions or suggestions: Paul Miglio.</p>",
+   "changes": 0,
+   "num": "XVIII",
+   "name": "Miscellaneous"
+  }
+ ]
+}

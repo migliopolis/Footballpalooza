@@ -2,9 +2,9 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0002';
+  const VERSION = '0.0003';
   const app = document.getElementById('app');
-  const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set() };
+  const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
   try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
   const nameOf = id => ((state.now && state.now.standings.find(s => s.id === id)) || {}).name || (state.teams[id] || {}).abbr || id;
 
@@ -256,12 +256,72 @@
         <ol class="card order">${order}</ol></section>`;
   }
 
+  /* ---------- By-Laws ---------- */
+  // Every heading is a <details>: articles open into sections, sections into their sub-parts.
+  function pageBylaws() {
+    const B = state.bylaws;
+    if (!B) return '<p class="loading">Loading the by-laws…</p>';
+    const tagHtml = tags => (tags || []).map(t => `<span class="bl-tag bl-${t}">${t[0].toUpperCase() + t.slice(1)}</span>`).join('');
+    const node = (n, path) => {
+      const id = path, open = state.blOpen.has(id) ? ' open' : '';
+      if (n.level === 1) {
+        const head = n.num ? `<span class="bl-num">${n.num}</span><span class="bl-name">${esc(n.name)}</span>`
+                           : `<span class="bl-num bl-star">2027</span><span class="bl-name">${esc(n.title)}</span>`;
+        return `<details class="bl bl1" data-bl="${id}"${open}><summary>${head}${n.changes ? `<span class="bl-chg">${n.changes} change${n.changes > 1 ? 's' : ''}</span>` : ''}<i class="car" aria-hidden="true"></i></summary>
+          <div class="bl-body">${n.html || ''}${n.children.map((c, i) => node(c, id + '.' + i)).join('')}</div></details>`;
+      }
+      return `<details class="bl bl${n.level}" data-bl="${id}"${open}><summary><span class="bl-t">${esc(n.title)}</span>${tagHtml(n.tags)}<i class="car" aria-hidden="true"></i></summary>
+        <div class="bl-body">${n.html || ''}${n.children.map((c, i) => node(c, id + '.' + i)).join('')}</div></details>`;
+    };
+    return `<div class="pagehead"><h1>By-Laws</h1><span class="asof">${esc(B.title)} · <b>${esc(B.edition)}</b></span></div>
+      <div class="bl-tools">
+        <input type="search" id="bl-q" placeholder="Search the by-laws (taxi, tiebreak, QB…)" aria-label="Search the by-laws" autocomplete="off">
+        <div class="seg" role="group" aria-label="Open or close everything"><button type="button" data-blall="open">Expand all</button><button type="button" data-blall="close">Collapse all</button></div>
+      </div>
+      <p class="bl-hit" id="bl-hit" hidden></p>
+      <div class="card bl-list">${B.articles.map((a, i) => node(a, String(i))).join('')}</div>`;
+  }
+  // search in place: hide articles without a match, open the parts that hold one, mark the words
+  function blSearch(q) {
+    const list = document.querySelector('.bl-list'); if (!list) return;
+    list.querySelectorAll('mark.bl-m').forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
+    list.normalize();
+    const hit = document.getElementById('bl-hit');
+    const arts = [...list.querySelectorAll('details.bl1')];
+    if (q.length < 2) {
+      arts.forEach(a => { a.hidden = false; });
+      list.querySelectorAll('details.bl').forEach(dt => { dt.open = state.blOpen.has(dt.dataset.bl); });
+      hit.hidden = true; return;
+    }
+    const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    let total = 0;
+    arts.forEach(a => {
+      const walker = document.createTreeWalker(a, NodeFilter.SHOW_TEXT);
+      const hits = [];
+      while (walker.nextNode()) { const t = walker.currentNode; rx.lastIndex = 0; if (rx.test(t.nodeValue)) hits.push(t); }
+      a.hidden = !hits.length;
+      a.querySelectorAll('details.bl').forEach(dt => { dt.open = false; });
+      a.open = false;
+      hits.forEach(t => {
+        for (let el = t.parentElement; el && el !== list; el = el.parentElement) if (el.tagName === 'DETAILS') el.open = true;
+        const frag = document.createDocumentFragment(); let last = 0; rx.lastIndex = 0; let m;
+        while ((m = rx.exec(t.nodeValue))) {
+          frag.append(t.nodeValue.slice(last, m.index));
+          const mk = document.createElement('mark'); mk.className = 'bl-m'; mk.textContent = m[0]; frag.append(mk);
+          last = m.index + m[0].length; total++;
+        }
+        frag.append(t.nodeValue.slice(last)); t.replaceWith(frag);
+      });
+    });
+    hit.hidden = false;
+    hit.textContent = total ? `${total} match${total > 1 ? 'es' : ''} in ${arts.filter(a => !a.hidden).length} article${arts.filter(a => !a.hidden).length > 1 ? 's' : ''}` : 'No matches';
+  }
+
   /* ---------- placeholders ---------- */
   const SOON = {
     reference: ['Reference', 'The FBP Reference almanac moves in here: franchise pages, every season’s standings and brackets, records, head-to-head and draft and auction history.', ['Turn on P-PPR in Settings to include the pre-2019 non-PPR seasons.']],
     offseason: ['Off-Season', 'A sandbox for next year: rosters, cap space, keeper look-ahead, free agents, the incoming rookie class and auction price predictions tuned on 2026 results.', []],
     draft: ['Rookie Draft', 'A mock draft using the league’s actual draft order: auto-mock the whole league, make every pick yourself, or pick for your team while the rest auto-draft. Each rookie’s price shows as you go.', []],
-    bylaws: ['By-Laws', 'The 2027 FBP by-laws, searchable and readable on a phone.', []],
   };
   const pageSoon = k => {
     const [h, p, extra] = SOON[k];
@@ -275,6 +335,12 @@
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
+    else if (tab === 'bylaws') {
+      app.innerHTML = pageBylaws();
+      if (!state.bylaws) fetch('data/bylaws.json', { cache: 'no-cache' }).then(r => r.json())
+        .then(b => { state.bylaws = b; if (location.hash === '#bylaws') route(); })
+        .catch(() => { app.innerHTML = '<p class="error">The by-laws didn’t load. Refresh the page to try again.</p>'; });
+    }
     else app.innerHTML = pageSoon(tab);
     const active = document.querySelector('.tabs a[aria-current="page"]');
     if (active && active.parentElement.scrollWidth > active.parentElement.clientWidth) active.parentElement.scrollLeft = active.offsetLeft - 10;
@@ -294,7 +360,20 @@
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', route);
+    app.addEventListener('toggle', e => {
+      const dt = e.target;
+      if (!dt.matches || !dt.matches('details.bl') || (document.getElementById('bl-q') || {}).value) return;
+      dt.open ? state.blOpen.add(dt.dataset.bl) : state.blOpen.delete(dt.dataset.bl);
+    }, true);
+    app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
     app.addEventListener('click', e => {
+      const all = e.target.closest('[data-blall]');
+      if (all) {
+        const q = document.getElementById('bl-q'); if (q && q.value) { q.value = ''; blSearch(''); }
+        const open = all.dataset.blall === 'open';
+        document.querySelectorAll('.bl-list details.bl').forEach(dt => { dt.open = open; open ? state.blOpen.add(dt.dataset.bl) : state.blOpen.delete(dt.dataset.bl); });
+        return;
+      }
       const sw = e.target.closest('.swatch'), md = e.target.closest('[data-mode]'), pp = e.target.closest('[data-ppr]');
       if (pp) {
         state.ppr = pp.dataset.ppr === 'on'; try { localStorage.setItem('fbp-ppr', state.ppr ? '1' : '0'); } catch (x) {}
