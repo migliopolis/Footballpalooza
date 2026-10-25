@@ -14,6 +14,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<script>
+/* apply saved light/dark and page colors before first paint (set in Settings) */
+try{var m=localStorage.getItem('fbp-mode');if(m==='light'||m==='dark')document.documentElement.dataset.theme=m;
+var v=JSON.parse(localStorage.getItem('fbp-theme-cache')||'{}'),r=document.documentElement.style;
+if(v['--hdr-bg']){['--hdr-bg','--hdr-fg','--hdr-accent'].forEach(function(k){r.setProperty(k,v[k])});
+var d=m?m==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setProperty('--accent',d?v.dark:v.light);}}catch(e){}
+</script>
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -35,6 +42,7 @@
     <a href="#offseason" data-tab="offseason">Off-Season</a>
     <a href="#draft" data-tab="draft">Rookie Draft</a>
     <a href="#bylaws" data-tab="bylaws">By-Laws</a>
+    <a href="#settings" data-tab="settings">Settings</a>
   </nav>
 </header>
 

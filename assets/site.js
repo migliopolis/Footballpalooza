@@ -2,8 +2,9 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   const app = document.getElementById('app');
-  const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1' };
-  try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; } catch (e) {}
+  const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto' };
+  try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
+  const nameOf = id => ((state.now && state.now.standings.find(s => s.id === id)) || {}).name || (state.teams[id] || {}).abbr || id;
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const rec = t => `${t.w}-${t.l}${t.t ? '-' + t.t : ''}`;
@@ -22,6 +23,74 @@
     const abbr = tm.abbr ? `<span class="abbr" style="background:${tm.primary};color:${tm.secondary}${border}">${tm.abbr}</span>` : '';
     const logo = tm.logo && !opts.noLogo ? `<img src="${tm.logo}" alt="" loading="lazy">` : '';
     return `<span class="team">${logo}<span class="nm">${esc(name)}</span>${opts.abbr ? abbr : ''}${opts.after || ''}</span>`;
+  }
+
+  /* ---------- page colors (Settings) ---------- */
+  const FBP_DEFAULT = { bg: '#bde2fa', fg: '#121519', hdrAccent: '#c8211a' };
+  const hex2rgb = h => { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+  const rgb2hex = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  const lum = h => { const [r, g, b] = hex2rgb(h).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+  const mix = (a, b, t) => { const A = hex2rgb(a), B = hex2rgb(b); return rgb2hex(A.map((v, i) => v + (B[i] - v) * t)); };
+  const INK = '#121519', WHITE = '#ffffff';
+  // header colors for a team: primary field, readable text, an accent for the tab underline and switch
+  function teamHeader(tm) {
+    let bg = tm.primary, other = tm.secondary;
+    if (lum(bg) > 0.8) { bg = tm.secondary; other = tm.primary; }          // white primaries use their secondary as the field
+    const plain = contrast(WHITE, bg) >= contrast(INK, bg) ? WHITE : INK;
+    const fg = contrast(other, bg) >= 4.5 ? other : plain;
+    const hdrAccent = contrast(other, bg) >= 2 && other !== fg ? other : fg;
+    return { bg, fg, hdrAccent };
+  }
+  // accent for numbers on the page: the team color that reads best on the page background, nudged until it reads
+  function teamAccent(tm, dark) {
+    const page = dark ? '#161b22' : '#ffffff', toward = dark ? WHITE : INK;
+    const sat = h => { const [r, g, b] = hex2rgb(h).map(v => v / 255), mx = Math.max(r, g, b), mn = Math.min(r, g, b); return mx === 0 ? 0 : (mx - mn) / mx; };
+    // the more colorful of the two team colors; near-black, white and grays lose to any real color
+    let c = [tm.primary, tm.secondary].sort((a, b) => sat(b) - sat(a))[0];
+    if (sat(c) < 0.25) c = [tm.primary, tm.secondary].sort((a, b) => contrast(b, page) - contrast(a, page))[0];
+    for (let t = 0.1; contrast(c, page) < 3.2 && t <= 1; t += 0.1) c = mix(c, toward, 0.1 / (1.1 - t));
+    return c;
+  }
+  const isDark = () => {
+    const m = document.documentElement.dataset.theme;
+    return m ? m === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  };
+  function themeVars(teamId) {
+    const tm = state.teams[teamId];
+    if (!tm) return null;
+    const h = teamHeader(tm);
+    return { '--hdr-bg': h.bg, '--hdr-fg': h.fg, '--hdr-accent': h.hdrAccent, light: teamAccent(tm, false), dark: teamAccent(tm, true) };
+  }
+  function applyTheme() {
+    const root = document.documentElement.style;
+    const v = state.themeTeam ? themeVars(state.themeTeam) : null;
+    ['--hdr-bg', '--hdr-fg', '--hdr-accent', '--accent'].forEach(k => root.removeProperty(k));
+    if (v) { ['--hdr-bg', '--hdr-fg', '--hdr-accent'].forEach(k => root.setProperty(k, v[k])); root.setProperty('--accent', isDark() ? v.dark : v.light); }
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = v ? v['--hdr-bg'] : FBP_DEFAULT.bg;
+    try { localStorage.setItem('fbp-theme-cache', JSON.stringify(v || {})); } catch (e) {}
+  }
+  function applyMode() {
+    if (state.mode === 'light' || state.mode === 'dark') document.documentElement.dataset.theme = state.mode;
+    else delete document.documentElement.dataset.theme;
+    applyTheme();
+  }
+
+  /* ---------- Settings ---------- */
+  function pageSettings() {
+    const ids = Object.keys(state.teams).sort((a, b) => (nameOf(a)).localeCompare(nameOf(b)));
+    const sw = (id, label, h, logo, dot) => `<button type="button" class="swatch" data-team="${id}" aria-pressed="${(state.themeTeam || '') === id}">
+        <span class="bar" style="background:${h.bg};color:${h.fg};border-bottom-color:${h.hdrAccent}">${logo ? `<img src="${logo}" alt="">` : ''}<b>${esc(label.short)}</b></span>
+        <span class="lbl"><span>${esc(label.full)}</span>${dot ? `<i class="dot" style="background:${dot}"></i>` : ''}</span></button>`;
+    const swatches = [sw('', { short: 'FBP', full: 'Footballpalooza (default)' }, FBP_DEFAULT, 'assets/icon-192.png', '#c8211a')]
+      .concat(ids.map(id => { const tm = state.teams[id]; return sw(id, { short: tm.abbr, full: nameOf(id) }, teamHeader(tm), tm.logo, teamAccent(tm, isDark())); })).join('');
+    const seg = ['auto', 'light', 'dark'].map(m => `<button type="button" data-mode="${m}" aria-pressed="${state.mode === m}">${m === 'auto' ? 'Match device' : m[0].toUpperCase() + m.slice(1)}</button>`).join('');
+    return `<div class="pagehead"><h1>Settings</h1><span class="asof">Saved on this device only</span></div>
+      <section class="card set"><h2>Page colors</h2><p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
+        <div class="swatches" role="group" aria-label="Page colors">${swatches}</div></section>
+      <section class="card set"><h2>Light or dark</h2><p>Match device follows your phone or computer’s setting.</p>
+        <div class="seg" role="group" aria-label="Light or dark">${seg}</div></section>`;
   }
 
   /* ---------- League Now ---------- */
@@ -128,11 +197,12 @@
   };
 
   /* ---------- router ---------- */
-  const TABS = ['now', 'reference', 'offseason', 'draft', 'bylaws'];
+  const TABS = ['now', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
   function route() {
     const tab = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'now';
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
+    else if (tab === 'settings') app.innerHTML = pageSettings();
     else app.innerHTML = pageSoon(tab);
     const active = document.querySelector('.tabs a[aria-current="page"]');
     if (active && active.parentElement.scrollWidth > active.parentElement.clientWidth) active.parentElement.scrollLeft = active.offsetLeft - 10;
@@ -152,8 +222,18 @@
       const yr = (now.season.match(/\d{4}/) || [''])[0];
       document.getElementById('season-label').textContent = yr ? `${yr} season · League hub` : 'League hub';
     } catch (e) { state.now = null; }
+    applyMode();
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', route);
     app.addEventListener('click', e => {
+      const sw = e.target.closest('.swatch'), md = e.target.closest('[data-mode]');
+      if (sw || md) {
+        if (sw) { state.themeTeam = sw.dataset.team; try { localStorage.setItem('fbp-theme-team', state.themeTeam); } catch (x) {} }
+        if (md) { state.mode = md.dataset.mode; try { localStorage.setItem('fbp-mode', state.mode); } catch (x) {} }
+        applyMode(); const y = window.scrollY; route(); window.scrollTo(0, y);
+        const again = document.querySelector(sw ? `.swatch[data-team="${state.themeTeam}"]` : `[data-mode="${state.mode}"]`); if (again) again.focus({ preventScroll: true });
+        return;
+      }
       const b = e.target.closest('.rtab'); if (!b) return;
       state.round = b.dataset.round;
       const sec = b.closest('section'), y = sec.getBoundingClientRect().top;
