@@ -1,0 +1,391 @@
+{
+ "season": 2027,
+ "mode": "projected",
+ "asOf": "2026-10-22",
+ "board": {
+  "name": "Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys)",
+  "url": "https://www.footballguys.com/article/2027-dynasty-rookie-rankings-big-board-v4",
+  "date": "2026-10-21"
+ },
+ "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-10-22); players no NFL source mentions price as undrafted.",
+ "players": [
+  {
+   "rank": 1,
+   "name": "Jeremiah Smith",
+   "pos": "WR",
+   "school": "Ohio State",
+   "nflPick": 1
+  },
+  {
+   "rank": 2,
+   "name": "Jadan Baugh",
+   "pos": "RB",
+   "school": "Florida",
+   "nflPick": 24
+  },
+  {
+   "rank": 3,
+   "name": "Charlie Becker",
+   "pos": "WR",
+   "school": "Indiana",
+   "nflPick": 18
+  },
+  {
+   "rank": 4,
+   "name": "Drew Mestemaker",
+   "pos": "QB",
+   "school": "Oklahoma State",
+   "nflPick": 13
+  },
+  {
+   "rank": 5,
+   "name": "Ahmad Hardy",
+   "pos": "RB",
+   "school": "Missouri",
+   "nflPick": 73
+  },
+  {
+   "rank": 6,
+   "name": "Darian Mensah",
+   "pos": "QB",
+   "school": "Miami",
+   "nflPick": 7
+  },
+  {
+   "rank": 7,
+   "name": "Kewan Lacy",
+   "pos": "RB",
+   "school": "Ole Miss",
+   "nflPick": 52
+  },
+  {
+   "rank": 8,
+   "name": "CJ Carr",
+   "pos": "QB",
+   "school": "Notre Dame",
+   "nflPick": 9
+  },
+  {
+   "rank": 9,
+   "name": "KJ Duff",
+   "pos": "WR",
+   "school": "Rutgers",
+   "nflPick": 34
+  },
+  {
+   "rank": 10,
+   "name": "Cam Coleman",
+   "pos": "WR",
+   "school": "Texas",
+   "nflPick": 13
+  },
+  {
+   "rank": 11,
+   "name": "Nick Marsh",
+   "pos": "WR",
+   "school": "Indiana",
+   "nflPick": 31
+  },
+  {
+   "rank": 12,
+   "name": "Nate Frazier",
+   "pos": "RB",
+   "school": "Georgia",
+   "nflPick": 110
+  },
+  {
+   "rank": 13,
+   "name": "Dante Moore",
+   "pos": "QB",
+   "school": "Oregon",
+   "nflPick": 11
+  },
+  {
+   "rank": 14,
+   "name": "Arch Manning",
+   "pos": "QB",
+   "school": "Texas",
+   "nflPick": 3
+  },
+  {
+   "rank": 15,
+   "name": "Trey'Dez Green",
+   "pos": "TE",
+   "school": "LSU",
+   "nflPick": 23
+  },
+  {
+   "rank": 16,
+   "name": "Ryan Wingo",
+   "pos": "WR",
+   "school": "Texas",
+   "nflPick": 70
+  },
+  {
+   "rank": 17,
+   "name": "Hollywood Smothers",
+   "pos": "RB",
+   "school": "Texas",
+   "nflPick": 114
+  },
+  {
+   "rank": 18,
+   "name": "Jamari Johnson",
+   "pos": "TE",
+   "school": "Oregon",
+   "nflPick": 21
+  },
+  {
+   "rank": 19,
+   "name": "Deuce Alexander",
+   "pos": "WR",
+   "school": "Ole Miss",
+   "nflPick": 55
+  },
+  {
+   "rank": 20,
+   "name": "Luke Reynolds",
+   "pos": "TE",
+   "school": "Virginia Tech",
+   "nflPick": 66
+  },
+  {
+   "rank": 21,
+   "name": "Ryan Coleman-Williams",
+   "pos": "WR",
+   "school": "Alabama",
+   "nflPick": 32
+  },
+  {
+   "rank": 22,
+   "name": "Mark Fletcher Jr.",
+   "pos": "RB",
+   "school": "Miami",
+   "nflPick": 118
+  },
+  {
+   "rank": 23,
+   "name": "Trinidad Chambliss",
+   "pos": "QB",
+   "school": "Ole Miss",
+   "nflPick": 12
+  },
+  {
+   "rank": 24,
+   "name": "Wyatt Young",
+   "pos": "WR",
+   "school": "Oklahoma State",
+   "nflPick": 96
+  },
+  {
+   "rank": 25,
+   "name": "Bryant Wesco Jr.",
+   "pos": "WR",
+   "school": "Clemson",
+   "nflPick": 79
+  },
+  {
+   "rank": 26,
+   "name": "Anthony Evans",
+   "pos": "WR",
+   "school": "Mississippi State",
+   "nflPick": null
+  },
+  {
+   "rank": 27,
+   "name": "T.J. Moore",
+   "pos": "WR",
+   "school": "Clemson",
+   "nflPick": 164
+  },
+  {
+   "rank": 28,
+   "name": "Reed Harris",
+   "pos": "WR",
+   "school": "Arizona State",
+   "nflPick": 48
+  },
+  {
+   "rank": 29,
+   "name": "Raleek Brown",
+   "pos": "RB",
+   "school": "Texas",
+   "nflPick": 260
+  },
+  {
+   "rank": 30,
+   "name": "Austin Simmons",
+   "pos": "QB",
+   "school": "Missouri",
+   "nflPick": 27
+  },
+  {
+   "rank": 31,
+   "name": "Isaac Brown",
+   "pos": "RB",
+   "school": "Louisville",
+   "nflPick": 128
+  },
+  {
+   "rank": 32,
+   "name": "DJ Vonnahme",
+   "pos": "TE",
+   "school": "Iowa",
+   "nflPick": 180
+  },
+  {
+   "rank": 33,
+   "name": "Mario Craver",
+   "pos": "WR",
+   "school": "Texas A&M",
+   "nflPick": 67
+  },
+  {
+   "rank": 34,
+   "name": "LJ Martin",
+   "pos": "RB",
+   "school": "BYU",
+   "nflPick": 123
+  },
+  {
+   "rank": 35,
+   "name": "Duce Robinson",
+   "pos": "WR",
+   "school": "Florida State",
+   "nflPick": 72
+  },
+  {
+   "rank": 36,
+   "name": "Cam Cook",
+   "pos": "RB",
+   "school": "West Virginia",
+   "nflPick": 260
+  },
+  {
+   "rank": 37,
+   "name": "Drake Lindsey",
+   "pos": "QB",
+   "school": "Minnesota",
+   "nflPick": null
+  },
+  {
+   "rank": 38,
+   "name": "LaNorris Sellers",
+   "pos": "QB",
+   "school": "South Carolina",
+   "nflPick": 97
+  },
+  {
+   "rank": 39,
+   "name": "Carlos Hernandez",
+   "pos": "WR",
+   "school": "Wake Forest",
+   "nflPick": null
+  },
+  {
+   "rank": 40,
+   "name": "Deshaun Bishop",
+   "pos": "RB",
+   "school": "Tennessee",
+   "nflPick": 188
+  },
+  {
+   "rank": 41,
+   "name": "Que'Sean Brown",
+   "pos": "WR",
+   "school": "Virginia Tech",
+   "nflPick": null
+  },
+  {
+   "rank": 42,
+   "name": "Antwan Raymond",
+   "pos": "RB",
+   "school": "Rutgers",
+   "nflPick": 260
+  },
+  {
+   "rank": 43,
+   "name": "Jayden Maiava",
+   "pos": "QB",
+   "school": "USC",
+   "nflPick": 62
+  },
+  {
+   "rank": 44,
+   "name": "Colin Dixon",
+   "pos": "WR",
+   "school": "Illinois",
+   "nflPick": null
+  },
+  {
+   "rank": 45,
+   "name": "Julian Sayin",
+   "pos": "QB",
+   "school": "Ohio State",
+   "nflPick": null
+  },
+  {
+   "rank": 46,
+   "name": "Terrance Carter Jr.",
+   "pos": "TE",
+   "school": "Texas Tech",
+   "nflPick": null
+  },
+  {
+   "rank": 47,
+   "name": "Justice Haynes",
+   "pos": "RB",
+   "school": "Georgia Tech",
+   "nflPick": 166
+  },
+  {
+   "rank": 48,
+   "name": "Nyck Harbor",
+   "pos": "WR",
+   "school": "South Carolina",
+   "nflPick": null
+  },
+  {
+   "rank": 49,
+   "name": "Byrum Brown",
+   "pos": "QB",
+   "school": "Auburn",
+   "nflPick": null
+  },
+  {
+   "rank": 50,
+   "name": "Wayshawn Parker",
+   "pos": "RB",
+   "school": "Utah",
+   "nflPick": 187
+  },
+  {
+   "rank": 51,
+   "name": "Omarion Miller",
+   "pos": "WR",
+   "school": "Arizona State",
+   "nflPick": 65
+  },
+  {
+   "rank": 52,
+   "name": "Devin McCuin",
+   "pos": "WR",
+   "school": "Ohio State",
+   "nflPick": null
+  },
+  {
+   "rank": 53,
+   "name": "Sam Leavitt",
+   "pos": "QB",
+   "school": "LSU",
+   "nflPick": null
+  },
+  {
+   "rank": 54,
+   "name": "Brendan Sorsby",
+   "pos": "QB",
+   "school": "",
+   "nflPick": null
+  }
+ ]
+}

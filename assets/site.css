@@ -287,7 +287,10 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 
 /* rookie draft */
 .dr-note{margin:-6px 0 0;padding:8px 12px;border-radius:8px;background:var(--red-soft);color:var(--fg);font-size:.85rem}
-.dr-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.dr-controls{display:grid;grid-template-columns:auto minmax(0,320px);gap:8px 12px;align-items:center;justify-content:start}
+.dr-field{display:contents;font-size:.85rem;font-weight:600}
+.dr-field select{font:inherit;font-weight:500;font-size:16px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);width:100%}
+@media (max-width:520px){.dr-controls{grid-template-columns:auto minmax(0,1fr)}}
 .dr-modes{flex-wrap:wrap}
 @media (max-width:520px){.dr-modes{display:grid;grid-template-columns:1fr;border-radius:12px;width:100%}.dr-modes button + button{border-left:0;border-top:1px solid var(--line)}}
 .dr-team{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600}

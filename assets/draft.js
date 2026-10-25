@@ -16,7 +16,7 @@
     for (let i = 0; i < a.length - 1; i++) { const [p0, f0] = a[i], [p1, f1] = a[i + 1]; if (p <= p1) return f0 + (f1 - f0) * (p - p0) / (p1 - p0); }
   };
   function price(pl, slot) {   // slot 0..47 (1.01 = 0)
-    const C = S.cfg, round = Math.floor(slot / 12) + 1;
+    const C = S.cfg, round = Math.floor(slot / 12) + 1;   // nflPick null = no projection: priced as undrafted
     if (round > 2) return C.flatSalaryByRound[String(round)] ?? 1;
     const c = C.positions[pl.pos];
     if (!c) return C.minimumRounds1to2;
@@ -105,8 +105,8 @@
   function load(rerender) {
     if (S.loading || S.cfg) return;
     S.loading = true;
-    Promise.all(['rookie-pricer/pricing.json', 'rookie-pricer/players.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error(u); return r.json(); })))
-      .then(([c, d]) => { S.cfg = c; S.data = d; S.loading = false; rerender(); })
+    Promise.all(['rookie-pricer/pricing.json', 'rookie-pricer/mock-board.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error(u); return r.json(); })))
+      .then(([c, d]) => { d.players.forEach(p => { p.adp = p.rank; }); S.cfg = c; S.data = d; S.loading = false; rerender(); })
       .catch(e => { S.err = String(e); S.loading = false; rerender(); });
   }
 
@@ -126,9 +126,10 @@
     const ids = Object.keys(teams).sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
 
     const modes = [['mine', 'Pick for my team'], ['all', 'I pick for everyone'], ['auto', 'Auto-mock the league']]
-      .map(([m, l]) => `<button type="button" data-dr-mode="${m}" aria-pressed="${S.mode === m}">${l}</button>`).join('');
-    const teamSel = `<label class="dr-team"${S.mode === 'mine' ? '' : ' hidden'}><span>My team</span>
-      <select id="dr-my">${ids.map(id => `<option value="${id}"${id === S.my ? ' selected' : ''}>${esc(nameOf(id))}</option>`).join('')}</select></label>`;
+      .map(([m, l]) => `<option value="${m}"${S.mode === m ? ' selected' : ''}>${l}</option>`).join('');
+    const teamSel = `<label class="dr-field"><span>My team</span>
+      <select id="dr-my">${ids.map(id => `<option value="${id}"${id === S.my ? ' selected' : ''}>${esc(nameOf(id))}</option>`).join('')}</select></label>
+      <label class="dr-field"><span>Mock type</span><select id="dr-mode">${modes}</select></label>`;
 
     // on the clock
     let clock;
@@ -137,7 +138,7 @@
         : S.mode === 'all' ? 'You make every pick (or let the computer take any of them).'
         : 'The computer drafts for all 12 teams while you watch.';
       clock = `<div class="dr-clock-h"><b>Ready to draft</b><span class="dr-via">${ord.length} picks · 4 rounds</span></div>
-        <p class="dr-status">${how} Pick a mode and team above, then start.</p>
+        <p class="dr-status">${how} Choose your team and mock type above, then start.</p>
         <div class="dr-actions"><button type="button" class="btn dr-start" data-dr="start">Start draft</button></div>`;
     } else if (done) {
       clock = `<div class="dr-clock-h"><b>Draft complete</b><span>${ord.length} picks</span></div>
@@ -164,8 +165,8 @@
     const canPick = S.started && !done && isMine(ord, S.cur) && !wantsAuto(ord);
     const posBtns = ['ALL', 'QB', 'RB', 'WR', 'TE'].map(x => `<button type="button" data-dr-pos="${x}" aria-pressed="${S.pos === x}">${x === 'ALL' ? 'All' : x}</button>`).join('');
     const rows = list.map(({ p, $ }) => `<li>
-        <span class="dr-adp" title="Average rookie-draft position">${p.adp != null ? p.adp.toFixed(1) : '—'}</span>
-        <span class="dr-nm"><b>${esc(p.name)}</b><small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.nflPick ? ` · proj NFL ${nflLabel(p.nflPick)}` : ''}${p.custom ? ' · added by you' : ''}</small></span>
+        <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
+        <span class="dr-nm"><b>${esc(p.name)}</b><small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.nflPick ? ` · proj NFL ${nflLabel(p.nflPick)}` : (p.custom ? '' : ' · no NFL projection')}${p.custom ? ' · added by you' : ''}</small></span>
         ${$ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : ''}
         ${canPick ? `<button type="button" class="dr-go" data-dr-pick="${esc(p.name)}">Draft</button>` : ''}</li>`).join('');
     const addForm = canPick ? `<details class="dr-add"><summary>Add a rookie who isn’t listed</summary>
@@ -199,7 +200,7 @@
     const d = S.data;
     return `<div class="pagehead"><h1>Rookie Draft</h1><span class="asof">${d.season} mock · order from Week ${now.weeksPlayed} standings · NFL picks ${d.mode === 'final' ? 'final' : 'projected'} (${esc(d.asOf)})</span></div>
       ${S.note ? `<p class="dr-note">${esc(S.note)}</p>` : ''}
-      <div class="dr-controls"><div class="seg dr-modes" role="group" aria-label="Mock draft mode">${modes}</div>${teamSel}</div>
+      <div class="dr-controls">${teamSel}</div>
       <div class="dr-grid" data-mtab="${S.mtab}">
         <section class="dr-boardwrap" data-panel="board"><h2 class="sec">Draft board <small>${!S.started ? 'not started' : done ? 'final' : `pick ${S.cur + 1} of ${ord.length}`}</small></h2><ol class="card dr-board" id="dr-board">${board}</ol></section>
         <div class="dr-right">
@@ -209,7 +210,7 @@
             <div class="dr-filters"><div class="seg" role="group" aria-label="Position">${posBtns}</div>
               <div class="seg" role="group" aria-label="Sort"><button type="button" data-dr-sort="adp" aria-pressed="${S.sort === 'adp'}">Rank</button><button type="button" data-dr-sort="price" aria-pressed="${S.sort === 'price'}"${slot == null ? ' disabled' : ''}>Price</button></div></div>
             <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
-            <p class="dr-foot">${av.length} of ${pool().length} ranked rookies left. Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
+            <p class="dr-foot">${av.length} of ${pool().length} rookies left. Ranks: <a href="${esc(S.data.board ? S.data.board.url : '#')}" target="_blank" rel="noopener">${esc(S.data.board ? S.data.board.name : 'rookie board')}</a>. Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
           </section>
         </div>
         <section class="dr-haulsec" data-panel="hauls"><h2 class="sec">Team hauls <small>rookie salaries from this mock</small></h2>
@@ -255,6 +256,7 @@
     return true;
   }
   function change(e) {
+    if (e.target.id === 'dr-mode') { stop(); S.mode = e.target.value; S.round = null; save(); return true; }
     if (e.target.id !== 'dr-my') return false;
     stop(); S.started = false; S.my = e.target.value; try { localStorage.setItem('fbp-myteam', S.my); } catch (x) {}
     S.picks = S.picks.map(() => null); S.cur = 0; S.round = null; save();
