@@ -5,7 +5,8 @@
 (() => {
   const KEY = 'fbp-mock-2027';
   const S = { cfg: null, data: null, loading: false, err: null, mode: 'mine', my: '', picks: [], custom: [],
-              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players' };
+              cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false };
+  const DELAY = 800;   // pause between computer picks (ms)
   try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; } catch (e) {}
 
   /* ---- price formula (same as the Rookie Pricer) ---- */
@@ -76,7 +77,28 @@
   function advance(ord, stopAtMine = true) {
     while (S.cur < ord.length && !(stopAtMine && isMine(ord, S.cur))) { S.picks[S.cur] = autoPick(ord, S.cur); S.cur++; }
   }
-  function draft(ord, player) { S.picks[S.cur] = player; S.cur++; if (S.mode !== 'all') advance(ord); save(); }
+  function draft(ord, player) { S.picks[S.cur] = player; S.cur++; save(); }
+  // computer picks, one at a time with a short pause, until it's a person's turn
+  function wantsAuto(ord) {
+    if (S.cur >= ord.length) return false;
+    if (S.mode === 'auto') return true;
+    if (S.mode === 'all') return S.simAll;
+    return !isMine(ord, S.cur);
+  }
+  function stop() { clearTimeout(S.timer); S.timer = null; S.simAll = false; }
+  function schedule(ctx) {
+    if (S.timer || !S.cfg) return;
+    if (!wantsAuto(order(ctx.now))) return;
+    S.timer = setTimeout(() => {
+      S.timer = null;
+      if (location.hash !== '#draft') return;          // left the tab: pick up again on return
+      const ord = order(ctx.now);
+      if (!wantsAuto(ord)) return;
+      S.picks[S.cur] = autoPick(ord, S.cur); S.cur++;
+      if (S.cur >= ord.length) S.simAll = false;
+      save(); ctx.rerender();
+    }, DELAY);
+  }
 
   /* ---- loading ---- */
   function load(rerender) {
@@ -97,8 +119,7 @@
     const sig = ord.map(o => o.owner).join(',');
     if (S.sig !== sig) restore(ord);
     if (!S.my || !teams[S.my]) S.my = ord.length ? ord[0].owner : Object.keys(teams)[0];
-    if (S.mode === 'auto' && S.cur < ord.length) { advance(ord, false); save(); }
-    if (S.mode === 'mine' && S.cur < ord.length && !isMine(ord, S.cur)) { advance(ord); save(); }
+    setTimeout(() => schedule(ctx), 0);
     const done = S.cur >= ord.length;
     const cur = ord[S.cur];
     const ids = Object.keys(teams).sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
@@ -115,12 +136,12 @@
         <div class="dr-actions"><button type="button" class="btn" data-dr="restart">${S.mode === 'auto' ? 'Run another mock' : 'Start over'}</button><button type="button" class="btn ghost" data-dr="undo">Undo last pick</button></div>`;
     } else {
       const via = cur.owner !== cur.orig ? `<span class="dr-via">via ${esc(nameOf(cur.orig))}</span>` : '';
-      const yours = isMine(ord, S.cur);
+      const auto = wantsAuto(ord), yours = !auto && isMine(ord, S.cur);
       clock = `<div class="dr-clock-h"><span class="dr-pk">${slotLabel(cur.slot)}</span>${chip(cur.owner)}${via}</div>
-        <p class="dr-status">${yours ? (S.mode === 'mine' ? 'You’re on the clock. Pick a rookie below.' : 'Pick a rookie for this team below, or let the computer pick.') : 'Auto-picking…'}</p>
+        <p class="dr-status${auto ? ' busy' : ''}">${yours ? (S.mode === 'mine' ? 'You’re on the clock. Pick a rookie below.' : 'Pick a rookie for this team below, or let the computer pick.') : 'Computer is picking…'}</p>
         <div class="dr-actions">
-          <button type="button" class="btn" data-dr="auto1">Auto-pick this one</button>
-          ${S.mode === 'all' ? '<button type="button" class="btn ghost" data-dr="simend">Auto-pick the rest</button>' : ''}
+          ${auto ? `<button type="button" class="btn" data-dr="skip">${S.mode === 'mine' ? 'Skip to my pick' : 'Skip to the end'}</button>${S.mode === 'all' ? '<button type="button" class="btn ghost" data-dr="pause">Pause</button>' : ''}`
+                 : `<button type="button" class="btn" data-dr="auto1">Auto-pick this one</button>${S.mode === 'all' ? '<button type="button" class="btn ghost" data-dr="simend">Auto-pick the rest</button>' : ''}`}
           <button type="button" class="btn ghost" data-dr="undo"${S.cur ? '' : ' disabled'}>Undo</button>
           <button type="button" class="btn ghost" data-dr="restart">Start over</button>
         </div>`;
@@ -132,7 +153,7 @@
     const list = av.filter(p => S.pos === 'ALL' || p.pos === S.pos)
       .map(p => ({ p, $: slot == null ? null : price(p, slot) }))
       .sort((a, b) => S.sort === 'price' && slot != null ? (b.$ - a.$) || (a.p.adp - b.p.adp) : (a.p.adp - b.p.adp));
-    const canPick = !done && isMine(ord, S.cur);
+    const canPick = !done && isMine(ord, S.cur) && !wantsAuto(ord);
     const posBtns = ['ALL', 'QB', 'RB', 'WR', 'TE'].map(x => `<button type="button" data-dr-pos="${x}" aria-pressed="${S.pos === x}">${x === 'ALL' ? 'All' : x}</button>`).join('');
     const rows = list.map(({ p, $ }) => `<li>
         <span class="dr-adp" title="Average rookie-draft position">${p.adp != null ? p.adp.toFixed(1) : '—'}</span>
@@ -194,7 +215,7 @@
     if (!el || !S.cfg) return false;
     const ord = order(ctx.now);
     if (el.dataset.drMtab) { S.mtab = el.dataset.drMtab; try { localStorage.setItem('fbp-draft-tab', S.mtab); } catch (x) {} return true; }
-    if (el.dataset.drMode) { S.mode = el.dataset.drMode; S.round = null; save(); }
+    if (el.dataset.drMode) { stop(); S.mode = el.dataset.drMode; S.round = null; save(); }
     else if (el.dataset.drPos) S.pos = el.dataset.drPos;
     else if (el.dataset.drSort) S.sort = el.dataset.drSort;
     else if (el.dataset.drRound) S.round = el.dataset.drRound;
@@ -202,14 +223,17 @@
     else {
       const a = el.dataset.dr;
       if (a === 'auto1' && S.cur < ord.length) { draft(ord, autoPick(ord, S.cur)); S.round = null; }
-      else if (a === 'simend') { advance(ord, false); save(); S.round = null; }
+      else if (a === 'simend') { S.simAll = true; }
+      else if (a === 'pause') { stop(); }
+      else if (a === 'skip') { clearTimeout(S.timer); S.timer = null; advance(ord, S.mode === 'mine'); S.simAll = false; save(); }
       else if (a === 'undo') {
+        stop();
         // step back to the previous pick that was yours (or the previous pick in "everyone" mode)
         do { S.cur = Math.max(0, S.cur - 1); S.picks[S.cur] = null; } while (S.cur > 0 && S.mode === 'mine' && !isMine(ord, S.cur));
         if (S.mode === 'auto') S.mode = 'all';
         S.round = null; save();
       }
-      else if (a === 'restart') { S.picks = ord.map(() => null); S.cur = 0; S.note = ''; S.round = null; save(); }
+      else if (a === 'restart') { stop(); S.picks = ord.map(() => null); S.cur = 0; S.note = ''; S.round = null; save(); }
       else if (a === 'add') {
         const nm = (document.getElementById('dr-add-name').value || '').trim();
         if (!nm || taken().has(nm) || pool().some(p => p.name === nm)) return true;
@@ -222,7 +246,7 @@
   }
   function change(e) {
     if (e.target.id !== 'dr-my') return false;
-    S.my = e.target.value; try { localStorage.setItem('fbp-myteam', S.my); } catch (x) {}
+    stop(); S.my = e.target.value; try { localStorage.setItem('fbp-myteam', S.my); } catch (x) {}
     S.picks = S.picks.map(() => null); S.cur = 0; S.round = null; save();
     return true;
   }
