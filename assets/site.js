@@ -394,7 +394,7 @@
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
-    else if (tab === 'draft') app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>';
+    else if (tab === 'draft') { app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>'; if (window.FBPDraft) FBPDraft.after(); }
     else if (tab === 'bylaws') {
       app.innerHTML = pageBylaws();
       if (!state.bylaws) fetch('data/bylaws.json', { cache: 'no-cache' }).then(r => r.json())
@@ -420,6 +420,9 @@
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', route);
+    // sticky panels sit just under the header, whatever height it wraps to
+    const hdr = () => document.documentElement.style.setProperty('--hdr-h', document.querySelector('.top').offsetHeight + 'px');
+    hdr(); window.addEventListener('resize', hdr);
     app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
     app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) { const y = window.scrollY; route(); window.scrollTo(0, y); } });
     app.addEventListener('click', e => {

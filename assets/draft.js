@@ -101,7 +101,6 @@
     if (S.mode === 'mine' && S.cur < ord.length && !isMine(ord, S.cur)) { advance(ord); save(); }
     const done = S.cur >= ord.length;
     const cur = ord[S.cur];
-    const rnd = S.round || (done ? '1' : String(Math.floor(cur.slot / 12) + 1));
     const ids = Object.keys(teams).sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
 
     const modes = [['mine', 'Pick for my team'], ['all', 'I pick for everyone'], ['auto', 'Auto-mock the league']]
@@ -146,13 +145,14 @@
         <input id="dr-add-nfl" type="number" min="1" max="260" placeholder="Proj. NFL pick (overall)" inputmode="numeric">
         <button type="button" class="btn" data-dr="add">Add and draft</button></div></details>` : '';
 
-    // board for one round
-    const R = ord.filter(o => Math.floor(o.slot / 12) + 1 === +rnd);
-    const tabs = ['1', '2', '3', '4'].map(r => `<button type="button" class="rtab" data-dr-round="${r}" aria-pressed="${r === rnd}">Round ${r}</button>`).join('');
-    const board = R.map(o => {
-      const i = ord.indexOf(o), p = S.picks[i], now_ = i === S.cur;
-      return `<li class="${now_ ? 'now' : ''}${p ? '' : ' empty'}"><span class="pk">${slotLabel(o.slot)}</span>
-        <span class="dr-b">${chip(o.owner)}${p ? `<span class="dr-sel"><b>${esc(p.name)}</b>${posPill(p)} · $${price(p, o.slot)}</span>` : `<span class="dr-sel muted">${now_ ? 'On the clock' : '—'}</span>`}${o.owner !== o.orig ? `<small class="dr-via">via ${esc(nameOf(o.orig))}</small>` : ''}</span></li>`;
+    // board: every pick, top to bottom, grouped by round
+    const board = ['1', '2', '3', '4'].map(r => {
+      const R = ord.filter(o => Math.floor(o.slot / 12) + 1 === +r);
+      return `<li class="dr-rh">Round ${r}${r > 2 ? ` <small>$${S.cfg.flatSalaryByRound[r]} each</small>` : ''}</li>` + R.map(o => {
+        const i = ord.indexOf(o), p = S.picks[i], now_ = i === S.cur;
+        return `<li class="${now_ ? 'now' : ''}${p ? '' : ' empty'}"><span class="pk">${slotLabel(o.slot)}</span>
+          <span class="dr-b">${chip(o.owner)}${p ? `<span class="dr-sel"><b>${esc(p.name)}</b>${posPill(p)} · $${price(p, o.slot)}</span>` : `<span class="dr-sel muted">${now_ ? 'On the clock' : '—'}</span>`}${o.owner !== o.orig ? `<small class="dr-via">via ${esc(nameOf(o.orig))}</small>` : ''}</span></li>`;
+      }).join('');
     }).join('');
 
     // team hauls
@@ -174,7 +174,7 @@
           <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
           <p class="dr-foot">${av.length} of ${pool().length} ranked rookies left. Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
         </section>
-        <section><h2 class="sec">Draft board</h2><div class="rtabs" role="group" aria-label="Round">${tabs}</div><ol class="card order dr-board">${board}</ol></section>
+        <section class="dr-boardwrap"><h2 class="sec">Draft board <small>${done ? 'final' : `pick ${S.cur + 1} of ${ord.length}`}</small></h2><ol class="card dr-board" id="dr-board">${board}</ol></section>
       </div>
       ${hauls ? `<section><h2 class="sec">Team hauls <small>rookie salaries from this mock</small></h2><div class="dr-hauls">${hauls}</div></section>` : ''}`;
   }
@@ -216,5 +216,11 @@
     S.picks = S.picks.map(() => null); S.cur = 0; S.round = null; save();
     return true;
   }
-  window.FBPDraft = { render, click, change };
+  function after() {
+    const box = document.getElementById('dr-board'), now = box && box.querySelector('li.now');
+    if (!box || !now) return;
+    const top = now.offsetTop - box.offsetTop, h = box.clientHeight;
+    if (top < box.scrollTop + 40 || top > box.scrollTop + h - 80) box.scrollTop = Math.max(0, top - h / 3);
+  }
+  window.FBPDraft = { render, click, change, after };
 })();

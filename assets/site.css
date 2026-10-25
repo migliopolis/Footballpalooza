@@ -292,8 +292,11 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 @media (max-width:520px){.dr-modes{display:grid;grid-template-columns:1fr;border-radius:12px;width:100%}.dr-modes button + button{border-left:0;border-top:1px solid var(--line)}}
 .dr-team{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600}
 .dr-team select,.dr-add-f input,.dr-add-f select{font:inherit;font-size:16px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);max-width:100%}
-.dr-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;align-items:start}
-@media (max-width:860px){.dr-grid{grid-template-columns:minmax(0,1fr)}}
+/* desktop: board on the left, on-the-clock and rookies on the right; phones: rookies first, board below */
+.dr-grid{display:grid;grid-template-columns:minmax(280px,0.85fr) minmax(0,1.3fr);gap:22px;align-items:start}
+.dr-boardwrap{order:-1;position:sticky;top:calc(var(--hdr-h,110px) + 10px)}
+.dr-board{list-style:none;margin:0;padding:0;max-height:calc(100vh - var(--hdr-h,110px) - 80px);overflow:auto}
+@media (max-width:860px){.dr-grid{grid-template-columns:minmax(0,1fr)}.dr-boardwrap{order:0;position:static}.dr-board{max-height:520px}}
 .dr-clock{padding:14px;display:flex;flex-direction:column;gap:10px}
 .dr-clock-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:1rem}
 .dr-clock-h b{font:700 1.3rem var(--display);text-transform:uppercase}
@@ -317,8 +320,12 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-add-f input{flex:1 1 140px;min-width:0}
 .dr-foot{margin:0;font-size:.76rem;color:var(--muted)}
 .dr-foot a{color:var(--fg)}
-.dr-board li{grid-template-columns:2.8rem minmax(0,1fr)}
-.dr-board .pk{grid-row:auto}
+.dr-board li{display:grid;grid-template-columns:2.8rem minmax(0,1fr);gap:2px 8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line)}
+.dr-board li:last-child{border-bottom:0}
+.dr-board .pk{font:700 1rem var(--display);color:var(--accent)}
+.dr-board li.empty .pk{color:var(--muted)}
+.dr-board li.dr-rh{display:block;position:sticky;top:0;z-index:1;background:var(--bg);padding:6px 12px;font:600 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dr-board li.dr-rh small{font-weight:400;letter-spacing:0;text-transform:none}
 .dr-board li.now{background:var(--sky-soft)}
 .dr-b{display:flex;flex-direction:column;gap:2px;min-width:0}
 .dr-sel{font-size:.85rem}
@@ -333,3 +340,4 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .dr-haul li{display:flex;align-items:center;gap:6px;padding:3px 0}
 .dr-haul .pk{font:600 .74rem var(--mono);color:var(--accent);width:2.4rem;flex:none}
 .dr-hp{margin-left:auto;font-weight:600;font-variant-numeric:tabular-nums}
+.dr-board li.now .pk{color:var(--accent)}
