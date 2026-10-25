@@ -1,6 +1,6 @@
 {
  "season": "FOOTBALLPALOOZA 2026",
- "generated": "2026-10-24T23:17:03+00:00",
+ "generated": "2026-10-25T00:22:52+00:00",
  "weeksPlayed": 6,
  "lastRegularSeasonWeek": 14,
  "divisions": [
@@ -662,6 +662,2136 @@
   ]
  },
  "pickOwnersKnown": true,
+ "odds": {
+  "model": {
+   "metrics": [
+    "playoff",
+    "bye",
+    "seed1"
+   ],
+   "sims": 20000,
+   "leagueAvg": 113.4,
+   "weeklySpread": 24.4,
+   "note": "Each run plays out the remaining regular season with scores drawn around each team's estimated true average (season average pulled toward the league average) and applies the same seeding and tiebreak rules as the standings."
+  },
+  "teams": {
+   "0001": {
+    "playoff": 90.2,
+    "bye": 38.0,
+    "seed1": 26.2,
+    "division": 39.3,
+    "seeds": [
+     26.2,
+     11.9,
+     1.2,
+     23.9,
+     18.3,
+     8.8,
+     9.8
+    ],
+    "projW": 9.1,
+    "sosRank": 11,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0009",
+      "winProb": 54,
+      "ifWin": [
+       95.7,
+       52.8,
+       38.1
+      ],
+      "ifLoss": [
+       83.8,
+       20.8,
+       12.2
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0006",
+      "winProb": 70,
+      "ifWin": [
+       93.9,
+       44.4,
+       32.0
+      ],
+      "ifLoss": [
+       81.7,
+       23.1,
+       12.6
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0002",
+      "winProb": 69,
+      "ifWin": [
+       94.1,
+       45.2,
+       32.5
+      ],
+      "ifLoss": [
+       81.6,
+       22.2,
+       12.1
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0004",
+      "winProb": 51,
+      "ifWin": [
+       95.8,
+       58.3,
+       41.4
+      ],
+      "ifLoss": [
+       84.6,
+       17.3,
+       10.6
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0008",
+      "winProb": 74,
+      "ifWin": [
+       93.4,
+       43.2,
+       31.0
+      ],
+      "ifLoss": [
+       81.3,
+       23.1,
+       12.3
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0011",
+      "winProb": 73,
+      "ifWin": [
+       93.6,
+       43.8,
+       31.4
+      ],
+      "ifLoss": [
+       81.2,
+       22.6,
+       12.1
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0009",
+      "winProb": 53,
+      "ifWin": [
+       95.8,
+       52.5,
+       38.2
+      ],
+      "ifLoss": [
+       84.0,
+       21.6,
+       12.5
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0012",
+      "winProb": 68,
+      "ifWin": [
+       94.0,
+       44.6,
+       32.1
+      ],
+      "ifLoss": [
+       82.2,
+       24.1,
+       13.6
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [],
+     "bye": [
+      {
+       "week": 7,
+       "rootFor": "0012",
+       "against": "0004",
+       "swing": 10.0
+      },
+      {
+       "week": 8,
+       "rootFor": "0002",
+       "against": "0004",
+       "swing": 9.6
+      },
+      {
+       "week": 13,
+       "rootFor": "0012",
+       "against": "0004",
+       "swing": 9.8
+      }
+     ],
+     "seed1": [
+      {
+       "week": 10,
+       "rootFor": "0007",
+       "against": "0005",
+       "swing": 7.2
+      },
+      {
+       "week": 12,
+       "rootFor": "0012",
+       "against": "0005",
+       "swing": 7.2
+      },
+      {
+       "week": 13,
+       "rootFor": "0010",
+       "against": "0005",
+       "swing": 7.8
+      }
+     ]
+    }
+   },
+   "0002": {
+    "playoff": 70.8,
+    "bye": 11.9,
+    "seed1": 3.0,
+    "division": 70.1,
+    "seeds": [
+     3.0,
+     8.9,
+     58.2,
+     0.1,
+     0.6,
+     0.0,
+     29.2
+    ],
+    "projW": 7.6,
+    "sosRank": 10,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0008",
+      "winProb": 56,
+      "ifWin": [
+       83.9,
+       17.6,
+       4.7
+      ],
+      "ifLoss": [
+       54.1,
+       4.7,
+       0.8
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0004",
+      "winProb": 32,
+      "ifWin": [
+       84.3,
+       23.8,
+       7.9
+      ],
+      "ifLoss": [
+       64.6,
+       6.4,
+       0.7
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0001",
+      "winProb": 31,
+      "ifWin": [
+       83.6,
+       24.1,
+       7.5
+      ],
+      "ifLoss": [
+       65.0,
+       6.4,
+       0.9
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0006",
+      "winProb": 52,
+      "ifWin": [
+       83.1,
+       17.8,
+       4.9
+      ],
+      "ifLoss": [
+       57.7,
+       5.6,
+       0.9
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0010",
+      "winProb": 37,
+      "ifWin": [
+       82.8,
+       21.9,
+       6.0
+      ],
+      "ifLoss": [
+       63.7,
+       6.0,
+       1.2
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0003",
+      "winProb": 41,
+      "ifWin": [
+       83.1,
+       20.8,
+       5.9
+      ],
+      "ifLoss": [
+       62.3,
+       5.7,
+       1.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0008",
+      "winProb": 56,
+      "ifWin": [
+       83.6,
+       17.4,
+       4.7
+      ],
+      "ifLoss": [
+       54.3,
+       4.8,
+       0.8
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0011",
+      "winProb": 54,
+      "ifWin": [
+       84.3,
+       17.9,
+       4.8
+      ],
+      "ifLoss": [
+       54.7,
+       4.7,
+       0.8
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 8,
+       "rootFor": "0005",
+       "against": "0008",
+       "swing": 9.1
+      },
+      {
+       "week": 9,
+       "rootFor": "0007",
+       "against": "0008",
+       "swing": 10.0
+      },
+      {
+       "week": 11,
+       "rootFor": "0001",
+       "against": "0008",
+       "swing": 9.7
+      }
+     ],
+     "bye": [
+      {
+       "week": 8,
+       "rootFor": "0008",
+       "against": "0005",
+       "swing": 5.6
+      },
+      {
+       "week": 9,
+       "rootFor": "0011",
+       "against": "0005",
+       "swing": 4.5
+      },
+      {
+       "week": 12,
+       "rootFor": "0012",
+       "against": "0005",
+       "swing": 5.4
+      }
+     ],
+     "seed1": []
+    }
+   },
+   "0003": {
+    "playoff": 28.7,
+    "bye": 7.8,
+    "seed1": 1.4,
+    "division": 9.1,
+    "seeds": [
+     1.4,
+     6.5,
+     1.3,
+     4.3,
+     9.8,
+     5.5,
+     71.3
+    ],
+    "projW": 6.9,
+    "sosRank": 4,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0007",
+      "winProb": 42,
+      "ifWin": [
+       44.2,
+       13.7,
+       2.8
+      ],
+      "ifLoss": [
+       17.4,
+       3.5,
+       0.3
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0012",
+      "winProb": 58,
+      "ifWin": [
+       37.1,
+       11.0,
+       2.1
+      ],
+      "ifLoss": [
+       17.0,
+       3.4,
+       0.3
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0009",
+      "winProb": 43,
+      "ifWin": [
+       43.6,
+       12.9,
+       2.9
+      ],
+      "ifLoss": [
+       17.7,
+       4.1,
+       0.2
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0010",
+      "winProb": 45,
+      "ifWin": [
+       44.2,
+       14.1,
+       2.7
+      ],
+      "ifLoss": [
+       15.9,
+       2.6,
+       0.2
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0006",
+      "winProb": 60,
+      "ifWin": [
+       36.8,
+       10.8,
+       2.1
+      ],
+      "ifLoss": [
+       16.7,
+       3.3,
+       0.3
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0002",
+      "winProb": 59,
+      "ifWin": [
+       37.1,
+       11.5,
+       2.2
+      ],
+      "ifLoss": [
+       16.7,
+       2.5,
+       0.2
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0007",
+      "winProb": 43,
+      "ifWin": [
+       43.4,
+       13.7,
+       2.9
+      ],
+      "ifLoss": [
+       17.9,
+       3.4,
+       0.2
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0005",
+      "winProb": 38,
+      "ifWin": [
+       44.0,
+       17.4,
+       3.2
+      ],
+      "ifLoss": [
+       19.2,
+       1.8,
+       0.2
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 9,
+       "rootFor": "0008",
+       "against": "0007",
+       "swing": 4.6
+      },
+      {
+       "week": 10,
+       "rootFor": "0012",
+       "against": "0009",
+       "swing": 4.5
+      },
+      {
+       "week": 11,
+       "rootFor": "0012",
+       "against": "0007",
+       "swing": 5.2
+      }
+     ],
+     "bye": [
+      {
+       "week": 8,
+       "rootFor": "0008",
+       "against": "0005",
+       "swing": 5.4
+      },
+      {
+       "week": 9,
+       "rootFor": "0011",
+       "against": "0005",
+       "swing": 5.5
+      },
+      {
+       "week": 11,
+       "rootFor": "0009",
+       "against": "0005",
+       "swing": 5.0
+      }
+     ],
+     "seed1": []
+    }
+   },
+   "0004": {
+    "playoff": 92.5,
+    "bye": 35.1,
+    "seed1": 25.2,
+    "division": 36.0,
+    "seeds": [
+     25.2,
+     9.9,
+     0.8,
+     31.0,
+     16.8,
+     8.7,
+     7.5
+    ],
+    "projW": 9.3,
+    "sosRank": 12,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0012",
+      "winProb": 68,
+      "ifWin": [
+       95.8,
+       41.8,
+       31.3
+      ],
+      "ifLoss": [
+       85.4,
+       20.8,
+       12.1
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0002",
+      "winProb": 68,
+      "ifWin": [
+       95.6,
+       42.2,
+       31.8
+      ],
+      "ifLoss": [
+       85.9,
+       19.7,
+       10.8
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0006",
+      "winProb": 70,
+      "ifWin": [
+       95.7,
+       41.5,
+       31.0
+      ],
+      "ifLoss": [
+       85.3,
+       20.4,
+       11.9
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0001",
+      "winProb": 49,
+      "ifWin": [
+       96.8,
+       56.5,
+       41.5
+      ],
+      "ifLoss": [
+       88.4,
+       14.2,
+       9.2
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0011",
+      "winProb": 72,
+      "ifWin": [
+       95.3,
+       41.1,
+       30.5
+      ],
+      "ifLoss": [
+       85.4,
+       19.9,
+       11.4
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0008",
+      "winProb": 74,
+      "ifWin": [
+       95.2,
+       40.3,
+       30.0
+      ],
+      "ifLoss": [
+       84.9,
+       20.4,
+       11.5
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0012",
+      "winProb": 69,
+      "ifWin": [
+       95.6,
+       41.7,
+       31.0
+      ],
+      "ifLoss": [
+       85.5,
+       20.4,
+       12.1
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0009",
+      "winProb": 54,
+      "ifWin": [
+       97.1,
+       49.2,
+       36.9
+      ],
+      "ifLoss": [
+       87.1,
+       18.4,
+       11.4
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [],
+     "bye": [
+      {
+       "week": 8,
+       "rootFor": "0006",
+       "against": "0001",
+       "swing": 11.1
+      },
+      {
+       "week": 12,
+       "rootFor": "0011",
+       "against": "0001",
+       "swing": 11.7
+      },
+      {
+       "week": 14,
+       "rootFor": "0012",
+       "against": "0001",
+       "swing": 11.2
+      }
+     ],
+     "seed1": [
+      {
+       "week": 8,
+       "rootFor": "0006",
+       "against": "0001",
+       "swing": 6.2
+      },
+      {
+       "week": 14,
+       "rootFor": "0003",
+       "against": "0005",
+       "swing": 6.4
+      },
+      {
+       "week": 14,
+       "rootFor": "0012",
+       "against": "0001",
+       "swing": 6.1
+      }
+     ]
+    }
+   },
+   "0005": {
+    "playoff": 91.2,
+    "bye": 57.5,
+    "seed1": 22.8,
+    "division": 62.2,
+    "seeds": [
+     22.8,
+     34.7,
+     4.7,
+     6.9,
+     10.2,
+     11.9,
+     8.8
+    ],
+    "projW": 9.0,
+    "sosRank": 8,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0010",
+      "winProb": 57,
+      "ifWin": [
+       95.9,
+       72.1,
+       31.6
+      ],
+      "ifLoss": [
+       85.0,
+       37.8,
+       11.0
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0008",
+      "winProb": 75,
+      "ifWin": [
+       94.0,
+       64.2,
+       27.3
+      ],
+      "ifLoss": [
+       82.8,
+       37.3,
+       9.1
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0011",
+      "winProb": 74,
+      "ifWin": [
+       93.9,
+       63.8,
+       27.7
+      ],
+      "ifLoss": [
+       83.9,
+       40.0,
+       9.1
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0007",
+      "winProb": 55,
+      "ifWin": [
+       95.8,
+       71.8,
+       32.3
+      ],
+      "ifLoss": [
+       85.6,
+       39.9,
+       11.1
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0009",
+      "winProb": 55,
+      "ifWin": [
+       96.0,
+       68.2,
+       34.0
+      ],
+      "ifLoss": [
+       85.5,
+       44.5,
+       9.2
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0012",
+      "winProb": 70,
+      "ifWin": [
+       94.1,
+       64.6,
+       28.4
+      ],
+      "ifLoss": [
+       84.6,
+       41.4,
+       10.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0010",
+      "winProb": 57,
+      "ifWin": [
+       96.3,
+       72.8,
+       32.4
+      ],
+      "ifLoss": [
+       84.6,
+       37.4,
+       10.2
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0003",
+      "winProb": 62,
+      "ifWin": [
+       95.7,
+       68.7,
+       30.0
+      ],
+      "ifLoss": [
+       84.2,
+       39.6,
+       11.3
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 12,
+       "rootFor": "0006",
+       "against": "0010",
+       "swing": 2.5
+      }
+     ],
+     "bye": [
+      {
+       "week": 9,
+       "rootFor": "0012",
+       "against": "0010",
+       "swing": 6.7
+      },
+      {
+       "week": 12,
+       "rootFor": "0006",
+       "against": "0010",
+       "swing": 6.2
+      },
+      {
+       "week": 12,
+       "rootFor": "0009",
+       "against": "0007",
+       "swing": 6.0
+      }
+     ],
+     "seed1": [
+      {
+       "week": 11,
+       "rootFor": "0008",
+       "against": "0001",
+       "swing": 6.2
+      },
+      {
+       "week": 12,
+       "rootFor": "0011",
+       "against": "0001",
+       "swing": 6.2
+      },
+      {
+       "week": 12,
+       "rootFor": "0008",
+       "against": "0004",
+       "swing": 6.0
+      }
+     ]
+    }
+   },
+   "0006": {
+    "playoff": 6.6,
+    "bye": 0.1,
+    "seed1": 0.0,
+    "division": 6.2,
+    "seeds": [
+     0.0,
+     0.1,
+     6.2,
+     0.0,
+     0.2,
+     0.1,
+     93.4
+    ],
+    "projW": 4.5,
+    "sosRank": 9,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0011",
+      "winProb": 53,
+      "ifWin": [
+       10.5,
+       0.2,
+       0.0
+      ],
+      "ifLoss": [
+       2.3,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0001",
+      "winProb": 30,
+      "ifWin": [
+       12.4,
+       0.3,
+       0.0
+      ],
+      "ifLoss": [
+       4.2,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0004",
+      "winProb": 30,
+      "ifWin": [
+       12.9,
+       0.3,
+       0.0
+      ],
+      "ifLoss": [
+       3.9,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0002",
+      "winProb": 48,
+      "ifWin": [
+       13.1,
+       0.2,
+       0.0
+      ],
+      "ifLoss": [
+       0.5,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0003",
+      "winProb": 40,
+      "ifWin": [
+       11.6,
+       0.2,
+       0.0
+      ],
+      "ifLoss": [
+       3.3,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0010",
+      "winProb": 36,
+      "ifWin": [
+       11.9,
+       0.3,
+       0.0
+      ],
+      "ifLoss": [
+       3.7,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0011",
+      "winProb": 53,
+      "ifWin": [
+       10.7,
+       0.2,
+       0.0
+      ],
+      "ifLoss": [
+       2.1,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0008",
+      "winProb": 55,
+      "ifWin": [
+       10.4,
+       0.2,
+       0.0
+      ],
+      "ifLoss": [
+       2.0,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 8,
+       "rootFor": "0004",
+       "against": "0002",
+       "swing": 3.6
+      },
+      {
+       "week": 11,
+       "rootFor": "0010",
+       "against": "0002",
+       "swing": 3.8
+      },
+      {
+       "week": 14,
+       "rootFor": "0011",
+       "against": "0002",
+       "swing": 4.2
+      }
+     ],
+     "bye": [],
+     "seed1": []
+    }
+   },
+   "0007": {
+    "playoff": 59.0,
+    "bye": 9.2,
+    "seed1": 1.4,
+    "division": 11.5,
+    "seeds": [
+     1.4,
+     7.8,
+     2.3,
+     4.2,
+     10.6,
+     32.6,
+     41.0
+    ],
+    "projW": 6.7,
+    "sosRank": 7,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0003",
+      "winProb": 58,
+      "ifWin": [
+       69.3,
+       13.7,
+       2.3
+      ],
+      "ifLoss": [
+       45.0,
+       3.1,
+       0.2
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0011",
+      "winProb": 69,
+      "ifWin": [
+       65.2,
+       11.7,
+       1.9
+      ],
+      "ifLoss": [
+       45.1,
+       3.6,
+       0.2
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0008",
+      "winProb": 71,
+      "ifWin": [
+       64.6,
+       11.7,
+       1.9
+      ],
+      "ifLoss": [
+       45.1,
+       3.0,
+       0.2
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0005",
+      "winProb": 45,
+      "ifWin": [
+       69.2,
+       18.7,
+       2.9
+      ],
+      "ifLoss": [
+       50.6,
+       1.5,
+       0.1
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0012",
+      "winProb": 66,
+      "ifWin": [
+       66.0,
+       12.3,
+       2.0
+      ],
+      "ifLoss": [
+       45.4,
+       3.3,
+       0.2
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0009",
+      "winProb": 50,
+      "ifWin": [
+       70.3,
+       14.1,
+       2.6
+      ],
+      "ifLoss": [
+       47.5,
+       4.2,
+       0.2
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0003",
+      "winProb": 57,
+      "ifWin": [
+       69.3,
+       14.0,
+       2.3
+      ],
+      "ifLoss": [
+       45.0,
+       2.8,
+       0.1
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0010",
+      "winProb": 52,
+      "ifWin": [
+       71.2,
+       15.7,
+       2.5
+      ],
+      "ifLoss": [
+       45.6,
+       2.1,
+       0.2
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 9,
+       "rootFor": "0012",
+       "against": "0010",
+       "swing": 5.9
+      },
+      {
+       "week": 11,
+       "rootFor": "0002",
+       "against": "0010",
+       "swing": 7.2
+      },
+      {
+       "week": 12,
+       "rootFor": "0002",
+       "against": "0003",
+       "swing": 6.0
+      }
+     ],
+     "bye": [
+      {
+       "week": 8,
+       "rootFor": "0008",
+       "against": "0005",
+       "swing": 4.5
+      },
+      {
+       "week": 9,
+       "rootFor": "0011",
+       "against": "0005",
+       "swing": 4.4
+      },
+      {
+       "week": 12,
+       "rootFor": "0012",
+       "against": "0005",
+       "swing": 4.6
+      }
+     ],
+     "seed1": []
+    }
+   },
+   "0008": {
+    "playoff": 15.7,
+    "bye": 1.4,
+    "seed1": 0.1,
+    "division": 14.5,
+    "seeds": [
+     0.1,
+     1.2,
+     13.1,
+     0.2,
+     0.9,
+     0.0,
+     84.3
+    ],
+    "projW": 4.9,
+    "sosRank": 5,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0002",
+      "winProb": 44,
+      "ifWin": [
+       28.7,
+       2.6,
+       0.3
+      ],
+      "ifLoss": [
+       5.5,
+       0.4,
+       0.0
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0005",
+      "winProb": 25,
+      "ifWin": [
+       28.0,
+       4.4,
+       0.5
+      ],
+      "ifLoss": [
+       11.6,
+       0.4,
+       0.0
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0007",
+      "winProb": 29,
+      "ifWin": [
+       27.8,
+       3.8,
+       0.4
+      ],
+      "ifLoss": [
+       10.8,
+       0.4,
+       0.0
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0011",
+      "winProb": 48,
+      "ifWin": [
+       24.7,
+       2.5,
+       0.3
+      ],
+      "ifLoss": [
+       7.3,
+       0.3,
+       0.0
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0001",
+      "winProb": 26,
+      "ifWin": [
+       28.7,
+       3.7,
+       0.6
+      ],
+      "ifLoss": [
+       11.1,
+       0.6,
+       0.0
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0004",
+      "winProb": 26,
+      "ifWin": [
+       27.9,
+       3.7,
+       0.5
+      ],
+      "ifLoss": [
+       11.4,
+       0.6,
+       0.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0002",
+      "winProb": 44,
+      "ifWin": [
+       28.7,
+       2.8,
+       0.3
+      ],
+      "ifLoss": [
+       5.6,
+       0.2,
+       0.0
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0006",
+      "winProb": 45,
+      "ifWin": [
+       24.7,
+       2.6,
+       0.3
+      ],
+      "ifLoss": [
+       8.4,
+       0.4,
+       0.0
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 8,
+       "rootFor": "0004",
+       "against": "0002",
+       "swing": 7.5
+      },
+      {
+       "week": 11,
+       "rootFor": "0010",
+       "against": "0002",
+       "swing": 7.8
+      },
+      {
+       "week": 12,
+       "rootFor": "0003",
+       "against": "0002",
+       "swing": 8.4
+      }
+     ],
+     "bye": [],
+     "seed1": []
+    }
+   },
+   "0009": {
+    "playoff": 78.1,
+    "bye": 23.3,
+    "seed1": 16.9,
+    "division": 24.6,
+    "seeds": [
+     16.9,
+     6.4,
+     1.2,
+     23.0,
+     18.7,
+     11.9,
+     21.9
+    ],
+    "projW": 8.1,
+    "sosRank": 2,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0001",
+      "winProb": 46,
+      "ifWin": [
+       88.9,
+       38.1,
+       28.1
+      ],
+      "ifLoss": [
+       68.9,
+       10.6,
+       7.3
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0010",
+      "winProb": 52,
+      "ifWin": [
+       88.7,
+       31.7,
+       24.4
+      ],
+      "ifLoss": [
+       66.7,
+       14.3,
+       8.8
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0003",
+      "winProb": 57,
+      "ifWin": [
+       87.6,
+       31.0,
+       23.7
+      ],
+      "ifLoss": [
+       65.4,
+       13.0,
+       7.8
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0012",
+      "winProb": 65,
+      "ifWin": [
+       85.1,
+       29.3,
+       21.9
+      ],
+      "ifLoss": [
+       65.1,
+       12.2,
+       7.5
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0005",
+      "winProb": 45,
+      "ifWin": [
+       88.0,
+       33.2,
+       28.0
+      ],
+      "ifLoss": [
+       70.0,
+       15.2,
+       7.8
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0007",
+      "winProb": 50,
+      "ifWin": [
+       88.9,
+       32.7,
+       25.0
+      ],
+      "ifLoss": [
+       67.5,
+       14.1,
+       9.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0001",
+      "winProb": 47,
+      "ifWin": [
+       88.1,
+       37.7,
+       27.7
+      ],
+      "ifLoss": [
+       69.3,
+       10.6,
+       7.4
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0004",
+      "winProb": 46,
+      "ifWin": [
+       87.6,
+       38.8,
+       28.7
+      ],
+      "ifLoss": [
+       70.2,
+       10.3,
+       7.0
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 11,
+       "rootFor": "0006",
+       "against": "0003",
+       "swing": 4.5
+      },
+      {
+       "week": 12,
+       "rootFor": "0006",
+       "against": "0010",
+       "swing": 5.5
+      },
+      {
+       "week": 12,
+       "rootFor": "0002",
+       "against": "0003",
+       "swing": 4.8
+      }
+     ],
+     "bye": [
+      {
+       "week": 9,
+       "rootFor": "0006",
+       "against": "0004",
+       "swing": 9.1
+      },
+      {
+       "week": 11,
+       "rootFor": "0011",
+       "against": "0004",
+       "swing": 9.1
+      },
+      {
+       "week": 13,
+       "rootFor": "0012",
+       "against": "0004",
+       "swing": 8.8
+      }
+     ],
+     "seed1": [
+      {
+       "week": 9,
+       "rootFor": "0006",
+       "against": "0004",
+       "swing": 5.5
+      },
+      {
+       "week": 11,
+       "rootFor": "0011",
+       "against": "0004",
+       "swing": 5.9
+      },
+      {
+       "week": 13,
+       "rootFor": "0012",
+       "against": "0004",
+       "swing": 4.3
+      }
+     ]
+    }
+   },
+   "0010": {
+    "playoff": 54.4,
+    "bye": 15.0,
+    "seed1": 2.9,
+    "division": 17.2,
+    "seeds": [
+     2.9,
+     12.1,
+     2.2,
+     5.6,
+     12.1,
+     19.5,
+     45.6
+    ],
+    "projW": 7.3,
+    "sosRank": 3,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0005",
+      "winProb": 43,
+      "ifWin": [
+       68.0,
+       28.6,
+       6.0
+      ],
+      "ifLoss": [
+       44.3,
+       5.0,
+       0.6
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0009",
+      "winProb": 48,
+      "ifWin": [
+       67.8,
+       21.6,
+       5.4
+      ],
+      "ifLoss": [
+       42.0,
+       8.9,
+       0.6
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0012",
+      "winProb": 63,
+      "ifWin": [
+       62.9,
+       19.4,
+       4.2
+      ],
+      "ifLoss": [
+       39.7,
+       7.4,
+       0.8
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0003",
+      "winProb": 55,
+      "ifWin": [
+       67.0,
+       22.3,
+       4.8
+      ],
+      "ifLoss": [
+       39.2,
+       6.2,
+       0.7
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0002",
+      "winProb": 63,
+      "ifWin": [
+       62.4,
+       20.0,
+       4.3
+      ],
+      "ifLoss": [
+       40.8,
+       6.6,
+       0.7
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0006",
+      "winProb": 64,
+      "ifWin": [
+       62.3,
+       19.1,
+       4.3
+      ],
+      "ifLoss": [
+       40.1,
+       7.7,
+       0.5
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0005",
+      "winProb": 43,
+      "ifWin": [
+       68.3,
+       28.8,
+       5.9
+      ],
+      "ifLoss": [
+       43.8,
+       4.5,
+       0.7
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0007",
+      "winProb": 48,
+      "ifWin": [
+       68.8,
+       23.1,
+       5.2
+      ],
+      "ifLoss": [
+       41.3,
+       7.6,
+       0.9
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 8,
+       "rootFor": "0011",
+       "against": "0007",
+       "swing": 5.4
+      },
+      {
+       "week": 11,
+       "rootFor": "0012",
+       "against": "0007",
+       "swing": 4.4
+      },
+      {
+       "week": 11,
+       "rootFor": "0006",
+       "against": "0003",
+       "swing": 4.4
+      }
+     ],
+     "bye": [
+      {
+       "week": 8,
+       "rootFor": "0008",
+       "against": "0005",
+       "swing": 6.2
+      },
+      {
+       "week": 9,
+       "rootFor": "0011",
+       "against": "0005",
+       "swing": 6.1
+      },
+      {
+       "week": 11,
+       "rootFor": "0009",
+       "against": "0005",
+       "swing": 6.4
+      }
+     ],
+     "seed1": []
+    }
+   },
+   "0011": {
+    "playoff": 9.7,
+    "bye": 0.4,
+    "seed1": 0.0,
+    "division": 9.2,
+    "seeds": [
+     0.0,
+     0.4,
+     8.7,
+     0.1,
+     0.4,
+     0.0,
+     90.3
+    ],
+    "projW": 5.0,
+    "sosRank": 6,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0006",
+      "winProb": 47,
+      "ifWin": [
+       15.8,
+       0.8,
+       0.1
+      ],
+      "ifLoss": [
+       4.2,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0007",
+      "winProb": 31,
+      "ifWin": [
+       17.3,
+       1.2,
+       0.1
+      ],
+      "ifLoss": [
+       6.3,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0005",
+      "winProb": 26,
+      "ifWin": [
+       18.8,
+       1.5,
+       0.1
+      ],
+      "ifLoss": [
+       6.4,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0008",
+      "winProb": 52,
+      "ifWin": [
+       15.4,
+       0.7,
+       0.0
+      ],
+      "ifLoss": [
+       3.5,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0004",
+      "winProb": 28,
+      "ifWin": [
+       17.3,
+       1.2,
+       0.1
+      ],
+      "ifLoss": [
+       6.7,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0001",
+      "winProb": 27,
+      "ifWin": [
+       18.3,
+       1.3,
+       0.1
+      ],
+      "ifLoss": [
+       6.4,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0006",
+      "winProb": 47,
+      "ifWin": [
+       15.7,
+       0.9,
+       0.1
+      ],
+      "ifLoss": [
+       4.3,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0002",
+      "winProb": 46,
+      "ifWin": [
+       19.5,
+       0.9,
+       0.1
+      ],
+      "ifLoss": [
+       1.5,
+       0.1,
+       0.0
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 8,
+       "rootFor": "0004",
+       "against": "0002",
+       "swing": 5.7
+      },
+      {
+       "week": 11,
+       "rootFor": "0010",
+       "against": "0002",
+       "swing": 5.1
+      },
+      {
+       "week": 12,
+       "rootFor": "0003",
+       "against": "0002",
+       "swing": 5.9
+      }
+     ],
+     "bye": [],
+     "seed1": []
+    }
+   },
+   "0012": {
+    "playoff": 3.0,
+    "bye": 0.2,
+    "seed1": 0.1,
+    "division": 0.2,
+    "seeds": [
+     0.1,
+     0.1,
+     0.0,
+     0.5,
+     1.4,
+     0.8,
+     97.0
+    ],
+    "projW": 4.7,
+    "sosRank": 1,
+    "ownGames": [
+     {
+      "week": 7,
+      "opp": "0004",
+      "winProb": 32,
+      "ifWin": [
+       6.4,
+       0.6,
+       0.2
+      ],
+      "ifLoss": [
+       1.4,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 8,
+      "opp": "0003",
+      "winProb": 42,
+      "ifWin": [
+       5.7,
+       0.4,
+       0.1
+      ],
+      "ifLoss": [
+       1.0,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0010",
+      "winProb": 37,
+      "ifWin": [
+       6.2,
+       0.3,
+       0.1
+      ],
+      "ifLoss": [
+       1.1,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0009",
+      "winProb": 35,
+      "ifWin": [
+       6.5,
+       0.5,
+       0.1
+      ],
+      "ifLoss": [
+       1.1,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0007",
+      "winProb": 34,
+      "ifWin": [
+       6.4,
+       0.4,
+       0.1
+      ],
+      "ifLoss": [
+       1.2,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0005",
+      "winProb": 30,
+      "ifWin": [
+       6.4,
+       0.5,
+       0.2
+      ],
+      "ifLoss": [
+       1.5,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0004",
+      "winProb": 31,
+      "ifWin": [
+       6.6,
+       0.6,
+       0.2
+      ],
+      "ifLoss": [
+       1.3,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0001",
+      "winProb": 32,
+      "ifWin": [
+       6.5,
+       0.5,
+       0.2
+      ],
+      "ifLoss": [
+       1.3,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [],
+     "bye": [],
+     "seed1": []
+    }
+   }
+  }
+ },
  "notes": [
   "Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.",
   "Picks 7-12 are projected by seed until the playoffs are played."

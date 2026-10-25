@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   const app = document.getElementById('app');
-  const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto' };
+  const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set() };
   try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
   const nameOf = id => ((state.now && state.now.standings.find(s => s.id === id)) || {}).name || (state.teams[id] || {}).abbr || id;
 
@@ -110,10 +110,50 @@
       const tb = s.via === 'division' ? (s.divisionTiebreak || s.tiebreak) : s.tiebreak;
       return base + (tb ? ` · <em>won tiebreak on ${tb}</em>` : '');
     };
+    /* playoff odds panel, opened by tapping a team in Playoff picture or On the bubble */
+    const O = d.odds && d.odds.teams;
+    const race = new Set(seeds.map(s => s.id));
+    d.standings.filter(t => !race.has(t.id)).sort((a, b) => b.pct - a.pct || b.allPlayW - a.allPlayW || b.pf - a.pf).slice(0, 3).forEach(t => race.add(t.id));
+    const fp = v => v == null ? '–' : v >= 99.5 ? '>99%' : v > 0 && v < 0.5 ? '<1%' : v === 0 ? '<1%' : Math.round(v) + '%';
+    const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
+    function oddsPanel(id, seed) {
+      const o = O && O[id];
+      if (!o) return `<div class="odds"><p class="onote">Playoff odds appear once the season has games left to play.</p></div>`;
+      const t = by[id];
+      const head = seed === 1 ? ['Chance to keep the 1 seed', o.seed1] : seed === 2 ? ['Chance to take the 1 seed', o.seed1]
+        : seed === 3 ? ['Chance to win the ' + t.divisionName, o.division] : ['Chance to make the playoffs', o.playoff];
+      const P = ['Make playoffs', o.playoff], B = ['First-round bye', o.bye], D = ['Win ' + t.divisionName, o.division], S1 = ['1 seed', o.seed1];
+      const stats = seed && seed <= 2 ? [B, D, P] : seed === 3 ? [P, B, S1] : [D, B, S1];
+      const m = seed && seed <= 2 ? 1 : 0, stakeTxt = m ? 'bye chances' : 'playoff chances';
+      const games = o.ownGames.map(g => ({ ...g, swing: g.ifWin[m] - g.ifLoss[m] }));
+      const big = games.slice().sort((a, b) => b.swing - a.swing).slice(0, 3).sort((a, b) => a.week - b.week);
+      const tags = opp => [by[opp] && by[opp].division === t.division ? '<span class="tag">Division</span>' : '', race.has(opp) ? '<span class="tag">Playoff race</span>' : ''].join('');
+      const gameRow = g => `<li><div class="gl"><b class="wk">Wk ${g.week}</b><span class="vs">vs</span>${chip(g.opp)}<span class="wp">${g.winProb}% to win</span></div>
+          <div class="gs"><span class="w">Win <b>${fp(g.ifWin[m])}</b></span><span class="l">Loss <b>${fp(g.ifLoss[m])}</b></span><span class="tags">${tags(g.opp)}</span></div></li>`;
+      const watch = (o.watch[m ? 'bye' : 'playoff'] || []).map(w => `<li><b class="wk">Wk ${w.week}</b><span class="wt">Root for <span class="inl">${chip(w.rootFor)}</span> over ${esc(nameOf(w.against))}</span><span class="sw">${Math.round(w.swing)}-pt swing</span></li>`).join('');
+      const labels = ['1', '2', '3', '4', '5', '6', 'Out'];
+      const dist = o.seeds.map((v, i) => `<div class="sd${i === 6 ? ' out' : ''}" style="--p:${Math.min(1, v / 60)}"><span>${labels[i]}</span><b>${fp(v)}</b></div>`).join('');
+      const games_left = t.w + t.l + t.t + o.ownGames.length;
+      const projL = Math.max(0, games_left - o.projW - t.t);
+      return `<div class="odds">
+        <div class="ohead"><b>${fp(head[1])}</b><span>${esc(head[0])}</span></div>
+        <div class="ostats">${stats.map(x => `<div><b>${fp(x[1])}</b><span>${esc(x[0])}</span></div>`).join('')}</div>
+        <h4>Where they finish</h4><div class="dist">${dist}</div>
+        <p class="onote">Projected record about ${o.projW.toFixed(1)}–${projL.toFixed(1)}${t.t ? `–${t.t}` : ''}${o.sosRank ? ` · remaining schedule is the ${o.sosRank === 1 ? 'toughest' : o.sosRank === 12 ? 'easiest' : ord(o.sosRank) + ' toughest'} in the league` : ''}</p>
+        ${big.length ? `<h4>Biggest games <small>their ${stakeTxt} after a win or loss</small></h4><ul class="glist">${big.map(gameRow).join('')}</ul>` : ''}
+        ${watch ? `<h4>Games to watch <small>other results that move their ${stakeTxt}</small></h4><ul class="wlist">${watch}</ul>` : ''}
+        <p class="onote">From ${(d.odds.model.sims).toLocaleString()} simulated finishes of weeks ${d.weeksPlayed + 1}–${d.lastRegularSeasonWeek}, using each team’s scoring so far and the by-law tiebreaks.</p>
+        ${games.length > big.length ? `<details class="all"><summary>All ${games.length} remaining games</summary><ul class="glist">${games.map(gameRow).join('')}</ul></details>` : ''}
+      </div>`;
+    }
+    const tmWrap = (id, rowCls, inner, seed) => {
+      const open = state.open.has(id);
+      return `<div class="tm${open ? ' open' : ''}"><button type="button" class="${rowCls}" data-odds="${id}" aria-expanded="${open}">${inner}</button>${open ? oddsPanel(id, seed) : ''}</div>`;
+    };
     const seedRows = seeds.map(s => {
       const t = by[s.id];
-      return `<div class="seed${s.seed <= 2 ? ' bye' : ''}"><span class="n">${s.seed}</span>${chip(s.id)}<span class="rec">${rec(t)}</span>
-        <span class="via">${viaTxt(s)} · ${pts(t.pf)} pts</span></div>`;
+      return tmWrap(s.id, `seed${s.seed <= 2 ? ' bye' : ''}`, `<span class="n">${s.seed}</span>${chip(s.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
+        <span class="via">${viaTxt(s)} · ${pts(t.pf)} pts</span>`, s.seed);
     }).join('');
 
     const g = (a, b, lbl) => `<div class="game">${lbl ? `<div class="lbl">${lbl}</div>` : ''}${[a, b].map(x =>
@@ -132,8 +172,8 @@
       .map(t => {
         const gb = ((s5.w - t.w) + (t.l - s5.l)) / 2;
         const apb = s6.allPlayW - t.allPlayW;
-        return `<div class="seed bubrow">${chip(t.id)}<span class="rec">${rec(t)}</span>
-          <span class="via">${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts</span></div>`;
+        return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
+          <span class="via">${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts</span>`, null);
       }).join('');
 
     const divTables = d.divisions.map(dv => {
@@ -174,7 +214,7 @@
       <div class="pagehead"><h1>League Now</h1>
         <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}</span></div>
       <div class="grid2">
-        <section><h2 class="sec">Playoff picture <small>if the season ended today</small></h2>
+        <section><h2 class="sec">Playoff picture <small>if the season ended today${O ? ' · tap a team for its odds' : ''}</small></h2>
           <div class="card seeds">${seedRows}</div>
           <h2 class="sec" style="margin-top:16px">On the bubble</h2>
           <div class="card seeds">${bubble}</div>
@@ -238,6 +278,15 @@
         if (md) { state.mode = md.dataset.mode; try { localStorage.setItem('fbp-mode', state.mode); } catch (x) {} }
         applyMode(); const y = window.scrollY; route(); window.scrollTo(0, y);
         const again = document.querySelector(sw ? `.swatch[data-team="${state.themeTeam}"]` : `[data-mode="${state.mode}"]`); if (again) again.focus({ preventScroll: true });
+        return;
+      }
+      const ob = e.target.closest('[data-odds]');
+      if (ob) {
+        const id = ob.dataset.odds;
+        state.open.has(id) ? state.open.delete(id) : state.open.add(id);
+        const y = ob.getBoundingClientRect().top; route();
+        const again = document.querySelector(`[data-odds="${id}"]`);
+        if (again) { window.scrollBy(0, again.getBoundingClientRect().top - y); again.focus({ preventScroll: true }); }
         return;
       }
       const b = e.target.closest('.rtab'); if (!b) return;

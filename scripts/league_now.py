@@ -36,39 +36,40 @@ def as_list(x):
     return x if isinstance(x, list) else ([x] if x else [])
 
 
-def build(folder):
-    league = load(folder, 'league')['league']
-    stand = load(folder, 'leagueStandings')['leagueStandings']
-    sched = load(folder, 'schedule')['schedule']
-    last_reg = int(league.get('lastRegularSeasonWeek', 14))
-    divisions = [{'id': d['id'], 'name': d['name']} for d in as_list(league['divisions']['division'])]
-    div_name = {d['id']: d['name'] for d in divisions}
+def pick_best(group, ladder, restart_on=()):
+    """Return (winner, rule that decided it). ladder: [(name, fn, higher_is_better)]."""
+    group = sorted(group)
+    while True:
+        if len(group) == 1:
+            return group[0], None
+        restarted = False
+        cur = list(group)
+        for step, (name, fn, high) in enumerate(ladder):
+            vals = {t: (fn(t, set(cur)) if name in restart_on else fn(t)) for t in cur}
+            best = max(vals.values()) if high else min(vals.values())
+            top = [t for t in cur if vals[t] == best]
+            if len(top) == 1:
+                # the first rule is the normal sort, not a tiebreak
+                return top[0], (name if step > 0 else None)
+            if name in restart_on and len(top) < len(cur):
+                group, restarted = top, True
+                break
+            cur = top
+        if not restarted:
+            return sorted(cur)[0], 'coin flip'
 
-    teams = {}
-    for f in as_list(league['franchises']['franchise']):
-        teams[f['id']] = {'id': f['id'], 'name': f['name'].strip(), 'division': f.get('division', '')}
-    for s in as_list(stand['franchise']):
-        t = teams[s['id']]
-        w, l, tie = int(s.get('h2hw', 0)), int(s.get('h2hl', 0)), int(s.get('h2ht', 0))
-        apw, apl, apt = (int(x) for x in s.get('all_play_wlt', '0-0-0').split('-'))
-        gp = w + l + tie
-        t.update({'w': w, 'l': l, 't': tie, 'pct': round((w + 0.5 * tie) / gp, 3) if gp else 0.0,
-                  'pf': float(s.get('pf', 0)), 'pa': float(s.get('pa', 0)), 'pp': float(s.get('pp', 0)),
-                  'allPlayW': apw, 'allPlayL': apl, 'allPlayT': apt, 'streak': s.get('strk', '')})
+def order(group, ladder):
+    out, rest = [], list(group)
+    while rest:
+        t, rule = pick_best(rest, ladder)
+        out.append((t, rule))
+        rest.remove(t)
+    return out
 
-    # head-to-head results from scored regular-season games
-    games, weeks_played = [], 0
-    for wk in as_list(sched.get('weeklySchedule')):
-        week = int(wk['week'])
-        if week > last_reg:
-            continue
-        for m in as_list(wk.get('matchup')):
-            fs = as_list(m.get('franchise'))
-            if len(fs) == 2 and all(f.get('score') not in (None, '') for f in fs):
-                a, b = fs
-                games.append((week, a['id'], float(a['score']), b['id'], float(b['score'])))
-                weeks_played = max(weeks_played, week)
 
+def seed_league(teams, games, divisions):
+    """Seeds 1-6 under the 2027 rules. teams: id -> {pct, pf, allPlayW, division}; games: (week, a, sa, b, sb).
+    Returns (seeds, winners {division: (id, rule)}, division rank {id: n})."""
     def h2h_pct(tid, group):
         w = l = tie = 0
         for _, a, sa, b, sb in games:
@@ -81,36 +82,6 @@ def build(folder):
     pct = lambda t: teams[t]['pct']
     pf = lambda t: teams[t]['pf']
     apw = lambda t: teams[t]['allPlayW']
-
-    def pick_best(group, ladder, restart_on=()):
-        """Return (winner, rule that decided it). ladder: [(name, fn, higher_is_better)]."""
-        group = sorted(group)
-        while True:
-            if len(group) == 1:
-                return group[0], None
-            restarted = False
-            cur = list(group)
-            for step, (name, fn, high) in enumerate(ladder):
-                vals = {t: (fn(t, set(cur)) if name in restart_on else fn(t)) for t in cur}
-                best = max(vals.values()) if high else min(vals.values())
-                top = [t for t in cur if vals[t] == best]
-                if len(top) == 1:
-                    # the first rule is the normal sort, not a tiebreak
-                    return top[0], (name if step > 0 else None)
-                if name in restart_on and len(top) < len(cur):
-                    group, restarted = top, True
-                    break
-                cur = top
-            if not restarted:
-                return sorted(cur)[0], 'coin flip'
-
-    def order(group, ladder):
-        out, rest = [], list(group)
-        while rest:
-            t, rule = pick_best(rest, ladder)
-            out.append((t, rule))
-            rest.remove(t)
-        return out
 
     # division winners
     div_ladder = [('record', lambda t: pct(t), True), ('head-to-head', h2h_pct, True),
@@ -146,7 +117,170 @@ def build(folder):
     for i, s in enumerate(seeds, 1):
         s['seed'] = i
 
+    return seeds, winners, div_rank
+
+
+def simulate(teams, games, remaining, divisions, n_sims=20000, seed=2027):
+    """Play out the rest of the regular season n_sims times and tally where everyone finishes.
+
+    Scoring model: each team's weekly score is normal around its true average with the league's
+    week-to-week spread. A team's true average is uncertain, so it is drawn fresh each run from an
+    estimate that pulls its season average toward the league average (more pull early in the year).
+    remaining: [(week, a, b)] unplayed regular-season games.
+    """
+    import random, statistics
+    rng = random.Random(seed)
+    ids = sorted(teams)
+    played = {t: [] for t in ids}
+    for _, a, sa, b, sb in games:
+        played[a].append(sa); played[b].append(sb)
+    allv = [v for t in ids for v in played[t]]
+    if len(allv) >= 2 * len(ids):
+        lg = statistics.mean(allv)
+        within = statistics.mean([statistics.variance(played[t]) for t in ids if len(played[t]) > 1])
+        n_avg = statistics.mean(len(played[t]) for t in ids)
+        between = statistics.variance([statistics.mean(played[t]) for t in ids]) - within / n_avg
+        true_var = max(between, within / 30)
+    else:  # too early: everyone looks the same
+        lg, within, true_var = (statistics.mean(allv) if allv else 110.0), 600.0, 100.0
+    post = {}
+    for t in ids:
+        prec = len(played[t]) / within + 1 / true_var
+        post[t] = ((sum(played[t]) / within + lg / true_var) / prec, (1 / prec) ** 0.5)
+    sd_week = within ** 0.5
+
+    weeks = sorted({w for w, _, _ in remaining})
+    seed_ct = {t: [0] * 7 for t in ids}          # seeds 1-6, then missed
+    div_ct = {t: 0 for t in ids}
+    wins_sum = {t: 0.0 for t in ids}
+    metrics = ('playoff', 'bye', 'seed1')
+    # per remaining game: how often the first-listed team won, and each team's results split by that outcome
+    g_awin = [0] * len(remaining)
+    g_hits = [[{t: [0, 0, 0] for t in ids}, {t: [0, 0, 0] for t in ids}] for _ in remaining]
+    g_n = [[0, 0] for _ in remaining]
+    by_week = {w: [(i, a, b) for i, (wk, a, b) in enumerate(remaining) if wk == w] for w in weeks}
+
+    for _ in range(n_sims):
+        mu = {t: rng.gauss(*post[t]) for t in ids}
+        T = {t: {'w': teams[t]['w'], 'l': teams[t]['l'], 't': teams[t]['t'], 'pf': teams[t]['pf'],
+                 'allPlayW': teams[t]['allPlayW'], 'division': teams[t]['division']} for t in ids}
+        G = list(games)
+        outcome = [0] * len(remaining)
+        for w in weeks:
+            sc = {t: round(rng.gauss(mu[t], sd_week), 2) for t in ids}
+            ordered = sorted(sc.values())
+            for t in ids:  # all-play: beat every team that scored less this week
+                T[t]['allPlayW'] += sum(1 for v in ordered if v < sc[t])
+            for i, a, b in by_week[w]:
+                sa, sb = sc[a], sc[b]
+                G.append((w, a, sa, b, sb))
+                T[a]['pf'] += sa; T[b]['pf'] += sb
+                if sa > sb: T[a]['w'] += 1; T[b]['l'] += 1; outcome[i] = 0
+                elif sb > sa: T[b]['w'] += 1; T[a]['l'] += 1; outcome[i] = 1
+                else: T[a]['t'] += 1; T[b]['t'] += 1; outcome[i] = 0
+        for t in ids:
+            g = T[t]['w'] + T[t]['l'] + T[t]['t']
+            T[t]['pct'] = (T[t]['w'] + 0.5 * T[t]['t']) / g if g else 0.0
+            wins_sum[t] += T[t]['w']
+        seeds, winners, _ = seed_league(T, G, divisions)
+        seed_of = {s['id']: s['seed'] for s in seeds}
+        for d, (wid, _) in winners.items():
+            div_ct[wid] += 1
+        res = {}
+        for t in ids:
+            sd = seed_of.get(t)
+            seed_ct[t][(sd or 7) - 1] += 1
+            res[t] = (1 if sd else 0, 1 if sd and sd <= 2 else 0, 1 if sd == 1 else 0)
+        for i, o in enumerate(outcome):
+            g_n[i][o] += 1
+            if o == 0: g_awin[i] += 1
+            hits = g_hits[i][o]
+            for t in ids:
+                h, r = hits[t], res[t]
+                h[0] += r[0]; h[1] += r[1]; h[2] += r[2]
+
+    pc = lambda x: round(100.0 * x / n_sims, 1)
+    opp_strength = {}
+    for t in ids:
+        opps = [b if a == t else a for _, a, b in remaining if t in (a, b)]
+        opp_strength[t] = statistics.mean(post[o][0] for o in opps) if opps else None
+    ranked = sorted([t for t in ids if opp_strength[t] is not None], key=lambda t: -opp_strength[t])
+    out = {}
+    for t in ids:
+        cond = lambda i, o, m: (g_hits[i][o][t][m] / g_n[i][o]) if g_n[i][o] else None
+        own, watch = [], {m: [] for m in metrics}
+        for i, (w, a, b) in enumerate(remaining):
+            if not (g_n[i][0] and g_n[i][1]):
+                continue
+            if t in (a, b):
+                me, them = (0, 1) if t == a else (1, 0)
+                pwin = g_awin[i] / n_sims if t == a else 1 - g_awin[i] / n_sims
+                own.append({'week': w, 'opp': b if t == a else a, 'winProb': round(100 * pwin),
+                            'ifWin': [round(100 * cond(i, me, m), 1) for m in range(3)],
+                            'ifLoss': [round(100 * cond(i, them, m), 1) for m in range(3)]})
+            else:
+                for m, key in enumerate(metrics):
+                    diff = cond(i, 0, m) - cond(i, 1, m)
+                    watch[key].append({'week': w, 'rootFor': a if diff > 0 else b, 'against': b if diff > 0 else a,
+                                       'swing': round(100 * abs(diff), 1)})
+        for key in metrics:
+            watch[key] = sorted([x for x in sorted(watch[key], key=lambda x: -x['swing']) if x['swing'] >= 2.5][:3],
+                                key=lambda x: x['week'])
+        out[t] = {
+            'playoff': pc(sum(seed_ct[t][:6])), 'bye': pc(sum(seed_ct[t][:2])), 'seed1': pc(seed_ct[t][0]),
+            'division': pc(div_ct[t]), 'seeds': [pc(c) for c in seed_ct[t]],
+            'projW': round(wins_sum[t] / n_sims, 1),
+            'sosRank': ranked.index(t) + 1 if t in ranked else None,
+            'ownGames': sorted(own, key=lambda x: x['week']),
+            'watch': watch,
+        }
+    model = {'metrics': list(metrics), 'sims': n_sims, 'leagueAvg': round(lg, 1), 'weeklySpread': round(sd_week, 1),
+             'note': 'Each run plays out the remaining regular season with scores drawn around each team\'s '
+                     'estimated true average (season average pulled toward the league average) and applies the '
+                     'same seeding and tiebreak rules as the standings.'}
+    return {'model': model, 'teams': out}
+
+
+def build(folder):
+    league = load(folder, 'league')['league']
+    stand = load(folder, 'leagueStandings')['leagueStandings']
+    sched = load(folder, 'schedule')['schedule']
+    last_reg = int(league.get('lastRegularSeasonWeek', 14))
+    divisions = [{'id': d['id'], 'name': d['name']} for d in as_list(league['divisions']['division'])]
+    div_name = {d['id']: d['name'] for d in divisions}
+
+    teams = {}
+    for f in as_list(league['franchises']['franchise']):
+        teams[f['id']] = {'id': f['id'], 'name': f['name'].strip(), 'division': f.get('division', '')}
+    for s in as_list(stand['franchise']):
+        t = teams[s['id']]
+        w, l, tie = int(s.get('h2hw', 0)), int(s.get('h2hl', 0)), int(s.get('h2ht', 0))
+        apw, apl, apt = (int(x) for x in s.get('all_play_wlt', '0-0-0').split('-'))
+        gp = w + l + tie
+        t.update({'w': w, 'l': l, 't': tie, 'pct': round((w + 0.5 * tie) / gp, 3) if gp else 0.0,
+                  'pf': float(s.get('pf', 0)), 'pa': float(s.get('pa', 0)), 'pp': float(s.get('pp', 0)),
+                  'allPlayW': apw, 'allPlayL': apl, 'allPlayT': apt, 'streak': s.get('strk', '')})
+
+    # head-to-head results from scored regular-season games
+    games, remaining, weeks_played = [], [], 0
+    for wk in as_list(sched.get('weeklySchedule')):
+        week = int(wk['week'])
+        if week > last_reg:
+            continue
+        for m in as_list(wk.get('matchup')):
+            fs = as_list(m.get('franchise'))
+            if len(fs) == 2 and all(f.get('score') not in (None, '') for f in fs):
+                a, b = fs
+                games.append((week, a['id'], float(a['score']), b['id'], float(b['score'])))
+                weeks_played = max(weeks_played, week)
+            elif len(fs) == 2:
+                remaining.append((week, fs[0]['id'], fs[1]['id']))
+
+    seeds, winners, div_rank = seed_league(teams, games, divisions)
+
     # projected rookie draft order
+    pf = lambda t: teams[t]['pf']
+    apw = lambda t: teams[t]['allPlayW']
     in_po = {s['id'] for s in seeds}
     lottery_ladder = [('potential points', lambda t: teams[t]['pp'], False),
                       ('total points', lambda t: pf(t), False),
@@ -212,6 +346,7 @@ def build(folder):
         'draftOrder': draft,
         'draftRounds': rounds,
         'pickOwnersKnown': bool(owners),
+        'odds': simulate(teams, games, [g for g in remaining if g[0] > weeks_played], divisions) if remaining else None,
         'notes': ['Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.',
                   'Picks 7-12 are projected by seed until the playoffs are played.'],
     }
