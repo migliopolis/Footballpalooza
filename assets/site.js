@@ -26,7 +26,7 @@
   }
 
   /* ---------- page colors (Settings) ---------- */
-  const FBP_DEFAULT = { bg: '#bde2fa', fg: '#121519', hdrAccent: '#c8211a' };
+  const FBP_DEFAULT = { bg: '#bde2fa', fg: '#121519', hdrAccent: '#c8211a', logo: '#c8211a' };
   const hex2rgb = h => { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
   const rgb2hex = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
   const lum = h => { const [r, g, b] = hex2rgb(h).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
@@ -40,7 +40,8 @@
     const plain = contrast(WHITE, bg) >= contrast(INK, bg) ? WHITE : INK;
     const fg = contrast(other, bg) >= 4.5 ? other : plain;
     const hdrAccent = contrast(other, bg) >= 2 && other !== fg ? other : fg;
-    return { bg, fg, hdrAccent };
+    const logo = contrast(other, bg) >= 3 ? other : fg;   // wordmark: the team's second color when it reads, else the text color
+    return { bg, fg, hdrAccent, logo };
   }
   // accent for numbers on the page: the team color that reads best on the page background, nudged until it reads
   function teamAccent(tm, dark) {
@@ -60,13 +61,13 @@
     const tm = state.teams[teamId];
     if (!tm) return null;
     const h = teamHeader(tm);
-    return { '--hdr-bg': h.bg, '--hdr-fg': h.fg, '--hdr-accent': h.hdrAccent, light: teamAccent(tm, false), dark: teamAccent(tm, true) };
+    return { '--hdr-bg': h.bg, '--hdr-fg': h.fg, '--hdr-accent': h.hdrAccent, '--hdr-logo': h.logo, light: teamAccent(tm, false), dark: teamAccent(tm, true) };
   }
   function applyTheme() {
     const root = document.documentElement.style;
     const v = state.themeTeam ? themeVars(state.themeTeam) : null;
-    ['--hdr-bg', '--hdr-fg', '--hdr-accent', '--accent'].forEach(k => root.removeProperty(k));
-    if (v) { ['--hdr-bg', '--hdr-fg', '--hdr-accent'].forEach(k => root.setProperty(k, v[k])); root.setProperty('--accent', isDark() ? v.dark : v.light); }
+    ['--hdr-bg', '--hdr-fg', '--hdr-accent', '--hdr-logo', '--accent'].forEach(k => root.removeProperty(k));
+    if (v) { ['--hdr-bg', '--hdr-fg', '--hdr-accent', '--hdr-logo'].forEach(k => root.setProperty(k, v[k])); root.setProperty('--accent', isDark() ? v.dark : v.light); }
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = v ? v['--hdr-bg'] : FBP_DEFAULT.bg;
     try { localStorage.setItem('fbp-theme-cache', JSON.stringify(v || {})); } catch (e) {}

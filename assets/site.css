@@ -7,7 +7,7 @@
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   color-scheme:light; --gut:16px;
   /* header and accent colors; Settings swaps these for a team's colors */
-  --hdr-bg:#bde2fa; --hdr-fg:#121519; --hdr-accent:#c8211a; --accent:var(--red);
+  --hdr-bg:#bde2fa; --hdr-fg:#121519; --hdr-accent:#c8211a; --hdr-logo:#c8211a; --accent:var(--red);
 }
 @media (max-width:520px){:root{--gut:10px}}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
@@ -32,7 +32,9 @@ img{max-width:100%}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
 .brand img{width:36px;height:36px;border-radius:8px;flex:none}
 .brand span{display:flex;flex-direction:column;min-width:0}
-.brand b{font:700 clamp(.8rem,4.2vw,1.35rem)/1 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em;text-transform:uppercase;color:var(--hdr-fg)}
+/* the wordmark is a mask filled with the theme's logo color, so it follows Settings > Page colors */
+.wordmark{display:block;height:clamp(20px,6vw,28px);aspect-ratio:1200/206;max-width:100%;margin:1px 0 4px;background:var(--hdr-logo);
+  -webkit-mask:url(fbp-wordmark-mask.png) left center/contain no-repeat;mask:url(fbp-wordmark-mask.png) left center/contain no-repeat}
 .brand small{font-size:.75rem;color:var(--hdr-fg);opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tabs{max-width:1180px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;
   padding:0 max(10px,env(safe-area-inset-right,0px)) 0 max(10px,env(safe-area-inset-left,0px))}

@@ -18,7 +18,7 @@
 /* apply saved light/dark and page colors before first paint (set in Settings) */
 try{var m=localStorage.getItem('fbp-mode');if(m==='light'||m==='dark')document.documentElement.dataset.theme=m;
 var v=JSON.parse(localStorage.getItem('fbp-theme-cache')||'{}'),r=document.documentElement.style;
-if(v['--hdr-bg']){['--hdr-bg','--hdr-fg','--hdr-accent'].forEach(function(k){r.setProperty(k,v[k])});
+if(v['--hdr-bg']){['--hdr-bg','--hdr-fg','--hdr-accent','--hdr-logo'].forEach(function(k){r.setProperty(k,v[k])});
 var d=m?m==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setProperty('--accent',d?v.dark:v.light);}}catch(e){}
 </script>
 <link rel="stylesheet" href="assets/site.css">
@@ -28,7 +28,7 @@ var d=m?m==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setPrope
   <div class="top-in">
     <a class="brand" href="#now" aria-label="Footballpalooza home">
       <img src="assets/fbp-shield-192.png" alt="" width="36" height="36">
-      <span><b>Footballpalooza</b><small id="season-label">League hub</small></span>
+      <span><i class="wordmark" role="img" aria-label="Footballpalooza"></i><small id="season-label">League hub</small></span>
     </a>
   </div>
   <nav class="tabs" aria-label="Sections">
