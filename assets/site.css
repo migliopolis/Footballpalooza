@@ -634,3 +634,11 @@ tr.dh-div td small{text-transform:none;letter-spacing:0;font-weight:400;color:va
 .aw-side.won{background:var(--sky-soft)}
 .aw-sideh{display:flex;align-items:center;gap:4px;font-size:.84rem}.aw-sideh span{margin-left:auto;font-weight:600}
 .aw-side ul{margin:6px 0 0;padding-left:1rem;font-size:.8rem}.aw-side li small{color:var(--muted)}.aw-side li.pk{color:var(--muted)}
+
+/* FBP Home: pick, arrow and logo pinned together; section labels stay put while the table swipes */
+.dh-home td.dh-pk{white-space:nowrap}
+.dh-lg{display:inline-block;vertical-align:middle;margin-left:4px}
+.dh-lg img{width:26px;height:26px;max-width:none;object-fit:contain;display:block}
+.dh-home td.dh-pk,.dh-home th.dh-pk{box-shadow:1px 0 0 var(--line)}
+tr.dh-div td{padding:0!important}
+.dh-divl{position:sticky;left:0;display:inline-block;padding:6px 12px;white-space:nowrap}

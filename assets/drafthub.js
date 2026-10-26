@@ -57,18 +57,17 @@ window.FBPDraftHub = (() => {
       const s = st[d.id] || {}, slot = d.pick - 1, p = players[slot];
       const traded = d.owner && d.owner !== d.id;
       return `<tr>
-        <td class="dh-pk"><b>${d.pick}</b>${move(d.id, d.pick)}</td>
-        <td class="lg">${logo(d.id)}</td>
+        <td class="dh-pk"><b>${d.pick}</b>${move(d.id, d.pick)}<span class="dh-lg">${logo(d.id)}</span></td>
         <td class="t"><span class="dh-tm">${esc(s.name || abbr(d.id))}</span>${traded ? `<small class="dh-trade" title="Traded to ${esc(X.nameOf(d.owner))}">→ ${logo(d.owner)}${esc(abbr(d.owner))}</small>` : ''}</td>
         <td>${s.w}-${s.l}${s.t ? '-' + s.t : ''}</td><td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td>${Number(s.pp || 0).toFixed(1)}</td><td class="dh-stk ${/^L/.test(s.streak || '') ? 'good' : /^W/.test(s.streak || '') ? 'bad' : ''}">${streak(s.streak)}</td>
         <td class="dh-sal">${p ? `<b>$${lib.price(p, slot)}</b><small>${esc(p.name)} ${posPill(p.pos)}</small>` : '—'}</td></tr>`;
     };
-    const div = (label, sub) => `<tr class="dh-div"><td colspan="10">${label}${sub ? `<small>${sub}</small>` : ''}</td></tr>`;
+    const div = (label, sub) => `<tr class="dh-div"><td colspan="9"><span class="dh-divl">${label}${sub ? `<small>${sub}</small>` : ''}</span></td></tr>`;
     const ord = now.draftOrder || [];
     const non = ord.filter(d => d.basis === 'lowest potential points'), po = ord.filter(d => d.basis !== 'lowest potential points');
     return head('', prev ? `movement since week ${prev.week}` : '') +
       `<section><h2 class="sec">${now.draftYear || ''} rookie draft order <small>round 1; rounds 2–4 repeat it</small></h2>
-      <div class="card tbl-wrap"><table class="tbl dh-tbl dh-home"><thead><tr><th class="dh-pk">Pick</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>Record</th><th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th title="Potential points: decides picks 1–6">Pot. pts</th><th>Streak</th><th class="dh-sal">Salary</th></tr></thead><tbody>
+      <div class="card tbl-wrap"><table class="tbl dh-tbl dh-home"><thead><tr><th class="dh-pk">Pick</th><th class="t">Team</th><th>Record</th><th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th title="Potential points: decides picks 1–6">Pot. pts</th><th>Streak</th><th class="dh-sal">Salary</th></tr></thead><tbody>
       ${div('Non-playoff teams', 'lowest potential points picks first')}${non.map(row).join('')}
       ${div('Playoff teams', 'projected finish; champion picks last')}${po.map(row).join('')}
       </tbody></table></div>
