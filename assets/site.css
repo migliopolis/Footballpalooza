@@ -589,3 +589,5 @@ tr.dh-div td small{text-transform:none;letter-spacing:0;font-weight:400;color:va
 .dh-tr{font:600 .62rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--fg);color:var(--bg)}
 .dh-which{white-space:normal!important;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem}
 @media (max-width:520px){.dh-home .lg{left:3.3rem}.dh-mv{width:1.6rem}.tbl.dh-tbl td.t{min-width:7.5rem;max-width:9.5rem}}
+.dh-stk.good{color:var(--ok);font-weight:600}.dh-stk.bad{color:var(--red);font-weight:600}
+.dh-mv{font-size:.82rem;width:2.3rem}

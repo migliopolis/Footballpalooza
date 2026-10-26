@@ -49,9 +49,9 @@ window.FBPDraftHub = (() => {
     const gb = s => { const g = ((s.w - worst.w) + (worst.l - s.l)) / 2; return g ? g.toFixed(1).replace('.0', '') : '—'; };
     const players = board();
     const move = (id, pick) => {
-      if (!prev) return `<span class="dh-mv" title="Movement shows after the next weekly refresh">·</span>`;
+      if (!prev) return `<span class="dh-mv" title="Movement shows after the next weekly refresh">–</span>`;
       const d = (was[id] || pick) - pick;   // positive: moved up toward pick 1
-      return d > 0 ? `<span class="dh-mv up" title="Up ${d} since week ${prev.week}">▲${d}</span>` : d < 0 ? `<span class="dh-mv dn" title="Down ${-d} since week ${prev.week}">▼${-d}</span>` : `<span class="dh-mv" title="No change since week ${prev.week}">–</span>`;
+      return d > 0 ? `<span class="dh-mv up" title="Up ${d} since week ${prev.week}: a better pick">▲${d}</span>` : d < 0 ? `<span class="dh-mv dn" title="Down ${-d} since week ${prev.week}: a worse pick">▼${-d}</span>` : `<span class="dh-mv" title="No change since week ${prev.week}">–</span>`;
     };
     const row = d => {
       const s = st[d.id] || {}, slot = d.pick - 1, p = players[slot];
@@ -60,7 +60,7 @@ window.FBPDraftHub = (() => {
         <td class="dh-pk"><b>${d.pick}</b>${move(d.id, d.pick)}</td>
         <td class="lg">${logo(d.id)}</td>
         <td class="t"><span class="dh-tm">${esc(s.name || abbr(d.id))}</span>${traded ? `<small class="dh-trade" title="Traded to ${esc(X.nameOf(d.owner))}">→ ${logo(d.owner)}${esc(abbr(d.owner))}</small>` : ''}</td>
-        <td>${s.w}-${s.l}${s.t ? '-' + s.t : ''}</td><td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td>${Number(s.pp || 0).toFixed(1)}</td><td class="dh-stk">${streak(s.streak)}</td>
+        <td>${s.w}-${s.l}${s.t ? '-' + s.t : ''}</td><td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td>${Number(s.pp || 0).toFixed(1)}</td><td class="dh-stk ${/^L/.test(s.streak || '') ? 'good' : /^W/.test(s.streak || '') ? 'bad' : ''}">${streak(s.streak)}</td>
         <td class="dh-sal">${p ? `<b>$${lib.price(p, slot)}</b><small>${esc(p.name)} ${posPill(p.pos)}</small>` : '—'}</td></tr>`;
     };
     const div = (label, sub) => `<tr class="dh-div"><td colspan="10">${label}${sub ? `<small>${sub}</small>` : ''}</td></tr>`;
@@ -72,7 +72,7 @@ window.FBPDraftHub = (() => {
       ${div('Non-playoff teams', 'lowest potential points picks first')}${non.map(row).join('')}
       ${div('Playoff teams', 'projected finish; champion picks last')}${po.map(row).join('')}
       </tbody></table></div>
-      <p class="rf-foot">Salary is what the projected rookie at that pick would cost: the board’s next-best player (<a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>), priced with his projected NFL landing spot. GB is games back of the worst record. SOS is the average win% of the opponents still to play. ${prev ? '' : 'Movement arrows start after the next weekly refresh.'}</p></section>
+      <p class="rf-foot">Salary is what the projected rookie at that pick would cost: the board’s next-best player (<a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>), priced with his projected NFL landing spot. GB is games back of the worst record. SOS is the average win% of the opponents still to play. Colors are from the draft’s point of view: green is good for a team’s pick (moving up, losing streaks), red is bad. ${prev ? '' : 'Movement arrows start after Monday night’s refresh, the first week with a saved order to compare against.'}</p></section>
       <div class="grid2">
       <section><h2 class="sec">How the order works</h2><div class="card dh-rules"><ol>
         <li>Picks 1–6 go to the six non-playoff teams, lowest potential points first. Ties: lower total points, then fewer all-play wins.</li>
