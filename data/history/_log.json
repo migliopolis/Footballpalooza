@@ -1,0 +1,12 @@
+{
+ "ran": "2026-10-26T21:43:46+00:00",
+ "seasons": {
+  "2019": "2019 transactions failed: api.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | api.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | www47.myfantasyleague.com key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
+  "2020": "2020 league failed: api.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
+  "2021": "ok",
+  "2022": "2022 league failed: api.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
+  "2023": "2023 league failed: api.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
+  "2024": "2024 league failed: api.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
+  "2025": "2025 league failed: api.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests"
+ }
+}

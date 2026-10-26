@@ -1,0 +1,2401 @@
+{
+ "fetched": "2026-10-26T21:41:26+00:00",
+ "rosters": {
+  "franchise": [
+   {
+    "id": "0001",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "3",
+      "drafted": "BB $0 (2019)",
+      "id": "13589",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Auction $6 (2020)",
+      "id": "14805",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "3",
+      "drafted": "Auction $3 (2019)",
+      "id": "14102",
+      "salary": "12",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "14974",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $8",
+      "id": "12151",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "13606",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $3 (2017)",
+      "id": "13277",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.08 2021",
+      "contractYear": "1",
+      "drafted": "Draft 1.08 $10 (2021)",
+      "id": "15282",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "14841",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "4",
+      "drafted": "",
+      "id": "13610",
+      "salary": "22",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "4",
+      "drafted": "Auction $11 (2018)",
+      "id": "13319",
+      "salary": "29",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "3",
+      "drafted": "Auction $1 (2019)",
+      "id": "13671",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12676",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12634",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $36",
+      "id": "13608",
+      "salary": "36",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "13139",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $6",
+      "id": "0518",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13308",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Auction $46 (2020)",
+      "id": "11232",
+      "salary": "49",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13113",
+      "salary": "1",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.02 2021",
+      "contractYear": "1",
+      "drafted": "Draft 2.02 $4 (2021)",
+      "id": "15238",
+      "salary": "4",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.08 2021",
+      "contractYear": "1",
+      "drafted": "Draft 4.08 $1 (2021)",
+      "id": "15272",
+      "salary": "1",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0002",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "4",
+      "drafted": "Trade (2020)",
+      "id": "13116",
+      "salary": "30",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "5",
+      "drafted": "",
+      "id": "12801",
+      "salary": "43",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Auction $1 (2020)",
+      "id": "14138",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $30",
+      "id": "14109",
+      "salary": "30",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "0501",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "10261",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "12628",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $48",
+      "id": "14073",
+      "salary": "48",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13809",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $48",
+      "id": "14803",
+      "salary": "48",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "10273",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $21",
+      "id": "13138",
+      "salary": "21",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $13",
+      "id": "12187",
+      "salary": "13",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13382",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0503",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "11182",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "5",
+      "drafted": "Trade (2020)",
+      "id": "13364",
+      "salary": "33",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "12630",
+      "salary": "1",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.11 2021",
+      "contractYear": "1",
+      "drafted": "3.11",
+      "id": "15241",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0003",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "4",
+      "drafted": "Trade (2020)",
+      "id": "13593",
+      "salary": "18",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "14858",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "14857",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "10697",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $9",
+      "id": "14080",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $8",
+      "id": "13153",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $6",
+      "id": "0529",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13772",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "0516",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13189",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $10",
+      "id": "14137",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13418",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.10 2021",
+      "contractYear": "1",
+      "drafted": "2.10",
+      "id": "15263",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "15326",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13642",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "15332",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "15296",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "12647",
+      "salary": "2",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $28",
+      "id": "11228",
+      "salary": "28",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "3",
+      "drafted": "BB $1 (2019)",
+      "id": "14104",
+      "salary": "10",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.10 2021",
+      "contractYear": "1",
+      "drafted": "3.10",
+      "id": "15301",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.10 2021",
+      "contractYear": "1",
+      "drafted": "1.10",
+      "id": "15293",
+      "salary": "7",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.10 2021",
+      "contractYear": "1",
+      "drafted": "4.10",
+      "id": "15334",
+      "salary": "1",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.11 2021",
+      "contractYear": "1",
+      "drafted": "4.11",
+      "id": "15407",
+      "salary": "1",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0004",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Trade (2020)",
+      "id": "14852",
+      "salary": "29",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $7",
+      "id": "0528",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "12650",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "13108",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $15",
+      "id": "11671",
+      "salary": "15",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $5 (2020)",
+      "id": "14813",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "11660",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "11644",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $3",
+      "id": "14017",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "14143",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $7",
+      "id": "13377",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "11247",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "10932",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14558",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "3",
+      "drafted": "Auction $4 (2019)",
+      "id": "14075",
+      "salary": "13",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12476",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.05 2021",
+      "contractYear": "1",
+      "drafted": "2.05",
+      "id": "15239",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $12",
+      "id": "10271",
+      "salary": "12",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $4",
+      "id": "13156",
+      "salary": "4",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Auction $13 (2020)",
+      "id": "11222",
+      "salary": "16",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.05 2021",
+      "contractYear": "1",
+      "drafted": "4.05",
+      "id": "15260",
+      "salary": "1",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.05 2021",
+      "contractYear": "1",
+      "drafted": "3.05",
+      "id": "15290",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0005",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": "1.01 2021",
+      "contractYear": "1",
+      "drafted": "1.01",
+      "id": "15254",
+      "salary": "45",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Auction $2 (2020)",
+      "id": "14840",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $5 (2020)",
+      "id": "14836",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.01 2021",
+      "contractYear": "1",
+      "drafted": "2.01",
+      "id": "15308",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "9918",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $9",
+      "id": "13129",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $6",
+      "id": "0510",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $7",
+      "id": "13630",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14072",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $5",
+      "id": "13193",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "12150",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "12610",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "9902",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "13192",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $6",
+      "id": "11680",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $7",
+      "id": "10703",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $5 (2020)",
+      "id": "11647",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "13168",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "5",
+      "drafted": "",
+      "id": "12626",
+      "salary": "37",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "FT",
+      "contractYear": "4",
+      "drafted": "",
+      "id": "13130",
+      "salary": "44",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.01 2021",
+      "contractYear": "1",
+      "drafted": "3.01",
+      "id": "15289",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.01 2021",
+      "contractYear": "1",
+      "drafted": "4.01",
+      "id": "15425",
+      "salary": "1",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0006",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $9 (2020)",
+      "id": "14835",
+      "salary": "12",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "13672",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "13154",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $9",
+      "id": "15034",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $3",
+      "id": "13623",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $5",
+      "id": "14085",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $15",
+      "id": "15040",
+      "salary": "15",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Trade (2020)",
+      "id": "14777",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.06 2021",
+      "contractYear": "1",
+      "drafted": "2.06",
+      "id": "15255",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $3",
+      "id": "14778",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "3",
+      "drafted": "BB $0 (2019)",
+      "id": "13674",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12930",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "13793",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14844",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.02 2021",
+      "contractYear": "1",
+      "drafted": "4.02",
+      "id": "15270",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14839",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14798",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "10960",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $9",
+      "id": "14799",
+      "salary": "9",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14112",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $15",
+      "id": "15259",
+      "salary": "15",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.02 2021",
+      "contractYear": "1",
+      "drafted": "3.02",
+      "id": "15319",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.11 2021",
+      "contractYear": "1",
+      "drafted": "1.11",
+      "id": "15288",
+      "salary": "6",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.04 2021",
+      "contractYear": "1",
+      "drafted": "1.04",
+      "id": "15257",
+      "salary": "25",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.04 2021",
+      "contractYear": "1",
+      "drafted": "2.04",
+      "id": "15237",
+      "salary": "4",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0007",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $2 (2020)",
+      "id": "14783",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $13",
+      "id": "12620",
+      "salary": "13",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "5",
+      "drafted": "",
+      "id": "13404",
+      "salary": "34",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.05 2021",
+      "contractYear": "1",
+      "drafted": "1.05",
+      "id": "15281",
+      "salary": "20",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "3",
+      "drafted": "BB $1 (2019)",
+      "id": "14208",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13134",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $17",
+      "id": "11225",
+      "salary": "17",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "0504",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $7",
+      "id": "12629",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "13620",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "FT",
+      "contractYear": "3",
+      "drafted": "Auction $32 (2019)",
+      "id": "11244",
+      "salary": "35",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14864",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.11 2021",
+      "contractYear": "1",
+      "drafted": "2.11",
+      "id": "15331",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "14810",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13863",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "FT",
+      "contractYear": "4",
+      "drafted": "Trade (2020)",
+      "id": "13128",
+      "salary": "65",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "14789",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14815",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $18 (2020)",
+      "id": "13629",
+      "salary": "21",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $29",
+      "id": "13163",
+      "salary": "29",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "5",
+      "drafted": "",
+      "id": "11938",
+      "salary": "30",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.06 2021",
+      "contractYear": "1",
+      "drafted": "4.06",
+      "id": "15275",
+      "salary": "1",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.06 2021",
+      "contractYear": "1",
+      "drafted": "3.06",
+      "id": "15271",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0008",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "9431",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $41 (2020)",
+      "id": "14802",
+      "salary": "44",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $1 (2020)",
+      "id": "14127",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $18",
+      "id": "13622",
+      "salary": "18",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $8",
+      "id": "12678",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.02 2021",
+      "contractYear": "1",
+      "drafted": "1.02",
+      "id": "15256",
+      "salary": "37",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14811",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $6 (2020)",
+      "id": "14081",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $5 (2020)",
+      "id": "14838",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.08 2021",
+      "contractYear": "1",
+      "drafted": "2.08",
+      "id": "15261",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14828",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $5 (2020)",
+      "id": "9988",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.06 2021",
+      "contractYear": "1",
+      "drafted": "Draft 1.06 $16 (2021)",
+      "id": "15329",
+      "salary": "16",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13424",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14845",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14977",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14331",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "15252",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "14850",
+      "salary": "3",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13880",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14341",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.04 2021",
+      "contractYear": "1",
+      "drafted": "3.04",
+      "id": "15297",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0009",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "3",
+      "drafted": "Auction $2 (2019)",
+      "id": "14056",
+      "salary": "11",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "FT",
+      "contractYear": "4",
+      "drafted": "",
+      "id": "13131",
+      "salary": "50",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "4",
+      "drafted": "",
+      "id": "13164",
+      "salary": "25",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $49",
+      "id": "11675",
+      "salary": "49",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $13",
+      "id": "13146",
+      "salary": "13",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $20",
+      "id": "13607",
+      "salary": "20",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14867",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "0502",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "13133",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $6",
+      "id": "14842",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "4",
+      "drafted": "Trade (2020)",
+      "id": "13299",
+      "salary": "18",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "13646",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $49",
+      "id": "13604",
+      "salary": "49",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Auction $1 (2020)",
+      "id": "13726",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14223",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "0530",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0 (2019)",
+      "id": "11674",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $32 (2020)",
+      "id": "14800",
+      "salary": "35",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $5 (2020)",
+      "id": "14087",
+      "salary": "8",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $7 (2020)",
+      "id": "14833",
+      "salary": "10",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.03 2021",
+      "contractYear": "1",
+      "drafted": "2.03",
+      "id": "15240",
+      "salary": "4",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0010",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "3",
+      "drafted": "Auction $1 (2019)",
+      "id": "14136",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "3",
+      "drafted": "Auction $1 (2019)",
+      "id": "12263",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $61",
+      "id": "12625",
+      "salary": "61",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $21",
+      "id": "13635",
+      "salary": "21",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $6",
+      "id": "14113",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "0525",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14239",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "11390",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "13814",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $3 (2020)",
+      "id": "13157",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $3 (2020)",
+      "id": "13645",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $8",
+      "id": "5848",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0521",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $30",
+      "id": "14079",
+      "salary": "30",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14105",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "5",
+      "drafted": "",
+      "id": "13132",
+      "salary": "25",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "12176",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "14059",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.07 2021",
+      "contractYear": "1",
+      "drafted": "1.07",
+      "id": "15258",
+      "salary": "12",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.07 2021",
+      "contractYear": "1",
+      "drafted": "3.07",
+      "id": "15292",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.07 2021",
+      "contractYear": "1",
+      "drafted": "2.07",
+      "id": "15287",
+      "salary": "3",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0011",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "BB $0 (2020)",
+      "id": "14779",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "2",
+      "drafted": "Auction $4 (2020)",
+      "id": "12184",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.09 2021",
+      "contractYear": "1",
+      "drafted": "1.09",
+      "id": "15284",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $10",
+      "id": "12175",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $26",
+      "id": "12164",
+      "salary": "26",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $8",
+      "id": "11679",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $3",
+      "id": "10276",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "10700",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $8",
+      "id": "13633",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "14123",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13143",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14821",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "9474",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13234",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0532",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $14",
+      "id": "12652",
+      "salary": "14",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $18",
+      "id": "15253",
+      "salary": "18",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "3.09 2021",
+      "contractYear": "1",
+      "drafted": "3.09",
+      "id": "15262",
+      "salary": "2",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   },
+   {
+    "id": "0012",
+    "player": [
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "3",
+      "drafted": "Auction $13 (2019)",
+      "id": "7836",
+      "salary": "22",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $31 (2020)",
+      "id": "14797",
+      "salary": "34",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "FT",
+      "contractYear": "5",
+      "drafted": "",
+      "id": "12186",
+      "salary": "37",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "BB $2 (2020)",
+      "id": "10738",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $18 (2020)",
+      "id": "14832",
+      "salary": "21",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.12 2021",
+      "contractYear": "1",
+      "drafted": "1.12",
+      "id": "15283",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "5",
+      "drafted": "",
+      "id": "11678",
+      "salary": "30",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "12658",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14870",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "12677",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "7401",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "13135",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "14095",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12657",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": " ",
+      "contractYear": "2",
+      "drafted": "Auction $22 (2020)",
+      "id": "14071",
+      "salary": "25",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12152",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13675",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0523",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.12 2021",
+      "contractYear": "1",
+      "drafted": "2.12",
+      "id": "15302",
+      "salary": "3",
+      "status": "TAXI_SQUAD"
+     }
+    ],
+    "week": "22"
+   }
+  ]
+ }
+}

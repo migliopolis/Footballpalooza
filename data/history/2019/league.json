@@ -1,0 +1,272 @@
+{
+ "fetched": "2026-10-26T21:38:29+00:00",
+ "league": {
+  "auction_kind": "live",
+  "baseURL": "https://www47.myfantasyleague.com",
+  "bbidConditional": "No",
+  "bbidIncrement": "1",
+  "bbidSeasonLimit": "100",
+  "bbidTiebreaker": "SORT",
+  "bestLineup": "No",
+  "bidIncrement": "1",
+  "conferences": {
+   "conference": [
+    {
+     "id": "00",
+     "name": "Roger Ebert"
+    },
+    {
+     "id": "01",
+     "name": "Gene Siskel"
+    }
+   ],
+   "count": "2"
+  },
+  "currentWaiverType": "BBID",
+  "defaultTradeExpirationDays": "3",
+  "divisions": {
+   "count": "4",
+   "division": [
+    {
+     "conference": "00",
+     "id": "00",
+     "name": "Thumbs Up"
+    },
+    {
+     "conference": "00",
+     "id": "01",
+     "name": "Thumbs Down"
+    },
+    {
+     "conference": "01",
+     "id": "02",
+     "name": "Thumbs Up"
+    },
+    {
+     "conference": "01",
+     "id": "03",
+     "name": "Thumbs Down"
+    }
+   ]
+  },
+  "endWeek": "17",
+  "franchises": {
+   "count": "12",
+   "franchise": [
+    {
+     "abbrev": "THOT",
+     "auctionStartAmount": "180",
+     "bbidAvailableBalance": "0.00",
+     "division": "00",
+     "id": "0001",
+     "name": "Thots and Players",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "9"
+    },
+    {
+     "abbrev": "MPL",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "54.00",
+     "division": "00",
+     "id": "0002",
+     "name": "Mitch Please",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "5"
+    },
+    {
+     "abbrev": "ZEKE",
+     "auctionStartAmount": "203",
+     "bbidAvailableBalance": "1.00",
+     "division": "00",
+     "id": "0003",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2019/14482_franchise_logo0003.jpg",
+     "name": "The Zekes",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "11"
+    },
+    {
+     "abbrev": "TAE",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "14.00",
+     "division": "01",
+     "id": "0004",
+     "name": "The America Eagles",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "2"
+    },
+    {
+     "abbrev": "WIZ",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "97.00",
+     "division": "01",
+     "icon": "https://www.jmc9000.com/wp-content/uploads/2016/09/Welmet.png",
+     "id": "0005",
+     "name": "The Fist of the Magi",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "6"
+    },
+    {
+     "abbrev": "DOGS",
+     "auctionStartAmount": "202",
+     "bbidAvailableBalance": "1.00",
+     "division": "01",
+     "id": "0006",
+     "name": "Centaurs for Disease Control ",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "7"
+    },
+    {
+     "abbrev": "FRO",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "1.00",
+     "division": "02",
+     "id": "0007",
+     "name": "MR. FROBOT",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "12"
+    },
+    {
+     "abbrev": "SOT",
+     "auctionStartAmount": "197",
+     "bbidAvailableBalance": "3.00",
+     "division": "02",
+     "id": "0008",
+     "name": "Son of Tinactin",
+     "salaryCapAmount": "",
+     "stadium": "The Rose Bowl",
+     "waiverSortOrder": "8"
+    },
+    {
+     "abbrev": "REP",
+     "auctionStartAmount": "203",
+     "bbidAvailableBalance": "61.00",
+     "division": "02",
+     "id": "0009",
+     "name": "The Replacements",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "1"
+    },
+    {
+     "abbrev": "HOLD",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "77.00",
+     "division": "03",
+     "id": "0010",
+     "name": "Hold Timers",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "10"
+    },
+    {
+     "abbrev": "WC",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "75.00",
+     "division": "03",
+     "id": "0011",
+     "name": "Wholey Club",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "4"
+    },
+    {
+     "abbrev": "SGR",
+     "auctionStartAmount": "215",
+     "bbidAvailableBalance": "95.00",
+     "division": "03",
+     "id": "0012",
+     "name": "Sour Grapes",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "3"
+    }
+   ]
+  },
+  "h2h": "YES",
+  "history": {
+   "league": [
+    {
+     "url": "https://www47.myfantasyleague.com/2019/home/14482",
+     "year": "2019"
+    },
+    {
+     "url": "https://www61.myfantasyleague.com/2020/home/14482",
+     "year": "2020"
+    }
+   ]
+  },
+  "id": "14482",
+  "injuredReserve": "2",
+  "lastRegularSeasonWeek": "13",
+  "loadRosters": "live_auction",
+  "lockout": "Yes",
+  "maxKeepers": "17",
+  "maxWaiverRounds": "8",
+  "minBid": "1",
+  "minKeepers": "0",
+  "mobileAlerts": "",
+  "name": "FootballPalooza Season 9",
+  "nflPoolEndWeek": "17",
+  "nflPoolStartWeek": "1",
+  "nflPoolType": "Confidence",
+  "partialLineupAllowed": "YES",
+  "playerLimitUnit": "LEAGUE",
+  "precision": "1",
+  "rosterLimits": {
+   "position": [
+    {
+     "limit": "1-5",
+     "name": "QB"
+    },
+    {
+     "limit": "2-8",
+     "name": "RB"
+    },
+    {
+     "limit": "2-8",
+     "name": "WR"
+    },
+    {
+     "limit": "5",
+     "name": "TE"
+    },
+    {
+     "limit": "1-5",
+     "name": "Def"
+    }
+   ]
+  },
+  "rosterSize": "17",
+  "rostersPerPlayer": "1",
+  "salaryCapAmount": "",
+  "standingsSort": "PCT,PTS,",
+  "startWeek": "1",
+  "starters": {
+   "count": "8",
+   "position": [
+    {
+     "limit": "1",
+     "name": "QB"
+    },
+    {
+     "limit": "2-3",
+     "name": "RB"
+    },
+    {
+     "limit": "2-3",
+     "name": "WR"
+    },
+    {
+     "limit": "1-2",
+     "name": "TE"
+    },
+    {
+     "limit": "1",
+     "name": "Def"
+    }
+   ]
+  },
+  "survivorPool": "Yes",
+  "survivorPoolEndWeek": "17",
+  "survivorPoolStartWeek": "1",
+  "taxiSquad": "0",
+  "usesContractYear": "1",
+  "usesSalaries": "1"
+ }
+}
