@@ -108,10 +108,10 @@ def main():
         A.append({'key': 'mvp', 'title': 'MVP', 'why': 'Most points in an FBP starting lineup',
                   'list': [player(p) for p in eligible[:3]]})
     # Best value: starter points per salary dollar, regular starters only
-    val = [p for p in eligible if starts[p] >= half and (salary.get(p) or 0) > 0]
+    val = [p for p in eligible if starts[p] >= half and (salary.get(p) or 0) > 0 and pos_of(p) != 'DEF']   # players only
     val.sort(key=lambda p: -tot[p] / salary[p])
     if val:
-        A.append({'key': 'value', 'title': 'Best Value', 'why': f'Most starter points per salary dollar (at least {half} starts)',
+        A.append({'key': 'value', 'title': 'Best Value', 'why': f'Most starter points per salary dollar (at least {half} starts; no defenses)',
                   'list': [dict(player(p), perDollar=round(tot[p] / salary[p], 1)) for p in val[:3]]})
     # Rookie of the Year
     rk = [p for p in eligible if pinfo.get(p, {}).get('draft_year') == season]
@@ -133,9 +133,9 @@ def main():
             except ValueError: bid = 0.0
         for pid in added:
             claims[(pid, t.get('franchise'))] = {'bid': bid, 'type': t['type'], 'ts': int(t.get('timestamp') or 0)}
-    pick = sorted(((by_team[k], k, v) for k, v in claims.items() if by_team[k] > 0), key=lambda x: -x[0])
+    pick = sorted(((by_team[k], k, v) for k, v in claims.items() if by_team[k] > 0 and pos_of(k[0]) != 'DEF'), key=lambda x: -x[0])   # no defenses
     if pick:
-        A.append({'key': 'waiver', 'title': 'Waiver Claim of the Year', 'why': 'Most starter points for the team that picked him up',
+        A.append({'key': 'waiver', 'title': 'Waiver Claim of the Year', 'why': 'Most starter points for the team that picked him up (no defenses)',
                   'list': [dict(player(k[0], pts, k[1]), bid=v['bid'], how='FAAB' if v['type'] == 'BBID_WAIVER' else 'Free agent') for pts, k, v in pick[:3]]})
 
     trades = []
