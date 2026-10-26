@@ -1,13 +1,15 @@
-"""Build data/awards.json for the Awards tab.
+"""Build the Awards tab data: data/awards.json (this season) and data/awards/<year>.json (past seasons).
 
-League awards count only points scored in an FBP starting lineup, and only players on an FBP
-roster. Inputs (all saved by the weekly refresh):
-  data/mfl/weeklyResults.json   starters and bench by week (refresh_mfl.py)
-  data/mfl/transactions.json    trades, waiver claims, free-agent pickups
-  data/mfl/rosters.json         current rosters and salaries
-  data/mfl/players.json         names, positions, NFL teams, draft year
+League awards count only points scored in an FBP starting lineup, regular season only.
+This season, only players on an FBP roster now count. Past seasons count everyone who started.
+
+This season's inputs (saved by the weekly refresh):
+  data/mfl/weeklyResults.json, transactions.json, rosters.json, players.json, league.json
   data/player-links.json        MFL id -> ESPN id (photos) and display name
   data/league-now.json          standings: points, potential points, all-play
+Past seasons (2019 on, saved once by scripts/backfill_history.py):
+  data/history/<year>/weeklyResults.json, transactions.json, rosters.json, players.json, league.json
+  data/reference/history.json   standings (points, potential points, all-play) for each year
 Run: python scripts/awards.py
 """
 import json, math, os, re
@@ -17,8 +19,8 @@ from datetime import datetime, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = lambda *p: os.path.join(ROOT, 'data', *p)
 as_list = lambda x: x if isinstance(x, list) else ([x] if x else [])
-SLOTS = ['QB', 'RB', 'RB', 'WR', 'WR', 'TE', 'FLEX', 'DEF']   # 2026 starting lineup
-FLEX_OK = {'RB', 'WR', 'TE'}
+DEFAULT_SLOTS = ['QB', 'RB', 'RB', 'WR', 'WR', 'TE', 'FLEX', 'DEF']   # 2026 starting lineup
+SLOT_ORDER = ['QB', 'RB', 'WR', 'TE']
 
 
 def load(path, default=None):
@@ -36,35 +38,27 @@ def display(name):
     return name
 
 
-def main():
-    meta = load(D('mfl', '_meta.json'), {})
-    season = str(meta.get('season') or '2026')
-    wr = load(D('mfl', 'weeklyResults.json'), {}) or {}
-    weeks = wr.get('weeks') or {}
-    out = {'generated': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': season}
-    if not weeks:
-        out['ready'] = False
-        json.dump(out, open(D('awards.json'), 'w'), indent=1)
-        print('awards.json: no weekly results yet')
-        return
+def lineup_slots(league):
+    """All-FBP spots from MFL's starter settings: each position's minimum, then FLEX spots for the rest."""
+    st = (league or {}).get('starters') or {}
+    try:
+        count = int(st.get('count'))
+        lim = {}
+        for p in as_list(st.get('position')):
+            lo, _, hi = str(p.get('limit', '0')).partition('-')
+            lim['DEF' if p['name'] == 'Def' else p['name']] = (int(lo), int(hi or lo))
+    except Exception:
+        return DEFAULT_SLOTS, {'RB', 'WR', 'TE'}
+    slots = [pos for pos in SLOT_ORDER for _ in range(lim.get(pos, (0, 0))[0])]
+    flex_ok = {pos for pos, (lo, hi) in lim.items() if hi > lo and pos != 'DEF'}
+    slots += ['FLEX'] * max(0, count - sum(lo for lo, _ in lim.values()))
+    slots += ['DEF'] * lim.get('DEF', (0, 0))[0]
+    return slots, flex_ok or {'RB', 'WR', 'TE'}
 
-    P = load(D('mfl', 'players.json'), {}) or {}
-    fields = P.get('fields', [])
-    pinfo = {pid: dict(zip(fields, row)) for pid, row in (P.get('players') or {}).items()}
-    links = (load(D('player-links.json'), {}) or {}).get('links', {})
 
-    # current rosters: owner, salary, contract
-    owner, salary, contract = {}, {}, {}
-    for f in as_list((load(D('mfl', 'rosters.json'), {}) or {}).get('rosters', {}).get('franchise')):
-        for pl in as_list(f.get('player')):
-            owner[pl['id']] = f['id']
-            try:
-                salary[pl['id']] = float(pl.get('salary') or 0)
-            except ValueError:
-                salary[pl['id']] = 0.0
-            contract[pl['id']] = pl.get('contractYear', '')
-
-    # starter points: by player, by (player, franchise), and every single game
+def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, slots, flex_ok, rostered_only):
+    """Every award for one season. weeks: {week: {franchise: {'s': [[id, pts]], 'n': [...]}}}, regular season only."""
+    out = {'season': season}
     tot, starts, by_team, games = defaultdict(float), defaultdict(int), defaultdict(float), []
     wk_nums = sorted(int(w) for w in weeks)
     for w in wk_nums:
@@ -72,7 +66,19 @@ def main():
             for pid, pts in t.get('s', []):
                 tot[pid] += pts; starts[pid] += 1; by_team[(pid, fr)] += pts
                 games.append((pts, w, pid, fr))
+    if not wk_nums:
+        out['ready'] = False
+        return out
     last_wk = wk_nums[-1]
+
+    # the team shown with a player: his roster now this season; in past seasons the team he scored most for
+    team_of = dict(owner)
+    if not rostered_only:
+        best = {}
+        for (pid, fr), pts in by_team.items():
+            if pts > best.get(pid, (-1, None))[0]:
+                best[pid] = (pts, fr)
+        team_of = {pid: fr for pid, (_, fr) in best.items()}
 
     def player(pid, pts=None, team=None):
         i = pinfo.get(pid, {})
@@ -82,19 +88,19 @@ def main():
         espn = (l[0] if l else '') or i.get('espn_id', '')
         nm = (l[2] if len(l) > 2 and l[2] else '') or display(i.get('name', pid))
         return {'id': pid, 'name': nm, 'pos': pos, 'nfl': i.get('team', ''), 'espn': espn if pos != 'DEF' else '',
-                'team': team or owner.get(pid), 'pts': round(tot[pid] if pts is None else pts, 1), 'starts': starts[pid],
+                'team': team or team_of.get(pid), 'pts': round(tot[pid] if pts is None else pts, 1), 'starts': starts[pid],
                 'ppg': round(tot[pid] / starts[pid], 1) if starts[pid] else 0, 'salary': salary.get(pid),
-                'contract': contract.get(pid, ''), 'rookie': i.get('draft_year') == season}
+                'contract': contract.get(pid, ''), 'rookie': str(i.get('draft_year')) == season}
 
     pos_of = lambda pid: ('DEF' if pinfo.get(pid, {}).get('position') == 'Def' else pinfo.get(pid, {}).get('position', ''))
-    eligible = sorted((pid for pid in tot if pid in owner), key=lambda p: -tot[p])   # rostered now
+    eligible = sorted((pid for pid in tot if (pid in owner or not rostered_only) and pos_of(pid)), key=lambda p: -tot[p])
 
     # All-FBP 1st and 2nd teams: best starter points at each lineup spot, FLEX = best RB/WR/TE left
     used, teams = set(), []
     for _ in range(2):
         team = []
-        for slot in SLOTS:
-            ok = FLEX_OK if slot == 'FLEX' else {slot}
+        for slot in slots:
+            ok = flex_ok if slot == 'FLEX' else {slot}
             pick = next((p for p in eligible if p not in used and pos_of(p) in ok), None)
             if pick:
                 used.add(pick); team.append({'slot': slot, 'player': player(pick)})
@@ -103,24 +109,21 @@ def main():
 
     A = []
     half = max(2, math.ceil(len(wk_nums) / 2))
-    # MVP
     if eligible:
         A.append({'key': 'mvp', 'title': 'MVP', 'why': 'Most points in an FBP starting lineup',
                   'list': [player(p) for p in eligible[:3]]})
-    # Best value: starter points per salary dollar, regular starters only
-    val = [p for p in eligible if starts[p] >= half and (salary.get(p) or 0) > 0 and pos_of(p) != 'DEF']   # players only
+    # Best value: starter points per salary dollar, regular starters only, no defenses
+    val = [p for p in eligible if starts[p] >= half and (salary.get(p) or 0) > 0 and pos_of(p) != 'DEF']
     val.sort(key=lambda p: -tot[p] / salary[p])
     if val:
         A.append({'key': 'value', 'title': 'Best Value', 'why': f'Most starter points per salary dollar (at least {half} starts; no defenses)',
                   'list': [dict(player(p), perDollar=round(tot[p] / salary[p], 1)) for p in val[:3]]})
-    # Rookie of the Year
-    rk = [p for p in eligible if pinfo.get(p, {}).get('draft_year') == season]
+    rk = [p for p in eligible if str(pinfo.get(p, {}).get('draft_year')) == season]
     if rk:
         A.append({'key': 'rookie', 'title': 'Rookie of the Year', 'why': f'Top {season} rookie by starter points',
                   'list': [player(p) for p in rk[:3]]})
 
-    # pickups and trades
-    tx = (load(D('mfl', 'transactions.json'), {}) or {}).get('transactions', [])
+    # pickups
     claims = {}
     for t in tx:
         if t.get('type') not in ('BBID_WAIVER', 'WAIVER', 'FREE_AGENT'):
@@ -133,11 +136,12 @@ def main():
             except ValueError: bid = 0.0
         for pid in added:
             claims[(pid, t.get('franchise'))] = {'bid': bid, 'type': t['type'], 'ts': int(t.get('timestamp') or 0)}
-    pick = sorted(((by_team[k], k, v) for k, v in claims.items() if by_team[k] > 0 and pos_of(k[0]) != 'DEF'), key=lambda x: -x[0])   # no defenses
+    pick = sorted(((by_team[k], k, v) for k, v in claims.items() if by_team[k] > 0 and pos_of(k[0]) not in ('DEF', '')), key=lambda x: -x[0])
     if pick:
         A.append({'key': 'waiver', 'title': 'Waiver Claim of the Year', 'why': 'Most starter points for the team that picked him up (no defenses)',
                   'list': [dict(player(k[0], pts, k[1]), bid=v['bid'], how='FAAB' if v['type'] == 'BBID_WAIVER' else 'Free agent') for pts, k, v in pick[:3]]})
 
+    # trades: what each side received, and its starter points for its new team that season
     trades = []
     for t in tx:
         if t.get('type') != 'TRADE':
@@ -145,9 +149,11 @@ def main():
         a, b = t.get('franchise'), t.get('franchise2')
         gave_a = [x for x in (t.get('franchise1_gave_up') or '').split(',') if x.strip()]
         gave_b = [x for x in (t.get('franchise2_gave_up') or '').split(',') if x.strip()]
+        if not (gave_a or gave_b) or not (a and b):
+            continue
         side = lambda fr, got: {'team': fr, 'players': [player(x, by_team[(x, fr)], fr) for x in got if x.isdigit()],
                                 'picks': [x for x in got if not x.isdigit()], 'pts': round(sum(by_team[(x, fr)] for x in got if x.isdigit()), 1)}
-        sa, sb = side(a, gave_b), side(b, gave_a)   # what each team received
+        sa, sb = side(a, gave_b), side(b, gave_a)
         if sa['pts'] < sb['pts']:
             sa, sb = sb, sa
         trades.append({'winner': sa, 'loser': sb, 'margin': round(sa['pts'] - sb['pts'], 1), 'ts': int(t.get('timestamp') or 0)})
@@ -157,44 +163,150 @@ def main():
                   'more': [t for t in trades[1:3] if t['margin'] > 0]})
 
     # team awards from the standings
-    now = load(D('league-now.json'), {}) or {}
-    st = now.get('standings') or []
-    eff = sorted((s for s in st if s.get('pp')), key=lambda s: -s['pf'] / s['pp'])
+    eff = sorted((s for s in standings if s.get('pp')), key=lambda s: -s['pf'] / s['pp'])
     if eff:
         A.append({'key': 'manager', 'title': 'Manager of the Year', 'why': 'Best lineup calls: actual points over the most the roster could have scored',
                   'teams': [{'team': s['id'], 'stat': f"{100 * s['pf'] / s['pp']:.1f}%", 'sub': f"{s['pf']:.1f} of {s['pp']:.1f} possible"} for s in eff[:3]]})
+
     def ap(s):
         g = s['allPlayW'] + s['allPlayL'] + s['allPlayT']
         return (s['allPlayW'] + s['allPlayT'] / 2) / g if g else 0
-    luck = sorted(st, key=lambda s: -(s['pct'] - ap(s)))
+    luck = sorted(standings, key=lambda s: -(s['pct'] - ap(s)))
     if luck:
         lk = lambda s: {'team': s['id'], 'stat': f"{'+' if s['pct'] - ap(s) >= 0 else ''}{(s['pct'] - ap(s)) * 100:.0f}% win", 'sub': f"{s['w']}-{s['l']}{'-' + str(s['t']) if s['t'] else ''} record, {s['allPlayW']}-{s['allPlayL']} all-play"}
         A.append({'key': 'lucky', 'title': 'Luckiest Team', 'why': 'Record furthest above what its all-play record suggests', 'teams': [lk(s) for s in luck[:3]]})
         A.append({'key': 'unlucky', 'title': 'Unluckiest Team', 'why': 'Record furthest below its all-play record', 'teams': [lk(s) for s in luck[::-1][:3]]})
-    # worst contract: big salaries with the fewest starter points per dollar
-    big = [p for p in owner if (salary.get(p) or 0) >= 15 and pos_of(p) in {'QB', 'RB', 'WR', 'TE'} and starts[p] >= half]   # regular starters only
+
+    # worst contract: big salaries with the fewest starter points per dollar, regular starters only
+    big = [p for p in salary if (salary.get(p) or 0) >= 15 and pos_of(p) in {'QB', 'RB', 'WR', 'TE'} and starts[p] >= half
+           and (p in owner or not rostered_only)]
     big.sort(key=lambda p: tot.get(p, 0) / salary[p])
     if big:
         A.append({'key': 'contract', 'title': 'Worst Contract', 'why': f'Fewest starter points per dollar among $15+ salaries (at least {half} starts)',
                   'list': [dict(player(p), perDollar=round(tot.get(p, 0) / salary[p], 1)) for p in big[:3]]})
-    # games
-    # Player of the Week for every week played; the page opens on the latest and can step back
+
+    # Player of the Week for every week; the page opens on the latest and can step back
     by_week = {}
     for w in wk_nums:
-        top = sorted((g for g in games if g[1] == w), key=lambda g: -g[0])[:3]
+        top = sorted((g for g in games if g[1] == w and pos_of(g[2])), key=lambda g: -g[0])[:3]
         if top:
             by_week[str(w)] = [dict(player(g[2], g[0], g[3]), week=g[1]) for g in top]
     if by_week:
         A.append({'key': 'week', 'title': 'Player of the Week', 'why': 'Top starter score each week',
                   'list': by_week[str(last_wk)], 'weeks': by_week, 'week': last_wk})
-    hi = sorted(games, key=lambda g: -g[0])
+    hi = sorted((g for g in games if pos_of(g[2])), key=lambda g: -g[0])
     if hi:
-        A.append({'key': 'high', 'title': 'Season-High Game', 'why': 'Best single-week starter score this season',
+        A.append({'key': 'high', 'title': 'Season-High Game', 'why': 'Best single-week starter score of the season',
                   'list': [dict(player(g[2], g[0], g[3]), week=g[1]) for g in hi[:3]]})
 
     out.update({'ready': True, 'throughWeek': last_wk, 'awards': A})
-    json.dump(out, open(D('awards.json'), 'w'), indent=1, ensure_ascii=False)
-    print(f'awards.json: through week {last_wk}, {len(A)} awards')
+    return out
+
+
+def roster_maps(rosters):
+    owner, salary, contract = {}, {}, {}
+    for f in as_list((rosters or {}).get('rosters', {}).get('franchise')):
+        for pl in as_list(f.get('player')):
+            owner[pl['id']] = f['id']
+            try:
+                s = float(pl.get('salary') or 0)
+            except ValueError:
+                s = 0.0
+            if s > 0 or pl['id'] not in salary:
+                salary[pl['id']] = s
+            contract[pl['id']] = pl.get('contractYear', '')
+    return owner, salary, contract
+
+
+def player_info(path):
+    P = load(path, {}) or {}
+    fields = P.get('fields', [])
+    return {pid: dict(zip(fields, row)) for pid, row in (P.get('players') or {}).items()}
+
+
+def current(links):
+    meta = load(D('mfl', '_meta.json'), {})
+    season = str(meta.get('season') or '2026')
+    wr = load(D('mfl', 'weeklyResults.json'), {}) or {}
+    weeks = wr.get('weeks') or {}
+    stamp = datetime.now(timezone.utc).isoformat(timespec='seconds')
+    if not weeks:
+        return {'generated': stamp, 'season': season, 'ready': False}
+    league = (load(D('mfl', 'league.json'), {}) or {}).get('league', {})
+    reg = int(league.get('lastRegularSeasonWeek') or 14)
+    weeks = {w: v for w, v in weeks.items() if int(w) <= reg}
+    pinfo = player_info(D('mfl', 'players.json'))
+    owner, salary, contract = roster_maps(load(D('mfl', 'rosters.json'), {}))
+    tx = (load(D('mfl', 'transactions.json'), {}) or {}).get('transactions', [])
+    st = (load(D('league-now.json'), {}) or {}).get('standings') or []
+    slots, flex_ok = lineup_slots(league)
+    out = build(season, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=True)
+    out['generated'] = stamp
+    return out
+
+
+def standings_from_reference(rows):
+    out = []
+    for r in rows or []:
+        try:
+            w, l, t = (int(x) for x in r['h2hwlt'].split('-'))
+            aw, al, at = (int(x) for x in r['all_play_wlt'].split('-'))
+            g = w + l + t
+            out.append({'id': r['franchise'], 'w': w, 'l': l, 't': t, 'pct': (w + t / 2) / g if g else 0,
+                        'pf': float(r['pf']), 'pp': float(r.get('pp') or 0), 'allPlayW': aw, 'allPlayL': al, 'allPlayT': at})
+        except Exception:
+            continue
+    return out
+
+
+def past(year, links, ref, fallback_info):
+    H = lambda n: D('history', year, n + '.json')
+    wr = load(H('weeklyResults'), {}) or {}
+    if not wr.get('weeks'):
+        return None
+    league = (load(H('league'), {}) or {}).get('league', {})
+    reg = int(wr.get('lastRegularSeasonWeek') or league.get('lastRegularSeasonWeek') or 14)
+    weeks = {w: v for w, v in wr['weeks'].items() if int(w) <= reg}
+    if any(str(w) not in weeks for w in range(1, reg + 1)):   # only complete seasons get awards
+        return None
+    pinfo = dict(fallback_info)
+    pinfo.update(player_info(H('players')))
+    owner, salary, contract = roster_maps(load(H('rosters'), {}))
+    tx = (load(H('transactions'), {}) or {}).get('transactions', [])
+    st = standings_from_reference((ref.get('standings_by_year') or {}).get(year))
+    # MFL's standings left out potential points some years: add up each week's optimal lineup instead
+    opt = defaultdict(float)
+    for wk in weeks.values():
+        for fr, t in wk.items():
+            try: opt[fr] += float(t.get('opt') or 0)
+            except ValueError: pass
+    for s in st:
+        if not s['pp'] and opt.get(s['id']):
+            s['pp'] = round(opt[s['id']], 1)
+    slots, flex_ok = lineup_slots(league)
+    out = build(year, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=False)
+    out['final'] = True
+    return out
+
+
+def main():
+    links = (load(D('player-links.json'), {}) or {}).get('links', {})
+    cur = current(links)
+    # past seasons, built once from saved history; listed so the page can offer a season picker
+    ref = load(D('reference', 'history.json'), {}) or {}
+    fallback = player_info(D('mfl', 'players.json'))
+    years = []
+    if os.path.isdir(D('history')):
+        os.makedirs(D('awards'), exist_ok=True)
+        for y in sorted((y for y in os.listdir(D('history')) if re.fullmatch(r'\d{4}', y)), reverse=True):
+            a = past(y, links, ref, fallback)
+            if a and a.get('ready'):
+                json.dump(a, open(D('awards', f'{y}.json'), 'w'), indent=1, ensure_ascii=False)
+                years.append(y)
+    cur['pastSeasons'] = years
+    json.dump(cur, open(D('awards.json'), 'w'), indent=1, ensure_ascii=False)
+    print(f"awards.json: {'through week ' + str(cur.get('throughWeek')) if cur.get('ready') else 'no weekly results yet'}, "
+          f"{len(cur.get('awards', []))} awards; past seasons: {' '.join(years) or 'none'}")
 
 
 if __name__ == '__main__':

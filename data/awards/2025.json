@@ -1,0 +1,1553 @@
+{
+ "season": "2025",
+ "allFbp": {
+  "first": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "13589",
+     "name": "Josh Allen",
+     "pos": "QB",
+     "nfl": "BUF",
+     "espn": "3918298",
+     "team": "0005",
+     "pts": 309.9,
+     "starts": 13,
+     "ppg": 23.8,
+     "salary": 21.0,
+     "contract": "1/3",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "13130",
+     "name": "Christian McCaffrey",
+     "pos": "RB",
+     "nfl": "SFO",
+     "espn": "3117251",
+     "team": "0011",
+     "pts": 328.5,
+     "starts": 13,
+     "ppg": 25.3,
+     "salary": 60.0,
+     "contract": "1/3",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "nfl": "IND",
+     "espn": "4242335",
+     "team": "0001",
+     "pts": 309.0,
+     "starts": 13,
+     "ppg": 23.8,
+     "salary": 56.0,
+     "contract": "1/3",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "16185",
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "nfl": "SEA",
+     "espn": "4430878",
+     "team": "0009",
+     "pts": 287.4,
+     "starts": 13,
+     "ppg": 22.1,
+     "salary": 28.0,
+     "contract": "3/6",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "16211",
+     "name": "Puka Nacua",
+     "pos": "WR",
+     "nfl": "LAR",
+     "espn": "4426515",
+     "team": "0004",
+     "pts": 258.9,
+     "starts": 12,
+     "ppg": 21.6,
+     "salary": 10.0,
+     "contract": "3/5",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "15794",
+     "name": "Trey McBride",
+     "pos": "TE",
+     "nfl": "ARI",
+     "espn": "4361307",
+     "team": "0001",
+     "pts": 234.7,
+     "starts": 13,
+     "ppg": 18.1,
+     "salary": 9.0,
+     "contract": "3/3",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "16162",
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "nfl": "DET",
+     "espn": "4429795",
+     "team": "0003",
+     "pts": 307.6,
+     "starts": 13,
+     "ppg": 23.7,
+     "salary": 46.0,
+     "contract": "3/5",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "DEF",
+    "player": {
+     "id": "0515",
+     "name": "Seattle Seahawks",
+     "pos": "DEF",
+     "nfl": "SEA",
+     "espn": "",
+     "team": "0010",
+     "pts": 175.0,
+     "starts": 10,
+     "ppg": 17.5,
+     "salary": 0.0,
+     "contract": "",
+     "rookie": false
+    }
+   }
+  ],
+  "second": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "14783",
+     "name": "Jalen Hurts",
+     "pos": "QB",
+     "nfl": "PHI",
+     "espn": "4040715",
+     "team": "0006",
+     "pts": 247.8,
+     "starts": 13,
+     "ppg": 19.1,
+     "salary": 32.0,
+     "contract": "2/3",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "16167",
+     "name": "De'Von Achane",
+     "pos": "RB",
+     "nfl": "MIA",
+     "espn": "4429160",
+     "team": "0001",
+     "pts": 271.9,
+     "starts": 13,
+     "ppg": 20.9,
+     "salary": 14.0,
+     "contract": "3/5",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "16161",
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "nfl": "ATL",
+     "espn": "4430807",
+     "team": "0009",
+     "pts": 264.3,
+     "starts": 13,
+     "ppg": 20.3,
+     "salary": 54.0,
+     "contract": "3/5",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "15287",
+     "name": "Amon-Ra St. Brown",
+     "pos": "WR",
+     "nfl": "DET",
+     "espn": "4374302",
+     "team": "0010",
+     "pts": 233.5,
+     "starts": 13,
+     "ppg": 18.0,
+     "salary": 21.0,
+     "contract": "5/6",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "15762",
+     "name": "George Pickens",
+     "pos": "WR",
+     "nfl": "DAL",
+     "espn": "4426354",
+     "team": "0008",
+     "pts": 228.1,
+     "starts": 12,
+     "ppg": 19.0,
+     "salary": 21.0,
+     "contract": "1/3",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "16641",
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "nfl": "LVR",
+     "espn": "4432665",
+     "team": "0002",
+     "pts": 153.1,
+     "starts": 10,
+     "ppg": 15.3,
+     "salary": 6.0,
+     "contract": "2/6",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "15715",
+     "name": "James Cook III",
+     "pos": "RB",
+     "nfl": "BUF",
+     "espn": "4379399",
+     "team": "0004",
+     "pts": 234.5,
+     "starts": 13,
+     "ppg": 18.0,
+     "salary": 29.0,
+     "contract": "4/6",
+     "rookie": false
+    }
+   },
+   {
+    "slot": "DEF",
+    "player": {
+     "id": "0532",
+     "name": "Houston Texans",
+     "pos": "DEF",
+     "nfl": "HOU",
+     "espn": "",
+     "team": "0002",
+     "pts": 168.0,
+     "starts": 12,
+     "ppg": 14.0,
+     "salary": 1.0,
+     "contract": "1/3",
+     "rookie": false
+    }
+   }
+  ]
+ },
+ "ready": true,
+ "throughWeek": 14,
+ "awards": [
+  {
+   "key": "mvp",
+   "title": "MVP",
+   "why": "Most points in an FBP starting lineup",
+   "list": [
+    {
+     "id": "13130",
+     "name": "Christian McCaffrey",
+     "pos": "RB",
+     "nfl": "SFO",
+     "espn": "3117251",
+     "team": "0011",
+     "pts": 328.5,
+     "starts": 13,
+     "ppg": 25.3,
+     "salary": 60.0,
+     "contract": "1/3",
+     "rookie": false
+    },
+    {
+     "id": "13589",
+     "name": "Josh Allen",
+     "pos": "QB",
+     "nfl": "BUF",
+     "espn": "3918298",
+     "team": "0005",
+     "pts": 309.9,
+     "starts": 13,
+     "ppg": 23.8,
+     "salary": 21.0,
+     "contract": "1/3",
+     "rookie": false
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "nfl": "IND",
+     "espn": "4242335",
+     "team": "0001",
+     "pts": 309.0,
+     "starts": 13,
+     "ppg": 23.8,
+     "salary": 56.0,
+     "contract": "1/3",
+     "rookie": false
+    }
+   ]
+  },
+  {
+   "key": "value",
+   "title": "Best Value",
+   "why": "Most starter points per salary dollar (at least 7 starts; no defenses)",
+   "list": [
+    {
+     "id": "14779",
+     "name": "Justin Herbert",
+     "pos": "QB",
+     "nfl": "LAC",
+     "espn": "4038941",
+     "team": "0009",
+     "pts": 206.1,
+     "starts": 11,
+     "ppg": 18.7,
+     "salary": 1.0,
+     "contract": "1/3",
+     "rookie": false,
+     "perDollar": 206.1
+    },
+    {
+     "id": "14782",
+     "name": "Jordan Love",
+     "pos": "QB",
+     "nfl": "GBP",
+     "espn": "4036378",
+     "team": "0008",
+     "pts": 152.4,
+     "starts": 9,
+     "ppg": 16.9,
+     "salary": 1.0,
+     "contract": "1/3",
+     "rookie": false,
+     "perDollar": 152.4
+    },
+    {
+     "id": "13674",
+     "name": "Dallas Goedert",
+     "pos": "TE",
+     "nfl": "PHI",
+     "espn": "3121023",
+     "team": "0011",
+     "pts": 138.1,
+     "starts": 13,
+     "ppg": 10.6,
+     "salary": 1.0,
+     "contract": "1/3",
+     "rookie": false,
+     "perDollar": 138.1
+    }
+   ]
+  },
+  {
+   "key": "rookie",
+   "title": "Rookie of the Year",
+   "why": "Top 2025 rookie by starter points",
+   "list": [
+    {
+     "id": "17042",
+     "name": "Ashton Jeanty",
+     "pos": "RB",
+     "nfl": "LVR",
+     "espn": "4890973",
+     "team": "0005",
+     "pts": 183.4,
+     "starts": 13,
+     "ppg": 14.1,
+     "salary": 35.0,
+     "contract": "1/5",
+     "rookie": true
+    },
+    {
+     "id": "17071",
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "nfl": "CAR",
+     "espn": "4685472",
+     "team": "0001",
+     "pts": 167.0,
+     "starts": 12,
+     "ppg": 13.9,
+     "salary": 15.0,
+     "contract": "1/5",
+     "rookie": true
+    },
+    {
+     "id": "17068",
+     "name": "RJ Harvey",
+     "pos": "RB",
+     "nfl": "DEN",
+     "espn": "4568490",
+     "team": "0009",
+     "pts": 155.2,
+     "starts": 11,
+     "ppg": 14.1,
+     "salary": 5.0,
+     "contract": "1/5",
+     "rookie": true
+    }
+   ]
+  },
+  {
+   "key": "waiver",
+   "title": "Waiver Claim of the Year",
+   "why": "Most starter points for the team that picked him up (no defenses)",
+   "list": [
+    {
+     "id": "14059",
+     "name": "Daniel Jones",
+     "pos": "QB",
+     "nfl": "IND",
+     "espn": "3917792",
+     "team": "0004",
+     "pts": 157.4,
+     "starts": 10,
+     "ppg": 15.7,
+     "salary": 2.0,
+     "contract": "",
+     "rookie": false,
+     "bid": 2.0,
+     "how": "FAAB"
+    },
+    {
+     "id": "16206",
+     "name": "Michael Wilson",
+     "pos": "WR",
+     "nfl": "ARI",
+     "espn": "4360761",
+     "team": "0002",
+     "pts": 99.1,
+     "starts": 4,
+     "ppg": 24.8,
+     "salary": 4.0,
+     "contract": "",
+     "rookie": false,
+     "bid": 4.0,
+     "how": "FAAB"
+    },
+    {
+     "id": "9431",
+     "name": "Matthew Stafford",
+     "pos": "QB",
+     "nfl": "LAR",
+     "espn": "12483",
+     "team": "0011",
+     "pts": 97.1,
+     "starts": 5,
+     "ppg": 19.4,
+     "salary": 0.0,
+     "contract": "",
+     "rookie": false,
+     "bid": 0.0,
+     "how": "FAAB"
+    }
+   ]
+  },
+  {
+   "key": "trade",
+   "title": "Trade of the Year",
+   "why": "Biggest edge in starter points from what each side received",
+   "trade": {
+    "winner": {
+     "team": "0003",
+     "players": [
+      {
+       "id": "16580",
+       "name": "Drake Maye",
+       "pos": "QB",
+       "nfl": "NEP",
+       "espn": "4431452",
+       "team": "0003",
+       "pts": 205.4,
+       "starts": 10,
+       "ppg": 20.5,
+       "salary": 3.0,
+       "contract": "2/6",
+       "rookie": false
+      },
+      {
+       "id": "16194",
+       "name": "Rashee Rice",
+       "pos": "WR",
+       "nfl": "KCC",
+       "espn": "4428331",
+       "team": "0003",
+       "pts": 138.0,
+       "starts": 7,
+       "ppg": 19.7,
+       "salary": 12.0,
+       "contract": "3/5",
+       "rookie": false
+      }
+     ],
+     "picks": [
+      "DP_1_5",
+      "FP_0002_2026_2"
+     ],
+     "pts": 343.4
+    },
+    "loser": {
+     "team": "0002",
+     "players": [
+      {
+       "id": "16579",
+       "name": "Caleb Williams",
+       "pos": "QB",
+       "nfl": "CHI",
+       "espn": "4431611",
+       "team": "0002",
+       "pts": 192.6,
+       "starts": 10,
+       "ppg": 19.3,
+       "salary": 6.0,
+       "contract": "2/6",
+       "rookie": false
+      }
+     ],
+     "picks": [],
+     "pts": 192.6
+    },
+    "margin": 150.8,
+    "ts": 1749864760
+   },
+   "more": [
+    {
+     "winner": {
+      "team": "0002",
+      "players": [
+       {
+        "id": "14104",
+        "name": "A.J. Brown",
+        "pos": "WR",
+        "nfl": "PHI",
+        "espn": "4047646",
+        "team": "0002",
+        "pts": 119.5,
+        "starts": 12,
+        "ppg": 14.8,
+        "salary": 36.0,
+        "contract": "2/3",
+        "rookie": false
+       }
+      ],
+      "picks": [],
+      "pts": 119.5
+     },
+     "loser": {
+      "team": "0008",
+      "players": [],
+      "picks": [
+       "FP_0002_2026_1"
+      ],
+      "pts": 0
+     },
+     "margin": 119.5,
+     "ts": 1760552150
+    },
+    {
+     "winner": {
+      "team": "0001",
+      "players": [
+       {
+        "id": "13589",
+        "name": "Josh Allen",
+        "pos": "QB",
+        "nfl": "BUF",
+        "espn": "3918298",
+        "team": "0001",
+        "pts": 54.5,
+        "starts": 13,
+        "ppg": 23.8,
+        "salary": 21.0,
+        "contract": "1/3",
+        "rookie": false
+       },
+       {
+        "id": "11675",
+        "name": "Davante Adams",
+        "pos": "WR",
+        "nfl": "LAR",
+        "espn": "16800",
+        "team": "0001",
+        "pts": 28.7,
+        "starts": 8,
+        "ppg": 17.0,
+        "salary": 23.0,
+        "contract": "1/3",
+        "rookie": false
+       }
+      ],
+      "picks": [],
+      "pts": 83.2
+     },
+     "loser": {
+      "team": "0005",
+      "players": [
+       {
+        "id": "16583",
+        "name": "Michael Penix Jr.",
+        "pos": "QB",
+        "nfl": "ATL",
+        "espn": "4360423",
+        "team": "0005",
+        "pts": 0.0,
+        "starts": 1,
+        "ppg": 3.8,
+        "salary": 2.0,
+        "contract": "2/6",
+        "rookie": false
+       },
+       {
+        "id": "16618",
+        "name": "Brian Thomas Jr.",
+        "pos": "WR",
+        "nfl": "JAC",
+        "espn": "4432773",
+        "team": "0005",
+        "pts": 0.0,
+        "starts": 4,
+        "ppg": 8.1,
+        "salary": 6.0,
+        "contract": "2/6",
+        "rookie": false
+       }
+      ],
+      "picks": [
+       "FP_0003_2026_1"
+      ],
+      "pts": 0.0
+     },
+     "margin": 83.2,
+     "ts": 1764191479
+    }
+   ]
+  },
+  {
+   "key": "manager",
+   "title": "Manager of the Year",
+   "why": "Best lineup calls: actual points over the most the roster could have scored",
+   "teams": [
+    {
+     "team": "0001",
+     "stat": "87.8%",
+     "sub": "1737.2 of 1978.8 possible"
+    },
+    {
+     "team": "0009",
+     "stat": "87.5%",
+     "sub": "1711.3 of 1956.5 possible"
+    },
+    {
+     "team": "0011",
+     "stat": "86.1%",
+     "sub": "1525.7 of 1771.8 possible"
+    }
+   ]
+  },
+  {
+   "key": "lucky",
+   "title": "Luckiest Team",
+   "why": "Record furthest above what its all-play record suggests",
+   "teams": [
+    {
+     "team": "0011",
+     "stat": "+25% win",
+     "sub": "11-3 record, 106-92 all-play"
+    },
+    {
+     "team": "0006",
+     "stat": "+18% win",
+     "sub": "6-8 record, 49-149 all-play"
+    },
+    {
+     "team": "0008",
+     "stat": "+8% win",
+     "sub": "5-8-1 record, 61-136 all-play"
+    }
+   ]
+  },
+  {
+   "key": "unlucky",
+   "title": "Unluckiest Team",
+   "why": "Record furthest below its all-play record",
+   "teams": [
+    {
+     "team": "0003",
+     "stat": "-12% win",
+     "sub": "6-7-1 record, 116-81 all-play"
+    },
+    {
+     "team": "0010",
+     "stat": "-12% win",
+     "sub": "5-9 record, 94-104 all-play"
+    },
+    {
+     "team": "0001",
+     "stat": "-9% win",
+     "sub": "8-5-1 record, 137-60 all-play"
+    }
+   ]
+  },
+  {
+   "key": "contract",
+   "title": "Worst Contract",
+   "why": "Fewest starter points per dollar among $15+ salaries (at least 7 starts)",
+   "list": [
+    {
+     "id": "15261",
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "nfl": "CAR",
+     "espn": "4241416",
+     "team": "0002",
+     "pts": 73.3,
+     "starts": 7,
+     "ppg": 10.5,
+     "salary": 38.0,
+     "contract": "1/3",
+     "rookie": false,
+     "perDollar": 1.9
+    },
+    {
+     "id": "14836",
+     "name": "Justin Jefferson",
+     "pos": "WR",
+     "nfl": "MIN",
+     "espn": "4262921",
+     "team": "0002",
+     "pts": 157.4,
+     "starts": 13,
+     "ppg": 12.1,
+     "salary": 65.0,
+     "contract": "1/3",
+     "rookie": false,
+     "perDollar": 2.4
+    },
+    {
+     "id": "15721",
+     "name": "Rachaad White",
+     "pos": "RB",
+     "nfl": "TBB",
+     "espn": "4697815",
+     "team": "0012",
+     "pts": 70.3,
+     "starts": 8,
+     "ppg": 8.8,
+     "salary": 25.0,
+     "contract": "4/6",
+     "rookie": false,
+     "perDollar": 2.8
+    }
+   ]
+  },
+  {
+   "key": "week",
+   "title": "Player of the Week",
+   "why": "Top starter score each week",
+   "list": [
+    {
+     "id": "13589",
+     "name": "Josh Allen",
+     "pos": "QB",
+     "nfl": "BUF",
+     "espn": "3918298",
+     "team": "0001",
+     "pts": 37.8,
+     "starts": 13,
+     "ppg": 23.8,
+     "salary": 21.0,
+     "contract": "1/3",
+     "rookie": false,
+     "week": 14
+    },
+    {
+     "id": "16206",
+     "name": "Michael Wilson",
+     "pos": "WR",
+     "nfl": "ARI",
+     "espn": "4360761",
+     "team": "0002",
+     "pts": 37.2,
+     "starts": 4,
+     "ppg": 24.8,
+     "salary": 4.0,
+     "contract": "",
+     "rookie": false,
+     "week": 14
+    },
+    {
+     "id": "16162",
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "nfl": "DET",
+     "espn": "4429795",
+     "team": "0003",
+     "pts": 37.0,
+     "starts": 13,
+     "ppg": 23.7,
+     "salary": 46.0,
+     "contract": "3/5",
+     "rookie": false,
+     "week": 14
+    }
+   ],
+   "weeks": {
+    "1": [
+     {
+      "id": "13589",
+      "name": "Josh Allen",
+      "pos": "QB",
+      "nfl": "BUF",
+      "espn": "3918298",
+      "team": "0005",
+      "pts": 38.8,
+      "starts": 13,
+      "ppg": 23.8,
+      "salary": 21.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 1
+     },
+     {
+      "id": "15238",
+      "name": "Justin Fields",
+      "pos": "QB",
+      "nfl": "NYJ",
+      "espn": "4362887",
+      "team": "0001",
+      "pts": 29.5,
+      "starts": 6,
+      "ppg": 15.9,
+      "salary": 0.0,
+      "contract": "",
+      "rookie": false,
+      "week": 1
+     },
+     {
+      "id": "13593",
+      "name": "Lamar Jackson",
+      "pos": "QB",
+      "nfl": "BAL",
+      "espn": "3916387",
+      "team": "0011",
+      "pts": 29.4,
+      "starts": 8,
+      "ppg": 18.4,
+      "salary": 31.0,
+      "contract": "2/3",
+      "rookie": false,
+      "week": 1
+     }
+    ],
+    "2": [
+     {
+      "id": "15287",
+      "name": "Amon-Ra St. Brown",
+      "pos": "WR",
+      "nfl": "DET",
+      "espn": "4374302",
+      "team": "0010",
+      "pts": 39.2,
+      "starts": 13,
+      "ppg": 18.0,
+      "salary": 21.0,
+      "contract": "5/6",
+      "rookie": false,
+      "week": 2
+     },
+     {
+      "id": "16615",
+      "name": "Malik Nabers",
+      "pos": "WR",
+      "nfl": "NYG",
+      "espn": "4595348",
+      "team": "0004",
+      "pts": 37.7,
+      "starts": 4,
+      "ppg": 14.3,
+      "salary": 15.0,
+      "contract": "2/5",
+      "rookie": false,
+      "week": 2
+     },
+     {
+      "id": "15281",
+      "name": "Ja'Marr Chase",
+      "pos": "WR",
+      "nfl": "CIN",
+      "espn": "4362628",
+      "team": "0007",
+      "pts": 36.5,
+      "starts": 12,
+      "ppg": 18.5,
+      "salary": 50.0,
+      "contract": "5/5",
+      "rookie": false,
+      "week": 2
+     }
+    ],
+    "3": [
+     {
+      "id": "0524",
+      "name": "Minnesota Vikings",
+      "pos": "DEF",
+      "nfl": "MIN",
+      "espn": "",
+      "team": "0011",
+      "pts": 37.0,
+      "starts": 6,
+      "ppg": 14.8,
+      "salary": null,
+      "contract": "",
+      "rookie": false,
+      "week": 3
+     },
+     {
+      "id": "14802",
+      "name": "Jonathan Taylor",
+      "pos": "RB",
+      "nfl": "IND",
+      "espn": "4242335",
+      "team": "0001",
+      "pts": 32.8,
+      "starts": 13,
+      "ppg": 23.8,
+      "salary": 56.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 3
+     },
+     {
+      "id": "16579",
+      "name": "Caleb Williams",
+      "pos": "QB",
+      "nfl": "CHI",
+      "espn": "4431611",
+      "team": "0002",
+      "pts": 29.1,
+      "starts": 10,
+      "ppg": 19.3,
+      "salary": 6.0,
+      "contract": "2/6",
+      "rookie": false,
+      "week": 3
+     }
+    ],
+    "4": [
+     {
+      "id": "16211",
+      "name": "Puka Nacua",
+      "pos": "WR",
+      "nfl": "LAR",
+      "espn": "4426515",
+      "team": "0004",
+      "pts": 36.0,
+      "starts": 12,
+      "ppg": 21.6,
+      "salary": 10.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 4
+     },
+     {
+      "id": "17042",
+      "name": "Ashton Jeanty",
+      "pos": "RB",
+      "nfl": "LVR",
+      "espn": "4890973",
+      "team": "0005",
+      "pts": 33.5,
+      "starts": 13,
+      "ppg": 14.1,
+      "salary": 35.0,
+      "contract": "1/5",
+      "rookie": true,
+      "week": 4
+     },
+     {
+      "id": "15762",
+      "name": "George Pickens",
+      "pos": "WR",
+      "nfl": "DAL",
+      "espn": "4426354",
+      "team": "0008",
+      "pts": 33.4,
+      "starts": 12,
+      "ppg": 19.0,
+      "salary": 21.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 4
+     }
+    ],
+    "5": [
+     {
+      "id": "14802",
+      "name": "Jonathan Taylor",
+      "pos": "RB",
+      "nfl": "IND",
+      "espn": "4242335",
+      "team": "0001",
+      "pts": 31.6,
+      "starts": 13,
+      "ppg": 23.8,
+      "salary": 56.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 5
+     },
+     {
+      "id": "15710",
+      "name": "Kyren Williams",
+      "pos": "RB",
+      "nfl": "LAR",
+      "espn": "4430737",
+      "team": "0007",
+      "pts": 31.1,
+      "starts": 12,
+      "ppg": 15.3,
+      "salary": 11.0,
+      "contract": "4/6",
+      "rookie": false,
+      "week": 5
+     },
+     {
+      "id": "15281",
+      "name": "Ja'Marr Chase",
+      "pos": "WR",
+      "nfl": "CIN",
+      "espn": "4362628",
+      "team": "0007",
+      "pts": 29.0,
+      "starts": 12,
+      "ppg": 18.5,
+      "salary": 50.0,
+      "contract": "5/5",
+      "rookie": false,
+      "week": 5
+     }
+    ],
+    "6": [
+     {
+      "id": "16161",
+      "name": "Bijan Robinson",
+      "pos": "RB",
+      "nfl": "ATL",
+      "espn": "4430807",
+      "team": "0009",
+      "pts": 35.8,
+      "starts": 13,
+      "ppg": 20.3,
+      "salary": 54.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 6
+     },
+     {
+      "id": "14823",
+      "name": "Rico Dowdle",
+      "pos": "RB",
+      "nfl": "CAR",
+      "espn": "4038815",
+      "team": "0002",
+      "pts": 33.9,
+      "starts": 8,
+      "ppg": 16.4,
+      "salary": 2.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 6
+     },
+     {
+      "id": "14073",
+      "name": "Josh Jacobs",
+      "pos": "RB",
+      "nfl": "GBP",
+      "espn": "4047365",
+      "team": "0010",
+      "pts": 32.0,
+      "starts": 11,
+      "ppg": 18.0,
+      "salary": 51.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 6
+     }
+    ],
+    "7": [
+     {
+      "id": "13130",
+      "name": "Christian McCaffrey",
+      "pos": "RB",
+      "nfl": "SFO",
+      "espn": "3117251",
+      "team": "0011",
+      "pts": 39.1,
+      "starts": 13,
+      "ppg": 25.3,
+      "salary": 60.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 7
+     },
+     {
+      "id": "15281",
+      "name": "Ja'Marr Chase",
+      "pos": "WR",
+      "nfl": "CIN",
+      "espn": "4362628",
+      "team": "0007",
+      "pts": 38.1,
+      "starts": 12,
+      "ppg": 18.5,
+      "salary": 50.0,
+      "contract": "5/5",
+      "rookie": false,
+      "week": 7
+     },
+     {
+      "id": "16162",
+      "name": "Jahmyr Gibbs",
+      "pos": "RB",
+      "nfl": "DET",
+      "espn": "4429795",
+      "team": "0003",
+      "pts": 36.8,
+      "starts": 13,
+      "ppg": 23.7,
+      "salary": 46.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 7
+     }
+    ],
+    "8": [
+     {
+      "id": "14802",
+      "name": "Jonathan Taylor",
+      "pos": "RB",
+      "nfl": "IND",
+      "espn": "4242335",
+      "team": "0001",
+      "pts": 37.4,
+      "starts": 13,
+      "ppg": 23.8,
+      "salary": 56.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 8
+     },
+     {
+      "id": "15715",
+      "name": "James Cook III",
+      "pos": "RB",
+      "nfl": "BUF",
+      "espn": "4379399",
+      "team": "0004",
+      "pts": 33.6,
+      "starts": 13,
+      "ppg": 18.0,
+      "salary": 29.0,
+      "contract": "4/6",
+      "rookie": false,
+      "week": 8
+     },
+     {
+      "id": "13604",
+      "name": "Saquon Barkley",
+      "pos": "RB",
+      "nfl": "PHI",
+      "espn": "3929630",
+      "team": "0005",
+      "pts": 33.4,
+      "starts": 13,
+      "ppg": 14.4,
+      "salary": 65.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 8
+     }
+    ],
+    "9": [
+     {
+      "id": "16641",
+      "name": "Brock Bowers",
+      "pos": "TE",
+      "nfl": "LVR",
+      "espn": "4432665",
+      "team": "0002",
+      "pts": 43.3,
+      "starts": 10,
+      "ppg": 15.3,
+      "salary": 6.0,
+      "contract": "2/6",
+      "rookie": false,
+      "week": 9
+     },
+     {
+      "id": "15751",
+      "name": "Drake London",
+      "pos": "WR",
+      "nfl": "ATL",
+      "espn": "4426502",
+      "team": "0003",
+      "pts": 38.8,
+      "starts": 9,
+      "ppg": 19.7,
+      "salary": 22.0,
+      "contract": "3/3",
+      "rookie": false,
+      "week": 9
+     },
+     {
+      "id": "16579",
+      "name": "Caleb Williams",
+      "pos": "QB",
+      "nfl": "CHI",
+      "espn": "4431611",
+      "team": "0002",
+      "pts": 38.7,
+      "starts": 10,
+      "ppg": 19.3,
+      "salary": 6.0,
+      "contract": "2/6",
+      "rookie": false,
+      "week": 9
+     }
+    ],
+    "10": [
+     {
+      "id": "14802",
+      "name": "Jonathan Taylor",
+      "pos": "RB",
+      "nfl": "IND",
+      "espn": "4242335",
+      "team": "0001",
+      "pts": 49.6,
+      "starts": 13,
+      "ppg": 23.8,
+      "salary": 56.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 10
+     },
+     {
+      "id": "16167",
+      "name": "De'Von Achane",
+      "pos": "RB",
+      "nfl": "MIA",
+      "espn": "4429160",
+      "team": "0001",
+      "pts": 40.5,
+      "starts": 13,
+      "ppg": 20.9,
+      "salary": 14.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 10
+     },
+     {
+      "id": "16162",
+      "name": "Jahmyr Gibbs",
+      "pos": "RB",
+      "nfl": "DET",
+      "espn": "4429795",
+      "team": "0003",
+      "pts": 38.2,
+      "starts": 13,
+      "ppg": 23.7,
+      "salary": 46.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 10
+     }
+    ],
+    "11": [
+     {
+      "id": "13589",
+      "name": "Josh Allen",
+      "pos": "QB",
+      "nfl": "BUF",
+      "espn": "3918298",
+      "team": "0005",
+      "pts": 42.7,
+      "starts": 13,
+      "ppg": 23.8,
+      "salary": 21.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 11
+     },
+     {
+      "id": "13130",
+      "name": "Christian McCaffrey",
+      "pos": "RB",
+      "nfl": "SFO",
+      "espn": "3117251",
+      "team": "0011",
+      "pts": 35.1,
+      "starts": 13,
+      "ppg": 25.3,
+      "salary": 60.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 11
+     },
+     {
+      "id": "16206",
+      "name": "Michael Wilson",
+      "pos": "WR",
+      "nfl": "ARI",
+      "espn": "4360761",
+      "team": "0002",
+      "pts": 33.5,
+      "starts": 4,
+      "ppg": 24.8,
+      "salary": 4.0,
+      "contract": "",
+      "rookie": false,
+      "week": 11
+     }
+    ],
+    "12": [
+     {
+      "id": "16162",
+      "name": "Jahmyr Gibbs",
+      "pos": "RB",
+      "nfl": "DET",
+      "espn": "4429795",
+      "team": "0003",
+      "pts": 55.4,
+      "starts": 13,
+      "ppg": 23.7,
+      "salary": 46.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 12
+     },
+     {
+      "id": "16185",
+      "name": "Jaxon Smith-Njigba",
+      "pos": "WR",
+      "nfl": "SEA",
+      "espn": "4430878",
+      "team": "0009",
+      "pts": 37.1,
+      "starts": 13,
+      "ppg": 22.1,
+      "salary": 28.0,
+      "contract": "3/6",
+      "rookie": false,
+      "week": 12
+     },
+     {
+      "id": "14783",
+      "name": "Jalen Hurts",
+      "pos": "QB",
+      "nfl": "PHI",
+      "espn": "4040715",
+      "team": "0006",
+      "pts": 30.9,
+      "starts": 13,
+      "ppg": 19.1,
+      "salary": 32.0,
+      "contract": "2/3",
+      "rookie": false,
+      "week": 12
+     }
+    ],
+    "13": [
+     {
+      "id": "14104",
+      "name": "A.J. Brown",
+      "pos": "WR",
+      "nfl": "PHI",
+      "espn": "4047646",
+      "team": "0002",
+      "pts": 35.2,
+      "starts": 12,
+      "ppg": 14.8,
+      "salary": 36.0,
+      "contract": "2/3",
+      "rookie": false,
+      "week": 13
+     },
+     {
+      "id": "0515",
+      "name": "Seattle Seahawks",
+      "pos": "DEF",
+      "nfl": "SEA",
+      "espn": "",
+      "team": "0010",
+      "pts": 31.0,
+      "starts": 10,
+      "ppg": 17.5,
+      "salary": 0.0,
+      "contract": "",
+      "rookie": false,
+      "week": 13
+     },
+     {
+      "id": "16161",
+      "name": "Bijan Robinson",
+      "pos": "RB",
+      "nfl": "ATL",
+      "espn": "4430807",
+      "team": "0009",
+      "pts": 30.3,
+      "starts": 13,
+      "ppg": 20.3,
+      "salary": 54.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 13
+     }
+    ],
+    "14": [
+     {
+      "id": "13589",
+      "name": "Josh Allen",
+      "pos": "QB",
+      "nfl": "BUF",
+      "espn": "3918298",
+      "team": "0001",
+      "pts": 37.8,
+      "starts": 13,
+      "ppg": 23.8,
+      "salary": 21.0,
+      "contract": "1/3",
+      "rookie": false,
+      "week": 14
+     },
+     {
+      "id": "16206",
+      "name": "Michael Wilson",
+      "pos": "WR",
+      "nfl": "ARI",
+      "espn": "4360761",
+      "team": "0002",
+      "pts": 37.2,
+      "starts": 4,
+      "ppg": 24.8,
+      "salary": 4.0,
+      "contract": "",
+      "rookie": false,
+      "week": 14
+     },
+     {
+      "id": "16162",
+      "name": "Jahmyr Gibbs",
+      "pos": "RB",
+      "nfl": "DET",
+      "espn": "4429795",
+      "team": "0003",
+      "pts": 37.0,
+      "starts": 13,
+      "ppg": 23.7,
+      "salary": 46.0,
+      "contract": "3/5",
+      "rookie": false,
+      "week": 14
+     }
+    ]
+   },
+   "week": 14
+  },
+  {
+   "key": "high",
+   "title": "Season-High Game",
+   "why": "Best single-week starter score of the season",
+   "list": [
+    {
+     "id": "16162",
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "nfl": "DET",
+     "espn": "4429795",
+     "team": "0003",
+     "pts": 55.4,
+     "starts": 13,
+     "ppg": 23.7,
+     "salary": 46.0,
+     "contract": "3/5",
+     "rookie": false,
+     "week": 12
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "nfl": "IND",
+     "espn": "4242335",
+     "team": "0001",
+     "pts": 49.6,
+     "starts": 13,
+     "ppg": 23.8,
+     "salary": 56.0,
+     "contract": "1/3",
+     "rookie": false,
+     "week": 10
+    },
+    {
+     "id": "16641",
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "nfl": "LVR",
+     "espn": "4432665",
+     "team": "0002",
+     "pts": 43.3,
+     "starts": 10,
+     "ppg": 15.3,
+     "salary": 6.0,
+     "contract": "2/6",
+     "rookie": false,
+     "week": 9
+    }
+   ]
+  }
+ ],
+ "final": true
+}

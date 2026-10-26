@@ -2,6 +2,13 @@
    Points are starter points only (scored in an FBP starting lineup), rostered players only. */
 window.FBPAwards = (() => {
   let A = null, loading = false, failed = false, X, potw = null;   // potw: week picked for Player of the Week
+  let year = null;                                     // null = this season; else a past season's year
+  const past = {}, pastLoading = {}, pastFailed = {};  // past seasons load on demand from data/awards/<year>.json
+  const loadPast = (y, rerender) => {
+    if (past[y] || pastLoading[y]) return; pastLoading[y] = true;
+    fetch(`data/awards/${y}.json`, { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(d => { past[y] = d; pastLoading[y] = false; rerender(); }).catch(() => { pastFailed[y] = true; pastLoading[y] = false; rerender(); });
+  };
   const esc = s => X.esc(s == null ? '' : s);
   const load = rerender => {
     if (A || loading) return; loading = true;
@@ -35,7 +42,7 @@ window.FBPAwards = (() => {
     let m = /^FP_(\d+)_(\d+)_(\d+)$/.exec(k);
     if (m) return `${m[2]} ${ord(+m[3])}-round pick (${(X.teams[m[1]] || {}).abbr || m[1]})`;
     m = /^DP_(\d+)_(\d+)$/.exec(k);
-    if (m) return `${A.season} rookie pick ${+m[1] + 1}.${String(+m[2] + 1).padStart(2, '0')}`;
+    if (m) return `${S.season} rookie pick ${+m[1] + 1}.${String(+m[2] + 1).padStart(2, '0')}`;
     return k;
   }
   function award(a) {
@@ -66,23 +73,38 @@ window.FBPAwards = (() => {
     return `<section class="card aw-award"><h3>${esc(a.title)}</h3><p class="aw-why">${esc(a.why)}</p>${picker}${body}</section>`;
   }
 
+  let S = null;   // the season on screen
   function render(ctx) {
     X = ctx;
-    const head = sub => `<div class="pagehead"><h1>Awards</h1><span class="asof">${sub}</span></div>`;
+    const seasons = A && A.pastSeasons && A.pastSeasons.length ? [A.season, ...A.pastSeasons] : [];
+    const picker = seasons.length ? `<div class="aw-years" role="group" aria-label="Season">${seasons.map(y => `<button type="button" data-aw-year="${y}" aria-pressed="${(year || A.season) === y}">${y}</button>`).join('')}</div>` : '';
+    const head = sub => `<div class="pagehead"><h1>Awards</h1><span class="asof">${sub}</span></div>${picker}`;
     if (failed) return head('') + '<p class="error">Awards didn’t load. Refresh the page to try again.</p>';
     if (!A) { load(ctx.rerender); return head('') + '<p class="loading">Loading awards…</p>'; }
-    if (!A.ready) return head(`${A.season} season`) + '<div class="card soon"><h2>Awards are on the way</h2><p>They fill in after the next weekly refresh pulls player scores from MFL: All-FBP teams, MVP, Best Value, Rookie of the Year, Waiver Claim of the Year, Trade of the Year and more.</p></div>';
+    if (year && year !== A.season) {
+      if (pastFailed[year]) return head(`${year} season`) + `<p class="error">The ${year} awards didn’t load. Refresh the page to try again.</p>`;
+      if (!past[year]) { loadPast(year, ctx.rerender); return head(`${year} season`) + '<p class="loading">Loading awards…</p>'; }
+      S = past[year];
+    } else S = A;
+    if (!S.ready) return head(`${S.season} season`) + '<div class="card soon"><h2>Awards are on the way</h2><p>They fill in after the next weekly refresh pulls player scores from MFL: All-FBP teams, MVP, Best Value, Rookie of the Year, Waiver Claim of the Year, Trade of the Year and more.</p></div>';
     const team = (t, second) => `<div class="aw-team">${t.map(e => card(e.slot, e.player, second)).join('')}</div>`;
-    return head(`${A.season} season through week ${A.throughWeek} · starter points only, rostered players`) +
-      `<section><h2 class="sec">1st Team All-FBP</h2>${team(A.allFbp.first)}</section>
-      <section><h2 class="sec">2nd Team All-FBP</h2>${team(A.allFbp.second, true)}</section>
-      <section><h2 class="sec">Season awards</h2><div class="aw-awards">${A.awards.map(award).join('')}</div>
-      <p class="rf-foot">Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. Updated every Monday night.</p></section>`;
+    const sub = S.final ? `${S.season} regular season, final · starter points only` : `${S.season} season through week ${S.throughWeek} · starter points only, rostered players`;
+    const foot = S.final
+      ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. Trades count only what each side scored for its new team that season. Team names are today’s.`
+      : 'Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. Updated every Monday night.';
+    return head(sub) +
+      `<section><h2 class="sec">1st Team All-FBP</h2>${team(S.allFbp.first)}</section>
+      <section><h2 class="sec">2nd Team All-FBP</h2>${team(S.allFbp.second, true)}</section>
+      <section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.map(award).join('')}</div>
+      <p class="rf-foot">${foot}</p></section>`;
   }
+  // returns the selector of the button pressed, so the page can keep focus on it
   function click(e) {
+    const y = e.target.closest('[data-aw-year]');
+    if (y) { year = y.dataset.awYear; potw = null; return `[data-aw-year="${year}"]`; }
     const b = e.target.closest('[data-aw-week]');
     if (!b) return false;
-    potw = +b.dataset.awWeek; return true;
+    potw = +b.dataset.awWeek; return `[data-aw-week="${potw}"]`;
   }
   return { render, click };
 })();

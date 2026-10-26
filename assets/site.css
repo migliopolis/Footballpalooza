@@ -649,3 +649,6 @@ tr.dh-div td{padding:0!important}
 .aw-more .aw-rank{display:block;font:700 .9rem var(--display);color:var(--muted);margin-bottom:4px}
 .aw-more .aw-side{padding:6px}
 .aw-more .aw-side ul{font-size:.76rem}
+.aw-years{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 14px}
+.aw-years button{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:700 .85rem var(--mono);padding:6px 10px;border-radius:8px;cursor:pointer}
+.aw-years button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}

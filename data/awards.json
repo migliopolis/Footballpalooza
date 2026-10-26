@@ -1,5 +1,4 @@
 {
- "generated": "2026-10-26T08:03:24+00:00",
  "season": "2026",
  "allFbp": {
   "first": [
@@ -1096,7 +1095,7 @@
   {
    "key": "high",
    "title": "Season-High Game",
-   "why": "Best single-week starter score this season",
+   "why": "Best single-week starter score of the season",
    "list": [
     {
      "id": "17071",
@@ -1145,5 +1144,13 @@
     }
    ]
   }
+ ],
+ "generated": "2026-10-26T22:06:29+00:00",
+ "pastSeasons": [
+  "2025",
+  "2024",
+  "2023",
+  "2022",
+  "2021"
  ]
 }

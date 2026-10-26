@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0030';
+  const VERSION = '0.0031';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -454,9 +454,10 @@
     app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) keepScroll(route); });
     app.addEventListener('click', e => {
       if (location.hash.startsWith('#draft') && location.hash !== '#draft/mock' && window.FBPDraftHub && FBPDraftHub.click(e)) { keepScroll(route); return; }
-      if (location.hash === '#awards' && window.FBPAwards && FBPAwards.click(e)) {
-        const k = e.target.closest('[data-aw-week]').dataset.awWeek; keepScroll(route);
-        if (e.detail === 0) { const again = document.querySelector(`[data-aw-week="${k}"]`); if (again) again.focus({ preventScroll: true }); }
+      const awSel = location.hash === '#awards' && window.FBPAwards && FBPAwards.click(e);   // selector of the button pressed
+      if (awSel) {
+        keepScroll(route);
+        if (e.detail === 0) { const again = document.querySelector(awSel); if (again) again.focus({ preventScroll: true }); }
         return;
       }
       if (location.hash === '#draft/mock' && window.FBPDraft && FBPDraft.click(e, draftCtx())) {
