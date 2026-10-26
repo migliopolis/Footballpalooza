@@ -1,0 +1,43 @@
+name: Backfill history (one time)
+
+on:
+  push:                     # runs once when this file is first pushed
+    branches: [main]
+    paths: ['.github/workflows/backfill-history.yml']
+  workflow_dispatch:        # or by hand from the Actions tab
+    inputs:
+      years:
+        description: Seasons to pull
+        default: '2019 2020 2021 2022 2023 2024 2025'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pull past seasons from MFL
+        env:
+          MFL_APIKEY: ${{ secrets.MFL_APIKEY }}
+          YEARS: ${{ inputs.years || '2019 2020 2021 2022 2023 2024 2025' }}
+        run: python scripts/backfill_history.py
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data/history
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Backfill past seasons for Awards history"
+            git push
+          fi
