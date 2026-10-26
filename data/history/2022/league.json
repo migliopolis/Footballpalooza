@@ -1,0 +1,274 @@
+{
+ "fetched": "2026-10-26T21:58:27+00:00",
+ "league": {
+  "auction_kind": "live",
+  "baseURL": "https://www47.myfantasyleague.com",
+  "bbidConditional": "No",
+  "bbidIncrement": "1",
+  "bbidSeasonLimit": "100",
+  "bbidTiebreaker": "SORT",
+  "bestLineup": "No",
+  "bidIncrement": "1",
+  "currentWaiverType": "BBID",
+  "defaultTradeExpirationDays": "3",
+  "divisions": {
+   "count": "3",
+   "division": [
+    {
+     "id": "00",
+     "name": "West"
+    },
+    {
+     "id": "01",
+     "name": "Central"
+    },
+    {
+     "id": "02",
+     "name": "East"
+    }
+   ]
+  },
+  "draftLimitHours": "4:00",
+  "draftPlayerPool": "Rookie",
+  "draftTimer": "ONS",
+  "draftTimerSusp": "01 09",
+  "draft_kind": "",
+  "endWeek": "18",
+  "franchises": {
+   "count": "12",
+   "franchise": [
+    {
+     "abbrev": "THOT",
+     "auctionStartAmount": "197",
+     "bbidAvailableBalance": "0.00",
+     "division": "00",
+     "id": "0001",
+     "name": "Thots and Players",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "10"
+    },
+    {
+     "abbrev": "MPL",
+     "auctionStartAmount": "180",
+     "bbidAvailableBalance": "31.00",
+     "division": "02",
+     "id": "0002",
+     "name": "Bearish on da Bears",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "11"
+    },
+    {
+     "abbrev": "SWAB",
+     "auctionStartAmount": "215",
+     "bbidAvailableBalance": "86.00",
+     "division": "02",
+     "id": "0003",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2022/14482_franchise_logo0003.png",
+     "name": "Q",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "2"
+    },
+    {
+     "abbrev": "TGV",
+     "auctionStartAmount": "202",
+     "bbidAvailableBalance": "62.00",
+     "division": "00",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2021/14482_franchise_icon0004.jpg",
+     "id": "0004",
+     "name": "Franchise Tagovailoa",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "4"
+    },
+    {
+     "abbrev": "WIZ",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "64.00",
+     "division": "01",
+     "icon": "https://www.jmc9000.com/wp-content/uploads/2016/09/Welmet.png",
+     "id": "0005",
+     "name": "The Fist of the Magi",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "7"
+    },
+    {
+     "abbrev": "FAX",
+     "auctionStartAmount": "198",
+     "bbidAvailableBalance": "0.00",
+     "division": "00",
+     "icon": "https://www47.myfantasyleague.com/fflnetdynamic2021/14482_franchise_icon0006.jpg",
+     "id": "0006",
+     "logo": "https://www47.myfantasyleague.com/fflnetdynamic2021/14482_franchise_logo0006.jpg",
+     "name": "Fairfax High School ",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "9"
+    },
+    {
+     "abbrev": "FRO",
+     "auctionStartAmount": "192",
+     "bbidAvailableBalance": "25.00",
+     "division": "01",
+     "id": "0007",
+     "name": "MR. FROBOT",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "12"
+    },
+    {
+     "abbrev": "SOT",
+     "auctionStartAmount": "211",
+     "bbidAvailableBalance": "14.00",
+     "division": "02",
+     "id": "0008",
+     "name": "Son of Tinactin",
+     "salaryCapAmount": "",
+     "stadium": "Yo Mama's House",
+     "waiverSortOrder": "5"
+    },
+    {
+     "abbrev": "MAIL",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "66.00",
+     "division": "01",
+     "id": "0009",
+     "name": "Mailing It In",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "1"
+    },
+    {
+     "abbrev": "HOLD",
+     "auctionStartAmount": "197",
+     "bbidAvailableBalance": "100.00",
+     "division": "01",
+     "id": "0010",
+     "name": "Hold Timers",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "6"
+    },
+    {
+     "abbrev": "WC",
+     "auctionStartAmount": "208",
+     "bbidAvailableBalance": "82.00",
+     "division": "02",
+     "id": "0011",
+     "name": "Wholey Club",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "8"
+    },
+    {
+     "abbrev": "SGR",
+     "auctionStartAmount": "200",
+     "bbidAvailableBalance": "100.00",
+     "division": "00",
+     "id": "0012",
+     "name": "Sour Grapes",
+     "salaryCapAmount": "",
+     "waiverSortOrder": "3"
+    }
+   ]
+  },
+  "h2h": "YES",
+  "history": {
+   "league": [
+    {
+     "url": "https://www47.myfantasyleague.com/2022/home/14482",
+     "year": "2022"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2019/home/14482",
+     "year": "2019"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2020/home/14482",
+     "year": "2020"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2021/home/14482",
+     "year": "2021"
+    },
+    {
+     "url": "https://www47.myfantasyleague.com/2023/home/14482",
+     "year": "2023"
+    }
+   ]
+  },
+  "id": "14482",
+  "includeTaxiWithContractYear": "100",
+  "includeTaxiWithSalary": "100",
+  "injuredReserve": "3",
+  "keeperType": "keeper",
+  "lastRegularSeasonWeek": "14",
+  "loadRosters": "_draft_live_auction",
+  "lockout": "No",
+  "maxKeepers": "18",
+  "maxWaiverRounds": "8",
+  "minBid": "1",
+  "minKeepers": "0",
+  "mobileAlerts": "",
+  "name": "FootballPalooza Season 12",
+  "partialLineupAllowed": "YES",
+  "playerLimitUnit": "LEAGUE",
+  "precision": "1",
+  "rosterLimits": {
+   "position": [
+    {
+     "limit": "0-6",
+     "name": "QB"
+    },
+    {
+     "limit": "0-10",
+     "name": "RB"
+    },
+    {
+     "limit": "0-10",
+     "name": "WR"
+    },
+    {
+     "limit": "0-10",
+     "name": "TE"
+    },
+    {
+     "limit": "0-4",
+     "name": "Def"
+    }
+   ]
+  },
+  "rosterSize": "18",
+  "rostersPerPlayer": "1",
+  "salaryCapAmount": "",
+  "standingsSort": "PCT,PTS,",
+  "startWeek": "1",
+  "starters": {
+   "count": "8",
+   "position": [
+    {
+     "limit": "1",
+     "name": "QB"
+    },
+    {
+     "limit": "2-3",
+     "name": "RB"
+    },
+    {
+     "limit": "2-3",
+     "name": "WR"
+    },
+    {
+     "limit": "1-2",
+     "name": "TE"
+    },
+    {
+     "limit": "1",
+     "name": "Def"
+    }
+   ]
+  },
+  "taxiSquad": "4",
+  "usesContractYear": "1",
+  "usesSalaries": "1",
+  "victoryPointsBuckets": "1 0",
+  "victoryPointsEndWeek": "14",
+  "victoryPointsLoss": "0",
+  "victoryPointsStartWeek": "1",
+  "victoryPointsTie": "0",
+  "victoryPointsWin": "1"
+ }
+}

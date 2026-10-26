@@ -1,0 +1,1591 @@
+{
+ "fetched": "2026-10-26T21:50:45+00:00",
+ "rosters": {
+  "franchise": [
+   {
+    "id": "0001",
+    "player": [
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13319",
+      "salary": "14",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13277",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13299",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $32",
+      "id": "13138",
+      "salary": "32",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $3",
+      "id": "14102",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Trade",
+      "id": "12610",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14113",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "13668",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $24",
+      "id": "14080",
+      "salary": "24",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13139",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0510",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13589",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "14284",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "Trade",
+      "id": "13604",
+      "salary": "72",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "11674",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13620",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14085",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13768",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "14138",
+      "salary": "2",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0002",
+    "player": [
+     {
+      "contractYear": "5",
+      "drafted": "",
+      "id": "12150",
+      "salary": "46",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "11886",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "12930",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "11257",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $5",
+      "id": "10703",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $8",
+      "id": "0521",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "9831",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "12176",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "13592",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "10723",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "11975",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "12801",
+      "salary": "31",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Trade",
+      "id": "12630",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "Trade",
+      "id": "12650",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "14086",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13590",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13678",
+      "salary": "1",
+      "status": "ROSTER"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0003",
+    "player": [
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13610",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "12625",
+      "salary": "46",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $55",
+      "id": "14073",
+      "salary": "55",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "9918",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "12620",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "14104",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13646",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "12676",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "12184",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $9",
+      "id": "0505",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "4",
+      "drafted": "",
+      "id": "11675",
+      "salary": "30",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13116",
+      "salary": "15",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "9902",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "12647",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "11516",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "11186",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12154",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14126",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13679",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0004",
+    "player": [
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13128",
+      "salary": "59",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "11390",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13157",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13793",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "11228",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $47",
+      "id": "11679",
+      "salary": "47",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "14075",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "12257",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14101",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "10312",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0507",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12611",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14336",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14141",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14072",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14058",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "11657",
+      "salary": "1",
+      "status": "ROSTER"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0005",
+    "player": [
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "12626",
+      "salary": "25",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13130",
+      "salary": "35",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13639",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13634",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13188",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $8",
+      "id": "13113",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $17",
+      "id": "11680",
+      "salary": "17",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "10738",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $3",
+      "id": "0514",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "9925",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "12912",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $37",
+      "id": "12151",
+      "salary": "37",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "10273",
+      "salary": "17",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $16",
+      "id": "10261",
+      "salary": "16",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "0506",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "12205",
+      "salary": "11",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0006",
+    "player": [
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "11760",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13404",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "12157",
+      "salary": "8",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "4",
+      "drafted": "",
+      "id": "11222",
+      "salary": "24",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "11247",
+      "salary": "14",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $12",
+      "id": "12634",
+      "salary": "12",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $11",
+      "id": "9099",
+      "salary": "11",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $18",
+      "id": "14109",
+      "salary": "18",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $18",
+      "id": "14105",
+      "salary": "18",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "0529",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $30",
+      "id": "12386",
+      "salary": "30",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0518",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13674",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13234",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13613",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14121",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14107",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $49",
+      "id": "11671",
+      "salary": "49",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14116",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0007",
+    "player": [
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13593",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $64",
+      "id": "11232",
+      "salary": "64",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $54",
+      "id": "11192",
+      "salary": "54",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "14208",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "Trade",
+      "id": "9662",
+      "salary": "13",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "0531",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Trade",
+      "id": "10276",
+      "salary": "49",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "12857",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "12678",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13146",
+      "salary": "15",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $7",
+      "id": "12447",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14612",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $4",
+      "id": "13868",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $4",
+      "id": "12197",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "11640",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14093",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14125",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14082",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13163",
+      "salary": "9",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0008",
+    "player": [
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13364",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13726",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "5",
+      "drafted": "",
+      "id": "12171",
+      "salary": "37",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "12187",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13635",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13630",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "13671",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $24",
+      "id": "14079",
+      "salary": "24",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $17",
+      "id": "14087",
+      "salary": "17",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "Trade",
+      "id": "12140",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0523",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13192",
+      "salary": "9",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "10697",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13488",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "14137",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14114",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14106",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13612",
+      "salary": "25",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13608",
+      "salary": "20",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0009",
+    "player": [
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13131",
+      "salary": "44",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13164",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13156",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13154",
+      "salary": "12",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $4",
+      "id": "8658",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $6",
+      "id": "14223",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "8687",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "14056",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "Trade",
+      "id": "13633",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $7",
+      "id": "9474",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13605",
+      "salary": "15",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13672",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13153",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "0527",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14112",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14059",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14067",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $3",
+      "id": "9075",
+      "salary": "3",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14123",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0010",
+    "player": [
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13129",
+      "salary": "65",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "4",
+      "drafted": "",
+      "id": "12652",
+      "salary": "19",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $56",
+      "id": "10271",
+      "salary": "56",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "0512",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "12263",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "11250",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "0504",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "12152",
+      "salary": "21",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $16",
+      "id": "13623",
+      "salary": "16",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "10700",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "14136",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13632",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13132",
+      "salary": "7",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "10973",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $6",
+      "id": "12181",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13629",
+      "salary": "12",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0011",
+    "player": [
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13607",
+      "salary": "18",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "11747",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "10729",
+      "salary": "37",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "11938",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $32",
+      "id": "11244",
+      "salary": "32",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $30",
+      "id": "12175",
+      "salary": "30",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "7393",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $6",
+      "id": "13617",
+      "salary": "6",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "5848",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "Trade",
+      "id": "13614",
+      "salary": "21",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0530",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $2",
+      "id": "4925",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "14122",
+      "salary": "2",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0508",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $25",
+      "id": "12635",
+      "salary": "25",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $10",
+      "id": "13631",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "10308",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $8",
+      "id": "13155",
+      "salary": "8",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "13763",
+      "salary": "",
+      "status": "INJURED_RESERVE"
+     }
+    ],
+    "week": "21"
+   },
+   {
+    "id": "0012",
+    "player": [
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "13378",
+      "salary": "10",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "13606",
+      "salary": "20",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "12186",
+      "salary": "19",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "3",
+      "drafted": "",
+      "id": "11678",
+      "salary": "18",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "12658",
+      "salary": "15",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "2",
+      "drafted": "",
+      "id": "12677",
+      "salary": "4",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $50",
+      "id": "14071",
+      "salary": "50",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $16",
+      "id": "10722",
+      "salary": "16",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $40",
+      "id": "9988",
+      "salary": "40",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $13",
+      "id": "7836",
+      "salary": "13",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "6997",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "11783",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "0511",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "Auction $1",
+      "id": "13850",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $5",
+      "id": "12391",
+      "salary": "5",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "10932",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "9714",
+      "salary": "",
+      "status": "ROSTER"
+     }
+    ],
+    "week": "21"
+   }
+  ]
+ }
+}

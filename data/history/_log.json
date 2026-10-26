@@ -1,12 +1,54 @@
 {
- "ran": "2026-10-26T21:43:46+00:00",
+ "ran": "2026-10-26T22:02:56+00:00",
  "seasons": {
-  "2019": "2019 transactions failed: api.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | api.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | www47.myfantasyleague.com key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
-  "2020": "2020 league failed: api.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
-  "2021": "ok",
-  "2022": "2022 league failed: api.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
-  "2023": "2023 league failed: api.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
-  "2024": "2024 league failed: api.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests",
-  "2025": "2025 league failed: api.myfantasyleague.com key: RuntimeError: {'$t': 'API Key Validation Failed'} | api.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com key: HTTPError: HTTP Error 429: Too Many Requests | www47.myfantasyleague.com no key: HTTPError: HTTP Error 429: Too Many Requests"
+  "2019": {
+   "league": "ok",
+   "weeklyResults": "0 weeks saved; missing 1 (weeklyResults: www47.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - ); 2 (weeklyResults: www47.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - ); 3 (weeklyResults: www47.myfantasyleague.com no k",
+   "transactions": "transactions: www47.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | www47.myfantasyleague.com key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | api.myfantasyleague.com n",
+   "rosters": "ok",
+   "players": "(216 of 216 ids)"
+  },
+  "2020": {
+   "league": "ok",
+   "weeklyResults": "0 weeks saved; missing 1 (weeklyResults: www47.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - ); 2 (weeklyResults: www47.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - ); 3 (weeklyResults: www47.myfantasyleague.com no k",
+   "transactions": "transactions: www47.myfantasyleague.com no key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | www47.myfantasyleague.com key: RuntimeError: {'$t': 'API requires logged in user in league ID 14482 - Please be sure to pass the proper MFL_USER_ID cookie or APIKEY parameter'} | api.myfantasyleague.com n",
+   "rosters": "ok",
+   "players": "(219 of 219 ids)"
+  },
+  "2021": {
+   "league": "ok",
+   "weeklyResults": "(17 weeks)",
+   "transactions": "kept",
+   "rosters": "kept",
+   "players": "kept"
+  },
+  "2022": {
+   "league": "ok",
+   "weeklyResults": "(17 weeks)",
+   "transactions": "(325)",
+   "rosters": "ok",
+   "players": "(353 of 353 ids)"
+  },
+  "2023": {
+   "league": "ok",
+   "weeklyResults": "(17 weeks)",
+   "transactions": "(283)",
+   "rosters": "ok",
+   "players": "(343 of 343 ids)"
+  },
+  "2024": {
+   "league": "ok",
+   "weeklyResults": "(17 weeks)",
+   "transactions": "(306)",
+   "rosters": "ok",
+   "players": "(356 of 356 ids)"
+  },
+  "2025": {
+   "league": "ok",
+   "weeklyResults": "(17 weeks)",
+   "transactions": "(282)",
+   "rosters": "ok",
+   "players": "(347 of 347 ids)"
+  }
  }
 }
