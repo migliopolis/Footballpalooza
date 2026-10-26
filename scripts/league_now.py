@@ -329,6 +329,13 @@ def build(folder):
     rounds = {str(r): [{'pick': d['pick'], 'id': d['id'], 'owner': owners.get((r, d['id']), d['id'])} for d in draft]
               for r in (1, 2, 3, 4)}
 
+    # strength of remaining schedule: average win% of the opponents still to play (regular season)
+    left = [g for g in remaining if g[0] > weeks_played]
+    for t in teams.values():
+        opps = [b if a == t['id'] else a for _, a, b in left if t['id'] in (a, b)]
+        t['gamesLeft'] = len(opps)
+        t['sos'] = round(sum(teams[o]['pct'] for o in opps) / len(opps), 3) if opps else None
+
     seed_of = {s['id']: s['seed'] for s in seeds}
     table = []
     for t in teams.values():
@@ -358,6 +365,16 @@ def main():
     folder = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'data', 'mfl')
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(ROOT, 'data', 'league-now.json')
     data = build(folder)
+    # week-by-week draft order, so the Rookie Draft page can show movement since last week
+    hist_path = os.path.join(os.path.dirname(out), 'draft-order-history.json')
+    hist = json.load(open(hist_path)) if os.path.exists(hist_path) else {'weeks': {}}
+    wk = data['weeksPlayed']
+    hist['weeks'][str(wk)] = [d['id'] for d in data['draftOrder']]
+    prev = [int(w) for w in hist['weeks'] if int(w) < wk]
+    data['prevDraftOrder'] = {'week': max(prev), 'order': hist['weeks'][str(max(prev))]} if prev else None
+    with open(hist_path, 'w') as f:
+        json.dump(hist, f, indent=1)
+        f.write('\n')
     meta_path = os.path.join(folder, '_meta.json')
     if os.path.exists(meta_path):
         data['fetched'] = json.load(open(meta_path)).get('fetched')

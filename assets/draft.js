@@ -1,4 +1,4 @@
-/* Rookie Draft mock: the hub's #draft tab.
+/* Rookie Draft mock: the hub's #draft/mock tab.
    Draft order and pick owners come from data/league-now.json (draftRounds); rookies, projected NFL
    picks and the salary formula come from the Rookie Pricer (rookie-pricer/players.json, pricing.json).
    Exposes window.FBPDraft.render(ctx) and .click(e, ctx); site.js routes to it. */
@@ -104,7 +104,7 @@
     if (!wantsAuto(order(ctx.now))) return;
     S.timer = setTimeout(() => {
       S.timer = null;
-      if (location.hash !== '#draft') return;          // left the tab: pick up again on return
+      if (location.hash !== '#draft/mock') return;     // left the tab: pick up again on return
       const ord = order(ctx.now);
       if (!wantsAuto(ord)) return;
       S.picks[S.cur] = autoPick(ord, S.cur); S.cur++;
@@ -326,7 +326,7 @@
                    ['hauls', `Team hauls${S.mode === 'mine' && haul[S.my] ? ` <small>you $${myTot}</small>` : ''}`]]
       .map(([k, l]) => `<button type="button" role="tab" data-dr-mtab="${k}" aria-selected="${S.mtab === k}">${l}</button>`).join('');
     const d = S.data;
-    return `<div class="pagehead"><h1>Rookie Draft</h1><span class="asof">${d.season} mock · order from Week ${now.weeksPlayed} standings · NFL picks ${d.mode === 'final' ? 'final' : 'projected'} (${esc(d.asOf)})</span></div>
+    return `<div class="pagehead"><h1>Rookie Draft</h1><span class="asof">${d.season} mock · order from Week ${now.weeksPlayed} standings · NFL picks ${d.mode === 'final' ? 'final' : 'projected'} (${esc(d.asOf)})</span></div>${window.FBPDraftHub ? FBPDraftHub.nav('mock') : ''}
       ${S.note ? `<p class="dr-note">${esc(S.note)}</p>` : ''}
       <div class="dr-controls">${teamSel}</div>
       <div class="dr-grid" data-mtab="${S.mtab}">
@@ -420,5 +420,7 @@
       window.scrollBy({ top: now.getBoundingClientRect().top - target, behavior: 'smooth' });
     });
   }
-  window.FBPDraft = { render, click, change, after };
+  // shared with the other Rookie Draft tabs (assets/drafthub.js)
+  const lib = { load, price, landing, slotLabel, nflLabel, order, ready: () => !!S.cfg, failed: () => S.err, cfg: () => S.cfg, data: () => S.data, nflOrder: () => S.nflOrder };
+  window.FBPDraft = { render, click, change, after, lib };
 })();

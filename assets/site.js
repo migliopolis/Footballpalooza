@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0021';
+  const VERSION = '0.0022';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -389,9 +389,9 @@
     fn();
     boxes.forEach(([sel, t]) => { const el = document.querySelector(sel); if (el) el.scrollTop = t; });
     window.scrollTo(0, y);
-    if (location.hash === '#draft' && window.FBPDraft) FBPDraft.after();   // the board follows the pick on the clock
+    if (location.hash === '#draft/mock' && window.FBPDraft) FBPDraft.after();   // the board follows the pick on the clock
   }
-  const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash === '#draft') route(); } });
+  const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash.startsWith('#draft')) route(); } });
 
   /* ---------- router ---------- */
   const TABS = ['now', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
@@ -411,7 +411,15 @@
       if (page !== lastPage && lastPage) window.scrollTo(0, 0);
       lastPage = page;
     }
-    else if (tab === 'draft') { app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>'; if (window.FBPDraft) FBPDraft.after(); }
+    else if (tab === 'draft') {
+      // sub-tabs: FBP Home (#draft), Mock Draft (#draft/mock), Big Board, Full Order
+      const sub = parts[1] || '';
+      if (sub === 'mock') { app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>'; if (window.FBPDraft) FBPDraft.after(); }
+      else app.innerHTML = window.FBPDraftHub ? FBPDraftHub.render(draftCtx(), sub) : '<p class="error">The Rookie Draft page didn’t load.</p>';
+      const page = 'draft/' + sub;
+      if (page !== lastPage && lastPage.startsWith('draft/')) window.scrollTo(0, 0);
+      lastPage = page;
+    }
     else if (tab === 'bylaws') {
       app.innerHTML = pageBylaws();
       if (!state.bylaws) fetch('data/bylaws.json', { cache: 'no-cache' }).then(r => r.json())
@@ -419,7 +427,7 @@
         .catch(() => { app.innerHTML = '<p class="error">The by-laws didn’t load. Refresh the page to try again.</p>'; });
     }
     else app.innerHTML = pageSoon(tab);
-    if (tab !== 'reference') lastPage = tab;
+    if (tab !== 'reference' && tab !== 'draft') lastPage = tab;
     const active = document.querySelector('.tabs a[aria-current="page"]');
     if (active && active.parentElement.scrollWidth > active.parentElement.clientWidth) active.parentElement.scrollLeft = active.offsetLeft - 10;
   }
@@ -444,7 +452,8 @@
     app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
     app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) keepScroll(route); });
     app.addEventListener('click', e => {
-      if (location.hash === '#draft' && window.FBPDraft && FBPDraft.click(e, draftCtx())) {
+      if (location.hash.startsWith('#draft') && location.hash !== '#draft/mock' && window.FBPDraftHub && FBPDraftHub.click(e)) { keepScroll(route); return; }
+      if (location.hash === '#draft/mock' && window.FBPDraft && FBPDraft.click(e, draftCtx())) {
         const el = e.target.closest('button'), key = el && [...el.attributes].find(a => a.name.startsWith('data-dr'));
         keepScroll(route);
         if (key && e.detail === 0) { const again = document.querySelector(`[${key.name}="${CSS.escape(key.value)}"]`); if (again) again.focus({ preventScroll: true }); }

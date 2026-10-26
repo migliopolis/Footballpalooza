@@ -1,6 +1,6 @@
 {
  "season": "FOOTBALLPALOOZA 2026",
- "generated": "2026-10-25T04:18:56+00:00",
+ "generated": "2026-10-26T04:43:06+00:00",
  "weeksPlayed": 6,
  "lastRegularSeasonWeek": 14,
  "divisions": [
@@ -36,6 +36,8 @@
    "divRecord": "1-1-0",
    "gb": 0.0,
    "avgPf": 124.8,
+   "gamesLeft": 8,
+   "sos": 0.542,
    "divisionName": "West",
    "divisionRank": 1,
    "seed": 1
@@ -58,6 +60,8 @@
    "divRecord": "1-1-0",
    "gb": 0.0,
    "avgPf": 132.5,
+   "gamesLeft": 8,
+   "sos": 0.458,
    "divisionName": "Central",
    "divisionRank": 1,
    "seed": 2
@@ -80,6 +84,8 @@
    "divRecord": "2-0-0",
    "gb": 0.5,
    "avgPf": 130.2,
+   "gamesLeft": 8,
+   "sos": 0.511,
    "divisionName": "West",
    "divisionRank": 2,
    "seed": 4
@@ -102,6 +108,8 @@
    "divRecord": "1-1-0",
    "gb": 0.5,
    "avgPf": 130.0,
+   "gamesLeft": 8,
+   "sos": 0.458,
    "divisionName": "West",
    "divisionRank": 3,
    "seed": 5
@@ -124,6 +132,8 @@
    "divRecord": "2-0-0",
    "gb": 0.0,
    "avgPf": 100.6,
+   "gamesLeft": 8,
+   "sos": 0.459,
    "divisionName": "East",
    "divisionRank": 1,
    "seed": 3
@@ -146,6 +156,8 @@
    "divRecord": "1-1-0",
    "gb": 1.0,
    "avgPf": 120.9,
+   "gamesLeft": 8,
+   "sos": 0.511,
    "divisionName": "Central",
    "divisionRank": 3,
    "seed": null
@@ -168,6 +180,8 @@
    "divRecord": "1-1-0",
    "gb": 1.0,
    "avgPf": 113.6,
+   "gamesLeft": 8,
+   "sos": 0.469,
    "divisionName": "Central",
    "divisionRank": 2,
    "seed": null
@@ -190,6 +204,8 @@
    "divRecord": "0-2-0",
    "gb": 1.5,
    "avgPf": 90.8,
+   "gamesLeft": 8,
+   "sos": 0.521,
    "divisionName": "East",
    "divisionRank": 2,
    "seed": null
@@ -212,6 +228,8 @@
    "divRecord": "1-1-0",
    "gb": 2.0,
    "avgPf": 124.7,
+   "gamesLeft": 8,
+   "sos": 0.5,
    "divisionName": "Central",
    "divisionRank": 4,
    "seed": 6
@@ -234,6 +252,8 @@
    "divRecord": "0-2-0",
    "gb": 2.5,
    "avgPf": 100.5,
+   "gamesLeft": 8,
+   "sos": 0.594,
    "divisionName": "West",
    "divisionRank": 4,
    "seed": null
@@ -256,6 +276,8 @@
    "divRecord": "1-1-0",
    "gb": 2.0,
    "avgPf": 93.7,
+   "gamesLeft": 8,
+   "sos": 0.469,
    "divisionName": "East",
    "divisionRank": 3,
    "seed": null
@@ -278,6 +300,8 @@
    "divRecord": "1-1-0",
    "gb": 3.0,
    "avgPf": 98.5,
+   "gamesLeft": 8,
+   "sos": 0.511,
    "divisionName": "East",
    "divisionRank": 4,
    "seed": null
@@ -2796,5 +2820,6 @@
   "Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.",
   "Picks 7-12 are projected by seed until the playoffs are played."
  ],
+ "prevDraftOrder": null,
  "fetched": "2026-10-25T04:18:38+00:00"
 }
