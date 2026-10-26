@@ -429,8 +429,10 @@ mark.bl-m{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inhe
 .rf-sub a{text-decoration:none;font:600 .82rem var(--body);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
 .rf-sub a[aria-current="page"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 /* main sections and season tabs: one even row of equal buttons */
-.rf-sub.seg{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;max-width:560px}
-.rf-sub.seg a{text-align:center;padding:7px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rf-sub.seg{display:flex;flex-wrap:nowrap;gap:6px;max-width:560px}
+/* each button as wide as its word, never cut off; spare room is shared evenly */
+.rf-sub.seg a{flex:1 0 auto;text-align:center;padding:7px 10px;white-space:nowrap}
+@media (max-width:520px){.rf-sub.seg{gap:4px}.rf-sub.seg a{padding:7px 6px;font-size:clamp(.74rem,3.6vw,.82rem)}}
 section > .rf-sub{margin:0 0 12px}
 .rf-note{margin:0;color:var(--muted);font-size:.9rem}
 .rf-note a{color:var(--accent)}
@@ -542,3 +544,4 @@ section > .rf-sub{margin:0 0 12px}
 .rf-ppr{display:flex;align-items:center;gap:8px;margin-left:auto}
 .rf-ppr > span{font:600 .72rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
 .rf-ppr .seg button{padding:5px 12px;font-size:.8rem}
+.rf-switch + .rf-note{margin-top:2px}

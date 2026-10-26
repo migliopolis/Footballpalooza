@@ -110,13 +110,11 @@ window.FBPRef = (() => {
   }
 
   /* ---------- franchises ---------- */
+  // team buttons; pick one to open its page
+  const teamSwitch = cur => `<nav class="rf-switch" aria-label="Franchise">${Object.keys(D.franchises).sort((x, y) => D.franchises[x].localeCompare(D.franchises[y])).map(id => `<a href="#reference/f-${id}" title="${esc(D.franchises[id])}"${id === cur ? ' aria-current="page"' : ''}>${logo(id) || esc((X.teams[id] || {}).abbr || id)}</a>`).join('')}</nav>`;
   function pageFranchises() {
-    const ids = Object.keys(D.franchises).sort((a, b) => D.franchise_alltime[b].win_pct - D.franchise_alltime[a].win_pct);
-    return head('Franchises') + nav('#reference/franchises') +
-      `<section><h2 class="sec">All-time <small>regular season 2019 on, ranked by win%${PRE().length ? '; 2011–16 is the non-PPR record; titles and 2nds include 2011–2018' : ''}</small></h2>
-      <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Franchise</th><th>W-L-T</th><th>Win%</th>${PRE().length ? '<th>2011–16</th>' : ''}<th>Titles</th><th>2nd</th><th>Points</th><th>Seasons</th></tr></thead><tbody>
-      ${ids.map(fr => { const a = D.franchise_alltime[fr]; return `<tr>${lgCell(fr)}${nameCell(fr)}<td>${rec(a.w, a.l, a.t)}</td><td>${pct(a.win_pct)}</td>${PRE().length ? `<td>${(r => r.w + r.l ? rec(r.w, r.l, r.t) : '—')(preRec(fr))}</td>` : ''}<td>${titlesOf(fr).length ? '🏆 ' + titlesOf(fr).length : '—'}</td><td>${secondsOf(fr).length || '—'}</td><td>${n0(a.total_pf)}</td><td>${a.seasons_played}</td></tr>`; }).join('')}
-      </tbody></table></div></section>`;
+    return head('Franchises') + nav('#reference/franchises') + teamSwitch('') +
+      '<p class="rf-note">Pick a team to see its year-by-year history, head-to-head and draft picks. Overall records are on the <a href="#reference">Reference home</a>.</p>';
   }
 
   function pageFranchise(fr) {
@@ -130,11 +128,11 @@ window.FBPRef = (() => {
     const h2h = Object.entries(D.head_to_head[fr] || {}).sort((x, y) => D.franchises[x[0]].localeCompare(D.franchises[y[0]]));
     const ids = Object.keys(D.franchises).sort((x, y) => D.franchises[x].localeCompare(D.franchises[y]));
     return head('Franchises') + nav('#reference/franchises') +
-      `<nav class="rf-switch" aria-label="Franchise">${ids.map(id => `<a href="#reference/f-${id}" title="${esc(D.franchises[id])}"${id === fr ? ' aria-current="page"' : ''}>${logo(id) || esc((X.teams[id] || {}).abbr || id)}</a>`).join('')}</nav>
+      teamSwitch(fr) + `
       <section class="rf-band" style="background:${bg};color:${fg};border-bottom-color:${ac}">
         ${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}
         <div><h2>${esc(D.franchises[fr])}</h2>
-        <p>${rec(a.w, a.l, a.t)} since 2019 (${pct(a.win_pct)}) · ${titlesOf(fr).length ? `🏆 ${titlesOf(fr).join(', ')}` : 'No titles yet'}${secondsOf(fr).length ? ` · 2nd ${secondsOf(fr).join(', ')}` : ''}</p>
+        <p>${(() => { const p = preRec(fr), w = a.w + p.w, l = a.l + p.l, t = a.t + p.t, g = w + l + t; return `${rec(w, l, t)} since ${firstYear()} (${pct(g ? w / g : 0)})`; })()} · ${titlesOf(fr).length ? `🏆 ${titlesOf(fr).join(', ')}` : 'No titles yet'}${secondsOf(fr).length ? ` · 2nd ${secondsOf(fr).join(', ')}` : ''}</p>
         ${preNote(fr)}
         ${names.length ? `<p class="aka">Also played as ${names.map(esc).join(', ')}</p>` : ''}</div>
       </section>
@@ -284,7 +282,7 @@ window.FBPRef = (() => {
       body = m('Biggest blowouts', L.biggest_blowouts) + '<div style="height:18px"></div>' + m('Closest finishes', L.closest_games);
     } else body = `<h2 class="sec">Best two-game stretches <small>back-to-back games, any week</small></h2>` + tbl(['#', 'lg', '!Team', 'Total', 'Year', 'Games'],
       L.top_two_game_stretches.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.total)}</b></td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td>wk ${r.week_a} ${n1(r.score_a)} + wk ${r.week_b} ${n1(r.score_b)}</td></tr>`));
-    return head('Records') + nav('#reference/records') + sub(BOARDS.map(([k, l]) => [`#reference/records/${k}`, l]), `#reference/records/${b}`) + `<section>${body}</section>`;
+    return head('Records') + nav('#reference/records') + (PRE().length ? '<p class="rf-note">P-PPR is on, but there are no game scores before 2019, so records cover 2019 on. See the blind spots on the Reference home.</p>' : '') + sub(BOARDS.map(([k, l]) => [`#reference/records/${k}`, l]), `#reference/records/${b}`) + `<section>${body}</section>`;
   }
 
   /* ---------- entry ---------- */
