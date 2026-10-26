@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0025';
+  const VERSION = '0.0026';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -391,10 +391,10 @@
     window.scrollTo(0, y);
     if (location.hash === '#draft/mock' && window.FBPDraft) FBPDraft.after();   // the board follows the pick on the clock
   }
-  const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash.startsWith('#draft')) route(); } });
+  const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash.startsWith('#draft') || location.hash === '#awards') route(); } });
 
   /* ---------- router ---------- */
-  const TABS = ['now', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
+  const TABS = ['now', 'awards', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
   const refCtx = () => ({ teams: state.teams, chip, esc, ppr: state.ppr, rerender: () => { if (location.hash.startsWith('#reference')) route(); } });
   let lastPage = '';
   function route() {
@@ -403,6 +403,7 @@
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
+    else if (tab === 'awards') app.innerHTML = window.FBPAwards ? FBPAwards.render(draftCtx()) : '<p class="error">Awards didn’t load.</p>';
     else if (tab === 'reference') {
       const path = parts.slice(1);
       app.innerHTML = window.FBPRef ? FBPRef.render(refCtx(), path) : '<p class="error">The Reference section didn’t load.</p>';

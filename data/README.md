@@ -15,6 +15,10 @@ Everything here is written by the weekly GitHub Action (`.github/workflows/refre
 | `player-overrides.json` | hand-maintained | corrections the linker applies first: `"<MFL id>": "<ESPN id>"`, or `null` to unlink |
 | `fantasypros/*.json` | FantasyPros API (`scripts/refresh_fantasypros.py`) | **off for now**: the free tier returns only the top 10 players per list |
 | `nfl-draft-order.json` | Tankathon full 2027 draft order (`scripts/refresh_tankathon.py`) | all 7 rounds (257 picks) with traded picks; the Rookie Draft uses it for each rookie's projected landing spot. Team codes match ESPN |
+| `mfl/weeklyResults.json` | MFL `TYPE=weeklyResults` per played week (`scripts/refresh_mfl.py`) | each team's starters and bench with points, by week |
+| `mfl/transactions.json` | MFL `TYPE=transactions` | this season's trades, waiver claims (with FAAB bids) and free-agent pickups |
+| `awards.json` | computed (`scripts/awards.py`) | the Awards tab: All-FBP 1st and 2nd teams and season awards, from starter points of rostered players |
+| `draft-order-history.json` | computed (`scripts/league_now.py`) | the round-1 order each week, for movement arrows on the Rookie Draft page |
 | `league-now.json` | computed (`scripts/league_now.py`) | standings, seeds, tiebreaks, draft order, playoff odds |
 | `reference/history.json` | hand-maintained (moved from the migliopolis/fbpreference almanac) | frozen league history 2019 on: seasons, schedules and scores, brackets, champions, rookie draft classes, auctions |
 | `reference.json` | computed (`scripts/build_reference.py`) | the Reference tab: history plus this season's games from `mfl/`, with all-time records, head-to-head and record tables recomputed from the scores. `--check` compares against the frozen copy |

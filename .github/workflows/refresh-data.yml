@@ -45,6 +45,9 @@ jobs:
         run: python tests/test_league_now.py
       - name: Rebuild Reference history with this season's games
         run: python scripts/build_reference.py
+      - name: Build the Awards page (All-FBP teams, season awards)
+        continue-on-error: true
+        run: python scripts/awards.py
       - name: Commit changed data
         run: |
           git config user.name "github-actions[bot]"

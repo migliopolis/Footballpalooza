@@ -66,6 +66,67 @@ def players_stale(days=1):
         return True
 
 
+as_list = lambda x: x if isinstance(x, list) else ([x] if x else [])
+
+
+def played_weeks():
+    """Weeks with final scores, from the schedule just saved."""
+    try:
+        sched = json.load(open(os.path.join(OUT, 'schedule.json')))['schedule']
+    except Exception:
+        return []
+    out = []
+    for wk in as_list(sched.get('weeklySchedule')):
+        fs = [f for m in as_list(wk.get('matchup')) for f in as_list(m.get('franchise'))]
+        if fs and all(f.get('score') not in (None, '') for f in fs):
+            out.append(int(wk['week']))
+    return sorted(out)
+
+
+def fetch_weekly():
+    """Player scores for every played week, starters and bench, for the Awards page.
+    Saved compactly: weeks -> franchise -> {s: [[player, points], ...] starters, n: bench}."""
+    path = os.path.join(OUT, 'weeklyResults.json')
+    try:
+        saved = json.load(open(path))
+    except Exception:
+        saved = {'weeks': {}}
+    weeks = played_weeks()
+    for w in weeks:
+        try:
+            raw = fetch('weeklyResults', {'W': str(w)}).get('weeklyResults', {})
+            teams = [f for m in as_list(raw.get('matchup')) for f in as_list(m.get('franchise'))] + as_list(raw.get('franchise'))
+            wk = {}
+            for f in teams:
+                st, bn = [], []
+                for pl in as_list(f.get('player')):
+                    sc = pl.get('score')
+                    pts = float(sc) if sc not in (None, '') else 0.0
+                    (st if pl.get('status') == 'starter' else bn).append([pl.get('id'), round(pts, 2)])
+                wk[f['id']] = {'s': st, 'n': bn, 'opt': f.get('opt_pts')}
+            if wk:
+                saved['weeks'][str(w)] = wk
+            print(f'  ok   weeklyResults week {w} ({len(wk)} teams)')
+        except Exception as e:
+            print(f'  FAIL {e}  (kept week {w} from before, if any)')
+        time.sleep(1.1)
+    saved['fetched'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+    save('weeklyResults', saved)
+
+
+def fetch_transactions():
+    """This season's trades, waiver claims and free-agent pickups (Awards page)."""
+    keep = {'TRADE', 'BBID_WAIVER', 'WAIVER', 'FREE_AGENT'}
+    try:
+        raw = fetch('transactions').get('transactions', {})
+        tx = [t for t in as_list(raw.get('transaction')) if t.get('type') in keep]
+        save('transactions', {'fetched': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'transactions': tx})
+        print(f'  ok   transactions ({len(tx)} trades and pickups)')
+    except Exception as e:
+        print(f'  FAIL {e}  (kept the previous file)')
+    time.sleep(1.1)
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     print(f'Season {SEASON}, league {LEAGUE}, API key {"set" if KEY else "not set"}')
@@ -95,6 +156,8 @@ def main():
                   f'{sum(1 for v in compact.values() if v[3])} with ESPN ids)')
         except Exception as e:
             print(f'  FAIL {e}  (kept the previous file)')
+    fetch_weekly()
+    fetch_transactions()
     save('_meta', {'season': SEASON, 'league': LEAGUE,
                    'fetched': datetime.now(timezone.utc).isoformat(timespec='seconds')})
     if failed_core:
