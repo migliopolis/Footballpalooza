@@ -29,6 +29,15 @@ window.FBPAwards = (() => {
       <span class="aw-stats"><span><b>${n1(p.pts)}</b>pts</span><span><b>${n1(p.ppg)}</b>per start</span><span><b>${sal(p)}</b>salary</span></span></div>`;
   }
   // one award: the winner big, the next two below
+  // MFL pick codes: FP_<team>_<year>_<round> is a future pick; DP_<round>_<pick> (zero-based) is this year's rookie draft
+  const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || 'th');
+  function pickName(k) {
+    let m = /^FP_(\d+)_(\d+)_(\d+)$/.exec(k);
+    if (m) return `${m[2]} ${ord(+m[3])}-round pick (${(X.teams[m[1]] || {}).abbr || m[1]})`;
+    m = /^DP_(\d+)_(\d+)$/.exec(k);
+    if (m) return `${A.season} rookie pick ${+m[1] + 1}.${String(+m[2] + 1).padStart(2, '0')}`;
+    return k;
+  }
   function award(a) {
     let body = '', picker = '';
     if (a.weeks) {   // Player of the Week: buttons for every week, latest first
@@ -49,8 +58,10 @@ window.FBPAwards = (() => {
         <ol class="aw-rest" start="2">${rest.map(t => `<li>${tlogo(t.team, 'mini')}<span>${esc(tname(t.team))}</span><b>${esc(t.stat)}</b><small>${esc(t.sub)}</small></li>`).join('')}</ol>`;
     } else if (a.trade) {
       const side = (s, won) => `<div class="aw-side${won ? ' won' : ''}"><div class="aw-sideh">${tlogo(s.team, 'mini')}<b>${esc(tname(s.team))}</b><span>${n1(s.pts)} pts</span></div>
-        <ul>${s.players.map(p => `<li>${esc(p.name)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(k.replace(/^FP_\d+_(\d+)_(\d+)$/, '$1 round $2 pick'))}</li>`).join('')}</ul></div>`;
-      body = `<p class="aw-sub">Received, and starter points since:</p><div class="aw-trade">${side(a.trade.winner, true)}${side(a.trade.loser, false)}</div><p class="aw-sub">Edge: ${n1(a.trade.margin)} pts</p>`;
+        <ul>${s.players.map(p => `<li>${esc(p.name)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(pickName(k))}</li>`).join('')}</ul></div>`;
+      const deal = t => `<div class="aw-trade">${side(t.winner, true)}${side(t.loser, false)}</div><p class="aw-sub">Edge: ${n1(t.margin)} pts to ${esc(tname(t.winner.team))}</p>`;
+      body = `<p class="aw-sub">What each side received, and its starter points since:</p>${deal(a.trade)}` +
+        (a.more && a.more.length ? a.more.map((t, i) => `<div class="aw-more"><span class="aw-rank">${i + 2}</span>${deal(t)}</div>`).join('') : '');
     }
     return `<section class="card aw-award"><h3>${esc(a.title)}</h3><p class="aw-why">${esc(a.why)}</p>${picker}${body}</section>`;
   }

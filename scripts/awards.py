@@ -153,7 +153,8 @@ def main():
         trades.append({'winner': sa, 'loser': sb, 'margin': round(sa['pts'] - sb['pts'], 1), 'ts': int(t.get('timestamp') or 0)})
     trades.sort(key=lambda x: -x['margin'])
     if trades and trades[0]['margin'] > 0:
-        A.append({'key': 'trade', 'title': 'Trade of the Year', 'why': 'Biggest edge in starter points from what each side received', 'trade': trades[0]})
+        A.append({'key': 'trade', 'title': 'Trade of the Year', 'why': 'Biggest edge in starter points from what each side received', 'trade': trades[0],
+                  'more': [t for t in trades[1:3] if t['margin'] > 0]})
 
     # team awards from the standings
     now = load(D('league-now.json'), {}) or {}
