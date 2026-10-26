@@ -36,8 +36,11 @@ window.FBPAwards = (() => {
     const h = p.honors; if (!h) return '';
     const n = h.first + h.second;
     const txt = n === 1 ? 'First All-FBP selection' : [h.first ? `<span>${h.first}× 1st Team</span>` : '', h.second ? `<span>${h.second}× 2nd Team</span>` : ''].filter(Boolean).join('');
-    return `<span class="aw-hon${n === 1 ? ' new' : ''}" title="All-FBP selections since ${esc(A.honorsFrom || '')}">${txt}</span>`;
+    return `${mvpTag(p, true)}<span class="aw-hon${n === 1 ? ' new' : ''}" title="All-FBP selections since ${esc(A.honorsFrom || '')}">${txt}</span>`;
   }
+  // FBP MVPs to date (finished seasons only)
+  const mvpTag = (p, block) => p.mvps && p.mvps.length ? `<span class="aw-mvp${block ? ' blk' : ''}" title="FBP MVP ${esc(p.mvps.join(', '))}">${p.mvps.length > 1 ? p.mvps.length + '× ' : ''}MVP${p.mvps.length === 1 ? ' ' + esc(p.mvps[0]) : ''}</span>` : '';
+  const cup = p => p.champ ? ' <span class="aw-cup" role="img" aria-label="Champion" title="Won the title that season">🏆</span>' : '';
   function card(slot, p, second) {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg')}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.rookie ? ' · <i>Rookie</i>' : ''}</span>
@@ -65,16 +68,16 @@ window.FBPAwards = (() => {
     if (a.list) {
       const [w, ...rest] = a.list;
       const extra = p => p.perDollar != null ? `${n1(p.perDollar)} pts per $` : p.bid != null ? `${p.how}${p.how === 'FAAB' ? ' $' + Math.round(p.bid) : ''}` : p.week ? `Week ${p.week}` : `${p.starts} starts`;
-      body = `<div class="aw-win">${photo(w, 'md')}<div><b>${esc(w.name)}</b><span class="aw-sub">${pos(w)} ${esc(w.nfl || '')} · ${tlogo(w.team, 'mini')}${esc(tname(w.team))}</span>
+      body = `<div class="aw-win">${photo(w, 'md')}<div><b>${esc(w.name)}</b>${mvpTag(w)}<span class="aw-sub">${pos(w)} ${esc(w.nfl || '')} · ${tlogo(w.team, 'mini')}${esc(tname(w.team))}</span>
         <span class="aw-big">${n1(w.pts)} <small>pts${a.key === 'value' || a.key === 'contract' ? ` · ${sal(w)}` : ''}</small></span><span class="aw-sub">${extra(w)}</span></div></div>
-        ${rest.length ? `<ol class="aw-rest" start="2">${rest.map(p => `<li>${tlogo(p.team, 'mini')}<span>${esc(p.name)} <small>${p.pos}</small></span><b>${n1(p.pts)}</b><small>${extra(p)}</small></li>`).join('')}</ol>` : ''}`;
+        ${rest.length ? `<ol class="aw-rest" start="2">${rest.map(p => `<li>${tlogo(p.team, 'mini')}<span>${esc(p.name)} <small>${p.pos}</small>${cup(p)}${mvpTag(p)}</span><b>${n1(p.pts)}</b><small>${extra(p)}</small></li>`).join('')}</ol>` : ''}`;
     } else if (a.teams) {
       const [w, ...rest] = a.teams;
       body = `<div class="aw-win team">${tlogo(w.team, 'aw-tlogo')}<div><b>${esc(tname(w.team))}</b><span class="aw-big">${esc(w.stat)}</span><span class="aw-sub">${esc(w.sub)}</span></div></div>
         <ol class="aw-rest" start="2">${rest.map(t => `<li>${tlogo(t.team, 'mini')}<span>${esc(tname(t.team))}</span><b>${esc(t.stat)}</b><small>${esc(t.sub)}</small></li>`).join('')}</ol>`;
     } else if (a.trade) {
       const side = (s, won) => `<div class="aw-side${won ? ' won' : ''}"><div class="aw-sideh">${tlogo(s.team, 'mini')}<b>${esc(tname(s.team))}</b><span>${n1(s.pts)} pts</span></div>
-        <ul>${s.players.map(p => `<li>${esc(p.name)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(pickName(k))}</li>`).join('')}</ul></div>`;
+        <ul>${s.players.map(p => `<li>${esc(p.name)}${cup(p)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(pickName(k))}</li>`).join('')}</ul></div>`;
       const deal = t => `<div class="aw-trade">${side(t.winner, true)}${side(t.loser, false)}</div><p class="aw-sub">Edge: ${n1(t.margin)} pts to ${esc(tname(t.winner.team))}</p>`;
       body = `<p class="aw-sub">What each side received, and its starter points since:</p>${deal(a.trade)}` +
         (a.more && a.more.length ? a.more.map((t, i) => `<div class="aw-more"><span class="aw-rank">${i + 2}</span>${deal(t)}</div>`).join('') : '');

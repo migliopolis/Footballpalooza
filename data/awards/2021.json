@@ -96,10 +96,14 @@
      "champTeam": "0009",
      "teamPts": 335.4,
      "teamStarts": 13,
+     "mvps": [
+      "2021"
+     ],
      "honors": {
       "first": 1,
       "second": 0
-     }
+     },
+     "mvp": true
     }
    },
    {
@@ -426,7 +430,13 @@
      "ppg": 25.8,
      "salary": 25.0,
      "contract": "4",
-     "rookie": false
+     "rookie": false,
+     "champ": true,
+     "champTeam": "0009",
+     "mvp": true,
+     "mvps": [
+      "2021"
+     ]
     },
     {
      "id": "14802",
@@ -440,7 +450,9 @@
      "ppg": 23.7,
      "salary": 44.0,
      "contract": "2",
-     "rookie": false
+     "rookie": false,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "13589",
@@ -454,7 +466,9 @@
      "ppg": 23.5,
      "salary": 9.0,
      "contract": "3",
-     "rookie": false
+     "rookie": false,
+     "champ": false,
+     "champTeam": null
     }
    ]
   },
@@ -476,7 +490,9 @@
      "salary": 1.0,
      "contract": "",
      "rookie": false,
-     "perDollar": 154.0
+     "perDollar": 154.0,
+     "champ": true,
+     "champTeam": "0009"
     },
     {
      "id": "14105",
@@ -491,7 +507,9 @@
      "salary": 1.0,
      "contract": "",
      "rookie": false,
-     "perDollar": 142.1
+     "perDollar": 142.1,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "14143",
@@ -506,7 +524,9 @@
      "salary": 1.0,
      "contract": "",
      "rookie": false,
-     "perDollar": 102.8
+     "perDollar": 102.8,
+     "champ": false,
+     "champTeam": null
     }
    ]
   },
@@ -527,7 +547,9 @@
      "ppg": 18.5,
      "salary": 45.0,
      "contract": "1",
-     "rookie": true
+     "rookie": true,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "15281",
@@ -541,7 +563,9 @@
      "ppg": 16.4,
      "salary": 20.0,
      "contract": "1",
-     "rookie": true
+     "rookie": true,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "15329",
@@ -555,7 +579,9 @@
      "ppg": 10.5,
      "salary": 16.0,
      "contract": "1",
-     "rookie": true
+     "rookie": true,
+     "champ": false,
+     "champTeam": null
     }
    ]
   },
@@ -578,7 +604,9 @@
      "contract": "",
      "rookie": false,
      "bid": 1.0,
-     "how": "FAAB"
+     "how": "FAAB",
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "11225",
@@ -594,7 +622,9 @@
      "contract": "",
      "rookie": false,
      "bid": 17.0,
-     "how": "FAAB"
+     "how": "FAAB",
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "14123",
@@ -610,7 +640,9 @@
      "contract": "",
      "rookie": false,
      "bid": 2.0,
-     "how": "FAAB"
+     "how": "FAAB",
+     "champ": false,
+     "champTeam": null
     }
    ]
   },
@@ -634,7 +666,9 @@
        "ppg": 17.6,
        "salary": null,
        "contract": "",
-       "rookie": false
+       "rookie": false,
+       "champ": false,
+       "champTeam": null
       },
       {
        "id": "14813",
@@ -648,7 +682,9 @@
        "ppg": 13.3,
        "salary": 8.0,
        "contract": "2",
-       "rookie": false
+       "rookie": false,
+       "champ": false,
+       "champTeam": null
       }
      ],
      "picks": [],
@@ -682,7 +718,9 @@
         "ppg": 18.2,
         "salary": 65.0,
         "contract": "4",
-        "rookie": false
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
        }
       ],
       "picks": [
@@ -705,7 +743,9 @@
         "ppg": 9.9,
         "salary": 3.0,
         "contract": "2",
-        "rookie": false
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
        }
       ],
       "picks": [
@@ -732,7 +772,9 @@
         "ppg": 23.4,
         "salary": 8.0,
         "contract": "",
-        "rookie": false
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
        }
       ],
       "picks": [],
@@ -835,7 +877,9 @@
      "salary": 48.0,
      "contract": "",
      "rookie": false,
-     "perDollar": 2.1
+     "perDollar": 2.1,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "14079",
@@ -850,7 +894,9 @@
      "salary": 30.0,
      "contract": "",
      "rookie": false,
-     "perDollar": 2.3
+     "perDollar": 2.3,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "13128",
@@ -865,7 +911,9 @@
      "salary": 65.0,
      "contract": "4",
      "rookie": false,
-     "perDollar": 2.8
+     "perDollar": 2.8,
+     "champ": false,
+     "champTeam": null
     }
    ]
   },
@@ -887,7 +935,9 @@
      "salary": 9.0,
      "contract": "3",
      "rookie": false,
-     "week": 14
+     "week": 14,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "13128",
@@ -902,7 +952,9 @@
      "salary": 65.0,
      "contract": "4",
      "rookie": false,
-     "week": 14
+     "week": 14,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "11675",
@@ -917,7 +969,9 @@
      "salary": 49.0,
      "contract": "",
      "rookie": false,
-     "week": 14
+     "week": 14,
+     "champ": true,
+     "champTeam": "0009"
     }
    ],
    "weeks": {
@@ -935,7 +989,9 @@
       "salary": 10.0,
       "contract": "",
       "rookie": false,
-      "week": 1
+      "week": 1,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "12801",
@@ -950,7 +1006,9 @@
       "salary": 43.0,
       "contract": "5",
       "rookie": false,
-      "week": 1
+      "week": 1,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "14056",
@@ -965,7 +1023,9 @@
       "salary": 11.0,
       "contract": "3",
       "rookie": false,
-      "week": 1
+      "week": 1,
+      "champ": true,
+      "champTeam": "0009"
      }
     ],
     "2": [
@@ -982,7 +1042,9 @@
       "salary": 37.0,
       "contract": "5",
       "rookie": false,
-      "week": 2
+      "week": 2,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13319",
@@ -997,7 +1059,9 @@
       "salary": 29.0,
       "contract": "4",
       "rookie": false,
-      "week": 2
+      "week": 2,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13164",
@@ -1012,7 +1076,12 @@
       "salary": 25.0,
       "contract": "4",
       "rookie": false,
-      "week": 2
+      "week": 2,
+      "champ": true,
+      "champTeam": "0009",
+      "mvps": [
+       "2021"
+      ]
      }
     ],
     "3": [
@@ -1029,7 +1098,9 @@
       "salary": 9.0,
       "contract": "3",
       "rookie": false,
-      "week": 3
+      "week": 3,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13154",
@@ -1044,7 +1115,9 @@
       "salary": 4.0,
       "contract": "",
       "rookie": false,
-      "week": 3
+      "week": 3,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "11675",
@@ -1059,7 +1132,9 @@
       "salary": 49.0,
       "contract": "",
       "rookie": false,
-      "week": 3
+      "week": 3,
+      "champ": true,
+      "champTeam": "0009"
      }
     ],
     "4": [
@@ -1076,7 +1151,9 @@
       "salary": 43.0,
       "contract": "5",
       "rookie": false,
-      "week": 4
+      "week": 4,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "14136",
@@ -1091,7 +1168,9 @@
       "salary": 10.0,
       "contract": "3",
       "rookie": false,
-      "week": 4
+      "week": 4,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13635",
@@ -1106,7 +1185,9 @@
       "salary": 21.0,
       "contract": "",
       "rookie": false,
-      "week": 4
+      "week": 4,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "5": [
@@ -1123,7 +1204,9 @@
       "salary": 18.0,
       "contract": "4",
       "rookie": false,
-      "week": 5
+      "week": 5,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13671",
@@ -1138,7 +1221,9 @@
       "salary": 10.0,
       "contract": "3",
       "rookie": false,
-      "week": 5
+      "week": 5,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "5848",
@@ -1153,7 +1238,9 @@
       "salary": 8.0,
       "contract": "",
       "rookie": false,
-      "week": 5
+      "week": 5,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "6": [
@@ -1170,7 +1257,9 @@
       "salary": 21.0,
       "contract": "2",
       "rookie": false,
-      "week": 6
+      "week": 6,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "12626",
@@ -1185,7 +1274,9 @@
       "salary": 37.0,
       "contract": "5",
       "rookie": false,
-      "week": 6
+      "week": 6,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13164",
@@ -1200,7 +1291,12 @@
       "salary": 25.0,
       "contract": "4",
       "rookie": false,
-      "week": 6
+      "week": 6,
+      "champ": true,
+      "champTeam": "0009",
+      "mvps": [
+       "2021"
+      ]
      }
     ],
     "7": [
@@ -1217,7 +1313,12 @@
       "salary": 25.0,
       "contract": "4",
       "rookie": false,
-      "week": 7
+      "week": 7,
+      "champ": true,
+      "champTeam": "0009",
+      "mvps": [
+       "2021"
+      ]
      },
      {
       "id": "15281",
@@ -1232,7 +1333,9 @@
       "salary": 20.0,
       "contract": "1",
       "rookie": true,
-      "week": 7
+      "week": 7,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13132",
@@ -1247,7 +1350,9 @@
       "salary": 25.0,
       "contract": "5",
       "rookie": false,
-      "week": 7
+      "week": 7,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "8": [
@@ -1264,7 +1369,9 @@
       "salary": 10.0,
       "contract": "3",
       "rookie": false,
-      "week": 8
+      "week": 8,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "14842",
@@ -1279,7 +1386,9 @@
       "salary": 6.0,
       "contract": "",
       "rookie": false,
-      "week": 8
+      "week": 8,
+      "champ": true,
+      "champTeam": "0009"
      },
      {
       "id": "13589",
@@ -1294,7 +1403,9 @@
       "salary": 9.0,
       "contract": "3",
       "rookie": false,
-      "week": 8
+      "week": 8,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "9": [
@@ -1311,7 +1422,9 @@
       "salary": 44.0,
       "contract": "2",
       "rookie": false,
-      "week": 9
+      "week": 9,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "14779",
@@ -1326,7 +1439,9 @@
       "salary": 3.0,
       "contract": "2",
       "rookie": false,
-      "week": 9
+      "week": 9,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13593",
@@ -1341,7 +1456,9 @@
       "salary": 18.0,
       "contract": "4",
       "rookie": false,
-      "week": 9
+      "week": 9,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "10": [
@@ -1358,7 +1475,9 @@
       "salary": 30.0,
       "contract": "4",
       "rookie": false,
-      "week": 10
+      "week": 10,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "14136",
@@ -1373,7 +1492,9 @@
       "salary": 10.0,
       "contract": "3",
       "rookie": false,
-      "week": 10
+      "week": 10,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "12186",
@@ -1388,7 +1509,9 @@
       "salary": 37.0,
       "contract": "5",
       "rookie": false,
-      "week": 10
+      "week": 10,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "11": [
@@ -1405,7 +1528,9 @@
       "salary": 44.0,
       "contract": "2",
       "rookie": false,
-      "week": 11
+      "week": 11,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13404",
@@ -1420,7 +1545,9 @@
       "salary": 34.0,
       "contract": "5",
       "rookie": false,
-      "week": 11
+      "week": 11,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "14836",
@@ -1435,7 +1562,9 @@
       "salary": 8.0,
       "contract": "2",
       "rookie": false,
-      "week": 11
+      "week": 11,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "12": [
@@ -1452,7 +1581,9 @@
       "salary": 9.0,
       "contract": "",
       "rookie": false,
-      "week": 12
+      "week": 12,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13131",
@@ -1467,7 +1598,9 @@
       "salary": 50.0,
       "contract": "4",
       "rookie": false,
-      "week": 12
+      "week": 12,
+      "champ": true,
+      "champTeam": "0009"
      },
      {
       "id": "15284",
@@ -1482,7 +1615,9 @@
       "salary": 8.0,
       "contract": "1",
       "rookie": true,
-      "week": 12
+      "week": 12,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "13": [
@@ -1499,7 +1634,9 @@
       "salary": 18.0,
       "contract": "4",
       "rookie": false,
-      "week": 13
+      "week": 13,
+      "champ": true,
+      "champTeam": "0009"
      },
      {
       "id": "14836",
@@ -1514,7 +1651,9 @@
       "salary": 8.0,
       "contract": "2",
       "rookie": false,
-      "week": 13
+      "week": 13,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "14208",
@@ -1529,7 +1668,9 @@
       "salary": 10.0,
       "contract": "3",
       "rookie": false,
-      "week": 13
+      "week": 13,
+      "champ": false,
+      "champTeam": null
      }
     ],
     "14": [
@@ -1546,7 +1687,9 @@
       "salary": 9.0,
       "contract": "3",
       "rookie": false,
-      "week": 14
+      "week": 14,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "13128",
@@ -1561,7 +1704,9 @@
       "salary": 65.0,
       "contract": "4",
       "rookie": false,
-      "week": 14
+      "week": 14,
+      "champ": false,
+      "champTeam": null
      },
      {
       "id": "11675",
@@ -1576,7 +1721,9 @@
       "salary": 49.0,
       "contract": "",
       "rookie": false,
-      "week": 14
+      "week": 14,
+      "champ": true,
+      "champTeam": "0009"
      }
     ]
    },
@@ -1600,7 +1747,9 @@
      "salary": 44.0,
      "contract": "2",
      "rookie": false,
-     "week": 11
+     "week": 11,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "12626",
@@ -1615,7 +1764,9 @@
      "salary": 37.0,
      "contract": "5",
      "rookie": false,
-     "week": 2
+     "week": 2,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "12801",
@@ -1630,7 +1781,9 @@
      "salary": 43.0,
      "contract": "5",
      "rookie": false,
-     "week": 4
+     "week": 4,
+     "champ": false,
+     "champTeam": null
     }
    ]
   }

@@ -290,32 +290,61 @@ def past(year, links, ref, fallback_info):
     c = (ref.get('championships') or {}).get(year) or {}
     title_wk = (wr['weeks'].get(str(c.get('week'))) or {}).get(c.get('champion')) or {}
     on_champ = {pid for pid, _ in title_wk.get('s', []) + title_wk.get('n', [])}
+    # every player shown that season (cards, award winners, trades): did he win the title, with whichever team
+    for p in players_in(out):
+        p['champ'] = p['id'] in on_champ
+        p['champTeam'] = c.get('champion') if p['champ'] else None
     # what each All-FBP player scored, and how often he started, for the team he's listed with
     for team in out.get('allFbp', {}).values():
         for e in team:
             p = e['player']
-            p['champ'] = p['id'] in on_champ            # won the title that season (with whichever team)
-            p['champTeam'] = c.get('champion') if p['champ'] else None
             pts = [x for wk in weeks.values() for x in (wk.get(p['team']) or {}).get('s', []) if x[0] == p['id']]
             p['teamPts'], p['teamStarts'] = round(sum(x[1] for x in pts), 1), len(pts)
     return out
 
 
+def players_in(obj):
+    """Every player dict anywhere in an awards structure."""
+    if isinstance(obj, dict):
+        if 'id' in obj and 'pos' in obj and 'pts' in obj:
+            yield obj
+        for v in obj.values():
+            yield from players_in(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from players_in(v)
+
+
 def add_honors(seasons):
-    """All-FBP selections to date on every All-FBP card: each season counts itself and the ones before it.
+    """Honors to date on every player shown: All-FBP selections and MVPs, each season counting itself
+    and the ones before it. MVPs count only finished seasons (this season's leader isn't MVP yet).
     seasons: [(year, awards dict)], any order. Only seasons with saved data count (2021 on for now)."""
-    tally = defaultdict(lambda: [0, 0])
-    for _, a in sorted(seasons, key=lambda x: x[0]):
+    tally, mvps = defaultdict(lambda: [0, 0]), defaultdict(list)
+    for y, a in sorted(seasons, key=lambda x: x[0]):
         if not a.get('ready'):
             continue
         for i, team in enumerate((a['allFbp']['first'], a['allFbp']['second'])):
             for e in team:
                 tally[e['player']['id']][i] += 1
+        mvp = next((x for x in a['awards'] if x['key'] == 'mvp'), None)
+        if mvp and a.get('final') and mvp['list']:
+            mvps[mvp['list'][0]['id']].append(y)
+            mvp['list'][0]['mvp'] = True          # this season's MVP
+        for p in players_in(a):
+            if p['id'] in mvps:
+                p['mvps'] = list(mvps[p['id']])
         for team in (a['allFbp']['first'], a['allFbp']['second']):
             for e in team:
                 f, s2 = tally[e['player']['id']]
                 e['player']['honors'] = {'first': f, 'second': s2}
+                if 'mvp' in mvp_flags(a, e['player']['id']):
+                    e['player']['mvp'] = True
     return seasons
+
+
+def mvp_flags(a, pid):
+    m = next((x for x in a['awards'] if x['key'] == 'mvp'), None)
+    return {'mvp'} if m and a.get('final') and m['list'] and m['list'][0]['id'] == pid else set()
 
 
 def franchise_all_fbp(seasons):
@@ -327,7 +356,7 @@ def franchise_all_fbp(seasons):
                 p = e['player']
                 r = by[p['team']].setdefault(p['id'], {k: p[k] for k in ('id', 'name', 'pos', 'nfl', 'espn')} | {'years': []})
                 r['name'], r['nfl'] = p['name'], p['nfl'] or r['nfl']   # latest spelling and team
-                r['years'].append({'year': y, 'tier': tier, 'pts': p.get('teamPts', p['pts']), 'starts': p.get('teamStarts', p['starts']), 'champ': p.get('champTeam') == p['team']})   # title with this franchise
+                r['years'].append({'year': y, 'tier': tier, 'pts': p.get('teamPts', p['pts']), 'starts': p.get('teamStarts', p['starts']), 'champ': p.get('champTeam') == p['team'], 'mvp': bool(p.get('mvp'))})   # title with this franchise; MVP that season
     out = {}
     for fr, players in by.items():
         rows = []
@@ -336,11 +365,12 @@ def franchise_all_fbp(seasons):
             r['first'] = sum(1 for x in ys if x['tier'] == 1)
             r['second'] = sum(1 for x in ys if x['tier'] == 2)
             r['champs'] = sum(1 for x in ys if x['champ'])
+            r['mvps'] = sum(1 for x in ys if x['mvp'])
             r['pts'] = round(sum(x['pts'] for x in ys), 1)
             r['starts'] = sum(x['starts'] for x in ys)
             r['ppg'] = round(r['pts'] / r['starts'], 1) if r['starts'] else 0
             rows.append(r)
-        rows.sort(key=lambda r: (-r['first'], -r['second'], -r['pts']))
+        rows.sort(key=lambda r: (-r['first'], -r['mvps'], -r['second'], -r['pts']))
         out[fr] = rows
     return {'seasons': [y for y, _ in sorted(seasons)], 'franchises': out}
 

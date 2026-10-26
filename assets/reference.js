@@ -169,13 +169,13 @@ window.FBPRef = (() => {
       const fb = (X.teams[fr] || {}).logo || '';
       return `<span class="aw-ph sm${r.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${r.champs ? `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the title with this team in an All-FBP season">🏆</span>` : ''}</span>`;
     };
-    const yr = y => `<span class="rf-afy t${y.tier}"${y.champ ? ' title="Won the title that season"' : ''}>${y.year} · ${y.tier === 1 ? '1st' : '2nd'}${y.champ ? ' 🏆' : ''}</span>`;
-    const tally = r => [r.first ? `${r.first}× 1st Team` : '', r.second ? `${r.second}× 2nd Team` : ''].filter(Boolean).map(t => `<span>${t}</span>`).join('');
+    const yr = y => `<span class="rf-afy t${y.tier}"${y.champ || y.mvp ? ` title="${[y.mvp ? 'FBP MVP' : '', y.champ ? 'won the title' : ''].filter(Boolean).join(', ')} that season"` : ''}>${y.year} · ${y.tier === 1 ? '1st' : '2nd'}${y.mvp ? ' · MVP' : ''}${y.champ ? ' 🏆' : ''}</span>`;
+    const tally = r => [r.mvps ? `${r.mvps}× MVP` : '', r.first ? `${r.first}× 1st Team` : '', r.second ? `${r.second}× 2nd Team` : ''].filter(Boolean).map(t => `<span>${t}</span>`).join('');
     return `<section>${head}<div class="card rf-af">${rows.map(r => `<div class="rf-afrow">${ph(r)}
       <div class="rf-afmain"><span class="rf-afnm"><b>${esc(r.name)}</b> <span class="pos ${r.pos}">${esc(r.pos)}</span></span><span class="rf-aftally">${tally(r)}</span>
         <span class="rf-afyears">${r.years.map(yr).join('')}</span></div>
       <div class="rf-afnum"><span><b>${n1(r.pts)}</b>pts</span><span><b>${n1(r.ppg)}</b>per start</span></div></div>`).join('')}</div>
-      <p class="rf-foot">All-FBP teams start with ${esc(AF.seasons ? AF.seasons[0] : '')}. A player is listed with the team he scored the most starter points for that season. 🏆 = won the title with this team that season.</p></section>`;
+      <p class="rf-foot">All-FBP teams start with ${esc(AF.seasons ? AF.seasons[0] : '')}. A player is listed with the team he scored the most starter points for that season. 🏆 = won the title with this team that season. MVP = FBP MVP that season.</p></section>`;
   }
 
   function preRows(fr) {
