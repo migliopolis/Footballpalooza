@@ -28,6 +28,13 @@ jobs:
       - name: Pull past seasons from MFL
         env:
           MFL_APIKEY: ${{ secrets.MFL_APIKEY }}
+          MFL_APIKEY_2019: ${{ secrets.MFL_APIKEY_2019 }}
+          MFL_APIKEY_2020: ${{ secrets.MFL_APIKEY_2020 }}
+          MFL_APIKEY_2021: ${{ secrets.MFL_APIKEY_2021 }}
+          MFL_APIKEY_2022: ${{ secrets.MFL_APIKEY_2022 }}
+          MFL_APIKEY_2023: ${{ secrets.MFL_APIKEY_2023 }}
+          MFL_APIKEY_2024: ${{ secrets.MFL_APIKEY_2024 }}
+          MFL_APIKEY_2025: ${{ secrets.MFL_APIKEY_2025 }}
           YEARS: ${{ inputs.years || '2019 2020 2021 2022 2023 2024 2025' }}
         run: python scripts/backfill_history.py
       - name: Commit
