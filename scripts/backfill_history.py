@@ -29,25 +29,28 @@ KEEP_TX = {'TRADE', 'BBID_WAIVER', 'WAIVER', 'FREE_AGENT'}
 
 
 def fetch(year, type_, extra=None, host=None):
-    params = {'TYPE': type_, 'L': LEAGUE, 'JSON': '1'}
-    if extra:
-        params.update(extra)
-    if KEY:
-        params['APIKEY'] = KEY
-    url = f'https://{host or HOST}/{year}/export?' + urllib.parse.urlencode(params)
-    last = None
-    for _ in range(3):
-        try:
-            req = urllib.request.Request(url, headers={'User-Agent': 'FBP-site-backfill/1.0'})
-            with urllib.request.urlopen(req, timeout=60) as r:
-                data = json.loads(r.read().decode('utf-8'))
-            if isinstance(data, dict) and 'error' in data:
-                raise RuntimeError(str(data['error'])[:200])
-            return data
-        except Exception as e:  # the message never includes the URL, so the key stays private
-            last = f'{type(e).__name__}: {str(e)[:200]}'
-            time.sleep(4)
-    raise RuntimeError(f'{year} {type_} failed ({last})')
+    """MFL API keys are issued per season, so a past season may refuse this year's key:
+    try with the key, then without it (the league's past seasons are public), on two hosts."""
+    errors = []
+    for h in ([host] if host else ['api.myfantasyleague.com', HOST]):
+        for use_key in ([True, False] if KEY else [False]):
+            params = {'TYPE': type_, 'L': LEAGUE, 'JSON': '1'}
+            if extra:
+                params.update(extra)
+            if use_key:
+                params['APIKEY'] = KEY
+            url = f'https://{h}/{year}/export?' + urllib.parse.urlencode(params)
+            try:
+                req = urllib.request.Request(url, headers={'User-Agent': 'FBP-site-backfill/1.0'})
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    data = json.loads(r.read().decode('utf-8'))
+                if isinstance(data, dict) and 'error' in data:
+                    raise RuntimeError(str(data['error'])[:200])
+                return data
+            except Exception as e:  # the message never includes the URL, so the key stays private
+                errors.append(f'{h} {"key" if use_key else "no key"}: {type(e).__name__}: {str(e)[:160]}')
+                time.sleep(2)
+    raise RuntimeError(f'{year} {type_} failed: ' + ' | '.join(errors))
 
 
 def save(year, name, data):
@@ -115,13 +118,18 @@ def season(year):
 
 def main():
     print(f'Seasons {" ".join(YEARS)}, league {LEAGUE}, API key {"set" if KEY else "not set"}')
-    failed = []
+    failed, log = [], {}
     for y in YEARS:
         try:
             season(y)
+            log[y] = 'ok'
         except Exception as e:
             print(f'  FAIL {e}')
             failed.append(y)
+            log[y] = str(e)[:600]
+    os.makedirs(os.path.join(ROOT, 'data', 'history'), exist_ok=True)
+    with open(os.path.join(ROOT, 'data', 'history', '_log.json'), 'w') as f:   # so a failed run can be read from the repo
+        json.dump({'ran': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'seasons': log}, f, indent=1)
     if failed:
         print('Seasons with errors:', ' '.join(failed))
 

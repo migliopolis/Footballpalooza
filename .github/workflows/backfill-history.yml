@@ -1,9 +1,9 @@
 name: Backfill history (one time)
 
 on:
-  push:                     # runs once when this file is first pushed
+  push:                     # runs when this file or the backfill script is pushed
     branches: [main]
-    paths: ['.github/workflows/backfill-history.yml']
+    paths: ['.github/workflows/backfill-history.yml', 'scripts/backfill_history.py']
   workflow_dispatch:        # or by hand from the Actions tab
     inputs:
       years:
@@ -34,6 +34,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          mkdir -p data/history
           git add data/history
           if git diff --cached --quiet; then
             echo "No changes"
