@@ -554,7 +554,7 @@ section > .rf-sub{margin:0 0 12px}
 .dh-pk b{font:700 1.15rem var(--display);color:var(--accent);display:inline-block;min-width:1.3rem;text-align:right}
 .dh-mv{display:inline-block;width:1.9rem;font:600 .68rem var(--mono);color:var(--muted);text-align:center;margin-left:2px}
 .dh-mv.up{color:var(--ok)}.dh-mv.dn{color:var(--red)}
-.dh-tbl .lg{left:3.6rem}
+.dh-home .lg{left:3.6rem}  /* logo pins right after the pick column on FBP Home */
 .dh-tbl td.t .dh-tm{font-weight:600}
 .dh-trade{display:flex;align-items:center;gap:4px;font:600 .7rem var(--body);color:var(--muted);margin-top:2px}
 .dh-trade img{width:16px;height:16px;object-fit:contain}
@@ -588,4 +588,4 @@ tr.dh-div td small{text-transform:none;letter-spacing:0;font-weight:400;color:va
 .dh-round li.traded{background:var(--sky-soft)}
 .dh-tr{font:600 .62rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--fg);color:var(--bg)}
 .dh-which{white-space:normal!important;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem}
-@media (max-width:520px){.dh-tbl .lg{left:3.3rem}.dh-mv{width:1.6rem}.tbl.dh-tbl td.t{min-width:7.5rem;max-width:9.5rem}}
+@media (max-width:520px){.dh-home .lg{left:3.3rem}.dh-mv{width:1.6rem}.tbl.dh-tbl td.t{min-width:7.5rem;max-width:9.5rem}}

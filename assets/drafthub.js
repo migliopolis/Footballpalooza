@@ -68,7 +68,7 @@ window.FBPDraftHub = (() => {
     const non = ord.filter(d => d.basis === 'lowest potential points'), po = ord.filter(d => d.basis !== 'lowest potential points');
     return head('', prev ? `movement since week ${prev.week}` : '') +
       `<section><h2 class="sec">${now.draftYear || ''} rookie draft order <small>round 1; rounds 2–4 repeat it</small></h2>
-      <div class="card tbl-wrap"><table class="tbl dh-tbl"><thead><tr><th class="dh-pk">Pick</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>Record</th><th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th title="Potential points: decides picks 1–6">Pot. pts</th><th>Streak</th><th class="dh-sal">Salary</th></tr></thead><tbody>
+      <div class="card tbl-wrap"><table class="tbl dh-tbl dh-home"><thead><tr><th class="dh-pk">Pick</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>Record</th><th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th title="Potential points: decides picks 1–6">Pot. pts</th><th>Streak</th><th class="dh-sal">Salary</th></tr></thead><tbody>
       ${div('Non-playoff teams', 'lowest potential points picks first')}${non.map(row).join('')}
       ${div('Playoff teams', 'projected finish; champion picks last')}${po.map(row).join('')}
       </tbody></table></div>
