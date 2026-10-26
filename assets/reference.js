@@ -11,6 +11,14 @@ window.FBPRef = (() => {
       .then(d => { D = d; rerender(); }).catch(() => { failed = true; rerender(); });
   };
 
+  // All-FBP players by franchise (data/awards/all-fbp.json, built by scripts/awards.py); loads with the first franchise page
+  let AF = null, afLoading = false;
+  const loadAF = rerender => {
+    if (AF || afLoading) return; afLoading = true;
+    fetch('data/awards/all-fbp.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(d => { AF = d; rerender(); }).catch(() => { AF = { franchises: {}, failed: true }; rerender(); });
+  };
+
   let X;   // context from site.js: teams, chip, esc
   const esc = s => X.esc(s == null ? '' : s);
   const n1 = v => v == null || v === '' ? '—' : Number(v).toFixed(1);
@@ -141,9 +149,33 @@ window.FBPRef = (() => {
       ${seasons.map(s => `<tr><td><a class="rf-nm" href="#reference/s-${s.year}">${s.year}</a></td><td class="t">${esc(s.name)}</td><td>${badge(fr, s.year) || (s.rank ? s.rank + (s.year === D.meta.current_year && !champOf(s.year) ? '*' : '') : '—')}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`).join('')}
       ${preRows(fr)}
       </tbody></table></div>${seasons.some(s => s.year === D.meta.current_year && !champOf(s.year)) ? `<p class="rf-foot">* ${D.meta.current_year} is in progress; that’s the current standing.</p>` : ''}</section>
+      ${allFbp(fr)}
       <section><h2 class="sec">Head-to-head <small>every game, playoffs included</small></h2>
       <div class="card rf-h2h">${h2h.map(([o, r]) => { const g = r.w + r.l + r.t, p = g ? (r.w + r.t / 2) / g : 0; return `<a href="#reference/f-${o}" class="rf-h2hrow">${X.chip(o, { name: D.franchises[o] })}<span class="bar"><i style="width:${(p * 100).toFixed(0)}%"></i></span><b>${rec(r.w, r.l, r.t)}</b></a>`; }).join('')}</div></section>
       <section><h2 class="sec">Rookie draft history</h2>${picksTable(D.franchise_draft_picks[fr] || [], false)}</section>`;
+  }
+
+  // All-FBP players who earned it with this team: most 1st Teams first, then 2nd Teams, then points
+  function allFbp(fr) {
+    const head = `<h2 class="sec">All-FBP players <small>starter points for this team in their All-FBP seasons</small></h2>`;
+    if (!AF) { loadAF(X.rerender); return `<section>${head}<p class="loading">Loading…</p></section>`; }
+    if (AF.failed) return '';
+    const rows = AF.franchises[fr] || [];
+    const span = AF.seasons && AF.seasons.length ? `${AF.seasons[0]}–${AF.seasons[AF.seasons.length - 1]}` : '';
+    if (!rows.length) return `<section>${head}<p class="rf-note">No All-FBP players with this team${span ? ' in ' + span : ''} yet.</p></section>`;
+    const m = window.FBP && FBP.media;
+    const ph = r => {
+      const src = r.pos === 'DEF' ? (m ? m.nflLogo(r.nfl) : '') : (r.espn && m ? m.headshot(r.espn) : '');
+      const fb = (X.teams[fr] || {}).logo || '';
+      return `<span class="aw-ph sm${r.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${r.champs ? `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the title with this team in an All-FBP season">🏆</span>` : ''}</span>`;
+    };
+    const yr = y => `<span class="rf-afy t${y.tier}"${y.champ ? ' title="Won the title that season"' : ''}>${y.year} · ${y.tier === 1 ? '1st' : '2nd'}${y.champ ? ' 🏆' : ''}</span>`;
+    const tally = r => [r.first ? `${r.first}× 1st Team` : '', r.second ? `${r.second}× 2nd Team` : ''].filter(Boolean).map(t => `<span>${t}</span>`).join('');
+    return `<section>${head}<div class="card rf-af">${rows.map(r => `<div class="rf-afrow">${ph(r)}
+      <div class="rf-afmain"><span class="rf-afnm"><b>${esc(r.name)}</b> <span class="pos ${r.pos}">${esc(r.pos)}</span></span><span class="rf-aftally">${tally(r)}</span>
+        <span class="rf-afyears">${r.years.map(yr).join('')}</span></div>
+      <div class="rf-afnum"><span><b>${n1(r.pts)}</b>pts</span><span><b>${n1(r.ppg)}</b>per start</span></div></div>`).join('')}</div>
+      <p class="rf-foot">All-FBP teams start with ${esc(AF.seasons ? AF.seasons[0] : '')}. A player is listed with the team he scored the most starter points for that season. 🏆 = won the title with this team that season.</p></section>`;
   }
 
   function preRows(fr) {

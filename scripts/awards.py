@@ -286,6 +286,18 @@ def past(year, links, ref, fallback_info):
     slots, flex_ok = lineup_slots(league)
     out = build(year, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=False)
     out['final'] = True
+    # title: an All-FBP player on the champion's roster (starting or bench) in the championship game
+    c = (ref.get('championships') or {}).get(year) or {}
+    title_wk = (wr['weeks'].get(str(c.get('week'))) or {}).get(c.get('champion')) or {}
+    on_champ = {pid for pid, _ in title_wk.get('s', []) + title_wk.get('n', [])}
+    # what each All-FBP player scored, and how often he started, for the team he's listed with
+    for team in out.get('allFbp', {}).values():
+        for e in team:
+            p = e['player']
+            p['champ'] = p['id'] in on_champ            # won the title that season (with whichever team)
+            p['champTeam'] = c.get('champion') if p['champ'] else None
+            pts = [x for wk in weeks.values() for x in (wk.get(p['team']) or {}).get('s', []) if x[0] == p['id']]
+            p['teamPts'], p['teamStarts'] = round(sum(x[1] for x in pts), 1), len(pts)
     return out
 
 
@@ -306,6 +318,33 @@ def add_honors(seasons):
     return seasons
 
 
+def franchise_all_fbp(seasons):
+    """data/awards/all-fbp.json: each franchise's All-FBP players (completed seasons), most accomplished first."""
+    by = defaultdict(dict)
+    for y, a in sorted(seasons):
+        for tier, team in ((1, a['allFbp']['first']), (2, a['allFbp']['second'])):
+            for e in team:
+                p = e['player']
+                r = by[p['team']].setdefault(p['id'], {k: p[k] for k in ('id', 'name', 'pos', 'nfl', 'espn')} | {'years': []})
+                r['name'], r['nfl'] = p['name'], p['nfl'] or r['nfl']   # latest spelling and team
+                r['years'].append({'year': y, 'tier': tier, 'pts': p.get('teamPts', p['pts']), 'starts': p.get('teamStarts', p['starts']), 'champ': p.get('champTeam') == p['team']})   # title with this franchise
+    out = {}
+    for fr, players in by.items():
+        rows = []
+        for r in players.values():
+            ys = r['years']
+            r['first'] = sum(1 for x in ys if x['tier'] == 1)
+            r['second'] = sum(1 for x in ys if x['tier'] == 2)
+            r['champs'] = sum(1 for x in ys if x['champ'])
+            r['pts'] = round(sum(x['pts'] for x in ys), 1)
+            r['starts'] = sum(x['starts'] for x in ys)
+            r['ppg'] = round(r['pts'] / r['starts'], 1) if r['starts'] else 0
+            rows.append(r)
+        rows.sort(key=lambda r: (-r['first'], -r['second'], -r['pts']))
+        out[fr] = rows
+    return {'seasons': [y for y, _ in sorted(seasons)], 'franchises': out}
+
+
 def main():
     links = (load(D('player-links.json'), {}) or {}).get('links', {})
     cur = current(links)
@@ -322,6 +361,7 @@ def main():
     os.makedirs(D('awards'), exist_ok=True)
     for y, a in built:
         json.dump(a, open(D('awards', f'{y}.json'), 'w'), indent=1, ensure_ascii=False)
+    json.dump(franchise_all_fbp(built), open(D('awards', 'all-fbp.json'), 'w'), indent=1, ensure_ascii=False)
     years = [y for y, _ in sorted(built, reverse=True)]
     cur['pastSeasons'] = years
     cur['honorsFrom'] = built[0][0] if built else cur.get('season')

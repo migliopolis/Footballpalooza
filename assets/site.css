@@ -654,3 +654,29 @@ tr.dh-div td{padding:0!important}
 .aw-years button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .aw-hon{display:block;text-align:center;font:600 .68rem var(--mono);letter-spacing:.02em;color:var(--muted);margin-top:3px}
 .aw-hon.new{color:var(--accent)}
+/* phones: two cards per row leave little width, so each stat gets its own line (label left, number right) */
+@media (max-width:600px){
+  .aw-stats{grid-template-columns:1fr;gap:3px;padding:8px 4px 0}
+  .aw-stats span{flex-direction:row-reverse;justify-content:space-between;align-items:baseline;gap:6px;text-align:left}
+  .aw-stats b{font-size:1rem}
+}
+.aw-hon span{display:block;white-space:nowrap}
+.aw-ph .aw-trophy{position:absolute;left:-6px;bottom:-4px;width:38%;height:38%;display:grid;place-items:center;background:var(--surface);border-radius:50%;box-shadow:0 0 0 1px var(--line);font-size:calc(.38 * var(--ph, 92px) * .55);line-height:1}
+.aw-ph.lg{--ph:92px}.aw-ph.md{--ph:64px}.aw-ph.sm{--ph:48px}
+/* Reference franchise page: All-FBP players */
+.rf-af{padding:4px 12px}
+.rf-afrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.rf-afrow:first-child{border-top:0}
+.aw-ph.sm{width:48px;height:48px}
+.rf-afmain{min-width:0;display:flex;flex-direction:column;gap:3px}
+.rf-afmain b{font-weight:700}
+.rf-afnm .pos{font-size:.62rem;margin-left:4px}
+.rf-aftally{font:600 .68rem var(--mono);color:var(--muted)}
+.rf-aftally span{white-space:nowrap}.rf-aftally span + span::before{content:" · "}
+.rf-afyears{display:flex;flex-wrap:wrap;gap:4px}
+.rf-afy{font:600 .68rem var(--mono);padding:2px 6px;border-radius:5px;border:1px solid var(--line);white-space:nowrap}
+.rf-afy.t1{background:var(--accent);border-color:var(--accent);color:#fff}
+.rf-afnum{display:flex;gap:14px;text-align:right}
+.rf-afnum span{display:flex;flex-direction:column;font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.rf-afnum b{font:700 1rem var(--display);color:var(--fg);letter-spacing:0}
+@media (max-width:600px){.rf-afnum{flex-direction:column;gap:4px}}

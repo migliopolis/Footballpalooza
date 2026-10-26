@@ -23,8 +23,10 @@ window.FBPAwards = (() => {
     const m = media();
     const src = p.pos === 'DEF' ? (m ? m.nflLogo(p.nfl) : '') : (p.espn && m ? m.headshot(p.espn) : '');
     const fb = (X.teams[p.team] || {}).logo || '';
-    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}</span>`;
+    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}</span>`;
   }
+  // won the title that season: trophy opposite the team badge
+  const trophy = p => `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the ${esc((S || A).season)} title${p.champTeam && p.champTeam !== p.team ? ' with ' + esc(tname(p.champTeam)) : ''}">🏆</span>`;
   const n1 = v => v == null ? '—' : Number(v).toFixed(1);
   const sal = p => p.salary != null ? `$${Math.round(p.salary)}` : '—';
   const pos = p => p.pos ? `<span class="pos ${p.pos === 'DEF' ? 'DEF' : p.pos}">${p.pos}</span>` : '';
@@ -33,7 +35,7 @@ window.FBPAwards = (() => {
   function honors(p) {
     const h = p.honors; if (!h) return '';
     const n = h.first + h.second;
-    const txt = n === 1 ? 'First All-FBP selection' : [h.first ? `${h.first}× 1st Team` : '', h.second ? `${h.second}× 2nd Team` : ''].filter(Boolean).join(' · ');
+    const txt = n === 1 ? 'First All-FBP selection' : [h.first ? `<span>${h.first}× 1st Team</span>` : '', h.second ? `<span>${h.second}× 2nd Team</span>` : ''].filter(Boolean).join('');
     return `<span class="aw-hon${n === 1 ? ' new' : ''}" title="All-FBP selections since ${esc(A.honorsFrom || '')}">${txt}</span>`;
   }
   function card(slot, p, second) {

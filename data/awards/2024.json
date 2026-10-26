@@ -17,6 +17,10 @@
      "salary": 28.0,
      "contract": "1/3",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 321.4,
+     "teamStarts": 13,
      "honors": {
       "first": 1,
       "second": 0
@@ -38,6 +42,10 @@
      "salary": 56.0,
      "contract": "3/3",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 300.0,
+     "teamStarts": 13,
      "honors": {
       "first": 1,
       "second": 1
@@ -59,6 +67,10 @@
      "salary": 46.0,
      "contract": "1/3",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 254.2,
+     "teamStarts": 13,
      "honors": {
       "first": 1,
       "second": 1
@@ -80,6 +92,10 @@
      "salary": 38.0,
      "contract": "4/5",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 317.4,
+     "teamStarts": 13,
      "honors": {
       "first": 1,
       "second": 1
@@ -101,6 +117,10 @@
      "salary": 35.0,
      "contract": "5/5",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 157.5,
+     "teamStarts": 8,
      "honors": {
       "first": 3,
       "second": 0
@@ -122,6 +142,10 @@
      "salary": 3.0,
      "contract": "2/3",
      "rookie": false,
+     "champ": true,
+     "champTeam": "0001",
+     "teamPts": 177.3,
+     "teamStarts": 12,
      "honors": {
       "first": 1,
       "second": 0
@@ -143,6 +167,10 @@
      "salary": 48.0,
      "contract": "2/5",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 246.8,
+     "teamStarts": 13,
      "honors": {
       "first": 1,
       "second": 0
@@ -164,6 +192,10 @@
      "salary": 1.0,
      "contract": "1/3",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 167.0,
+     "teamStarts": 13,
      "honors": {
       "first": 1,
       "second": 1
@@ -187,6 +219,10 @@
      "salary": 28.0,
      "contract": "1/3",
      "rookie": false,
+     "champ": true,
+     "champTeam": "0001",
+     "teamPts": 202.3,
+     "teamStarts": 10,
      "honors": {
       "first": 2,
       "second": 1
@@ -208,6 +244,10 @@
      "salary": 40.0,
      "contract": "2/5",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 236.8,
+     "teamStarts": 13,
      "honors": {
       "first": 0,
       "second": 1
@@ -229,6 +269,10 @@
      "salary": 8.0,
      "contract": "2/5",
      "rookie": false,
+     "champ": true,
+     "champTeam": "0001",
+     "teamPts": 232.0,
+     "teamStarts": 13,
      "honors": {
       "first": 0,
       "second": 1
@@ -250,6 +294,10 @@
      "salary": 12.0,
      "contract": "4/6",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 227.0,
+     "teamStarts": 13,
      "honors": {
       "first": 0,
       "second": 1
@@ -271,6 +319,10 @@
      "salary": 48.0,
      "contract": "5/5",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 219.3,
+     "teamStarts": 13,
      "honors": {
       "first": 1,
       "second": 1
@@ -292,6 +344,10 @@
      "salary": 17.0,
      "contract": "1/3",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 169.5,
+     "teamStarts": 10,
      "honors": {
       "first": 0,
       "second": 1
@@ -313,6 +369,10 @@
      "salary": 24.0,
      "contract": "2/3",
      "rookie": false,
+     "champ": true,
+     "champTeam": "0001",
+     "teamPts": 230.1,
+     "teamStarts": 12,
      "honors": {
       "first": 0,
       "second": 1
@@ -334,6 +394,10 @@
      "salary": 1.0,
      "contract": "1/3",
      "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 146.0,
+     "teamStarts": 14,
      "honors": {
       "first": 0,
       "second": 2
