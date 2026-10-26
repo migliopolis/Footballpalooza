@@ -29,10 +29,17 @@ window.FBPAwards = (() => {
   const sal = p => p.salary != null ? `$${Math.round(p.salary)}` : '—';
   const pos = p => p.pos ? `<span class="pos ${p.pos === 'DEF' ? 'DEF' : p.pos}">${p.pos}</span>` : '';
 
+  // All-FBP selections to date (that season and the ones before it, from the first season with data)
+  function honors(p) {
+    const h = p.honors; if (!h) return '';
+    const n = h.first + h.second;
+    const txt = n === 1 ? 'First All-FBP selection' : [h.first ? `${h.first}× 1st Team` : '', h.second ? `${h.second}× 2nd Team` : ''].filter(Boolean).join(' · ');
+    return `<span class="aw-hon${n === 1 ? ' new' : ''}" title="All-FBP selections since ${esc(A.honorsFrom || '')}">${txt}</span>`;
+  }
   function card(slot, p, second) {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg')}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.rookie ? ' · <i>Rookie</i>' : ''}</span>
-      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>
+      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${honors(p)}
       <span class="aw-stats"><span><b>${n1(p.pts)}</b>pts</span><span><b>${n1(p.ppg)}</b>per start</span><span><b>${sal(p)}</b>salary</span></span></div>`;
   }
   // one award: the winner big, the next two below
@@ -90,8 +97,8 @@ window.FBPAwards = (() => {
     const team = (t, second) => `<div class="aw-team">${t.map(e => card(e.slot, e.player, second)).join('')}</div>`;
     const sub = S.final ? `${S.season} regular season, final · starter points only` : `${S.season} season through week ${S.throughWeek} · starter points only, rostered players`;
     const foot = S.final
-      ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. Trades count only what each side scored for its new team that season. Team names are today’s.`
-      : 'Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. Updated every Monday night.';
+      ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. All-FBP counts start with ${esc(A.honorsFrom || S.season)}. Trades count only what each side scored for its new team that season. Team names are today’s.`
+      : `Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. All-FBP counts start with ${esc(A.honorsFrom || S.season)} and include this season’s spot so far. Updated every Monday night.`;
     return head(sub) +
       `<section><h2 class="sec">1st Team All-FBP</h2>${team(S.allFbp.first)}</section>
       <section><h2 class="sec">2nd Team All-FBP</h2>${team(S.allFbp.second, true)}</section>

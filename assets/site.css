@@ -652,3 +652,5 @@ tr.dh-div td{padding:0!important}
 .aw-years{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 14px}
 .aw-years button{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:700 .85rem var(--mono);padding:6px 10px;border-radius:8px;cursor:pointer}
 .aw-years button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.aw-hon{display:block;text-align:center;font:600 .68rem var(--mono);letter-spacing:.02em;color:var(--muted);margin-top:3px}
+.aw-hon.new{color:var(--accent)}

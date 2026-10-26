@@ -289,21 +289,42 @@ def past(year, links, ref, fallback_info):
     return out
 
 
+def add_honors(seasons):
+    """All-FBP selections to date on every All-FBP card: each season counts itself and the ones before it.
+    seasons: [(year, awards dict)], any order. Only seasons with saved data count (2021 on for now)."""
+    tally = defaultdict(lambda: [0, 0])
+    for _, a in sorted(seasons, key=lambda x: x[0]):
+        if not a.get('ready'):
+            continue
+        for i, team in enumerate((a['allFbp']['first'], a['allFbp']['second'])):
+            for e in team:
+                tally[e['player']['id']][i] += 1
+        for team in (a['allFbp']['first'], a['allFbp']['second']):
+            for e in team:
+                f, s2 = tally[e['player']['id']]
+                e['player']['honors'] = {'first': f, 'second': s2}
+    return seasons
+
+
 def main():
     links = (load(D('player-links.json'), {}) or {}).get('links', {})
     cur = current(links)
-    # past seasons, built once from saved history; listed so the page can offer a season picker
+    # past seasons, built from saved history; listed so the page can offer a season picker
     ref = load(D('reference', 'history.json'), {}) or {}
     fallback = player_info(D('mfl', 'players.json'))
-    years = []
+    built = []
     if os.path.isdir(D('history')):
-        os.makedirs(D('awards'), exist_ok=True)
-        for y in sorted((y for y in os.listdir(D('history')) if re.fullmatch(r'\d{4}', y)), reverse=True):
+        for y in sorted(y for y in os.listdir(D('history')) if re.fullmatch(r'\d{4}', y)):
             a = past(y, links, ref, fallback)
-            if a and a.get('ready'):
-                json.dump(a, open(D('awards', f'{y}.json'), 'w'), indent=1, ensure_ascii=False)
-                years.append(y)
+            if a and a.get('ready') and y != cur.get('season'):
+                built.append((y, a))
+    add_honors(built + [(cur.get('season', '9999'), cur)])
+    os.makedirs(D('awards'), exist_ok=True)
+    for y, a in built:
+        json.dump(a, open(D('awards', f'{y}.json'), 'w'), indent=1, ensure_ascii=False)
+    years = [y for y, _ in sorted(built, reverse=True)]
     cur['pastSeasons'] = years
+    cur['honorsFrom'] = built[0][0] if built else cur.get('season')
     json.dump(cur, open(D('awards.json'), 'w'), indent=1, ensure_ascii=False)
     print(f"awards.json: {'through week ' + str(cur.get('throughWeek')) if cur.get('ready') else 'no weekly results yet'}, "
           f"{len(cur.get('awards', []))} awards; past seasons: {' '.join(years) or 'none'}")
