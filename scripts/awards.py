@@ -171,16 +171,21 @@ def main():
         A.append({'key': 'lucky', 'title': 'Luckiest Team', 'why': 'Record furthest above what its all-play record suggests', 'teams': [lk(s) for s in luck[:3]]})
         A.append({'key': 'unlucky', 'title': 'Unluckiest Team', 'why': 'Record furthest below its all-play record', 'teams': [lk(s) for s in luck[::-1][:3]]})
     # worst contract: big salaries with the fewest starter points per dollar
-    big = [p for p in owner if (salary.get(p) or 0) >= 15 and pos_of(p) in {'QB', 'RB', 'WR', 'TE'}]
+    big = [p for p in owner if (salary.get(p) or 0) >= 15 and pos_of(p) in {'QB', 'RB', 'WR', 'TE'} and starts[p] >= half]   # regular starters only
     big.sort(key=lambda p: tot.get(p, 0) / salary[p])
     if big:
-        A.append({'key': 'contract', 'title': 'Worst Contract', 'why': 'Fewest starter points per dollar among $15+ salaries',
+        A.append({'key': 'contract', 'title': 'Worst Contract', 'why': f'Fewest starter points per dollar among $15+ salaries (at least {half} starts)',
                   'list': [dict(player(p), perDollar=round(tot.get(p, 0) / salary[p], 1)) for p in big[:3]]})
     # games
-    wk_games = sorted((g for g in games if g[1] == last_wk), key=lambda g: -g[0])
-    if wk_games:
-        A.append({'key': 'week', 'title': f'Player of Week {last_wk}', 'why': 'Top starter score last week',
-                  'list': [dict(player(g[2], g[0], g[3]), week=g[1]) for g in wk_games[:3]]})
+    # Player of the Week for every week played; the page opens on the latest and can step back
+    by_week = {}
+    for w in wk_nums:
+        top = sorted((g for g in games if g[1] == w), key=lambda g: -g[0])[:3]
+        if top:
+            by_week[str(w)] = [dict(player(g[2], g[0], g[3]), week=g[1]) for g in top]
+    if by_week:
+        A.append({'key': 'week', 'title': 'Player of the Week', 'why': 'Top starter score each week',
+                  'list': by_week[str(last_wk)], 'weeks': by_week, 'week': last_wk})
     hi = sorted(games, key=lambda g: -g[0])
     if hi:
         A.append({'key': 'high', 'title': 'Season-High Game', 'why': 'Best single-week starter score this season',

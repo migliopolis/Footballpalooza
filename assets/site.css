@@ -642,3 +642,6 @@ tr.dh-div td small{text-transform:none;letter-spacing:0;font-weight:400;color:va
 .dh-home td.dh-pk,.dh-home th.dh-pk{box-shadow:1px 0 0 var(--line)}
 tr.dh-div td{padding:0!important}
 .dh-divl{position:sticky;left:0;display:inline-block;padding:6px 12px;white-space:nowrap}
+.aw-weeks{display:flex;gap:4px;flex-wrap:wrap}
+.aw-weeks button{min-width:2rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .78rem var(--mono);padding:4px 6px;border-radius:6px;cursor:pointer}
+.aw-weeks button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}

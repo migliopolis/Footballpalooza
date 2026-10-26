@@ -1,7 +1,7 @@
 /* Awards tab: All-FBP teams and season awards, from data/awards.json (scripts/awards.py).
    Points are starter points only (scored in an FBP starting lineup), rostered players only. */
 window.FBPAwards = (() => {
-  let A = null, loading = false, failed = false, X;
+  let A = null, loading = false, failed = false, X, potw = null;   // potw: week picked for Player of the Week
   const esc = s => X.esc(s == null ? '' : s);
   const load = rerender => {
     if (A || loading) return; loading = true;
@@ -30,7 +30,13 @@ window.FBPAwards = (() => {
   }
   // one award: the winner big, the next two below
   function award(a) {
-    let body = '';
+    let body = '', picker = '';
+    if (a.weeks) {   // Player of the Week: buttons for every week, latest first
+      const ws = Object.keys(a.weeks).map(Number).sort((x, y) => x - y);
+      const w = ws.includes(potw) ? potw : a.week;
+      a = Object.assign({}, a, { list: a.weeks[w], title: `Player of Week ${w}` });
+      picker = `<div class="aw-weeks" role="group" aria-label="Week">${ws.map(n => `<button type="button" data-aw-week="${n}" aria-pressed="${n === w}">${n}</button>`).join('')}</div>`;
+    }
     if (a.list) {
       const [w, ...rest] = a.list;
       const extra = p => p.perDollar != null ? `${n1(p.perDollar)} pts per $` : p.bid != null ? `${p.how}${p.how === 'FAAB' ? ' $' + Math.round(p.bid) : ''}` : p.week ? `Week ${p.week}` : `${p.starts} starts`;
@@ -46,7 +52,7 @@ window.FBPAwards = (() => {
         <ul>${s.players.map(p => `<li>${esc(p.name)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(k.replace(/^FP_\d+_(\d+)_(\d+)$/, '$1 round $2 pick'))}</li>`).join('')}</ul></div>`;
       body = `<p class="aw-sub">Received, and starter points since:</p><div class="aw-trade">${side(a.trade.winner, true)}${side(a.trade.loser, false)}</div><p class="aw-sub">Edge: ${n1(a.trade.margin)} pts</p>`;
     }
-    return `<section class="card aw-award"><h3>${esc(a.title)}</h3><p class="aw-why">${esc(a.why)}</p>${body}</section>`;
+    return `<section class="card aw-award"><h3>${esc(a.title)}</h3><p class="aw-why">${esc(a.why)}</p>${picker}${body}</section>`;
   }
 
   function render(ctx) {
@@ -62,5 +68,10 @@ window.FBPAwards = (() => {
       <section><h2 class="sec">Season awards</h2><div class="aw-awards">${A.awards.map(award).join('')}</div>
       <p class="rf-foot">Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. Updated every Monday night.</p></section>`;
   }
-  return { render };
+  function click(e) {
+    const b = e.target.closest('[data-aw-week]');
+    if (!b) return false;
+    potw = +b.dataset.awWeek; return true;
+  }
+  return { render, click };
 })();
