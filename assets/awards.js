@@ -84,10 +84,13 @@ window.FBPAwards = (() => {
       body = `<p class="aw-sub">What each side received, and its starter points since:</p>${deal(a.trade)}` +
         (a.more && a.more.length ? a.more.map((t, i) => `<div class="aw-more"><span class="aw-rank">${i + 2}</span>${deal(t)}</div>`).join('') : '');
     }
-    return `<section class="card aw-award"><h3>${esc(a.title)}</h3><p class="aw-why">${esc(a.why)}</p>${picker}${body}</section>`;
+    return `<section class="card aw-award k-${esc(a.key)}"><h3>${esc(a.title)}</h3><p class="aw-why">${esc(a.why)}</p>${picker}${body}</section>`;
   }
 
   let S = null;   // the season on screen
+  // order of the Season awards on the page (any award not listed goes last)
+  const ORDER = ['mvp', 'rookie', 'manager', 'week', 'value', 'contract', 'waiver', 'high', 'trade', 'lucky', 'unlucky'];
+  const rank = a => { const i = ORDER.indexOf(a.key); return i < 0 ? 99 : i; };
   function render(ctx) {
     X = ctx;
     const seasons = A && A.pastSeasons && A.pastSeasons.length ? [A.season, ...A.pastSeasons] : [];
@@ -109,7 +112,7 @@ window.FBPAwards = (() => {
     return head(sub) +
       `<section><h2 class="sec">1st Team All-FBP</h2>${team(S.allFbp.first)}</section>
       <section><h2 class="sec">2nd Team All-FBP</h2>${team(S.allFbp.second, true)}</section>
-      <section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.map(award).join('')}</div>
+      <section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.slice().sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
       <p class="rf-foot">${foot}</p></section>`;
   }
   // returns the selector of the button pressed, so the page can keep focus on it

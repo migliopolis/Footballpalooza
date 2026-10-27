@@ -733,3 +733,7 @@ tr.dh-div td{padding:0!important}
 /* section labels wrap inside the screen instead of running off it */
 .dh-divl{white-space:normal;max-width:calc(100vw - 56px);box-sizing:border-box}
 .dh-divl small{display:block;margin:2px 0 0!important}
+/* Trade of the Year is the tallest card: on desktop it fills the right column beside Season-High Game and the
+   luck awards; on narrower screens it goes last */
+@media (min-width:1001px){.aw-award.k-trade{grid-column:3;grid-row:span 2}}
+@media (max-width:1000px){.aw-award.k-trade{order:1}}
