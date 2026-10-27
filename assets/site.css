@@ -702,3 +702,28 @@ tr.dh-div td{padding:0!important}
 .rf-po{white-space:nowrap;font-size:.82rem;color:var(--fg)}
 .rf-po.champ{font-weight:700}.rf-po.out{color:var(--muted)}
 .rf-cup{font-size:.85em}
+/* franchise page: regular-season finish chart */
+.rf-rank{margin:14px 0 0;padding:12px 14px 8px;--rk:var(--rk-l)}
+:root[data-theme="dark"] .rf-rank{--rk:var(--rk-d)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .rf-rank{--rk:var(--rk-d)}}
+.rf-rank figcaption{font:700 .9rem var(--body);margin-bottom:4px}
+.rf-rank figcaption small{font-weight:400;color:var(--muted);margin-left:6px;font-size:.75rem}
+.rf-rank svg{display:block;width:100%;height:auto;overflow:visible}
+.rf-rank .g{stroke:var(--line);stroke-width:1}
+.rf-rank .ax,.rf-rank .yr{font:500 12px var(--body);fill:var(--muted)}
+.rf-rank .cut{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4;opacity:.7}
+.rf-rank .cutl{font:600 10px var(--body);fill:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.rf-rank .ln{fill:none;stroke:var(--rk);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.rf-rank .ln.live{stroke-dasharray:3 4}
+.rf-rank .dot{fill:var(--rk);stroke:var(--surface);stroke-width:2}
+.rf-rank .live .dot{fill:var(--surface);stroke:var(--rk)}
+.rf-rank .ring{fill:none;stroke:#d4a017;stroke-width:2.5}
+.rf-rank .hit{fill:transparent}
+.rf-rank .pt{cursor:default;outline:none}
+.rf-rank .tip{opacity:0;pointer-events:none;transition:opacity .12s}
+.rf-rank .tip rect{fill:var(--fg)}.rf-rank .tip text{font:600 11.5px var(--body);fill:var(--surface)}
+.rf-rank .pt:hover .tip,.rf-rank .pt:focus .tip{opacity:1}
+.rf-rank .pt:hover .dot,.rf-rank .pt:focus .dot{r:7}
+.rf-rank .ln.pre{stroke:var(--muted);stroke-dasharray:2 4}
+.rf-rank .pre .dot{fill:var(--surface);stroke:var(--muted)}
+.rf-rknote{margin:6px 0 2px;font-size:.72rem;line-height:1.4;color:var(--muted)}

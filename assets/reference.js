@@ -186,7 +186,8 @@ window.FBPRef = (() => {
       <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>Year</th><th class="t">Team name</th><th title="Place in the regular-season standings">Reg. finish</th><th class="t">Playoffs</th><th>W-L-T</th><th>PF</th><th>PA</th><th>All-play</th></tr></thead><tbody>
       ${seasons.map(s => { const live = s.year === D.meta.current_year && !champOf(s.year); return `<tr><td><a class="rf-nm" href="#reference/s-${s.year}">${s.year}</a></td><td class="t">${esc(s.name)}${isChamp(fr, s.year) ? ' <span class="rf-cup" title="Champion">🏆</span>' : ''}</td><td>${s.rank ? ord(s.rank) + (live ? '*' : '') : '—'}</td><td class="t">${live ? '<span class="rf-po">In progress</span>' : playoffOut(fr, s.year)}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`; }).join('')}
       ${preRows(fr)}
-      </tbody></table></div>${seasons.some(s => s.year === D.meta.current_year && !champOf(s.year)) ? `<p class="rf-foot">* ${D.meta.current_year} is in progress; that’s the current standing.</p>` : ''}</section>
+      </tbody></table></div>${seasons.some(s => s.year === D.meta.current_year && !champOf(s.year)) ? `<p class="rf-foot">* ${D.meta.current_year} is in progress; that’s the current standing.</p>` : ''}
+      ${rankChart(fr, seasons)}</section>
       ${allFbp(fr)}
       <section><h2 class="sec">Head-to-head <small>every game, playoffs included</small></h2>
       <div class="card rf-h2h">${h2h.map(([o, r]) => { const g = r.w + r.l + r.t, p = g ? (r.w + r.t / 2) / g : 0; return `<a href="#reference/f-${o}" class="rf-h2hrow">${X.chip(o, { name: D.franchises[o] })}<span class="bar"><i style="width:${(p * 100).toFixed(0)}%"></i></span><b>${rec(r.w, r.l, r.t)}</b></a>`; }).join('')}</div></section>
@@ -214,6 +215,61 @@ window.FBPRef = (() => {
         <span class="rf-afyears">${r.years.map(yr).join('')}</span></div>
       <div class="rf-afnum"><span><b>${n1(r.pts)}</b>pts</span><span><b>${n1(r.ppg)}</b>per start</span></div></div>`).join('')}</div>
       <p class="rf-foot">All-FBP teams start with ${esc(AF.seasons ? AF.seasons[0] : '')}. A player is listed with the team he scored the most starter points for that season. 🏆 = won the title with this team that season. MVP = FBP MVP that season.</p></section>`;
+  }
+
+  // regular-season finish by year: 1st at the top, the playoff cut marked, title years ringed in gold.
+  // With P-PPR on, 2011-16 are added, ranked by win-loss record (ties keep the old final order).
+  function preFinishes(fr) {
+    return PRE().filter(x => x.standings && x.standings.some(r => r.franchise === fr)).map(x => {
+      const pc = r => { const g = r.w + r.l + r.t; return g ? (r.w + r.t / 2) / g : 0; };
+      const order = x.standings.slice().sort((a, b) => pc(b) - pc(a) || a.place - b.place);
+      const me = order.find(r => r.franchise === fr);
+      return { year: x.year, rank: order.indexOf(me) + 1, w: me.w, l: me.l, t: me.t, pre: true, champ: x.champion.franchise === fr, teams: order.length };
+    }).sort((a, b) => a.year - b.year);
+  }
+  function rankChart(fr, seasons) {
+    const pre = preFinishes(fr);
+    const pts = pre.concat(seasons.filter(s => s.rank).map(s => ({ year: s.year, rank: s.rank, w: s.w, l: s.l, t: s.t, champ: isChamp(fr, s.year) })))
+      .sort((a, b) => a.year - b.year);
+    if (pts.length < 2) return '';
+    const n = Math.max(12, ...pts.map(s => s.rank));
+    const W = window.innerWidth > 900 ? 900 : 480, H = 210, L = 36, R = 10, T = 18, B = 26;   // wider drawing on desktop keeps text the same size
+    const y0 = pts[0].year, y1 = pts[pts.length - 1].year;
+    const x = yr => L + (W - L - R) * (y1 === y0 ? 0.5 : (yr - y0) / (y1 - y0));   // by year, so missing seasons leave a gap
+    const y = r => T + (H - T - B) * (r - 1) / (n - 1);
+    const b = D.playoff_brackets[String(D.meta.current_year - 1)] || Object.values(D.playoff_brackets).slice(-1)[0] || {};
+    const cut = ((b.byes || []).length + 2 * (b.round1_games || []).length) || 6;   // teams that make the playoffs now
+    // line color: the team color that reads on the page (darker one on light, lighter one on dark)
+    const tm = X.teams[fr] || {}, cs = [tm.primary, tm.secondary].filter(Boolean);
+    const dark = cs.slice().sort((a, b) => lum(a) - lum(b))[0] || '#555', light = cs.slice().sort((a, b) => lum(b) - lum(a))[0] || '#ccc';
+    const onLight = lum(dark) < 0.55 ? dark : '#3b4654', onDark = lum(light) > 0.35 ? light : '#c9d2dc';
+    const live = s => s.year === D.meta.current_year && !champOf(s.year);
+    const xy = s => `${x(s.year).toFixed(1)},${y(s.rank).toFixed(1)}`;
+    // line pieces: consecutive years only; non-PPR and in-progress pieces drawn dashed
+    const segs = [];
+    pts.forEach((s, i) => { const p = pts[i - 1]; if (p && s.year - p.year === 1) segs.push(`<line class="ln${s.pre ? ' pre' : ''}${live(s) ? ' live' : ''}" x1="${x(p.year)}" y1="${y(p.rank)}" x2="${x(s.year)}" y2="${y(s.rank)}"/>`); });
+    const grid = [1, cut, n].map(r => `<line class="g" x1="${L}" x2="${W - R}" y1="${y(r)}" y2="${y(r)}"/><text class="ax" x="${L - 8}" y="${y(r) + 4}" text-anchor="end">${ord(r)}</text>`).join('');
+    const cutY = (y(cut) + y(cut + 1)) / 2;
+    const short = pts.length > 8 || (y1 - y0) > 8;
+    const dots = pts.map(s => {
+      const tip = `${s.year}: ${ord(s.rank)}${s.pre ? ' by record' : ''}${live(s) ? ' so far' : ''} · ${rec(s.w, s.l, s.t)}${s.champ ? ' · Champion' : ''}${s.pre ? ' · non-PPR' : ''}`;
+      const tw = Math.max(164, tip.length * 6.6), tx = Math.min(Math.max(x(s.year), L + tw / 2), W - R - tw / 2), ty = y(s.rank) < T + 40 ? y(s.rank) + 30 : y(s.rank) - 16;
+      return `<g class="pt${live(s) ? ' live' : ''}${s.pre ? ' pre' : ''}" tabindex="0" aria-label="${esc(tip)}">
+        <circle class="hit" cx="${x(s.year)}" cy="${y(s.rank)}" r="16"/>${s.champ ? `<circle class="ring" cx="${x(s.year)}" cy="${y(s.rank)}" r="9"/>` : ''}
+        <circle class="dot" cx="${x(s.year)}" cy="${y(s.rank)}" r="5.5"/>
+        <text class="yr" x="${x(s.year)}" y="${H - 8}" text-anchor="middle">${short ? "'" + String(s.year).slice(2) : s.year}</text>
+        <g class="tip"><rect x="${tx - tw / 2}" y="${ty - 15}" width="${tw}" height="22" rx="5"/><text x="${tx}" y="${ty}" text-anchor="middle">${esc(tip)}</text></g></g>`;
+    }).join('');
+    return `<figure class="card rf-rank" style="--rk-l:${onLight};--rk-d:${onDark}" aria-label="Regular-season finish by year">
+      <figcaption>Regular-season finish <small>1st at the top · dashed line = playoff cut · gold ring = champion · tap a point for the record</small></figcaption>
+      <svg viewBox="0 0 ${W} ${H}">
+        ${grid}
+        <line class="cut" x1="${L}" x2="${W - R}" y1="${cutY}" y2="${cutY}"/>
+        ${segs.join('')}
+        ${dots}
+      </svg>
+      ${pre.length ? `<p class="rf-rknote">P-PPR years (${pre[0].year}–${pre[pre.length - 1].year}, gray) are estimates: ranked by win-loss record from final standings that included the playoffs, so ties may be off. No standings exist for 2017–18.</p>` : ''}
+    </figure>`;
   }
 
   function preRows(fr) {
