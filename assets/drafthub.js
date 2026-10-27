@@ -150,5 +150,20 @@ window.FBPDraftHub = (() => {
     if (!b) return false;
     H.pos = b.dataset.dhPos; return true;
   }
-  return { render, nav, click };
+  // Phones: size the Team column so Pick, Team and the lead number (Pot. pts / Record) exactly fill the
+  // screen as the page opens, with no sliver of the next column showing. Measured, so it fits any phone
+  // width and any text size; swipe for the rest.
+  function fit() {
+    const t = document.querySelector('.dh-home');
+    if (!t) return;
+    const cells = [...t.querySelectorAll('td.t, th.t')];
+    cells.forEach(c => { c.style.minWidth = ''; c.style.width = ''; });
+    if (window.innerWidth > 600) return;
+    const wrap = t.closest('.tbl-wrap');
+    const w = sel => Math.max(0, ...[...t.querySelectorAll(sel)].map(c => c.getBoundingClientRect().width));
+    const room = Math.floor(wrap.clientWidth - w('.dh-pk') - w('.dh-key'));
+    if (room > 60) cells.forEach(c => { c.style.minWidth = room + 'px'; c.style.width = room + 'px'; });
+  }
+  window.addEventListener('resize', () => { if (location.hash === '#draft' || location.hash === '#draft/') fit(); });
+  return { render, nav, click, fit };
 })();

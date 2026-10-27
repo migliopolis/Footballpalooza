@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0045';
+  const VERSION = '0.0046';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -452,7 +452,7 @@
       // sub-tabs: FBP Home (#draft), Mock Draft (#draft/mock), Big Board, Full Order
       const sub = parts[1] || '';
       if (sub === 'mock') { app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>'; if (window.FBPDraft) FBPDraft.after(); }
-      else app.innerHTML = window.FBPDraftHub ? FBPDraftHub.render(draftCtx(), sub) : '<p class="error">The Rookie Draft page didn’t load.</p>';
+      else { app.innerHTML = window.FBPDraftHub ? FBPDraftHub.render(draftCtx(), sub) : '<p class="error">The Rookie Draft page didn’t load.</p>'; if (window.FBPDraftHub && FBPDraftHub.fit) { FBPDraftHub.fit(); if (document.fonts) document.fonts.ready.then(() => FBPDraftHub.fit()); } }
       const page = 'draft/' + sub;
       if (page !== lastPage && lastPage.startsWith('draft/')) window.scrollTo(0, 0);
       lastPage = page;
