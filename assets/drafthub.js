@@ -53,23 +53,30 @@ window.FBPDraftHub = (() => {
       const d = (was[id] || pick) - pick;   // positive: moved up toward pick 1
       return d > 0 ? `<span class="dh-mv up" title="Up ${d} since week ${prev.week}: a better pick">▲${d}</span>` : d < 0 ? `<span class="dh-mv dn" title="Down ${-d} since week ${prev.week}: a worse pick">▼${-d}</span>` : '';
     };
-    const row = d => {
+    // the stat that decides the pick leads: potential points for picks 1-6, record for the playoff teams
+    const recTxt = s => `${s.w}-${s.l}${s.t ? '-' + s.t : ''}`, ppTxt = s => Number(s.pp || 0).toFixed(1);
+    const row = (d, playoff) => {
       const s = st[d.id] || {}, slot = d.pick - 1, p = players[slot];
       const traded = d.owner && d.owner !== d.id;
       return `<tr>
         <td class="dh-pk"><b>${d.pick}</b><span class="dh-lg">${logo(d.id)}</span>${move(d.id, d.pick)}</td>
         <td class="t"><span class="dh-tm">${esc(s.name || abbr(d.id))}</span>${traded ? `<small class="dh-trade" title="Traded to ${esc(X.nameOf(d.owner))}">→ ${logo(d.owner)}${esc(abbr(d.owner))}</small>` : ''}</td>
-        <td>${s.w}-${s.l}${s.t ? '-' + s.t : ''}</td><td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td>${Number(s.pp || 0).toFixed(1)}</td><td class="dh-stk ${/^L/.test(s.streak || '') ? 'good' : /^W/.test(s.streak || '') ? 'bad' : ''}">${streak(s.streak)}</td>
+        <td class="dh-key">${playoff ? recTxt(s) : ppTxt(s)}</td><td>${playoff ? ppTxt(s) : recTxt(s)}</td><td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td class="dh-stk ${/^L/.test(s.streak || '') ? 'good' : /^W/.test(s.streak || '') ? 'bad' : ''}">${streak(s.streak)}</td>
         <td class="dh-sal">${p ? `<b>$${lib.price(p, slot)}</b><small>${esc(p.name)} ${posPill(p.pos)}</small>` : '—'}</td></tr>`;
     };
+    // column labels under each section's divider, since the lead column differs
+    const cols = playoff => `<tr class="dh-cols"><th class="dh-pk">Pick</th><th class="t">Team</th>${playoff
+      ? '<th class="dh-key">Record</th><th title="Potential points">Pot. pts</th>'
+      : '<th class="dh-key" title="Potential points: lowest picks first">Pot. pts</th><th>Record</th>'}<th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th>Streak</th><th class="dh-sal">Salary</th></tr>`;
     const div = (label, sub) => `<tr class="dh-div"><td colspan="9"><span class="dh-divl">${label}${sub ? `<small>${sub}</small>` : ''}</span></td></tr>`;
     const ord = now.draftOrder || [];
     const non = ord.filter(d => d.basis === 'lowest potential points'), po = ord.filter(d => d.basis !== 'lowest potential points');
     return head('', prev ? `movement since week ${prev.week}` : '') +
       `<section><h2 class="sec">${now.draftYear || ''} rookie draft order <small>round 1; rounds 2–4 repeat it</small></h2>
-      <div class="card tbl-wrap"><table class="tbl dh-tbl dh-home"><thead><tr><th class="dh-pk">Pick</th><th class="t">Team</th><th>Record</th><th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th title="Potential points: decides picks 1–6">Pot. pts</th><th>Streak</th><th class="dh-sal">Salary</th></tr></thead><tbody>
-      ${div('Non-playoff teams', 'lowest potential points picks first')}${non.map(row).join('')}
-      ${div('Playoff teams', 'projected finish; champion picks last')}${po.map(row).join('')}
+      <div class="card tbl-wrap"><table class="tbl dh-tbl dh-home"><tbody>
+      ${div('Non-playoff teams', 'lowest potential points picks first')}${cols(false)}${non.map(d => row(d, false)).join('')}
+      <tr class="dh-gap"><td colspan="9"></td></tr>
+      ${div('Playoff teams', 'projected finish; champion picks last')}${cols(true)}${po.map(d => row(d, true)).join('')}
       </tbody></table></div>
       <p class="rf-foot">Salary is what the projected rookie at that pick would cost: the board’s next-best player (<a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>), priced with his projected NFL landing spot. GB is games back of the worst record. SOS is the average win% of the opponents still to play. Colors are from the draft’s point of view: green is good for a team’s pick (moving up, losing streaks), red is bad. ${prev ? '' : 'Movement arrows start after Monday night’s refresh, the first week with a saved order to compare against.'}</p></section>
       <div class="grid2">

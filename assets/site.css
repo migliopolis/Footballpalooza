@@ -769,3 +769,14 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
   .six .ap,.six .sx{justify-self:end;justify-content:flex-end}
   .six .ap small,.six .sx small{order:-1}
 }
+/* FBP Home draft order: the deciding stat right after the team, column labels per section, a gap between sections */
+.dh-home tr.dh-cols th{background:var(--surface);padding-top:7px;padding-bottom:7px}
+.dh-home td.dh-key{font-weight:700;font-variant-numeric:tabular-nums}
+.dh-home tr.dh-gap td{height:14px;padding:0!important;border-bottom:0;background:var(--bg)}
+.dh-home th.dh-pk,.dh-home td.dh-pk{padding-left:8px!important}
+.dh-home td.t{white-space:normal}
+/* phones: pick, team and the deciding stat fit on screen as it opens; swipe for the rest */
+@media (max-width:600px){
+  .tbl.dh-tbl.dh-home td.t,.tbl.dh-tbl.dh-home th.t{min-width:calc(100vw - 120px - 4rem);max-width:none}
+  .dh-home td.dh-key,.dh-home th.dh-key{padding-right:12px}
+}
