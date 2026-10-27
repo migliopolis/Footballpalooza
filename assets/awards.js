@@ -41,10 +41,12 @@ window.FBPAwards = (() => {
   // FBP MVPs to date (finished seasons only)
   const mvpTag = (p, block) => p.mvps && p.mvps.length ? `<span class="aw-mvp${block ? ' blk' : ''}" title="FBP MVP ${esc(p.mvps.join(', '))}">${p.mvps.length > 1 ? p.mvps.length + '× ' : ''}MVP${p.mvps.length === 1 ? ' ' + esc(p.mvps[0]) : ''}</span>` : '';
   const cup = p => p.champ ? ' <span class="aw-cup" role="img" aria-label="Champion" title="Won the title that season">🏆</span>' : '';
+  // this season: what changed on this spot since the last weekly update
+  const change = p => p.change && !S.final ? `<span class="aw-chg ${p.change.dir}" title="Since week ${esc(p.change.since)}">${{ up: '▲', down: '▼', new: '●' }[p.change.dir] || ''} ${esc(p.change.text)}</span>` : '';
   function card(slot, p, second) {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg')}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.rookie ? ' · <i>Rookie</i>' : ''}</span>
-      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${honors(p)}
+      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${honors(p)}${change(p)}
       <span class="aw-stats"><span><b>${n1(p.pts)}</b>pts</span><span><b>${n1(p.ppg)}</b>per start</span><span><b>${sal(p)}</b>salary</span></span></div>`;
   }
   // one award: the winner big, the next two below

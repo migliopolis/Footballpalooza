@@ -375,9 +375,53 @@ def franchise_all_fbp(seasons):
     return {'seasons': [y for y, _ in sorted(seasons)], 'franchises': out}
 
 
+def snapshot(a):
+    """Who held each All-FBP spot, to compare with next week's teams."""
+    return {'throughWeek': a.get('throughWeek'),
+            'teams': [[{'slot': e['slot'], 'id': e['player']['id'], 'name': e['player']['name']} for e in a['allFbp'][k]]
+                      for k in ('first', 'second')]}
+
+
+def mark_changes(cur, prev):
+    """This season only: a line on each card whose spot changed since the last weekly update.
+    The comparison point is last week's teams; reruns in the same week keep the same comparison."""
+    if not cur.get('ready'):
+        return
+    if prev.get('ready') and prev.get('throughWeek') and prev['throughWeek'] < cur['throughWeek']:
+        basis = snapshot(prev)
+    else:
+        basis = prev.get('basis')
+    cur['basis'] = basis
+    if not basis:
+        return
+    old_tier = {x['id']: t for t, team in enumerate(basis['teams']) for x in team}
+    old_pos = {x['id']: x['slot'] for team in basis['teams'] for x in team}
+    new_tier = {e['player']['id']: t for t, k in enumerate(('first', 'second')) for e in cur['allFbp'][k]}
+    label = ['1st Team', '2nd Team']
+    for t, k in enumerate(('first', 'second')):
+        team = cur['allFbp'][k]
+        # spot shuffles inside a team don't count; only who joined and who left
+        joined = [e for e in team if old_tier.get(e['player']['id']) != t]
+        left = [x for x in basis['teams'][t] if new_tier.get(x['id']) != t]
+        for e in joined:   # pair each newcomer with someone who left, same position first
+            pick = next((x for x in left if x['slot'] == e['slot']), None) or (left[0] if left else None)
+            if pick:
+                left.remove(pick)
+            p = e['player']
+            was = old_tier.get(p['id'])
+            head, d = ('New this week', 'new') if was is None else ((f'Up from {label[was]}', 'up') if was > t else (f'Down from {label[was]}', 'down'))
+            tail = ''
+            if pick and d != 'down':
+                now = new_tier.get(pick['id'])
+                tail = f" · replaced {pick['name']} ({'off the list' if now is None else 'now ' + label[now]})"
+            p['change'] = {'dir': d, 'text': head + tail, 'since': basis['throughWeek']}
+
+
 def main():
     links = (load(D('player-links.json'), {}) or {}).get('links', {})
+    prev = load(D('awards.json'), {}) or {}
     cur = current(links)
+    mark_changes(cur, prev)
     # past seasons, built from saved history; listed so the page can offer a season picker
     ref = load(D('reference', 'history.json'), {}) or {}
     fallback = player_info(D('mfl', 'players.json'))

@@ -30,6 +30,20 @@ window.FBPRef = (() => {
   const logo = fr => { const t = X.teams[fr]; return t && t.logo ? `<img src="${t.logo}" alt="" loading="lazy">` : ''; };
   // a team, linked to its franchise page, under the name it used that season
   const tl = (fr, y, label) => `<a class="rf-tm" href="#reference/f-${fr}">${X.chip(fr, { name: label || nm(fr, y) })}</a>`;
+  // a stat tile's team: its logo, big and pushed off the bottom-right corner so only the top-left quarter shows
+  // per-logo tweaks [size, how far off the corner]: wide logos with lots of empty space need more showing
+  const TILE_FIT = { '0009': [1.2, 0.18, 0.42] };   // [size, off the right edge, off the bottom edge]
+  const tileLogo = fr => { const t = fr && X.teams[fr], f = TILE_FIT[fr]; return t && t.logo ? `<img class="rf-tlogo" src="${t.logo}" alt="" loading="lazy"${f ? ` style="--tl:${f[0]};--tlx:${f[1]};--tly:${f[2]}"` : ''}>` : ''; };
+  // the tile in the team's colors (same rule as the franchise banner: very light primaries swap with the secondary)
+  const tileStyle = fr => {
+    const t = fr && X.teams[fr]; if (!t || !t.primary) return '';
+    let bg = t.primary, ac = t.secondary || '#fff';
+    if (lum(bg) > 0.85) [bg, ac] = [ac, bg];
+    const fg = lum(bg) > 0.6 ? '#121519' : '#ffffff';
+    const num = Math.abs(lum(ac) - lum(bg)) > 0.35 ? ac : fg;
+    return ` style="--tile-bg:${bg};--tile-fg:${fg};--tile-num:${num}"`;
+  };
+  const frByName = n => Object.keys(D.franchises).find(f => D.franchises[f] === n);
   const lgCell = fr => `<td class="lg">${logo(fr)}</td>`;
   const nameCell = (fr, y, label) => `<td class="t"><a class="rf-nm" href="#reference/f-${fr}">${esc(label || nm(fr, y))}</a></td>`;
   const champOf = y => D.championships[y] || D.championships[String(y)];
@@ -84,9 +98,9 @@ window.FBPRef = (() => {
       (PRE().length ? `<p class="rf-note">P-PPR is on: seasons, titles and finishes include ${firstYear()}–2018 (non-PPR). Game scores and records stay 2019 on; see the blind spots at the bottom.</p>` : '') +
       `<section class="rf-tiles">
         <div class="card rf-tile"><span>Seasons</span><b>${years().length + PRE().length}</b><small>${firstYear()}–${D.meta.current_year}</small></div>
-        <div class="card rf-tile"><span>Most titles</span><b>${titles[0][1]}</b><small>${most.map(t => esc(t[0])).join(', ')}</small></div>
-        <div class="card rf-tile"><span>Best all-time win%</span><b>${pct(best.pct)}</b><small>${esc(D.franchises[best.fr])}</small></div>
-        <div class="card rf-tile"><span>Highest score</span><b>${n1(hi.score)}</b><small>${esc(hi.name)}, ${hi.year} wk ${hi.week}</small></div>
+        <div class="card rf-tile${most.length === 1 ? ' lg tm' : ''}"${most.length === 1 ? tileStyle(frByName(most[0][0])) : ''}>${most.length === 1 ? tileLogo(frByName(most[0][0])) : ''}<span>Most titles</span><b>${titles[0][1]}</b><small>${most.map(t => esc(t[0])).join(', ')}</small></div>
+        <div class="card rf-tile lg tm"${tileStyle(best.fr)}>${tileLogo(best.fr)}<span>Best all-time win%</span><b>${pct(best.pct)}</b><small>${esc(D.franchises[best.fr])}</small></div>
+        <div class="card rf-tile lg tm"${tileStyle(hi.franchise)}>${tileLogo(hi.franchise)}<span>Highest score</span><b>${n1(hi.score)}</b><small>${esc(hi.name)}, ${hi.year} wk ${hi.week}</small></div>
       </section>
       <div class="grid2">
         <section><h2 class="sec">Overall records <small>${firstYear()}–${D.meta.current_year}, regular season</small></h2>
