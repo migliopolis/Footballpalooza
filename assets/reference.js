@@ -48,6 +48,30 @@ window.FBPRef = (() => {
   const nameCell = (fr, y, label) => `<td class="t"><a class="rf-nm" href="#reference/f-${fr}">${esc(label || nm(fr, y))}</a></td>`;
   const champOf = y => D.championships[y] || D.championships[String(y)];
   const badge = (fr, y) => { const c = champOf(y); return c && c.champion === fr ? '<span class="rf-badge gold" title="Champion">🏆</span>' : c && c.runnerup === fr ? '<span class="rf-badge">2nd</span>' : ''; };
+  const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || 'th');
+  const isChamp = (fr, y) => { const c = champOf(y); return !!c && c.champion === fr; };
+  // how a season ended in the playoffs, from the bracket
+  function playoffOut(fr, y) {
+    const c = champOf(y), b = D.playoff_brackets[y] || D.playoff_brackets[String(y)];
+    if (c && c.champion === fr) return '<span class="rf-po champ">Champion</span>';
+    if (c && c.runnerup === fr) return '<span class="rf-po final">Lost final</span>';
+    if (b) {
+      const lost = games => (games || []).some(g => (g.franchiseA === fr && g.resultA === 'L') || (g.franchiseB === fr && g.resultB === 'L'));
+      if (lost(b.semifinal_games)) {
+        // the two semifinal losers play for 3rd in the title-game week
+        const other = b.semifinal_games.map(g => g.resultA === 'L' ? g.franchiseA : g.franchiseB).find(f => f !== fr);
+        const g = (D.schedules_by_year[y] || D.schedules_by_year[String(y)] || []).find(g => +g.week === +b.championship_week &&
+          ((g.franchiseA === fr && g.franchiseB === other) || (g.franchiseB === fr && g.franchiseA === other)));
+        if (g) {
+          const won = (g.franchiseA === fr ? +g.scoreA > +g.scoreB : +g.scoreB > +g.scoreA);
+          return `<span class="rf-po${won ? ' third' : ''}" title="Lost in the semifinals, then ${won ? 'won' : 'lost'} the 3rd-place game">${won ? '3rd place' : '4th place'}</span>`;
+        }
+        return '<span class="rf-po">Lost semis</span>';
+      }
+      if (lost(b.round1_games)) return '<span class="rf-po">Lost round 1</span>';
+    }
+    return '<span class="rf-po out">Missed</span>';
+  }
   const lastDone = () => Math.max(...Object.keys(D.championships).map(Number));
   const years = () => D.meta.years_covered.slice().sort((a, b) => a - b);
   const sub = (items, cur, seg) => `<nav class="rf-sub${seg ? ' seg' : ''}">${items.map(([h, l]) => `<a href="${h}"${h === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
@@ -159,8 +183,8 @@ window.FBPRef = (() => {
         ${names.length ? `<p class="aka">Also played as ${names.map(esc).join(', ')}</p>` : ''}</div>
       </section>
       <section><h2 class="sec">Year by year</h2>
-      <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>Year</th><th class="t">Team name</th><th>Fin</th><th>W-L-T</th><th>PF</th><th>PA</th><th>All-play</th></tr></thead><tbody>
-      ${seasons.map(s => `<tr><td><a class="rf-nm" href="#reference/s-${s.year}">${s.year}</a></td><td class="t">${esc(s.name)}</td><td>${badge(fr, s.year) || (s.rank ? s.rank + (s.year === D.meta.current_year && !champOf(s.year) ? '*' : '') : '—')}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`).join('')}
+      <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>Year</th><th class="t">Team name</th><th title="Place in the regular-season standings">Reg. finish</th><th class="t">Playoffs</th><th>W-L-T</th><th>PF</th><th>PA</th><th>All-play</th></tr></thead><tbody>
+      ${seasons.map(s => { const live = s.year === D.meta.current_year && !champOf(s.year); return `<tr><td><a class="rf-nm" href="#reference/s-${s.year}">${s.year}</a></td><td class="t">${esc(s.name)}${isChamp(fr, s.year) ? ' <span class="rf-cup" title="Champion">🏆</span>' : ''}</td><td>${s.rank ? ord(s.rank) + (live ? '*' : '') : '—'}</td><td class="t">${live ? '<span class="rf-po">In progress</span>' : playoffOut(fr, s.year)}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`; }).join('')}
       ${preRows(fr)}
       </tbody></table></div>${seasons.some(s => s.year === D.meta.current_year && !champOf(s.year)) ? `<p class="rf-foot">* ${D.meta.current_year} is in progress; that’s the current standing.</p>` : ''}</section>
       ${allFbp(fr)}
@@ -197,8 +221,8 @@ window.FBPRef = (() => {
       const s = (x.standings || []).find(r => r.franchise === fr);
       const k = ['champion', 'runnerup', 'third'].find(k => x[k].franchise === fr);
       if (!s && !k) return '';
-      const fin = k === 'champion' ? '<span class="rf-badge gold">🏆</span>' : k === 'runnerup' ? '<span class="rf-badge">2nd</span>' : s ? s.place : '3';
-      return `<tr class="rf-pre"><td><a class="rf-nm" href="#reference/s-${x.year}">${x.year}</a></td><td class="t">${esc((s || x[k]).name)} ${NP}</td><td>${fin}</td><td>${s ? rec(s.w, s.l, s.t) : '—'}</td><td>—</td><td>—</td><td>—</td></tr>`;
+      const po = k === 'champion' ? '<span class="rf-po champ">Champion</span>' : k === 'runnerup' ? '<span class="rf-po final">Lost final</span>' : k === 'third' ? '<span class="rf-po">3rd place</span>' : '—';
+      return `<tr class="rf-pre"><td><a class="rf-nm" href="#reference/s-${x.year}">${x.year}</a></td><td class="t">${esc((s || x[k]).name)}${k === 'champion' ? ' <span class="rf-cup" title="Champion">🏆</span>' : ''} ${NP}</td><td>—</td><td class="t">${po}</td><td>${s ? rec(s.w, s.l, s.t) : '—'}</td><td>—</td><td>—</td><td>—</td></tr>`;
     }).join('');
   }
   function preNote(fr) {

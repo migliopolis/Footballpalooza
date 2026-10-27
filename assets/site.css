@@ -699,3 +699,6 @@ tr.dh-div td{padding:0!important}
 .rf-tile.tm span,.rf-tile.tm small{color:var(--tile-fg);opacity:.85}
 .rf-tile.tm b{color:var(--tile-num)}
 .rf-tile.tm .rf-tlogo{opacity:.4}
+.rf-po{white-space:nowrap;font-size:.82rem;color:var(--fg)}
+.rf-po.champ{font-weight:700}.rf-po.out{color:var(--muted)}
+.rf-cup{font-size:.85em}
