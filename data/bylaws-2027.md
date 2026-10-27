@@ -11,6 +11,7 @@ These are the v5.0 by-laws rewritten for 2027. Every change is tagged [[CHANGED]
 | Playoffs | Full tiebreaker ladder incl. all-play wins; 3rd-place game in Week 17; division winners always outrank wild cards |
 | Rookie draft order | Picks 1–12 fully specified (3rd-place game decides picks 9–10) |
 | Divisions | No realignment for 2027 |
+| Trades | No roster parking: traded players move to the new team when the trade is processed; no holding a player for another team |
 
 # Article I – League Commissioner
 
@@ -217,6 +218,7 @@ Owners monitor their own rosters and salaries and notify the commissioner of err
 - Bullying or harassing any owner over a trade is not allowed.
 - Tradable assets: players (with contracts), draft picks (up to 2 years out), auction cash, FAAB dollars.
 - [[NEW]] Trades of TS rookies carry the discount and fee rules in Article VI. Teams may attach side terms to a TS trade, declared in the trade.
+- [[NEW]] **No roster parking.** A player may only be rostered by the team that owns him, and no team may hold or store a player for another team for any length of time. Every player in a trade moves to the receiving team's roster when the trade is processed. An agreement to trade for a player but leave him on the other team's roster, to be moved over at a later date, is not allowed, and neither is any other arrangement to hold a player now and hand him to another team later. Any such deal is treated as collusion (Article XVI).
 
 # Article XII – Playoffs
 
