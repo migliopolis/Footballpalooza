@@ -1,6 +1,6 @@
 {
  "season": "FOOTBALLPALOOZA 2026",
- "generated": "2026-10-27T06:00:04+00:00",
+ "generated": "2026-10-27T11:10:18+00:00",
  "weeksPlayed": 7,
  "lastRegularSeasonWeek": 14,
  "divisions": [
@@ -449,7 +449,7 @@
    "basis": "seed 2, projected runner-up",
    "tiebreak": null,
    "pick": 11,
-   "owner": "0002"
+   "owner": "0006"
   },
   {
    "id": "0009",
@@ -514,7 +514,7 @@
    {
     "pick": 11,
     "id": "0002",
-    "owner": "0002"
+    "owner": "0006"
    },
    {
     "pick": 12,
@@ -638,7 +638,7 @@
    {
     "pick": 11,
     "id": "0002",
-    "owner": "0006"
+    "owner": "0002"
    },
    {
     "pick": 12,
@@ -680,7 +680,7 @@
    {
     "pick": 7,
     "id": "0007",
-    "owner": "0006"
+    "owner": "0002"
    },
    {
     "pick": 8,
@@ -3313,5 +3313,5 @@
    }
   }
  },
- "fetched": "2026-10-27T05:55:35+00:00"
+ "fetched": "2026-10-27T11:09:56+00:00"
 }

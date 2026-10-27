@@ -1,6 +1,15 @@
 {
- "fetched": "2026-10-27T05:55:34+00:00",
+ "fetched": "2026-10-27T11:09:55+00:00",
  "transactions": [
+  {
+   "expires": "1793404800",
+   "franchise": "0006",
+   "franchise1_gave_up": "15281,FP_0002_2027_3,FP_0007_2027_4,",
+   "franchise2": "0002",
+   "franchise2_gave_up": "FP_0002_2027_1,FP_0002_2028_2,",
+   "timestamp": "1793097113",
+   "type": "TRADE"
+  },
   {
    "franchise": "0010",
    "timestamp": "1792944000",
