@@ -823,17 +823,17 @@
     {
      "team": "0012",
      "stat": "+18% win",
-     "sub": "8-6 record, 73-114 all-play"
+     "sub": "8-6 record, should be about 5-9 · 73-114 all-play"
     },
     {
      "team": "0002",
      "stat": "+8% win",
-     "sub": "8-6 record, 91-96 all-play"
+     "sub": "8-6 record, should be about 7-7 · 91-96 all-play"
     },
     {
      "team": "0011",
      "stat": "+8% win",
-     "sub": "5-9 record, 52-135 all-play"
+     "sub": "5-9 record, should be about 4-10 · 52-135 all-play"
     }
    ]
   },
@@ -845,17 +845,17 @@
     {
      "team": "0006",
      "stat": "-14% win",
-     "sub": "3-11 record, 66-121 all-play"
+     "sub": "3-11 record, should be about 5-9 · 66-121 all-play"
     },
     {
      "team": "0007",
      "stat": "-11% win",
-     "sub": "9-5 record, 140-47 all-play"
+     "sub": "9-5 record, should be about 10-4 · 140-47 all-play"
     },
     {
      "team": "0008",
      "stat": "-6% win",
-     "sub": "6-8 record, 92-95 all-play"
+     "sub": "6-8 record, should be about 7-7 · 92-95 all-play"
     }
    ]
   },

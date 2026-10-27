@@ -173,7 +173,13 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
         return (s['allPlayW'] + s['allPlayT'] / 2) / g if g else 0
     luck = sorted(standings, key=lambda s: -(s['pct'] - ap(s)))
     if luck:
-        lk = lambda s: {'team': s['id'], 'stat': f"{'+' if s['pct'] - ap(s) >= 0 else ''}{(s['pct'] - ap(s)) * 100:.0f}% win", 'sub': f"{s['w']}-{s['l']}{'-' + str(s['t']) if s['t'] else ''} record, {s['allPlayW']}-{s['allPlayL']} all-play"}
+        def should_be(s):
+            # the record the all-play rate points to over the same number of games
+            g = s['w'] + s['l'] + s['t']
+            w = round(g * ap(s))
+            return f"{w}-{g - w}"
+        lk = lambda s: {'team': s['id'], 'stat': f"{'+' if s['pct'] - ap(s) >= 0 else ''}{(s['pct'] - ap(s)) * 100:.0f}% win",
+                        'sub': f"{s['w']}-{s['l']}{'-' + str(s['t']) if s['t'] else ''} record, should be about {should_be(s)} · {s['allPlayW']}-{s['allPlayL']} all-play"}
         A.append({'key': 'lucky', 'title': 'Luckiest Team', 'why': 'Record furthest above what its all-play record suggests', 'teams': [lk(s) for s in luck[:3]]})
         A.append({'key': 'unlucky', 'title': 'Unluckiest Team', 'why': 'Record furthest below its all-play record', 'teams': [lk(s) for s in luck[::-1][:3]]})
 

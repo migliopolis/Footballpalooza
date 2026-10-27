@@ -749,17 +749,17 @@
     {
      "team": "0002",
      "stat": "+32% win",
-     "sub": "5-2 record, 30-47 all-play"
+     "sub": "5-2 record, should be about 3-4 · 30-47 all-play"
     },
     {
      "team": "0011",
      "stat": "+21% win",
-     "sub": "3-4 record, 17-60 all-play"
+     "sub": "3-4 record, should be about 2-5 · 17-60 all-play"
     },
     {
      "team": "0009",
      "stat": "+9% win",
-     "sub": "5-1-1 record, 53-23 all-play"
+     "sub": "5-1-1 record, should be about 5-2 · 53-23 all-play"
     }
    ]
   },
@@ -771,17 +771,17 @@
     {
      "team": "0007",
      "stat": "-21% win",
-     "sub": "3-4 record, 49-28 all-play"
+     "sub": "3-4 record, should be about 4-3 · 49-28 all-play"
     },
     {
      "team": "0001",
      "stat": "-14% win",
-     "sub": "4-3 record, 55-22 all-play"
+     "sub": "4-3 record, should be about 5-2 · 55-22 all-play"
     },
     {
      "team": "0006",
      "stat": "-9% win",
-     "sub": "1-6 record, 18-59 all-play"
+     "sub": "1-6 record, should be about 2-5 · 18-59 all-play"
     }
    ]
   },
@@ -1277,7 +1277,7 @@
    ]
   }
  ],
- "generated": "2026-10-27T05:56:15+00:00",
+ "generated": "2026-10-27T06:12:02+00:00",
  "basis": {
   "throughWeek": 6,
   "teams": [
