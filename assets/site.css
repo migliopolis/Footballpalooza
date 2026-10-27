@@ -780,3 +780,6 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
   .tbl.dh-tbl.dh-home td.t,.tbl.dh-tbl.dh-home th.t{min-width:calc(100vw - 120px - 4rem);max-width:none}
   .dh-home td.dh-key,.dh-home th.dh-key{padding-right:12px}
 }
+/* pick numbers sit closer to the left edge */
+.dh-home th.dh-pk,.dh-home td.dh-pk{padding-left:3px!important}
+.dh-home .dh-pk b{min-width:1.15rem}
