@@ -3,6 +3,7 @@ name: Refresh league data
 on:
   schedule:
     - cron: '0 6 * * 2'    # Tuesdays 06:00 UTC = Monday 10 PM PST (11 PM during daylight time), after Monday night games
+    - cron: '0 5 27 10 *'  # one-time extra run: Oct 27 05:00 UTC = Mon Oct 26 10 PM PDT. Delete after it runs.
   workflow_dispatch:        # "Run workflow" button on the Actions tab
 
 permissions:
