@@ -293,6 +293,16 @@ def build(folder):
 
     seeds, winners, div_rank = seed_league(teams, games, divisions)
 
+    # home weeks per team, so schedules can say "vs" (home) or "@" (away)
+    home_weeks = {t: [] for t in teams}
+    for wk in as_list(sched.get('weeklySchedule')):
+        if int(wk['week']) > last_reg:
+            continue
+        for m in as_list(wk.get('matchup')):
+            for f in as_list(m.get('franchise')):
+                if f.get('isHome') == '1' and f.get('id') in home_weeks:
+                    home_weeks[f['id']].append(int(wk['week']))
+
     # projected rookie draft order
     pf = lambda t: teams[t]['pf']
     apw = lambda t: teams[t]['allPlayW']
@@ -374,6 +384,7 @@ def build(folder):
         # every regular-season game: played [week, a, scoreA, b, scoreB] and still to play [week, a, b]
         'games': [list(g) for g in games],
         'upcoming': [list(g) for g in remaining if g[0] > weeks_played],
+        'homeWeeks': home_weeks,
         'notes': ['Division ties: 2026 uses total points; from 2027, head-to-head comes first.' if not DIV_HEAD_TO_HEAD
                   else 'Tiebreaks follow the 2027 by-laws and are computed here, not by MFL.',
                   'Picks 7-12 are projected by seed until the playoffs are played.'],

@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0046';
+  const VERSION = '0.0047';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -205,13 +205,18 @@
       </div>`;
     }
     // the team's whole regular season: results so far, then the games left (with what each one means)
+    // opponent as just its logo (name on hover / for screen readers), so schedule rows stay one line on phones
+    const logoOnly = id => { const tm = state.teams[id] || {}; return tm.logo ? `<img class="gl-lg" src="${tm.logo}" alt="${esc(nameOf(id))}" title="${esc(nameOf(id))}" loading="lazy">` : `<span class="team"><span class="nm">${esc(nameOf(id))}</span></span>`; };
+    // home game "vs", road game "@" (from MFL's schedule; plain "vs" if unknown)
+    const va = (id, wk) => { const h = d.homeWeeks && d.homeWeeks[id]; return !h || h.includes(+wk) ? 'vs' : '@'; };
     function fullSchedule(id, left, gameRow) {
       const played = (d.games || []).filter(g => g[1] === id || g[3] === id).map(g => {
         const me = g[1] === id, mine = me ? g[2] : g[4], theirs = me ? g[4] : g[2], opp = me ? g[3] : g[1];
         const r = mine > theirs ? 'W' : mine < theirs ? 'L' : 'T';
-        return { week: g[0], html: `<li class="done"><div class="gl"><b class="wk">Wk ${g[0]}</b><span class="vs">vs</span>${chip(opp)}<span class="res ${r}">${r} ${pts(mine)}–${pts(theirs)}</span></div></li>` };
+        return { week: g[0], html: `<li class="done"><div class="gl"><b class="wk">Wk ${g[0]}</b><span class="vs">${va(id, g[0])}</span>${logoOnly(opp)}<span class="res ${r}">${r} ${pts(mine)}–${pts(theirs)}</span></div></li>` };
       });
-      const rows = played.concat(left.map(g => ({ week: g.week, html: gameRow(g) }))).sort((a, b) => a.week - b.week);
+      // upcoming weeks: same row as Biggest games, with the opponent shown by logo only
+      const rows = played.concat(left.map(g => ({ week: g.week, html: gameRow(g).replace(chip(g.opp), logoOnly(g.opp)).replace('<span class="vs">vs</span>', `<span class="vs">${va(id, g.week)}</span>`) }))).sort((a, b) => a.week - b.week);
       if (!rows.length) return '';
       return `<details class="all"><summary>Full schedule <small>${played.length} played · ${left.length} to go</small></summary><ul class="glist">${rows.map(r => r.html).join('')}</ul></details>`;
     }

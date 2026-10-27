@@ -783,3 +783,9 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 /* pick numbers sit closer to the left edge */
 .dh-home th.dh-pk,.dh-home td.dh-pk{padding-left:3px!important}
 .dh-home .dh-pk b{min-width:1.15rem}
+/* schedule rows: names wrap between words only; the score (or win chance) drops to its own line when space runs out */
+.gl{flex-wrap:wrap;row-gap:2px}
+.gl .team{flex:1 1 auto}
+.gl .team .nm{overflow-wrap:normal;word-break:normal}
+.gl .res,.gl .wp{margin-left:auto}
+.gl .gl-lg{width:26px;height:26px;object-fit:contain;flex:none}
