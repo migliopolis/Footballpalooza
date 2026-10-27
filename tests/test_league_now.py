@@ -11,7 +11,7 @@ d = ln.build(FIX)
 seeds = [s['id'] for s in d['seeds']]
 assert seeds == ['0009', '0005', '0002', '0001', '0004', '0007'], seeds
 rank = {t['id']: t['divisionRank'] for t in d['standings']}
-assert rank['0003'] == 2 and rank['0010'] == 3, 'Hauk Tua beat Hold Timers head-to-head (week 4)'
+assert rank['0010'] == 2 and rank['0003'] == 3, 'tied 3-3: 2026 breaks division ties on total points (Hold Timers 725.4, Hauk Tua 681.8)'
 six = d['seeds'][5]
 assert six['via'] == 'all-play wins' and six['tiebreak'] == 'total points', six
 assert d['seeds'][1]['tiebreak'] == 'total points'

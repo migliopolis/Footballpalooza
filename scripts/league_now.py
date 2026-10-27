@@ -67,6 +67,11 @@ def order(group, ladder):
     return out
 
 
+# Division tiebreak: 2026 breaks a tied division record on total points; the 2027 by-laws put
+# head-to-head first. build() sets this from the season year in MFL's league name.
+DIV_HEAD_TO_HEAD = True
+
+
 def seed_league(teams, games, divisions):
     """Seeds 1-6 under the 2027 rules. teams: id -> {pct, pf, allPlayW, division}; games: (week, a, sa, b, sb).
     Returns (seeds, winners {division: (id, rule)}, division rank {id: n})."""
@@ -84,8 +89,12 @@ def seed_league(teams, games, divisions):
     apw = lambda t: teams[t]['allPlayW']
 
     # division winners
-    div_ladder = [('record', lambda t: pct(t), True), ('head-to-head', h2h_pct, True),
-                  ('total points', lambda t: pf(t), True), ('all-play wins', lambda t: apw(t), True)]
+    if DIV_HEAD_TO_HEAD:
+        div_ladder = [('record', lambda t: pct(t), True), ('head-to-head', h2h_pct, True),
+                      ('total points', lambda t: pf(t), True), ('all-play wins', lambda t: apw(t), True)]
+    else:   # 2026 rules
+        div_ladder = [('record', lambda t: pct(t), True), ('total points', lambda t: pf(t), True),
+                      ('all-play wins', lambda t: apw(t), True)]
     winners, div_rank = {}, {}
     for d in divisions:
         members = [t for t in teams if teams[t]['division'] == d['id']]
@@ -244,7 +253,10 @@ def simulate(teams, games, remaining, divisions, n_sims=20000, seed=2027, spread
 
 
 def build(folder):
+    global DIV_HEAD_TO_HEAD
     league = load(folder, 'league')['league']
+    yr_txt = ''.join(ch for ch in league.get('name', '') if ch.isdigit())[-4:]
+    DIV_HEAD_TO_HEAD = not (yr_txt and int(yr_txt) < 2027)
     stand = load(folder, 'leagueStandings')['leagueStandings']
     sched = load(folder, 'schedule')['schedule']
     last_reg = int(league.get('lastRegularSeasonWeek', 14))
@@ -362,7 +374,8 @@ def build(folder):
         # every regular-season game: played [week, a, scoreA, b, scoreB] and still to play [week, a, b]
         'games': [list(g) for g in games],
         'upcoming': [list(g) for g in remaining if g[0] > weeks_played],
-        'notes': ['Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.',
+        'notes': ['Division ties: 2026 uses total points; from 2027, head-to-head comes first.' if not DIV_HEAD_TO_HEAD
+                  else 'Tiebreaks follow the 2027 by-laws and are computed here, not by MFL.',
                   'Picks 7-12 are projected by seed until the playoffs are played.'],
     }
 
