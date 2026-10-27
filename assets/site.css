@@ -727,3 +727,9 @@ tr.dh-div td{padding:0!important}
 .rf-rank .ln.pre{stroke:var(--muted);stroke-dasharray:2 4}
 .rf-rank .pre .dot{fill:var(--surface);stroke:var(--muted)}
 .rf-rknote{margin:6px 0 2px;font-size:.72rem;line-height:1.4;color:var(--muted)}
+/* FBP Home: logo right after the pick number (pinned with it); movement arrow only when a pick moved */
+.dh-home .dh-mv{width:auto;margin-left:4px;font-size:.72rem;vertical-align:middle}
+.dh-home td.dh-pk{padding-right:8px}
+/* section labels wrap inside the screen instead of running off it */
+.dh-divl{white-space:normal;max-width:calc(100vw - 56px);box-sizing:border-box}
+.dh-divl small{display:block;margin:2px 0 0!important}

@@ -49,15 +49,15 @@ window.FBPDraftHub = (() => {
     const gb = s => { const g = ((s.w - worst.w) + (worst.l - s.l)) / 2; return g ? g.toFixed(1).replace('.0', '') : '—'; };
     const players = board();
     const move = (id, pick) => {
-      if (!prev) return `<span class="dh-mv" title="Movement shows after the next weekly refresh">–</span>`;
+      if (!prev) return '';   // arrows only when a pick moved; no placeholder taking up room
       const d = (was[id] || pick) - pick;   // positive: moved up toward pick 1
-      return d > 0 ? `<span class="dh-mv up" title="Up ${d} since week ${prev.week}: a better pick">▲${d}</span>` : d < 0 ? `<span class="dh-mv dn" title="Down ${-d} since week ${prev.week}: a worse pick">▼${-d}</span>` : `<span class="dh-mv" title="No change since week ${prev.week}">–</span>`;
+      return d > 0 ? `<span class="dh-mv up" title="Up ${d} since week ${prev.week}: a better pick">▲${d}</span>` : d < 0 ? `<span class="dh-mv dn" title="Down ${-d} since week ${prev.week}: a worse pick">▼${-d}</span>` : '';
     };
     const row = d => {
       const s = st[d.id] || {}, slot = d.pick - 1, p = players[slot];
       const traded = d.owner && d.owner !== d.id;
       return `<tr>
-        <td class="dh-pk"><b>${d.pick}</b>${move(d.id, d.pick)}<span class="dh-lg">${logo(d.id)}</span></td>
+        <td class="dh-pk"><b>${d.pick}</b><span class="dh-lg">${logo(d.id)}</span>${move(d.id, d.pick)}</td>
         <td class="t"><span class="dh-tm">${esc(s.name || abbr(d.id))}</span>${traded ? `<small class="dh-trade" title="Traded to ${esc(X.nameOf(d.owner))}">→ ${logo(d.owner)}${esc(abbr(d.owner))}</small>` : ''}</td>
         <td>${s.w}-${s.l}${s.t ? '-' + s.t : ''}</td><td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td>${Number(s.pp || 0).toFixed(1)}</td><td class="dh-stk ${/^L/.test(s.streak || '') ? 'good' : /^W/.test(s.streak || '') ? 'bad' : ''}">${streak(s.streak)}</td>
         <td class="dh-sal">${p ? `<b>$${lib.price(p, slot)}</b><small>${esc(p.name)} ${posPill(p.pos)}</small>` : '—'}</td></tr>`;
