@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0040';
+  const VERSION = '0.0041';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -158,6 +158,20 @@
     const race = new Set(seeds.map(s => s.id));
     d.standings.filter(t => !race.has(t.id)).sort((a, b) => b.pct - a.pct || b.allPlayW - a.allPlayW || b.pf - a.pf).slice(0, 3).forEach(t => race.add(t.id));
     const fp = v => v == null ? '–' : v >= 99.5 ? '>99%' : v > 0 && v < 0.5 ? '<1%' : v === 0 ? '<1%' : Math.round(v) + '%';
+    // change since last week's update: ▲ green (better), ▼ red (worse); nothing if it barely moved
+    const P = d.prev && d.prev.teams, pw = d.prev && d.prev.week;
+    const dlt = (id, key, cur) => {
+      const was = P && P[id] && P[id][key];
+      if (was == null || cur == null) return '';
+      const x = Math.round(cur - was);
+      return x >= 1 ? `<span class="dl up" title="Up ${x} points since week ${pw}">▲${x}</span>` : x <= -1 ? `<span class="dl dn" title="Down ${-x} points since week ${pw}">▼${-x}</span>` : '';
+    };
+    const rankMove = (id, key, cur) => {
+      const was = P && P[id] && P[id][key];
+      if (was == null || cur == null || was === cur) return P ? '<span class="dl">–</span>' : '';
+      return was > cur ? `<span class="dl up" title="Up from ${was} in week ${pw}">▲${was - cur}</span>` : `<span class="dl dn" title="Down from ${was} in week ${pw}">▼${cur - was}</span>`;
+    };
+    const oddsKey = { 'Make playoffs': 'playoff', 'First-round bye': 'bye', '1 seed': 'seed1' };
     const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
     function oddsPanel(id, seed) {
       const o = O && O[id];
@@ -165,8 +179,9 @@
       const t = by[id];
       const head = seed === 1 ? ['Chance to keep the 1 seed', o.seed1] : seed === 2 ? ['Chance to take the 1 seed', o.seed1]
         : seed === 3 ? ['Chance to win the ' + t.divisionName, o.division] : ['Chance to make the playoffs', o.playoff];
-      const P = ['Make playoffs', o.playoff], B = ['First-round bye', o.bye], D = ['Win ' + t.divisionName, o.division], S1 = ['1 seed', o.seed1];
-      const stats = seed && seed <= 2 ? [B, D, P] : seed === 3 ? [P, B, S1] : [D, B, S1];
+      const headKey = seed === 1 || seed === 2 ? 'seed1' : seed === 3 ? 'division' : 'playoff';
+      const Pl = ['Make playoffs', o.playoff], B = ['First-round bye', o.bye], Dv = ['Win ' + t.divisionName, o.division], S1 = ['1 seed', o.seed1];
+      const stats = seed && seed <= 2 ? [B, Dv, Pl] : seed === 3 ? [Pl, B, S1] : [Dv, B, S1];
       const m = seed && seed <= 2 ? 1 : 0, stakeTxt = m ? 'bye chances' : 'playoff chances';
       const games = o.ownGames.map(g => ({ ...g, swing: g.ifWin[m] - g.ifLoss[m] }));
       const big = games.slice().sort((a, b) => b.swing - a.swing).slice(0, 3).sort((a, b) => a.week - b.week);
@@ -179,24 +194,36 @@
       const games_left = t.w + t.l + t.t + o.ownGames.length;
       const projL = Math.max(0, games_left - o.projW - t.t);
       return `<div class="odds">
-        <div class="ohead"><b>${fp(head[1])}</b><span>${esc(head[0])}</span></div>
-        <div class="ostats">${stats.map(x => `<div><b>${fp(x[1])}</b><span>${esc(x[0])}</span></div>`).join('')}</div>
+        <div class="ohead"><b>${fp(head[1])}</b>${dlt(id, headKey, head[1])}<span>${esc(head[0])}</span></div>
+        <div class="ostats">${stats.map(x => `<div><b>${fp(x[1])} ${dlt(id, oddsKey[x[0]] || 'division', x[1])}</b><span>${esc(x[0])}</span></div>`).join('')}</div>
         <h4>Where they finish</h4><div class="dist">${dist}</div>
         <p class="onote">Projected record about ${o.projW.toFixed(1)}–${projL.toFixed(1)}${t.t ? `–${t.t}` : ''}${o.sosRank ? ` · remaining schedule is the ${o.sosRank === 1 ? 'toughest' : o.sosRank === 12 ? 'easiest' : ord(o.sosRank) + ' toughest'} in the league` : ''}</p>
         ${big.length ? `<h4>Biggest games <small>their ${stakeTxt} after a win or loss</small></h4><ul class="glist">${big.map(gameRow).join('')}</ul>` : ''}
         ${watch ? `<h4>Games to watch <small>other results that move their ${stakeTxt}</small></h4><ul class="wlist">${watch}</ul>` : ''}
         <p class="onote">From ${(d.odds.model.sims).toLocaleString()} simulated finishes of weeks ${d.weeksPlayed + 1}–${d.lastRegularSeasonWeek}, using each team’s scoring so far and the by-law tiebreaks.</p>
-        ${games.length > big.length ? `<details class="all"><summary>All ${games.length} remaining games</summary><ul class="glist">${games.map(gameRow).join('')}</ul></details>` : ''}
+        ${fullSchedule(id, games, gameRow)}
       </div>`;
+    }
+    // the team's whole regular season: results so far, then the games left (with what each one means)
+    function fullSchedule(id, left, gameRow) {
+      const played = (d.games || []).filter(g => g[1] === id || g[3] === id).map(g => {
+        const me = g[1] === id, mine = me ? g[2] : g[4], theirs = me ? g[4] : g[2], opp = me ? g[3] : g[1];
+        const r = mine > theirs ? 'W' : mine < theirs ? 'L' : 'T';
+        return { week: g[0], html: `<li class="done"><div class="gl"><b class="wk">Wk ${g[0]}</b><span class="vs">vs</span>${chip(opp)}<span class="res ${r}">${r} ${pts(mine)}–${pts(theirs)}</span></div></li>` };
+      });
+      const rows = played.concat(left.map(g => ({ week: g.week, html: gameRow(g) }))).sort((a, b) => a.week - b.week);
+      if (!rows.length) return '';
+      return `<details class="all"><summary>Full schedule <small>${played.length} played · ${left.length} to go</small></summary><ul class="glist">${rows.map(r => r.html).join('')}</ul></details>`;
     }
     const tmWrap = (id, rowCls, inner, seed) => {
       const open = state.open.has(id);
       return `<div class="tm${open ? ' open' : ''}"><button type="button" class="${rowCls}" data-odds="${id}" aria-expanded="${open}">${inner}</button>${open ? oddsPanel(id, seed) : ''}</div>`;
     };
+    const rowOdds = id => O && O[id] ? ` · <span class="ro">${fp(O[id].playoff)} playoffs ${dlt(id, 'playoff', O[id].playoff)}</span>` : '';
     const seedRows = seeds.map(s => {
       const t = by[s.id];
       return tmWrap(s.id, `seed${s.seed <= 2 ? ' bye' : ''}`, `<span class="n">${s.seed}</span>${chip(s.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
-        <span class="via">${viaTxt(s)} · ${pts(t.pf)} pts</span>`, s.seed);
+        <span class="via">${viaTxt(s)} · ${pts(t.pf)} pts${rowOdds(s.id)}</span>`, s.seed);
     }).join('');
 
     const g = (a, b, lbl) => `<div class="game">${lbl ? `<div class="lbl">${lbl}</div>` : ''}${[a, b].map(x =>
@@ -217,7 +244,7 @@
         const gb = ((s5.w - t.w) + (t.l - s5.l)) / 2;
         const apb = s6.allPlayW - t.allPlayW;
         return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
-          <span class="via">${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts</span>`, null);
+          <span class="via">${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts${rowOdds(t.id)}</span>`, null);
       }).join('');
 
     /* the last three teams: their odds plus a weekly pep talk */
@@ -238,7 +265,7 @@
       const apb = s6.allPlayW - t.allPlayW;
       const o = O && O[t.id];
       const [q, who] = PEP[(d.weeksPlayed * 3 + i) % PEP.length];
-      const odds = o ? (o.playoff >= 0.5 ? `<b>${fp(o.playoff)}</b> playoff odds` : '<b>&lt;1%</b> playoff odds · miracle territory') : '';
+      const odds = o ? (o.playoff >= 0.5 ? `<b>${fp(o.playoff)}</b> playoff odds ${dlt(t.id, 'playoff', o.playoff)}` : '<b>&lt;1%</b> playoff odds · miracle territory') : '';
       return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
         <span class="via">${odds ? odds + ' · ' : ''}${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`}</span>
         <span class="pep">“${esc(q)}” <span class="who">— ${esc(who)}</span></span>`, null);
@@ -258,43 +285,52 @@
         </tbody></table></div></div>`;
     }).join('');
 
-    const nm = id => (by[id] || {}).name || id;
-    const basis = Object.fromEntries(d.draftOrder.map(p => [p.id, p]));
-    const rounds = d.draftRounds || { 1: d.draftOrder.map(p => ({ pick: p.pick, id: p.id, owner: p.owner || p.id })) };
-    const rnd = rounds[state.round] ? state.round : '1';
-    const order = rounds[rnd].map(p => {
-      const owner = p.owner || p.id, traded = owner !== p.id, b = basis[p.id] || {}, t = by[p.id];
-      let why;
-      if (rnd === '1') {
-        why = p.pick <= 6 ? `Lowest potential points (${pts(t.pp)})${b.tiebreak ? ` · tiebreak on ${b.tiebreak}` : ''}`
-                          : (b.basis || '').charAt(0).toUpperCase() + (b.basis || '').slice(1);
-        if (traded) why = `Via ${nm(p.id)} · ${why.charAt(0).toLowerCase() + why.slice(1)}`;
-      } else {
-        why = traded ? `Via ${nm(p.id)}` : 'Own pick';
-      }
-      return `<li class="${p.pick > 6 ? 'po' : ''}${traded ? ' traded' : ''}"><span class="pk">${rnd}.${String(p.pick).padStart(2, '0')}</span>${chip(owner)}<span class="why">${esc(why)}</span></li>`;
+    // the all-play 6 seed: best all-play record among teams that aren't division winners or wild cards
+    const top5 = new Set(seeds.slice(0, 5).map(s => s.id));
+    const sixRace = d.standings.filter(t => !top5.has(t.id)).sort((a, b) => b.allPlayW - a.allPlayW || b.pf - a.pf);
+    const lead = sixRace[0];
+    const sixRows = sixRace.slice(0, 5).map((t, i) => {
+      const gap = lead.allPlayW - t.allPlayW, o = O && O[t.id];
+      return `<div class="six${i === 0 ? ' hold' : ''}"><span class="n">${i === 0 ? '6' : ''}</span>${chip(t.id)}
+        <span class="ap"><b>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</b><small>${i === 0 ? 'holds the 6 seed' : gap ? `${gap} behind` : 'tied'}</small></span>
+        <span class="sx">${o ? `<b>${fp(o.seeds[5])}</b>${dlt(t.id, 'seed6', o.seeds[5])}<small>chance at 6</small>` : ''}</span></div>`;
     }).join('');
-    const tradedCount = r => (rounds[r] || []).filter(p => p.owner !== p.id).length;
-    const rtabs = Object.keys(rounds).map(r => `<button type="button" class="rtab" data-round="${r}" aria-pressed="${r === rnd}">Round ${r}${tradedCount(r) ? ` <span class="tc">${tradedCount(r)} traded</span>` : ''}</button>`).join('');
-    const ownNote = d.pickOwnersKnown ? 'traded picks show their current owner' : 'pick trades not loaded yet';
 
-    return `
-      <div class="pagehead"><h1>League Now</h1>
-        <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}</span></div>
+    // Power Rankings: MFL's power rating for now (our own formula comes later)
+    const pr = d.standings.slice().sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99));
+    const hasPwr = pr.some(t => t.pwr);
+    const powerRows = pr.map((t, i) => `<tr><td class="pr-n">${t.pwrRank || i + 1}</td><td class="pr-mv">${rankMove(t.id, 'pwrRank', t.pwrRank)}</td>
+      <td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true })}</td>
+      <td><b>${t.pwr ? t.pwr.toFixed(2) : '—'}</b></td><td>${t.w}-${t.l}${t.t ? '-' + t.t : ''}</td><td>${pts(t.pf)}</td><td class="hide-sm">${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('');
+
+    const sub = (location.hash.split('/')[1] || '');
+    const nav = `<nav class="rf-sub seg now-sub">${[['', 'Standings'], ['power', 'Power Rankings'], ['playoffs', 'Playoff Picture']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    const headTxt = `<div class="pagehead"><h1>League Now</h1>
+        <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
+
+    if (sub === 'power') return headTxt + `
+      <section><h2 class="sec">Power Rankings <small>MFL’s power rating for now; our own formula is coming</small></h2>
+      ${hasPwr ? `<div class="card tbl-wrap"><table class="tbl pr-tbl"><thead><tr><th>#</th><th><span class="sr">Change</span></th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th title="MFL power rating">Rating</th><th>Record</th><th>PF</th><th class="hide-sm">All-play</th><th class="hide-sm">Strk</th></tr></thead><tbody>${powerRows}</tbody></table></div>`
+        : '<div class="card soon"><p>Power rankings fill in after the next weekly refresh.</p></div>'}
+      ${P ? '' : '<p class="rf-foot">Movement arrows start with the second weekly refresh that has rankings saved.</p>'}</section>`;
+
+    if (sub === 'playoffs') return headTxt + `
       <div class="grid2">
-        <section><h2 class="sec">Playoff picture <small>if the season ended today${O ? ' · tap a team for its odds' : ''}</small></h2>
+        <section><h2 class="sec">Playoff picture <small>if the season ended today${O ? ' · tap a team for its odds and schedule' : ''}</small></h2>
           <div class="card seeds">${seedRows}</div>
           <h2 class="sec" style="margin-top:16px">On the bubble</h2>
           <div class="card seeds">${bubble}</div>
           ${longshots ? `<h2 class="sec" style="margin-top:16px">Long shots <small>still breathing, technically</small></h2>
           <div class="card seeds">${longshots}</div>` : ''}
         </section>
-        <section><h2 class="sec">Bracket</h2><div class="card">${bracket}</div></section>
-      </div>
-      <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div></section>
-      <section><h2 class="sec">Projected ${esc(d.draftYear || '')} rookie draft order <small>order follows the standings; picks 7–12 assume higher seeds win · ${ownNote}</small></h2>
-        <div class="rtabs" role="group" aria-label="Draft round">${rtabs}</div>
-        <ol class="card order">${order}</ol></section>`;
+        <section><h2 class="sec">Bracket</h2><div class="card">${bracket}</div>
+          <h2 class="sec" style="margin-top:16px">All-play 6 seed race <small>most all-play wins among everyone not in seeds 1–5</small></h2>
+          <div class="card sixrace">${sixRows}</div>
+          <p class="rf-foot">All-play counts a win against every team you outscored that week. Ties on all-play wins go to total points, then record.</p></section>
+      </div>`;
+
+    return headTxt + `
+      <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div></section>`;
   }
 
   /* ---------- By-Laws ---------- */

@@ -261,7 +261,8 @@ def build(folder):
         gp = w + l + tie
         t.update({'w': w, 'l': l, 't': tie, 'pct': round((w + 0.5 * tie) / gp, 3) if gp else 0.0,
                   'pf': float(s.get('pf', 0)), 'pa': float(s.get('pa', 0)), 'pp': float(s.get('pp', 0)),
-                  'allPlayW': apw, 'allPlayL': apl, 'allPlayT': apt, 'streak': s.get('strk', '')})
+                  'allPlayW': apw, 'allPlayL': apl, 'allPlayT': apt, 'streak': s.get('strk', ''),
+                  'pwr': float(s.get('pwr') or 0)})   # MFL's power rating (Power Rankings tab, for now)
 
     # head-to-head results from scored regular-season games
     games, remaining, weeks_played = [], [], 0
@@ -342,6 +343,8 @@ def build(folder):
         table.append(dict(t, divisionName=div_name.get(t['division'], ''), divisionRank=div_rank.get(t['id']),
                           seed=seed_of.get(t['id'])))
     table.sort(key=lambda r: (-r['pct'], -r['pf']))
+    for i, r in enumerate(sorted(table, key=lambda r: -r['pwr']), 1):
+        r['pwrRank'] = i
 
     return {
         'season': league.get('name', ''),
@@ -356,9 +359,25 @@ def build(folder):
         'draftRounds': rounds,
         'pickOwnersKnown': bool(owners),
         'odds': simulate(teams, games, [g for g in remaining if g[0] > weeks_played], divisions) if remaining else None,
+        # every regular-season game: played [week, a, scoreA, b, scoreB] and still to play [week, a, b]
+        'games': [list(g) for g in games],
+        'upcoming': [list(g) for g in remaining if g[0] > weeks_played],
         'notes': ['Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.',
                   'Picks 7-12 are projected by seed until the playoffs are played.'],
     }
+
+
+def snapshot(data):
+    """What each team looked like this week: playoff odds, seed, standings place and power rank."""
+    odds = (data.get('odds') or {}).get('teams') or {}
+    seed = {x['id']: x['seed'] for x in data['seeds']}
+    out = {}
+    for i, t in enumerate(data['standings'], 1):
+        o = odds.get(t['id']) or {}
+        out[t['id']] = {'rank': i, 'seed': seed.get(t['id']), 'pwrRank': t.get('pwrRank'), 'allPlayW': t['allPlayW'],
+                        'playoff': o.get('playoff'), 'bye': o.get('bye'), 'division': o.get('division'),
+                        'seed1': o.get('seed1'), 'seed6': (o.get('seeds') or [None] * 7)[5]}
+    return out
 
 
 def main():
@@ -374,6 +393,15 @@ def main():
     data['prevDraftOrder'] = {'week': max(prev), 'order': hist['weeks'][str(max(prev))]} if prev else None
     with open(hist_path, 'w') as f:
         json.dump(hist, f, indent=1)
+        f.write('\n')
+    # week-by-week snapshot of odds, seeds and power ranks, so pages can show what moved since last week
+    snap_path = os.path.join(os.path.dirname(out), 'league-now-history.json')
+    snaps = json.load(open(snap_path)) if os.path.exists(snap_path) else {'weeks': {}}
+    snaps['weeks'][str(wk)] = snapshot(data)
+    earlier = [int(w) for w in snaps['weeks'] if int(w) < wk]
+    data['prev'] = {'week': max(earlier), 'teams': snaps['weeks'][str(max(earlier))]} if earlier else None
+    with open(snap_path, 'w') as f:
+        json.dump(snaps, f, indent=1)
         f.write('\n')
     meta_path = os.path.join(folder, '_meta.json')
     if os.path.exists(meta_path):

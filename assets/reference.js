@@ -355,7 +355,7 @@ window.FBPRef = (() => {
         <div class="round"><h3>Round 1 · week ${br.round1_week}</h3>${br.round1_games.map(g => game(g, y)).join('')}<p class="rf-foot">Byes: ${br.byes.map(b => esc(nm(b, y))).join(', ')}</p></div>
         <div class="round"><h3>Semifinals · week ${br.semi_week}</h3>${br.semifinal_games.length ? br.semifinal_games.map(g => game(g, y)).join('') : '<p class="rf-foot">To be played.</p>'}</div>
         <div class="round"><h3>Championship · week ${br.championship_week}</h3>${br.championship_game ? game(br.championship_game, y) : '<p class="rf-foot">To be played.</p>'}</div>
-      </div>` : `<div class="card rf-pad"><p class="rf-note">${live ? 'The bracket fills in here once the playoffs start. The live picture is on <a href="#now">League Now</a>.' : 'No bracket on record for this season.'}</p></div>`}</section>
+      </div>` : `<div class="card rf-pad"><p class="rf-note">${live ? 'The bracket fills in here once the playoffs start. The live picture is on <a href="#now/playoffs">League Now · Playoff Picture</a>.' : 'No bracket on record for this season.'}</p></div>`}</section>
       <section>${sub([[base, 'Weekly results'], [base + '/draft', 'Rookie draft'], [base + '/auction', 'Auction']], tab === 'results' ? base : base + '/' + tab, true)}<div class="rf-body">${body}</div></section>`;
   }
 

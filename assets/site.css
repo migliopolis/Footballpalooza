@@ -737,3 +737,24 @@ tr.dh-div td{padding:0!important}
    luck awards; on narrower screens it goes last */
 @media (min-width:1001px){.aw-award.k-trade{grid-column:3;grid-row:span 2}}
 @media (max-width:1000px){.aw-award.k-trade{order:1}}
+/* ---------- League Now sub-tabs ---------- */
+.now-sub{margin:-6px 0 14px}
+.dl{display:inline-block;margin-left:4px;font:700 .68rem var(--mono);color:var(--muted);vertical-align:1px;white-space:nowrap}
+.dl.up{color:var(--ok)}.dl.dn{color:var(--red)}
+.ohead .dl{font-size:.85rem}
+.seed .via .ro{white-space:nowrap;color:var(--fg)}
+.glist li.done{background:var(--surface)}
+.glist .res{margin-left:auto;font:600 .8rem var(--mono);white-space:nowrap}
+.glist .res.W{color:var(--ok)}.glist .res.L{color:var(--red)}
+details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
+.sixrace{padding:2px 0}
+.six{display:grid;grid-template-columns:1.5rem minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:10px 12px 10px 8px;border-bottom:1px solid var(--line)}
+.six:last-child{border-bottom:0}
+.six.hold{background:var(--sky-soft)}
+.six .n{font:700 1.4rem/1 var(--display);color:var(--accent);text-align:center}
+.six .ap,.six .sx{display:flex;flex-direction:column;align-items:flex-end;text-align:right;font-variant-numeric:tabular-nums}
+.six .ap small,.six .sx small{font-size:.7rem;color:var(--muted);white-space:nowrap}
+.six .sx{min-width:4.2rem}.six .sx b{font:700 1rem var(--display)}
+.pr-tbl .pr-n{font:700 1.15rem var(--display);color:var(--accent);width:1px}
+.pr-tbl .pr-mv{width:1px;padding-left:0}
+.pr-tbl .pr-mv .dl{margin:0}
