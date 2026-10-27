@@ -693,7 +693,7 @@ tr.dh-div td{padding:0!important}
 .aw-chg.up{background:#d8efe1;color:#165c34}.aw-chg.down{background:#f3d9da;color:#8a1c24}
 .rf-tile{position:relative;overflow:hidden}
 .rf-tile > :not(.rf-tlogo){position:relative;z-index:1}
-.rf-tlogo{position:absolute;width:calc(170px * var(--tl, 1));height:calc(170px * var(--tl, 1));object-fit:contain;right:calc(-170px * var(--tl, 1) * var(--tlx, .5));bottom:calc(-170px * var(--tl, 1) * var(--tly, .5));opacity:.32;pointer-events:none}
+.rf-tlogo{position:absolute;right:0;bottom:0;height:calc(150% * var(--tl, 1));width:auto;aspect-ratio:1;object-fit:contain;transform:translate(calc(var(--tlx, .5) * 100%),calc(var(--tly, .5) * 100%));opacity:.32;pointer-events:none}
 .rf-tile.lg small{padding-right:52px}
 .rf-tile.tm{background:var(--tile-bg);border-color:transparent}
 .rf-tile.tm span,.rf-tile.tm small{color:var(--tile-fg);opacity:.85}

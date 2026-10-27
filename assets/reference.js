@@ -32,7 +32,7 @@ window.FBPRef = (() => {
   const tl = (fr, y, label) => `<a class="rf-tm" href="#reference/f-${fr}">${X.chip(fr, { name: label || nm(fr, y) })}</a>`;
   // a stat tile's team: its logo, big and pushed off the bottom-right corner so only the top-left quarter shows
   // per-logo tweaks [size, how far off the corner]: wide logos with lots of empty space need more showing
-  const TILE_FIT = { '0009': [1.2, 0.18, 0.42] };   // [size, off the right edge, off the bottom edge]
+  const TILE_FIT = { '0009': [1, 0.2, 0.4], '0008': [1, 0.25, 0.3] };   // [size, off the right edge, off the bottom edge]
   const tileLogo = fr => { const t = fr && X.teams[fr], f = TILE_FIT[fr]; return t && t.logo ? `<img class="rf-tlogo" src="${t.logo}" alt="" loading="lazy"${f ? ` style="--tl:${f[0]};--tlx:${f[1]};--tly:${f[2]}"` : ''}>` : ''; };
   // the tile in the team's colors (same rule as the franchise banner: very light primaries swap with the secondary)
   const tileStyle = fr => {
