@@ -981,6 +981,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17696",
+   "mflName": "Carsen Ryan",
+   "pos": "TE",
+   "team": "CLE",
+   "fbp": null,
+   "espn": "4685540",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "17724",
    "mflName": "Dae'Quan Wright",
    "pos": "TE",
@@ -1005,15 +1014,6 @@
    "team": "PIT",
    "fbp": null,
    "espn": "3912092",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16919",
-   "mflName": "E.J. Jenkins",
-   "pos": "TE",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4248557",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

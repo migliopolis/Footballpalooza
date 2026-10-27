@@ -1,7 +1,7 @@
 {
  "season": "FOOTBALLPALOOZA 2026",
- "generated": "2026-10-27T05:28:48+00:00",
- "weeksPlayed": 6,
+ "generated": "2026-10-27T05:55:57+00:00",
+ "weeksPlayed": 7,
  "lastRegularSeasonWeek": 14,
  "divisions": [
   {
@@ -22,309 +22,309 @@
    "id": "0009",
    "name": "Mailing It In",
    "division": "00",
-   "w": 4,
+   "w": 5,
    "l": 1,
    "t": 1,
-   "pct": 0.75,
-   "pf": 748.6,
-   "pa": 620.5,
-   "pp": 869.9,
-   "allPlayW": 42,
+   "pct": 0.786,
+   "pf": 895.9,
+   "pa": 759.4,
+   "pp": 1019.0,
+   "allPlayW": 53,
    "allPlayL": 23,
    "allPlayT": 1,
-   "streak": "W4",
-   "pwr": 35.74,
-   "divRecord": "1-1-0",
+   "streak": "W5",
+   "pwr": 38.1,
+   "divRecord": "2-1-0",
    "gb": 0.0,
-   "avgPf": 124.8,
-   "gamesLeft": 8,
-   "sos": 0.542,
+   "avgPf": 128.0,
+   "gamesLeft": 7,
+   "sos": 0.51,
    "divisionName": "West",
    "divisionRank": 1,
    "seed": 1,
    "pwrRank": 2
   },
   {
-   "id": "0005",
-   "name": "The Fist of the Magi",
-   "division": "01",
-   "w": 4,
-   "l": 2,
-   "t": 0,
-   "pct": 0.667,
-   "pf": 794.9,
-   "pa": 711.4,
-   "pp": 826.0,
-   "allPlayW": 48,
-   "allPlayL": 18,
-   "allPlayT": 0,
-   "streak": "L1",
-   "pwr": 33.03,
-   "divRecord": "1-1-0",
-   "gb": 0.0,
-   "avgPf": 132.5,
-   "gamesLeft": 8,
-   "sos": 0.458,
-   "divisionName": "Central",
-   "divisionRank": 1,
-   "seed": 2,
-   "pwrRank": 5
-  },
-  {
-   "id": "0001",
-   "name": "Thots & Players",
-   "division": "00",
-   "w": 4,
-   "l": 2,
-   "t": 0,
-   "pct": 0.667,
-   "pf": 781.1,
-   "pa": 718.0,
-   "pp": 926.4,
-   "allPlayW": 46,
-   "allPlayL": 20,
-   "allPlayT": 0,
-   "streak": "W1",
-   "pwr": 39.19,
-   "divRecord": "2-0-0",
-   "gb": 0.5,
-   "avgPf": 130.2,
-   "gamesLeft": 8,
-   "sos": 0.511,
-   "divisionName": "West",
-   "divisionRank": 2,
-   "seed": 4,
-   "pwrRank": 1
-  },
-  {
    "id": "0004",
    "name": "Fully Cooked",
    "division": "00",
-   "w": 4,
+   "w": 5,
    "l": 2,
    "t": 0,
-   "pct": 0.667,
-   "pf": 780.1,
-   "pa": 689.2,
-   "pp": 864.3,
-   "allPlayW": 49,
-   "allPlayL": 17,
+   "pct": 0.714,
+   "pf": 888.7,
+   "pa": 765.3,
+   "pp": 995.8,
+   "allPlayW": 55,
+   "allPlayL": 22,
    "allPlayT": 0,
-   "streak": "W2",
-   "pwr": 34.94,
-   "divRecord": "1-1-0",
+   "streak": "W3",
+   "pwr": 36.43,
+   "divRecord": "2-1-0",
    "gb": 0.5,
-   "avgPf": 130.0,
-   "gamesLeft": 8,
-   "sos": 0.458,
+   "avgPf": 127.0,
+   "gamesLeft": 7,
+   "sos": 0.469,
    "divisionName": "West",
-   "divisionRank": 3,
-   "seed": 5,
+   "divisionRank": 2,
+   "seed": 4,
    "pwrRank": 4
   },
   {
    "id": "0002",
    "name": "Bullish on da Bears",
    "division": "02",
-   "w": 4,
+   "w": 5,
    "l": 2,
    "t": 0,
-   "pct": 0.667,
-   "pf": 603.5,
-   "pa": 653.5,
-   "pp": 724.3,
-   "allPlayW": 25,
-   "allPlayL": 41,
+   "pct": 0.714,
+   "pf": 706.5,
+   "pa": 743.8,
+   "pp": 837.3,
+   "allPlayW": 30,
+   "allPlayL": 47,
    "allPlayT": 0,
-   "streak": "L1",
-   "pwr": 28.96,
-   "divRecord": "2-0-0",
+   "streak": "W1",
+   "pwr": 31.0,
+   "divRecord": "3-0-0",
    "gb": 0.0,
-   "avgPf": 100.6,
-   "gamesLeft": 8,
+   "avgPf": 100.9,
+   "gamesLeft": 7,
    "sos": 0.459,
    "divisionName": "East",
    "divisionRank": 1,
-   "seed": 3,
+   "seed": 2,
    "pwrRank": 8
+  },
+  {
+   "id": "0001",
+   "name": "Thots & Players",
+   "division": "00",
+   "w": 4,
+   "l": 3,
+   "t": 0,
+   "pct": 0.571,
+   "pf": 920.0,
+   "pa": 865.3,
+   "pp": 1087.2,
+   "allPlayW": 55,
+   "allPlayL": 22,
+   "allPlayT": 0,
+   "streak": "L1",
+   "pwr": 39.6,
+   "divRecord": "2-1-0",
+   "gb": 1.5,
+   "avgPf": 131.4,
+   "gamesLeft": 7,
+   "sos": 0.49,
+   "divisionName": "West",
+   "divisionRank": 3,
+   "seed": 5,
+   "pwrRank": 1
+  },
+  {
+   "id": "0005",
+   "name": "The Fist of the Magi",
+   "division": "01",
+   "w": 4,
+   "l": 3,
+   "t": 0,
+   "pct": 0.571,
+   "pf": 868.9,
+   "pa": 840.5,
+   "pp": 918.9,
+   "allPlayW": 50,
+   "allPlayL": 27,
+   "allPlayT": 0,
+   "streak": "L2",
+   "pwr": 31.25,
+   "divRecord": "1-2-0",
+   "gb": 0.0,
+   "avgPf": 124.1,
+   "gamesLeft": 7,
+   "sos": 0.47,
+   "divisionName": "Central",
+   "divisionRank": 2,
+   "seed": 6,
+   "pwrRank": 6
   },
   {
    "id": "0010",
    "name": "Hold Timers",
    "division": "01",
-   "w": 3,
+   "w": 4,
    "l": 3,
    "t": 0,
-   "pct": 0.5,
-   "pf": 725.4,
-   "pa": 609.0,
-   "pp": 785.4,
-   "allPlayW": 39,
-   "allPlayL": 27,
+   "pct": 0.571,
+   "pf": 854.5,
+   "pa": 683.0,
+   "pp": 927.5,
+   "allPlayW": 47,
+   "allPlayL": 30,
+   "allPlayT": 0,
+   "streak": "W2",
+   "pwr": 32.35,
+   "divRecord": "2-1-0",
+   "gb": 0.0,
+   "avgPf": 122.1,
+   "gamesLeft": 7,
+   "sos": 0.48,
+   "divisionName": "Central",
+   "divisionRank": 1,
+   "seed": 3,
+   "pwrRank": 5
+  },
+  {
+   "id": "0007",
+   "name": "MR. FROBOT",
+   "division": "01",
+   "w": 3,
+   "l": 4,
+   "t": 0,
+   "pct": 0.429,
+   "pf": 887.7,
+   "pa": 890.0,
+   "pp": 1028.0,
+   "allPlayW": 49,
+   "allPlayL": 28,
    "allPlayT": 0,
    "streak": "W1",
-   "pwr": 29.8,
-   "divRecord": "1-1-0",
+   "pwr": 37.62,
+   "divRecord": "2-1-0",
    "gb": 1.0,
-   "avgPf": 120.9,
-   "gamesLeft": 8,
-   "sos": 0.511,
+   "avgPf": 126.8,
+   "gamesLeft": 7,
+   "sos": 0.49,
    "divisionName": "Central",
    "divisionRank": 3,
    "seed": null,
-   "pwrRank": 7
+   "pwrRank": 3
   },
   {
    "id": "0003",
    "name": "Hauk Tua",
    "division": "01",
    "w": 3,
-   "l": 3,
+   "l": 4,
    "t": 0,
-   "pct": 0.5,
-   "pf": 681.8,
-   "pa": 675.7,
-   "pp": 827.6,
-   "allPlayW": 32,
-   "allPlayL": 34,
+   "pct": 0.429,
+   "pf": 800.2,
+   "pa": 815.0,
+   "pp": 948.0,
+   "allPlayW": 39,
+   "allPlayL": 38,
    "allPlayT": 0,
-   "streak": "L1",
-   "pwr": 31.29,
-   "divRecord": "1-1-0",
+   "streak": "L2",
+   "pwr": 31.16,
+   "divRecord": "1-2-0",
    "gb": 1.0,
-   "avgPf": 113.6,
-   "gamesLeft": 8,
-   "sos": 0.469,
+   "avgPf": 114.3,
+   "gamesLeft": 7,
+   "sos": 0.5,
    "divisionName": "Central",
+   "divisionRank": 4,
+   "seed": null,
+   "pwrRank": 7
+  },
+  {
+   "id": "0011",
+   "name": "Wholey Club",
+   "division": "02",
+   "w": 3,
+   "l": 4,
+   "t": 0,
+   "pct": 0.429,
+   "pf": 632.6,
+   "pa": 824.2,
+   "pp": 830.6,
+   "allPlayW": 17,
+   "allPlayL": 60,
+   "allPlayT": 0,
+   "streak": "W1",
+   "pwr": 26.72,
+   "divRecord": "2-1-0",
+   "gb": 2.0,
+   "avgPf": 90.4,
+   "gamesLeft": 7,
+   "sos": 0.5,
+   "divisionName": "East",
    "divisionRank": 2,
    "seed": null,
-   "pwrRank": 6
+   "pwrRank": 9
   },
   {
    "id": "0008",
    "name": "Son of Tinactin",
    "division": "02",
    "w": 2,
-   "l": 3,
+   "l": 4,
    "t": 1,
-   "pct": 0.417,
-   "pf": 544.6,
-   "pa": 595.6,
-   "pp": 694.4,
-   "allPlayW": 17,
-   "allPlayL": 48,
+   "pct": 0.357,
+   "pf": 634.9,
+   "pa": 698.6,
+   "pp": 797.5,
+   "allPlayW": 21,
+   "allPlayL": 55,
    "allPlayT": 1,
-   "streak": "W2",
-   "pwr": 24.35,
-   "divRecord": "0-2-0",
-   "gb": 1.5,
-   "avgPf": 90.8,
-   "gamesLeft": 8,
-   "sos": 0.521,
+   "streak": "L1",
+   "pwr": 24.01,
+   "divRecord": "0-3-0",
+   "gb": 2.5,
+   "avgPf": 90.7,
+   "gamesLeft": 7,
+   "sos": 0.51,
    "divisionName": "East",
-   "divisionRank": 2,
+   "divisionRank": 3,
    "seed": null,
    "pwrRank": 12
-  },
-  {
-   "id": "0007",
-   "name": "MR. FROBOT",
-   "division": "01",
-   "w": 2,
-   "l": 4,
-   "t": 0,
-   "pct": 0.333,
-   "pf": 748.4,
-   "pa": 771.6,
-   "pp": 867.1,
-   "allPlayW": 39,
-   "allPlayL": 27,
-   "allPlayT": 0,
-   "streak": "L2",
-   "pwr": 34.96,
-   "divRecord": "1-1-0",
-   "gb": 2.0,
-   "avgPf": 124.7,
-   "gamesLeft": 8,
-   "sos": 0.5,
-   "divisionName": "Central",
-   "divisionRank": 4,
-   "seed": 6,
-   "pwrRank": 3
   },
   {
    "id": "0012",
    "name": "Sour Grapes",
    "division": "00",
    "w": 2,
-   "l": 4,
+   "l": 5,
    "t": 0,
-   "pct": 0.333,
-   "pf": 603.3,
-   "pa": 694.3,
-   "pp": 762.7,
-   "allPlayW": 24,
-   "allPlayL": 42,
+   "pct": 0.286,
+   "pf": 679.4,
+   "pa": 802.9,
+   "pp": 856.3,
+   "allPlayW": 27,
+   "allPlayL": 50,
    "allPlayT": 0,
-   "streak": "W1",
-   "pwr": 25.84,
-   "divRecord": "0-2-0",
-   "gb": 2.5,
-   "avgPf": 100.5,
-   "gamesLeft": 8,
-   "sos": 0.594,
+   "streak": "L1",
+   "pwr": 24.86,
+   "divRecord": "0-3-0",
+   "gb": 3.5,
+   "avgPf": 97.1,
+   "gamesLeft": 7,
+   "sos": 0.582,
    "divisionName": "West",
    "divisionRank": 4,
    "seed": null,
    "pwrRank": 10
   },
   {
-   "id": "0011",
-   "name": "Wholey Club",
-   "division": "02",
-   "w": 2,
-   "l": 4,
-   "t": 0,
-   "pct": 0.333,
-   "pf": 562.4,
-   "pa": 754.2,
-   "pp": 750.3,
-   "allPlayW": 16,
-   "allPlayL": 50,
-   "allPlayT": 0,
-   "streak": "L2",
-   "pwr": 26.37,
-   "divRecord": "1-1-0",
-   "gb": 2.0,
-   "avgPf": 93.7,
-   "gamesLeft": 8,
-   "sos": 0.469,
-   "divisionName": "East",
-   "divisionRank": 3,
-   "seed": null,
-   "pwrRank": 9
-  },
-  {
    "id": "0006",
    "name": "Jesus Christ College",
    "division": "02",
    "w": 1,
-   "l": 5,
+   "l": 6,
    "t": 0,
-   "pct": 0.167,
-   "pf": 590.9,
-   "pa": 672.0,
-   "pp": 792.7,
+   "pct": 0.143,
+   "pf": 660.9,
+   "pa": 742.2,
+   "pp": 896.8,
    "allPlayW": 18,
-   "allPlayL": 48,
+   "allPlayL": 59,
    "allPlayT": 0,
-   "streak": "L5",
-   "pwr": 25.66,
-   "divRecord": "1-1-0",
-   "gb": 3.0,
-   "avgPf": 98.5,
-   "gamesLeft": 8,
-   "sos": 0.511,
+   "streak": "L6",
+   "pwr": 24.61,
+   "divRecord": "1-2-0",
+   "gb": 4.0,
+   "avgPf": 94.4,
+   "gamesLeft": 7,
+   "sos": 0.541,
    "divisionName": "East",
    "divisionRank": 4,
    "seed": null,
@@ -340,35 +340,35 @@
    "seed": 1
   },
   {
-   "id": "0005",
-   "via": "division",
-   "tiebreak": "total points",
-   "divisionTiebreak": null,
-   "seed": 2
-  },
-  {
    "id": "0002",
    "via": "division",
    "tiebreak": null,
    "divisionTiebreak": null,
-   "seed": 3
+   "seed": 2
   },
   {
-   "id": "0001",
-   "via": "wild card",
-   "tiebreak": "total points",
-   "seed": 4
+   "id": "0010",
+   "via": "division",
+   "tiebreak": null,
+   "divisionTiebreak": "head-to-head",
+   "seed": 3
   },
   {
    "id": "0004",
    "via": "wild card",
    "tiebreak": null,
+   "seed": 4
+  },
+  {
+   "id": "0001",
+   "via": "wild card",
+   "tiebreak": "total points",
    "seed": 5
   },
   {
-   "id": "0007",
+   "id": "0005",
    "via": "all-play wins",
-   "tiebreak": "total points",
+   "tiebreak": null,
    "seed": 6
   }
  ],
@@ -396,60 +396,60 @@
    "owner": "0012"
   },
   {
-   "id": "0010",
-   "basis": "lowest potential points",
-   "tiebreak": null,
-   "pick": 4,
-   "owner": "0010"
-  },
-  {
    "id": "0006",
    "basis": "lowest potential points",
    "tiebreak": null,
-   "pick": 5,
+   "pick": 4,
    "owner": "0006"
   },
   {
    "id": "0003",
    "basis": "lowest potential points",
    "tiebreak": null,
-   "pick": 6,
+   "pick": 5,
    "owner": "0003"
   },
   {
    "id": "0007",
-   "basis": "seed 6, projected round-1 loser (worse seed)",
+   "basis": "lowest potential points",
    "tiebreak": null,
-   "pick": 7,
+   "pick": 6,
    "owner": "0007"
   },
   {
-   "id": "0004",
-   "basis": "seed 5, projected round-1 loser",
+   "id": "0005",
+   "basis": "seed 6, projected round-1 loser (worse seed)",
    "tiebreak": null,
-   "pick": 8,
-   "owner": "0011"
+   "pick": 7,
+   "owner": "0005"
   },
   {
    "id": "0001",
-   "basis": "seed 4, projected 4th place",
+   "basis": "seed 5, projected round-1 loser",
    "tiebreak": null,
-   "pick": 9,
+   "pick": 8,
    "owner": "0001"
   },
   {
-   "id": "0002",
+   "id": "0004",
+   "basis": "seed 4, projected 4th place",
+   "tiebreak": null,
+   "pick": 9,
+   "owner": "0011"
+  },
+  {
+   "id": "0010",
    "basis": "seed 3, projected 3rd place",
    "tiebreak": null,
    "pick": 10,
-   "owner": "0002"
+   "owner": "0010"
   },
   {
-   "id": "0005",
+   "id": "0002",
    "basis": "seed 2, projected runner-up",
    "tiebreak": null,
    "pick": 11,
-   "owner": "0005"
+   "owner": "0002"
   },
   {
    "id": "0009",
@@ -478,43 +478,43 @@
    },
    {
     "pick": 4,
-    "id": "0010",
-    "owner": "0010"
-   },
-   {
-    "pick": 5,
     "id": "0006",
     "owner": "0006"
    },
    {
-    "pick": 6,
+    "pick": 5,
     "id": "0003",
     "owner": "0003"
    },
    {
-    "pick": 7,
+    "pick": 6,
     "id": "0007",
     "owner": "0007"
    },
    {
-    "pick": 8,
-    "id": "0004",
-    "owner": "0011"
+    "pick": 7,
+    "id": "0005",
+    "owner": "0005"
    },
    {
-    "pick": 9,
+    "pick": 8,
     "id": "0001",
     "owner": "0001"
    },
    {
+    "pick": 9,
+    "id": "0004",
+    "owner": "0011"
+   },
+   {
     "pick": 10,
-    "id": "0002",
-    "owner": "0002"
+    "id": "0010",
+    "owner": "0010"
    },
    {
     "pick": 11,
-    "id": "0005",
-    "owner": "0005"
+    "id": "0002",
+    "owner": "0002"
    },
    {
     "pick": 12,
@@ -540,43 +540,43 @@
    },
    {
     "pick": 4,
-    "id": "0010",
-    "owner": "0010"
-   },
-   {
-    "pick": 5,
     "id": "0006",
     "owner": "0006"
    },
    {
-    "pick": 6,
+    "pick": 5,
     "id": "0003",
     "owner": "0003"
    },
    {
-    "pick": 7,
+    "pick": 6,
     "id": "0007",
     "owner": "0007"
    },
    {
-    "pick": 8,
-    "id": "0004",
-    "owner": "0004"
+    "pick": 7,
+    "id": "0005",
+    "owner": "0005"
    },
    {
-    "pick": 9,
+    "pick": 8,
     "id": "0001",
     "owner": "0012"
    },
    {
+    "pick": 9,
+    "id": "0004",
+    "owner": "0004"
+   },
+   {
     "pick": 10,
-    "id": "0002",
-    "owner": "0007"
+    "id": "0010",
+    "owner": "0010"
    },
    {
     "pick": 11,
-    "id": "0005",
-    "owner": "0005"
+    "id": "0002",
+    "owner": "0007"
    },
    {
     "pick": 12,
@@ -602,43 +602,43 @@
    },
    {
     "pick": 4,
-    "id": "0010",
-    "owner": "0010"
-   },
-   {
-    "pick": 5,
     "id": "0006",
     "owner": "0006"
    },
    {
-    "pick": 6,
+    "pick": 5,
     "id": "0003",
     "owner": "0003"
    },
    {
-    "pick": 7,
+    "pick": 6,
     "id": "0007",
     "owner": "0007"
    },
    {
-    "pick": 8,
-    "id": "0004",
-    "owner": "0004"
+    "pick": 7,
+    "id": "0005",
+    "owner": "0005"
    },
    {
-    "pick": 9,
+    "pick": 8,
     "id": "0001",
     "owner": "0001"
    },
    {
+    "pick": 9,
+    "id": "0004",
+    "owner": "0004"
+   },
+   {
     "pick": 10,
-    "id": "0002",
-    "owner": "0006"
+    "id": "0010",
+    "owner": "0010"
    },
    {
     "pick": 11,
-    "id": "0005",
-    "owner": "0005"
+    "id": "0002",
+    "owner": "0006"
    },
    {
     "pick": 12,
@@ -664,43 +664,43 @@
    },
    {
     "pick": 4,
-    "id": "0010",
-    "owner": "0010"
-   },
-   {
-    "pick": 5,
     "id": "0006",
     "owner": "0006"
    },
    {
-    "pick": 6,
+    "pick": 5,
     "id": "0003",
     "owner": "0003"
    },
    {
-    "pick": 7,
+    "pick": 6,
     "id": "0007",
     "owner": "0006"
    },
    {
-    "pick": 8,
-    "id": "0004",
-    "owner": "0004"
+    "pick": 7,
+    "id": "0005",
+    "owner": "0005"
    },
    {
-    "pick": 9,
+    "pick": 8,
     "id": "0001",
     "owner": "0001"
    },
    {
+    "pick": 9,
+    "id": "0004",
+    "owner": "0004"
+   },
+   {
     "pick": 10,
-    "id": "0002",
-    "owner": "0002"
+    "id": "0010",
+    "owner": "0010"
    },
    {
     "pick": 11,
-    "id": "0005",
-    "owner": "0005"
+    "id": "0002",
+    "owner": "0002"
    },
    {
     "pick": 12,
@@ -718,146 +718,131 @@
     "seed1"
    ],
    "sims": 20000,
-   "leagueAvg": 113.4,
-   "weeklySpread": 24.4,
+   "leagueAvg": 112.3,
+   "weeklySpread": 24.0,
    "note": "Each run plays out the remaining regular season with scores drawn around each team's estimated true average (season average pulled toward the league average) and applies the same seeding and tiebreak rules as the standings."
   },
   "teams": {
    "0001": {
-    "playoff": 91.6,
-    "bye": 39.7,
-    "seed1": 27.2,
-    "division": 40.7,
+    "playoff": 93.3,
+    "bye": 26.1,
+    "seed1": 21.5,
+    "division": 26.6,
     "seeds": [
-     27.2,
-     12.5,
-     0.9,
-     25.0,
-     17.9,
-     8.0,
-     8.4
+     21.5,
+     4.5,
+     0.5,
+     29.0,
+     25.9,
+     11.8,
+     6.7
     ],
-    "projW": 9.3,
-    "sosRank": 11,
+    "projW": 9.1,
+    "sosRank": 12,
     "ownGames": [
-     {
-      "week": 7,
-      "opp": "0009",
-      "winProb": 55,
-      "ifWin": [
-       96.6,
-       54.4,
-       39.4
-      ],
-      "ifLoss": [
-       85.6,
-       22.1,
-       12.5
-      ]
-     },
      {
       "week": 8,
       "opp": "0006",
-      "winProb": 74,
+      "winProb": 80,
       "ifWin": [
-       94.7,
-       45.6,
-       32.5
+       95.5,
+       29.8,
+       25.2
       ],
       "ifLoss": [
-       82.7,
-       23.1,
-       11.9
+       84.2,
+       11.1,
+       6.8
       ]
      },
      {
       "week": 9,
       "opp": "0002",
-      "winProb": 73,
+      "winProb": 76,
       "ifWin": [
-       94.7,
-       46.0,
-       32.9
+       95.7,
+       30.9,
+       26.3
       ],
       "ifLoss": [
-       83.3,
-       23.1,
-       12.1
+       85.7,
+       11.3,
+       6.9
       ]
      },
      {
       "week": 10,
       "opp": "0004",
-      "winProb": 51,
+      "winProb": 54,
       "ifWin": [
-       96.8,
-       61.8,
-       43.5
+       97.1,
+       42.6,
+       35.8
       ],
       "ifLoss": [
-       86.3,
-       17.3,
-       10.5
+       88.7,
+       6.6,
+       4.7
       ]
      },
      {
       "week": 11,
       "opp": "0008",
-      "winProb": 79,
+      "winProb": 82,
       "ifWin": [
-       94.1,
-       44.1,
-       31.2
+       95.1,
+       29.5,
+       24.8
       ],
       "ifLoss": [
-       82.1,
-       23.4,
-       12.2
+       84.7,
+       9.9,
+       6.5
       ]
      },
      {
       "week": 12,
       "opp": "0011",
-      "winProb": 77,
+      "winProb": 82,
       "ifWin": [
-       94.3,
-       44.6,
-       31.7
+       95.2,
+       29.3,
+       24.6
       ],
       "ifLoss": [
-       82.3,
-       23.1,
-       11.9
+       84.1,
+       11.2,
+       7.6
       ]
      },
      {
       "week": 13,
       "opp": "0009",
-      "winProb": 54,
+      "winProb": 53,
       "ifWin": [
-       96.6,
-       54.6,
-       39.5
+       97.2,
+       41.9,
+       35.8
       ],
       "ifLoss": [
-       85.7,
-       22.3,
-       12.7
+       88.8,
+       8.0,
+       5.3
       ]
      },
      {
       "week": 14,
       "opp": "0012",
-      "winProb": 72,
+      "winProb": 78,
       "ifWin": [
-       94.6,
-       45.7,
-       32.7
+       95.6,
+       30.1,
+       25.4
       ],
       "ifLoss": [
-       83.7,
-       24.4,
-       13.0
+       84.9,
+       11.5,
+       7.7
       ]
      }
     ],
@@ -865,203 +850,188 @@
      "playoff": [],
      "bye": [
       {
-       "week": 7,
-       "rootFor": "0012",
-       "against": "0004",
-       "swing": 12.0
+       "week": 8,
+       "rootFor": "0010",
+       "against": "0009",
+       "swing": 10.9
       },
       {
-       "week": 9,
-       "rootFor": "0006",
-       "against": "0004",
-       "swing": 11.2
+       "week": 11,
+       "rootFor": "0005",
+       "against": "0009",
+       "swing": 12.1
       },
       {
-       "week": 13,
-       "rootFor": "0012",
-       "against": "0004",
-       "swing": 11.7
+       "week": 12,
+       "rootFor": "0007",
+       "against": "0009",
+       "swing": 11.5
       }
      ],
      "seed1": [
       {
        "week": 9,
-       "rootFor": "0011",
-       "against": "0005",
+       "rootFor": "0003",
+       "against": "0009",
        "swing": 7.8
       },
       {
-       "week": 10,
-       "rootFor": "0007",
-       "against": "0005",
-       "swing": 8.2
+       "week": 11,
+       "rootFor": "0011",
+       "against": "0004",
+       "swing": 7.1
       },
       {
        "week": 12,
-       "rootFor": "0012",
-       "against": "0005",
+       "rootFor": "0007",
+       "against": "0009",
        "swing": 7.8
       }
      ]
     }
    },
    "0002": {
-    "playoff": 72.2,
-    "bye": 9.3,
-    "seed1": 2.2,
-    "division": 71.8,
+    "playoff": 87.0,
+    "bye": 14.8,
+    "seed1": 3.0,
+    "division": 86.8,
     "seeds": [
-     2.2,
-     7.1,
-     62.5,
-     0.1,
-     0.4,
+     3.0,
+     11.8,
+     72.1,
      0.0,
-     27.8
+     0.1,
+     0.0,
+     13.0
     ],
-    "projW": 7.5,
-    "sosRank": 10,
+    "projW": 8.0,
+    "sosRank": 8,
     "ownGames": [
-     {
-      "week": 7,
-      "opp": "0008",
-      "winProb": 58,
-      "ifWin": [
-       84.6,
-       13.6,
-       3.4
-      ],
-      "ifLoss": [
-       55.3,
-       3.5,
-       0.5
-      ]
-     },
      {
       "week": 8,
       "opp": "0004",
       "winProb": 28,
       "ifWin": [
-       86.1,
-       20.8,
-       6.4
+       94.8,
+       30.4,
+       8.8
       ],
       "ifLoss": [
-       66.9,
-       4.9,
-       0.5
+       84.0,
+       8.8,
+       0.8
       ]
      },
      {
       "week": 9,
       "opp": "0001",
-      "winProb": 27,
+      "winProb": 24,
       "ifWin": [
-       85.7,
-       20.7,
-       6.2
+       95.4,
+       31.1,
+       9.2
       ],
       "ifLoss": [
-       67.1,
-       5.0,
-       0.6
+       84.3,
+       9.5,
+       1.0
       ]
      },
      {
       "week": 10,
       "opp": "0006",
-      "winProb": 52,
+      "winProb": 56,
       "ifWin": [
-       84.7,
-       14.4,
-       3.7
+       94.0,
+       21.6,
+       4.9
       ],
       "ifLoss": [
-       58.8,
-       3.8,
-       0.5
+       78.2,
+       6.1,
+       0.6
       ]
      },
      {
       "week": 11,
       "opp": "0010",
-      "winProb": 34,
+      "winProb": 32,
       "ifWin": [
-       84.9,
-       18.5,
-       4.8
+       94.9,
+       31.2,
+       7.4
       ],
       "ifLoss": [
-       65.6,
-       4.5,
-       0.8
+       83.3,
+       7.1,
+       1.0
       ]
      },
      {
       "week": 12,
       "opp": "0003",
-      "winProb": 39,
+      "winProb": 38,
       "ifWin": [
-       84.5,
-       17.4,
-       4.6
+       94.6,
+       26.7,
+       6.1
       ],
       "ifLoss": [
-       64.3,
-       4.1,
-       0.6
+       82.3,
+       7.5,
+       1.1
       ]
      },
      {
       "week": 13,
       "opp": "0008",
-      "winProb": 58,
+      "winProb": 59,
       "ifWin": [
-       84.5,
-       13.6,
-       3.4
+       94.3,
+       20.9,
+       4.6
       ],
       "ifLoss": [
-       55.2,
-       3.3,
-       0.5
+       76.4,
+       5.8,
+       0.7
       ]
      },
      {
       "week": 14,
       "opp": "0011",
-      "winProb": 56,
+      "winProb": 60,
       "ifWin": [
-       85.5,
-       14.1,
-       3.5
+       96.0,
+       20.7,
+       4.5
       ],
       "ifLoss": [
-       55.7,
-       3.3,
-       0.4
+       73.5,
+       6.0,
+       0.8
       ]
      }
     ],
     "watch": {
      "playoff": [
       {
-       "week": 9,
+       "week": 8,
        "rootFor": "0007",
-       "against": "0008",
-       "swing": 11.0
+       "against": "0011",
+       "swing": 8.7
       },
       {
        "week": 11,
-       "rootFor": "0001",
-       "against": "0008",
-       "swing": 10.0
+       "rootFor": "0004",
+       "against": "0011",
+       "swing": 9.5
       },
       {
        "week": 12,
-       "rootFor": "0004",
-       "against": "0008",
-       "swing": 9.8
+       "rootFor": "0001",
+       "against": "0011",
+       "swing": 8.7
       }
      ],
      "bye": [
@@ -1069,159 +1039,144 @@
        "week": 8,
        "rootFor": "0008",
        "against": "0005",
-       "swing": 5.4
+       "swing": 5.0
       },
       {
        "week": 11,
        "rootFor": "0009",
        "against": "0005",
-       "swing": 4.5
+       "swing": 5.9
       },
       {
        "week": 12,
        "rootFor": "0012",
        "against": "0005",
-       "swing": 5.8
+       "swing": 5.5
       }
      ],
      "seed1": []
     }
    },
    "0003": {
-    "playoff": 26.3,
-    "bye": 6.7,
-    "seed1": 1.0,
-    "division": 7.5,
+    "playoff": 17.0,
+    "bye": 5.5,
+    "seed1": 0.3,
+    "division": 6.6,
     "seeds": [
-     1.0,
-     5.7,
-     0.8,
-     3.7,
-     9.7,
-     5.4,
-     73.7
+     0.3,
+     5.3,
+     1.1,
+     1.1,
+     3.9,
+     5.3,
+     83.0
     ],
-    "projW": 6.9,
-    "sosRank": 4,
+    "projW": 6.6,
+    "sosRank": 5,
     "ownGames": [
-     {
-      "week": 7,
-      "opp": "0007",
-      "winProb": 41,
-      "ifWin": [
-       42.3,
-       12.2,
-       2.2
-      ],
-      "ifLoss": [
-       15.4,
-       2.9,
-       0.2
-      ]
-     },
      {
       "week": 8,
       "opp": "0012",
-      "winProb": 60,
+      "winProb": 66,
       "ifWin": [
-       33.8,
-       9.3,
-       1.5
+       21.8,
+       7.5,
+       0.4
       ],
       "ifLoss": [
-       15.0,
-       2.8,
-       0.2
+       8.0,
+       1.8,
+       0.0
       ]
      },
      {
       "week": 9,
       "opp": "0009",
-      "winProb": 41,
+      "winProb": 37,
       "ifWin": [
-       41.9,
-       11.7,
-       2.3
+       28.4,
+       9.9,
+       0.7
       ],
       "ifLoss": [
-       15.5,
-       3.2,
-       0.1
+       10.2,
+       2.9,
+       0.0
       ]
      },
      {
       "week": 10,
       "opp": "0010",
-      "winProb": 44,
+      "winProb": 43,
       "ifWin": [
-       41.4,
-       12.5,
-       2.1
+       28.8,
+       11.5,
+       0.6
       ],
       "ifLoss": [
-       14.3,
-       2.1,
-       0.1
+       8.1,
+       1.0,
+       0.0
       ]
      },
      {
       "week": 11,
       "opp": "0006",
-      "winProb": 62,
+      "winProb": 67,
       "ifWin": [
-       33.7,
-       9.1,
-       1.5
+       21.5,
+       7.4,
+       0.4
       ],
       "ifLoss": [
-       14.3,
-       2.8,
-       0.2
+       7.9,
+       1.8,
+       0.0
       ]
      },
      {
       "week": 12,
       "opp": "0002",
-      "winProb": 61,
+      "winProb": 62,
       "ifWin": [
-       34.0,
-       9.7,
-       1.6
+       22.4,
+       8.2,
+       0.4
       ],
       "ifLoss": [
-       14.4,
-       1.9,
-       0.1
+       8.2,
+       1.2,
+       0.0
       ]
      },
      {
       "week": 13,
       "opp": "0007",
-      "winProb": 41,
+      "winProb": 38,
       "ifWin": [
-       41.3,
-       12.5,
-       2.2
+       30.3,
+       11.9,
+       0.7
       ],
       "ifLoss": [
-       16.0,
-       2.7,
-       0.2
+       8.7,
+       1.5,
+       0.0
       ]
      },
      {
       "week": 14,
       "opp": "0005",
-      "winProb": 36,
+      "winProb": 42,
       "ifWin": [
-       42.1,
-       16.1,
-       2.5
+       29.6,
+       12.1,
+       0.7
       ],
       "ifLoss": [
-       17.6,
-       1.5,
-       0.2
+       8.0,
+       0.8,
+       0.0
       ]
      }
     ],
@@ -1229,181 +1184,166 @@
      "playoff": [
       {
        "week": 9,
-       "rootFor": "0008",
-       "against": "0007",
-       "swing": 5.8
-      },
-      {
-       "week": 9,
-       "rootFor": "0012",
-       "against": "0010",
-       "swing": 4.5
+       "rootFor": "0011",
+       "against": "0005",
+       "swing": 4.9
       },
       {
        "week": 11,
        "rootFor": "0012",
        "against": "0007",
+       "swing": 4.6
+      },
+      {
+       "week": 12,
+       "rootFor": "0012",
+       "against": "0005",
        "swing": 5.2
       }
      ],
      "bye": [
       {
-       "week": 8,
-       "rootFor": "0008",
-       "against": "0005",
-       "swing": 5.8
-      },
-      {
        "week": 9,
        "rootFor": "0011",
        "against": "0005",
-       "swing": 5.4
+       "swing": 2.6
       },
       {
        "week": 11,
-       "rootFor": "0009",
+       "rootFor": "0012",
+       "against": "0007",
+       "swing": 2.5
+      },
+      {
+       "week": 12,
+       "rootFor": "0012",
        "against": "0005",
-       "swing": 4.6
+       "swing": 3.0
       }
      ],
      "seed1": []
     }
    },
    "0004": {
-    "playoff": 94.0,
-    "bye": 36.9,
-    "seed1": 26.6,
-    "division": 37.6,
+    "playoff": 93.4,
+    "bye": 38.8,
+    "seed1": 33.5,
+    "division": 39.3,
     "seeds": [
-     26.6,
-     10.3,
-     0.7,
-     32.3,
-     16.7,
-     7.3,
-     6.0
+     33.5,
+     5.3,
+     0.5,
+     29.8,
+     18.9,
+     5.4,
+     6.6
     ],
-    "projW": 9.5,
-    "sosRank": 12,
+    "projW": 9.8,
+    "sosRank": 11,
     "ownGames": [
-     {
-      "week": 7,
-      "opp": "0012",
-      "winProb": 72,
-      "ifWin": [
-       96.7,
-       43.0,
-       32.1
-      ],
-      "ifLoss": [
-       86.6,
-       21.1,
-       12.0
-      ]
-     },
      {
       "week": 8,
       "opp": "0002",
       "winProb": 72,
       "ifWin": [
-       96.5,
-       43.4,
-       32.7
+       96.3,
+       45.8,
+       40.6
       ],
       "ifLoss": [
-       87.3,
-       20.0,
-       10.6
+       85.9,
+       20.7,
+       14.9
       ]
      },
      {
       "week": 9,
       "opp": "0006",
-      "winProb": 74,
+      "winProb": 77,
       "ifWin": [
-       96.3,
-       42.8,
-       31.9
+       95.8,
+       44.1,
+       38.9
       ],
       "ifLoss": [
-       87.2,
-       20.5,
-       11.6
+       85.3,
+       20.9,
+       15.2
       ]
      },
      {
       "week": 10,
       "opp": "0001",
-      "winProb": 49,
+      "winProb": 46,
       "ifWin": [
-       97.6,
-       60.2,
-       44.7
+       97.7,
+       61.7,
+       54.8
       ],
       "ifLoss": [
-       90.4,
-       14.1,
-       8.8
+       89.8,
+       19.4,
+       15.4
       ]
      },
      {
       "week": 11,
       "opp": "0011",
-      "winProb": 77,
+      "winProb": 79,
       "ifWin": [
-       96.2,
-       42.1,
-       31.2
+       96.0,
+       43.7,
+       38.5
       ],
       "ifLoss": [
-       86.7,
-       20.1,
-       11.5
+       83.5,
+       19.9,
+       14.2
       ]
      },
      {
       "week": 12,
       "opp": "0008",
-      "winProb": 78,
+      "winProb": 80,
       "ifWin": [
-       96.1,
-       41.5,
-       30.8
+       95.8,
+       43.5,
+       38.3
       ],
       "ifLoss": [
-       86.3,
-       20.4,
-       11.5
+       84.2,
+       20.0,
+       14.6
       ]
      },
      {
       "week": 13,
       "opp": "0012",
-      "winProb": 73,
+      "winProb": 76,
       "ifWin": [
-       96.6,
-       43.0,
-       31.9
+       96.1,
+       44.6,
+       39.2
       ],
       "ifLoss": [
-       86.8,
+       84.9,
        20.4,
-       12.0
+       15.4
       ]
      },
      {
       "week": 14,
       "opp": "0009",
-      "winProb": 55,
+      "winProb": 49,
       "ifWin": [
-       97.8,
-       50.9,
-       38.4
+       98.0,
+       58.8,
+       52.6
       ],
       "ifLoss": [
-       89.3,
-       19.9,
-       12.1
+       89.0,
+       19.4,
+       15.0
       ]
      }
     ],
@@ -1414,19 +1354,19 @@
        "week": 8,
        "rootFor": "0006",
        "against": "0001",
-       "swing": 12.7
+       "swing": 11.9
+      },
+      {
+       "week": 9,
+       "rootFor": "0003",
+       "against": "0009",
+       "swing": 11.9
       },
       {
        "week": 12,
-       "rootFor": "0011",
-       "against": "0001",
-       "swing": 13.1
-      },
-      {
-       "week": 14,
-       "rootFor": "0012",
-       "against": "0001",
-       "swing": 13.5
+       "rootFor": "0007",
+       "against": "0009",
+       "swing": 12.1
       }
      ],
      "seed1": [
@@ -1434,168 +1374,165 @@
        "week": 8,
        "rootFor": "0006",
        "against": "0001",
-       "swing": 6.7
+       "swing": 8.0
+      },
+      {
+       "week": 9,
+       "rootFor": "0003",
+       "against": "0009",
+       "swing": 8.8
       },
       {
        "week": 12,
-       "rootFor": "0011",
-       "against": "0001",
-       "swing": 6.9
-      },
-      {
-       "week": 14,
-       "rootFor": "0003",
-       "against": "0005",
-       "swing": 7.2
+       "rootFor": "0007",
+       "against": "0009",
+       "swing": 8.2
       }
      ]
     }
    },
    "0005": {
-    "playoff": 92.5,
-    "bye": 61.3,
-    "seed1": 24.0,
-    "division": 65.0,
+    "playoff": 71.8,
+    "bye": 31.1,
+    "seed1": 6.0,
+    "division": 35.1,
     "seeds": [
-     24.0,
-     37.3,
-     3.7,
-     6.2,
-     10.2,
-     11.0,
-     7.5
+     6.0,
+     25.2,
+     4.0,
+     5.4,
+     12.1,
+     19.2,
+     28.2
     ],
-    "projW": 9.3,
-    "sosRank": 8,
+    "projW": 8.3,
+    "sosRank": 9,
     "ownGames": [
-     {
-      "week": 7,
-      "opp": "0010",
-      "winProb": 59,
-      "ifWin": [
-       96.7,
-       75.7,
-       33.1
-      ],
-      "ifLoss": [
-       86.3,
-       40.4,
-       10.8
-      ]
-     },
      {
       "week": 8,
       "opp": "0008",
-      "winProb": 80,
+      "winProb": 78,
       "ifWin": [
-       94.6,
-       66.8,
-       27.8
+       76.8,
+       35.7,
+       7.3
       ],
       "ifLoss": [
-       83.8,
-       39.1,
-       8.7
+       54.3,
+       15.2,
+       1.4
       ]
      },
      {
       "week": 9,
       "opp": "0011",
-      "winProb": 78,
+      "winProb": 77,
       "ifWin": [
-       94.6,
-       66.7,
-       28.1
+       77.0,
+       36.1,
+       7.4
       ],
       "ifLoss": [
-       84.8,
-       41.7,
-       9.0
+       54.1,
+       14.3,
+       1.0
       ]
      },
      {
       "week": 10,
       "opp": "0007",
-      "winProb": 56,
+      "winProb": 47,
       "ifWin": [
-       96.5,
-       75.5,
-       33.9
+       84.3,
+       49.0,
+       10.9
       ],
       "ifLoss": [
-       87.2,
-       42.9,
-       11.2
+       60.6,
+       15.0,
+       1.5
       ]
      },
      {
       "week": 11,
       "opp": "0009",
-      "winProb": 56,
+      "winProb": 46,
       "ifWin": [
-       96.7,
-       71.6,
-       35.7
+       83.3,
+       43.2,
+       11.7
       ],
       "ifLoss": [
-       87.1,
-       48.2,
-       9.1
+       62.1,
+       20.9,
+       1.1
       ]
      },
      {
       "week": 12,
       "opp": "0012",
-      "winProb": 74,
+      "winProb": 73,
       "ifWin": [
-       95.0,
-       67.5,
-       28.9
+       77.4,
+       36.9,
+       7.7
       ],
       "ifLoss": [
-       85.4,
-       43.7,
-       10.0
+       56.7,
+       15.7,
+       1.2
       ]
      },
      {
       "week": 13,
       "opp": "0010",
-      "winProb": 59,
+      "winProb": 52,
       "ifWin": [
-       97.0,
-       76.1,
-       33.3
+       84.9,
+       49.7,
+       10.5
       ],
       "ifLoss": [
-       86.1,
-       40.1,
-       10.8
+       57.4,
+       10.7,
+       1.0
       ]
      },
      {
       "week": 14,
       "opp": "0003",
-      "winProb": 64,
+      "winProb": 58,
       "ifWin": [
-       96.3,
-       71.5,
-       31.0
+       82.1,
+       41.5,
+       9.2
       ],
       "ifLoss": [
-       85.5,
-       42.8,
-       11.3
+       57.4,
+       16.6,
+       1.4
       ]
      }
     ],
     "watch": {
      "playoff": [
       {
+       "week": 9,
+       "rootFor": "0012",
+       "against": "0010",
+       "swing": 5.4
+      },
+      {
+       "week": 11,
+       "rootFor": "0002",
+       "against": "0010",
+       "swing": 6.5
+      },
+      {
        "week": 12,
        "rootFor": "0006",
        "against": "0010",
-       "swing": 2.6
+       "swing": 5.5
       }
      ],
      "bye": [
@@ -1603,86 +1540,71 @@
        "week": 8,
        "rootFor": "0009",
        "against": "0010",
-       "swing": 6.9
+       "swing": 8.4
       },
       {
        "week": 9,
        "rootFor": "0012",
        "against": "0010",
-       "swing": 7.1
+       "swing": 7.7
       },
       {
        "week": 12,
        "rootFor": "0006",
        "against": "0010",
-       "swing": 7.2
+       "swing": 7.6
       }
      ],
      "seed1": [
       {
-       "week": 8,
-       "rootFor": "0006",
-       "against": "0001",
-       "swing": 7.0
-      },
-      {
        "week": 9,
        "rootFor": "0006",
        "against": "0004",
-       "swing": 7.3
+       "swing": 2.9
+      },
+      {
+       "week": 11,
+       "rootFor": "0011",
+       "against": "0004",
+       "swing": 3.1
       },
       {
        "week": 12,
-       "rootFor": "0011",
-       "against": "0001",
-       "swing": 6.6
+       "rootFor": "0008",
+       "against": "0004",
+       "swing": 3.2
       }
      ]
     }
    },
    "0006": {
-    "playoff": 6.8,
+    "playoff": 1.6,
     "bye": 0.0,
     "seed1": 0.0,
-    "division": 6.6,
+    "division": 1.6,
     "seeds": [
      0.0,
      0.0,
-     6.5,
+     1.6,
      0.0,
-     0.1,
-     0.1,
-     93.2
+     0.0,
+     0.0,
+     98.4
     ],
-    "projW": 4.3,
-    "sosRank": 9,
+    "projW": 3.5,
+    "sosRank": 7,
     "ownGames": [
-     {
-      "week": 7,
-      "opp": "0011",
-      "winProb": 54,
-      "ifWin": [
-       10.6,
-       0.1,
-       0.0
-      ],
-      "ifLoss": [
-       2.2,
-       0.0,
-       0.0
-      ]
-     },
      {
       "week": 8,
       "opp": "0001",
-      "winProb": 26,
+      "winProb": 20,
       "ifWin": [
-       13.2,
-       0.1,
+       4.6,
+       0.0,
        0.0
       ],
       "ifLoss": [
-       4.5,
+       0.8,
        0.0,
        0.0
       ]
@@ -1690,14 +1612,14 @@
      {
       "week": 9,
       "opp": "0004",
-      "winProb": 26,
+      "winProb": 23,
       "ifWin": [
-       13.9,
-       0.2,
+       4.5,
+       0.0,
        0.0
       ],
       "ifLoss": [
-       4.2,
+       0.7,
        0.0,
        0.0
       ]
@@ -1705,14 +1627,14 @@
      {
       "week": 10,
       "opp": "0002",
-      "winProb": 48,
+      "winProb": 44,
       "ifWin": [
-       13.5,
-       0.1,
+       3.5,
+       0.0,
        0.0
       ],
       "ifLoss": [
-       0.5,
+       0.0,
        0.0,
        0.0
       ]
@@ -1720,14 +1642,14 @@
      {
       "week": 11,
       "opp": "0003",
-      "winProb": 38,
+      "winProb": 33,
       "ifWin": [
-       12.1,
-       0.1,
+       3.3,
+       0.0,
        0.0
       ],
       "ifLoss": [
-       3.5,
+       0.7,
        0.0,
        0.0
       ]
@@ -1735,14 +1657,14 @@
      {
       "week": 12,
       "opp": "0010",
-      "winProb": 32,
+      "winProb": 27,
       "ifWin": [
-       12.9,
-       0.1,
+       3.8,
+       0.0,
        0.0
       ],
       "ifLoss": [
-       3.8,
+       0.7,
        0.0,
        0.0
       ]
@@ -1750,14 +1672,14 @@
      {
       "week": 13,
       "opp": "0011",
-      "winProb": 53,
+      "winProb": 54,
       "ifWin": [
-       10.7,
-       0.1,
+       2.8,
+       0.0,
        0.0
       ],
       "ifLoss": [
-       2.2,
+       0.2,
        0.0,
        0.0
       ]
@@ -1765,134 +1687,100 @@
      {
       "week": 14,
       "opp": "0008",
-      "winProb": 56,
+      "winProb": 53,
       "ifWin": [
-       10.6,
-       0.1,
+       2.7,
+       0.0,
        0.0
       ],
       "ifLoss": [
-       1.8,
+       0.2,
        0.0,
        0.0
       ]
      }
     ],
     "watch": {
-     "playoff": [
-      {
-       "week": 11,
-       "rootFor": "0010",
-       "against": "0002",
-       "swing": 4.5
-      },
-      {
-       "week": 12,
-       "rootFor": "0003",
-       "against": "0002",
-       "swing": 4.4
-      },
-      {
-       "week": 14,
-       "rootFor": "0011",
-       "against": "0002",
-       "swing": 4.8
-      }
-     ],
+     "playoff": [],
      "bye": [],
      "seed1": []
     }
    },
    "0007": {
-    "playoff": 60.7,
-    "bye": 9.7,
-    "seed1": 1.2,
-    "division": 11.5,
+    "playoff": 72.4,
+    "bye": 19.6,
+    "seed1": 2.0,
+    "division": 23.9,
     "seeds": [
-     1.2,
-     8.5,
-     1.8,
-     4.4,
-     11.2,
-     33.7,
-     39.3
+     2.0,
+     17.6,
+     4.3,
+     3.3,
+     10.8,
+     34.5,
+     27.6
     ],
-    "projW": 6.8,
-    "sosRank": 7,
+    "projW": 7.5,
+    "sosRank": 10,
     "ownGames": [
-     {
-      "week": 7,
-      "opp": "0003",
-      "winProb": 59,
-      "ifWin": [
-       71.2,
-       14.2,
-       1.9
-      ],
-      "ifLoss": [
-       45.4,
-       3.1,
-       0.1
-      ]
-     },
      {
       "week": 8,
       "opp": "0011",
-      "winProb": 73,
+      "winProb": 80,
       "ifWin": [
-       66.2,
-       12.0,
-       1.5
+       76.5,
+       22.8,
+       2.5
       ],
       "ifLoss": [
-       45.5,
-       3.3,
-       0.2
+       56.4,
+       7.0,
+       0.1
       ]
      },
      {
       "week": 9,
       "opp": "0008",
-      "winProb": 75,
+      "winProb": 80,
       "ifWin": [
-       65.8,
-       11.9,
-       1.5
+       76.4,
+       22.4,
+       2.4
       ],
       "ifLoss": [
-       44.9,
-       2.8,
-       0.2
+       56.8,
+       8.2,
+       0.3
       ]
      },
      {
       "week": 10,
       "opp": "0005",
-      "winProb": 44,
+      "winProb": 53,
       "ifWin": [
-       71.4,
-       20.3,
-       2.6
+       82.3,
+       32.5,
+       3.7
       ],
       "ifLoss": [
-       52.4,
-       1.4,
+       61.4,
+       5.2,
        0.1
       ]
      },
      {
       "week": 11,
       "opp": "0012",
-      "winProb": 69,
+      "winProb": 75,
       "ifWin": [
-       67.0,
-       12.5,
-       1.6
+       77.4,
+       23.4,
+       2.6
       ],
       "ifLoss": [
-       46.5,
-       3.2,
-       0.2
+       57.6,
+       8.2,
+       0.3
       ]
      },
      {
@@ -1900,43 +1788,43 @@
       "opp": "0009",
       "winProb": 50,
       "ifWin": [
-       72.2,
-       14.8,
-       2.2
+       81.8,
+       28.9,
+       4.0
       ],
       "ifLoss": [
-       48.9,
-       4.4,
-       0.1
+       63.2,
+       10.5,
+       0.0
       ]
      },
      {
       "week": 13,
       "opp": "0003",
-      "winProb": 59,
+      "winProb": 62,
       "ifWin": [
-       71.0,
-       14.4,
-       2.0
+       80.9,
+       27.0,
+       3.1
       ],
       "ifLoss": [
-       45.9,
-       2.8,
-       0.1
+       58.8,
+       7.7,
+       0.3
       ]
      },
      {
       "week": 14,
       "opp": "0010",
-      "winProb": 53,
+      "winProb": 54,
       "ifWin": [
-       73.2,
-       16.3,
-       2.2
+       83.9,
+       33.5,
+       3.6
       ],
       "ifLoss": [
-       46.7,
-       2.2,
+       58.8,
+       3.2,
        0.1
       ]
      }
@@ -1944,22 +1832,22 @@
     "watch": {
      "playoff": [
       {
-       "week": 7,
-       "rootFor": "0005",
+       "week": 9,
+       "rootFor": "0012",
        "against": "0010",
-       "swing": 6.3
+       "swing": 5.8
       },
       {
        "week": 11,
        "rootFor": "0002",
        "against": "0010",
-       "swing": 7.7
+       "swing": 6.2
       },
       {
        "week": 12,
-       "rootFor": "0002",
-       "against": "0003",
-       "swing": 6.2
+       "rootFor": "0006",
+       "against": "0010",
+       "swing": 6.8
       }
      ],
      "bye": [
@@ -1973,767 +1861,118 @@
        "week": 9,
        "rootFor": "0011",
        "against": "0005",
-       "swing": 5.5
-      },
-      {
-       "week": 12,
-       "rootFor": "0012",
-       "against": "0005",
-       "swing": 5.4
-      }
-     ],
-     "seed1": []
-    }
-   },
-   "0008": {
-    "playoff": 13.8,
-    "bye": 0.9,
-    "seed1": 0.1,
-    "division": 13.2,
-    "seeds": [
-     0.1,
-     0.8,
-     12.3,
-     0.1,
-     0.5,
-     0.0,
-     86.2
-    ],
-    "projW": 4.6,
-    "sosRank": 5,
-    "ownGames": [
-     {
-      "week": 7,
-      "opp": "0002",
-      "winProb": 42,
-      "ifWin": [
-       26.7,
-       1.8,
-       0.1
-      ],
-      "ifLoss": [
-       4.4,
-       0.2,
-       0.0
-      ]
-     },
-     {
-      "week": 8,
-      "opp": "0005",
-      "winProb": 20,
-      "ifWin": [
-       26.5,
-       3.8,
-       0.3
-      ],
-      "ifLoss": [
-       10.7,
-       0.2,
-       0.0
-      ]
-     },
-     {
-      "week": 9,
-      "opp": "0007",
-      "winProb": 25,
-      "ifWin": [
-       26.7,
-       2.7,
-       0.2
-      ],
-      "ifLoss": [
-       9.7,
-       0.3,
-       0.0
-      ]
-     },
-     {
-      "week": 10,
-      "opp": "0011",
-      "winProb": 48,
-      "ifWin": [
-       22.2,
-       1.6,
-       0.1
-      ],
-      "ifLoss": [
-       6.2,
-       0.2,
-       0.0
-      ]
-     },
-     {
-      "week": 11,
-      "opp": "0001",
-      "winProb": 21,
-      "ifWin": [
-       27.4,
-       3.0,
-       0.4
-      ],
-      "ifLoss": [
-       10.2,
-       0.3,
-       0.0
-      ]
-     },
-     {
-      "week": 12,
-      "opp": "0004",
-      "winProb": 22,
-      "ifWin": [
-       26.5,
-       2.7,
-       0.3
-      ],
-      "ifLoss": [
-       10.4,
-       0.4,
-       0.0
-      ]
-     },
-     {
-      "week": 13,
-      "opp": "0002",
-      "winProb": 42,
-      "ifWin": [
-       26.7,
-       1.9,
-       0.2
-      ],
-      "ifLoss": [
-       4.6,
-       0.2,
-       0.0
-      ]
-     },
-     {
-      "week": 14,
-      "opp": "0006",
-      "winProb": 44,
-      "ifWin": [
-       22.6,
-       1.7,
-       0.2
-      ],
-      "ifLoss": [
-       7.0,
-       0.2,
-       0.0
-      ]
-     }
-    ],
-    "watch": {
-     "playoff": [
-      {
-       "week": 9,
-       "rootFor": "0001",
-       "against": "0002",
-       "swing": 7.5
-      },
-      {
-       "week": 11,
-       "rootFor": "0010",
-       "against": "0002",
-       "swing": 7.9
-      },
-      {
-       "week": 12,
-       "rootFor": "0003",
-       "against": "0002",
-       "swing": 8.0
-      }
-     ],
-     "bye": [],
-     "seed1": []
-    }
-   },
-   "0009": {
-    "playoff": 77.5,
-    "bye": 20.8,
-    "seed1": 15.2,
-    "division": 21.7,
-    "seeds": [
-     15.2,
-     5.6,
-     0.9,
-     22.6,
-     19.8,
-     13.4,
-     22.5
-    ],
-    "projW": 8.1,
-    "sosRank": 2,
-    "ownGames": [
-     {
-      "week": 7,
-      "opp": "0001",
-      "winProb": 45,
-      "ifWin": [
-       88.4,
-       35.0,
-       25.9
-      ],
-      "ifLoss": [
-       68.4,
-       9.0,
-       6.3
-      ]
-     },
-     {
-      "week": 8,
-      "opp": "0010",
-      "winProb": 53,
-      "ifWin": [
-       88.1,
-       28.8,
-       22.3
-      ],
-      "ifLoss": [
-       65.7,
-       11.8,
-       7.3
-      ]
-     },
-     {
-      "week": 9,
-      "opp": "0003",
-      "winProb": 59,
-      "ifWin": [
-       87.0,
-       28.0,
-       21.4
-      ],
-      "ifLoss": [
-       63.8,
-       10.4,
-       6.3
-      ]
-     },
-     {
-      "week": 10,
-      "opp": "0012",
-      "winProb": 69,
-      "ifWin": [
-       84.0,
-       25.7,
-       19.3
-      ],
-      "ifLoss": [
-       63.3,
-       10.0,
-       6.3
-      ]
-     },
-     {
-      "week": 11,
-      "opp": "0005",
-      "winProb": 44,
-      "ifWin": [
-       87.7,
-       30.5,
-       26.1
-      ],
-      "ifLoss": [
-       69.5,
-       13.1,
-       6.6
-      ]
-     },
-     {
-      "week": 12,
-      "opp": "0007",
-      "winProb": 50,
-      "ifWin": [
-       88.8,
-       29.9,
-       22.9
-      ],
-      "ifLoss": [
-       66.4,
-       11.9,
-       7.6
-      ]
-     },
-     {
-      "week": 13,
-      "opp": "0001",
-      "winProb": 46,
-      "ifWin": [
-       88.2,
-       34.8,
-       26.0
-      ],
-      "ifLoss": [
-       68.4,
-       8.9,
-       6.0
-      ]
-     },
-     {
-      "week": 14,
-      "opp": "0004",
-      "winProb": 45,
-      "ifWin": [
-       87.4,
-       35.7,
-       26.5
-      ],
-      "ifLoss": [
-       69.4,
-       8.5,
-       5.9
-      ]
-     }
-    ],
-    "watch": {
-     "playoff": [
-      {
-       "week": 9,
-       "rootFor": "0012",
-       "against": "0010",
-       "swing": 4.5
+       "swing": 6.4
       },
       {
        "week": 12,
        "rootFor": "0006",
        "against": "0010",
        "swing": 6.2
-      },
-      {
-       "week": 12,
-       "rootFor": "0002",
-       "against": "0003",
-       "swing": 4.8
-      }
-     ],
-     "bye": [
-      {
-       "week": 9,
-       "rootFor": "0006",
-       "against": "0004",
-       "swing": 9.2
-      },
-      {
-       "week": 11,
-       "rootFor": "0011",
-       "against": "0004",
-       "swing": 9.4
-      },
-      {
-       "week": 12,
-       "rootFor": "0008",
-       "against": "0004",
-       "swing": 8.8
-      }
-     ],
-     "seed1": [
-      {
-       "week": 9,
-       "rootFor": "0006",
-       "against": "0004",
-       "swing": 5.1
-      },
-      {
-       "week": 11,
-       "rootFor": "0011",
-       "against": "0004",
-       "swing": 5.3
-      },
-      {
-       "week": 13,
-       "rootFor": "0012",
-       "against": "0004",
-       "swing": 4.7
-      }
-     ]
-    }
-   },
-   "0010": {
-    "playoff": 53.9,
-    "bye": 14.3,
-    "seed1": 2.5,
-    "division": 16.0,
-    "seeds": [
-     2.5,
-     11.8,
-     1.6,
-     5.2,
-     12.3,
-     20.5,
-     46.1
-    ],
-    "projW": 7.3,
-    "sosRank": 3,
-    "ownGames": [
-     {
-      "week": 7,
-      "opp": "0005",
-      "winProb": 41,
-      "ifWin": [
-       68.7,
-       28.8,
-       5.5
-      ],
-      "ifLoss": [
-       43.7,
-       4.4,
-       0.5
-      ]
-     },
-     {
-      "week": 8,
-      "opp": "0009",
-      "winProb": 47,
-      "ifWin": [
-       67.9,
-       21.0,
-       4.8
-      ],
-      "ifLoss": [
-       41.3,
-       8.4,
-       0.6
-      ]
-     },
-     {
-      "week": 9,
-      "opp": "0012",
-      "winProb": 66,
-      "ifWin": [
-       61.7,
-       18.2,
-       3.5
-      ],
-      "ifLoss": [
-       38.6,
-       6.7,
-       0.6
-      ]
-     },
-     {
-      "week": 10,
-      "opp": "0003",
-      "winProb": 56,
-      "ifWin": [
-       66.2,
-       21.0,
-       4.2
-      ],
-      "ifLoss": [
-       38.5,
-       6.0,
-       0.4
-      ]
-     },
-     {
-      "week": 11,
-      "opp": "0002",
-      "winProb": 66,
-      "ifWin": [
-       61.3,
-       18.6,
-       3.6
-      ],
-      "ifLoss": [
-       39.7,
-       6.1,
-       0.6
-      ]
-     },
-     {
-      "week": 12,
-      "opp": "0006",
-      "winProb": 68,
-      "ifWin": [
-       61.0,
-       17.9,
-       3.6
-      ],
-      "ifLoss": [
-       39.1,
-       6.9,
-       0.3
-      ]
-     },
-     {
-      "week": 13,
-      "opp": "0005",
-      "winProb": 41,
-      "ifWin": [
-       68.6,
-       29.0,
-       5.5
-      ],
-      "ifLoss": [
-       43.6,
-       4.1,
-       0.5
-      ]
-     },
-     {
-      "week": 14,
-      "opp": "0007",
-      "winProb": 47,
-      "ifWin": [
-       69.1,
-       22.6,
-       4.6
-      ],
-      "ifLoss": [
-       40.4,
-       7.0,
-       0.7
-      ]
-     }
-    ],
-    "watch": {
-     "playoff": [
-      {
-       "week": 8,
-       "rootFor": "0011",
-       "against": "0007",
-       "swing": 6.0
-      },
-      {
-       "week": 9,
-       "rootFor": "0008",
-       "against": "0007",
-       "swing": 5.3
-      },
-      {
-       "week": 10,
-       "rootFor": "0012",
-       "against": "0009",
-       "swing": 5.5
-      }
-     ],
-     "bye": [
-      {
-       "week": 9,
-       "rootFor": "0011",
-       "against": "0005",
-       "swing": 7.1
-      },
-      {
-       "week": 11,
-       "rootFor": "0009",
-       "against": "0005",
-       "swing": 6.5
-      },
-      {
-       "week": 12,
-       "rootFor": "0012",
-       "against": "0005",
-       "swing": 6.5
       }
      ],
      "seed1": []
     }
    },
-   "0011": {
-    "playoff": 8.8,
+   "0008": {
+    "playoff": 4.8,
     "bye": 0.2,
     "seed1": 0.0,
-    "division": 8.5,
+    "division": 4.4,
     "seeds": [
      0.0,
      0.2,
-     8.2,
-     0.1,
-     0.2,
+     4.2,
      0.0,
-     91.2
+     0.3,
+     0.0,
+     95.2
     ],
-    "projW": 4.8,
-    "sosRank": 6,
+    "projW": 4.2,
+    "sosRank": 4,
     "ownGames": [
      {
-      "week": 7,
-      "opp": "0006",
-      "winProb": 46,
-      "ifWin": [
-       14.6,
-       0.5,
-       0.1
-      ],
-      "ifLoss": [
-       3.8,
-       0.1,
-       0.0
-      ]
-     },
-     {
       "week": 8,
-      "opp": "0007",
-      "winProb": 27,
+      "opp": "0005",
+      "winProb": 22,
       "ifWin": [
-       16.9,
+       11.6,
        0.8,
-       0.1
+       0.0
       ],
       "ifLoss": [
-       5.8,
+       2.8,
        0.0,
        0.0
       ]
      },
      {
       "week": 9,
-      "opp": "0005",
-      "winProb": 22,
+      "opp": "0007",
+      "winProb": 20,
       "ifWin": [
-       17.9,
-       1.1,
-       0.1
-      ],
-      "ifLoss": [
-       6.3,
-       0.0,
-       0.0
-      ]
-     },
-     {
-      "week": 10,
-      "opp": "0008",
-      "winProb": 52,
-      "ifWin": [
-       14.2,
-       0.4,
+       12.2,
+       0.9,
        0.0
       ],
       "ifLoss": [
        2.9,
-       0.1,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0011",
+      "winProb": 50,
+      "ifWin": [
+       8.1,
+       0.4,
+       0.0
+      ],
+      "ifLoss": [
+       1.4,
+       0.0,
        0.0
       ]
      },
      {
       "week": 11,
-      "opp": "0004",
-      "winProb": 23,
+      "opp": "0001",
+      "winProb": 18,
       "ifWin": [
-       17.0,
+       12.3,
        0.8,
-       0.1
+       0.0
       ],
       "ifLoss": [
-       6.3,
+       3.1,
        0.1,
        0.0
       ]
      },
      {
       "week": 12,
-      "opp": "0001",
-      "winProb": 23,
+      "opp": "0004",
+      "winProb": 20,
       "ifWin": [
-       18.1,
-       0.8,
-       0.1
+       11.7,
+       0.7,
+       0.0
       ],
       "ifLoss": [
-       6.1,
+       3.0,
        0.1,
        0.0
       ]
      },
      {
       "week": 13,
-      "opp": "0006",
-      "winProb": 47,
-      "ifWin": [
-       14.6,
-       0.5,
-       0.1
-      ],
-      "ifLoss": [
-       3.7,
-       0.0,
-       0.0
-      ]
-     },
-     {
-      "week": 14,
       "opp": "0002",
-      "winProb": 44,
+      "winProb": 41,
       "ifWin": [
-       18.4,
+       10.8,
        0.5,
-       0.1
-      ],
-      "ifLoss": [
-       1.1,
-       0.0,
        0.0
-      ]
-     }
-    ],
-    "watch": {
-     "playoff": [
-      {
-       "week": 8,
-       "rootFor": "0004",
-       "against": "0002",
-       "swing": 5.6
-      },
-      {
-       "week": 11,
-       "rootFor": "0010",
-       "against": "0002",
-       "swing": 5.4
-      },
-      {
-       "week": 12,
-       "rootFor": "0003",
-       "against": "0002",
-       "swing": 5.9
-      }
-     ],
-     "bye": [],
-     "seed1": []
-    }
-   },
-   "0012": {
-    "playoff": 1.9,
-    "bye": 0.1,
-    "seed1": 0.0,
-    "division": 0.1,
-    "seeds": [
-     0.0,
-     0.0,
-     0.0,
-     0.3,
-     0.9,
-     0.7,
-     98.1
-    ],
-    "projW": 4.4,
-    "sosRank": 1,
-    "ownGames": [
-     {
-      "week": 7,
-      "opp": "0004",
-      "winProb": 28,
-      "ifWin": [
-       4.8,
-       0.3,
-       0.1
-      ],
-      "ifLoss": [
-       0.9,
-       0.0,
-       0.0
-      ]
-     },
-     {
-      "week": 8,
-      "opp": "0003",
-      "winProb": 40,
-      "ifWin": [
-       4.0,
-       0.2,
-       0.1
       ],
       "ifLoss": [
        0.6,
@@ -2742,16 +1981,590 @@
       ]
      },
      {
-      "week": 9,
-      "opp": "0010",
-      "winProb": 34,
+      "week": 14,
+      "opp": "0006",
+      "winProb": 47,
       "ifWin": [
-       4.4,
-       0.2,
-       0.1
+       8.3,
+       0.4,
+       0.0
       ],
       "ifLoss": [
+       1.7,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 10,
+       "rootFor": "0006",
+       "against": "0002",
+       "swing": 4.4
+      },
+      {
+       "week": 11,
+       "rootFor": "0010",
+       "against": "0002",
+       "swing": 4.0
+      },
+      {
+       "week": 14,
+       "rootFor": "0011",
+       "against": "0002",
+       "swing": 4.3
+      }
+     ],
+     "bye": [],
+     "seed1": []
+    }
+   },
+   "0009": {
+    "playoff": 89.8,
+    "bye": 33.4,
+    "seed1": 29.5,
+    "division": 34.1,
+    "seeds": [
+     29.5,
+     3.9,
+     0.7,
+     27.8,
+     18.1,
+     9.7,
+     10.2
+    ],
+    "projW": 9.0,
+    "sosRank": 2,
+    "ownGames": [
+     {
+      "week": 8,
+      "opp": "0010",
+      "winProb": 56,
+      "ifWin": [
+       96.1,
+       44.1,
+       40.7
+      ],
+      "ifLoss": [
+       81.8,
+       20.1,
+       15.5
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0003",
+      "winProb": 63,
+      "ifWin": [
+       95.0,
+       42.2,
+       38.1
+      ],
+      "ifLoss": [
+       81.1,
+       18.8,
+       15.2
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0012",
+      "winProb": 76,
+      "ifWin": [
+       92.7,
+       38.7,
+       34.5
+      ],
+      "ifLoss": [
+       80.6,
+       17.0,
+       13.8
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0005",
+      "winProb": 54,
+      "ifWin": [
+       96.2,
+       44.5,
+       41.3
+      ],
+      "ifLoss": [
+       82.1,
+       20.3,
+       15.4
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0007",
+      "winProb": 50,
+      "ifWin": [
+       96.2,
+       45.8,
+       41.8
+      ],
+      "ifLoss": [
+       83.2,
+       20.8,
+       16.9
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0001",
+      "winProb": 47,
+      "ifWin": [
+       95.8,
+       51.3,
+       45.8
+      ],
+      "ifLoss": [
+       84.5,
+       17.7,
+       15.1
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0004",
+      "winProb": 51,
+      "ifWin": [
+       95.3,
+       53.1,
+       47.1
+      ],
+      "ifLoss": [
+       84.0,
+       13.1,
+       11.3
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 9,
+       "rootFor": "0012",
+       "against": "0010",
+       "swing": 3.6
+      },
+      {
+       "week": 9,
+       "rootFor": "0008",
+       "against": "0007",
+       "swing": 3.2
+      },
+      {
+       "week": 12,
+       "rootFor": "0006",
+       "against": "0010",
+       "swing": 3.1
+      }
+     ],
+     "bye": [
+      {
+       "week": 9,
+       "rootFor": "0006",
+       "against": "0004",
+       "swing": 13.5
+      },
+      {
+       "week": 12,
+       "rootFor": "0008",
+       "against": "0004",
+       "swing": 13.4
+      },
+      {
+       "week": 13,
+       "rootFor": "0012",
+       "against": "0004",
+       "swing": 12.2
+      }
+     ],
+     "seed1": [
+      {
+       "week": 9,
+       "rootFor": "0006",
+       "against": "0004",
+       "swing": 9.7
+      },
+      {
+       "week": 12,
+       "rootFor": "0008",
+       "against": "0004",
+       "swing": 10.6
+      },
+      {
+       "week": 13,
+       "rootFor": "0012",
+       "against": "0004",
+       "swing": 9.3
+      }
+     ]
+    }
+   },
+   "0010": {
+    "playoff": 61.4,
+    "bye": 30.3,
+    "seed1": 4.3,
+    "division": 34.4,
+    "seeds": [
+     4.3,
+     26.0,
+     4.1,
+     3.5,
+     9.5,
+     14.1,
+     38.6
+    ],
+    "projW": 8.1,
+    "sosRank": 6,
+    "ownGames": [
+     {
+      "week": 8,
+      "opp": "0009",
+      "winProb": 44,
+      "ifWin": [
+       76.6,
+       42.2,
+       8.8
+      ],
+      "ifLoss": [
+       49.3,
+       20.7,
+       0.6
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0012",
+      "winProb": 71,
+      "ifWin": [
+       68.1,
+       35.5,
+       5.6
+      ],
+      "ifLoss": [
+       45.0,
+       17.4,
+       1.1
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0003",
+      "winProb": 57,
+      "ifWin": [
+       73.4,
+       41.1,
+       6.9
+      ],
+      "ifLoss": [
+       45.6,
+       16.0,
+       0.8
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0002",
+      "winProb": 68,
+      "ifWin": [
+       68.9,
+       38.3,
+       5.8
+      ],
+      "ifLoss": [
+       45.4,
+       13.0,
+       0.9
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0006",
+      "winProb": 73,
+      "ifWin": [
+       67.7,
+       35.3,
+       5.5
+      ],
+      "ifLoss": [
+       44.1,
+       16.5,
+       0.9
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0005",
+      "winProb": 48,
+      "ifWin": [
+       78.0,
+       50.0,
+       7.9
+      ],
+      "ifLoss": [
+       46.4,
+       12.4,
+       0.9
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0007",
+      "winProb": 46,
+      "ifWin": [
+       77.9,
+       48.5,
+       7.9
+      ],
+      "ifLoss": [
+       47.5,
+       14.8,
+       1.1
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 8,
+       "rootFor": "0008",
+       "against": "0005",
+       "swing": 7.6
+      },
+      {
+       "week": 9,
+       "rootFor": "0011",
+       "against": "0005",
+       "swing": 6.5
+      },
+      {
+       "week": 11,
+       "rootFor": "0012",
+       "against": "0007",
+       "swing": 6.0
+      }
+     ],
+     "bye": [
+      {
+       "week": 9,
+       "rootFor": "0011",
+       "against": "0005",
+       "swing": 7.6
+      },
+      {
+       "week": 11,
+       "rootFor": "0009",
+       "against": "0005",
+       "swing": 7.1
+      },
+      {
+       "week": 12,
+       "rootFor": "0012",
+       "against": "0005",
+       "swing": 6.9
+      }
+     ],
+     "seed1": []
+    }
+   },
+   "0011": {
+    "playoff": 7.4,
+    "bye": 0.2,
+    "seed1": 0.0,
+    "division": 7.2,
+    "seeds": [
+     0.0,
+     0.2,
+     6.9,
+     0.1,
+     0.2,
+     0.0,
+     92.6
+    ],
+    "projW": 5.2,
+    "sosRank": 3,
+    "ownGames": [
+     {
+      "week": 8,
+      "opp": "0007",
+      "winProb": 20,
+      "ifWin": [
+       16.5,
        0.7,
+       0.0
+      ],
+      "ifLoss": [
+       5.1,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0005",
+      "winProb": 23,
+      "ifWin": [
+       15.7,
+       0.8,
+       0.0
+      ],
+      "ifLoss": [
+       5.0,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 10,
+      "opp": "0008",
+      "winProb": 50,
+      "ifWin": [
+       11.9,
+       0.4,
+       0.0
+      ],
+      "ifLoss": [
+       3.0,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 11,
+      "opp": "0004",
+      "winProb": 21,
+      "ifWin": [
+       16.4,
+       0.8,
+       0.0
+      ],
+      "ifLoss": [
+       5.1,
+       0.1,
+       0.0
+      ]
+     },
+     {
+      "week": 12,
+      "opp": "0001",
+      "winProb": 18,
+      "ifWin": [
+       16.9,
+       1.0,
+       0.0
+      ],
+      "ifLoss": [
+       5.4,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 13,
+      "opp": "0006",
+      "winProb": 46,
+      "ifWin": [
+       12.1,
+       0.4,
+       0.0
+      ],
+      "ifLoss": [
+       3.4,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 14,
+      "opp": "0002",
+      "winProb": 40,
+      "ifWin": [
+       17.4,
+       0.5,
+       0.0
+      ],
+      "ifLoss": [
+       0.8,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "watch": {
+     "playoff": [
+      {
+       "week": 10,
+       "rootFor": "0006",
+       "against": "0002",
+       "swing": 7.3
+      },
+      {
+       "week": 12,
+       "rootFor": "0003",
+       "against": "0002",
+       "swing": 6.3
+      },
+      {
+       "week": 13,
+       "rootFor": "0008",
+       "against": "0002",
+       "swing": 6.1
+      }
+     ],
+     "bye": [],
+     "seed1": []
+    }
+   },
+   "0012": {
+    "playoff": 0.2,
+    "bye": 0.0,
+    "seed1": 0.0,
+    "division": 0.0,
+    "seeds": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.2,
+     0.0,
+     99.8
+    ],
+    "projW": 3.9,
+    "sosRank": 1,
+    "ownGames": [
+     {
+      "week": 8,
+      "opp": "0003",
+      "winProb": 34,
+      "ifWin": [
+       0.5,
+       0.0,
+       0.0
+      ],
+      "ifLoss": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "week": 9,
+      "opp": "0010",
+      "winProb": 29,
+      "ifWin": [
+       0.6,
+       0.0,
+       0.0
+      ],
+      "ifLoss": [
+       0.0,
        0.0,
        0.0
       ]
@@ -2759,14 +2572,14 @@
      {
       "week": 10,
       "opp": "0009",
-      "winProb": 31,
+      "winProb": 24,
       "ifWin": [
-       4.7,
-       0.2,
-       0.1
+       0.6,
+       0.0,
+       0.0
       ],
       "ifLoss": [
-       0.7,
+       0.1,
        0.0,
        0.0
       ]
@@ -2774,14 +2587,14 @@
      {
       "week": 11,
       "opp": "0007",
-      "winProb": 31,
+      "winProb": 25,
       "ifWin": [
-       4.6,
-       0.2,
-       0.1
+       0.7,
+       0.0,
+       0.0
       ],
       "ifLoss": [
-       0.8,
+       0.0,
        0.0,
        0.0
       ]
@@ -2789,14 +2602,14 @@
      {
       "week": 12,
       "opp": "0005",
-      "winProb": 26,
+      "winProb": 27,
       "ifWin": [
-       4.7,
-       0.2,
-       0.2
+       0.6,
+       0.0,
+       0.0
       ],
       "ifLoss": [
-       1.0,
+       0.0,
        0.0,
        0.0
       ]
@@ -2804,14 +2617,14 @@
      {
       "week": 13,
       "opp": "0004",
-      "winProb": 27,
+      "winProb": 24,
       "ifWin": [
-       4.8,
-       0.3,
-       0.1
+       0.7,
+       0.0,
+       0.0
       ],
       "ifLoss": [
-       0.9,
+       0.0,
        0.0,
        0.0
       ]
@@ -2819,14 +2632,14 @@
      {
       "week": 14,
       "opp": "0001",
-      "winProb": 28,
+      "winProb": 22,
       "ifWin": [
-       4.8,
-       0.3,
-       0.1
+       0.7,
+       0.0,
+       0.0
       ],
       "ifLoss": [
-       0.8,
+       0.1,
        0.0,
        0.0
       ]
@@ -3092,39 +2905,51 @@
    88.0,
    "0004",
    130.1
-  ]
- ],
- "upcoming": [
+  ],
   [
    7,
    "0004",
-   "0012"
+   108.6,
+   "0012",
+   76.1
   ],
   [
    7,
    "0005",
-   "0010"
+   74.0,
+   "0010",
+   129.1
   ],
   [
    7,
    "0007",
-   "0003"
+   139.3,
+   "0003",
+   118.4
   ],
   [
    7,
    "0008",
-   "0002"
+   90.3,
+   "0002",
+   103.0
   ],
   [
    7,
    "0011",
-   "0006"
+   70.2,
+   "0006",
+   70.0
   ],
   [
    7,
    "0001",
-   "0009"
-  ],
+   138.9,
+   "0009",
+   147.3
+  ]
+ ],
+ "upcoming": [
   [
    8,
    "0001",
@@ -3340,7 +3165,159 @@
   "Tiebreaks follow the 2027 by-laws draft and are computed here, not by MFL.",
   "Picks 7-12 are projected by seed until the playoffs are played."
  ],
- "prevDraftOrder": null,
- "prev": null,
- "fetched": "2026-10-26T07:42:50+00:00"
+ "prevDraftOrder": {
+  "week": 6,
+  "order": [
+   "0008",
+   "0011",
+   "0012",
+   "0010",
+   "0006",
+   "0003",
+   "0007",
+   "0004",
+   "0001",
+   "0002",
+   "0005",
+   "0009"
+  ]
+ },
+ "prev": {
+  "week": 6,
+  "teams": {
+   "0009": {
+    "rank": 1,
+    "seed": 1,
+    "pwrRank": 2,
+    "allPlayW": 42,
+    "playoff": 77.5,
+    "bye": 20.8,
+    "division": 21.7,
+    "seed1": 15.2,
+    "seed6": 13.4
+   },
+   "0005": {
+    "rank": 2,
+    "seed": 2,
+    "pwrRank": 5,
+    "allPlayW": 48,
+    "playoff": 92.5,
+    "bye": 61.3,
+    "division": 65.0,
+    "seed1": 24.0,
+    "seed6": 11.0
+   },
+   "0001": {
+    "rank": 3,
+    "seed": 4,
+    "pwrRank": 1,
+    "allPlayW": 46,
+    "playoff": 91.6,
+    "bye": 39.7,
+    "division": 40.7,
+    "seed1": 27.2,
+    "seed6": 8.0
+   },
+   "0004": {
+    "rank": 4,
+    "seed": 5,
+    "pwrRank": 4,
+    "allPlayW": 49,
+    "playoff": 94.0,
+    "bye": 36.9,
+    "division": 37.6,
+    "seed1": 26.6,
+    "seed6": 7.3
+   },
+   "0002": {
+    "rank": 5,
+    "seed": 3,
+    "pwrRank": 8,
+    "allPlayW": 25,
+    "playoff": 72.2,
+    "bye": 9.3,
+    "division": 71.8,
+    "seed1": 2.2,
+    "seed6": 0.0
+   },
+   "0010": {
+    "rank": 6,
+    "seed": null,
+    "pwrRank": 7,
+    "allPlayW": 39,
+    "playoff": 53.9,
+    "bye": 14.3,
+    "division": 16.0,
+    "seed1": 2.5,
+    "seed6": 20.5
+   },
+   "0003": {
+    "rank": 7,
+    "seed": null,
+    "pwrRank": 6,
+    "allPlayW": 32,
+    "playoff": 26.3,
+    "bye": 6.7,
+    "division": 7.5,
+    "seed1": 1.0,
+    "seed6": 5.4
+   },
+   "0008": {
+    "rank": 8,
+    "seed": null,
+    "pwrRank": 12,
+    "allPlayW": 17,
+    "playoff": 13.8,
+    "bye": 0.9,
+    "division": 13.2,
+    "seed1": 0.1,
+    "seed6": 0.0
+   },
+   "0007": {
+    "rank": 9,
+    "seed": 6,
+    "pwrRank": 3,
+    "allPlayW": 39,
+    "playoff": 60.7,
+    "bye": 9.7,
+    "division": 11.5,
+    "seed1": 1.2,
+    "seed6": 33.7
+   },
+   "0012": {
+    "rank": 10,
+    "seed": null,
+    "pwrRank": 10,
+    "allPlayW": 24,
+    "playoff": 1.9,
+    "bye": 0.1,
+    "division": 0.1,
+    "seed1": 0.0,
+    "seed6": 0.7
+   },
+   "0011": {
+    "rank": 11,
+    "seed": null,
+    "pwrRank": 9,
+    "allPlayW": 16,
+    "playoff": 8.8,
+    "bye": 0.2,
+    "division": 8.5,
+    "seed1": 0.0,
+    "seed6": 0.0
+   },
+   "0006": {
+    "rank": 12,
+    "seed": null,
+    "pwrRank": 11,
+    "allPlayW": 18,
+    "playoff": 6.8,
+    "bye": 0.0,
+    "division": 6.6,
+    "seed1": 0.0,
+    "seed6": 0.1
+   }
+  }
+ },
+ "fetched": "2026-10-27T05:55:35+00:00"
 }
