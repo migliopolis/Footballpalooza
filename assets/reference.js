@@ -19,6 +19,33 @@ window.FBPRef = (() => {
       .then(d => { AF = d; rerender(); }).catch(() => { AF = { franchises: {}, failed: true }; rerender(); });
   };
 
+  // every auction's bidding (data/auction-bids.json, pulled from MFL's auction log); loads with the first auction page
+  // per season, ';'-separated auctions "player:nominator:winner:price:bids:last six bids (team-amount, oldest first)"
+  let AB = null, abLoading = false;
+  const loadAB = rerender => {
+    if (AB || abLoading) return; abLoading = true;
+    fetch('data/auction-bids.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(d => { AB = d; rerender(); }).catch(() => { AB = {}; rerender(); });
+  };
+  const fr4 = n => String(n).padStart(4, '0');
+  function bidsFor(y) {
+    const map = {};
+    (AB[y] || '').split(';').filter(Boolean).forEach(a => {
+      const [p, nom, win, price, n, last] = a.split(':');
+      const o = { nom: fr4(nom), n: +n, bids: last.split(',').map(b => { const [f, v] = b.split('-'); return { fr: fr4(f), v: +v }; }) };
+      map[`${p}|${fr4(win)}|${price}`] = o; if (!map[p]) map[p] = o;
+    });
+    return map;
+  }
+  // twirl-downs on the auction table open and close in place (no re-render)
+  document.addEventListener('click', e => {
+    const r = e.target.closest('tr[data-ab]'); if (!r) return;
+    const open = r.getAttribute('aria-expanded') !== 'true';
+    r.setAttribute('aria-expanded', open); r.classList.toggle('open', open);
+    const d = r.nextElementSibling; if (d && d.classList.contains('ab-det')) d.hidden = !open;
+  });
+  document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('tr[data-ab]')) { e.preventDefault(); e.target.click(); } });
+
   let X;   // context from site.js: teams, chip, esc
   const esc = s => X.esc(s == null ? '' : s);
   const n1 = v => v == null || v === '' ? '—' : Number(v).toFixed(1);
@@ -375,10 +402,22 @@ window.FBPRef = (() => {
   function auctionTable(y) {
     const list = D.auction_results[y] || D.auction_results[String(y)] || [];
     if (!list.length) return '<p class="rf-note">No auction on record for this season.</p>';
+    if (!AB) loadAB(X.rerender);
+    const B = AB ? bidsFor(y) : null;
     const total = list.reduce((s, p) => s + (p.price || 0), 0);
-    return `<p class="rf-foot" style="margin:0 0 8px">${list.length} players won · $${total} spent · $${(total / list.length).toFixed(2)} average</p>
-      <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Player</th><th>Pos</th><th>$</th></tr></thead><tbody>
-      ${list.map((p, i) => `<tr><td>${i + 1}</td>${lgCell(p.franchise)}<td class="t">${esc(person(p.player_name) || 'Player #' + p.player_id)}<small class="rf-by">${esc(nm(p.franchise, y))}</small></td><td>${esc(p.player_pos || '')}</td><td>$${p.price != null ? p.price : '—'}</td></tr>`).join('')}
+    const team = fr => `<span class="ab-tm">${logo(fr)}<span>${esc(nm(fr, y))}</span></span>`;
+    const detail = (p, b) => {
+      if (!b) return `<p class="ab-note">${B ? 'No bid log for this player.' : 'Loading bids…'}</p>`;
+      if (b.n <= 1) return `<p class="ab-note">Nominated by ${esc(nm(b.nom, y))} at $${b.bids[0].v}. Nobody else bid.</p>`;
+      const rows = b.bids.slice().reverse();   // winning bid first, then the five before it
+      return `<ol class="ab-bids">${rows.map((x, i) => `<li${i === 0 ? ' class="win"' : ''}><b>$${x.v}</b>${team(x.fr)}${i === 0 ? '<span class="ab-w">Won</span>' : ''}</li>`).join('')}</ol>
+        <p class="ab-note">${b.n} bids · nominated by ${esc(nm(b.nom, y))}${b.n > 6 ? ` · showing the last ${rows.length}` : ''}</p>`;
+    };
+    return `<p class="rf-foot" style="margin:0 0 8px">${list.length} players won · $${total} spent · $${(total / list.length).toFixed(2)} average · tap a player for the bidding</p>
+      <div class="card tbl-wrap"><table class="tbl rf-t ab-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Player</th><th>Pos</th><th>$</th></tr></thead><tbody>
+      ${list.map((p, i) => { const b = B && (B[`${p.player_id}|${p.franchise}|${p.price}`] || B[p.player_id]);
+        return `<tr data-ab tabindex="0" role="button" aria-expanded="false"><td>${i + 1}</td>${lgCell(p.franchise)}<td class="t">${esc(person(p.player_name) || 'Player #' + p.player_id)}<small class="rf-by">${esc(nm(p.franchise, y))}</small></td><td>${esc(p.player_pos || '')}</td><td class="ab-pr">$${p.price != null ? p.price : '—'}<i class="car" aria-hidden="true"></i></td></tr>
+        <tr class="ab-det" hidden><td colspan="5">${detail(p, b)}</td></tr>`; }).join('')}
       </tbody></table></div>`;
   }
 

@@ -127,6 +127,57 @@ def fetch_transactions():
     time.sleep(1.1)
 
 
+def compact_auction_bids(init, bids, won):
+    """Turn MFL's auction log into one line per auction for data/auction-bids.json:
+    "player:nominator:winner:price:number of bids:last six bids (team-amount, oldest first)".
+    Bids logged in the same second are put in order by amount."""
+    rows = []
+    for kind, lst in (('I', init), ('B', bids), ('W', won)):
+        for t in lst:
+            p, amt = (t.get('transaction', '') + '||').split('|')[:2]
+            rows.append((int(t['timestamp']), 'IBW'.index(kind), kind, p, int(t['franchise']), int(amt or 0)))
+    rows.sort(key=lambda r: (r[0], r[1]))
+    open_, done = {}, []
+    for ts, _, kind, p, fr, amt in rows:
+        if kind == 'I':
+            open_[p] = {'p': p, 'nom': fr, 'b': [(fr, amt)]}
+        elif kind == 'B':
+            open_.setdefault(p, {'p': p, 'nom': 0, 'b': []})['b'].append((fr, amt))
+        else:
+            o = open_.pop(p, {'p': p, 'nom': 0, 'b': []})
+            o['win'] = (fr, amt)
+            done.append(o)
+    out = []
+    for o in done:
+        b = [x for _, x in sorted(enumerate(o['b']), key=lambda e: (e[1][1], e[0]))]
+        last = ','.join(f'{f}-{a}' for f, a in b[-6:])
+        out.append(':'.join(str(v) for v in (o['p'], o['nom'], o['win'][0], o['win'][1], len(b), last)))
+    return out
+
+
+def fetch_auction_bids():
+    """This season's auction bid log (Reference > Seasons > Auction twirl-downs). Past seasons stay as saved."""
+    path = os.path.join(ROOT, 'data', 'auction-bids.json')
+    try:
+        logs = {}
+        for t in ('AUCTION_INIT', 'AUCTION_BID', 'AUCTION_WON'):
+            logs[t] = as_list(fetch('transactions', {'TRANS_TYPE': t}).get('transactions', {}).get('transaction'))
+            time.sleep(1.1)
+        lines = compact_auction_bids(logs['AUCTION_INIT'], logs['AUCTION_BID'], logs['AUCTION_WON'])
+        saved = json.load(open(path)) if os.path.exists(path) else {}
+        before = len([x for x in saved.get(SEASON, '').split(';') if x])
+        if len(lines) >= before and lines:
+            saved[SEASON] = ';'.join(lines)
+            with open(path, 'w') as f:
+                json.dump(saved, f, separators=(',', ':'))
+                f.write('\n')
+            print(f'  ok   auction bids ({len(lines)} auctions)')
+        else:
+            print(f'  skip auction bids ({len(lines)} auctions found, {before} already saved)')
+    except Exception as e:
+        print(f'  FAIL {e}  (kept the previous file)')
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     print(f'Season {SEASON}, league {LEAGUE}, API key {"set" if KEY else "not set"}')
@@ -158,6 +209,7 @@ def main():
             print(f'  FAIL {e}  (kept the previous file)')
     fetch_weekly()
     fetch_transactions()
+    fetch_auction_bids()
     save('_meta', {'season': SEASON, 'league': LEAGUE,
                    'fetched': datetime.now(timezone.utc).isoformat(timespec='seconds')})
     if failed_core:

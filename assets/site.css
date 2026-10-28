@@ -789,3 +789,26 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .gl .team .nm{overflow-wrap:normal;word-break:normal}
 .gl .res,.gl .wp{margin-left:auto}
 .gl .gl-lg{width:26px;height:26px;object-fit:contain;flex:none}
+
+
+/* auction results: twirl down a winning bid to see the bids before it */
+.ab-t tr[data-ab]{cursor:pointer}
+.ab-t tr[data-ab]:hover td{background:var(--surface-2,rgba(127,127,127,.06))}
+.ab-t tr[data-ab]:focus-visible{outline:2px solid var(--fg);outline-offset:-2px}
+.ab-pr{white-space:nowrap}
+.ab-t tr.open .car{transform:translateY(1px) rotate(-135deg)}
+.ab-t tr.open td{border-bottom-color:transparent}
+.ab-det > td{padding:2px 14px 14px 14px;text-align:left}
+.ab-bids{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;max-width:420px;margin-left:auto;margin-right:auto}
+.ab-bids li{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:8px;padding:5px 8px;border-radius:8px;font-size:.88rem}
+.ab-bids li b{text-align:right;font-variant-numeric:tabular-nums}
+.ab-bids li.win{background:var(--surface-2,rgba(127,127,127,.1));font-weight:600}
+.ab-bids li:not(.win){color:var(--muted)}
+.ab-tm{display:flex;align-items:center;gap:8px;min-width:0}
+.ab-tm img{width:22px;height:22px;object-fit:contain;flex:none}
+.ab-tm span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ab-w{font:700 .66rem var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--accent,#c62828)}
+.ab-note{margin:6px auto 0;max-width:420px;font-size:.78rem;color:var(--muted);text-align:center}
+.ab-det > td,.ab-det > td *{white-space:normal}
+.ab-tm span{white-space:nowrap!important}
+.ab-det > td{max-width:0}
