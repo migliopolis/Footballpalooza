@@ -860,3 +860,4 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .py-tlg{display:flex;flex-wrap:wrap;gap:4px;margin:5px 0 0 38px}
 .py-tlg .py-lg{display:inline-flex}
 .py-tlg img{width:20px;height:20px;object-fit:contain}
+@media (max-width:640px){.py-pos{grid-template-columns:minmax(0,1fr)}}
