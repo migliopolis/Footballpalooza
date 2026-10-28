@@ -855,3 +855,8 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 @media (max-width:640px){.py-sm{display:flex;margin:4px 0 0 38px;max-width:none}.py-sm img{width:16px;height:16px}}
 .py-page section+section,.py-page .py-two{margin-top:22px}.py-page .py-two section+section{margin-top:0}
 .py-page > .rf-sub{margin-bottom:14px}
+/* Most teams paid: logos on their own line under the name */
+.py-vr.py-tv{grid-template-columns:minmax(0,1fr) auto}
+.py-tlg{display:flex;flex-wrap:wrap;gap:4px;margin:5px 0 0 38px}
+.py-tlg .py-lg{display:inline-flex}
+.py-tlg img{width:20px;height:20px;object-fit:contain}
