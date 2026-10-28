@@ -120,7 +120,7 @@ window.FBPRef = (() => {
   const firstYear = () => (PRE().length ? Math.min(...PRE().map(x => x.year)) : 2019);
 
   function nav(top) {
-    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records']], top, true);
+    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/payroll', 'Payroll']], top, true);
   }
   function head(title, extra = '') {
     const m = D.meta;
@@ -450,6 +450,52 @@ window.FBPRef = (() => {
     return head('Records') + nav('#reference/records') + (PRE().length ? '<p class="rf-note">P-PPR is on, but there are no game scores before 2019, so records cover 2019 on. See the blind spots on the Reference home.</p>' : '') + sub(BOARDS.map(([k, l]) => [`#reference/records/${k}`, l]), `#reference/records/${b}`) + `<section>${body}</section>`;
   }
 
+  /* ---------- payroll (data/payroll.json, built by scripts/payroll.py) ---------- */
+  let PAY = null, payLoading = false;
+  const loadPay = rerender => {
+    if (PAY || payLoading) return; payLoading = true;
+    fetch('data/payroll.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(d => { PAY = d; rerender(); }).catch(() => { PAY = { failed: true }; rerender(); });
+  };
+  function pagePayroll(yr) {
+    const top = head('Payroll') + nav('#reference/payroll');
+    if (!PAY) { loadPay(X.rerender); return top + '<p class="loading">Loading payroll…</p>'; }
+    if (PAY.failed) return top + '<p class="error">Payroll didn’t load.</p>';
+    const m = window.FBP && FBP.media;
+    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
+    const who = p => `<span class="py-who">${face(p)}<span><b>${esc(p.name)}</b><small>${esc(p.pos)}</small></span></span>`;
+    const lg = fr => logo(fr) ? `<span class="py-lg" title="${esc(D.franchises[fr] || '')}">${logo(fr)}</span>` : '';
+    const T = PAY.totals, S = PAY.seasons, cur = S[S.length - 1], first = S[0];
+    const big = T.biggest;
+    const tiles = `<section class="rf-tiles">
+      <div class="card rf-tile"><span>Paid to players</span><b>$${T.paid.toLocaleString()}</b><small>${T.contracts.toLocaleString()} contracts since ${PAY.first}</small></div>
+      <div class="card rf-tile"><span>Top career earner</span><b>$${PAY.career[0].total}</b><small>${esc(PAY.career[0].name)}, ${PAY.career[0].teams.length} teams</small></div>
+      <div class="card rf-tile"><span>Biggest contract</span><b>$${big.sal}</b><small>${esc(big.name)}, ${big.year}</small></div>
+      <div class="card rf-tile"><span>Top-12 auction avg</span><b>$${cur.auctionTop12}</b><small>${cur.year} · was $${first.auctionTop12} in ${first.year}</small></div></section>`;
+    const career = `<section><h2 class="sec">Career earnings <small>every season's salary added up, ${PAY.first}–${PAY.current}</small></h2>
+      <div class="card tbl-wrap"><table class="tbl rf-t py-t"><thead><tr><th>#</th><th class="t">Player</th><th>Earned</th><th class="hide-sm">Seasons</th><th class="t hide-sm">Paid by</th><th class="hide-sm">Peak</th><th title="Starter points per salary dollar, 2021 on">Pts/$</th></tr></thead><tbody>
+      ${PAY.career.slice(0, 25).map((p, i) => `<tr><td>${i + 1}</td><td class="t">${who(p)}<span class="py-lgs py-sm">${p.teams.map(lg).join('')}</span></td><td><b>$${p.total}</b></td><td class="hide-sm">${p.seasons}<small class="py-yrs">${p.first}–${String(p.last).slice(2)}</small></td><td class="t hide-sm"><span class="py-lgs">${p.teams.map(lg).join('')}</span></td><td class="hide-sm">$${p.peak}<small class="py-yrs">${p.peakYear}</small></td><td>${p.ptsPerDollar != null ? p.ptsPerDollar.toFixed(1) : '—'}</td></tr>`).join('')}
+      </tbody></table></div><p class="rf-foot">Pts/$ = starter points per salary dollar, 2021–${PAY.current - 1} (weekly lineups start in 2021). League average is about 7.8.</p></section>`;
+    const P5 = ['RB', 'WR', 'QB', 'TE', 'DEF'];
+    const shares = `<section><h2 class="sec">Where the money goes <small>share of all player pay by position</small></h2><div class="card py-share">
+      ${S.map(s => `<div class="py-sr"><span class="py-y">${s.year}</span><span class="py-bar">${P5.map(k => s.share[k] ? `<i class="pos-${k}" style="width:${s.share[k]}%" title="${k} ${s.share[k]}%">${s.share[k] >= 9 ? Math.round(s.share[k]) + '%' : ''}</i>` : '').join('')}</span></div>`).join('')}
+      <div class="py-key">${P5.map(k => `<span><i class="pos-${k}"></i>${k}</span>`).join('')}</div></div></section>`;
+    const Y = S.find(s => s.year === yr) || cur;
+    const years = `<nav class="rf-weeks py-years" aria-label="Season">${S.map(s => `<a href="#reference/payroll/${s.year}"${s.year === Y.year ? ' aria-current="page"' : ''}>${s.year}</a>`).join('')}</nav>`;
+    const contracts = `<section><h2 class="sec">Biggest contracts <small>${Y.year} · $${Y.total.toLocaleString()} paid · ${Y.over40} deals of $40+</small></h2>${years}
+      <div class="card tbl-wrap"><table class="tbl rf-t py-t"><thead><tr><th>#</th><th class="t">Player</th><th class="lg"><span class="sr">Team</span></th><th>Salary</th><th class="t hide-sm">How</th><th>${Y.year >= 2021 ? 'Pts' : ''}</th></tr></thead><tbody>
+      ${Y.top.map((p, i) => `<tr><td>${i + 1}</td><td class="t">${who(p)}</td><td class="lg">${logo(p.fr)}</td><td><b>$${p.sal}</b></td><td class="t hide-sm">${esc(p.how)}</td><td>${p.pts != null ? n1(p.pts) : '—'}</td></tr>`).join('')}
+      </tbody></table></div>${Y.year === PAY.current ? '<p class="rf-foot">Season in progress: starter points so far.</p>' : ''}</section>`;
+    const vlist = (title, sub2, list, good) => `<section><h2 class="sec">${title} <small>${sub2}</small></h2><div class="card py-v">
+      ${list.slice(0, 8).map(p => `<div class="py-vr">${who(p)}<span class="py-vm"><b class="${good ? 'up' : 'dn'}">${p.per.toFixed(1)}</b><small>pts per $</small></span><span class="py-vd">$${p.sal} · ${n1(p.pts)} pts<small>${p.year} ${lg(p.fr)}</small></span></div>`).join('')}</div></section>`;
+    const value = `<div class="py-two">${vlist('Bargains', '$20+ contracts, most starter points per dollar, 2021–' + (PAY.current - 1), PAY.bargains, true)}${vlist('Busts', '$30+ contracts, fewest points per dollar', PAY.busts, false)}</div>`;
+    const travel = `<section><h2 class="sec">Most teams paid <small>same player, different paychecks</small></h2><div class="card py-v">
+      ${PAY.travelers.map(p => `<div class="py-vr">${who(p)}<span class="py-lgs">${p.teams.map(lg).join('')}</span><span class="py-vd">$${p.total}<small>${p.seasons} seasons</small></span></div>`).join('')}</div></section>`;
+    const bypos = `<section><h2 class="sec">Top earners by position</h2><div class="py-pos">${['QB', 'RB', 'WR', 'TE'].map(k => `<div class="card"><h3>${k}</h3>${PAY.byPosition[k].map((p, i) => `<div class="py-pr"><span>${i + 1}. ${esc(p.name)}</span><b>$${p.total}</b></div>`).join('')}</div>`).join('')}</div></section>`;
+    const notes = `<p class="rf-foot">How it's counted: a player's pay for a season is his auction price, or the salary he carried (keeper, rookie deal, trade). Waiver claims count only if the contract was kept into the next season (${T.excludedWaivers} left out, worth $${T.excludedDollars.toLocaleString()}; the biggest was ${esc(PAY.biggestWaivers[0].name)} at $${PAY.biggestWaivers[0].sal} in ${PAY.biggestWaivers[0].year}). ${PAY.current} waiver claims wait until next season. Salaries come from season-end rosters, so a kept player cut mid-season isn't counted that year. Records start in ${PAY.first}.</p>`;
+    return '<div class="py-page">' + top + tiles + career + shares + contracts + value + travel + bypos + notes + '</div>';
+  }
+
   /* ---------- entry ---------- */
   function render(ctx, path) {
     X = ctx; PPR = !!ctx.ppr;
@@ -462,6 +508,7 @@ window.FBPRef = (() => {
     if (p === 'seasons') return pageSeasons();
     if (p.startsWith('s-')) return pageSeason(+p.slice(2), a, b ? +b : null);
     if (p === 'records') return pageRecords(a);
+    if (p === 'payroll') return pagePayroll(a ? +a : null);
     return pageHome(ctx.ppr);
   }
   // which page a path is, so moving between sub-tabs keeps your place but a new page starts at the top

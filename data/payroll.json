@@ -1,0 +1,1942 @@
+{
+ "generated": "2026-10-28T07:47:41+00:00",
+ "first": 2019,
+ "current": 2026,
+ "totals": {
+  "paid": 18018,
+  "contracts": 1691,
+  "players": 603,
+  "excludedWaivers": 216,
+  "excludedDollars": 1410,
+  "biggest": {
+   "id": "13604",
+   "name": "Saquon Barkley",
+   "pos": "RB",
+   "espn": "3929630",
+   "sal": 83,
+   "year": 2020,
+   "fr": "0006"
+  }
+ },
+ "career": [
+  {
+   "id": "13604",
+   "name": "Saquon Barkley",
+   "pos": "RB",
+   "espn": "3929630",
+   "total": 480,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0001",
+    "0006",
+    "0004",
+    "0007",
+    "0005",
+    "0002"
+   ],
+   "peak": 83,
+   "peakYear": 2020,
+   "ptsPerDollar": 3.5
+  },
+  {
+   "id": "14802",
+   "name": "Jonathan Taylor",
+   "pos": "RB",
+   "espn": "4242335",
+   "total": 343,
+   "seasons": 7,
+   "first": 2020,
+   "last": 2026,
+   "teams": [
+    "0008",
+    "0002",
+    "0001"
+   ],
+   "peak": 59,
+   "peakYear": 2026,
+   "ptsPerDollar": 4.1
+  },
+  {
+   "id": "13130",
+   "name": "Christian McCaffrey",
+   "pos": "RB",
+   "espn": "3117251",
+   "total": 336,
+   "seasons": 7,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0005",
+    "0007",
+    "0011",
+    "0012"
+   ],
+   "peak": 60,
+   "peakYear": 2025,
+   "ptsPerDollar": 4.9
+  },
+  {
+   "id": "12626",
+   "name": "Derrick Henry",
+   "pos": "RB",
+   "espn": "3043078",
+   "total": 332,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0005",
+    "0010",
+    "0011",
+    "0006",
+    "0012"
+   ],
+   "peak": 60,
+   "peakYear": 2022,
+   "ptsPerDollar": 4.3
+  },
+  {
+   "id": "13131",
+   "name": "Joe Mixon",
+   "pos": "RB",
+   "espn": "3116385",
+   "total": 285,
+   "seasons": 7,
+   "first": 2019,
+   "last": 2025,
+   "teams": [
+    "0009",
+    "0001",
+    "0010"
+   ],
+   "peak": 59,
+   "peakYear": 2022,
+   "ptsPerDollar": 4.2
+  },
+  {
+   "id": "11675",
+   "name": "Davante Adams",
+   "pos": "WR",
+   "espn": "16800",
+   "total": 270,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0003",
+    "0008",
+    "0001",
+    "0009",
+    "0005"
+   ],
+   "peak": 54,
+   "peakYear": 2020,
+   "ptsPerDollar": 5.7
+  },
+  {
+   "id": "14073",
+   "name": "Josh Jacobs",
+   "pos": "RB",
+   "espn": "4047365",
+   "total": 264,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0003",
+    "0002",
+    "0001",
+    "0010",
+    "0005"
+   ],
+   "peak": 58,
+   "peakYear": 2020,
+   "ptsPerDollar": 7.0
+  },
+  {
+   "id": "13128",
+   "name": "Dalvin Cook",
+   "pos": "RB",
+   "espn": "3116593",
+   "total": 259,
+   "seasons": 5,
+   "first": 2019,
+   "last": 2023,
+   "teams": [
+    "0004",
+    "0001",
+    "0007"
+   ],
+   "peak": 65,
+   "peakYear": 2021,
+   "ptsPerDollar": 2.7
+  },
+  {
+   "id": "13404",
+   "name": "Austin Ekeler",
+   "pos": "RB",
+   "espn": "3068267",
+   "total": 255,
+   "seasons": 7,
+   "first": 2019,
+   "last": 2025,
+   "teams": [
+    "0006",
+    "0007",
+    "0011",
+    "0012",
+    "0008"
+   ],
+   "peak": 60,
+   "peakYear": 2022,
+   "ptsPerDollar": 3.8
+  },
+  {
+   "id": "14832",
+   "name": "CeeDee Lamb",
+   "pos": "WR",
+   "espn": "4241389",
+   "total": 243,
+   "seasons": 7,
+   "first": 2020,
+   "last": 2026,
+   "teams": [
+    "0012",
+    "0007"
+   ],
+   "peak": 48,
+   "peakYear": 2024,
+   "ptsPerDollar": 5.9
+  },
+  {
+   "id": "11244",
+   "name": "Travis Kelce",
+   "pos": "TE",
+   "espn": "15847",
+   "total": 226,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0011",
+    "0007",
+    "0002",
+    "0010"
+   ],
+   "peak": 45,
+   "peakYear": 2023,
+   "ptsPerDollar": 5.8
+  },
+  {
+   "id": "15711",
+   "name": "Kenneth Walker III",
+   "pos": "RB",
+   "espn": "4567048",
+   "total": 224,
+   "seasons": 5,
+   "first": 2022,
+   "last": 2026,
+   "teams": [
+    "0006",
+    "0002",
+    "0004"
+   ],
+   "peak": 66,
+   "peakYear": 2026,
+   "ptsPerDollar": 3.6
+  },
+  {
+   "id": "15281",
+   "name": "Ja'Marr Chase",
+   "pos": "WR",
+   "espn": "4362628",
+   "total": 222,
+   "seasons": 6,
+   "first": 2021,
+   "last": 2026,
+   "teams": [
+    "0007",
+    "0006"
+   ],
+   "peak": 62,
+   "peakYear": 2026,
+   "ptsPerDollar": 7.1
+  },
+  {
+   "id": "12801",
+   "name": "Tyreek Hill",
+   "pos": "WR",
+   "espn": "3116406",
+   "total": 217,
+   "seasons": 7,
+   "first": 2019,
+   "last": 2025,
+   "teams": [
+    "0002",
+    "0007",
+    "0005"
+   ],
+   "peak": 43,
+   "peakYear": 2021,
+   "ptsPerDollar": 6.7
+  },
+  {
+   "id": "16161",
+   "name": "Bijan Robinson",
+   "pos": "RB",
+   "espn": "4430807",
+   "total": 210,
+   "seasons": 4,
+   "first": 2023,
+   "last": 2026,
+   "teams": [
+    "0009"
+   ],
+   "peak": 63,
+   "peakYear": 2026,
+   "ptsPerDollar": 4.8
+  },
+  {
+   "id": "12625",
+   "name": "Ezekiel Elliott",
+   "pos": "RB",
+   "espn": "3051392",
+   "total": 200,
+   "seasons": 5,
+   "first": 2019,
+   "last": 2023,
+   "teams": [
+    "0003",
+    "0010"
+   ],
+   "peak": 61,
+   "peakYear": 2021,
+   "ptsPerDollar": 3.2
+  },
+  {
+   "id": "14797",
+   "name": "D'Andre Swift",
+   "pos": "RB",
+   "espn": "4259545",
+   "total": 200,
+   "seasons": 7,
+   "first": 2020,
+   "last": 2026,
+   "teams": [
+    "0012",
+    "0005",
+    "0004",
+    "0003",
+    "0010"
+   ],
+   "peak": 40,
+   "peakYear": 2022,
+   "ptsPerDollar": 5.1
+  },
+  {
+   "id": "14836",
+   "name": "Justin Jefferson",
+   "pos": "WR",
+   "espn": "4262921",
+   "total": 196,
+   "seasons": 7,
+   "first": 2020,
+   "last": 2026,
+   "teams": [
+    "0005",
+    "0006",
+    "0002",
+    "0003"
+   ],
+   "peak": 65,
+   "peakYear": 2025,
+   "ptsPerDollar": 7.2
+  },
+  {
+   "id": "12186",
+   "name": "Stefon Diggs",
+   "pos": "WR",
+   "espn": "2976212",
+   "total": 189,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0012",
+    "0002",
+    "0011",
+    "0003",
+    "0010"
+   ],
+   "peak": 38,
+   "peakYear": 2023,
+   "ptsPerDollar": 6.7
+  },
+  {
+   "id": "11232",
+   "name": "DeAndre Hopkins",
+   "pos": "WR",
+   "espn": "15795",
+   "total": 187,
+   "seasons": 6,
+   "first": 2019,
+   "last": 2024,
+   "teams": [
+    "0007",
+    "0001",
+    "0003",
+    "0006",
+    "0012"
+   ],
+   "peak": 64,
+   "peakYear": 2019,
+   "ptsPerDollar": 6.0
+  },
+  {
+   "id": "14071",
+   "name": "David Montgomery",
+   "pos": "RB",
+   "espn": "4035538",
+   "total": 179,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0012",
+    "0001",
+    "0010",
+    "0011"
+   ],
+   "peak": 50,
+   "peakYear": 2019,
+   "ptsPerDollar": 5.9
+  },
+  {
+   "id": "13319",
+   "name": "Aaron Jones Sr.",
+   "pos": "RB",
+   "espn": "3042519",
+   "total": 178,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0001",
+    "0011",
+    "0003",
+    "0009",
+    "0012",
+    "0005"
+   ],
+   "peak": 29,
+   "peakYear": 2021,
+   "ptsPerDollar": 4.0
+  },
+  {
+   "id": "16162",
+   "name": "Jahmyr Gibbs",
+   "pos": "RB",
+   "espn": "4429795",
+   "total": 178,
+   "seasons": 4,
+   "first": 2023,
+   "last": 2026,
+   "teams": [
+    "0003"
+   ],
+   "peak": 55,
+   "peakYear": 2026,
+   "ptsPerDollar": 5.8
+  },
+  {
+   "id": "14104",
+   "name": "A.J. Brown",
+   "pos": "WR",
+   "espn": "4047646",
+   "total": 175,
+   "seasons": 7,
+   "first": 2020,
+   "last": 2026,
+   "teams": [
+    "0003",
+    "0001",
+    "0002"
+   ],
+   "peak": 42,
+   "peakYear": 2026,
+   "ptsPerDollar": 7.2
+  },
+  {
+   "id": "13146",
+   "name": "James Conner",
+   "pos": "RB",
+   "espn": "3045147",
+   "total": 165,
+   "seasons": 7,
+   "first": 2019,
+   "last": 2025,
+   "teams": [
+    "0007",
+    "0004",
+    "0009",
+    "0002",
+    "0008"
+   ],
+   "peak": 42,
+   "peakYear": 2025,
+   "ptsPerDollar": 3.9
+  },
+  {
+   "id": "14800",
+   "name": "J.K. Dobbins",
+   "pos": "RB",
+   "espn": "4241985",
+   "total": 160,
+   "seasons": 7,
+   "first": 2020,
+   "last": 2026,
+   "teams": [
+    "0009",
+    "0011",
+    "0004",
+    "0006"
+   ],
+   "peak": 44,
+   "peakYear": 2020,
+   "ptsPerDollar": 2.4
+  },
+  {
+   "id": "15254",
+   "name": "Najee Harris",
+   "pos": "RB",
+   "espn": "4241457",
+   "total": 158,
+   "seasons": 5,
+   "first": 2021,
+   "last": 2025,
+   "teams": [
+    "0005",
+    "0010",
+    "0003",
+    "0001"
+   ],
+   "peak": 48,
+   "peakYear": 2022,
+   "ptsPerDollar": 3.4
+  },
+  {
+   "id": "11671",
+   "name": "Mike Evans",
+   "pos": "WR",
+   "espn": "16737",
+   "total": 155,
+   "seasons": 8,
+   "first": 2019,
+   "last": 2026,
+   "teams": [
+    "0006",
+    "0008",
+    "0004",
+    "0002"
+   ],
+   "peak": 49,
+   "peakYear": 2019,
+   "ptsPerDollar": 9.2
+  },
+  {
+   "id": "13164",
+   "name": "Cooper Kupp",
+   "pos": "WR",
+   "espn": "2977187",
+   "total": 155,
+   "seasons": 7,
+   "first": 2019,
+   "last": 2025,
+   "teams": [
+    "0009",
+    "0004",
+    "0006",
+    "0003",
+    "0012"
+   ],
+   "peak": 37,
+   "peakYear": 2022,
+   "ptsPerDollar": 6.5
+  },
+  {
+   "id": "13132",
+   "name": "Alvin Kamara",
+   "pos": "RB",
+   "espn": "3054850",
+   "total": 155,
+   "seasons": 7,
+   "first": 2019,
+   "last": 2025,
+   "teams": [
+    "0010",
+    "0004",
+    "0001"
+   ],
+   "peak": 46,
+   "peakYear": 2022,
+   "ptsPerDollar": 6.5
+  }
+ ],
+ "seasons": [
+  {
+   "year": 2019,
+   "total": 2180,
+   "contracts": 182,
+   "share": {
+    "WR": 35.6,
+    "RB": 51.2,
+    "TE": 4.4,
+    "DEF": 2.4,
+    "QB": 4.8
+   },
+   "top": [
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0001",
+     "sal": 72,
+     "how": "Trade",
+     "pts": null
+    },
+    {
+     "id": "13129",
+     "name": "Leonard Fournette",
+     "pos": "RB",
+     "espn": "3115364",
+     "fr": "0010",
+     "sal": 65,
+     "how": "Keeper",
+     "pts": null
+    },
+    {
+     "id": "11232",
+     "name": "DeAndre Hopkins",
+     "pos": "WR",
+     "espn": "15795",
+     "fr": "0007",
+     "sal": 64,
+     "how": "Auction",
+     "pts": null
+    },
+    {
+     "id": "13128",
+     "name": "Dalvin Cook",
+     "pos": "RB",
+     "espn": "3116593",
+     "fr": "0004",
+     "sal": 59,
+     "how": "Keeper",
+     "pts": null
+    },
+    {
+     "id": "10271",
+     "name": "Julio Jones",
+     "pos": "WR",
+     "espn": "13982",
+     "fr": "0010",
+     "sal": 56,
+     "how": "Auction",
+     "pts": null
+    },
+    {
+     "id": "14073",
+     "name": "Josh Jacobs",
+     "pos": "RB",
+     "espn": "4047365",
+     "fr": "0003",
+     "sal": 55,
+     "how": "Auction",
+     "pts": null
+    },
+    {
+     "id": "11192",
+     "name": "Le'Veon Bell",
+     "pos": "RB",
+     "espn": "15825",
+     "fr": "0007",
+     "sal": 54,
+     "how": "Auction",
+     "pts": null
+    },
+    {
+     "id": "14071",
+     "name": "David Montgomery",
+     "pos": "RB",
+     "espn": "4035538",
+     "fr": "0012",
+     "sal": 50,
+     "how": "Auction",
+     "pts": null
+    }
+   ],
+   "auctionTop12": 47.1,
+   "over40": 15
+  },
+  {
+   "year": 2020,
+   "total": 2123,
+   "contracts": 178,
+   "share": {
+    "RB": 55.2,
+    "WR": 35.0,
+    "QB": 4.6,
+    "DEF": 1.5,
+    "TE": 3.5
+   },
+   "top": [
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0006",
+     "sal": 83,
+     "how": "Auction",
+     "pts": null
+    },
+    {
+     "id": "14803",
+     "name": "Clyde Edwards-Helaire",
+     "pos": "RB",
+     "espn": "4242214",
+     "fr": "0010",
+     "sal": 60,
+     "how": "Auction",
+     "pts": null
+    },
+    {
+     "id": "13128",
+     "name": "Dalvin Cook",
+     "pos": "RB",
+     "espn": "3116593",
+     "fr": "0001",
+     "sal": 59,
+     "how": "Trade",
+     "pts": null
+    },
+    {
+     "id": "10271",
+     "name": "Julio Jones",
+     "pos": "WR",
+     "espn": "13982",
+     "fr": "0010",
+     "sal": 59,
+     "how": "Keeper",
+     "pts": null
+    },
+    {
+     "id": "14073",
+     "name": "Josh Jacobs",
+     "pos": "RB",
+     "espn": "4047365",
+     "fr": "0002",
+     "sal": 58,
+     "how": "Trade",
+     "pts": null
+    },
+    {
+     "id": "12625",
+     "name": "Ezekiel Elliott",
+     "pos": "RB",
+     "espn": "3051392",
+     "fr": "0003",
+     "sal": 58,
+     "how": "Keeper",
+     "pts": null
+    },
+    {
+     "id": "11675",
+     "name": "Davante Adams",
+     "pos": "WR",
+     "espn": "16800",
+     "fr": "0003",
+     "sal": 54,
+     "how": "Keeper",
+     "pts": null
+    },
+    {
+     "id": "11232",
+     "name": "DeAndre Hopkins",
+     "pos": "WR",
+     "espn": "15795",
+     "fr": "0001",
+     "sal": 46,
+     "how": "Auction",
+     "pts": null
+    }
+   ],
+   "auctionTop12": 39.9,
+   "over40": 12
+  },
+  {
+   "year": 2021,
+   "total": 2346,
+   "contracts": 219,
+   "share": {
+    "RB": 50.8,
+    "WR": 33.9,
+    "QB": 7.3,
+    "TE": 6.6,
+    "DEF": 1.4
+   },
+   "top": [
+    {
+     "id": "13128",
+     "name": "Dalvin Cook",
+     "pos": "RB",
+     "espn": "3116593",
+     "fr": "0007",
+     "sal": 65,
+     "how": "Keeper",
+     "pts": 181.7
+    },
+    {
+     "id": "12625",
+     "name": "Ezekiel Elliott",
+     "pos": "RB",
+     "espn": "3051392",
+     "fr": "0010",
+     "sal": 61,
+     "how": "Auction",
+     "pts": 204.7
+    },
+    {
+     "id": "13131",
+     "name": "Joe Mixon",
+     "pos": "RB",
+     "espn": "3116385",
+     "fr": "0009",
+     "sal": 50,
+     "how": "Keeper",
+     "pts": 223.3
+    },
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0004",
+     "sal": 49,
+     "how": "Auction",
+     "pts": 79.7
+    },
+    {
+     "id": "11232",
+     "name": "DeAndre Hopkins",
+     "pos": "WR",
+     "espn": "15795",
+     "fr": "0001",
+     "sal": 49,
+     "how": "Keeper",
+     "pts": 147.2
+    },
+    {
+     "id": "14803",
+     "name": "Clyde Edwards-Helaire",
+     "pos": "RB",
+     "espn": "4242214",
+     "fr": "0006",
+     "sal": 48,
+     "how": "Auction",
+     "pts": 98.5
+    },
+    {
+     "id": "14073",
+     "name": "Josh Jacobs",
+     "pos": "RB",
+     "espn": "4047365",
+     "fr": "0003",
+     "sal": 48,
+     "how": "Auction",
+     "pts": 161.8
+    },
+    {
+     "id": "15254",
+     "name": "Najee Harris",
+     "pos": "RB",
+     "espn": "4241457",
+     "fr": "0005",
+     "sal": 45,
+     "how": "Rookie deal",
+     "pts": 241.0
+    }
+   ],
+   "auctionTop12": 37.1,
+   "over40": 12
+  },
+  {
+   "year": 2022,
+   "total": 2243,
+   "contracts": 221,
+   "share": {
+    "RB": 51.0,
+    "TE": 7.0,
+    "WR": 33.7,
+    "QB": 7.1,
+    "DEF": 1.2
+   },
+   "top": [
+    {
+     "id": "13404",
+     "name": "Austin Ekeler",
+     "pos": "RB",
+     "espn": "3068267",
+     "fr": "0011",
+     "sal": 60,
+     "how": "Auction",
+     "pts": 292.7
+    },
+    {
+     "id": "12626",
+     "name": "Derrick Henry",
+     "pos": "RB",
+     "espn": "3043078",
+     "fr": "0010",
+     "sal": 60,
+     "how": "Auction",
+     "pts": 244.1
+    },
+    {
+     "id": "13131",
+     "name": "Joe Mixon",
+     "pos": "RB",
+     "espn": "3116385",
+     "fr": "0001",
+     "sal": 59,
+     "how": "Keeper",
+     "pts": 193.5
+    },
+    {
+     "id": "13128",
+     "name": "Dalvin Cook",
+     "pos": "RB",
+     "espn": "3116593",
+     "fr": "0004",
+     "sal": 55,
+     "how": "Auction",
+     "pts": 191.0
+    },
+    {
+     "id": "13130",
+     "name": "Christian McCaffrey",
+     "pos": "RB",
+     "espn": "3117251",
+     "fr": "0007",
+     "sal": 53,
+     "how": "Keeper",
+     "pts": 268.6
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "espn": "4242335",
+     "fr": "0002",
+     "sal": 50,
+     "how": "Keeper",
+     "pts": 144.1
+    },
+    {
+     "id": "15254",
+     "name": "Najee Harris",
+     "pos": "RB",
+     "espn": "4241457",
+     "fr": "0005",
+     "sal": 48,
+     "how": "Rookie deal",
+     "pts": 132.1
+    },
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0006",
+     "sal": 47,
+     "how": "Auction",
+     "pts": 226.4
+    }
+   ],
+   "auctionTop12": 40.8,
+   "over40": 12
+  },
+  {
+   "year": 2023,
+   "total": 2209,
+   "contracts": 212,
+   "share": {
+    "RB": 48.0,
+    "WR": 35.4,
+    "QB": 8.6,
+    "TE": 7.1,
+    "DEF": 0.9
+   },
+   "top": [
+    {
+     "id": "13130",
+     "name": "Christian McCaffrey",
+     "pos": "RB",
+     "espn": "3117251",
+     "fr": "0005",
+     "sal": 55,
+     "how": "Auction",
+     "pts": 311.4
+    },
+    {
+     "id": "13404",
+     "name": "Austin Ekeler",
+     "pos": "RB",
+     "espn": "3068267",
+     "fr": "0012",
+     "sal": 55,
+     "how": "Auction",
+     "pts": 150.1
+    },
+    {
+     "id": "13610",
+     "name": "Nick Chubb",
+     "pos": "RB",
+     "espn": "3128720",
+     "fr": "0004",
+     "sal": 55,
+     "how": "Auction",
+     "pts": 23.1
+    },
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0007",
+     "sal": 50,
+     "how": "Keeper",
+     "pts": 151.8
+    },
+    {
+     "id": "12626",
+     "name": "Derrick Henry",
+     "pos": "RB",
+     "espn": "3043078",
+     "fr": "0011",
+     "sal": 45,
+     "how": "Auction",
+     "pts": 150.7
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "espn": "4242335",
+     "fr": "0002",
+     "sal": 45,
+     "how": "Auction",
+     "pts": 101.1
+    },
+    {
+     "id": "11244",
+     "name": "Travis Kelce",
+     "pos": "TE",
+     "espn": "15847",
+     "fr": "0002",
+     "sal": 45,
+     "how": "Keeper",
+     "pts": 197.6
+    },
+    {
+     "id": "16161",
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "espn": "4430807",
+     "fr": "0009",
+     "sal": 45,
+     "how": "Rookie deal",
+     "pts": 189.0
+    }
+   ],
+   "auctionTop12": 38.2,
+   "over40": 10
+  },
+  {
+   "year": 2024,
+   "total": 2251,
+   "contracts": 224,
+   "share": {
+    "RB": 43.4,
+    "WR": 38.5,
+    "QB": 10.1,
+    "TE": 7.1,
+    "DEF": 0.8
+   },
+   "top": [
+    {
+     "id": "13404",
+     "name": "Austin Ekeler",
+     "pos": "RB",
+     "espn": "3068267",
+     "fr": "0012",
+     "sal": 58,
+     "how": "Keeper",
+     "pts": 130.4
+    },
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0007",
+     "sal": 56,
+     "how": "Keeper",
+     "pts": 300.0
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "espn": "4242335",
+     "fr": "0002",
+     "sal": 48,
+     "how": "Keeper",
+     "pts": 142.2
+    },
+    {
+     "id": "16161",
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "espn": "4430807",
+     "fr": "0009",
+     "sal": 48,
+     "how": "Rookie deal",
+     "pts": 246.8
+    },
+    {
+     "id": "14832",
+     "name": "CeeDee Lamb",
+     "pos": "WR",
+     "espn": "4241389",
+     "fr": "0012",
+     "sal": 48,
+     "how": "Keeper",
+     "pts": 219.3
+    },
+    {
+     "id": "12626",
+     "name": "Derrick Henry",
+     "pos": "RB",
+     "espn": "3043078",
+     "fr": "0006",
+     "sal": 46,
+     "how": "Auction",
+     "pts": 254.2
+    },
+    {
+     "id": "15253",
+     "name": "Travis Etienne Jr.",
+     "pos": "RB",
+     "espn": "4239996",
+     "fr": "0004",
+     "sal": 44,
+     "how": "Auction",
+     "pts": 69.1
+    },
+    {
+     "id": "16162",
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "espn": "4429795",
+     "fr": "0003",
+     "sal": 40,
+     "how": "Rookie deal",
+     "pts": 236.8
+    }
+   ],
+   "auctionTop12": 31.4,
+   "over40": 8
+  },
+  {
+   "year": 2025,
+   "total": 2343,
+   "contracts": 233,
+   "share": {
+    "RB": 47.4,
+    "WR": 38.7,
+    "QB": 7.4,
+    "TE": 5.8,
+    "DEF": 0.7
+   },
+   "top": [
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0005",
+     "sal": 65,
+     "how": "Auction",
+     "pts": 187.1
+    },
+    {
+     "id": "14836",
+     "name": "Justin Jefferson",
+     "pos": "WR",
+     "espn": "4262921",
+     "fr": "0002",
+     "sal": 65,
+     "how": "Auction",
+     "pts": 157.4
+    },
+    {
+     "id": "13130",
+     "name": "Christian McCaffrey",
+     "pos": "RB",
+     "espn": "3117251",
+     "fr": "0011",
+     "sal": 60,
+     "how": "Auction",
+     "pts": 328.5
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "espn": "4242335",
+     "fr": "0001",
+     "sal": 56,
+     "how": "Auction",
+     "pts": 309.0
+    },
+    {
+     "id": "16161",
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "espn": "4430807",
+     "fr": "0009",
+     "sal": 54,
+     "how": "Rookie deal",
+     "pts": 264.3
+    },
+    {
+     "id": "14073",
+     "name": "Josh Jacobs",
+     "pos": "RB",
+     "espn": "4047365",
+     "fr": "0010",
+     "sal": 51,
+     "how": "Auction",
+     "pts": 197.7
+    },
+    {
+     "id": "12626",
+     "name": "Derrick Henry",
+     "pos": "RB",
+     "espn": "3043078",
+     "fr": "0012",
+     "sal": 50,
+     "how": "Auction",
+     "pts": 188.5
+    },
+    {
+     "id": "15281",
+     "name": "Ja'Marr Chase",
+     "pos": "WR",
+     "espn": "4362628",
+     "fr": "0007",
+     "sal": 50,
+     "how": "Rookie deal",
+     "pts": 221.9
+    }
+   ],
+   "auctionTop12": 47.9,
+   "over40": 12
+  },
+  {
+   "year": 2026,
+   "total": 2323,
+   "contracts": 222,
+   "share": {
+    "RB": 45.5,
+    "WR": 39.5,
+    "TE": 6.2,
+    "QB": 7.7,
+    "DEF": 1.1
+   },
+   "top": [
+    {
+     "id": "15711",
+     "name": "Kenneth Walker III",
+     "pos": "RB",
+     "espn": "4567048",
+     "fr": "0004",
+     "sal": 66,
+     "how": "Auction",
+     "pts": 147.7
+    },
+    {
+     "id": "16161",
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "espn": "4430807",
+     "fr": "0009",
+     "sal": 63,
+     "how": "Rookie deal",
+     "pts": 145.7
+    },
+    {
+     "id": "15281",
+     "name": "Ja'Marr Chase",
+     "pos": "WR",
+     "espn": "4362628",
+     "fr": "0006",
+     "sal": 62,
+     "how": "Auction",
+     "pts": 97.1
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "espn": "4242335",
+     "fr": "0001",
+     "sal": 59,
+     "how": "Keeper",
+     "pts": 137.5
+    },
+    {
+     "id": "13604",
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "espn": "3929630",
+     "fr": "0002",
+     "sal": 58,
+     "how": "Auction",
+     "pts": 38.1
+    },
+    {
+     "id": "16162",
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "espn": "4429795",
+     "fr": "0003",
+     "sal": 55,
+     "how": "Rookie deal",
+     "pts": 171.0
+    },
+    {
+     "id": "13130",
+     "name": "Christian McCaffrey",
+     "pos": "RB",
+     "espn": "3117251",
+     "fr": "0012",
+     "sal": 51,
+     "how": "Auction",
+     "pts": 144.0
+    },
+    {
+     "id": "15751",
+     "name": "Drake London",
+     "pos": "WR",
+     "espn": "4426502",
+     "fr": "0010",
+     "sal": 50,
+     "how": "Auction",
+     "pts": 108.0
+    }
+   ],
+   "auctionTop12": 43.6,
+   "over40": 13
+  }
+ ],
+ "bargains": [
+  {
+   "id": "13589",
+   "name": "Josh Allen",
+   "pos": "QB",
+   "espn": "3918298",
+   "year": 2025,
+   "fr": "0005",
+   "sal": 21,
+   "pts": 309.9,
+   "per": 14.8,
+   "how": "Auction"
+  },
+  {
+   "id": "14783",
+   "name": "Jalen Hurts",
+   "pos": "QB",
+   "espn": "4040715",
+   "year": 2023,
+   "fr": "0007",
+   "sal": 20,
+   "pts": 291.8,
+   "per": 14.6,
+   "how": "Keeper"
+  },
+  {
+   "id": "13164",
+   "name": "Cooper Kupp",
+   "pos": "WR",
+   "espn": "2977187",
+   "year": 2021,
+   "fr": "0009",
+   "sal": 25,
+   "pts": 335.4,
+   "per": 13.4,
+   "how": "Keeper"
+  },
+  {
+   "id": "13593",
+   "name": "Lamar Jackson",
+   "pos": "QB",
+   "espn": "3916387",
+   "year": 2024,
+   "fr": "0011",
+   "sal": 28,
+   "pts": 321.4,
+   "per": 11.5,
+   "how": "Auction"
+  },
+  {
+   "id": "15287",
+   "name": "Amon-Ra St. Brown",
+   "pos": "WR",
+   "espn": "4374302",
+   "year": 2025,
+   "fr": "0010",
+   "sal": 21,
+   "pts": 233.5,
+   "per": 11.1,
+   "how": "Rookie deal"
+  },
+  {
+   "id": "7836",
+   "name": "Aaron Rodgers",
+   "pos": "QB",
+   "espn": "8439",
+   "year": 2021,
+   "fr": "0012",
+   "sal": 22,
+   "pts": 244.5,
+   "per": 11.1,
+   "how": "Keeper"
+  },
+  {
+   "id": "13593",
+   "name": "Lamar Jackson",
+   "pos": "QB",
+   "espn": "3916387",
+   "year": 2023,
+   "fr": "0012",
+   "sal": 23,
+   "pts": 253.8,
+   "per": 11.0,
+   "how": "Keeper"
+  },
+  {
+   "id": "15762",
+   "name": "George Pickens",
+   "pos": "WR",
+   "espn": "4426354",
+   "year": 2025,
+   "fr": "0008",
+   "sal": 21,
+   "pts": 228.1,
+   "per": 10.9,
+   "how": "Auction"
+  },
+  {
+   "id": "13116",
+   "name": "Patrick Mahomes",
+   "pos": "QB",
+   "espn": "3139477",
+   "year": 2023,
+   "fr": "0002",
+   "sal": 22,
+   "pts": 235.7,
+   "per": 10.7,
+   "how": "Keeper"
+  },
+  {
+   "id": "12801",
+   "name": "Tyreek Hill",
+   "pos": "WR",
+   "espn": "3116406",
+   "year": 2023,
+   "fr": "0007",
+   "sal": 31,
+   "pts": 322.7,
+   "per": 10.4,
+   "how": "Keeper"
+  }
+ ],
+ "busts": [
+  {
+   "id": "13850",
+   "name": "Gus Edwards",
+   "pos": "RB",
+   "espn": "3051926",
+   "year": 2021,
+   "fr": "0011",
+   "sal": 34,
+   "pts": 0,
+   "per": 0.0,
+   "how": "Auction"
+  },
+  {
+   "id": "14800",
+   "name": "J.K. Dobbins",
+   "pos": "RB",
+   "espn": "4241985",
+   "year": 2021,
+   "fr": "0009",
+   "sal": 35,
+   "pts": 0,
+   "per": 0.0,
+   "how": "Keeper"
+  },
+  {
+   "id": "13610",
+   "name": "Nick Chubb",
+   "pos": "RB",
+   "espn": "3128720",
+   "year": 2023,
+   "fr": "0004",
+   "sal": 55,
+   "pts": 23.1,
+   "per": 0.4,
+   "how": "Auction"
+  },
+  {
+   "id": "13146",
+   "name": "James Conner",
+   "pos": "RB",
+   "espn": "3045147",
+   "year": 2025,
+   "fr": "0004",
+   "sal": 42,
+   "pts": 33.3,
+   "per": 0.8,
+   "how": "Auction"
+  },
+  {
+   "id": "15256",
+   "name": "Javonte Williams",
+   "pos": "RB",
+   "espn": "4361579",
+   "year": 2022,
+   "fr": "0008",
+   "sal": 40,
+   "pts": 42.0,
+   "per": 1.1,
+   "how": "Rookie deal"
+  },
+  {
+   "id": "13364",
+   "name": "Chris Carson",
+   "pos": "RB",
+   "espn": "",
+   "year": 2021,
+   "fr": "0002",
+   "sal": 33,
+   "pts": 48.1,
+   "per": 1.5,
+   "how": "Keeper"
+  },
+  {
+   "id": "11678",
+   "name": "Allen Robinson",
+   "pos": "WR",
+   "espn": "16799",
+   "year": 2021,
+   "fr": "0012",
+   "sal": 30,
+   "pts": 44.7,
+   "per": 1.5,
+   "how": "Keeper"
+  },
+  {
+   "id": "15253",
+   "name": "Travis Etienne Jr.",
+   "pos": "RB",
+   "espn": "4239996",
+   "year": 2024,
+   "fr": "0004",
+   "sal": 44,
+   "pts": 69.1,
+   "per": 1.6,
+   "how": "Auction"
+  },
+  {
+   "id": "13604",
+   "name": "Saquon Barkley",
+   "pos": "RB",
+   "espn": "3929630",
+   "year": 2021,
+   "fr": "0004",
+   "sal": 49,
+   "pts": 79.7,
+   "per": 1.6,
+   "how": "Auction"
+  },
+  {
+   "id": "14840",
+   "name": "Brandon Aiyuk",
+   "pos": "WR",
+   "espn": "4360438",
+   "year": 2024,
+   "fr": "0005",
+   "sal": 32,
+   "pts": 58.1,
+   "per": 1.8,
+   "how": "Keeper"
+  }
+ ],
+ "travelers": [
+  {
+   "id": "13604",
+   "name": "Saquon Barkley",
+   "pos": "RB",
+   "espn": "3929630",
+   "teams": [
+    "0001",
+    "0006",
+    "0004",
+    "0007",
+    "0005",
+    "0002"
+   ],
+   "total": 480,
+   "seasons": 8
+  },
+  {
+   "id": "13319",
+   "name": "Aaron Jones Sr.",
+   "pos": "RB",
+   "espn": "3042519",
+   "teams": [
+    "0001",
+    "0011",
+    "0003",
+    "0009",
+    "0012",
+    "0005"
+   ],
+   "total": 178,
+   "seasons": 8
+  },
+  {
+   "id": "12626",
+   "name": "Derrick Henry",
+   "pos": "RB",
+   "espn": "3043078",
+   "teams": [
+    "0005",
+    "0010",
+    "0011",
+    "0006",
+    "0012"
+   ],
+   "total": 332,
+   "seasons": 8
+  },
+  {
+   "id": "11675",
+   "name": "Davante Adams",
+   "pos": "WR",
+   "espn": "16800",
+   "teams": [
+    "0003",
+    "0008",
+    "0001",
+    "0009",
+    "0005"
+   ],
+   "total": 270,
+   "seasons": 8
+  },
+  {
+   "id": "14073",
+   "name": "Josh Jacobs",
+   "pos": "RB",
+   "espn": "4047365",
+   "teams": [
+    "0003",
+    "0002",
+    "0001",
+    "0010",
+    "0005"
+   ],
+   "total": 264,
+   "seasons": 8
+  },
+  {
+   "id": "13404",
+   "name": "Austin Ekeler",
+   "pos": "RB",
+   "espn": "3068267",
+   "teams": [
+    "0006",
+    "0007",
+    "0011",
+    "0012",
+    "0008"
+   ],
+   "total": 255,
+   "seasons": 7
+  },
+  {
+   "id": "14797",
+   "name": "D'Andre Swift",
+   "pos": "RB",
+   "espn": "4259545",
+   "teams": [
+    "0012",
+    "0005",
+    "0004",
+    "0003",
+    "0010"
+   ],
+   "total": 200,
+   "seasons": 7
+  },
+  {
+   "id": "12186",
+   "name": "Stefon Diggs",
+   "pos": "WR",
+   "espn": "2976212",
+   "teams": [
+    "0012",
+    "0002",
+    "0011",
+    "0003",
+    "0010"
+   ],
+   "total": 189,
+   "seasons": 8
+  }
+ ],
+ "byPosition": {
+  "QB": [
+   {
+    "id": "13593",
+    "name": "Lamar Jackson",
+    "pos": "QB",
+    "espn": "3916387",
+    "total": 146,
+    "seasons": 8
+   },
+   {
+    "id": "13116",
+    "name": "Patrick Mahomes",
+    "pos": "QB",
+    "espn": "3139477",
+    "total": 145,
+    "seasons": 8
+   },
+   {
+    "id": "13589",
+    "name": "Josh Allen",
+    "pos": "QB",
+    "espn": "3918298",
+    "total": 137,
+    "seasons": 8
+   },
+   {
+    "id": "14783",
+    "name": "Jalen Hurts",
+    "pos": "QB",
+    "espn": "4040715",
+    "total": 108,
+    "seasons": 6
+   },
+   {
+    "id": "14777",
+    "name": "Joe Burrow",
+    "pos": "QB",
+    "espn": "3915511",
+    "total": 86,
+    "seasons": 7
+   }
+  ],
+  "RB": [
+   {
+    "id": "13604",
+    "name": "Saquon Barkley",
+    "pos": "RB",
+    "espn": "3929630",
+    "total": 480,
+    "seasons": 8
+   },
+   {
+    "id": "14802",
+    "name": "Jonathan Taylor",
+    "pos": "RB",
+    "espn": "4242335",
+    "total": 343,
+    "seasons": 7
+   },
+   {
+    "id": "13130",
+    "name": "Christian McCaffrey",
+    "pos": "RB",
+    "espn": "3117251",
+    "total": 336,
+    "seasons": 7
+   },
+   {
+    "id": "12626",
+    "name": "Derrick Henry",
+    "pos": "RB",
+    "espn": "3043078",
+    "total": 332,
+    "seasons": 8
+   },
+   {
+    "id": "13131",
+    "name": "Joe Mixon",
+    "pos": "RB",
+    "espn": "3116385",
+    "total": 285,
+    "seasons": 7
+   }
+  ],
+  "WR": [
+   {
+    "id": "11675",
+    "name": "Davante Adams",
+    "pos": "WR",
+    "espn": "16800",
+    "total": 270,
+    "seasons": 8
+   },
+   {
+    "id": "14832",
+    "name": "CeeDee Lamb",
+    "pos": "WR",
+    "espn": "4241389",
+    "total": 243,
+    "seasons": 7
+   },
+   {
+    "id": "15281",
+    "name": "Ja'Marr Chase",
+    "pos": "WR",
+    "espn": "4362628",
+    "total": 222,
+    "seasons": 6
+   },
+   {
+    "id": "12801",
+    "name": "Tyreek Hill",
+    "pos": "WR",
+    "espn": "3116406",
+    "total": 217,
+    "seasons": 7
+   },
+   {
+    "id": "14836",
+    "name": "Justin Jefferson",
+    "pos": "WR",
+    "espn": "4262921",
+    "total": 196,
+    "seasons": 7
+   }
+  ],
+  "TE": [
+   {
+    "id": "11244",
+    "name": "Travis Kelce",
+    "pos": "TE",
+    "espn": "15847",
+    "total": 226,
+    "seasons": 8
+   },
+   {
+    "id": "13299",
+    "name": "George Kittle",
+    "pos": "TE",
+    "espn": "3040151",
+    "total": 117,
+    "seasons": 8
+   },
+   {
+    "id": "15329",
+    "name": "Kyle Pitts Sr.",
+    "pos": "TE",
+    "espn": "4360248",
+    "total": 67,
+    "seasons": 6
+   },
+   {
+    "id": "13671",
+    "name": "Mark Andrews",
+    "pos": "TE",
+    "espn": "3116365",
+    "total": 51,
+    "seasons": 6
+   },
+   {
+    "id": "12263",
+    "name": "Darren Waller",
+    "pos": "TE",
+    "espn": "2576925",
+    "total": 46,
+    "seasons": 6
+   }
+  ]
+ },
+ "biggestWaivers": [
+  {
+   "id": "14798",
+   "name": "Zack Moss",
+   "pos": "RB",
+   "espn": "4035676",
+   "year": 2022,
+   "fr": "0002",
+   "sal": 55
+  },
+  {
+   "id": "16166",
+   "name": "Sean Tucker",
+   "pos": "RB",
+   "espn": "4430871",
+   "year": 2024,
+   "fr": "0006",
+   "sal": 51
+  },
+  {
+   "id": "14067",
+   "name": "Gardner Minshew II",
+   "pos": "QB",
+   "espn": "4038524",
+   "year": 2023,
+   "fr": "0011",
+   "sal": 50
+  },
+  {
+   "id": "17059",
+   "name": "Ollie Gordon II",
+   "pos": "RB",
+   "espn": "4711533",
+   "year": 2026,
+   "fr": "0004",
+   "sal": 37
+  },
+  {
+   "id": "13608",
+   "name": "Rashaad Penny",
+   "pos": "RB",
+   "espn": "3139925",
+   "year": 2021,
+   "fr": "0001",
+   "sal": 36
+  }
+ ]
+}

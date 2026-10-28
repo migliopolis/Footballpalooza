@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+
+# private analysis inputs/outputs (owner names, cash notes)
+scripts/analysis/trade_index/trades-master.md
+scripts/analysis/**/*.json
+!scripts/analysis/trade_index/slots.json
+!scripts/analysis/trade_index/origins.json
