@@ -50,7 +50,8 @@ window.FBPAwards = (() => {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg')}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.rookie ? ' · <i>Rookie</i>' : ''}</span>
       <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${honors(p)}${change(p)}
-      <span class="aw-stats"><span><b>${n1(p.pts)}</b>pts</span><span><b>${n1(p.ppg)}</b>per start</span><span><b>${sal(p)}</b>salary</span></span></div>`;
+      <span class="aw-stats"><span><b>${n1(p.pts)}</b>pts</span><span><b>${n1(p.ppg)}</b>per start</span><span><b>${sal(p)}</b>salary</span></span>
+      ${p.starts != null ? `<span class="aw-started">${p.starts} week${p.starts === 1 ? '' : 's'} started</span>` : ''}</div>`;
   }
   // one award: the winner big, the next two below
   // MFL pick codes: FP_<team>_<year>_<round> is a future pick; DP_<round>_<pick> (zero-based) is this year's rookie draft
@@ -72,7 +73,10 @@ window.FBPAwards = (() => {
     }
     if (a.list) {
       const [w, ...rest] = a.list;
-      const extra = p => p.benchWeeks != null ? `${p.benchWeeks} week${p.benchWeeks === 1 ? '' : 's'} on the bench` : p.perDollar != null ? `${n1(p.perDollar)} pts per $` : p.bid != null ? `${p.how}${p.how === 'FAAB' ? ' $' + Math.round(p.bid) : ''}` : p.week ? `Week ${p.week}` : `${p.starts} starts`;
+      const wks = (n, what) => `${n} week${n === 1 ? '' : 's'} ${what}`;
+      const st = p => p.starts != null ? wks(p.starts, 'started') : '';
+      const extra = p => p.benchWeeks != null ? wks(p.benchWeeks, 'on the bench') : p.week ? `Week ${p.week}`
+        : [p.perDollar != null ? `${n1(p.perDollar)} pts per $` : p.bid != null ? `${p.how}${p.how === 'FAAB' ? ' $' + Math.round(p.bid) : ''}` : '', st(p)].filter(Boolean).join(' · ');
       body = `<div class="aw-win">${photo(w, 'md')}<div><b>${esc(w.name)}</b>${mvpTag(w)}<span class="aw-sub">${pos(w)} ${esc(w.nfl || '')} · ${tlogo(w.team, 'mini')}${esc(tname(w.team))}</span>
         <span class="aw-big">${n1(w.pts)} <small>pts${a.key === 'value' || a.key === 'contract' ? ` · ${sal(w)}` : ''}</small></span><span class="aw-sub">${extra(w)}</span></div></div>
         ${rest.length ? `<ol class="aw-rest" start="2">${rest.map(p => `<li>${tlogo(p.team, 'mini')}<span>${esc(p.name)} <small>${p.pos}</small>${cup(p)}${mvpTag(p)}</span><b>${n1(p.pts)}</b><small>${extra(p)}</small></li>`).join('')}</ol>` : ''}`;
@@ -95,7 +99,10 @@ window.FBPAwards = (() => {
   // All-FBP teams fold the same way; the preview is the lineup's names
   function fold(key, title, t, html) {
     const open = awOpen.has(key);
-    const names = t.map(e => e.player ? esc(e.player.name) : '').filter(Boolean).join(' · ');
+    // the lineup's FBP teams as a stack of logos, QB's team in front, each next one tucked behind
+    const ps = t.filter(e => e.player);
+    const names = `<span class="aw-stack" aria-label="${esc(ps.map(e => `${e.slot} ${e.player.name}`).join(', '))}">${ps.map((e, i) => { const tm = X.teams[e.player.team] || {};
+      return `<span class="aw-sl" style="z-index:${ps.length - i}" title="${esc(e.slot + ': ' + e.player.name + ' (' + tname(e.player.team) + ')')}">${tm.logo ? `<img src="${tm.logo}" alt="">` : esc(tm.abbr || '')}</span>`; }).join('')}</span>`;
     return `<section class="aw-fold${open ? ' open' : ''}"><button type="button" class="aw-sum aw-tsum" data-aw-toggle="${key}" aria-expanded="${open}"><span class="aw-sumt"><h2 class="sec">${title}</h2><span class="aw-prev aw-names">${names}</span></span><i class="car" aria-hidden="true"></i></button>
       <div class="aw-body"${open ? '' : ' hidden'}>${html}</div></section>`;
   }

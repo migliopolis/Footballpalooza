@@ -885,3 +885,10 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .aw-names{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .aw-fold .aw-body{margin-top:10px}
 .aw-tsum .aw-sumt{flex:1;min-width:0}
+/* folded All-FBP: the lineup's team logos, overlapped, QB's team in front */
+.aw-names{overflow:visible}
+.aw-stack{display:flex;align-items:center;padding:4px 0 2px}
+.aw-sl{position:relative;width:34px;height:34px;border-radius:50%;background:var(--surface);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line);display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 .6rem var(--body);overflow:hidden}
+.aw-sl+.aw-sl{margin-left:-11px}
+.aw-sl img{width:26px;height:26px;object-fit:contain}
+.aw-started{font-size:.72rem;color:var(--muted);margin-top:2px}
