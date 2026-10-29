@@ -3,6 +3,9 @@
 window.FBPAwards = (() => {
   let A = null, loading = false, failed = false, X, potw = null;   // potw: week picked for Player of the Week
   let year = null;                                     // null = this season; else a past season's year
+  // season awards start collapsed to a one-line preview; the ones you open stay open on this device
+  const awOpen = new Set((() => { try { return JSON.parse(localStorage.getItem('fbp-aw-open') || '[]'); } catch (e) { return []; } })());
+  const saveOpen = () => { try { localStorage.setItem('fbp-aw-open', JSON.stringify([...awOpen])); } catch (e) {} };
   const past = {}, pastLoading = {}, pastFailed = {};  // past seasons load on demand from data/awards/<year>.json
   const loadPast = (y, rerender) => {
     if (past[y] || pastLoading[y]) return; pastLoading[y] = true;
@@ -84,7 +87,29 @@ window.FBPAwards = (() => {
       body = `<p class="aw-sub">What each side received, and its starter points since:</p>${deal(a.trade)}` +
         (a.more && a.more.length ? a.more.map((t, i) => `<div class="aw-more"><span class="aw-rank">${i + 2}</span>${deal(t)}</div>`).join('') : '');
     }
-    return `<section class="card aw-award k-${esc(a.key)}"><h3>${esc(a.title)}</h3><p class="aw-why">${esc(a.why)}</p>${picker}${body}</section>`;
+    const open = awOpen.has(a.key);
+    return `<section class="card aw-award k-${esc(a.key)}${open ? ' open' : ''}">
+      <button type="button" class="aw-sum" data-aw-toggle="${esc(a.key)}" aria-expanded="${open}"><span class="aw-sumt"><h3>${esc(a.title)}</h3><span class="aw-prev">${preview(a)}</span></span><i class="car" aria-hidden="true"></i></button>
+      <div class="aw-body"${open ? '' : ' hidden'}><p class="aw-why">${esc(a.why)}</p>${picker}${body}</div></section>`;
+  }
+  // All-FBP teams fold the same way; the preview is the lineup's names
+  function fold(key, title, t, html) {
+    const open = awOpen.has(key);
+    const names = t.map(e => e.player ? esc(e.player.name) : '').filter(Boolean).join(' · ');
+    return `<section class="aw-fold${open ? ' open' : ''}"><button type="button" class="aw-sum aw-tsum" data-aw-toggle="${key}" aria-expanded="${open}"><span class="aw-sumt"><h2 class="sec">${title}</h2><span class="aw-prev aw-names">${names}</span></span><i class="car" aria-hidden="true"></i></button>
+      <div class="aw-body"${open ? '' : ' hidden'}>${html}</div></section>`;
+  }
+  // the one line a folded award shows: who won, and the number
+  function preview(a) {
+    if (a.weeks) {
+      const ws = Object.keys(a.weeks).map(Number); const w = ws.includes(potw) ? potw : a.week; const p = (a.weeks[w] || [])[0];
+      return p ? `${tlogo(p.team, 'mini')}<b>${esc(p.name)}</b><span>${n1(p.pts)} · wk ${w}</span>` : '';
+    }
+    if (a.list && a.list[0]) { const p = a.list[0];
+      return `${tlogo(p.team, 'mini')}<b>${esc(p.name)}</b><span>${p.perDollar != null ? n1(p.perDollar) + ' pts/$' : n1(p.pts)}</span>`; }
+    if (a.teams && a.teams[0]) { const t = a.teams[0]; return `${tlogo(t.team, 'mini')}<b>${esc(tname(t.team))}</b><span>${esc(t.stat)}</span>`; }
+    if (a.trade) { const t = a.trade; return `${tlogo(t.winner.team, 'mini')}<b>${esc(tname(t.winner.team))}</b><span>+${n1(t.margin)} pts</span>`; }
+    return '';
   }
 
   let S = null;   // the season on screen
@@ -110,13 +135,15 @@ window.FBPAwards = (() => {
       ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. All-FBP counts start with ${esc(A.honorsFrom || S.season)}. Trades count only what each side scored for its new team that season. Team names are today’s.`
       : `Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. All-FBP counts start with ${esc(A.honorsFrom || S.season)} and include this season’s spot so far. Updated every Monday night.`;
     return head(sub) +
-      `<section><h2 class="sec">1st Team All-FBP</h2>${team(S.allFbp.first)}</section>
-      <section><h2 class="sec">2nd Team All-FBP</h2>${team(S.allFbp.second, true)}</section>
-      <section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.slice().sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
+      fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first)) +
+      fold('allfbp2', '2nd Team All-FBP', S.allFbp.second, team(S.allFbp.second, true)) +
+      `<section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.slice().sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
       <p class="rf-foot">${foot}</p></section>`;
   }
   // returns the selector of the button pressed, so the page can keep focus on it
   function click(e) {
+    const tg = e.target.closest('[data-aw-toggle]');
+    if (tg) { const k = tg.dataset.awToggle; awOpen.has(k) ? awOpen.delete(k) : awOpen.add(k); saveOpen(); return `[data-aw-toggle="${k}"]`; }
     const y = e.target.closest('[data-aw-year]');
     if (y) { year = y.dataset.awYear; potw = null; return `[data-aw-year="${year}"]`; }
     const b = e.target.closest('[data-aw-week]');

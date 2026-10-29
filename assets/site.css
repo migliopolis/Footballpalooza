@@ -861,3 +861,27 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .py-tlg .py-lg{display:inline-flex}
 .py-tlg img{width:20px;height:20px;object-fit:contain}
 @media (max-width:640px){.py-pos{grid-template-columns:minmax(0,1fr)}}
+
+/* Season awards fold to a one-line preview (tap the name to open) */
+.aw-award{gap:0}
+.aw-sum{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
+.aw-sum .car{margin-left:auto;flex:none;transform:translateY(-2px) rotate(45deg)}
+.aw-award.open .aw-sum .car{transform:translateY(2px) rotate(-135deg)}
+.aw-sum:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+.aw-sumt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.aw-prev{display:flex;align-items:center;gap:6px;font-size:.88rem;color:var(--muted);min-width:0}
+.aw-prev b{color:var(--fg);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.aw-prev span{white-space:nowrap}
+.aw-prev img.mini{width:18px;height:18px;object-fit:contain;flex:none}
+.aw-award.open .aw-prev{display:none}
+.aw-body{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.aw-awards{align-items:start}
+@media (min-width:1001px){.aw-award.k-trade:not(.open){grid-column:auto;grid-row:auto}}
+.open > .aw-sum .car{transform:translateY(2px) rotate(-135deg)}
+.aw-fold{margin-bottom:6px}
+.aw-fold.open .aw-prev{display:none}
+.aw-tsum{padding:6px 2px;border-bottom:1px solid var(--line)}
+.aw-tsum .sec{margin:0}
+.aw-names{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.aw-fold .aw-body{margin-top:10px}
+.aw-tsum .aw-sumt{flex:1;min-width:0}
