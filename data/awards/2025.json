@@ -534,6 +534,67 @@
    ]
   },
   {
+   "key": "bench",
+   "title": "Left on the Bench",
+   "why": "Most points scored while sitting on an FBP bench",
+   "list": [
+    {
+     "id": "15237",
+     "name": "Trevor Lawrence",
+     "pos": "QB",
+     "nfl": "JAC",
+     "espn": "4360310",
+     "team": "0010",
+     "pts": 216.2,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 2.0,
+     "contract": "1/3",
+     "rookie": false,
+     "benchWeeks": 14,
+     "started": 0,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "16582",
+     "name": "Bo Nix",
+     "pos": "QB",
+     "nfl": "DEN",
+     "espn": "4426338",
+     "team": "0010",
+     "pts": 211.3,
+     "starts": 2,
+     "ppg": 9.6,
+     "salary": 3.0,
+     "contract": "2/6",
+     "rookie": false,
+     "benchWeeks": 12,
+     "started": 2,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "12611",
+     "name": "Jared Goff",
+     "pos": "QB",
+     "nfl": "DET",
+     "espn": "3046779",
+     "team": "0005",
+     "pts": 180.7,
+     "starts": 3,
+     "ppg": 15.7,
+     "salary": 3.0,
+     "contract": "1/3",
+     "rookie": false,
+     "benchWeeks": 11,
+     "started": 3,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
+  {
    "key": "rookie",
    "title": "Rookie of the Year",
    "why": "Top 2025 rookie by starter points",

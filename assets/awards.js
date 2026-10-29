@@ -69,7 +69,7 @@ window.FBPAwards = (() => {
     }
     if (a.list) {
       const [w, ...rest] = a.list;
-      const extra = p => p.perDollar != null ? `${n1(p.perDollar)} pts per $` : p.bid != null ? `${p.how}${p.how === 'FAAB' ? ' $' + Math.round(p.bid) : ''}` : p.week ? `Week ${p.week}` : `${p.starts} starts`;
+      const extra = p => p.benchWeeks != null ? `${p.benchWeeks} week${p.benchWeeks === 1 ? '' : 's'} on the bench` : p.perDollar != null ? `${n1(p.perDollar)} pts per $` : p.bid != null ? `${p.how}${p.how === 'FAAB' ? ' $' + Math.round(p.bid) : ''}` : p.week ? `Week ${p.week}` : `${p.starts} starts`;
       body = `<div class="aw-win">${photo(w, 'md')}<div><b>${esc(w.name)}</b>${mvpTag(w)}<span class="aw-sub">${pos(w)} ${esc(w.nfl || '')} · ${tlogo(w.team, 'mini')}${esc(tname(w.team))}</span>
         <span class="aw-big">${n1(w.pts)} <small>pts${a.key === 'value' || a.key === 'contract' ? ` · ${sal(w)}` : ''}</small></span><span class="aw-sub">${extra(w)}</span></div></div>
         ${rest.length ? `<ol class="aw-rest" start="2">${rest.map(p => `<li>${tlogo(p.team, 'mini')}<span>${esc(p.name)} <small>${p.pos}</small>${cup(p)}${mvpTag(p)}</span><b>${n1(p.pts)}</b><small>${extra(p)}</small></li>`).join('')}</ol>` : ''}`;
@@ -89,7 +89,7 @@ window.FBPAwards = (() => {
 
   let S = null;   // the season on screen
   // order of the Season awards on the page (any award not listed goes last)
-  const ORDER = ['mvp', 'rookie', 'manager', 'week', 'value', 'contract', 'waiver', 'high', 'trade', 'lucky', 'unlucky'];
+  const ORDER = ['mvp', 'rookie', 'manager', 'week', 'bench', 'value', 'contract', 'waiver', 'high', 'trade', 'lucky', 'unlucky'];
   const rank = a => { const i = ORDER.indexOf(a.key); return i < 0 ? 99 : i; };
   function render(ctx) {
     X = ctx;

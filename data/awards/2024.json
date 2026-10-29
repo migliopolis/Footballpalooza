@@ -531,6 +531,67 @@
    ]
   },
   {
+   "key": "bench",
+   "title": "Left on the Bench",
+   "why": "Most points scored while sitting on an FBP bench",
+   "list": [
+    {
+     "id": "14777",
+     "name": "Joe Burrow",
+     "pos": "QB",
+     "nfl": "CIN",
+     "espn": "3915511",
+     "team": "0010",
+     "pts": 225.3,
+     "starts": 3,
+     "ppg": 19.6,
+     "salary": 21.0,
+     "contract": "1/3",
+     "rookie": false,
+     "benchWeeks": 10,
+     "started": 3,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "16598",
+     "name": "Bucky Irving",
+     "pos": "RB",
+     "nfl": "TBB",
+     "espn": "4596448",
+     "team": "0012",
+     "pts": 182.4,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 5.0,
+     "contract": "1/3",
+     "rookie": true,
+     "benchWeeks": 14,
+     "started": 0,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "9431",
+     "name": "Matthew Stafford",
+     "pos": "QB",
+     "nfl": "LAR",
+     "espn": "12483",
+     "team": "0011",
+     "pts": 170.4,
+     "starts": 1,
+     "ppg": 20.8,
+     "salary": 3.0,
+     "contract": "1/3",
+     "rookie": false,
+     "benchWeeks": 13,
+     "started": 1,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
+  {
    "key": "rookie",
    "title": "Rookie of the Year",
    "why": "Top 2024 rookie by starter points",

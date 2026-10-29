@@ -531,6 +531,67 @@
    ]
   },
   {
+   "key": "bench",
+   "title": "Left on the Bench",
+   "why": "Most points scored while sitting on an FBP bench",
+   "list": [
+    {
+     "id": "10700",
+     "name": "Kirk Cousins",
+     "pos": "QB",
+     "nfl": "MIN",
+     "espn": "14880",
+     "team": "0011",
+     "pts": 204.0,
+     "starts": 3,
+     "ppg": 15.9,
+     "salary": 2.0,
+     "contract": "",
+     "rookie": false,
+     "benchWeeks": 11,
+     "started": 3,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "13146",
+     "name": "James Conner",
+     "pos": "RB",
+     "nfl": "ARI",
+     "espn": "3045147",
+     "team": "0009",
+     "pts": 185.1,
+     "starts": 2,
+     "ppg": 18.1,
+     "salary": 13.0,
+     "contract": "",
+     "rookie": false,
+     "benchWeeks": 12,
+     "started": 2,
+     "champ": true,
+     "champTeam": "0009"
+    },
+    {
+     "id": "10697",
+     "name": "Ryan Tannehill",
+     "pos": "QB",
+     "nfl": "TEN",
+     "espn": "14876",
+     "team": "0003",
+     "pts": 164.5,
+     "starts": 3,
+     "ppg": 12.8,
+     "salary": 4.0,
+     "contract": "",
+     "rookie": false,
+     "benchWeeks": 11,
+     "started": 3,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
+  {
    "key": "rookie",
    "title": "Rookie of the Year",
    "why": "Top 2021 rookie by starter points",

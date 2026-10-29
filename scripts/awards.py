@@ -60,12 +60,15 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
     """Every award for one season. weeks: {week: {franchise: {'s': [[id, pts]], 'n': [...]}}}, regular season only."""
     out = {'season': season}
     tot, starts, by_team, games = defaultdict(float), defaultdict(int), defaultdict(float), []
+    bench, bench_wks = defaultdict(float), defaultdict(int)   # points left on an FBP bench, by (player, team)
     wk_nums = sorted(int(w) for w in weeks)
     for w in wk_nums:
         for fr, t in weeks[str(w)].items():
             for pid, pts in t.get('s', []):
                 tot[pid] += pts; starts[pid] += 1; by_team[(pid, fr)] += pts
                 games.append((pts, w, pid, fr))
+            for pid, pts in t.get('n', []):   # bench = rostered but not started; free agents never appear here
+                bench[(pid, fr)] += pts; bench_wks[(pid, fr)] += 1
     if not wk_nums:
         out['ready'] = False
         return out
@@ -118,6 +121,11 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
     if val:
         A.append({'key': 'value', 'title': 'Best Value', 'why': f'Most starter points per salary dollar (at least {half} starts; no defenses)',
                   'list': [dict(player(p), perDollar=round(tot[p] / salary[p], 1)) for p in val[:3]]})
+    # Left on the Bench: most points scored while sitting on an FBP bench (one team's bench; waiver-wire points don't count)
+    bl = sorted(((k, v) for k, v in bench.items() if v > 0 and pos_of(k[0])), key=lambda kv: -kv[1])[:3]
+    if bl:
+        A.append({'key': 'bench', 'title': 'Left on the Bench', 'why': 'Most points scored while sitting on an FBP bench',
+                  'list': [dict(player(pid, pts=v, team=fr), benchWeeks=bench_wks[(pid, fr)], started=starts[pid]) for (pid, fr), v in bl]})
     rk = [p for p in eligible if str(pinfo.get(p, {}).get('draft_year')) == season]
     if rk:
         A.append({'key': 'rookie', 'title': 'Rookie of the Year', 'why': f'Top {season} rookie by starter points',
