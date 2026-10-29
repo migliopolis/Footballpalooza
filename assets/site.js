@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0055';
+  const VERSION = '0.0056';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -309,7 +309,7 @@
       <td><b>${t.pwr ? t.pwr.toFixed(2) : '—'}</b></td><td>${t.w}-${t.l}${t.t ? '-' + t.t : ''}</td><td>${pts(t.pf)}</td><td class="hide-sm">${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('');
 
     const sub = (location.hash.split('/')[1] || '');
-    const nav = `<nav class="rf-sub seg now-sub">${[['', 'Standings'], ['power', 'Power Rankings'], ['playoffs', 'Playoff Picture']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    const nav = `<nav class="rf-sub seg now-sub">${[['', 'Standings'], ['matchups', 'Matchups'], ['power', 'Power Rankings'], ['playoffs', 'Playoff Picture']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
@@ -334,8 +334,114 @@
           <p class="rf-foot">All-play counts a win against every team you outscored that week. Ties on all-play wins go to total points, then record.</p></section>
       </div>`;
 
-    return headTxt + `
+    if (sub === 'matchups') return headTxt + pageMatchups(fp);
+    if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
+    return headTxt + pressBox() + `
       <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div></section>`;
+  }
+
+  /* ---------- From the press box: the weekly column (data/columns.json, built by scripts/build_columns.py) ---------- */
+  function loadColumns() {
+    if (state.columns || state.columnsLoading) return;
+    state.columnsLoading = true;
+    fetch('data/columns.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)
+      .then(j => { state.columns = j || { columns: [], columnists: {} }; if (location.hash === '' || location.hash.startsWith('#now')) route(); });
+  }
+  const colDate = d => { const t = new Date(d + 'T12:00:00'); return isNaN(t) ? d : t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
+  function colAvatar(a, big) {
+    const ini = (a.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2);
+    return a.photo ? `<img class="col-av${big ? ' big' : ''}" src="${a.photo}" alt="">` : `<span class="col-av${big ? ' big' : ''}" aria-hidden="true">${esc(ini)}</span>`;
+  }
+  function pressBox() {
+    if (!state.columns) { loadColumns(); return ''; }
+    const c = state.columns.columns[0]; if (!c) return '';
+    const a = state.columns.columnists[c.author] || { name: c.author };
+    return `<section class="col-box"><a class="card col-card" href="#now/column/${c.slug}">
+      ${colAvatar(a)}
+      <span class="col-txt"><span class="col-kick">From the press box · ${esc(c.kicker)}</span>
+      <b class="col-title">${esc(c.title)}</b>
+      <span class="col-tease">${esc(c.teaser)}</span>
+      <span class="col-by">${esc(a.name)} · ${colDate(c.date)} · ${c.minutes} min read <span class="col-go">Read the column →</span></span></span></a></section>`;
+  }
+  function pageColumn(slug) {
+    if (!state.columns) { loadColumns(); return '<p class="loading">Loading the column…</p>'; }
+    const C = state.columns.columns, c = C.find(x => x.slug === slug) || C[0];
+    if (!c) return '<p class="error">No column yet.</p>';
+    const a = state.columns.columnists[c.author] || { name: c.author };
+    const more = C.filter(x => x.slug !== c.slug).slice(0, 6);
+    return `<article class="col-page">
+      <a class="col-back" href="#now">← League Now</a>
+      <p class="col-kick">From the press box · ${esc(c.kicker)}</p>
+      <h1 class="col-h1">${esc(c.title)}</h1>
+      <div class="col-byline">${colAvatar(a, true)}<span><b>${esc(a.name)}</b><small>${esc(a.title || '')} · ${colDate(c.date)} · ${c.minutes} min read</small></span></div>
+      <div class="col-body">${c.html}</div>
+      ${a.bio ? `<p class="col-bio">${colAvatar(a)}<span><b>${esc(a.name)}</b> ${esc(a.bio)}</span></p>` : ''}
+      ${more.length ? `<h2 class="sec">More from the press box</h2><div class="card col-more">${more.map(x => `<a href="#now/column/${x.slug}"><b>${esc(x.title)}</b><small>${esc(x.kicker)} · ${colDate(x.date)}</small></a>`).join('')}</div>` : ''}
+    </article>`;
+  }
+
+  /* ---------- Matchups: this week's games with a head-to-head breakdown (data/matchups.json, built by scripts/matchups.py) ---------- */
+  function loadMatchups() {
+    if (state.mu || state.muLoading) return;
+    state.muLoading = true;
+    fetch('data/matchups.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)
+      .then(j => { state.mu = j || { games: [] }; if (location.hash.startsWith('#now/matchups')) route(); });
+  }
+  function pageMatchups(fp) {
+    if (!state.mu) { loadMatchups(); return '<p class="loading">Loading the matchups…</p>'; }
+    const M = state.mu;
+    if (!M.week || !M.games.length) return '<div class="card soon"><p>Matchups return when the next regular-season week is set.</p></div>';
+    const short = id => (state.teams[id] || {}).abbr || nameOf(id);
+    const logo = (id, cls = 'mu-lg') => { const tm = state.teams[id] || {}; return tm.logo ? `<img class="${cls}" src="${tm.logo}" alt="" loading="lazy">` : ''; };
+    const yw = r => `${r.y} · Wk ${r.w}`;
+    const seedTxt = t => t.seed ? `${t.seed} seed` : 'out of the playoffs';
+    // one tale-of-the-tape row: a value | label | b value, the better side in bold
+    const row = (lbl, va, vb, better) => {
+      const b = better === 'hi' ? (va > vb ? 'a' : vb > va ? 'b' : '') : better === 'lo' ? (va < vb ? 'a' : vb < va ? 'b' : '') : '';
+      const f = v => v == null ? '–' : typeof v === 'number' ? pts(v) : esc(v);
+      return `<div class="mu-r"><span class="${b === 'a' ? 'bt' : ''}">${f(va)}</span><small>${lbl}</small><span class="${b === 'b' ? 'bt' : ''}">${f(vb)}</span></div>`;
+    };
+    const card = g => {
+      const a = g.teams[g.away], b = g.teams[g.home], s = g.series;
+      const sw = s.w[g.away], sl = s.w[g.home];
+      const lead = sw === sl ? `Series tied ${sw}-${sl}${s.t ? '-' + s.t : ''}` : `${esc(nameOf(sw > sl ? g.away : g.home))} leads ${Math.max(sw, sl)}-${Math.min(sw, sl)}${s.t ? '-' + s.t : ''}`;
+      const strk = s.streak ? (s.streak.n >= 2 ? `${esc(nameOf(s.streak.id))} has won ${s.streak.n} straight` : `${esc(nameOf(s.streak.id))} won the last one`) : '';
+      const big = [g.away, g.home].map(id => s.biggest[id] ? `<li>${logo(id, 'mu-ic')}<span><b>${esc(nameOf(id))}</b> by ${pts(s.biggest[id].margin)} <small>${s.biggest[id].score} · ${yw(s.biggest[id])}</small></span></li>` : '').join('');
+      const po = s.playoff.length ? `<p class="mu-po">Playoff history: ${s.playoff.map(r => `${esc(r.kind.replace('Playoffs · ', ''))} ${r.y}, ${esc(short(r.win))} won ${pts(Math.max(r.sa, r.sb))}-${pts(Math.min(r.sa, r.sb))}`).join(' · ')}</p>` : '';
+      const stRow = (id, t) => t.ifWin ? `<tr><td class="t">${logo(id, 'mu-ic')}<span>${esc(short(id))}</span></td><td class="w">${fp(t.ifWin[0])}</td><td class="l">${fp(t.ifLoss[0])}</td><td class="w">${fp(t.ifWin[1])}</td><td class="l">${fp(t.ifLoss[1])}</td></tr>` : '';
+      const meet = s.recent.map(r => `<li><b class="wk">${yw(r)}</b>${r.kind !== 'Regular season' ? `<span class="tag">${esc(r.kind.replace('Playoffs · ', ''))}</span>` : ''}
+          <span class="mu-sc"><span class="${r.win === g.away ? 'bt' : ''}">${esc(short(g.away))} ${pts(r.sa)}</span> – <span class="${r.win === g.home ? 'bt' : ''}">${pts(r.sb)} ${esc(short(g.home))}</span></span></li>`).join('');
+      return `<article class="card mu">
+        ${g.gotw || s.divisionGame ? `<div class="mu-tags">${g.gotw ? '<span class="mu-gotw">Game of the week</span>' : ''}${s.divisionGame ? '<span class="tag">Division</span>' : ''}</div>` : ''}
+        <div class="mu-head">
+          <div class="mu-t">${logo(g.away)}<b>${esc(nameOf(g.away))}</b><small>${rec(a)} · ${seedTxt(a)}</small></div>
+          <div class="mu-at">at</div>
+          <div class="mu-t">${logo(g.home)}<b>${esc(nameOf(g.home))}</b><small>${rec(b)} · ${seedTxt(b)}</small></div>
+        </div>
+        ${a.winProb != null ? `<div class="mu-wp"><span>${a.winProb}%</span><div class="mu-bar"><i style="width:${a.winProb}%"></i></div><span>${b.winProb}%</span></div><p class="mu-cap">Win chance</p>` : ''}
+        <div class="mu-tape">
+          ${row('Points', a.pf, b.pf, 'hi')}
+          ${row('League rank', ord(a.pfRank), ord(b.pfRank))}
+          ${row('Per week', a.avg, b.avg, 'hi')}
+          ${row('Last 3 weeks', a.last3, b.last3, 'hi')}
+          ${row('Best week', a.high, b.high, 'hi')}
+          ${row('Worst week', a.low, b.low, 'hi')}
+          ${row('All-play', a.allPlay, b.allPlay)}
+          ${row('Streak', a.streak, b.streak)}
+        </div>
+        <div class="mu-ser"><h4>Head to head <small>since ${M.since}, playoffs included</small></h4>
+          <p class="mu-lead"><b>${lead}</b>${strk ? ` · ${strk}` : ''}</p>
+          <p class="mu-avg">Average score in the series: ${esc(short(g.away))} ${pts(s.avg[g.away])}, ${esc(short(g.home))} ${pts(s.avg[g.home])}</p>
+          ${big ? `<ul class="mu-big">${big}</ul>` : ''}${po}
+        </div>
+        ${a.ifWin || b.ifWin ? `<div class="mu-stakes"><h4>What's at stake</h4><table class="mu-stt"><thead><tr><th></th><th colspan="2">Playoffs</th><th colspan="2">Bye</th></tr>
+          <tr><th></th><th>Win</th><th>Loss</th><th>Win</th><th>Loss</th></tr></thead><tbody>${stRow(g.away, a)}${stRow(g.home, b)}</tbody></table></div>` : ''}
+        ${meet ? `<details class="all"><summary>Last ${s.recent.length} meetings <small>${s.games} all-time</small></summary><ul class="mu-meet">${meet}</ul></details>` : ''}
+      </article>`;
+    };
+    const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
+    return `<section><h2 class="sec">Week ${M.week} matchups <small>biggest playoff stakes first · win chances from the playoff simulation</small></h2>
+      <div class="mu-grid">${M.games.map(card).join('')}</div></section>`;
   }
 
   /* ---------- By-Laws ---------- */

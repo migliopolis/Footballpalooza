@@ -51,6 +51,12 @@ jobs:
       - name: Build the Payroll page (player earnings)
         continue-on-error: true
         run: python scripts/payroll.py
+      - name: Build this week's matchups (League Now > Matchups)
+        continue-on-error: true
+        run: python scripts/matchups.py
+      - name: Build the press box columns
+        continue-on-error: true
+        run: python scripts/build_columns.py
       - name: Commit changed data
         run: |
           git config user.name "github-actions[bot]"
