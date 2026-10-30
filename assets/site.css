@@ -978,3 +978,17 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .mu-sc{margin-left:auto;font:500 .8rem var(--mono);color:var(--muted);white-space:nowrap}
 .mu-sc .bt{color:var(--fg);font-weight:700}
 @media (max-width:520px){.rf-sub.seg.now-sub a{flex:1 1 auto;min-width:0;padding:7px 4px;font-size:min(.82rem,3.2vw)}}
+.col-secby{display:flex;align-items:center;gap:10px;margin:-4px 0 12px}
+.col-secby .col-av{width:40px;height:40px;font-size:.8rem}
+.col-secby b{display:block;font-size:.95rem}.col-secby small{color:var(--muted);font-size:.78rem}
+
+/* front page: press box headlines */
+.col-heads{margin:4px 0 18px}
+.col-heads .col-hk{margin:0 0 6px;font:700 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.col-heads ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.col-heads li{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.col-heads a{flex:1 1 auto;min-width:0;color:var(--fg);text-decoration:none}
+.col-heads a b{font:700 1.02rem/1.25 var(--display);text-transform:uppercase}
+.col-heads a:hover b{text-decoration:underline;text-decoration-color:var(--accent)}
+.col-hkick{display:block;font:600 .68rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:1px}
+.col-ago{flex:none;font-size:.78rem;color:var(--muted);white-space:nowrap}

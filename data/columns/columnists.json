@@ -4,5 +4,35 @@
   "title": "FBP columnist",
   "bio": "Sixteen years on the Footballpalooza beat. Trusts the standings, has grudgingly learned to read the numbers.",
   "photo": "assets/columnists/sal.jpg"
+ },
+ "desk": {
+  "name": "FBP Trade Desk",
+  "title": "Press box staff",
+  "bio": "",
+  "photo": "assets/fbp-shield-192.png"
+ },
+ "peg": {
+  "name": "Peg Okafor",
+  "title": "Contracts and cap",
+  "bio": "Covers the money: contracts, the cap and the auction. Reads salary escalators for fun.",
+  "photo": ""
+ },
+ "rex": {
+  "name": "Rex Callahan",
+  "title": "FBP columnist",
+  "bio": "Believes flags fly forever and draft picks are lottery tickets with paperwork.",
+  "photo": ""
+ },
+ "dana": {
+  "name": "Dana Whitlock",
+  "title": "Dynasty desk",
+  "bio": "Dynasty lifer. Has never met a future first she didn't like.",
+  "photo": ""
+ },
+ "devin": {
+  "name": "Devin Cho",
+  "title": "Analytics desk",
+  "bio": "Sits next to Sal in the press box. Turns every trade into expected points, dollars and a winner.",
+  "photo": ""
  }
 }

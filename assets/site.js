@@ -2,7 +2,7 @@
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0056';
+  const VERSION = '0.0057';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -276,16 +276,19 @@
         <span class="pep">“${esc(q)}” <span class="who">— ${esc(who)}</span></span>`, null);
     }).join('');
 
+    // scoring average over each team's last three games
+    const l3 = id => { const sc = (d.games || []).filter(g => g[1] === id || g[3] === id).sort((x, y) => x[0] - y[0]).slice(-3).map(g => g[1] === id ? g[2] : g[4]);
+      return sc.length ? pts(sc.reduce((a, b) => a + b, 0) / sc.length) : '—'; };
     const divTables = d.divisions.map(dv => {
       const rows = d.standings.filter(t => t.division === dv.id).sort((a, b) => a.divisionRank - b.divisionRank);
       const gb = v => v <= 0 ? '—' : (Number.isInteger(v) ? v : v.toFixed(1));
       return `<div class="card"><h3 class="dvh">${esc(dv.name)}</h3><div class="tbl-wrap"><table class="tbl">
         <thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>GB</th><th class="hide-sm">Pct</th><th class="hide-sm" title="Division record">Div</th>
-          <th>PF</th><th class="hide-sm">PA</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
+          <th>PF</th><th class="hide-sm">PA</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th><th title="Average points over the last three games">L3 Avg</th>
           <th title="All-play record: results against every team, every week">All-play</th><th class="hide-sm">Strk</th>${state.budgets ? `<th title="${state.budgets.season} auction budget, after trades">${state.budgets.season} $</th>` : ''}</tr></thead><tbody>
         ${rows.map(t => `<tr><td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true, after: t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '' })}</td>
           <td>${t.w}-${t.l}-${t.t}</td><td>${gb(t.gb)}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
-          <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td class="hide-sm">${pts(t.pp)}</td>
+          <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td class="hide-sm">${pts(t.pp)}</td><td>${l3(t.id)}</td>
           <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount < 0 ? '−' : '+'}$${Math.abs(x.amount)} ${x.note}`).join('\n\n') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
         </tbody></table></div></div>`;
     }).join('');
@@ -352,16 +355,18 @@
     const ini = (a.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2);
     return a.photo ? `<img class="col-av${big ? ' big' : ''}" src="${a.photo}" alt="">` : `<span class="col-av${big ? ' big' : ''}" aria-hidden="true">${esc(ini)}</span>`;
   }
+  // how long ago a column ran: Today, Yesterday, 3 days ago, then the date after a week
+  const colAgo = d => {
+    const t = new Date(d + 'T12:00:00'); if (isNaN(t)) return d;
+    const n = new Date(); n.setHours(12, 0, 0, 0);
+    const days = Math.round((n - t) / 864e5);
+    return days <= 0 ? 'Today' : days === 1 ? 'Yesterday' : days < 7 ? `${days} days ago` : colDate(d);
+  };
+  // front page: the latest columns as headline links (newest first)
   function pressBox() {
     if (!state.columns) { loadColumns(); return ''; }
-    const c = state.columns.columns[0]; if (!c) return '';
-    const a = state.columns.columnists[c.author] || { name: c.author };
-    return `<section class="col-box"><a class="card col-card" href="#now/column/${c.slug}">
-      ${colAvatar(a)}
-      <span class="col-txt"><span class="col-kick">From the press box · ${esc(c.kicker)}</span>
-      <b class="col-title">${esc(c.title)}</b>
-      <span class="col-tease">${esc(c.teaser)}</span>
-      <span class="col-by">${esc(a.name)} · ${colDate(c.date)} · ${c.minutes} min read <span class="col-go">Read the column →</span></span></span></a></section>`;
+    const C = state.columns.columns.slice(0, 3); if (!C.length) return '';
+    return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map(c => `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-ago">${colAgo(c.date)}</span></li>`).join('')}</ul></section>`;
   }
   function pageColumn(slug) {
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the column…</p>'; }
