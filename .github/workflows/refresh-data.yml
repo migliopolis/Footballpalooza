@@ -56,7 +56,7 @@ jobs:
         run: python scripts/matchups.py
       - name: Build the press box columns
         continue-on-error: true
-        run: python scripts/build_columns.py
+        run: pip install markdown && python scripts/build_columns.py
       - name: Commit changed data
         run: |
           git config user.name "github-actions[bot]"
