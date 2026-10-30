@@ -991,4 +991,6 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .col-heads a b{font:700 1.02rem/1.25 var(--display);text-transform:uppercase}
 .col-heads a:hover b{text-decoration:underline;text-decoration-color:var(--accent)}
 .col-hkick{display:block;font:600 .68rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:1px}
-.col-ago{flex:none;font-size:.78rem;color:var(--muted);white-space:nowrap}
+.col-side{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.col-ago{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.col-heads .col-av{width:46px;height:46px;font-size:.8rem}

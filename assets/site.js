@@ -1,8 +1,9 @@
 /* Footballpalooza hub: hash router, P-PPR toggle and the League Now page.
    Data comes from files the weekly GitHub Action writes (data/league-now.json). */
 (() => {
-  // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md).
-  const VERSION = '0.0057';
+  // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
+  // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
+  const VERSION = '0.0058';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -366,7 +367,8 @@
   function pressBox() {
     if (!state.columns) { loadColumns(); return ''; }
     const C = state.columns.columns.slice(0, 3); if (!C.length) return '';
-    return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map(c => `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-ago">${colAgo(c.date)}</span></li>`).join('')}</ul></section>`;
+    return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map(c => { const a = state.columns.columnists[c.author] || { name: c.author };
+      return `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span>${colAvatar(a)}</span></li>`; }).join('')}</ul></section>`;
   }
   function pageColumn(slug) {
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the column…</p>'; }

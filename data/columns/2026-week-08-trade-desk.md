@@ -1,5 +1,5 @@
 ---
-title: Four trades, five opinions and one spreadsheet
+title: Rent now, pay later: grading the trade flurry
 kicker: Trade desk
 author: desk
 season: 2026
