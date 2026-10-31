@@ -996,3 +996,15 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .col-heads .col-av{width:46px;height:46px;font-size:.8rem}
 /* phones turned sideways (and small tablets): keep team names on readable lines; the table scrolls instead */
 @media (min-width:521px){.tbl td.t{min-width:10.5rem}.tbl td.t .nm{overflow-wrap:normal}}
+
+/* closed playoff paths */
+.ex{display:inline-block;font:600 .62rem var(--body);letter-spacing:.03em;padding:1px 5px;border-radius:999px;color:var(--muted);border:1px solid var(--line);margin-left:6px;white-space:nowrap;vertical-align:middle}
+.ex.out{color:#fff;background:var(--muted);border-color:var(--muted)}
+.ext{color:var(--red);font-weight:600}
+
+/* sortable table headers */
+table.sortable th[data-sort]{cursor:pointer;user-select:none}
+table.sortable th[data-sort]:hover{color:var(--fg)}
+table.sortable th[aria-sort]{color:var(--fg)}
+table.sortable th[aria-sort="ascending"]::after{content:" ▲";font-size:.8em}
+table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}

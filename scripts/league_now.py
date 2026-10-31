@@ -22,6 +22,7 @@ Ties that reach a coin flip are flagged and ordered by franchise id.
 MFL's own standings sort is win % then points, so these tiebreaks are ours.
 """
 import json, os, sys
+from eliminations import eliminations
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -359,11 +360,15 @@ def build(folder):
         t['gamesLeft'] = len(opps)
         t['sos'] = round(sum(teams[o]['pct'] for o in opps) / len(opps), 3) if opps else None
 
+    # playoff paths that are mathematically closed, with the week each one closed (scripts/eliminations.py)
+    elim = eliminations({t: teams[t]['division'] for t in teams}, games,
+                        [(w, a, b) for w, a, _, b, _ in games] + list(remaining), weeks_played)
+
     seed_of = {s['id']: s['seed'] for s in seeds}
     table = []
     for t in teams.values():
         table.append(dict(t, divisionName=div_name.get(t['division'], ''), divisionRank=div_rank.get(t['id']),
-                          seed=seed_of.get(t['id'])))
+                          seed=seed_of.get(t['id']), eliminated=elim[t['id']]))
     table.sort(key=lambda r: (-r['pct'], -r['pf']))
     for i, r in enumerate(sorted(table, key=lambda r: -r['pwr']), 1):
         r['pwrRank'] = i

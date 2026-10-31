@@ -45,6 +45,23 @@ window.FBPRef = (() => {
     const d = r.nextElementSibling; if (d && d.classList.contains('ab-det')) d.hidden = !open;
   });
   document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('tr[data-ab]')) { e.preventDefault(); e.target.click(); } });
+  // sortable tables: tap a header with data-sort to sort by it (tap again to flip). Cells may carry data-v
+  // with the value to sort on; blanks always go last. Sorts the rows in place, no re-render.
+  document.addEventListener('click', e => {
+    const th = e.target.closest('table.sortable th[data-sort]'); if (!th) return;
+    const table = th.closest('table'), tb = table.tBodies[0], idx = [...th.parentNode.children].indexOf(th);
+    const num = th.dataset.sort === 'num';
+    const asc = th.getAttribute('aria-sort') ? th.getAttribute('aria-sort') !== 'ascending' : th.dataset.first !== 'desc';
+    table.querySelectorAll('th[aria-sort]').forEach(h => h.removeAttribute('aria-sort'));
+    th.setAttribute('aria-sort', asc ? 'ascending' : 'descending');
+    const val = tr => { const td = tr.children[idx]; if (!td) return null; const v = td.dataset.v != null ? td.dataset.v : td.textContent.trim();
+      if (v === '' || v === '—') return null; return num ? parseFloat(v) : v.toLowerCase(); };
+    const rows = [...tb.rows];
+    rows.sort((x, y) => { const a = val(x), b = val(y); if (a === null && b === null) return 0; if (a === null) return 1; if (b === null) return -1;
+      const c = num ? a - b : a.localeCompare(b); return asc ? c : -c; });
+    rows.forEach(r => tb.appendChild(r));
+  });
+  document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('table.sortable th[data-sort]')) { e.preventDefault(); e.target.click(); } });
 
   let X;   // context from site.js: teams, chip, esc
   const esc = s => X.esc(s == null ? '' : s);
@@ -318,8 +335,8 @@ window.FBPRef = (() => {
     if (!picks.length) return `<p class="rf-note">${byFranchise ? 'Round-based rookie drafts started in 2021; earlier rookies came through the startup auctions.' : 'No rookie picks on record.'}</p>`;
     const ys = [...new Set(picks.flatMap(p => (p.points_by_season || []).map(x => x.year)))].sort();
     const moved = picks.some(p => p.kept_by_drafting_team === false);
-    return `<div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>Pick</th>${byFranchise ? '<th class="lg"><span class="sr">Logo</span></th>' : ''}<th class="t">Player</th><th>Pos</th><th>$</th>${ys.map(y => `<th>${y}</th>`).join('')}${ys.length ? '<th>Total</th><th>Avg</th>' : ''}</tr></thead><tbody>
-      ${picks.map(p => { const yr = p.year || year; return `<tr><td>${byFranchise ? '' : yr + ' · '}${+p.round}.${String(+p.pick).padStart(2, '0')}</td>${byFranchise ? lgCell(p.franchise) : ''}<td class="t">${esc(person(p.player_name) || 'Player #' + p.player_id)}${byFranchise ? `<small class="rf-by">${esc(nm(p.franchise, yr))}</small>` : ''}</td><td>${esc(p.player_pos || '')}</td><td>${p.drafted_price != null ? '$' + p.drafted_price + (p.kept_by_drafting_team === false ? '†' : '') : '—'}</td>${ys.map(y => { if (y < yr) return '<td></td>'; const s = (p.points_by_season || []).find(x => x.year === y); return `<td>${s && s.points != null ? n1(s.points) : '—'}</td>`; }).join('')}${ys.length ? `<td>${n1(p.total_points)}</td><td>${n1(p.avg_points_per_season)}</td>` : ''}</tr>`; }).join('')}
+    return `<div class="card tbl-wrap"><table class="tbl rf-t sortable"><thead><tr>${byFranchise ? '' : '<th data-sort="num" tabindex="0" data-first="desc">Year</th>'}<th data-sort="num" tabindex="0">Pick</th>${byFranchise ? '<th class="lg"><span class="sr">Logo</span></th>' : ''}<th class="t" data-sort="txt" tabindex="0">Player</th><th data-sort="txt" tabindex="0">Pos</th><th data-sort="num" tabindex="0" data-first="desc">$</th>${ys.map(y => `<th data-sort="num" tabindex="0" data-first="desc">${y}</th>`).join('')}${ys.length ? '<th data-sort="num" tabindex="0" data-first="desc">Total</th><th data-sort="num" tabindex="0" data-first="desc">Avg</th>' : ''}</tr></thead><tbody>
+      ${picks.map(p => { const yr = p.year || year; return `<tr>${byFranchise ? '' : `<td>${yr}</td>`}<td data-v="${+p.round * 100 + +p.pick}">${+p.round}.${String(+p.pick).padStart(2, '0')}</td>${byFranchise ? lgCell(p.franchise) : ''}<td class="t" data-v="${esc(person(p.player_name) || '')}">${esc(person(p.player_name) || 'Player #' + p.player_id)}${byFranchise ? `<small class="rf-by">${esc(nm(p.franchise, yr))}</small>` : ''}</td><td>${esc(p.player_pos || '')}</td><td data-v="${p.drafted_price != null ? p.drafted_price : ''}">${p.drafted_price != null ? '$' + p.drafted_price + (p.kept_by_drafting_team === false ? '†' : '') : '—'}</td>${ys.map(y => { if (y < yr) return '<td></td>'; const s = (p.points_by_season || []).find(x => x.year === y); return `<td>${s && s.points != null ? n1(s.points) : '—'}</td>`; }).join('')}${ys.length ? `<td>${n1(p.total_points)}</td><td>${n1(p.avg_points_per_season)}</td>` : ''}</tr>`; }).join('')}
       </tbody></table></div>${!ys.length && picks.length ? '<p class="rf-foot">Points by season fill in once the season is done.</p>' : ''}${moved ? '<p class="rf-foot">† Left the drafting team before the end of his rookie season (traded or dropped), so later points may be for another team.</p>' : ''}`;
   }
 

@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0060';
+  const VERSION = '0.0061';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
@@ -196,6 +196,7 @@
       const projL = Math.max(0, games_left - o.projW - t.t);
       return `<div class="odds">
         <div class="ohead"><b>${fp(head[1])}</b>${dlt(id, headKey, head[1])}<span>${esc(head[0])}</span></div>
+        ${elimTxt(id) ? `<p class="onote">${elimTxt(id).replace(/ · $/, '')}</p>` : ''}
         <div class="ostats">${stats.map(x => `<div><b>${fp(x[1])} ${dlt(id, oddsKey[x[0]] || 'division', x[1])}</b><span>${esc(x[0])}</span></div>`).join('')}</div>
         <h4>Where they finish</h4><div class="dist">${dist}</div>
         <p class="onote">Projected record about ${o.projW.toFixed(1)}–${projL.toFixed(1)}${t.t ? `–${t.t}` : ''}${o.sosRank ? ` · remaining schedule is the ${o.sosRank === 1 ? 'toughest' : o.sosRank === 12 ? 'easiest' : ord(o.sosRank) + ' toughest'} in the league` : ''}</p>
@@ -225,6 +226,21 @@
       const open = state.open.has(id);
       return `<div class="tm${open ? ' open' : ''}"><button type="button" class="${rowCls}" data-odds="${id}" aria-expanded="${open}">${inner}</button>${open ? oddsPanel(id, seed) : ''}</div>`;
     };
+    // mathematically closed playoff paths (scripts/eliminations.py): {division, wildCard, allPlay: week or null, all}
+    const PATHS = [['division', 'Div', 'the division title'], ['wildCard', 'WC', 'a wild card'], ['allPlay', '6', 'the all-play 6 seed']];
+    const elimOf = id => (by[id] && by[id].eliminated) || {};
+    const elimTag = id => {
+      const e = elimOf(id);
+      if (e.all) return `<span class="ex out" title="Eliminated from the playoffs in week ${e.all}">Out</span>`;
+      const shut = PATHS.filter(([k]) => e[k]);
+      return shut.length ? `<span class="ex" title="${shut.map(([k, , l]) => `Out of the race for ${l} (week ${e[k]})`).join('\n')}">${shut.map(([, s]) => '✕' + s).join(' ')}</span>` : '';
+    };
+    const elimTxt = id => {
+      const e = elimOf(id);
+      if (e.all) return `<span class="ext">Eliminated in week ${e.all}</span> · `;
+      const shut = PATHS.filter(([k]) => e[k]);
+      return shut.length ? `<span class="ext">Out of the race for ${shut.map(([k, , l]) => `${l} (wk ${e[k]})`).join(', ')}</span> · ` : '';
+    };
     const rowOdds = id => O && O[id] ? ` · <span class="ro">${fp(O[id].playoff)} playoffs ${dlt(id, 'playoff', O[id].playoff)}</span>` : '';
     const seedRows = seeds.map(s => {
       const t = by[s.id];
@@ -250,7 +266,7 @@
         const gb = ((s5.w - t.w) + (t.l - s5.l)) / 2;
         const apb = s6.allPlayW - t.allPlayW;
         return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
-          <span class="via">${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts${rowOdds(t.id)}</span>`, null);
+          <span class="via">${elimTxt(t.id)}${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`} · ${pts(t.pf)} pts${rowOdds(t.id)}</span>`, null);
       }).join('');
 
     /* the last three teams: their odds plus a weekly pep talk */
@@ -273,7 +289,7 @@
       const [q, who] = PEP[(d.weeksPlayed * 3 + i) % PEP.length];
       const odds = o ? (o.playoff >= 0.5 ? `<b>${fp(o.playoff)}</b> playoff odds ${dlt(t.id, 'playoff', o.playoff)}` : '<b>&lt;1%</b> playoff odds · miracle territory') : '';
       return tmWrap(t.id, 'seed bubrow', `${chip(t.id)}<span class="rec">${rec(t)}<i class="car" aria-hidden="true"></i></span>
-        <span class="via">${odds ? odds + ' · ' : ''}${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`}</span>
+        <span class="via">${elimTxt(t.id)}${odds && !elimOf(t.id).all ? odds + ' · ' : ''}${gb <= 0 ? 'Tied for seed 5' : `${gb} GB of seed 5`} · ${apb <= 0 ? 'tied with seed 6 in all-play wins' : `${apb} all-play wins behind seed 6`}</span>
         <span class="pep">“${esc(q)}” <span class="who">— ${esc(who)}</span></span>`, null);
     }).join('');
 
@@ -287,7 +303,7 @@
         <thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>GB</th><th class="hide-sm">Pct</th><th class="hide-sm" title="Division record">Div</th>
           <th>PF</th><th class="hide-sm">PA</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th title="Average points over the last three games">L3 Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
           <th title="All-play record: results against every team, every week">All-play</th><th class="hide-sm">Strk</th>${state.budgets ? `<th title="${state.budgets.season} auction budget, after trades">${state.budgets.season} $</th>` : ''}</tr></thead><tbody>
-        ${rows.map(t => `<tr><td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true, after: t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '' })}</td>
+        ${rows.map(t => `<tr><td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true, after: (t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '') + elimTag(t.id) })}</td>
           <td>${t.w}-${t.l}-${t.t}</td><td>${gb(t.gb)}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
           <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td>${l3(t.id)}</td><td class="hide-sm">${pts(t.pp)}</td>
           <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount < 0 ? '−' : '+'}$${Math.abs(x.amount)} ${x.note}`).join('\n\n') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
@@ -300,7 +316,7 @@
     const lead = sixRace[0];
     const sixRows = sixRace.slice(0, 5).map((t, i) => {
       const gap = lead.allPlayW - t.allPlayW, o = O && O[t.id];
-      return `<div class="six${i === 0 ? ' hold' : ''}"><span class="n">${i === 0 ? '6' : ''}</span>${chip(t.id)}
+      return `<div class="six${i === 0 ? ' hold' : ''}"><span class="n">${i === 0 ? '6' : ''}</span>${chip(t.id, { after: elimTag(t.id) })}
         <span class="ap"><b>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</b><small>${i === 0 ? 'holds the 6 seed' : gap ? `${gap} behind` : 'tied'}</small></span>
         <span class="sx">${o ? `<b>${fp(o.seeds[5])}</b>${dlt(t.id, 'seed6', o.seeds[5])}<small>chance at 6</small>` : ''}</span></div>`;
     }).join('');
@@ -341,7 +357,8 @@
     if (sub === 'matchups') return headTxt + pageMatchups(fp);
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `
-      <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div></section>`;
+      <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div>
+      ${d.standings.some(t => t.eliminated && (t.eliminated.division || t.eliminated.wildCard || t.eliminated.allPlay)) ? `<p class="rf-foot"><span class="ex">✕Div</span> <span class="ex">✕WC</span> <span class="ex">✕6</span> that path to the playoffs is mathematically closed (division title, wild card, all-play 6 seed). <span class="ex out">Out</span> every path is closed. Tap or hover a tag for the week it happened.</p>` : ''}</section>`;
   }
 
   /* ---------- From the press box: the weekly column (data/columns.json, built by scripts/build_columns.py) ---------- */

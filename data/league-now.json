@@ -1,6 +1,6 @@
 {
  "season": "FOOTBALLPALOOZA 2026",
- "generated": "2026-10-27T15:53:50+00:00",
+ "generated": "2026-10-31T03:54:25+00:00",
  "weeksPlayed": 7,
  "lastRegularSeasonWeek": 14,
  "divisions": [
@@ -42,6 +42,12 @@
    "divisionName": "West",
    "divisionRank": 1,
    "seed": 1,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 2
   },
   {
@@ -68,6 +74,12 @@
    "divisionName": "West",
    "divisionRank": 2,
    "seed": 4,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 4
   },
   {
@@ -94,6 +106,12 @@
    "divisionName": "East",
    "divisionRank": 1,
    "seed": 2,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 8
   },
   {
@@ -120,6 +138,12 @@
    "divisionName": "West",
    "divisionRank": 3,
    "seed": 5,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 1
   },
   {
@@ -146,6 +170,12 @@
    "divisionName": "Central",
    "divisionRank": 1,
    "seed": 3,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 6
   },
   {
@@ -172,6 +202,12 @@
    "divisionName": "Central",
    "divisionRank": 2,
    "seed": null,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 5
   },
   {
@@ -198,6 +234,12 @@
    "divisionName": "Central",
    "divisionRank": 3,
    "seed": 6,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 3
   },
   {
@@ -224,6 +266,12 @@
    "divisionName": "Central",
    "divisionRank": 4,
    "seed": null,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 7
   },
   {
@@ -250,6 +298,12 @@
    "divisionName": "East",
    "divisionRank": 2,
    "seed": null,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 9
   },
   {
@@ -276,6 +330,12 @@
    "divisionName": "East",
    "divisionRank": 3,
    "seed": null,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 12
   },
   {
@@ -302,6 +362,12 @@
    "divisionName": "West",
    "divisionRank": 4,
    "seed": null,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 10
   },
   {
@@ -328,6 +394,12 @@
    "divisionName": "East",
    "divisionRank": 4,
    "seed": null,
+   "eliminated": {
+    "division": null,
+    "wildCard": null,
+    "allPlay": null,
+    "all": null
+   },
    "pwrRank": 11
   }
  ],
