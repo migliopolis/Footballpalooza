@@ -42,7 +42,7 @@ jobs:
       - name: Compute standings, playoff picture and draft order
         run: python scripts/league_now.py
       - name: Check the computation
-        run: python tests/test_league_now.py
+        run: python tests/test_league_now.py && python tests/test_eliminations.py
       - name: Rebuild Reference history with this season's games
         run: python scripts/build_reference.py
       - name: Build the Awards page (All-FBP teams, season awards)
