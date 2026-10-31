@@ -114,6 +114,35 @@ def fetch_weekly():
     save('weeklyResults', saved)
 
 
+def fetch_player_scores():
+    """Weekly scores for every player taken in an FBP rookie draft, taxi squad included (MFL's weekly
+    results leave the taxi squad out). Feeds the franchise pages' rookie draft history (pick_tenure.py)."""
+    try:
+        ref = json.load(open(os.path.join(os.path.dirname(OUT), 'reference.json')))
+        ids = sorted({str(p['player_id']) for v in ref.get('franchise_draft_picks', {}).values() for p in v if p.get('player_id')})
+    except Exception:
+        ids = []
+    if not ids:
+        print('  skip playerScores (no draft picks known yet)')
+        return
+    path = os.path.join(OUT, 'playerScores.json')
+    try:
+        saved = json.load(open(path))
+    except Exception:
+        saved = {'weeks': {}}
+    for w in played_weeks():
+        try:
+            raw = fetch('playerScores', {'W': str(w), 'PLAYERS': ','.join(ids)}).get('playerScores', {})
+            wk = {x['id']: float(x['score']) for x in as_list(raw.get('playerScore')) if x.get('score') not in (None, '') and float(x['score'])}
+            saved['weeks'][str(w)] = wk
+            print(f'  ok   playerScores week {w} ({len(wk)} drafted players scored)')
+        except Exception as e:
+            print(f'  FAIL {e}  (kept week {w} from before, if any)')
+        time.sleep(1.1)
+    saved['fetched'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+    save('playerScores', saved)
+
+
 def fetch_transactions():
     """This season's trades, waiver claims and free-agent pickups (Awards page)."""
     keep = {'TRADE', 'BBID_WAIVER', 'WAIVER', 'FREE_AGENT'}
@@ -208,6 +237,7 @@ def main():
         except Exception as e:
             print(f'  FAIL {e}  (kept the previous file)')
     fetch_weekly()
+    fetch_player_scores()
     fetch_transactions()
     fetch_auction_bids()
     save('_meta', {'season': SEASON, 'league': LEAGUE,

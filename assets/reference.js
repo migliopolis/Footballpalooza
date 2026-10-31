@@ -334,11 +334,42 @@ window.FBPRef = (() => {
   function picksTable(picks, byFranchise, year) {
     if (!picks.length) return `<p class="rf-note">${byFranchise ? 'Round-based rookie drafts started in 2021; earlier rookies came through the startup auctions.' : 'No rookie picks on record.'}</p>`;
     const ys = [...new Set(picks.flatMap(p => (p.points_by_season || []).map(x => x.year)))].sort();
-    const moved = picks.some(p => p.kept_by_drafting_team === false);
+    // franchise pages: only what the pick gave the team that drafted him (scripts/pick_tenure.py);
+    // season draft classes: the player's whole career
+    const mine = !byFranchise && picks.some(p => p.team_points_by_season);
+    const moved = !mine && picks.some(p => p.kept_by_drafting_team === false);
+    const cur = D.meta.current_year;
+    const teamSeason = (p, y) => (p.team_points_by_season || []).find(x => x.year === y);
+    const HOW = { 'traded': s => `Traded · ${s.year} wk ${s.week}`, 'cut-in-season': s => `Cut in-season · ${s.year} wk ${s.week}`,
+      'cut-offseason': s => `Cut before the ${s.year} season`, 'cut-keeper': s => `Cut on keeper day · ${s.year}`,
+      'contract-ended': s => `Rookie deal ended · ${s.year - 1}` };
+    const leftTag = p => {
+      if (!mine || !p.stint) return '';
+      const s = p.stint, f = HOW[s.reason];
+      return `<span class="rf-left rf-${s.reason}" title="Left the team that drafted him">${f ? f(s) : 'Left'}</span>`;
+    };
+    const cell = (p, y, yr) => {
+      if (y < yr) return '<td></td>';
+      if (mine) {
+        const s = teamSeason(p, y);
+        if (!s) return '<td class="rf-gone" data-v="" title="Gone: no longer on his rookie deal with this team"></td>';
+        return `<td data-v="${s.points}"${s.status === 'left' ? ' class="rf-part" title="Left during this season; points before he left"' : ''}>${n1(s.points)}</td>`;
+      }
+      const s = (p.points_by_season || []).find(x => x.year === y);
+      return `<td data-v="${s && s.points != null ? s.points : ''}">${s && s.points != null ? n1(s.points) : '—'}</td>`;
+    };
+    const totals = p => {
+      if (!mine) return [p.total_points, p.avg_points_per_season];
+      const ss = (p.team_points_by_season || []).filter(x => ys.includes(x.year));
+      if (!ss.length) return [null, null];
+      const t = ss.reduce((a, x) => a + x.points, 0);
+      return [t, t / ss.length];
+    };
     return `<div class="card tbl-wrap"><table class="tbl rf-t sortable"><thead><tr>${byFranchise ? '' : '<th data-sort="num" tabindex="0" data-first="desc">Year</th>'}<th data-sort="num" tabindex="0">Pick</th>${byFranchise ? '<th class="lg"><span class="sr">Logo</span></th>' : ''}<th class="t" data-sort="txt" tabindex="0">Player</th><th data-sort="txt" tabindex="0">Pos</th><th data-sort="num" tabindex="0" data-first="desc">$</th>${ys.map(y => `<th data-sort="num" tabindex="0" data-first="desc">${y}</th>`).join('')}${ys.length ? '<th data-sort="num" tabindex="0" data-first="desc">Total</th><th data-sort="num" tabindex="0" data-first="desc">Avg</th>' : ''}</tr></thead><tbody>
-      ${picks.map(p => { const yr = p.year || year; return `<tr>${byFranchise ? '' : `<td>${yr}</td>`}<td data-v="${+p.round * 100 + +p.pick}">${+p.round}.${String(+p.pick).padStart(2, '0')}</td>${byFranchise ? lgCell(p.franchise) : ''}<td class="t" data-v="${esc(person(p.player_name) || '')}">${esc(person(p.player_name) || 'Player #' + p.player_id)}${byFranchise ? `<small class="rf-by">${esc(nm(p.franchise, yr))}</small>` : ''}</td><td>${esc(p.player_pos || '')}</td><td data-v="${p.drafted_price != null ? p.drafted_price : ''}">${p.drafted_price != null ? '$' + p.drafted_price + (p.kept_by_drafting_team === false ? '†' : '') : '—'}</td>${ys.map(y => { if (y < yr) return '<td></td>'; const s = (p.points_by_season || []).find(x => x.year === y); return `<td>${s && s.points != null ? n1(s.points) : '—'}</td>`; }).join('')}${ys.length ? `<td>${n1(p.total_points)}</td><td>${n1(p.avg_points_per_season)}</td>` : ''}</tr>`; }).join('')}
-      </tbody></table></div>${!ys.length && picks.length ? '<p class="rf-foot">Points by season fill in once the season is done.</p>' : ''}${moved ? '<p class="rf-foot">† Left the drafting team before the end of his rookie season (traded or dropped), so later points may be for another team.</p>' : ''}`;
+      ${picks.map(p => { const yr = p.year || year, [tot, avg] = totals(p); return `<tr>${byFranchise ? '' : `<td>${yr}</td>`}<td data-v="${+p.round * 100 + +p.pick}">${+p.round}.${String(+p.pick).padStart(2, '0')}</td>${byFranchise ? lgCell(p.franchise) : ''}<td class="t" data-v="${esc(person(p.player_name) || '')}">${esc(person(p.player_name) || 'Player #' + p.player_id)}${byFranchise ? `<small class="rf-by">${esc(nm(p.franchise, yr))}</small>` : ''}${leftTag(p)}</td><td>${esc(p.player_pos || '')}</td><td data-v="${p.drafted_price != null ? p.drafted_price : ''}">${p.drafted_price != null ? '$' + p.drafted_price + (moved && p.kept_by_drafting_team === false ? '†' : '') : '—'}</td>${ys.map(y => cell(p, y, yr)).join('')}${ys.length ? `<td data-v="${tot == null ? '' : tot}">${n1(tot)}</td><td data-v="${avg == null ? '' : avg}">${n1(avg)}</td>` : ''}</tr>`; }).join('')}
+      </tbody></table></div>${!ys.length && picks.length ? '<p class="rf-foot">Points by season fill in once the season is done.</p>' : ''}${mine ? '<p class="rf-foot">What each pick gave this team on his rookie deal: every regular-season point while he was here (starting, bench or taxi squad), up to when he was traded, cut or not kept. A later return to the team doesn\'t count. Shaded = gone; <span class="rf-part">underlined</span> = left that season. Avg is per season on the team.</p>' : ''}${moved ? '<p class="rf-foot">† Left the drafting team before the end of his rookie season (traded or dropped), so later points may be for another team.</p>' : ''}`;
   }
+
 
   /* ---------- seasons ---------- */
   function pageSeasons() {

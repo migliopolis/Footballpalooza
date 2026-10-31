@@ -244,6 +244,8 @@ def main():
     d = load(DATA / 'reference' / 'history.json')
     d, year = overlay_current(d)
     d = derive(d)
+    from pick_tenure import apply as pick_tenure   # what each rookie pick gave the team that drafted it
+    d = pick_tenure(d)
     from datetime import datetime, timezone
     d['meta']['built'] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     (DATA / 'reference.json').write_text(json.dumps(d, separators=(',', ':'), ensure_ascii=False))

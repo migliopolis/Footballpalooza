@@ -1008,3 +1008,11 @@ table.sortable th[data-sort]:hover{color:var(--fg)}
 table.sortable th[aria-sort]{color:var(--fg)}
 table.sortable th[aria-sort="ascending"]::after{content:" ▲";font-size:.8em}
 table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
+
+/* franchise rookie draft history: seasons away from the drafting team */
+.tbl td.rf-gone{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--line) 5px 6px)}
+.rf-taxi{color:var(--muted);font-size:.78em;font-style:italic}
+.rf-left{display:block;font:600 .64rem var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--red);margin-top:2px}
+
+.tbl td.rf-part,.rf-foot .rf-part{text-decoration:underline dotted;text-underline-offset:3px}
+.rf-left.rf-traded{color:var(--accent)}
