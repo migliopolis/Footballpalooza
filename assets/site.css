@@ -1052,3 +1052,4 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .hof-lg.two img{width:38px;height:38px}
 .hof-lg{flex:none;display:flex;flex-direction:column;gap:6px;align-items:center}
 .hof-lg img{width:44px!important;height:44px!important;max-width:none;object-fit:contain}
+.hof-at .aw-ph{background:#c9a227}
