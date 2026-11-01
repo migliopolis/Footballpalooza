@@ -552,9 +552,10 @@ window.FBPRef = (() => {
     const top = head('Hall of Fame') + nav('#reference/hof');
     const H = D.hall_of_fame || { inductees: [] }, all = H.inductees || [];
     const classes = [...new Set(all.map(x => x.class))].sort((a, b) => b - a);
-    const card = x => `<article class="card hof-card">${x.franchise ? `<span class="hof-lg">${logo(x.franchise)}</span>` : ''}<div>
-        <span class="hof-k">Class of ${esc(x.class)}${x.year ? ` · ${esc(x.year)}${x.week ? ` wk ${esc(x.week)}` : ''}` : ''}</span>
-        <b class="hof-t">${esc(x.title)}</b>${x.subtitle ? `<small class="hof-s">${x.franchise ? `<a href="#reference/f-${x.franchise}">${esc(x.subtitle)}</a>` : esc(x.subtitle)}</small>` : ''}
+    const frs = x => x.franchises || (x.franchise ? [x.franchise] : []);
+    const card = x => `<article class="card hof-card">${frs(x).length ? `<span class="hof-lg${frs(x).length > 1 ? ' two' : ''}">${frs(x).map(f => logo(f)).join('')}</span>` : ''}<div>
+        <span class="hof-k">Class of ${esc(x.class)}</span>
+        <b class="hof-t">${esc(x.title)}</b>${x.subtitle ? `<small class="hof-s">${x.franchise ? `<a href="#reference/f-${x.franchise}">${esc(x.subtitle)}</a>` : x.category === 'game' && x.year && x.week ? `<a href="#reference/s-${x.year}">${esc(x.subtitle)}</a>` : esc(x.subtitle)}</small>` : ''}
         ${x.stat ? `<span class="hof-stat">${esc(x.stat)}</span>` : ''}${x.blurb ? `<p class="hof-b">${esc(x.blurb)}</p>` : ''}</div></article>`;
     const sections = HOF_CATS.map(([k, label, sub]) => {
       const xs = all.filter(x => (x.category || 'other') === k).sort((a, b) => b.class - a.class || (a.year || 0) - (b.year || 0));

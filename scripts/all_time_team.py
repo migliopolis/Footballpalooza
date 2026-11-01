@@ -1,7 +1,7 @@
 """The All-Time FBP team (Hall of Fame): the best single seasons ever, set in the All-FBP starting lineup.
 
 Each season's regular-season starter points come from the saved weekly results (data/history/<year>,
-finished seasons only). A player season qualifies with MIN_STARTS starts in an FBP lineup, and seasons
+finished seasons only; 2019-2020 from data/reference/season-starters-2019-2020.json). A player season qualifies with MIN_STARTS starts in an FBP lineup, and seasons
 rank by total starter points, then points per start. A player can hold more than one spot with different
 seasons: it recognizes the best seasons, period. One team: QB, RB, RB, WR, WR, TE, FLEX (best RB/WR/TE left), DEF.
 Each season also notes every FBP team he started for (in order), whether he won the title that season
@@ -63,6 +63,16 @@ def seasons(d):
                          'champTeam': ch.get('champion') if pid in champ_ids else None,
                          'mvp': pid == mvp, 'titleMvp': pid == title_mvp,
                          'titlePts': next((x[1] for x in cw.get('s', []) if x[0] == pid), None) if pid == title_mvp else None})
+    # seasons before the saved weekly results (2019-2020): frozen starter totals
+    have = {r['year'] for r in rows}
+    old = (_load(DATA / 'reference' / 'season-starters-2019-2020.json') or {}).get('seasons') or {}
+    for y, lst in old.items():
+        if int(y) in have:
+            continue
+        ch = ((d.get('championships') or {}).get(y) or {}).get('champion')
+        for r in lst:
+            rows.append(dict(r, year=int(y), ppg=round(r['pts'] / r['starts'], 1), champTeam=ch if r['champ'] else None,
+                             titleMvp=r.get('titlePts') is not None))
     return rows
 
 

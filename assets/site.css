@@ -1048,3 +1048,7 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .hof-tag.champ{background:#f6e7b0;color:#5a4400}
 .hof-tag.mvp{background:var(--red);color:#fff}
 .hof-tag.tmvp{background:#121519;color:#fff}
+.hof-lg.two{display:flex;flex-direction:column;gap:4px}
+.hof-lg.two img{width:38px;height:38px}
+.hof-lg{flex:none;display:flex;flex-direction:column;gap:6px;align-items:center}
+.hof-lg img{width:44px!important;height:44px!important;max-width:none;object-fit:contain}

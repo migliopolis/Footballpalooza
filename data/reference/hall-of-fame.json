@@ -1,4 +1,19 @@
 {
- "note": "The FBP Hall of Fame. The commissioner picks every inductee. category: player, team, game, performance or other. class: the year inducted. Optional: franchise (id), year/week (when it happened), player_id (MFL), stat (one line), blurb (a sentence or two).",
- "inductees": []
+ "note": "The FBP Hall of Fame. The commissioner picks every inductee. category: player, team, game, performance or other. class: the year inducted. Optional: franchise (id) or franchises (list, e.g. both teams in a game), year/week (when it happened), player_id (MFL), stat (one line), blurb (a sentence or two).",
+ "inductees": [
+  {
+   "category": "game",
+   "class": 2026,
+   "year": 2019,
+   "week": 3,
+   "franchises": [
+    "0010",
+    "0009"
+   ],
+   "title": "Hold Timers 178.3, Mailing It In 177.6",
+   "subtitle": "Week 3, 2019",
+   "stat": "355.9 combined \u00b7 highest-scoring game in FBP history",
+   "blurb": "Two of the five biggest scores the league has ever seen, in the same game, decided by 0.7. Mailing It In's 177.6 is still the most points ever scored in a loss. Alvin Kamara (37.1), Darren Waller (27.1) and Julio Jones (26.8) outlasted Mark Ingram (35.5), Cooper Kupp (33.1) and Greg Olsen (25.5), and Hold Timers went on to win the 2019 title."
+  }
+ ]
 }

@@ -1,0 +1,1531 @@
+{
+ "note": "Season starter totals for 2019-2020 (regular season, weeks 1-13), players with 10+ starts. The saved weekly results start in 2021; these were computed once from MFL weekly results. Used by scripts/all_time_team.py.",
+ "seasons": {
+  "2019": [
+   {
+    "id": "7836",
+    "name": "Rodgers, Aaron",
+    "pos": "QB",
+    "nfl": "GBP",
+    "pts": 225.2,
+    "starts": 12,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "9662",
+    "name": "Edelman, Julian",
+    "pos": "WR",
+    "nfl": "NEP",
+    "pts": 209.3,
+    "starts": 12,
+    "team": "0007",
+    "teams": [
+     "0009",
+     "0007"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "10271",
+    "name": "Jones, Julio",
+    "pos": "WR",
+    "nfl": "ATL",
+    "pts": 182.7,
+    "starts": 11,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "10276",
+    "name": "Ingram, Mark",
+    "pos": "RB",
+    "nfl": "BAL",
+    "pts": 166.1,
+    "starts": 11,
+    "team": "0009",
+    "teams": [
+     "0009",
+     "0007"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "10703",
+    "name": "Wilson, Russell",
+    "pos": "QB",
+    "nfl": "SEA",
+    "pts": 267.4,
+    "starts": 12,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "10738",
+    "name": "Jones, Marvin",
+    "pos": "WR",
+    "nfl": "DET",
+    "pts": 187.1,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11192",
+    "name": "Bell, Le'Veon",
+    "pos": "RB",
+    "nfl": "NYJ",
+    "pts": 178.2,
+    "starts": 12,
+    "team": "0007",
+    "teams": [
+     "0007"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11222",
+    "name": "Allen, Keenan",
+    "pos": "WR",
+    "nfl": "LAC",
+    "pts": 194.5,
+    "starts": 12,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11232",
+    "name": "Hopkins, DeAndre",
+    "pos": "WR",
+    "nfl": "HOU",
+    "pts": 217.1,
+    "starts": 12,
+    "team": "0007",
+    "teams": [
+     "0007"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11244",
+    "name": "Kelce, Travis",
+    "pos": "TE",
+    "nfl": "KCC",
+    "pts": 184.3,
+    "starts": 13,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11247",
+    "name": "Ertz, Zach",
+    "pos": "TE",
+    "nfl": "PHI",
+    "pts": 143.2,
+    "starts": 11,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11671",
+    "name": "Evans, Mike",
+    "pos": "WR",
+    "nfl": "TBB",
+    "pts": 219.6,
+    "starts": 12,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11678",
+    "name": "Robinson, Allen",
+    "pos": "WR",
+    "nfl": "CHI",
+    "pts": 186.0,
+    "starts": 12,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11679",
+    "name": "Beckham, Odell",
+    "pos": "WR",
+    "nfl": "CLE",
+    "pts": 139.1,
+    "starts": 11,
+    "team": "0004",
+    "teams": [
+     "0004"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11680",
+    "name": "Landry, Jarvis",
+    "pos": "WR",
+    "nfl": "CLE",
+    "pts": 187.9,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12150",
+    "name": "Gurley, Todd",
+    "pos": "RB",
+    "nfl": "LAR",
+    "pts": 149.6,
+    "starts": 11,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12175",
+    "name": "Cooper, Amari",
+    "pos": "WR",
+    "nfl": "DAL",
+    "pts": 164.9,
+    "starts": 10,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12186",
+    "name": "Diggs, Stefon",
+    "pos": "WR",
+    "nfl": "MIN",
+    "pts": 162.8,
+    "starts": 11,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12187",
+    "name": "Lockett, Tyler",
+    "pos": "WR",
+    "nfl": "SEA",
+    "pts": 181.6,
+    "starts": 12,
+    "team": "0008",
+    "teams": [
+     "0008"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12263",
+    "name": "Waller, Darren",
+    "pos": "TE",
+    "nfl": "OAK",
+    "pts": 165.2,
+    "starts": 12,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12625",
+    "name": "Elliott, Ezekiel",
+    "pos": "RB",
+    "nfl": "DAL",
+    "pts": 214.6,
+    "starts": 12,
+    "team": "0003",
+    "teams": [
+     "0003"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12626",
+    "name": "Henry, Derrick",
+    "pos": "RB",
+    "nfl": "TEN",
+    "pts": 223.0,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12652",
+    "name": "Thomas, Michael",
+    "pos": "WR",
+    "nfl": "NOS",
+    "pts": 274.1,
+    "starts": 12,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": 31.6
+   },
+   {
+    "id": "12677",
+    "name": "Hooper, Austin",
+    "pos": "TE",
+    "nfl": "ATL",
+    "pts": 154.8,
+    "starts": 10,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13113",
+    "name": "Watson, Deshaun",
+    "pos": "QB",
+    "nfl": "HOU",
+    "pts": 266.9,
+    "starts": 13,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13116",
+    "name": "Mahomes, Patrick",
+    "pos": "QB",
+    "nfl": "KCC",
+    "pts": 213.8,
+    "starts": 10,
+    "team": "0003",
+    "teams": [
+     "0003"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13128",
+    "name": "Cook, Dalvin",
+    "pos": "RB",
+    "nfl": "MIN",
+    "pts": 269.6,
+    "starts": 12,
+    "team": "0004",
+    "teams": [
+     "0004"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13129",
+    "name": "Fournette, Leonard",
+    "pos": "RB",
+    "nfl": "JAC",
+    "pts": 224.3,
+    "starts": 12,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13130",
+    "name": "McCaffrey, Christian",
+    "pos": "RB",
+    "nfl": "CAR",
+    "pts": 354.1,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": true,
+    "titlePts": null
+   },
+   {
+    "id": "13131",
+    "name": "Mixon, Joe",
+    "pos": "RB",
+    "nfl": "CIN",
+    "pts": 126.0,
+    "starts": 10,
+    "team": "0009",
+    "teams": [
+     "0009"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13132",
+    "name": "Kamara, Alvin",
+    "pos": "RB",
+    "nfl": "NOS",
+    "pts": 179.6,
+    "starts": 10,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13156",
+    "name": "Smith-Schuster, JuJu",
+    "pos": "WR",
+    "nfl": "PIT",
+    "pts": 106.4,
+    "starts": 10,
+    "team": "0009",
+    "teams": [
+     "0009"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13163",
+    "name": "Godwin, Chris",
+    "pos": "WR",
+    "nfl": "TBB",
+    "pts": 242.9,
+    "starts": 12,
+    "team": "0007",
+    "teams": [
+     "0007"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13164",
+    "name": "Kupp, Cooper",
+    "pos": "WR",
+    "nfl": "LAR",
+    "pts": 174.7,
+    "starts": 10,
+    "team": "0009",
+    "teams": [
+     "0009"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13234",
+    "name": "Mack, Marlon",
+    "pos": "RB",
+    "nfl": "IND",
+    "pts": 131.8,
+    "starts": 10,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13277",
+    "name": "Golladay, Kenny",
+    "pos": "WR",
+    "nfl": "DET",
+    "pts": 168.2,
+    "starts": 11,
+    "team": "0001",
+    "teams": [
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13299",
+    "name": "Kittle, George",
+    "pos": "TE",
+    "nfl": "SFO",
+    "pts": 142.2,
+    "starts": 10,
+    "team": "0001",
+    "teams": [
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13319",
+    "name": "Jones, Aaron",
+    "pos": "RB",
+    "nfl": "GBP",
+    "pts": 222.2,
+    "starts": 12,
+    "team": "0001",
+    "teams": [
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13364",
+    "name": "Carson, Chris",
+    "pos": "RB",
+    "nfl": "SEA",
+    "pts": 186.8,
+    "starts": 12,
+    "team": "0008",
+    "teams": [
+     "0008"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13378",
+    "name": "Breida, Matt",
+    "pos": "RB",
+    "nfl": "SFO",
+    "pts": 93.2,
+    "starts": 10,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13404",
+    "name": "Ekeler, Austin",
+    "pos": "RB",
+    "nfl": "LAC",
+    "pts": 234.8,
+    "starts": 12,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13593",
+    "name": "Jackson, Lamar",
+    "pos": "QB",
+    "nfl": "BAL",
+    "pts": 295.4,
+    "starts": 11,
+    "team": "0007",
+    "teams": [
+     "0007"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13607",
+    "name": "Michel, Sony",
+    "pos": "RB",
+    "nfl": "NEP",
+    "pts": 95.5,
+    "starts": 10,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13610",
+    "name": "Chubb, Nick",
+    "pos": "RB",
+    "nfl": "CLE",
+    "pts": 209.0,
+    "starts": 12,
+    "team": "0003",
+    "teams": [
+     "0003"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13614",
+    "name": "Lindsay, Phillip",
+    "pos": "RB",
+    "nfl": "DEN",
+    "pts": 145.3,
+    "starts": 12,
+    "team": "0011",
+    "teams": [
+     "0001",
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13671",
+    "name": "Andrews, Mark",
+    "pos": "TE",
+    "nfl": "BAL",
+    "pts": 137.5,
+    "starts": 11,
+    "team": "0008",
+    "teams": [
+     "0008"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14056",
+    "name": "Murray, Kyler",
+    "pos": "QB",
+    "nfl": "ARI",
+    "pts": 195.2,
+    "starts": 10,
+    "team": "0009",
+    "teams": [
+     "0009"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14071",
+    "name": "Montgomery, David",
+    "pos": "RB",
+    "nfl": "CHI",
+    "pts": 133.7,
+    "starts": 12,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14073",
+    "name": "Jacobs, Josh",
+    "pos": "RB",
+    "nfl": "OAK",
+    "pts": 145.0,
+    "starts": 10,
+    "team": "0003",
+    "teams": [
+     "0003"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0521",
+    "name": "Bears, Chicago",
+    "pos": "DEF",
+    "nfl": "CHI",
+    "pts": 150.0,
+    "starts": 12,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0524",
+    "name": "Vikings, Minnesota",
+    "pos": "DEF",
+    "nfl": "MIN",
+    "pts": 131.0,
+    "starts": 11,
+    "team": "0009",
+    "teams": [
+     "0009"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0514",
+    "name": "Chargers, Los Angeles",
+    "pos": "DEF",
+    "nfl": "LAC",
+    "pts": 131.0,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0511",
+    "name": "Broncos, Denver",
+    "pos": "DEF",
+    "nfl": "DEN",
+    "pts": 125.0,
+    "starts": 13,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0504",
+    "name": "Patriots, New England",
+    "pos": "DEF",
+    "nfl": "NEP",
+    "pts": 226.0,
+    "starts": 11,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   }
+  ],
+  "2020": [
+   {
+    "id": "7836",
+    "name": "Rodgers, Aaron",
+    "pos": "QB",
+    "nfl": "GBP",
+    "pts": 282.8,
+    "starts": 12,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "8687",
+    "name": "Olsen, Greg",
+    "pos": "TE",
+    "nfl": "FA",
+    "pts": 51.4,
+    "starts": 11,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "10703",
+    "name": "Wilson, Russell",
+    "pos": "QB",
+    "nfl": "SEA",
+    "pts": 222.3,
+    "starts": 10,
+    "team": "0008",
+    "teams": [
+     "0008"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11222",
+    "name": "Allen, Keenan",
+    "pos": "WR",
+    "nfl": "LAC",
+    "pts": 222.3,
+    "starts": 12,
+    "team": "0004",
+    "teams": [
+     "0004"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11228",
+    "name": "Woods, Robert",
+    "pos": "WR",
+    "nfl": "LAR",
+    "pts": 177.5,
+    "starts": 11,
+    "team": "0004",
+    "teams": [
+     "0004"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11232",
+    "name": "Hopkins, DeAndre",
+    "pos": "WR",
+    "nfl": "ARI",
+    "pts": 214.9,
+    "starts": 12,
+    "team": "0001",
+    "teams": [
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11244",
+    "name": "Kelce, Travis",
+    "pos": "TE",
+    "nfl": "KCC",
+    "pts": 239.6,
+    "starts": 12,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11671",
+    "name": "Evans, Mike",
+    "pos": "WR",
+    "nfl": "TBB",
+    "pts": 168.1,
+    "starts": 11,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11675",
+    "name": "Adams, Davante",
+    "pos": "WR",
+    "nfl": "GBP",
+    "pts": 262.9,
+    "starts": 10,
+    "team": "0003",
+    "teams": [
+     "0003"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11678",
+    "name": "Robinson, Allen",
+    "pos": "WR",
+    "nfl": "CHI",
+    "pts": 197.3,
+    "starts": 12,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11680",
+    "name": "Landry, Jarvis",
+    "pos": "WR",
+    "nfl": "CLE",
+    "pts": 131.6,
+    "starts": 11,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "11938",
+    "name": "Thielen, Adam",
+    "pos": "WR",
+    "nfl": "MIN",
+    "pts": 192.3,
+    "starts": 10,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12150",
+    "name": "Gurley, Todd",
+    "pos": "RB",
+    "nfl": "ATL",
+    "pts": 142.2,
+    "starts": 11,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12151",
+    "name": "Gordon, Melvin",
+    "pos": "RB",
+    "nfl": "DEN",
+    "pts": 133.3,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12175",
+    "name": "Cooper, Amari",
+    "pos": "WR",
+    "nfl": "DAL",
+    "pts": 166.6,
+    "starts": 10,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12176",
+    "name": "Parker, DeVante",
+    "pos": "WR",
+    "nfl": "MIA",
+    "pts": 124.1,
+    "starts": 10,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12186",
+    "name": "Diggs, Stefon",
+    "pos": "WR",
+    "nfl": "BUF",
+    "pts": 217.7,
+    "starts": 12,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": 41.5
+   },
+   {
+    "id": "12187",
+    "name": "Lockett, Tyler",
+    "pos": "WR",
+    "nfl": "SEA",
+    "pts": 207.4,
+    "starts": 12,
+    "team": "0008",
+    "teams": [
+     "0008"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12263",
+    "name": "Waller, Darren",
+    "pos": "TE",
+    "nfl": "LVR",
+    "pts": 191.2,
+    "starts": 12,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12625",
+    "name": "Elliott, Ezekiel",
+    "pos": "RB",
+    "nfl": "DAL",
+    "pts": 182.8,
+    "starts": 12,
+    "team": "0003",
+    "teams": [
+     "0003"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12626",
+    "name": "Henry, Derrick",
+    "pos": "RB",
+    "nfl": "TEN",
+    "pts": 226.9,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12630",
+    "name": "Drake, Kenyan",
+    "pos": "RB",
+    "nfl": "ARI",
+    "pts": 149.1,
+    "starts": 11,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12650",
+    "name": "Boyd, Tyler",
+    "pos": "WR",
+    "nfl": "CIN",
+    "pts": 166.9,
+    "starts": 11,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "12801",
+    "name": "Hill, Tyreek",
+    "pos": "WR",
+    "nfl": "KCC",
+    "pts": 274.9,
+    "starts": 12,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13113",
+    "name": "Watson, Deshaun",
+    "pos": "QB",
+    "nfl": "HOU",
+    "pts": 276.8,
+    "starts": 12,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13116",
+    "name": "Mahomes, Patrick",
+    "pos": "QB",
+    "nfl": "KCC",
+    "pts": 310.6,
+    "starts": 12,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": true,
+    "titlePts": null
+   },
+   {
+    "id": "13128",
+    "name": "Cook, Dalvin",
+    "pos": "RB",
+    "nfl": "MIN",
+    "pts": 275.4,
+    "starts": 11,
+    "team": "0001",
+    "teams": [
+     "0004",
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13132",
+    "name": "Kamara, Alvin",
+    "pos": "RB",
+    "nfl": "NOS",
+    "pts": 280.8,
+    "starts": 12,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13146",
+    "name": "Conner, James",
+    "pos": "RB",
+    "nfl": "PIT",
+    "pts": 134.0,
+    "starts": 10,
+    "team": "0007",
+    "teams": [
+     "0007",
+     "0004"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13164",
+    "name": "Kupp, Cooper",
+    "pos": "WR",
+    "nfl": "LAR",
+    "pts": 159.0,
+    "starts": 11,
+    "team": "0009",
+    "teams": [
+     "0009"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13319",
+    "name": "Jones, Aaron",
+    "pos": "RB",
+    "nfl": "GBP",
+    "pts": 193.3,
+    "starts": 10,
+    "team": "0001",
+    "teams": [
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13589",
+    "name": "Allen, Josh",
+    "pos": "QB",
+    "nfl": "BUF",
+    "pts": 276.1,
+    "starts": 11,
+    "team": "0001",
+    "teams": [
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13629",
+    "name": "Ridley, Calvin",
+    "pos": "WR",
+    "nfl": "ATL",
+    "pts": 194.9,
+    "starts": 11,
+    "team": "0007",
+    "teams": [
+     "0007"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13635",
+    "name": "Moore, D.J.",
+    "pos": "WR",
+    "nfl": "CAR",
+    "pts": 168.5,
+    "starts": 12,
+    "team": "0008",
+    "teams": [
+     "0008"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "13671",
+    "name": "Andrews, Mark",
+    "pos": "TE",
+    "nfl": "BAL",
+    "pts": 119.4,
+    "starts": 10,
+    "team": "0008",
+    "teams": [
+     "0008"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14056",
+    "name": "Murray, Kyler",
+    "pos": "QB",
+    "nfl": "ARI",
+    "pts": 307.9,
+    "starts": 12,
+    "team": "0009",
+    "teams": [
+     "0009"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14071",
+    "name": "Montgomery, David",
+    "pos": "RB",
+    "nfl": "CHI",
+    "pts": 154.4,
+    "starts": 10,
+    "team": "0012",
+    "teams": [
+     "0012"
+    ],
+    "champ": true,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14073",
+    "name": "Jacobs, Josh",
+    "pos": "RB",
+    "nfl": "LVR",
+    "pts": 172.7,
+    "starts": 11,
+    "team": "0002",
+    "teams": [
+     "0002"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14102",
+    "name": "Metcalf, DK",
+    "pos": "WR",
+    "nfl": "SEA",
+    "pts": 226.9,
+    "starts": 12,
+    "team": "0001",
+    "teams": [
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14109",
+    "name": "McLaurin, Terry",
+    "pos": "WR",
+    "nfl": "WAS",
+    "pts": 175.1,
+    "starts": 11,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14803",
+    "name": "Edwards-Helaire, Clyde",
+    "pos": "RB",
+    "nfl": "KCC",
+    "pts": 152.6,
+    "starts": 12,
+    "team": "0010",
+    "teams": [
+     "0010"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "14813",
+    "name": "Robinson, James",
+    "pos": "RB",
+    "nfl": "JAC",
+    "pts": 212.4,
+    "starts": 11,
+    "team": "0009",
+    "teams": [
+     "0009",
+     "0001"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0508",
+    "name": "Titans, Tennessee",
+    "pos": "DEF",
+    "nfl": "TEN",
+    "pts": 98.0,
+    "starts": 11,
+    "team": "0006",
+    "teams": [
+     "0006"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0531",
+    "name": "Ravens, Baltimore",
+    "pos": "DEF",
+    "nfl": "BAL",
+    "pts": 153.0,
+    "starts": 11,
+    "team": "0003",
+    "teams": [
+     "0003"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0524",
+    "name": "Vikings, Minnesota",
+    "pos": "DEF",
+    "nfl": "MIN",
+    "pts": 117.0,
+    "starts": 13,
+    "team": "0005",
+    "teams": [
+     "0005"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0510",
+    "name": "Steelers, Pittsburgh",
+    "pos": "DEF",
+    "nfl": "PIT",
+    "pts": 187.0,
+    "starts": 12,
+    "team": "0011",
+    "teams": [
+     "0011"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   },
+   {
+    "id": "0528",
+    "name": "Rams, Los Angeles",
+    "pos": "DEF",
+    "nfl": "LAR",
+    "pts": 156.0,
+    "starts": 11,
+    "team": "0004",
+    "teams": [
+     "0012",
+     "0004"
+    ],
+    "champ": false,
+    "mvp": false,
+    "titlePts": null
+   }
+  ]
+ }
+}
