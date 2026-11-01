@@ -137,7 +137,7 @@ window.FBPRef = (() => {
   const firstYear = () => (PRE().length ? Math.min(...PRE().map(x => x.year)) : 2019);
 
   function nav(top) {
-    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/payroll', 'Payroll']], top, true);
+    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']], top, true);
   }
   function head(title, extra = '') {
     const m = D.meta;
@@ -545,6 +545,56 @@ window.FBPRef = (() => {
   }
 
   /* ---------- entry ---------- */
+  /* ---------- Hall of Fame (data/reference/hall-of-fame.json, picked by the commissioner) ---------- */
+  const HOF_CATS = [['player', 'Players', 'The greats who carried FBP rosters.'], ['team', 'Teams', 'Franchise seasons for the ages.'],
+    ['game', 'Games', 'The matchups people still bring up.'], ['performance', 'Performances', 'Single-week explosions.'], ['other', 'Moments & more', 'Trades, draft picks, comebacks and lore.']];
+  function pageHof() {
+    const top = head('Hall of Fame') + nav('#reference/hof');
+    const H = D.hall_of_fame || { inductees: [] }, all = H.inductees || [];
+    const classes = [...new Set(all.map(x => x.class))].sort((a, b) => b - a);
+    const card = x => `<article class="card hof-card">${x.franchise ? `<span class="hof-lg">${logo(x.franchise)}</span>` : ''}<div>
+        <span class="hof-k">Class of ${esc(x.class)}${x.year ? ` · ${esc(x.year)}${x.week ? ` wk ${esc(x.week)}` : ''}` : ''}</span>
+        <b class="hof-t">${esc(x.title)}</b>${x.subtitle ? `<small class="hof-s">${x.franchise ? `<a href="#reference/f-${x.franchise}">${esc(x.subtitle)}</a>` : esc(x.subtitle)}</small>` : ''}
+        ${x.stat ? `<span class="hof-stat">${esc(x.stat)}</span>` : ''}${x.blurb ? `<p class="hof-b">${esc(x.blurb)}</p>` : ''}</div></article>`;
+    const sections = HOF_CATS.map(([k, label, sub]) => {
+      const xs = all.filter(x => (x.category || 'other') === k).sort((a, b) => b.class - a.class || (a.year || 0) - (b.year || 0));
+      return `<section class="hof-sec"><h2 class="sec">${label} <small>${sub}</small></h2>${xs.length ? `<div class="hof-grid">${xs.map(card).join('')}</div>` : '<p class="rf-note hof-empty">No inductees yet.</p>'}</section>`;
+    }).join('');
+    // ideas for the committee, straight from the record book (nothing here is inducted)
+    const L = D.leaderboards || {}, champs = Object.keys(D.championships).sort();
+    const idea = (t, s) => `<li><b>${t}</b><small>${s}</small></li>`;
+    const ideas = `<details class="card hof-ideas"><summary>Ideas for the committee <small>from the record book; nothing here is inducted</small></summary>
+      <div class="hof-icols">
+        <div><h4>Teams</h4><ul>${(L.season_ppg_top25 || []).slice(0, 5).map(r => idea(`${esc(r.team)} ${r.year}`, `${n1(r.ppg)} points a game${r.champion ? ' · champion' : ''}`)).join('')}</ul></div>
+        <div><h4>Games</h4><ul>${champs.map(y => { const c = champOf(y); return c && c.margin != null && c.margin < 5 ? idea(`${y} title game`, `${esc(nm(c.champion, +y))} ${esc(c.score)} over ${esc(nm(c.runnerup, +y))}`) : ''; }).join('')}${(L.closest_games || []).slice(0, 3).map(g => idea(`${g.year} wk ${g.week}`, `${esc(g.winner_name)} ${n1(g.winner_score)}, ${esc(g.loser_name)} ${n1(g.loser_score)}`)).join('')}</ul></div>
+        <div><h4>Performances</h4><ul>${(L.top_single_game_scores || []).slice(0, 5).map(g => idea(`${esc(g.name)}, ${n1(g.score)}`, `${g.year} wk ${g.week} vs ${esc(g.opp_name)}`)).join('')}</ul></div>
+      </div></details>`;
+    // the All-Time FBP team: best single seasons ever, in the All-FBP lineup (scripts/all_time_team.py)
+    const AT = D.all_time_team, m = window.FBP && FBP.media;
+    const atCard = e => {
+      const src = e.pos === 'DEF' ? (m ? m.nflLogo(e.nfl) : '') : (e.espn && m ? m.headshot(e.espn) : '');
+      const fb = (X.teams[e.team] || {}).logo || '';
+      const nmx = e.pos === 'DEF' ? e.name.split(',').reverse().join(' ').trim() : person(e.name);
+      const teams = e.teams && e.teams.length ? e.teams : [e.team];
+      // every FBP team he started for that season, in order; a later team tucks slightly over the first
+      // photo badges: the team he started the season with, then the team he finished with tucked over it
+      const badges = teams.map((fr, i) => { const lg = (X.teams[fr] || {}).logo; return lg ? `<img class="aw-badge" src="${lg}" alt="" loading="lazy" title="${esc(nm(fr, e.year))}" style="right:${(teams.length - 1 - i) * 22 - 6}px;z-index:${i + 1}">` : ''; }).join('');
+      const names = teams.length > 1 ? teams.map(fr => `<a href="#reference/f-${fr}">${esc(nm(fr, e.year))}</a>`).join(' → ') : `${logo(teams[0])}<a href="#reference/f-${teams[0]}">${esc(nm(teams[0], e.year))}</a>`;
+      const tags = [e.champ ? `<span class="hof-tag champ" title="Won the ${e.year} FBP title${e.champTeam && teams.length > 1 ? ' with ' + esc(nm(e.champTeam, e.year)) : ''}">🏆 Champion</span>` : '',
+        e.mvp ? `<span class="hof-tag mvp" title="Most starter points in ${e.year}">${e.year} MVP</span>` : '',
+        e.titleMvp ? `<span class="hof-tag tmvp" title="The champion's top scorer in the ${e.year} title game${e.titlePts != null ? ': ' + n1(e.titlePts) + ' points' : ''}">Title game MVP</span>` : ''].join('');
+      return `<div class="card aw-card"><span class="aw-slot">${e.slot}</span>
+        <span class="aw-ph lg${e.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${badges}</span>
+        <b class="aw-nm">${esc(nmx)}</b><span class="aw-sub"><span class="pos ${e.pos}">${e.pos}</span> ${esc(e.nfl || '')} · <b>${e.year}</b></span>
+        <span class="aw-fbp hof-fbp">${names}</span>${tags ? `<span class="hof-tags">${tags}</span>` : ''}
+        <span class="aw-stats"><span><b>${n1(e.pts)}</b>pts</span><span><b>${n1(e.ppg)}</b>per start</span><span><b>${e.starts}</b>starts</span></span></div>`;
+    };
+    const atTeam = AT && AT.team && AT.team.length ? `<section class="hof-sec hof-at"><h2 class="sec">All-Time FBP Team <small>Class of ${AT.inducted} · the best single seasons, ${AT.years.join('–')}</small></h2>
+      <div class="aw-team">${AT.team.map(atCard).join('')}</div>
+      <p class="rf-foot">Regular-season points scored in an FBP starting lineup, ${AT.minStarts}+ starts to qualify. Ranked by total points, then points per start. A player can hold more than one spot with different seasons. Lineup: QB, 2 RB, 2 WR, TE, FLEX (RB/WR/TE), DEF. 🏆 Champion: on the title team's roster for the title game. MVP: most starter points that season. Title game MVP: the champion's top scorer in the title game.</p></section>` : '';
+    return top + `<section class="hof-intro"><p>The FBP Hall of Fame: players, teams, games, performances and moments, blessed by the commissioner as they come to him. Everything inducted in a season joins that year’s class.${classes.length ? ` ${all.length} inductee${all.length === 1 ? '' : 's'} across ${classes.length} class${classes.length === 1 ? '' : 'es'}.` : ''}</p></section>` + atTeam + sections + ideas;
+  }
+
   function render(ctx, path) {
     X = ctx; PPR = !!ctx.ppr;
     if (failed) return '<p class="error">History didn’t load. Refresh the page to try again.</p>';
@@ -557,6 +607,7 @@ window.FBPRef = (() => {
     if (p.startsWith('s-')) return pageSeason(+p.slice(2), a, b ? +b : null);
     if (p === 'records') return pageRecords(a);
     if (p === 'payroll') return pagePayroll(a ? +a : null);
+    if (p === 'hof') return pageHof();
     return pageHome(ctx.ppr);
   }
   // which page a path is, so moving between sub-tabs keeps your place but a new page starts at the top

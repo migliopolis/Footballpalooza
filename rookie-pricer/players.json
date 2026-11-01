@@ -1,8 +1,8 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-10-22",
- "note": "NFL picks are projections from NFL Mock Draft Database consensus mock position; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
+ "asOf": "2026-10-31",
+ "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
  "players": [
   {
    "name": "Jeremiah Smith",
@@ -16,28 +16,28 @@
    "pos": "WR",
    "school": "Texas",
    "adp": 4.6,
-   "nflPick": 13
+   "nflPick": 12
   },
   {
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
    "adp": 4.9,
-   "nflPick": 24
+   "nflPick": 22
   },
   {
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
    "adp": 5.4,
-   "nflPick": 3
+   "nflPick": 7
   },
   {
    "name": "Charlie Becker",
    "pos": "WR",
    "school": "Indiana",
    "adp": 5.7,
-   "nflPick": 18
+   "nflPick": 7
   },
   {
    "name": "Darian Mensah",
@@ -51,21 +51,21 @@
    "pos": "QB",
    "school": "Oregon",
    "adp": 7.7,
-   "nflPick": 11
+   "nflPick": 22
   },
   {
    "name": "Drew Mestemaker",
    "pos": "QB",
    "school": "Oklahoma State",
    "adp": 7.8,
-   "nflPick": 13
+   "nflPick": 4
   },
   {
    "name": "CJ Carr",
    "pos": "QB",
    "school": "Notre Dame",
    "adp": 12.3,
-   "nflPick": 9
+   "nflPick": 15
   },
   {
    "name": "Kewan Lacy",
@@ -79,7 +79,7 @@
    "pos": "WR",
    "school": "Rutgers",
    "adp": 12.5,
-   "nflPick": 34
+   "nflPick": 31
   },
   {
    "name": "Ahmad Hardy",
@@ -93,14 +93,14 @@
    "pos": "WR",
    "school": "Indiana",
    "adp": 13.9,
-   "nflPick": 31
+   "nflPick": 22
   },
   {
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 14.0,
-   "nflPick": 12
+   "nflPick": 28
   },
   {
    "name": "Jamari Johnson",
@@ -114,14 +114,14 @@
    "pos": "WR",
    "school": "Alabama",
    "adp": 15.5,
-   "nflPick": 32
+   "nflPick": 30
   },
   {
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
    "adp": 16.6,
-   "nflPick": 23
+   "nflPick": 16
   },
   {
    "name": "Nate Frazier",
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 21.8,
-   "nflPick": 48
+   "nflPick": 47
   },
   {
    "name": "Mark Fletcher Jr.",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 24.8,
-   "nflPick": 27
+   "nflPick": 24
   },
   {
    "name": "Justice Haynes",

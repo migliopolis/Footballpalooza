@@ -35,7 +35,7 @@ window.FBPDraftHub = (() => {
   }
   const landing = p => {
     const l = L().landing(p);
-    return l ? `<span class="dr-land" title="Projected landing spot: ${esc(l.name)}"><img src="${l.logo}" alt="" loading="lazy" onerror="this.remove()">${esc(l.team)}</span>` : '';
+    return l ? `<span class="dr-land" title="Projected landing spot: ${esc(l.name)}, ${esc(l.why || '')}"><img src="${l.logo}" alt="" loading="lazy" onerror="this.remove()">${esc(l.team)}</span>` : '';
   };
 
   /* ---------- FBP Home ---------- */
@@ -113,7 +113,7 @@ window.FBPDraftHub = (() => {
       `<section><div class="dh-bar"><div class="seg" role="group" aria-label="Position">${posBtns}</div><span class="rf-foot">${counts}</span></div>
       <div class="card tbl-wrap"><table class="tbl rf-t dh-tbl"><thead><tr><th>#</th><th class="t">Rookie</th><th title="Average draft position across the Rookie Pricer’s boards">ADP</th><th title="Projected NFL pick and landing team">NFL</th><th title="Where he goes if the draft follows the board">FBP pick</th><th title="His salary at that FBP pick">Salary</th><th title="His salary if taken 1.01">At 1.01</th></tr></thead>
       <tbody>${body || '<tr><td colspan="7" class="muted">No rookies at this position.</td></tr>'}</tbody></table></div>
-      <p class="rf-foot">Order: <a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>. ADP is the Rookie Pricer’s blend of rookie boards. NFL picks and landing spots: the Rookie Pricer’s mock-draft sources and ${lib.nflOrder() ? `<a href="${esc(lib.nflOrder().url)}" target="_blank" rel="noopener">Tankathon’s</a> projected order` : 'Tankathon’s projected order'}. Salaries use the 2027 formula (${Object.entries(C.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; $${C.minimumRounds1to2} minimum in rounds 1–2; rounds 3–4 $${C.flatSalaryByRound['3']}/$${C.flatSalaryByRound['4']}).</p></section>`;
+      <p class="rf-foot">Order: <a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>. ADP is the Rookie Pricer’s blend of rookie boards. NFL picks: the Rookie Pricer’s mock-draft sources. Landing teams: <a href="https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027" target="_blank" rel="noopener">NFL Mock Draft Database</a> (consensus mock, then recent mocks), else the team holding his pick in ${lib.nflOrder() ? `<a href="${esc(lib.nflOrder().url)}" target="_blank" rel="noopener">Tankathon’s</a> projected order` : 'Tankathon’s projected order'}. Salaries use the 2027 formula (${Object.entries(C.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; $${C.minimumRounds1to2} minimum in rounds 1–2; rounds 3–4 $${C.flatSalaryByRound['3']}/$${C.flatSalaryByRound['4']}).</p></section>`;
   }
 
   /* ---------- Full Order ---------- */

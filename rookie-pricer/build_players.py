@@ -68,6 +68,10 @@ def nfl_pick(name):
     board_vals = [(s['picks'].get(name, cfg['missingBigBoardRank']), w) for s, w in boards]
     board_est = wavg(board_vals) if board_vals else cfg['missingBigBoardRank']
     mock_vals = [(s['picks'].get(name, max(cfg['missingNflMockFloor'], board_est)), w) for s, w in mocks]
+    # settings.nflPickFromMocks: when any current mock draft has him, his slot comes from the mocks alone
+    # (big boards rank talent, mocks place players with teams); otherwise boards and mocks blend
+    if cfg.get('nflPickFromMocks') and any(name in s['picks'] for s, _ in mocks):
+        return min(cfg['undraftedPick'], round(wavg(mock_vals)))
     return min(cfg['undraftedPick'], round(wavg(board_vals + mock_vals)))
 
 players = {n for s, _ in rookie for n in s['picks']}

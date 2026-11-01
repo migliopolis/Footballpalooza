@@ -117,20 +117,27 @@
   // projected landing spot: the NFL team holding the overall pick a rookie is projected to go at
   // (Tankathon's projected 2027 order with traded picks; logos from ESPN). Optional extras.
   function loadLanding(rerender) {
-    Promise.all(['data/nfl-draft-order.json', 'data/espn/teams.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)))
-      .then(([o, t]) => { S.nflOrder = o; S.nflTeams = t || {}; if (o) rerender(); });
+    Promise.all(['data/nfl-draft-order.json', 'data/espn/teams.json', 'data/nfl-landing.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)))
+      .then(([o, t, l]) => { S.nflOrder = o; S.nflTeams = t || {}; S.nflLand = l; if (o || l) rerender(); });
   }
+  // Landing spot: NFL Mock Draft Database first (analysts' mocks, so team needs count: a team that just drafted a
+  // QB rarely gets another), then the team holding his projected pick in Tankathon's order.
   function landing(p) {
+    const team = code => { const t = S.nflTeams[code] || {}; return { name: t.name || code, logo: t.logo || `https://a.espncdn.com/i/teamlogos/nfl/500/${code.toLowerCase()}.png` }; };
+    const m = S.nflLand && S.nflLand.players && S.nflLand.players[p.name];
+    if (m && m.team) {
+      const why = m.basis === 'consensus' ? `pick ${m.pick} in the consensus mock draft` : m.basis === 'recent' ? `his median pick (${m.pick}) in recent mock drafts` : 'the team he is most often mocked to';
+      return Object.assign({ team: m.team, why: `${why} (NFL Mock Draft Database, ${S.nflLand.asOf})` }, team(m.team));
+    }
     const O = S.nflOrder;
     if (!O || !p.nflPick || p.nflPick > O.picks.length) return null;
     const k = O.picks[Math.round(p.nflPick) - 1];
     if (!k) return null;
-    const t = S.nflTeams[k.team] || {};
-    return { team: k.team, name: t.name || k.team, logo: t.logo || `https://a.espncdn.com/i/teamlogos/nfl/500/${k.team.toLowerCase()}.png`, from: k.from };
+    return Object.assign({ team: k.team, from: k.from, why: `holds pick ${Math.round(p.nflPick)}${k.from ? ` (from ${k.from})` : ''} in Tankathon's projected order` }, team(k.team));
   }
   const landHtml = p => {
     const l = landing(p);
-    return l ? `<span class="dr-land" title="Projected landing spot: ${l.name} hold pick ${Math.round(p.nflPick)}${l.from ? ` (from ${l.from})` : ''} in Tankathon's projected order"><img src="${l.logo}" alt="" loading="lazy" onerror="this.remove()">${l.team}</span>` : '';
+    return l ? `<span class="dr-land" title="Projected landing spot: ${l.name}, ${l.why}"><img src="${l.logo}" alt="" loading="lazy" onerror="this.remove()">${l.team}</span>` : '';
   };
   function load(rerender) {
     if (S.loading || S.cfg) return;

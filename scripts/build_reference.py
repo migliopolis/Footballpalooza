@@ -244,6 +244,9 @@ def main():
     d = load(DATA / 'reference' / 'history.json')
     d, year = overlay_current(d)
     d = derive(d)
+    d['hall_of_fame'] = load(DATA / 'reference' / 'hall-of-fame.json', {'inductees': []})   # chosen by the commissioner
+    from all_time_team import apply as all_time_team   # best single seasons ever, in the All-FBP lineup
+    d = all_time_team(d)
     from pick_tenure import apply as pick_tenure   # what each rookie pick gave the team that drafted it
     d = pick_tenure(d)
     from datetime import datetime, timezone

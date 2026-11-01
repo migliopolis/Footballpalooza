@@ -1016,3 +1016,35 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 
 .tbl td.rf-part,.rf-foot .rf-part{text-decoration:underline dotted;text-underline-offset:3px}
 .rf-left.rf-traded{color:var(--accent)}
+
+/* Reference > Hall of Fame */
+.hof-intro p{margin:4px 0 14px;color:var(--muted)}
+.hof-sec{margin-bottom:18px}
+.hof-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.hof-card{display:flex;gap:12px;padding:14px;border-top:4px solid #c9a227}
+.hof-lg img{width:44px;height:44px;object-fit:contain}
+.hof-k{display:block;font:700 .66rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:#a07d10}
+.hof-t{display:block;font:700 1.1rem/1.2 var(--display);text-transform:uppercase;margin-top:2px}
+.hof-s{display:block;color:var(--muted);font-size:.82rem}
+.hof-stat{display:block;font:600 .85rem var(--mono);margin-top:6px}
+.hof-b{margin:6px 0 0;font-size:.88rem}
+.hof-empty{margin:0}
+.hof-ideas{padding:12px 14px;margin-top:8px}
+.hof-ideas summary{cursor:pointer;font-weight:600}
+.hof-ideas summary small{color:var(--muted);font-weight:400;margin-left:6px}
+.hof-icols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin-top:10px}
+.hof-icols h4{margin:0 0 6px;font:600 .72rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.hof-icols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:.86rem}
+.hof-icols small{display:block;color:var(--muted);font-size:.76rem}
+.hof-sub{margin:10px 0 8px;font:600 .74rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.hof-at .aw-card{border-top:3px solid #c9a227}
+
+.hof-fbp{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.hof-tstack{display:inline-flex;align-items:center}
+.hof-tstack img{width:20px;height:20px;object-fit:contain;border-radius:50%;background:var(--surface)}
+.hof-tstack img + img{margin-left:-7px;box-shadow:0 0 0 2px var(--surface)}
+.hof-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:2px 0 4px}
+.hof-tag{font:700 .62rem var(--body);letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--sky-soft);color:var(--fg);white-space:nowrap}
+.hof-tag.champ{background:#f6e7b0;color:#5a4400}
+.hof-tag.mvp{background:var(--red);color:#fff}
+.hof-tag.tmvp{background:#121519;color:#fff}
