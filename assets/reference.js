@@ -593,7 +593,7 @@ window.FBPRef = (() => {
     const atTeam = AT && AT.team && AT.team.length ? `<section class="hof-sec hof-at"><h2 class="sec">All-Time FBP Team <small>Class of ${AT.inducted} · the best single seasons, ${AT.years.join('–')}</small></h2>
       <div class="aw-team">${AT.team.map(atCard).join('')}</div>
       <p class="rf-foot">Regular-season points scored in an FBP starting lineup, ${AT.minStarts}+ starts to qualify. Ranked by total points, then points per start. A player can hold more than one spot with different seasons. Lineup: QB, 2 RB, 2 WR, TE, FLEX (RB/WR/TE), DEF. 🏆 Champion: on the title team's roster for the title game. MVP: most starter points that season. Title game MVP: the champion's top scorer in the title game.</p></section>` : '';
-    return top + `<section class="hof-intro"><p>The FBP Hall of Fame: players, teams, games, performances and moments, blessed by the commissioner as they come to him. Everything inducted in a season joins that year’s class.${classes.length ? ` ${all.length} inductee${all.length === 1 ? '' : 's'} across ${classes.length} class${classes.length === 1 ? '' : 'es'}.` : ''}</p></section>` + atTeam + sections + ideas;
+    return top + `<section class="hof-intro"><p>The FBP Hall of Fame: players, teams, games, performances and moments, blessed by the commissioner as they come to him. Everything inducted in a season joins that year’s class.${(() => { const n = all.length + (AT && AT.team && AT.team.length ? 1 : 0), cs = new Set(classes.concat(AT && AT.team && AT.team.length ? [AT.inducted] : [])).size; return n ? ` ${n} inductee${n === 1 ? '' : 's'} across ${cs} class${cs === 1 ? '' : 'es'}.` : ''; })() || ''}</p></section>` + atTeam + sections + ideas;
   }
 
   function render(ctx, path) {

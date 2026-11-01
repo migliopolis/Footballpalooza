@@ -3,8 +3,22 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0065';
-  window.FBP = Object.assign(window.FBP || {}, { version: VERSION });   // pages use it to reset saved state after an update
+  const VERSION = '0.0066';
+  window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
+  // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
+  // where there's no share sheet (most desktop browsers), copy the link instead
+  (() => {
+    const btn = document.getElementById('share-btn'); if (!btn) return;
+    const toast = msg => { let t = document.getElementById('share-toast'); if (!t) { t = document.createElement('div'); t.id = 'share-toast'; t.className = 'share-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+      t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 1800); };
+    btn.addEventListener('click', async () => {
+      const h = document.querySelector('#app h1');
+      const title = (h ? h.textContent.trim().replace(/\s+/g, ' ') + ' · ' : '') + 'Footballpalooza';
+      const url = location.href;
+      if (navigator.share) { try { await navigator.share({ title, url }); } catch (e) {} return; }
+      try { await navigator.clipboard.writeText(url); toast('Link copied'); } catch (e) { toast(url); }
+    });
+  })();   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
   try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
