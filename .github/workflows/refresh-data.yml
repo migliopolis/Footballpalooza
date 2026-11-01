@@ -30,6 +30,9 @@ jobs:
       - name: Fetch the projected NFL draft order (Tankathon)
         continue-on-error: true
         run: python scripts/refresh_tankathon.py
+      - name: Refresh NFL mock drafts (NFL Mock Draft Database), rookie NFL picks, salaries and landing teams
+        continue-on-error: true
+        run: python scripts/refresh_mocks.py
       - name: Link MFL players to ESPN (photos, display names, spelling report)
         continue-on-error: true
         run: python scripts/link_players.py
@@ -61,7 +64,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add data
+          git add data rookie-pricer
           if git diff --cached --quiet; then
             echo "No data changes"
           else
