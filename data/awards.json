@@ -20,6 +20,10 @@
      "honors": {
       "first": 4,
       "second": 1
+     },
+     "pace": {
+      "proj": 349.6,
+      "record": true
      }
     }
    },
@@ -41,6 +45,10 @@
      "honors": {
       "first": 2,
       "second": 1
+     },
+     "pace": {
+      "proj": 370.5,
+      "record": true
      }
     }
    },
@@ -62,6 +70,10 @@
      "honors": {
       "first": 1,
       "second": 0
+     },
+     "pace": {
+      "proj": 319.9,
+      "record": false
      }
     }
    },
@@ -83,6 +95,10 @@
      "honors": {
       "first": 2,
       "second": 0
+     },
+     "pace": {
+      "proj": 364.2,
+      "record": true
      }
     }
    },
@@ -104,6 +120,10 @@
      "honors": {
       "first": 2,
       "second": 1
+     },
+     "pace": {
+      "proj": 288.7,
+      "record": false
      }
     }
    },
@@ -125,6 +145,10 @@
      "honors": {
       "first": 3,
       "second": 0
+     },
+     "pace": {
+      "proj": 241.8,
+      "record": false
      }
     }
    },
@@ -146,6 +170,10 @@
      "honors": {
       "first": 2,
       "second": 1
+     },
+     "pace": {
+      "proj": 270.5,
+      "record": false
      }
     }
    },
@@ -167,6 +195,10 @@
      "honors": {
       "first": 1,
       "second": 0
+     },
+     "pace": {
+      "proj": 167.4,
+      "record": false
      }
     }
    }
@@ -195,6 +227,10 @@
      "honors": {
       "first": 0,
       "second": 1
+     },
+     "pace": {
+      "proj": 237.9,
+      "record": false
      }
     }
    },
@@ -219,6 +255,10 @@
      "honors": {
       "first": 2,
       "second": 2
+     },
+     "pace": {
+      "proj": 267.6,
+      "record": false
      }
     }
    },
@@ -240,6 +280,10 @@
      "honors": {
       "first": 2,
       "second": 1
+     },
+     "pace": {
+      "proj": 255.1,
+      "record": false
      }
     }
    },
@@ -266,6 +310,10 @@
      "honors": {
       "first": 0,
       "second": 3
+     },
+     "pace": {
+      "proj": 282.1,
+      "record": false
      }
     }
    },
@@ -287,6 +335,10 @@
      "honors": {
       "first": 0,
       "second": 1
+     },
+     "pace": {
+      "proj": 240.5,
+      "record": false
      }
     }
    },
@@ -308,6 +360,10 @@
      "honors": {
       "first": 0,
       "second": 1
+     },
+     "pace": {
+      "proj": 214.4,
+      "record": false
      }
     }
    },
@@ -329,6 +385,10 @@
      "honors": {
       "first": 0,
       "second": 1
+     },
+     "pace": {
+      "proj": 254.7,
+      "record": false
      }
     }
    },
@@ -355,6 +415,10 @@
      "honors": {
       "first": 0,
       "second": 1
+     },
+     "pace": {
+      "proj": 189.6,
+      "record": false
      }
     }
    }
@@ -1332,7 +1396,7 @@
    ]
   }
  ],
- "generated": "2026-10-29T04:06:07+00:00",
+ "generated": "2026-11-02T01:55:48+00:00",
  "basis": {
   "throughWeek": 6,
   "teams": [
@@ -1421,6 +1485,43 @@
     }
    ]
   ]
+ },
+ "records": {
+  "QB": {
+   "name": "Jalen Hurts",
+   "year": 2022,
+   "team": "0007",
+   "pts": 334.9,
+   "starts": 13
+  },
+  "RB": {
+   "name": "Christian McCaffrey",
+   "year": 2019,
+   "team": "0005",
+   "pts": 354.1,
+   "starts": 12
+  },
+  "WR": {
+   "name": "Cooper Kupp",
+   "year": 2021,
+   "team": "0009",
+   "pts": 335.4,
+   "starts": 13
+  },
+  "TE": {
+   "name": "Travis Kelce",
+   "year": 2022,
+   "team": "0002",
+   "pts": 257.4,
+   "starts": 13
+  },
+  "DEF": {
+   "name": "New England Patriots",
+   "year": 2019,
+   "team": "0010",
+   "pts": 226.0,
+   "starts": 11
+  }
  },
  "pastSeasons": [
   "2025",

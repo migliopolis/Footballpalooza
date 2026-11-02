@@ -46,10 +46,16 @@ window.FBPAwards = (() => {
   const cup = p => p.champ ? ' <span class="aw-cup" role="img" aria-label="Champion" title="Won the title that season">🏆</span>' : '';
   // this season: what changed on this spot since the last weekly update
   const change = p => p.change && !S.final ? `<span class="aw-chg ${p.change.dir}" title="Since week ${esc(p.change.since)}">${{ up: '▲', down: '▼', new: '●' }[p.change.dir] || ''} ${esc(p.change.text)}</span>` : '';
+  // on pace to beat the best season ever at his position (1st Team, this season only)
+  const paceTag = (p, second) => {
+    if (second || !p.pace || !p.pace.record || S !== A || S.final) return '';
+    const r = (A.records || {})[p.pos];
+    return `<span class="aw-pace" title="On pace for ${n1(p.pace.proj)} points${r ? `; the ${p.pos} record is ${n1(r.pts)} (${esc(r.name)}, ${r.year})` : ''}">🔥 Record pace · ${n1(p.pace.proj)}</span>`;
+  };
   function card(slot, p, second) {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg')}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.rookie ? ' · <i>Rookie</i>' : ''}</span>
-      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${honors(p)}${change(p)}
+      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${honors(p)}${change(p)}${paceTag(p, second)}
       <span class="aw-stats"><span><b>${n1(p.pts)}</b>pts</span><span><b>${n1(p.ppg)}</b>per start</span><span><b>${sal(p)}</b>salary</span></span>
       ${p.starts != null ? `<span class="aw-started">${p.starts} week${p.starts === 1 ? '' : 's'} started</span>` : ''}</div>`;
   }
@@ -137,12 +143,19 @@ window.FBPAwards = (() => {
     } else S = A;
     if (!S.ready) return head(`${S.season} season`) + '<div class="card soon"><h2>Awards are on the way</h2><p>They fill in after the next weekly refresh pulls player scores from MFL: All-FBP teams, MVP, Best Value, Rookie of the Year, Waiver Claim of the Year, Trade of the Year and more.</p></div>';
     const team = (t, second) => `<div class="aw-team">${t.map(e => card(e.slot, e.player, second)).join('')}</div>`;
+    // footnote: the best season ever at each position on the team (FBP Reference, 2019 on)
+    const recNote = () => {
+      const R = A.records; if (!R || S !== A || S.final) return '';
+      const pos = ['QB', 'RB', 'WR', 'TE', 'DEF'].filter(k => R[k]);
+      const any = S.allFbp.first.some(e => e.player.pace && e.player.pace.record);
+      return `<p class="rf-foot aw-recs">${any ? '🔥 Record pace: projected regular-season total (points so far plus points per start for the weeks left) beats the best season ever at his position. ' : ''}Best seasons since 2019: ${pos.map(k => `${k} ${esc(R[k].name)} ${n1(R[k].pts)} (${R[k].year})`).join(' · ')}.</p>`;
+    };
     const sub = S.final ? `${S.season} regular season, final · starter points only` : `${S.season} season through week ${S.throughWeek} · starter points only, rostered players`;
     const foot = S.final
       ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. All-FBP counts start with ${esc(A.honorsFrom || S.season)}. Trades count only what each side scored for its new team that season. Team names are today’s.`
       : `Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. All-FBP counts start with ${esc(A.honorsFrom || S.season)} and include this season’s spot so far. Updated every Monday night.`;
     return head(sub) +
-      fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first)) +
+      fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first) + recNote()) +
       fold('allfbp2', '2nd Team All-FBP', S.allFbp.second, team(S.allFbp.second, true)) +
       `<section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.slice().sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
       <p class="rf-foot">${foot}</p></section>`;

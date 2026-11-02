@@ -12,7 +12,7 @@ Past seasons (2019 on, saved once by scripts/backfill_history.py):
   data/reference/history.json   standings (points, potential points, all-play) for each year
 Run: python scripts/awards.py
 """
-import json, math, os, re
+import json, sys, math, os, re
 from collections import defaultdict
 from datetime import datetime, timezone
 
@@ -431,6 +431,41 @@ def mark_changes(cur, prev):
             p['change'] = {'dir': d, 'text': head + tail, 'since': basis['throughWeek']}
 
 
+def add_record_paces(cur):
+    """Best single season ever at each position (2019 on, finished seasons; scripts/all_time_team.py), and for this
+    season's All-FBP players a projected regular-season total: points so far plus points per start for the weeks
+    left (one fewer if he has started every week, since his bye is still ahead). Flags anyone on pace to beat the record."""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from all_time_team import seasons
+        ref = load(D('reference.json'), {}) or {}
+        rows = seasons(ref) if ref else []
+    except Exception as e:
+        print(f'  record paces skipped: {e}')
+        return
+    links = (load(D('player-links.json'), {}) or {}).get('links', {})
+    rec = {}
+    for r in rows:
+        if r['pos'] and r['pts'] > rec.get(r['pos'], {}).get('pts', -1):
+            l = links.get(r['id']) or []
+            nm = (l[2] if len(l) > 2 and l[2] else '') or display(r['name']) if r['pos'] != 'DEF' else ' '.join(reversed(r['name'].split(', ')))
+            rec[r['pos']] = {'name': nm, 'year': r['year'], 'team': r['team'], 'pts': r['pts'], 'starts': r['starts']}
+    cur['records'] = rec
+    if not cur.get('ready') or cur.get('final'):
+        return
+    now = load(D('league-now.json'), {}) or {}
+    reg = int(now.get('lastRegularSeasonWeek') or 14)
+    wk = int(cur.get('throughWeek') or now.get('weeksPlayed') or 0)
+    for team in (cur.get('allFbp') or {}).values():
+        for e in team:
+            p = e['player']; r = rec.get(p.get('pos'))
+            if not r or not p.get('starts'):
+                continue
+            left = max(0, reg - wk - (1 if p['starts'] >= wk else 0))
+            proj = round(p['pts'] + p['ppg'] * left, 1)
+            p['pace'] = {'proj': proj, 'record': proj > r['pts']}
+
+
 def main():
     links = (load(D('player-links.json'), {}) or {}).get('links', {})
     prev = load(D('awards.json'), {}) or {}
@@ -450,6 +485,7 @@ def main():
     for y, a in built:
         json.dump(a, open(D('awards', f'{y}.json'), 'w'), indent=1, ensure_ascii=False)
     json.dump(franchise_all_fbp(built), open(D('awards', 'all-fbp.json'), 'w'), indent=1, ensure_ascii=False)
+    add_record_paces(cur)
     years = [y for y, _ in sorted(built, reverse=True)]
     cur['pastSeasons'] = years
     cur['honorsFrom'] = built[0][0] if built else cur.get('season')
