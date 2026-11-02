@@ -1063,3 +1063,6 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .share-toast.on{opacity:1;transform:translate(-50%,0)}
 .aw-pace{display:inline-block;margin:4px auto 2px;font:700 .64rem var(--body);letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:#ffe3d6;color:#a3330b;white-space:nowrap}
 .aw-recs{margin-top:10px}
+.aw-pace{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:0 5px;max-width:100%;white-space:normal;text-align:center;line-height:1.35}
+.aw-pace span,.aw-pace b{white-space:nowrap}
+.aw-pace b{font-weight:800}

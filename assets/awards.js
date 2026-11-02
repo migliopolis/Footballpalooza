@@ -50,7 +50,7 @@ window.FBPAwards = (() => {
   const paceTag = (p, second) => {
     if (second || !p.pace || !p.pace.record || S !== A || S.final) return '';
     const r = (A.records || {})[p.pos];
-    return `<span class="aw-pace" title="On pace for ${n1(p.pace.proj)} points${r ? `; the ${p.pos} record is ${n1(r.pts)} (${esc(r.name)}, ${r.year})` : ''}">🔥 Record pace · ${n1(p.pace.proj)}</span>`;
+    return `<span class="aw-pace" title="On pace for ${n1(p.pace.proj)} points${r ? `; the ${p.pos} record is ${n1(r.pts)} (${esc(r.name)}, ${r.year})` : ''}"><span>🔥 Record pace</span><b>${n1(p.pace.proj)}</b></span>`;
   };
   function card(slot, p, second) {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg')}
