@@ -710,49 +710,41 @@
   {
    "key": "trade",
    "title": "Trade of the Year",
-   "why": "Biggest edge in starter points from what each side received",
+   "why": "Biggest edge in starter points from what each side received (a pick used in that season's draft counts as the player taken)",
    "trade": {
     "winner": {
-     "team": "0004",
-     "players": [
-      {
-       "id": "13592",
-       "name": "Sam Darnold",
-       "pos": "QB",
-       "nfl": "CAR",
-       "espn": "3912547",
-       "team": "0004",
-       "pts": 52.7,
-       "starts": 3,
-       "ppg": 17.6,
-       "salary": null,
-       "contract": "",
-       "rookie": false,
-       "champ": false,
-       "champTeam": null
-      },
-      {
-       "id": "14813",
-       "name": "James Robinson",
-       "pos": "RB",
-       "nfl": "JAC",
-       "espn": "4052042",
-       "team": "0004",
-       "pts": 97.6,
-       "starts": 8,
-       "ppg": 13.3,
-       "salary": 8.0,
-       "contract": "2",
-       "rookie": false,
+     "team": "0007",
+     "players": [],
+     "picks": [
+      "DP_0_4"
+     ],
+     "drafted": {
+      "DP_0_4": {
+       "id": "15281",
+       "name": "Ja'Marr Chase",
+       "pos": "WR",
+       "year": 2021,
+       "slot": "1.05",
+       "by": "0007",
+       "pts": 164.0,
        "champ": false,
        "champTeam": null
       }
-     ],
-     "picks": [],
-     "pts": 150.3,
-     "became": {},
+     },
+     "pts": 164.0,
+     "became": {
+      "DP_0_4": {
+       "id": "15281",
+       "name": "Ja'Marr Chase",
+       "pos": "WR",
+       "year": 2021,
+       "slot": "1.05",
+       "by": "0007"
+      }
+     },
      "later": {
       "years": [
+       "2021",
        "2022",
        "2023",
        "2024",
@@ -762,83 +754,181 @@
       "current": "2026",
       "rows": [
        {
+        "id": "15281",
+        "name": "Ja'Marr Chase",
+        "pos": "WR",
+        "via": "DP_0_4",
+        "pts": {
+         "2021": 164.0,
+         "2022": 186.9,
+         "2023": 239.3,
+         "2024": 317.4,
+         "2025": 221.9,
+         "2026": 0.0
+        }
+       }
+      ],
+      "total": 1129.5
+     }
+    },
+    "loser": {
+     "team": "0004",
+     "players": [],
+     "picks": [],
+     "drafted": {},
+     "pts": 0,
+     "became": {},
+     "later": {
+      "years": [
+       "2021",
+       "2022",
+       "2023",
+       "2024",
+       "2025",
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [],
+      "total": 0
+     }
+    },
+    "margin": 164.0,
+    "ts": 1625005197
+   },
+   "more": [
+    {
+     "winner": {
+      "team": "0004",
+      "players": [
+       {
         "id": "13592",
         "name": "Sam Darnold",
         "pos": "QB",
-        "via": null,
-        "pts": {
-         "2022": 0.0,
-         "2023": 0.0,
-         "2024": 0.0,
-         "2025": 0.0,
-         "2026": 8.3
-        }
+        "nfl": "CAR",
+        "espn": "3912547",
+        "team": "0004",
+        "pts": 52.7,
+        "starts": 3,
+        "ppg": 17.6,
+        "salary": null,
+        "contract": "",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
        },
        {
         "id": "14813",
         "name": "James Robinson",
         "pos": "RB",
-        "via": null,
-        "pts": {
-         "2022": 46.2,
-         "2023": 0.0,
-         "2024": 0.0,
-         "2025": 0.0,
-         "2026": 0.0
-        }
+        "nfl": "JAC",
+        "espn": "4052042",
+        "team": "0004",
+        "pts": 97.6,
+        "starts": 8,
+        "ppg": 13.3,
+        "salary": 8.0,
+        "contract": "2",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
        }
       ],
-      "total": 54.5
-     }
-    },
-    "loser": {
-     "team": "0001",
-     "players": [],
-     "picks": [
-      "FP_0004_2022_1"
-     ],
-     "pts": 0,
-     "became": {
-      "FP_0004_2022_1": {
-       "id": "15751",
-       "name": "Drake London",
-       "pos": "WR",
-       "year": 2022,
-       "slot": "1.03",
-       "by": "0003"
+      "picks": [],
+      "drafted": {},
+      "pts": 150.3,
+      "became": {},
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "13592",
+         "name": "Sam Darnold",
+         "pos": "QB",
+         "via": null,
+         "pts": {
+          "2021": 52.7,
+          "2022": 0.0,
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 8.3
+         }
+        },
+        {
+         "id": "14813",
+         "name": "James Robinson",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2021": 97.6,
+          "2022": 46.2,
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 204.8
       }
      },
-     "later": {
-      "years": [
-       "2022",
-       "2023",
-       "2024",
-       "2025",
-       "2026"
+     "loser": {
+      "team": "0001",
+      "players": [],
+      "picks": [
+       "FP_0004_2022_1"
       ],
-      "current": "2026",
-      "rows": [
-       {
+      "drafted": {},
+      "pts": 0,
+      "became": {
+       "FP_0004_2022_1": {
         "id": "15751",
         "name": "Drake London",
         "pos": "WR",
-        "via": "FP_0004_2022_1",
-        "pts": {
-         "2022": 0.0,
-         "2023": 0.0,
-         "2024": 0.0,
-         "2025": 0.0,
-         "2026": 0.0
-        }
+        "year": 2022,
+        "slot": "1.03",
+        "by": "0003"
        }
-      ],
-      "total": 0.0
-     }
+      },
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "15751",
+         "name": "Drake London",
+         "pos": "WR",
+         "via": "FP_0004_2022_1",
+         "pts": {
+          "2022": 0.0,
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 0.0
+      }
+     },
+     "margin": 150.3,
+     "ts": 1633020869
     },
-    "margin": 150.3,
-    "ts": 1633020869
-   },
-   "more": [
     {
      "winner": {
       "team": "0007",
@@ -863,6 +953,7 @@
       "picks": [
        "DP_2_7"
       ],
+      "drafted": {},
       "pts": 181.7,
       "became": {
        "DP_2_7": {
@@ -891,6 +982,7 @@
          "pos": "RB",
          "via": null,
          "pts": {
+          "2021": 181.7,
           "2022": 191.0,
           "2023": 0.0,
           "2024": 0.0,
@@ -913,7 +1005,7 @@
          }
         }
        ],
-       "total": 191.0
+       "total": 372.7
       }
      },
      "loser": {
@@ -939,6 +1031,7 @@
       "picks": [
        "DP_0_5"
       ],
+      "drafted": {},
       "pts": 49.7,
       "became": {
        "DP_0_5": {
@@ -967,6 +1060,7 @@
          "pos": "WR",
          "via": null,
          "pts": {
+          "2021": 49.7,
           "2022": 0.0,
           "2023": 0.0,
           "2024": 0.0,
@@ -989,7 +1083,7 @@
          }
         }
        ],
-       "total": 178.3
+       "total": 228.0
       }
      },
      "margin": 132.0,
@@ -1017,10 +1111,12 @@
        }
       ],
       "picks": [],
+      "drafted": {},
       "pts": 127.4,
       "became": {},
       "later": {
        "years": [
+        "2021",
         "2022",
         "2023",
         "2024",
@@ -1035,6 +1131,7 @@
          "pos": "QB",
          "via": null,
          "pts": {
+          "2021": 127.4,
           "2022": 159.2,
           "2023": 0.0,
           "2024": 0.0,
@@ -1043,7 +1140,7 @@
          }
         }
        ],
-       "total": 159.2
+       "total": 286.6
       }
      },
      "loser": {
@@ -1052,6 +1149,7 @@
       "picks": [
        "FP_0010_2022_1"
       ],
+      "drafted": {},
       "pts": 0,
       "became": {
        "FP_0010_2022_1": {
@@ -1065,6 +1163,7 @@
       },
       "later": {
        "years": [
+        "2021",
         "2022",
         "2023",
         "2024",
@@ -1092,6 +1191,170 @@
      },
      "margin": 127.4,
      "ts": 1635527622
+    },
+    {
+     "winner": {
+      "team": "0007",
+      "players": [
+       {
+        "id": "13404",
+        "name": "Austin Ekeler",
+        "pos": "RB",
+        "nfl": "LAC",
+        "espn": "3068267",
+        "team": "0007",
+        "pts": 242.3,
+        "starts": 13,
+        "ppg": 21.3,
+        "salary": 34.0,
+        "contract": "5",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 242.3,
+      "became": {},
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "13404",
+         "name": "Austin Ekeler",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2021": 242.3,
+          "2022": 0.0,
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 242.3
+      }
+     },
+     "loser": {
+      "team": "0006",
+      "players": [
+       {
+        "id": "14777",
+        "name": "Joe Burrow",
+        "pos": "QB",
+        "nfl": "CIN",
+        "espn": "3915511",
+        "team": "0006",
+        "pts": 112.7,
+        "starts": 7,
+        "ppg": 16.1,
+        "salary": 5.0,
+        "contract": "2",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       },
+       {
+        "id": "15255",
+        "name": "Kenny Gainwell",
+        "pos": "RB",
+        "nfl": "PHI",
+        "espn": "4371733",
+        "team": "0006",
+        "pts": 7.2,
+        "starts": 3,
+        "ppg": 2.4,
+        "salary": 4.0,
+        "contract": "1",
+        "rookie": true,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [
+       "FP_0007_2022_2"
+      ],
+      "drafted": {},
+      "pts": 119.9,
+      "became": {
+       "FP_0007_2022_2": {
+        "id": "15720",
+        "name": "Hassan Haskins",
+        "pos": "RB",
+        "year": 2022,
+        "slot": "2.10",
+        "by": "0006"
+       }
+      },
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14777",
+         "name": "Joe Burrow",
+         "pos": "QB",
+         "via": null,
+         "pts": {
+          "2021": 112.7,
+          "2022": 290.8,
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "15255",
+         "name": "Kenny Gainwell",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2021": 7.2,
+          "2022": 0.0,
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "15720",
+         "name": "Hassan Haskins",
+         "pos": "RB",
+         "via": "FP_0007_2022_2",
+         "pts": {
+          "2022": 0.0,
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 410.7
+      }
+     },
+     "margin": 122.4,
+     "ts": 1632356932
     }
    ]
   },

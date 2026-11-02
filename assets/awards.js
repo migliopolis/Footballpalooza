@@ -96,7 +96,7 @@ window.FBPAwards = (() => {
     } else if (a.trade) {
       const became = (s, k) => { const b = (s.became || {})[k]; return b ? `<span class="aw-became">→ ${esc(b.name)} <small>${b.pos || ''}${k.startsWith('DP_') ? '' : ` · ${b.year} ${b.slot}`}${b.by && b.by !== s.team ? ` · taken by ${esc(tname(b.by))}` : ''}</small></span>` : ''; };
       const side = (s, won) => `<div class="aw-side${won ? ' won' : ''}"><div class="aw-sideh">${tlogo(s.team, 'mini')}<b>${esc(tname(s.team))}</b><span>${n1(s.pts)} pts</span></div>
-        <ul>${s.players.map(p => `<li>${esc(p.name)}${cup(p)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(pickName(k))}${became(s, k)}</li>`).join('')}</ul></div>`;
+        <ul>${s.players.map(p => `<li>${esc(p.name)}${cup(p)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(pickName(k))}${became(s, k)}${(s.drafted || {})[k] ? ` <small>· ${n1(s.drafted[k].pts)}</small>` : ''}</li>`).join('')}</ul></div>`;
       // the deeper dive: starter points each side's haul scored for it in the seasons after (doesn't change the award)
       const later = t => {
         const L = [t.winner, t.loser].filter(s => s.later && s.later.rows.length);
@@ -108,13 +108,26 @@ window.FBPAwards = (() => {
           ${s.later.rows.map(r => { const tot = Object.values(r.pts).reduce((x, v) => x + v, 0); return `<tr><td class="t">${esc(r.name)} <small>${r.pos || ''}</small>${r.via ? `<small class="aw-via">via ${esc(pickName(r.via))}</small>` : ''}</td>${years.map(y => `<td>${y in r.pts ? n1(r.pts[y]) : ''}</td>`).join('')}<td><b>${n1(tot)}</b></td></tr>`; }).join('')}
           </tbody></table></div></div>`;
         const w = L.find(s => s === t.winner), l = L.find(s => s === t.loser);
-        const lead = w && l ? (w.later.total === l.later.total ? 'Even since.' : `${esc(tname((w.later.total > l.later.total ? w : l).team))} by ${n1(Math.abs(w.later.total - l.later.total))} since.`) : '';
-        return `<details class="aw-later"><summary>How it played out <small>starter points for each team in the seasons after${lead ? ' · ' + lead : ''}</small></summary>${L.map(tbl).join('')}
-          <p class="rf-foot">Regular-season points scored as a starter for the team that received him. Picks count from the season the player was drafted. * this season so far. Doesn't change the award, which counts only the season of the trade.</p></details>`;
+        const lead = w && l ? (w.later.total === l.later.total ? 'Even overall.' : `${esc(tname((w.later.total > l.later.total ? w : l).team))} by ${n1(Math.abs(w.later.total - l.later.total))} overall.`) : '';
+        return `<details class="aw-later"><summary>How it played out <small>starter points for each team, trade season on${lead ? ' · ' + lead : ''}</small></summary>${L.map(tbl).join('')}
+          <p class="rf-foot">Regular-season points scored as a starter for the team that received him. Counted from the trade season on; a pick counts from the season the player was drafted. * this season so far. Doesn't change the award, which counts only the season of the trade.</p></details>`;
       };
-      const deal = t => `<div class="aw-trade">${side(t.winner, true)}${side(t.loser, false)}</div><p class="aw-sub">Edge: ${n1(t.margin)} pts to ${esc(tname(t.winner.team))}</p>${later(t)}`;
-      body = `<p class="aw-sub">What each side received, and its starter points since:</p>${deal(a.trade)}` +
-        (a.more && a.more.length ? a.more.map((t, i) => `<div class="aw-more"><span class="aw-rank">${i + 2}</span>${deal(t)}</div>`).join('') : '');
+      // headline: what each side got, in short (players and drafted rookies by name, other picks counted)
+      const got = s => {
+        const dr = s.drafted || {}, bc = s.became || {};
+        const names = [...s.players.map(p => p.name), ...s.picks.filter(k => dr[k]).map(k => dr[k].name)];
+        const rest = s.picks.filter(k => !dr[k]);
+        const pk = rest.length === 1 && !names.length ? pickName(rest[0]) : rest.length ? `${rest.length} pick${rest.length > 1 ? 's' : ''}` : '';
+        const all = pk ? [...names, pk] : names;
+        return all.length ? (all.length > 2 ? `${all.slice(0, 2).join(', ')} + ${all.length - 2} more` : all.join(' + ')) : 'nothing on record';
+      };
+      const deal = (t, i) => `<details class="aw-deal"><summary><span class="aw-rank">${i}</span><span class="aw-dh">
+          <span class="aw-dl">${tlogo(t.winner.team, 'mini')}<b>${esc(tname(t.winner.team))}</b> got ${esc(got(t.winner))}</span>
+          <span class="aw-dl lose">${tlogo(t.loser.team, 'mini')}<b>${esc(tname(t.loser.team))}</b> got ${esc(got(t.loser))}</span></span>
+          <span class="aw-edge">+${n1(t.margin)}</span><i class="car" aria-hidden="true"></i></summary>
+        <div class="aw-trade">${side(t.winner, true)}${side(t.loser, false)}</div><p class="aw-sub">Edge: ${n1(t.margin)} pts to ${esc(tname(t.winner.team))}</p>${later(t)}</details>`;
+      body = `<p class="aw-sub">The ${1 + (a.more || []).length} biggest edges. Tap a trade for what each side received and how it played out.</p>` +
+        [a.trade, ...(a.more || [])].map((t, i) => deal(t, i + 1)).join('');
     }
     const open = awOpen.has(a.key);
     return `<section class="card aw-award k-${esc(a.key)}${open ? ' open' : ''}">
@@ -171,7 +184,7 @@ window.FBPAwards = (() => {
     };
     const sub = S.final ? `${S.season} regular season, final · starter points only` : `${S.season} season through week ${S.throughWeek} · starter points only, rostered players`;
     const foot = S.final
-      ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. All-FBP counts start with ${esc(A.honorsFrom || S.season)}. Trades count only what each side scored for its new team that season. Team names are today’s.`
+      ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. All-FBP counts start with ${esc(A.honorsFrom || S.season)}. Trades count only what each side scored for its new team that season; a pick used in that season’s draft counts as the player taken with it. Team names are today’s.`
       : `Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. All-FBP counts start with ${esc(A.honorsFrom || S.season)} and include this season’s spot so far. Updated every Monday night.`;
     return head(sub) +
       fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first) + recNote()) +

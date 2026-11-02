@@ -713,42 +713,32 @@
   {
    "key": "trade",
    "title": "Trade of the Year",
-   "why": "Biggest edge in starter points from what each side received",
+   "why": "Biggest edge in starter points from what each side received (a pick used in that season's draft counts as the player taken)",
    "trade": {
     "winner": {
-     "team": "0008",
+     "team": "0011",
      "players": [
       {
-       "id": "13589",
-       "name": "Josh Allen",
-       "pos": "QB",
+       "id": "12186",
+       "name": "Stefon Diggs",
+       "pos": "WR",
        "nfl": "BUF",
-       "espn": "3918298",
-       "team": "0008",
-       "pts": 286.9,
+       "espn": "2976212",
+       "team": "0011",
+       "pts": 234.3,
        "starts": 13,
-       "ppg": 23.6,
-       "salary": 30.0,
-       "contract": "5/5",
+       "ppg": 18.0,
+       "salary": 38.0,
+       "contract": "2/3",
        "rookie": false,
        "champ": false,
        "champTeam": null
       }
      ],
-     "picks": [
-      "DP_0_9"
-     ],
-     "pts": 286.9,
-     "became": {
-      "DP_0_9": {
-       "id": "16152",
-       "name": "Anthony Richardson Sr.",
-       "pos": "QB",
-       "year": 2023,
-       "slot": "1.10",
-       "by": "0008"
-      }
-     },
+     "picks": [],
+     "drafted": {},
+     "pts": 234.3,
+     "became": {},
      "later": {
       "years": [
        "2023",
@@ -759,55 +749,66 @@
       "current": "2026",
       "rows": [
        {
-        "id": "13589",
-        "name": "Josh Allen",
-        "pos": "QB",
+        "id": "12186",
+        "name": "Stefon Diggs",
+        "pos": "WR",
         "via": null,
         "pts": {
+         "2023": 234.3,
          "2024": 0.0,
          "2025": 0.0,
-         "2026": 0.0
-        }
-       },
-       {
-        "id": "16152",
-        "name": "Anthony Richardson Sr.",
-        "pos": "QB",
-        "via": "DP_0_9",
-        "pts": {
-         "2023": 0.0,
-         "2024": 9.9,
-         "2025": 0.0,
-         "2026": 0.0
+         "2026": 37.5
         }
        }
       ],
-      "total": 9.9
+      "total": 271.8
      }
     },
     "loser": {
      "team": "0001",
      "players": [],
      "picks": [
-      "DP_0_4",
-      "DP_0_11"
+      "DP_0_7",
+      "FP_0011_2024_1",
+      "FP_0011_2025_2"
      ],
-     "pts": 0,
-     "became": {
-      "DP_0_4": {
-       "id": "16171",
-       "name": "Kendre Miller",
-       "pos": "RB",
+     "drafted": {
+      "DP_0_7": {
+       "id": "16188",
+       "name": "Quentin Johnston",
+       "pos": "WR",
        "year": 2023,
-       "slot": "1.05",
+       "slot": "1.08",
+       "by": "0001",
+       "pts": 0.0,
+       "champ": false,
+       "champTeam": null
+      }
+     },
+     "pts": 0.0,
+     "became": {
+      "DP_0_7": {
+       "id": "16188",
+       "name": "Quentin Johnston",
+       "pos": "WR",
+       "year": 2023,
+       "slot": "1.08",
        "by": "0001"
       },
-      "DP_0_11": {
-       "id": "16167",
-       "name": "De'Von Achane",
-       "pos": "RB",
-       "year": 2023,
-       "slot": "1.12",
+      "FP_0011_2024_1": {
+       "id": "16581",
+       "name": "Jayden Daniels",
+       "pos": "QB",
+       "year": 2024,
+       "slot": "1.09",
+       "by": "0008"
+      },
+      "FP_0011_2025_2": {
+       "id": "17030",
+       "name": "Cam Ward",
+       "pos": "QB",
+       "year": 2025,
+       "slot": "2.02",
        "by": "0001"
       }
      },
@@ -821,10 +822,10 @@
       "current": "2026",
       "rows": [
        {
-        "id": "16171",
-        "name": "Kendre Miller",
-        "pos": "RB",
-        "via": "DP_0_4",
+        "id": "16188",
+        "name": "Quentin Johnston",
+        "pos": "WR",
+        "via": "DP_0_7",
         "pts": {
          "2023": 0.0,
          "2024": 0.0,
@@ -833,51 +834,85 @@
         }
        },
        {
-        "id": "16167",
-        "name": "De'Von Achane",
-        "pos": "RB",
-        "via": "DP_0_11",
+        "id": "16581",
+        "name": "Jayden Daniels",
+        "pos": "QB",
+        "via": "FP_0011_2024_1",
         "pts": {
-         "2023": 62.1,
-         "2024": 232.0,
-         "2025": 271.9,
-         "2026": 24.6
+         "2024": 0.0,
+         "2025": 0.0,
+         "2026": 0.0
+        }
+       },
+       {
+        "id": "17030",
+        "name": "Cam Ward",
+        "pos": "QB",
+        "via": "FP_0011_2025_2",
+        "pts": {
+         "2025": 0.0,
+         "2026": 0.0
         }
        }
       ],
-      "total": 590.6
+      "total": 0.0
      }
     },
-    "margin": 286.9,
-    "ts": 1686834232
+    "margin": 234.3,
+    "ts": 1687888171
    },
    "more": [
     {
      "winner": {
-      "team": "0011",
+      "team": "0008",
       "players": [
        {
-        "id": "12186",
-        "name": "Stefon Diggs",
-        "pos": "WR",
+        "id": "13589",
+        "name": "Josh Allen",
+        "pos": "QB",
         "nfl": "BUF",
-        "espn": "2976212",
-        "team": "0011",
-        "pts": 234.3,
+        "espn": "3918298",
+        "team": "0008",
+        "pts": 286.9,
         "starts": 13,
-        "ppg": 18.0,
-        "salary": 38.0,
-        "contract": "2/3",
+        "ppg": 23.6,
+        "salary": 30.0,
+        "contract": "5/5",
         "rookie": false,
         "champ": false,
         "champTeam": null
        }
       ],
-      "picks": [],
-      "pts": 234.3,
-      "became": {},
+      "picks": [
+       "DP_0_9"
+      ],
+      "drafted": {
+       "DP_0_9": {
+        "id": "16152",
+        "name": "Anthony Richardson Sr.",
+        "pos": "QB",
+        "year": 2023,
+        "slot": "1.10",
+        "by": "0008",
+        "pts": 0.0,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 286.9,
+      "became": {
+       "DP_0_9": {
+        "id": "16152",
+        "name": "Anthony Richardson Sr.",
+        "pos": "QB",
+        "year": 2023,
+        "slot": "1.10",
+        "by": "0008"
+       }
+      },
       "later": {
        "years": [
+        "2023",
         "2024",
         "2025",
         "2026"
@@ -885,52 +920,80 @@
        "current": "2026",
        "rows": [
         {
-         "id": "12186",
-         "name": "Stefon Diggs",
-         "pos": "WR",
+         "id": "13589",
+         "name": "Josh Allen",
+         "pos": "QB",
          "via": null,
          "pts": {
+          "2023": 286.9,
           "2024": 0.0,
           "2025": 0.0,
-          "2026": 37.5
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "16152",
+         "name": "Anthony Richardson Sr.",
+         "pos": "QB",
+         "via": "DP_0_9",
+         "pts": {
+          "2023": 0.0,
+          "2024": 9.9,
+          "2025": 0.0,
+          "2026": 0.0
          }
         }
        ],
-       "total": 37.5
+       "total": 296.8
       }
      },
      "loser": {
       "team": "0001",
       "players": [],
       "picks": [
-       "DP_0_7",
-       "FP_0011_2024_1",
-       "FP_0011_2025_2"
+       "DP_0_4",
+       "DP_0_11"
       ],
-      "pts": 0,
-      "became": {
-       "DP_0_7": {
-        "id": "16188",
-        "name": "Quentin Johnston",
-        "pos": "WR",
+      "drafted": {
+       "DP_0_4": {
+        "id": "16171",
+        "name": "Kendre Miller",
+        "pos": "RB",
         "year": 2023,
-        "slot": "1.08",
+        "slot": "1.05",
+        "by": "0001",
+        "pts": 0.0,
+        "champ": false,
+        "champTeam": null
+       },
+       "DP_0_11": {
+        "id": "16167",
+        "name": "De'Von Achane",
+        "pos": "RB",
+        "year": 2023,
+        "slot": "1.12",
+        "by": "0001",
+        "pts": 62.1,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 62.1,
+      "became": {
+       "DP_0_4": {
+        "id": "16171",
+        "name": "Kendre Miller",
+        "pos": "RB",
+        "year": 2023,
+        "slot": "1.05",
         "by": "0001"
        },
-       "FP_0011_2024_1": {
-        "id": "16581",
-        "name": "Jayden Daniels",
-        "pos": "QB",
-        "year": 2024,
-        "slot": "1.09",
-        "by": "0008"
-       },
-       "FP_0011_2025_2": {
-        "id": "17030",
-        "name": "Cam Ward",
-        "pos": "QB",
-        "year": 2025,
-        "slot": "2.02",
+       "DP_0_11": {
+        "id": "16167",
+        "name": "De'Von Achane",
+        "pos": "RB",
+        "year": 2023,
+        "slot": "1.12",
         "by": "0001"
        }
       },
@@ -944,10 +1007,10 @@
        "current": "2026",
        "rows": [
         {
-         "id": "16188",
-         "name": "Quentin Johnston",
-         "pos": "WR",
-         "via": "DP_0_7",
+         "id": "16171",
+         "name": "Kendre Miller",
+         "pos": "RB",
+         "via": "DP_0_4",
          "pts": {
           "2023": 0.0,
           "2024": 0.0,
@@ -956,32 +1019,23 @@
          }
         },
         {
-         "id": "16581",
-         "name": "Jayden Daniels",
-         "pos": "QB",
-         "via": "FP_0011_2024_1",
+         "id": "16167",
+         "name": "De'Von Achane",
+         "pos": "RB",
+         "via": "DP_0_11",
          "pts": {
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
-         }
-        },
-        {
-         "id": "17030",
-         "name": "Cam Ward",
-         "pos": "QB",
-         "via": "FP_0011_2025_2",
-         "pts": {
-          "2025": 0.0,
-          "2026": 0.0
+          "2023": 62.1,
+          "2024": 232.0,
+          "2025": 271.9,
+          "2026": 24.6
          }
         }
        ],
-       "total": 0.0
+       "total": 590.6
       }
      },
-     "margin": 234.3,
-     "ts": 1687888171
+     "margin": 224.8,
+     "ts": 1686834232
     },
     {
      "winner": {
@@ -1005,10 +1059,12 @@
        }
       ],
       "picks": [],
+      "drafted": {},
       "pts": 231.2,
       "became": {},
       "later": {
        "years": [
+        "2023",
         "2024",
         "2025",
         "2026"
@@ -1021,13 +1077,14 @@
          "pos": "WR",
          "via": null,
          "pts": {
+          "2023": 231.2,
           "2024": 0.0,
           "2025": 0.0,
           "2026": 0.0
          }
         }
        ],
-       "total": 0.0
+       "total": 231.2
       }
      },
      "loser": {
@@ -1036,7 +1093,20 @@
       "picks": [
        "DP_1_6"
       ],
-      "pts": 0,
+      "drafted": {
+       "DP_1_6": {
+        "id": "16194",
+        "name": "Rashee Rice",
+        "pos": "WR",
+        "year": 2023,
+        "slot": "2.07",
+        "by": "0002",
+        "pts": 50.7,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 50.7,
       "became": {
        "DP_1_6": {
         "id": "16194",
@@ -1072,8 +1142,276 @@
        "total": 115.6
       }
      },
-     "margin": 231.2,
+     "margin": 180.5,
      "ts": 1687893677
+    },
+    {
+     "winner": {
+      "team": "0007",
+      "players": [
+       {
+        "id": "13604",
+        "name": "Saquon Barkley",
+        "pos": "RB",
+        "nfl": "NYG",
+        "espn": "3929630",
+        "team": "0007",
+        "pts": 151.8,
+        "starts": 9,
+        "ppg": 16.9,
+        "salary": 50.0,
+        "contract": "2/3",
+        "rookie": false,
+        "champ": true,
+        "champTeam": "0007"
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 151.8,
+      "became": {},
+      "later": {
+       "years": [
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "13604",
+         "name": "Saquon Barkley",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2023": 151.8,
+          "2024": 300.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 451.8
+      }
+     },
+     "loser": {
+      "team": "0006",
+      "players": [],
+      "picks": [
+       "DP_2_8",
+       "DP_3_8",
+       "FP_0007_2024_1"
+      ],
+      "drafted": {
+       "DP_2_8": {
+        "id": "16206",
+        "name": "Michael Wilson",
+        "pos": "WR",
+        "year": 2023,
+        "slot": "3.09",
+        "by": "0006",
+        "pts": 0.0,
+        "champ": false,
+        "champTeam": null
+       },
+       "DP_3_8": {
+        "id": "16170",
+        "name": "Kenny McIntosh",
+        "pos": "RB",
+        "year": 2023,
+        "slot": "4.09",
+        "by": "0006",
+        "pts": 0.0,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 0.0,
+      "became": {
+       "DP_2_8": {
+        "id": "16206",
+        "name": "Michael Wilson",
+        "pos": "WR",
+        "year": 2023,
+        "slot": "3.09",
+        "by": "0006"
+       },
+       "DP_3_8": {
+        "id": "16170",
+        "name": "Kenny McIntosh",
+        "pos": "RB",
+        "year": 2023,
+        "slot": "4.09",
+        "by": "0006"
+       },
+       "FP_0007_2024_1": {
+        "id": "16593",
+        "name": "Blake Corum",
+        "pos": "RB",
+        "year": 2024,
+        "slot": "1.12",
+        "by": "0006"
+       }
+      },
+      "later": {
+       "years": [
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "16206",
+         "name": "Michael Wilson",
+         "pos": "WR",
+         "via": "DP_2_8",
+         "pts": {
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "16170",
+         "name": "Kenny McIntosh",
+         "pos": "RB",
+         "via": "DP_3_8",
+         "pts": {
+          "2023": 0.0,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "16593",
+         "name": "Blake Corum",
+         "pos": "RB",
+         "via": "FP_0007_2024_1",
+         "pts": {
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 0.0
+      }
+     },
+     "margin": 151.8,
+     "ts": 1687354410
+    },
+    {
+     "winner": {
+      "team": "0008",
+      "players": [],
+      "picks": [
+       "DP_1_9"
+      ],
+      "drafted": {
+       "DP_1_9": {
+        "id": "16214",
+        "name": "Sam LaPorta",
+        "pos": "TE",
+        "year": 2023,
+        "slot": "2.10",
+        "by": "0008",
+        "pts": 156.4,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 156.4,
+      "became": {
+       "DP_1_9": {
+        "id": "16214",
+        "name": "Sam LaPorta",
+        "pos": "TE",
+        "year": 2023,
+        "slot": "2.10",
+        "by": "0008"
+       }
+      },
+      "later": {
+       "years": [
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "16214",
+         "name": "Sam LaPorta",
+         "pos": "TE",
+         "via": "DP_1_9",
+         "pts": {
+          "2023": 156.4,
+          "2024": 51.7,
+          "2025": 61.8,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 269.9
+      }
+     },
+     "loser": {
+      "team": "0003",
+      "players": [
+       {
+        "id": "11150",
+        "name": "Geno Smith",
+        "pos": "QB",
+        "nfl": "SEA",
+        "espn": "15864",
+        "team": "0003",
+        "pts": 9.1,
+        "starts": 1,
+        "ppg": 9.1,
+        "salary": null,
+        "contract": "",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 9.1,
+      "became": {},
+      "later": {
+       "years": [
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "11150",
+         "name": "Geno Smith",
+         "pos": "QB",
+         "via": null,
+         "pts": {
+          "2023": 9.1,
+          "2024": 0.0,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 9.1
+      }
+     },
+     "margin": 147.3,
+     "ts": 1687893456
     }
    ]
   },

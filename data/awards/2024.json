@@ -710,7 +710,7 @@
   {
    "key": "trade",
    "title": "Trade of the Year",
-   "why": "Biggest edge in starter points from what each side received",
+   "why": "Biggest edge in starter points from what each side received (a pick used in that season's draft counts as the player taken)",
    "trade": {
     "winner": {
      "team": "0001",
@@ -733,10 +733,12 @@
       }
      ],
      "picks": [],
+     "drafted": {},
      "pts": 80.3,
      "became": {},
      "later": {
       "years": [
+       "2024",
        "2025",
        "2026"
       ],
@@ -748,12 +750,13 @@
         "pos": "QB",
         "via": null,
         "pts": {
+         "2024": 80.3,
          "2025": 54.5,
          "2026": 161.3
         }
        }
       ],
-      "total": 215.8
+      "total": 296.1
      }
     },
     "loser": {
@@ -779,6 +782,7 @@
      "picks": [
       "FP_0001_2025_2"
      ],
+     "drafted": {},
      "pts": 0.0,
      "became": {
       "FP_0001_2025_2": {
@@ -792,6 +796,7 @@
      },
      "later": {
       "years": [
+       "2024",
        "2025",
        "2026"
       ],
@@ -803,6 +808,7 @@
         "pos": "WR",
         "via": null,
         "pts": {
+         "2024": 0.0,
          "2025": 39.6,
          "2026": 0.0
         }
@@ -827,94 +833,6 @@
    "more": [
     {
      "winner": {
-      "team": "0001",
-      "players": [
-       {
-        "id": "16190",
-        "name": "Zay Flowers",
-        "pos": "WR",
-        "nfl": "BAL",
-        "espn": "4429615",
-        "team": "0001",
-        "pts": 78.2,
-        "starts": 6,
-        "ppg": 13.0,
-        "salary": 4.0,
-        "contract": "2/6",
-        "rookie": false,
-        "champ": true,
-        "champTeam": "0001"
-       }
-      ],
-      "picks": [],
-      "pts": 78.2,
-      "became": {},
-      "later": {
-       "years": [
-        "2025",
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [
-        {
-         "id": "16190",
-         "name": "Zay Flowers",
-         "pos": "WR",
-         "via": null,
-         "pts": {
-          "2025": 135.4,
-          "2026": 106.8
-         }
-        }
-       ],
-       "total": 242.2
-      }
-     },
-     "loser": {
-      "team": "0008",
-      "players": [],
-      "picks": [
-       "DP_0_8"
-      ],
-      "pts": 0,
-      "became": {
-       "DP_0_8": {
-        "id": "16581",
-        "name": "Jayden Daniels",
-        "pos": "QB",
-        "year": 2024,
-        "slot": "1.09",
-        "by": "0008"
-       }
-      },
-      "later": {
-       "years": [
-        "2024",
-        "2025",
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [
-        {
-         "id": "16581",
-         "name": "Jayden Daniels",
-         "pos": "QB",
-         "via": "DP_0_8",
-         "pts": {
-          "2024": 99.9,
-          "2025": 96.2,
-          "2026": 64.7
-         }
-        }
-       ],
-       "total": 260.8
-      }
-     },
-     "margin": 78.2,
-     "ts": 1719350348
-    },
-    {
-     "winner": {
       "team": "0006",
       "players": [
        {
@@ -935,10 +853,12 @@
        }
       ],
       "picks": [],
+      "drafted": {},
       "pts": 77.7,
       "became": {},
       "later": {
        "years": [
+        "2024",
         "2025",
         "2026"
        ],
@@ -950,22 +870,25 @@
          "pos": "WR",
          "via": null,
          "pts": {
+          "2024": 77.7,
           "2025": 0.0,
           "2026": 0.0
          }
         }
        ],
-       "total": 0.0
+       "total": 77.7
       }
      },
      "loser": {
       "team": "0005",
       "players": [],
       "picks": [],
+      "drafted": {},
       "pts": 0,
       "became": {},
       "later": {
        "years": [
+        "2024",
         "2025",
         "2026"
        ],
@@ -976,6 +899,312 @@
      },
      "margin": 77.7,
      "ts": 1731103292
+    },
+    {
+     "winner": {
+      "team": "0004",
+      "players": [
+       {
+        "id": "13193",
+        "name": "Jonnu Smith",
+        "pos": "TE",
+        "nfl": "MIA",
+        "espn": "3054212",
+        "team": "0004",
+        "pts": 65.9,
+        "starts": 5,
+        "ppg": 13.9,
+        "salary": 1.0,
+        "contract": "",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 65.9,
+      "became": {},
+      "later": {
+       "years": [
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "13193",
+         "name": "Jonnu Smith",
+         "pos": "TE",
+         "via": null,
+         "pts": {
+          "2024": 65.9,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 65.9
+      }
+     },
+     "loser": {
+      "team": "0002",
+      "players": [],
+      "picks": [],
+      "drafted": {},
+      "pts": 0,
+      "became": {},
+      "later": {
+       "years": [
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [],
+       "total": 0
+      }
+     },
+     "margin": 65.9,
+     "ts": 1731195824
+    },
+    {
+     "winner": {
+      "team": "0001",
+      "players": [
+       {
+        "id": "14073",
+        "name": "Josh Jacobs",
+        "pos": "RB",
+        "nfl": "GBP",
+        "espn": "4047365",
+        "team": "0001",
+        "pts": 74.9,
+        "starts": 13,
+        "ppg": 17.6,
+        "salary": 22.0,
+        "contract": "3/3",
+        "rookie": false,
+        "champ": true,
+        "champTeam": "0001"
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 74.9,
+      "became": {},
+      "later": {
+       "years": [
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14073",
+         "name": "Josh Jacobs",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2024": 74.9,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 74.9
+      }
+     },
+     "loser": {
+      "team": "0002",
+      "players": [
+       {
+        "id": "15256",
+        "name": "Javonte Williams",
+        "pos": "RB",
+        "nfl": "DEN",
+        "espn": "4361579",
+        "team": "0002",
+        "pts": 9.8,
+        "starts": 4,
+        "ppg": 5.9,
+        "salary": 17.0,
+        "contract": "1/3",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [
+       "FP_0001_2025_3"
+      ],
+      "drafted": {},
+      "pts": 9.8,
+      "became": {
+       "FP_0001_2025_3": {
+        "id": "17031",
+        "name": "Shedeur Sanders",
+        "pos": "QB",
+        "year": 2025,
+        "slot": "3.12",
+        "by": "0002"
+       }
+      },
+      "later": {
+       "years": [
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "15256",
+         "name": "Javonte Williams",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2024": 9.8,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "17031",
+         "name": "Shedeur Sanders",
+         "pos": "QB",
+         "via": "FP_0001_2025_3",
+         "pts": {
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 9.8
+      }
+     },
+     "margin": 65.1,
+     "ts": 1732038775
+    },
+    {
+     "winner": {
+      "team": "0004",
+      "players": [
+       {
+        "id": "14797",
+        "name": "D'Andre Swift",
+        "pos": "RB",
+        "nfl": "CHI",
+        "espn": "4259545",
+        "team": "0004",
+        "pts": 14.4,
+        "starts": 9,
+        "ppg": 13.3,
+        "salary": 21.0,
+        "contract": "2/3",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       },
+       {
+        "id": "11671",
+        "name": "Mike Evans",
+        "pos": "WR",
+        "nfl": "TBB",
+        "espn": "16737",
+        "team": "0004",
+        "pts": 36.7,
+        "starts": 9,
+        "ppg": 14.7,
+        "salary": 13.0,
+        "contract": "2/3",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 51.1,
+      "became": {},
+      "later": {
+       "years": [
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14797",
+         "name": "D'Andre Swift",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2024": 14.4,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "11671",
+         "name": "Mike Evans",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2024": 36.7,
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 51.1
+      }
+     },
+     "loser": {
+      "team": "0002",
+      "players": [],
+      "picks": [
+       "FP_0004_2025_2"
+      ],
+      "drafted": {},
+      "pts": 0,
+      "became": {
+       "FP_0004_2025_2": {
+        "id": "17083",
+        "name": "Jayden Higgins",
+        "pos": "WR",
+        "year": 2025,
+        "slot": "2.06",
+        "by": "0003"
+       }
+      },
+      "later": {
+       "years": [
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "17083",
+         "name": "Jayden Higgins",
+         "pos": "WR",
+         "via": "FP_0004_2025_2",
+         "pts": {
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 0.0
+      }
+     },
+     "margin": 51.1,
+     "ts": 1732224779
     }
    ]
   },

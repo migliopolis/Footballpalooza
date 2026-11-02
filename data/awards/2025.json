@@ -713,7 +713,7 @@
   {
    "key": "trade",
    "title": "Trade of the Year",
-   "why": "Biggest edge in starter points from what each side received",
+   "why": "Biggest edge in starter points from what each side received (a pick used in that season's draft counts as the player taken)",
    "trade": {
     "winner": {
      "team": "0003",
@@ -755,6 +755,19 @@
       "DP_1_5",
       "FP_0002_2026_2"
      ],
+     "drafted": {
+      "DP_1_5": {
+       "id": "17083",
+       "name": "Jayden Higgins",
+       "pos": "WR",
+       "year": 2025,
+       "slot": "2.06",
+       "by": "0003",
+       "pts": 0.0,
+       "champ": false,
+       "champTeam": null
+      }
+     },
      "pts": 343.4,
      "became": {
       "DP_1_5": {
@@ -787,6 +800,7 @@
         "pos": "QB",
         "via": null,
         "pts": {
+         "2025": 205.4,
          "2026": 112.3
         }
        },
@@ -796,6 +810,7 @@
         "pos": "WR",
         "via": null,
         "pts": {
+         "2025": 138.0,
          "2026": 38.0
         }
        },
@@ -819,7 +834,7 @@
         }
        }
       ],
-      "total": 150.3
+      "total": 493.7
      }
     },
     "loser": {
@@ -843,10 +858,12 @@
       }
      ],
      "picks": [],
+     "drafted": {},
      "pts": 192.6,
      "became": {},
      "later": {
       "years": [
+       "2025",
        "2026"
       ],
       "current": "2026",
@@ -857,11 +874,12 @@
         "pos": "QB",
         "via": null,
         "pts": {
+         "2025": 192.6,
          "2026": 83.6
         }
        }
       ],
-      "total": 83.6
+      "total": 276.2
      }
     },
     "margin": 150.8,
@@ -890,10 +908,12 @@
        }
       ],
       "picks": [],
+      "drafted": {},
       "pts": 119.5,
       "became": {},
       "later": {
        "years": [
+        "2025",
         "2026"
        ],
        "current": "2026",
@@ -904,11 +924,12 @@
          "pos": "WR",
          "via": null,
          "pts": {
+          "2025": 119.5,
           "2026": 19.1
          }
         }
        ],
-       "total": 19.1
+       "total": 138.6
       }
      },
      "loser": {
@@ -917,6 +938,7 @@
       "picks": [
        "FP_0002_2026_1"
       ],
+      "drafted": {},
       "pts": 0,
       "became": {
        "FP_0002_2026_1": {
@@ -930,6 +952,7 @@
       },
       "later": {
        "years": [
+        "2025",
         "2026"
        ],
        "current": "2026",
@@ -949,6 +972,106 @@
      },
      "margin": 119.5,
      "ts": 1760552150
+    },
+    {
+     "winner": {
+      "team": "0001",
+      "players": [],
+      "picks": [
+       "DP_0_3"
+      ],
+      "drafted": {
+       "DP_0_3": {
+        "id": "17071",
+        "name": "Tetairoa McMillan",
+        "pos": "WR",
+        "year": 2025,
+        "slot": "1.04",
+        "by": "0001",
+        "pts": 167.0,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 167.0,
+      "became": {
+       "DP_0_3": {
+        "id": "17071",
+        "name": "Tetairoa McMillan",
+        "pos": "WR",
+        "year": 2025,
+        "slot": "1.04",
+        "by": "0001"
+       }
+      },
+      "later": {
+       "years": [
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "17071",
+         "name": "Tetairoa McMillan",
+         "pos": "WR",
+         "via": "DP_0_3",
+         "pts": {
+          "2025": 167.0,
+          "2026": 97.1
+         }
+        }
+       ],
+       "total": 264.1
+      }
+     },
+     "loser": {
+      "team": "0008",
+      "players": [
+       {
+        "id": "14104",
+        "name": "A.J. Brown",
+        "pos": "WR",
+        "nfl": "PHI",
+        "espn": "4047646",
+        "team": "0008",
+        "pts": 58.4,
+        "starts": 12,
+        "ppg": 14.8,
+        "salary": 36.0,
+        "contract": "2/3",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 58.4,
+      "became": {},
+      "later": {
+       "years": [
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14104",
+         "name": "A.J. Brown",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2025": 58.4,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 58.4
+      }
+     },
+     "margin": 108.6,
+     "ts": 1750783187
     },
     {
      "winner": {
@@ -988,10 +1111,12 @@
        }
       ],
       "picks": [],
+      "drafted": {},
       "pts": 83.2,
       "became": {},
       "later": {
        "years": [
+        "2025",
         "2026"
        ],
        "current": "2026",
@@ -1002,6 +1127,7 @@
          "pos": "QB",
          "via": null,
          "pts": {
+          "2025": 54.5,
           "2026": 161.3
          }
         },
@@ -1011,11 +1137,12 @@
          "pos": "WR",
          "via": null,
          "pts": {
+          "2025": 28.7,
           "2026": 0.0
          }
         }
        ],
-       "total": 161.3
+       "total": 244.5
       }
      },
      "loser": {
@@ -1057,6 +1184,7 @@
       "picks": [
        "FP_0003_2026_1"
       ],
+      "drafted": {},
       "pts": 0.0,
       "became": {
        "FP_0003_2026_1": {
@@ -1070,6 +1198,7 @@
       },
       "later": {
        "years": [
+        "2025",
         "2026"
        ],
        "current": "2026",
@@ -1080,6 +1209,7 @@
          "pos": "QB",
          "via": null,
          "pts": {
+          "2025": 0.0,
           "2026": 23.1
          }
         },
@@ -1089,6 +1219,7 @@
          "pos": "WR",
          "via": null,
          "pts": {
+          "2025": 0.0,
           "2026": 0.0
          }
         },
@@ -1107,6 +1238,74 @@
      },
      "margin": 83.2,
      "ts": 1764191479
+    },
+    {
+     "winner": {
+      "team": "0007",
+      "players": [
+       {
+        "id": "14127",
+        "name": "Jakobi Meyers",
+        "pos": "WR",
+        "nfl": "JAC",
+        "espn": "3916433",
+        "team": "0007",
+        "pts": 67.4,
+        "starts": 6,
+        "ppg": 11.2,
+        "salary": 5.0,
+        "contract": "2/3",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 67.4,
+      "became": {},
+      "later": {
+       "years": [
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14127",
+         "name": "Jakobi Meyers",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2025": 67.4,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 67.4
+      }
+     },
+     "loser": {
+      "team": "0006",
+      "players": [],
+      "picks": [
+       "FP_0007_2027_4"
+      ],
+      "drafted": {},
+      "pts": 0,
+      "became": {},
+      "later": {
+       "years": [
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [],
+       "total": 0
+      }
+     },
+     "margin": 67.4,
+     "ts": 1755727293
     }
    ]
   },

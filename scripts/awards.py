@@ -151,6 +151,13 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
 
     # trades: what each side received, and its starter points for its new team that season
     trades = []
+    last_got = {}   # (team, pick) -> when that team last received the pick (a pick moved twice is credited once)
+    for t in tx:
+        if t.get('type') == 'TRADE':
+            for fr, gave in ((t.get('franchise'), t.get('franchise2_gave_up')), (t.get('franchise2'), t.get('franchise1_gave_up'))):
+                for x in (gave or '').split(','):
+                    if x.strip() and not x.isdigit():
+                        last_got[(fr, x)] = max(last_got.get((fr, x), 0), int(t.get('timestamp') or 0))
     for t in tx:
         if t.get('type') != 'TRADE':
             continue
@@ -159,16 +166,24 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
         gave_b = [x for x in (t.get('franchise2_gave_up') or '').split(',') if x.strip()]
         if not (gave_a or gave_b) or not (a and b):
             continue
-        side = lambda fr, got: {'team': fr, 'players': [player(x, by_team[(x, fr)], fr) for x in got if x.isdigit()],
-                                'picks': [x for x in got if not x.isdigit()], 'pts': round(sum(by_team[(x, fr)] for x in got if x.isdigit()), 1)}
+        ts = int(t.get('timestamp') or 0)
+        def side(fr, got):
+            # a pick used in this season's draft counts as the player taken with it: both sides scored that season
+            picks = [x for x in got if not x.isdigit()]
+            drafts = {k: v for k in picks for v in [drafted(k, season)] if v and str(v['year']) == str(season)
+                      and v['by'] == fr and last_got.get((fr, k)) == ts}   # he made the pick, and this trade is how he got it
+            pids = [x for x in got if x.isdigit()] + [v['id'] for v in drafts.values()]
+            return {'team': fr, 'players': [player(x, by_team[(x, fr)], fr) for x in got if x.isdigit()],
+                    'picks': picks, 'drafted': {k: dict(v, pts=round(by_team[(v['id'], fr)], 1)) for k, v in drafts.items()},
+                    'pts': round(sum(by_team[(x, fr)] for x in pids), 1)}
         sa, sb = side(a, gave_b), side(b, gave_a)
         if sa['pts'] < sb['pts']:
             sa, sb = sb, sa
         trades.append({'winner': sa, 'loser': sb, 'margin': round(sa['pts'] - sb['pts'], 1), 'ts': int(t.get('timestamp') or 0)})
     trades.sort(key=lambda x: -x['margin'])
     if trades and trades[0]['margin'] > 0:
-        A.append({'key': 'trade', 'title': 'Trade of the Year', 'why': 'Biggest edge in starter points from what each side received', 'trade': trades[0],
-                  'more': [t for t in trades[1:3] if t['margin'] > 0]})
+        A.append({'key': 'trade', 'title': 'Trade of the Year', 'why': 'Biggest edge in starter points from what each side received (a pick used in that season\'s draft counts as the player taken)', 'trade': trades[0],
+                  'more': [t for t in trades[1:5] if t['margin'] > 0]})
 
     # team awards from the standings
     eff = sorted((s for s in standings if s.get('pp')), key=lambda s: -s['pf'] / s['pp'])
@@ -431,10 +446,42 @@ def mark_changes(cur, prev):
             p['change'] = {'dir': d, 'text': head + tail, 'since': basis['throughWeek']}
 
 
+_DRAFT = {}
+
+
+def drafted(code, season):
+    """The player taken with traded pick `code` (DP_r_p = that season's draft, FP_team_year_round = a future one), or None
+    if it hasn't been used."""
+    if not _DRAFT:
+        ref = load(D('reference.json'), {}) or {}
+        _DRAFT.update(classes=ref.get('draft_classes') or {}, slots=load(D('reference', 'draft-slots.json'), {}) or {},
+                      links=(load(D('player-links.json'), {}) or {}).get('links', {}), pinfo=player_info(D('mfl', 'players.json')))
+    classes, slots, links, pinfo = _DRAFT['classes'], _DRAFT['slots'], _DRAFT['links'], _DRAFT['pinfo']
+    m = re.fullmatch(r'DP_(\d+)_(\d+)', code)
+    if m:
+        y, rnd, pk = int(season), int(m.group(1)) + 1, int(m.group(2)) + 1
+    else:
+        m = re.fullmatch(r'FP_(\d+)_(\d+)_(\d+)', code)
+        if not m:
+            return None
+        y, rnd = int(m.group(2)), int(m.group(3))
+        pk = (slots.get(str(y)) or {}).get(m.group(1))
+        if not pk:
+            return None
+    row = next((r for r in classes.get(str(y)) or [] if int(r['round']) == rnd and int(r['pick']) == pk), None)
+    if not row:
+        return None
+    l = links.get(row['player_id']) or []
+    nm = (l[2] if len(l) > 2 and l[2] else '') or display(row.get('player_name') or row['player_id'])
+    pos = row.get('player_pos') or (pinfo.get(row['player_id']) or {}).get('position', '')
+    return {'id': row['player_id'], 'name': nm, 'pos': 'DEF' if pos == 'Def' else pos, 'year': y,
+            'slot': f"{rnd}.{pk:02d}", 'by': row.get('franchise')}
+
+
 def add_trade_followups(seasons):
     """Trade of the Year (and runners-up): a deeper look that doesn't change the award. Each traded pick that has
     been used shows the player taken with it, and each side gets its received players' (and pick-turned players')
-    starter points for that team in every later regular season, this season so far included."""
+    starter points for that team from the trade season on (the award's own numbers), this season so far included."""
     ref = load(D('reference.json'), {}) or {}
     slots = load(D('reference', 'draft-slots.json'), {}) or {}
     links = (load(D('player-links.json'), {}) or {}).get('links', {})
@@ -458,26 +505,6 @@ def add_trade_followups(seasons):
                     out[(pid, fr)] += pts
         weekly[y] = out
         return out
-    def drafted(code, season):
-        m = re.fullmatch(r'DP_(\d+)_(\d+)', code)
-        if m:
-            y, rnd, pk = int(season), int(m.group(1)) + 1, int(m.group(2)) + 1
-        else:
-            m = re.fullmatch(r'FP_(\d+)_(\d+)_(\d+)', code)
-            if not m:
-                return None
-            y, rnd = int(m.group(2)), int(m.group(3))
-            pk = (slots.get(str(y)) or {}).get(m.group(1))
-            if not pk:
-                return None
-        row = next((r for r in classes.get(str(y)) or [] if int(r['round']) == rnd and int(r['pick']) == pk), None)
-        if not row:
-            return None
-        l = links.get(row['player_id']) or []
-        nm = (l[2] if len(l) > 2 and l[2] else '') or display(row.get('player_name') or row['player_id'])
-        pos = row.get('player_pos') or (pinfo.get(row['player_id']) or {}).get('position', '')
-        return {'id': row['player_id'], 'name': nm, 'pos': 'DEF' if pos == 'Def' else pos, 'year': y,
-                'slot': f"{rnd}.{pk:02d}", 'by': row.get('franchise')}
     for season, a in seasons:
         for aw in a.get('awards') or []:
             if aw.get('key') != 'trade':
@@ -487,9 +514,9 @@ def add_trade_followups(seasons):
                     fr = s['team']
                     became = {k: drafted(k, season) for k in s.get('picks') or []}
                     s['became'] = {k: v for k, v in became.items() if v}
-                    assets = [(p['id'], p['name'], p['pos'], None, int(season) + 1) for p in s.get('players') or []]
+                    assets = [(p['id'], p['name'], p['pos'], None, int(season)) for p in s.get('players') or []]
                     assets += [(v['id'], v['name'], v['pos'], k, v['year']) for k, v in s['became'].items()]
-                    years = list(range(int(season) + 1, cur_year + 1))
+                    years = list(range(int(season), cur_year + 1))
                     years = sorted(set(years) | {v['year'] for v in s['became'].values() if v['year'] <= cur_year})
                     rows = []
                     for pid, nm, pos, via, start in assets:

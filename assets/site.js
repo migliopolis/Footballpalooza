@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0071';
+  const VERSION = '0.0072';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -627,8 +627,8 @@
       state.now = now; state.teams = teams.teams || {};
       try { state.budgets = await fetch('data/budgets.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null); } catch (e) { state.budgets = null; }
       const yr = (now.season.match(/\d{4}/) || [''])[0];
-      // the version never gets cut off: if the line is too long, "League hub" shortens first
-      document.getElementById('season-label').innerHTML = `<span class="sl-t">${yr ? `${yr} season · League hub` : 'League hub'}</span><span class="sl-v">&nbsp;· v ${VERSION}</span>`;
+      // season on one line, the version under it
+      document.getElementById('season-label').innerHTML = `<span class="sl-t">${yr ? `${yr} season` : 'League hub'}</span><span class="sl-v">v ${VERSION}</span>`;
     } catch (e) { state.now = null; }
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
