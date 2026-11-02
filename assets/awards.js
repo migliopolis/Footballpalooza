@@ -22,11 +22,14 @@ window.FBPAwards = (() => {
   const tname = id => X.nameOf(id);
   const media = () => window.FBP && FBP.media;
   // player photo from ESPN; defenses use their NFL logo; anything missing falls back to the FBP team logo
-  function photo(p, size = 'lg') {
+  // the FBP team's color behind an All-FBP photo (a near-white primary swaps to the secondary)
+  const lumOf = hex => { const h = (hex || '').replace('#', ''); if (h.length !== 6) return 1; const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const teamBg = id => { const t = X.teams[id] || {}; let c = t.primary; if (!c) return ''; if (lumOf(c) > 0.85 && t.secondary) c = t.secondary; return `background:${c}`; };
+  function photo(p, size = 'lg', tint) {
     const m = media();
     const src = p.pos === 'DEF' ? (m ? m.nflLogo(p.nfl) : '') : (p.espn && m ? m.headshot(p.espn) : '');
     const fb = (X.teams[p.team] || {}).logo || '';
-    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}</span>`;
+    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}"${tint && teamBg(p.team) ? ` style="${teamBg(p.team)}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}</span>`;
   }
   // won the title that season: trophy opposite the team badge
   const trophy = p => `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the ${esc((S || A).season)} title${p.champTeam && p.champTeam !== p.team ? ' with ' + esc(tname(p.champTeam)) : ''}">🏆</span>`;
@@ -53,7 +56,7 @@ window.FBPAwards = (() => {
     return `<span class="aw-pace" title="On pace for ${n1(p.pace.proj)} points${r ? `; the ${p.pos} record is ${n1(r.pts)} (${esc(r.name)}, ${r.year})` : ''}"><span>🔥 Record pace</span><b>${n1(p.pace.proj)}</b></span>`;
   };
   function card(slot, p, second) {
-    return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg')}
+    return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg', true)}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.rookie ? ' · <i>Rookie</i>' : ''}</span>
       <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${honors(p)}${change(p)}${paceTag(p, second)}
       <span class="aw-stats"><span><b>${n1(p.pts)}</b>pts</span><span><b>${n1(p.ppg)}</b>per start</span><span><b>${sal(p)}</b>salary</span></span>
