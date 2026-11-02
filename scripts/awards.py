@@ -150,6 +150,12 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
                   'list': [dict(player(k[0], pts, k[1]), bid=v['bid'], how='FAAB' if v['type'] == 'BBID_WAIVER' else 'Free agent') for pts, k, v in pick[:3]]})
 
     # trades: what each side received, and its starter points for its new team that season
+    def bookkeeping(t):
+        # the commissioner moving picks one way with nothing back: carrying out a pick trade made earlier, not a new trade
+        a = [x for x in (t.get('franchise1_gave_up') or '').split(',') if x.strip()]
+        b = [x for x in (t.get('franchise2_gave_up') or '').split(',') if x.strip()]
+        return str(t.get('by_commish')) == '1' and not (a and b) and all(not x.isdigit() for x in a + b)
+    tx = [t for t in tx if not (t.get('type') == 'TRADE' and bookkeeping(t))]
     trades = []
     last_got = {}   # (team, pick) -> when that team last received the pick (a pick moved twice is credited once)
     for t in tx:
@@ -472,7 +478,9 @@ def drafted(code, season):
     if not row:
         return None
     l = links.get(row['player_id']) or []
-    nm = (l[2] if len(l) > 2 and l[2] else '') or display(row.get('player_name') or row['player_id'])
+    if not ((len(l) > 2 and l[2]) or row.get('player_name')):
+        return None   # no record of who it was
+    nm = (l[2] if len(l) > 2 and l[2] else '') or display(row.get('player_name'))
     pos = row.get('player_pos') or (pinfo.get(row['player_id']) or {}).get('position', '')
     return {'id': row['player_id'], 'name': nm, 'pos': 'DEF' if pos == 'Def' else pos, 'year': y,
             'slot': f"{rnd}.{pk:02d}", 'by': row.get('franchise')}
@@ -492,19 +500,52 @@ def add_trade_followups(seasons):
     pinfo = player_info(D('mfl', 'players.json'))
     weekly = {}
     def season_pts(y):
+        """(player, team) -> {week: starter points} for season y's regular season."""
         if y in weekly:
             return weekly[y]
         wr = load(D('mfl', 'weeklyResults.json') if y == cur_year else D('history', str(y), 'weeklyResults.json'), {}) or {}
         first_po = min(po.get(str(y)) or [99])
-        out = defaultdict(float)
+        out = defaultdict(dict)
         for w, frs in (wr.get('weeks') or {}).items():
             if int(w) >= first_po:
                 continue
             for fr, t in frs.items():
                 for pid, pts in t.get('s', []):
-                    out[(pid, fr)] += pts
+                    out[(pid, fr)][int(w)] = out[(pid, fr)].get(int(w), 0) + pts
         weekly[y] = out
         return out
+    listed = {}
+    def listed_with(y):
+        """player -> {week: teams he was rostered on (started or benched)} in season y."""
+        if y not in listed:
+            wr = load(D('mfl', 'weeklyResults.json') if y == cur_year else D('history', str(y), 'weeklyResults.json'), {}) or {}
+            out = defaultdict(lambda: defaultdict(set))
+            for w, frs in (wr.get('weeks') or {}).items():
+                for fr, t in frs.items():
+                    for lst in ('s', 'n'):
+                        for pid, _ in t.get(lst, []):
+                            out[pid][int(w)].add(fr)
+            listed[y] = out
+        return listed[y]
+    import pick_tenure as PT
+    tcache = {}
+    def gone(fr, pid, ts, y0):
+        """(year, first week not counted) when fr first let pid go after time ts, or None if he's still there.
+        A later return to the team is a new stint and doesn't count."""
+        for y in range(y0, cur_year + 1):
+            if y not in tcache:
+                tcache[y] = PT.season_data(y, cur_year)
+            tx, ro = tcache[y]
+            moves = sorted(int(t['timestamp']) for t in tx if int(t.get('timestamp') or 0) > ts and PT.gave_up(t, fr, pid))
+            first = PT.week_of(ts, y) if y == y0 and ts else 1
+            # on another team's roster (e.g. let go on keeper day and bought back at the auction by someone else)
+            elsewhere = sorted(w for w, frs in listed_with(y).get(pid, {}).items() if w >= first and fr not in frs)
+            ends = ([PT.week_of(moves[0], y)] if moves else []) + elsewhere[:1]
+            if ends:
+                return y, min(ends)
+            if y > y0 and ro and not any(f.get('id') == fr and any(str(pl.get('id')) == pid for pl in (f.get('player') or [])) for f in ro):
+                return y, 1   # not kept at the keeper deadline
+        return None
     for season, a in seasons:
         for aw in a.get('awards') or []:
             if aw.get('key') != 'trade':
@@ -520,7 +561,13 @@ def add_trade_followups(seasons):
                     years = sorted(set(years) | {v['year'] for v in s['became'].values() if v['year'] <= cur_year})
                     rows = []
                     for pid, nm, pos, via, start in assets:
-                        pts = {str(y): round(season_pts(y).get((pid, fr), 0.0), 1) for y in years if y >= start}
+                        end = gone(fr, pid, int(t.get('ts') or 0), start)
+                        pts = {}
+                        for y in years:
+                            if y < start or (end and (y > end[0] or (y == end[0] and end[1] == 1))):
+                                continue
+                            wk = season_pts(y).get((pid, fr), {})
+                            pts[str(y)] = round(sum(v for w, v in wk.items() if not (end and y == end[0] and w >= end[1])), 1)
                         rows.append({'id': pid, 'name': nm, 'pos': pos, 'via': via, 'pts': pts})
                     if years:
                         s['later'] = {'years': [str(y) for y in years], 'current': str(cur_year), 'rows': rows,

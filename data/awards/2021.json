@@ -713,33 +713,95 @@
    "why": "Biggest edge in starter points from what each side received (a pick used in that season's draft counts as the player taken)",
    "trade": {
     "winner": {
-     "team": "0007",
-     "players": [],
-     "picks": [
-      "DP_0_4"
-     ],
-     "drafted": {
-      "DP_0_4": {
-       "id": "15281",
-       "name": "Ja'Marr Chase",
-       "pos": "WR",
-       "year": 2021,
-       "slot": "1.05",
-       "by": "0007",
-       "pts": 164.0,
+     "team": "0004",
+     "players": [
+      {
+       "id": "13592",
+       "name": "Sam Darnold",
+       "pos": "QB",
+       "nfl": "CAR",
+       "espn": "3912547",
+       "team": "0004",
+       "pts": 52.7,
+       "starts": 3,
+       "ppg": 17.6,
+       "salary": null,
+       "contract": "",
+       "rookie": false,
+       "champ": false,
+       "champTeam": null
+      },
+      {
+       "id": "14813",
+       "name": "James Robinson",
+       "pos": "RB",
+       "nfl": "JAC",
+       "espn": "4052042",
+       "team": "0004",
+       "pts": 97.6,
+       "starts": 8,
+       "ppg": 13.3,
+       "salary": 8.0,
+       "contract": "2",
+       "rookie": false,
        "champ": false,
        "champTeam": null
       }
-     },
-     "pts": 164.0,
+     ],
+     "picks": [],
+     "drafted": {},
+     "pts": 150.3,
+     "became": {},
+     "later": {
+      "years": [
+       "2021",
+       "2022",
+       "2023",
+       "2024",
+       "2025",
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [
+       {
+        "id": "13592",
+        "name": "Sam Darnold",
+        "pos": "QB",
+        "via": null,
+        "pts": {
+         "2021": 52.7
+        }
+       },
+       {
+        "id": "14813",
+        "name": "James Robinson",
+        "pos": "RB",
+        "via": null,
+        "pts": {
+         "2021": 97.6,
+         "2022": 46.2
+        }
+       }
+      ],
+      "total": 196.5
+     }
+    },
+    "loser": {
+     "team": "0001",
+     "players": [],
+     "picks": [
+      "FP_0004_2022_1"
+     ],
+     "drafted": {},
+     "pts": 0,
      "became": {
-      "DP_0_4": {
-       "id": "15281",
-       "name": "Ja'Marr Chase",
+      "FP_0004_2022_1": {
+       "id": "15751",
+       "name": "Drake London",
        "pos": "WR",
-       "year": 2021,
-       "slot": "1.05",
-       "by": "0007"
+       "year": 2022,
+       "slot": "1.03",
+       "by": "0003"
       }
      },
      "later": {
@@ -754,341 +816,22 @@
       "current": "2026",
       "rows": [
        {
-        "id": "15281",
-        "name": "Ja'Marr Chase",
-        "pos": "WR",
-        "via": "DP_0_4",
-        "pts": {
-         "2021": 164.0,
-         "2022": 186.9,
-         "2023": 239.3,
-         "2024": 317.4,
-         "2025": 221.9,
-         "2026": 0.0
-        }
-       }
-      ],
-      "total": 1129.5
-     }
-    },
-    "loser": {
-     "team": "0004",
-     "players": [],
-     "picks": [],
-     "drafted": {},
-     "pts": 0,
-     "became": {},
-     "later": {
-      "years": [
-       "2021",
-       "2022",
-       "2023",
-       "2024",
-       "2025",
-       "2026"
-      ],
-      "current": "2026",
-      "rows": [],
-      "total": 0
-     }
-    },
-    "margin": 164.0,
-    "ts": 1625005197
-   },
-   "more": [
-    {
-     "winner": {
-      "team": "0004",
-      "players": [
-       {
-        "id": "13592",
-        "name": "Sam Darnold",
-        "pos": "QB",
-        "nfl": "CAR",
-        "espn": "3912547",
-        "team": "0004",
-        "pts": 52.7,
-        "starts": 3,
-        "ppg": 17.6,
-        "salary": null,
-        "contract": "",
-        "rookie": false,
-        "champ": false,
-        "champTeam": null
-       },
-       {
-        "id": "14813",
-        "name": "James Robinson",
-        "pos": "RB",
-        "nfl": "JAC",
-        "espn": "4052042",
-        "team": "0004",
-        "pts": 97.6,
-        "starts": 8,
-        "ppg": 13.3,
-        "salary": 8.0,
-        "contract": "2",
-        "rookie": false,
-        "champ": false,
-        "champTeam": null
-       }
-      ],
-      "picks": [],
-      "drafted": {},
-      "pts": 150.3,
-      "became": {},
-      "later": {
-       "years": [
-        "2021",
-        "2022",
-        "2023",
-        "2024",
-        "2025",
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [
-        {
-         "id": "13592",
-         "name": "Sam Darnold",
-         "pos": "QB",
-         "via": null,
-         "pts": {
-          "2021": 52.7,
-          "2022": 0.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 8.3
-         }
-        },
-        {
-         "id": "14813",
-         "name": "James Robinson",
-         "pos": "RB",
-         "via": null,
-         "pts": {
-          "2021": 97.6,
-          "2022": 46.2,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
-         }
-        }
-       ],
-       "total": 204.8
-      }
-     },
-     "loser": {
-      "team": "0001",
-      "players": [],
-      "picks": [
-       "FP_0004_2022_1"
-      ],
-      "drafted": {},
-      "pts": 0,
-      "became": {
-       "FP_0004_2022_1": {
         "id": "15751",
         "name": "Drake London",
         "pos": "WR",
-        "year": 2022,
-        "slot": "1.03",
-        "by": "0003"
-       }
-      },
-      "later": {
-       "years": [
-        "2021",
-        "2022",
-        "2023",
-        "2024",
-        "2025",
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [
-        {
-         "id": "15751",
-         "name": "Drake London",
-         "pos": "WR",
-         "via": "FP_0004_2022_1",
-         "pts": {
-          "2022": 0.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
-         }
+        "via": "FP_0004_2022_1",
+        "pts": {
+         "2022": 0
         }
-       ],
-       "total": 0.0
-      }
-     },
-     "margin": 150.3,
-     "ts": 1633020869
+       }
+      ],
+      "total": 0
+     }
     },
-    {
-     "winner": {
-      "team": "0007",
-      "players": [
-       {
-        "id": "13128",
-        "name": "Dalvin Cook",
-        "pos": "RB",
-        "nfl": "MIN",
-        "espn": "3116593",
-        "team": "0007",
-        "pts": 181.7,
-        "starts": 10,
-        "ppg": 18.2,
-        "salary": 65.0,
-        "contract": "4",
-        "rookie": false,
-        "champ": false,
-        "champTeam": null
-       }
-      ],
-      "picks": [
-       "DP_2_7"
-      ],
-      "drafted": {},
-      "pts": 181.7,
-      "became": {
-       "DP_2_7": {
-        "id": "15268",
-        "name": "15268",
-        "pos": "",
-        "year": 2021,
-        "slot": "3.08",
-        "by": "0007"
-       }
-      },
-      "later": {
-       "years": [
-        "2021",
-        "2022",
-        "2023",
-        "2024",
-        "2025",
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [
-        {
-         "id": "13128",
-         "name": "Dalvin Cook",
-         "pos": "RB",
-         "via": null,
-         "pts": {
-          "2021": 181.7,
-          "2022": 191.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
-         }
-        },
-        {
-         "id": "15268",
-         "name": "15268",
-         "pos": "",
-         "via": "DP_2_7",
-         "pts": {
-          "2021": 0.0,
-          "2022": 0.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
-         }
-        }
-       ],
-       "total": 372.7
-      }
-     },
-     "loser": {
-      "team": "0001",
-      "players": [
-       {
-        "id": "14841",
-        "name": "Chase Claypool",
-        "pos": "WR",
-        "nfl": "PIT",
-        "espn": "4046692",
-        "team": "0001",
-        "pts": 49.7,
-        "starts": 5,
-        "ppg": 9.9,
-        "salary": 3.0,
-        "contract": "2",
-        "rookie": false,
-        "champ": false,
-        "champTeam": null
-       }
-      ],
-      "picks": [
-       "DP_0_5"
-      ],
-      "drafted": {},
-      "pts": 49.7,
-      "became": {
-       "DP_0_5": {
-        "id": "15329",
-        "name": "Kyle Pitts Sr.",
-        "pos": "TE",
-        "year": 2021,
-        "slot": "1.06",
-        "by": "0001"
-       }
-      },
-      "later": {
-       "years": [
-        "2021",
-        "2022",
-        "2023",
-        "2024",
-        "2025",
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [
-        {
-         "id": "14841",
-         "name": "Chase Claypool",
-         "pos": "WR",
-         "via": null,
-         "pts": {
-          "2021": 49.7,
-          "2022": 0.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
-         }
-        },
-        {
-         "id": "15329",
-         "name": "Kyle Pitts Sr.",
-         "pos": "TE",
-         "via": "DP_0_5",
-         "pts": {
-          "2021": 117.1,
-          "2022": 0.0,
-          "2023": 61.2,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
-         }
-        }
-       ],
-       "total": 228.0
-      }
-     },
-     "margin": 132.0,
-     "ts": 1622244106
-    },
+    "margin": 150.3,
+    "ts": 1633020869
+   },
+   "more": [
     {
      "winner": {
       "team": "0010",
@@ -1132,11 +875,7 @@
          "via": null,
          "pts": {
           "2021": 127.4,
-          "2022": 159.2,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
+          "2022": 159.2
          }
         }
        ],
@@ -1180,9 +919,7 @@
          "pts": {
           "2022": 95.7,
           "2023": 187.8,
-          "2024": 55.0,
-          "2025": 0.0,
-          "2026": 0.0
+          "2024": 55.0
          }
         }
        ],
@@ -1234,12 +971,7 @@
          "pos": "RB",
          "via": null,
          "pts": {
-          "2021": 242.3,
-          "2022": 0.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
+          "2021": 242.3
          }
         }
        ],
@@ -1315,11 +1047,7 @@
          "via": null,
          "pts": {
           "2021": 112.7,
-          "2022": 290.8,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
+          "2022": 290.8
          }
         },
         {
@@ -1329,11 +1057,7 @@
          "via": null,
          "pts": {
           "2021": 7.2,
-          "2022": 0.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
+          "2022": 0
          }
         },
         {
@@ -1342,11 +1066,7 @@
          "pos": "RB",
          "via": "FP_0007_2022_2",
          "pts": {
-          "2022": 0.0,
-          "2023": 0.0,
-          "2024": 0.0,
-          "2025": 0.0,
-          "2026": 0.0
+          "2022": 0
          }
         }
        ],
@@ -1355,6 +1075,256 @@
      },
      "margin": 122.4,
      "ts": 1632356932
+    },
+    {
+     "winner": {
+      "team": "0001",
+      "players": [
+       {
+        "id": "13610",
+        "name": "Nick Chubb",
+        "pos": "RB",
+        "nfl": "CLE",
+        "espn": "3128720",
+        "team": "0001",
+        "pts": 111.5,
+        "starts": 10,
+        "ppg": 15.9,
+        "salary": 22.0,
+        "contract": "4",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 111.5,
+      "became": {},
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "13610",
+         "name": "Nick Chubb",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2021": 111.5,
+          "2022": 224.5
+         }
+        }
+       ],
+       "total": 336.0
+      }
+     },
+     "loser": {
+      "team": "0003",
+      "players": [],
+      "picks": [
+       "FP_0001_2022_1",
+       "FP_0004_2022_1",
+       "FP_0001_2022_3",
+       "FP_0001_2023_2"
+      ],
+      "drafted": {},
+      "pts": 0,
+      "became": {
+       "FP_0001_2022_1": {
+        "id": "15752",
+        "name": "Treylon Burks",
+        "pos": "WR",
+        "year": 2022,
+        "slot": "1.11",
+        "by": "0003"
+       },
+       "FP_0004_2022_1": {
+        "id": "15751",
+        "name": "Drake London",
+        "pos": "WR",
+        "year": 2022,
+        "slot": "1.03",
+        "by": "0003"
+       },
+       "FP_0001_2023_2": {
+        "id": "16214",
+        "name": "Sam LaPorta",
+        "pos": "TE",
+        "year": 2023,
+        "slot": "2.10",
+        "by": "0008"
+       }
+      },
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "15752",
+         "name": "Treylon Burks",
+         "pos": "WR",
+         "via": "FP_0001_2022_1",
+         "pts": {
+          "2022": 0,
+          "2023": 0
+         }
+        },
+        {
+         "id": "15751",
+         "name": "Drake London",
+         "pos": "WR",
+         "via": "FP_0004_2022_1",
+         "pts": {
+          "2022": 72.8,
+          "2023": 34.7,
+          "2024": 188.2,
+          "2025": 177.0
+         }
+        },
+        {
+         "id": "16214",
+         "name": "Sam LaPorta",
+         "pos": "TE",
+         "via": "FP_0001_2023_2",
+         "pts": {
+          "2023": 0
+         }
+        }
+       ],
+       "total": 472.7
+      }
+     },
+     "margin": 111.5,
+     "ts": 1633021086
+    },
+    {
+     "winner": {
+      "team": "0008",
+      "players": [],
+      "picks": [
+       "DP_0_1"
+      ],
+      "drafted": {
+       "DP_0_1": {
+        "id": "15256",
+        "name": "Javonte Williams",
+        "pos": "RB",
+        "year": 2021,
+        "slot": "1.02",
+        "by": "0008",
+        "pts": 104.4,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 104.4,
+      "became": {
+       "DP_0_1": {
+        "id": "15256",
+        "name": "Javonte Williams",
+        "pos": "RB",
+        "year": 2021,
+        "slot": "1.02",
+        "by": "0008"
+       }
+      },
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "15256",
+         "name": "Javonte Williams",
+         "pos": "RB",
+         "via": "DP_0_1",
+         "pts": {
+          "2021": 104.4,
+          "2022": 42.0
+         }
+        }
+       ],
+       "total": 146.4
+      }
+     },
+     "loser": {
+      "team": "0006",
+      "players": [],
+      "picks": [
+       "DP_0_3"
+      ],
+      "drafted": {
+       "DP_0_3": {
+        "id": "15257",
+        "name": "Trey Sermon",
+        "pos": "RB",
+        "year": 2021,
+        "slot": "1.04",
+        "by": "0006",
+        "pts": 0.0,
+        "champ": false,
+        "champTeam": null
+       }
+      },
+      "pts": 0.0,
+      "became": {
+       "DP_0_3": {
+        "id": "15257",
+        "name": "Trey Sermon",
+        "pos": "RB",
+        "year": 2021,
+        "slot": "1.04",
+        "by": "0006"
+       }
+      },
+      "later": {
+       "years": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "15257",
+         "name": "Trey Sermon",
+         "pos": "RB",
+         "via": "DP_0_3",
+         "pts": {
+          "2021": 0,
+          "2022": 0
+         }
+        }
+       ],
+       "total": 0
+      }
+     },
+     "margin": 104.4,
+     "ts": 1625005134
     }
    ]
   },
