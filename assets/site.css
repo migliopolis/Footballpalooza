@@ -1078,3 +1078,6 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .aw-ltbl td.t small{color:var(--muted)}
 .aw-ltbl td.t{white-space:normal;min-width:9rem;max-width:12rem}
 .aw-ltbl .aw-via{display:block;font-size:.72rem}
+.brand small#season-label{display:flex;min-width:0;overflow:visible}
+.brand .sl-t{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand .sl-v{flex:none;white-space:nowrap}
