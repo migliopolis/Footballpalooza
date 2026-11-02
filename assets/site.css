@@ -1066,3 +1066,15 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .aw-pace{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:0 5px;max-width:100%;white-space:normal;text-align:center;line-height:1.35}
 .aw-pace span,.aw-pace b{white-space:nowrap}
 .aw-pace b{font-weight:800}
+
+/* Trade of the Year: picks that became players, and how the deal played out */
+.aw-became{display:block;color:var(--fg);font-weight:600;font-size:.86rem}
+.aw-became small{color:var(--muted);font-weight:400}
+.aw-later{margin:6px 0 4px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg)}
+.aw-later summary{cursor:pointer;font-weight:600;font-size:.88rem}
+.aw-later summary small{color:var(--muted);font-weight:400;margin-left:4px}
+.aw-lt{margin-top:10px}
+.aw-lt .aw-sideh{margin-bottom:4px}
+.aw-ltbl td.t small{color:var(--muted)}
+.aw-ltbl td.t{white-space:normal;min-width:9rem;max-width:12rem}
+.aw-ltbl .aw-via{display:block;font-size:.72rem}

@@ -755,7 +755,72 @@
       "DP_1_5",
       "FP_0002_2026_2"
      ],
-     "pts": 343.4
+     "pts": 343.4,
+     "became": {
+      "DP_1_5": {
+       "id": "17083",
+       "name": "Jayden Higgins",
+       "pos": "WR",
+       "year": 2025,
+       "slot": "2.06",
+       "by": "0003"
+      },
+      "FP_0002_2026_2": {
+       "id": "17481",
+       "name": "Demond Claiborne",
+       "pos": "RB",
+       "year": 2026,
+       "slot": "2.08",
+       "by": "0003"
+      }
+     },
+     "later": {
+      "years": [
+       "2025",
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [
+       {
+        "id": "16580",
+        "name": "Drake Maye",
+        "pos": "QB",
+        "via": null,
+        "pts": {
+         "2026": 112.3
+        }
+       },
+       {
+        "id": "16194",
+        "name": "Rashee Rice",
+        "pos": "WR",
+        "via": null,
+        "pts": {
+         "2026": 38.0
+        }
+       },
+       {
+        "id": "17083",
+        "name": "Jayden Higgins",
+        "pos": "WR",
+        "via": "DP_1_5",
+        "pts": {
+         "2025": 0.0,
+         "2026": 0.0
+        }
+       },
+       {
+        "id": "17481",
+        "name": "Demond Claiborne",
+        "pos": "RB",
+        "via": "FP_0002_2026_2",
+        "pts": {
+         "2026": 0.0
+        }
+       }
+      ],
+      "total": 150.3
+     }
     },
     "loser": {
      "team": "0002",
@@ -778,7 +843,26 @@
       }
      ],
      "picks": [],
-     "pts": 192.6
+     "pts": 192.6,
+     "became": {},
+     "later": {
+      "years": [
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [
+       {
+        "id": "16579",
+        "name": "Caleb Williams",
+        "pos": "QB",
+        "via": null,
+        "pts": {
+         "2026": 83.6
+        }
+       }
+      ],
+      "total": 83.6
+     }
     },
     "margin": 150.8,
     "ts": 1749864760
@@ -806,7 +890,26 @@
        }
       ],
       "picks": [],
-      "pts": 119.5
+      "pts": 119.5,
+      "became": {},
+      "later": {
+       "years": [
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14104",
+         "name": "A.J. Brown",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2026": 19.1
+         }
+        }
+       ],
+       "total": 19.1
+      }
      },
      "loser": {
       "team": "0008",
@@ -814,7 +917,35 @@
       "picks": [
        "FP_0002_2026_1"
       ],
-      "pts": 0
+      "pts": 0,
+      "became": {
+       "FP_0002_2026_1": {
+        "id": "17462",
+        "name": "Fernando Mendoza",
+        "pos": "QB",
+        "year": 2026,
+        "slot": "1.08",
+        "by": "0008"
+       }
+      },
+      "later": {
+       "years": [
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "17462",
+         "name": "Fernando Mendoza",
+         "pos": "QB",
+         "via": "FP_0002_2026_1",
+         "pts": {
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 0.0
+      }
      },
      "margin": 119.5,
      "ts": 1760552150
@@ -857,7 +988,35 @@
        }
       ],
       "picks": [],
-      "pts": 83.2
+      "pts": 83.2,
+      "became": {},
+      "later": {
+       "years": [
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "13589",
+         "name": "Josh Allen",
+         "pos": "QB",
+         "via": null,
+         "pts": {
+          "2026": 161.3
+         }
+        },
+        {
+         "id": "11675",
+         "name": "Davante Adams",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 161.3
+      }
      },
      "loser": {
       "team": "0005",
@@ -898,7 +1057,53 @@
       "picks": [
        "FP_0003_2026_1"
       ],
-      "pts": 0.0
+      "pts": 0.0,
+      "became": {
+       "FP_0003_2026_1": {
+        "id": "17543",
+        "name": "Kenyon Sadiq",
+        "pos": "TE",
+        "year": 2026,
+        "slot": "1.07",
+        "by": "0005"
+       }
+      },
+      "later": {
+       "years": [
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "16583",
+         "name": "Michael Penix Jr.",
+         "pos": "QB",
+         "via": null,
+         "pts": {
+          "2026": 23.1
+         }
+        },
+        {
+         "id": "16618",
+         "name": "Brian Thomas Jr.",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2026": 0.0
+         }
+        },
+        {
+         "id": "17543",
+         "name": "Kenyon Sadiq",
+         "pos": "TE",
+         "via": "FP_0003_2026_1",
+         "pts": {
+          "2026": 3.8
+         }
+        }
+       ],
+       "total": 26.9
+      }
      },
      "margin": 83.2,
      "ts": 1764191479

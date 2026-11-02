@@ -431,6 +431,75 @@ def mark_changes(cur, prev):
             p['change'] = {'dir': d, 'text': head + tail, 'since': basis['throughWeek']}
 
 
+def add_trade_followups(seasons):
+    """Trade of the Year (and runners-up): a deeper look that doesn't change the award. Each traded pick that has
+    been used shows the player taken with it, and each side gets its received players' (and pick-turned players')
+    starter points for that team in every later regular season, this season so far included."""
+    ref = load(D('reference.json'), {}) or {}
+    slots = load(D('reference', 'draft-slots.json'), {}) or {}
+    links = (load(D('player-links.json'), {}) or {}).get('links', {})
+    po = ref.get('playoff_weeks_by_year') or {}
+    classes = ref.get('draft_classes') or {}
+    meta = load(D('mfl', '_meta.json'), {}) or {}
+    cur_year = int(meta.get('season') or 2026)
+    pinfo = player_info(D('mfl', 'players.json'))
+    weekly = {}
+    def season_pts(y):
+        if y in weekly:
+            return weekly[y]
+        wr = load(D('mfl', 'weeklyResults.json') if y == cur_year else D('history', str(y), 'weeklyResults.json'), {}) or {}
+        first_po = min(po.get(str(y)) or [99])
+        out = defaultdict(float)
+        for w, frs in (wr.get('weeks') or {}).items():
+            if int(w) >= first_po:
+                continue
+            for fr, t in frs.items():
+                for pid, pts in t.get('s', []):
+                    out[(pid, fr)] += pts
+        weekly[y] = out
+        return out
+    def drafted(code, season):
+        m = re.fullmatch(r'DP_(\d+)_(\d+)', code)
+        if m:
+            y, rnd, pk = int(season), int(m.group(1)) + 1, int(m.group(2)) + 1
+        else:
+            m = re.fullmatch(r'FP_(\d+)_(\d+)_(\d+)', code)
+            if not m:
+                return None
+            y, rnd = int(m.group(2)), int(m.group(3))
+            pk = (slots.get(str(y)) or {}).get(m.group(1))
+            if not pk:
+                return None
+        row = next((r for r in classes.get(str(y)) or [] if int(r['round']) == rnd and int(r['pick']) == pk), None)
+        if not row:
+            return None
+        l = links.get(row['player_id']) or []
+        nm = (l[2] if len(l) > 2 and l[2] else '') or display(row.get('player_name') or row['player_id'])
+        pos = row.get('player_pos') or (pinfo.get(row['player_id']) or {}).get('position', '')
+        return {'id': row['player_id'], 'name': nm, 'pos': 'DEF' if pos == 'Def' else pos, 'year': y,
+                'slot': f"{rnd}.{pk:02d}", 'by': row.get('franchise')}
+    for season, a in seasons:
+        for aw in a.get('awards') or []:
+            if aw.get('key') != 'trade':
+                continue
+            for t in [aw['trade']] + (aw.get('more') or []):
+                for s in (t['winner'], t['loser']):
+                    fr = s['team']
+                    became = {k: drafted(k, season) for k in s.get('picks') or []}
+                    s['became'] = {k: v for k, v in became.items() if v}
+                    assets = [(p['id'], p['name'], p['pos'], None, int(season) + 1) for p in s.get('players') or []]
+                    assets += [(v['id'], v['name'], v['pos'], k, v['year']) for k, v in s['became'].items()]
+                    years = list(range(int(season) + 1, cur_year + 1))
+                    years = sorted(set(years) | {v['year'] for v in s['became'].values() if v['year'] <= cur_year})
+                    rows = []
+                    for pid, nm, pos, via, start in assets:
+                        pts = {str(y): round(season_pts(y).get((pid, fr), 0.0), 1) for y in years if y >= start}
+                        rows.append({'id': pid, 'name': nm, 'pos': pos, 'via': via, 'pts': pts})
+                    if years:
+                        s['later'] = {'years': [str(y) for y in years], 'current': str(cur_year), 'rows': rows,
+                                      'total': round(sum(v for r in rows for v in r['pts'].values()), 1)}
+
+
 def add_record_paces(cur):
     """Best single season ever at each position (2019 on, finished seasons; scripts/all_time_team.py), and for this
     season's All-FBP players a projected regular-season total: points so far plus points per start for the weeks
@@ -482,12 +551,14 @@ def main():
                 built.append((y, a))
     add_honors(built + [(cur.get('season', '9999'), cur)])
     os.makedirs(D('awards'), exist_ok=True)
-    for y, a in built:
-        json.dump(a, open(D('awards', f'{y}.json'), 'w'), indent=1, ensure_ascii=False)
+
     json.dump(franchise_all_fbp(built), open(D('awards', 'all-fbp.json'), 'w'), indent=1, ensure_ascii=False)
     add_record_paces(cur)
+    add_trade_followups(built + [(cur.get('season', '9999'), cur)])
     years = [y for y, _ in sorted(built, reverse=True)]
     cur['pastSeasons'] = years
+    for y, a in built:
+        json.dump(a, open(D('awards', f'{y}.json'), 'w'), indent=1, ensure_ascii=False)
     cur['honorsFrom'] = built[0][0] if built else cur.get('season')
     json.dump(cur, open(D('awards.json'), 'w'), indent=1, ensure_ascii=False)
     print(f"awards.json: {'through week ' + str(cur.get('throughWeek')) if cur.get('ready') else 'no weekly results yet'}, "

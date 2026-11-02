@@ -733,7 +733,28 @@
       }
      ],
      "picks": [],
-     "pts": 80.3
+     "pts": 80.3,
+     "became": {},
+     "later": {
+      "years": [
+       "2025",
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [
+       {
+        "id": "13589",
+        "name": "Josh Allen",
+        "pos": "QB",
+        "via": null,
+        "pts": {
+         "2025": 54.5,
+         "2026": 161.3
+        }
+       }
+      ],
+      "total": 215.8
+     }
     },
     "loser": {
      "team": "0010",
@@ -758,7 +779,47 @@
      "picks": [
       "FP_0001_2025_2"
      ],
-     "pts": 0.0
+     "pts": 0.0,
+     "became": {
+      "FP_0001_2025_2": {
+       "id": "17106",
+       "name": "Mason Taylor",
+       "pos": "TE",
+       "year": 2025,
+       "slot": "2.12",
+       "by": "0010"
+      }
+     },
+     "later": {
+      "years": [
+       "2025",
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [
+       {
+        "id": "16080",
+        "name": "Rashid Shaheed",
+        "pos": "WR",
+        "via": null,
+        "pts": {
+         "2025": 39.6,
+         "2026": 0.0
+        }
+       },
+       {
+        "id": "17106",
+        "name": "Mason Taylor",
+        "pos": "TE",
+        "via": "FP_0001_2025_2",
+        "pts": {
+         "2025": 17.7,
+         "2026": 0.0
+        }
+       }
+      ],
+      "total": 57.3
+     }
     },
     "margin": 80.3,
     "ts": 1732665177
@@ -786,7 +847,28 @@
        }
       ],
       "picks": [],
-      "pts": 78.2
+      "pts": 78.2,
+      "became": {},
+      "later": {
+       "years": [
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "16190",
+         "name": "Zay Flowers",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2025": 135.4,
+          "2026": 106.8
+         }
+        }
+       ],
+       "total": 242.2
+      }
      },
      "loser": {
       "team": "0008",
@@ -794,7 +876,39 @@
       "picks": [
        "DP_0_8"
       ],
-      "pts": 0
+      "pts": 0,
+      "became": {
+       "DP_0_8": {
+        "id": "16581",
+        "name": "Jayden Daniels",
+        "pos": "QB",
+        "year": 2024,
+        "slot": "1.09",
+        "by": "0008"
+       }
+      },
+      "later": {
+       "years": [
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "16581",
+         "name": "Jayden Daniels",
+         "pos": "QB",
+         "via": "DP_0_8",
+         "pts": {
+          "2024": 99.9,
+          "2025": 96.2,
+          "2026": 64.7
+         }
+        }
+       ],
+       "total": 260.8
+      }
      },
      "margin": 78.2,
      "ts": 1719350348
@@ -821,13 +935,44 @@
        }
       ],
       "picks": [],
-      "pts": 77.7
+      "pts": 77.7,
+      "became": {},
+      "later": {
+       "years": [
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14836",
+         "name": "Justin Jefferson",
+         "pos": "WR",
+         "via": null,
+         "pts": {
+          "2025": 0.0,
+          "2026": 0.0
+         }
+        }
+       ],
+       "total": 0.0
+      }
      },
      "loser": {
       "team": "0005",
       "players": [],
       "picks": [],
-      "pts": 0
+      "pts": 0,
+      "became": {},
+      "later": {
+       "years": [
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [],
+       "total": 0
+      }
      },
      "margin": 77.7,
      "ts": 1731103292

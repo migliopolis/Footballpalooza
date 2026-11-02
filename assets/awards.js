@@ -94,9 +94,25 @@ window.FBPAwards = (() => {
       body = `<div class="aw-win team">${tlogo(w.team, 'aw-tlogo')}<div><b>${esc(tname(w.team))}</b><span class="aw-big">${esc(w.stat)}</span><span class="aw-sub">${esc(w.sub)}</span></div></div>
         <ol class="aw-rest" start="2">${rest.map(t => `<li>${tlogo(t.team, 'mini')}<span>${esc(tname(t.team))}</span><b>${esc(t.stat)}</b><small>${esc(t.sub)}</small></li>`).join('')}</ol>`;
     } else if (a.trade) {
+      const became = (s, k) => { const b = (s.became || {})[k]; return b ? `<span class="aw-became">→ ${esc(b.name)} <small>${b.pos || ''}${k.startsWith('DP_') ? '' : ` · ${b.year} ${b.slot}`}${b.by && b.by !== s.team ? ` · taken by ${esc(tname(b.by))}` : ''}</small></span>` : ''; };
       const side = (s, won) => `<div class="aw-side${won ? ' won' : ''}"><div class="aw-sideh">${tlogo(s.team, 'mini')}<b>${esc(tname(s.team))}</b><span>${n1(s.pts)} pts</span></div>
-        <ul>${s.players.map(p => `<li>${esc(p.name)}${cup(p)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(pickName(k))}</li>`).join('')}</ul></div>`;
-      const deal = t => `<div class="aw-trade">${side(t.winner, true)}${side(t.loser, false)}</div><p class="aw-sub">Edge: ${n1(t.margin)} pts to ${esc(tname(t.winner.team))}</p>`;
+        <ul>${s.players.map(p => `<li>${esc(p.name)}${cup(p)} <small>${p.pos} · ${n1(p.pts)}</small></li>`).join('')}${s.picks.map(k => `<li class="pk">${esc(pickName(k))}${became(s, k)}</li>`).join('')}</ul></div>`;
+      // the deeper dive: starter points each side's haul scored for it in the seasons after (doesn't change the award)
+      const later = t => {
+        const L = [t.winner, t.loser].filter(s => s.later && s.later.rows.length);
+        if (!L.length) return '';
+        const years = [...new Set(L.flatMap(s => s.later.years))].sort();
+        const yl = y => y === L[0].later.current ? `${y}*` : y;
+        const tbl = s => `<div class="aw-lt"><div class="aw-sideh">${tlogo(s.team, 'mini')}<b>${esc(tname(s.team))}</b><span>${n1(s.later.total)} pts</span></div>
+          <div class="tbl-wrap"><table class="tbl aw-ltbl"><thead><tr><th class="t">Player</th>${years.map(y => `<th>${yl(y)}</th>`).join('')}<th>Total</th></tr></thead><tbody>
+          ${s.later.rows.map(r => { const tot = Object.values(r.pts).reduce((x, v) => x + v, 0); return `<tr><td class="t">${esc(r.name)} <small>${r.pos || ''}</small>${r.via ? `<small class="aw-via">via ${esc(pickName(r.via))}</small>` : ''}</td>${years.map(y => `<td>${y in r.pts ? n1(r.pts[y]) : ''}</td>`).join('')}<td><b>${n1(tot)}</b></td></tr>`; }).join('')}
+          </tbody></table></div></div>`;
+        const w = L.find(s => s === t.winner), l = L.find(s => s === t.loser);
+        const lead = w && l ? (w.later.total === l.later.total ? 'Even since.' : `${esc(tname((w.later.total > l.later.total ? w : l).team))} by ${n1(Math.abs(w.later.total - l.later.total))} since.`) : '';
+        return `<details class="aw-later"><summary>How it played out <small>starter points for each team in the seasons after${lead ? ' · ' + lead : ''}</small></summary>${L.map(tbl).join('')}
+          <p class="rf-foot">Regular-season points scored as a starter for the team that received him. Picks count from the season the player was drafted. * this season so far. Doesn't change the award, which counts only the season of the trade.</p></details>`;
+      };
+      const deal = t => `<div class="aw-trade">${side(t.winner, true)}${side(t.loser, false)}</div><p class="aw-sub">Edge: ${n1(t.margin)} pts to ${esc(tname(t.winner.team))}</p>${later(t)}`;
       body = `<p class="aw-sub">What each side received, and its starter points since:</p>${deal(a.trade)}` +
         (a.more && a.more.length ? a.more.map((t, i) => `<div class="aw-more"><span class="aw-rank">${i + 2}</span>${deal(t)}</div>`).join('') : '');
     }
