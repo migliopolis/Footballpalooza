@@ -279,13 +279,22 @@ def build(folder):
 
     # head-to-head results from scored regular-season games
     games, remaining, weeks_played = [], [], 0
+    # a week only counts once its NFL games are over (the refresh runs daily; refresh_mfl.py saves that check)
+    # (only for the live league folder: history and test folders keep counting by MFL scores alone)
+    nfl_final = None
+    if os.path.abspath(folder) == os.path.join(ROOT, 'data', 'mfl') and yr_txt:
+        try:
+            import nfl_weeks
+            nfl_final = nfl_weeks.cached(yr_txt)
+        except Exception:
+            nfl_final = None
     for wk in as_list(sched.get('weeklySchedule')):
         week = int(wk['week'])
         if week > last_reg:
             continue
         for m in as_list(wk.get('matchup')):
             fs = as_list(m.get('franchise'))
-            if len(fs) == 2 and all(f.get('score') not in (None, '') for f in fs):
+            if len(fs) == 2 and all(f.get('score') not in (None, '') for f in fs) and (nfl_final is None or week in nfl_final):
                 a, b = fs
                 games.append((week, a['id'], float(a['score']), b['id'], float(b['score'])))
                 weeks_played = max(weeks_played, week)

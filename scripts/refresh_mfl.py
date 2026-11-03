@@ -80,6 +80,12 @@ def played_weeks():
         fs = [f for m in as_list(wk.get('matchup')) for f in as_list(m.get('franchise'))]
         if fs and all(f.get('score') not in (None, '') for f in fs):
             out.append(int(wk['week']))
+    # the refresh runs daily, so also require the NFL week to be over (nfl_weeks.py)
+    if out:
+        import nfl_weeks
+        final = nfl_weeks.final_weeks(SEASON, max(out))
+        if final is not None:
+            out = [w for w in out if w in final]
     return sorted(out)
 
 
