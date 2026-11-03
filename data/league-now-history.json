@@ -267,6 +267,140 @@
     "seed1": 0.0,
     "seed6": 0.0
    }
+  },
+  "8": {
+   "0002": {
+    "rank": 1,
+    "seed": 1,
+    "pwrRank": 7,
+    "allPlayW": 39,
+    "playoff": 94.8,
+    "bye": 37.9,
+    "division": 94.5,
+    "seed1": 16.8,
+    "seed6": 0.0
+   },
+   "0009": {
+    "rank": 2,
+    "seed": 2,
+    "pwrRank": 3,
+    "allPlayW": 57,
+    "playoff": 84.5,
+    "bye": 32.0,
+    "division": 35.9,
+    "seed1": 20.8,
+    "seed6": 10.5
+   },
+   "0004": {
+    "rank": 3,
+    "seed": 4,
+    "pwrRank": 4,
+    "allPlayW": 63,
+    "playoff": 93.1,
+    "bye": 40.5,
+    "division": 44.2,
+    "seed1": 27.9,
+    "seed6": 9.8
+   },
+   "0010": {
+    "rank": 4,
+    "seed": 3,
+    "pwrRank": 6,
+    "allPlayW": 52,
+    "playoff": 67.7,
+    "bye": 30.4,
+    "division": 37.7,
+    "seed1": 11.3,
+    "seed6": 6.8
+   },
+   "0007": {
+    "rank": 5,
+    "seed": 5,
+    "pwrRank": 1,
+    "allPlayW": 59,
+    "playoff": 87.8,
+    "bye": 24.8,
+    "division": 38.0,
+    "seed1": 8.3,
+    "seed6": 27.2
+   },
+   "0001": {
+    "rank": 6,
+    "seed": 6,
+    "pwrRank": 2,
+    "allPlayW": 58,
+    "playoff": 84.1,
+    "bye": 17.5,
+    "division": 19.9,
+    "seed1": 10.5,
+    "seed6": 21.5
+   },
+   "0003": {
+    "rank": 7,
+    "seed": null,
+    "pwrRank": 5,
+    "allPlayW": 50,
+    "playoff": 42.0,
+    "bye": 8.9,
+    "division": 12.7,
+    "seed1": 2.5,
+    "seed6": 12.9
+   },
+   "0005": {
+    "rank": 8,
+    "seed": null,
+    "pwrRank": 8,
+    "allPlayW": 50,
+    "playoff": 37.9,
+    "bye": 7.5,
+    "division": 11.6,
+    "seed1": 1.7,
+    "seed6": 11.2
+   },
+   "0008": {
+    "rank": 9,
+    "seed": null,
+    "pwrRank": 11,
+    "allPlayW": 23,
+    "playoff": 5.1,
+    "bye": 0.4,
+    "division": 3.3,
+    "seed1": 0.0,
+    "seed6": 0.0
+   },
+   "0011": {
+    "rank": 10,
+    "seed": null,
+    "pwrRank": 9,
+    "allPlayW": 18,
+    "playoff": 1.8,
+    "bye": 0.1,
+    "division": 1.3,
+    "seed1": 0.0,
+    "seed6": 0.0
+   },
+   "0012": {
+    "rank": 11,
+    "seed": null,
+    "pwrRank": 12,
+    "allPlayW": 33,
+    "playoff": 0.2,
+    "bye": 0.0,
+    "division": 0.0,
+    "seed1": 0.0,
+    "seed6": 0.1
+   },
+   "0006": {
+    "rank": 12,
+    "seed": null,
+    "pwrRank": 10,
+    "allPlayW": 25,
+    "playoff": 1.0,
+    "bye": 0.0,
+    "division": 0.9,
+    "seed1": 0.0,
+    "seed6": 0.0
+   }
   }
  }
 }

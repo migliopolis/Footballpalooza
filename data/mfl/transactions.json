@@ -1,6 +1,102 @@
 {
- "fetched": "2026-10-27T11:09:55+00:00",
+ "fetched": "2026-11-03T05:29:30+00:00",
  "transactions": [
+  {
+   "franchise": "0009",
+   "timestamp": "1793553980",
+   "transaction": "|0518,",
+   "type": "FREE_AGENT"
+  },
+  {
+   "franchise": "0007",
+   "timestamp": "1793552400",
+   "transaction": "15730,|1.00|",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0008",
+   "timestamp": "1793462400",
+   "transaction": "17074,|0.00|",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0008",
+   "timestamp": "1793462400",
+   "transaction": "14095,|0.00|",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0006",
+   "timestamp": "1793462400",
+   "transaction": "0525,|0.00|",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0011",
+   "timestamp": "1793289600",
+   "transaction": "13633,|1.00|17171,",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0004",
+   "timestamp": "1793289600",
+   "transaction": "17069,|2.00|15717,",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0008",
+   "timestamp": "1793221336",
+   "transaction": "|14095,",
+   "type": "FREE_AGENT"
+  },
+  {
+   "franchise": "0007",
+   "timestamp": "1793203200",
+   "transaction": "17106,|0.00|12678,",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0006",
+   "timestamp": "1793203200",
+   "transaction": "15797,|0.00|0503,",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0007",
+   "timestamp": "1793203200",
+   "transaction": "0520,|1.00|0529,",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0002",
+   "timestamp": "1793203200",
+   "transaction": "0526,|1.00|13630,",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0005",
+   "timestamp": "1793203200",
+   "transaction": "17549,|12.00|",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0001",
+   "timestamp": "1793166485",
+   "transaction": "|11150,",
+   "type": "FREE_AGENT"
+  },
+  {
+   "franchise": "0003",
+   "timestamp": "1793119521",
+   "transaction": "|13633,",
+   "type": "FREE_AGENT"
+  },
+  {
+   "franchise": "0007",
+   "timestamp": "1793109675",
+   "transaction": "|17492,",
+   "type": "FREE_AGENT"
+  },
   {
    "expires": "1793404800",
    "franchise": "0006",

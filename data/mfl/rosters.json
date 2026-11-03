@@ -143,28 +143,19 @@
      {
       "contractInfo": "",
       "contractStatus": "",
-      "contractYear": "",
-      "drafted": "Draft 3.07 $2 (2024)",
-      "id": "16747",
-      "salary": "16",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "BB $9",
-      "id": "11150",
-      "salary": "9",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
       "contractYear": "1/3",
       "drafted": "Trade",
       "id": "13130",
       "salary": "51",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "4.12 2025",
+      "contractYear": "2/6",
+      "drafted": "4.12 (2025)",
+      "id": "17087",
+      "salary": "1",
       "status": "ROSTER"
      },
      {
@@ -178,11 +169,11 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "4.12 2025",
-      "contractYear": "2/6",
-      "drafted": "4.12 (2025)",
-      "id": "17087",
-      "salary": "1",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Draft 3.07 $2 (2024)",
+      "id": "16747",
+      "salary": "16",
       "status": "INJURED_RESERVE"
      },
      {
@@ -231,7 +222,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0002",
@@ -337,15 +328,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "2018",
-      "contractYear": "1/3",
-      "drafted": "Auction $1",
-      "id": "13630",
-      "salary": "1",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "1.06 2024",
       "contractYear": "3/6",
       "drafted": "Draft 1.06 $6 (2024)",
@@ -401,6 +383,15 @@
      {
       "contractInfo": "",
       "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "0526",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
       "contractYear": "1/3",
       "drafted": "Draft 2.05 $4 (2023)",
       "id": "16164",
@@ -444,7 +435,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0003",
@@ -631,15 +622,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "BB $0",
-      "id": "13633",
-      "salary": "",
-      "status": "INJURED_RESERVE"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "4.07 2026",
       "contractYear": "1/5",
       "drafted": "4.07",
@@ -675,7 +657,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0004",
@@ -801,15 +783,6 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
-      "drafted": "BB $5",
-      "id": "15717",
-      "salary": "5",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
       "drafted": "Draft 2.02 $3 (2024)",
       "id": "16617",
       "salary": "",
@@ -840,6 +813,15 @@
       "drafted": "Draft 1.05 $20 (2022)",
       "id": "15715",
       "salary": "38",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $2",
+      "id": "17069",
+      "salary": "2",
       "status": "ROSTER"
      },
      {
@@ -906,7 +888,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0005",
@@ -1057,6 +1039,15 @@
      },
      {
       "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $12",
+      "id": "17549",
+      "salary": "12",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
       "contractStatus": "2014",
       "contractYear": "1/3",
       "drafted": "Auction $15",
@@ -1092,7 +1083,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0006",
@@ -1236,8 +1227,8 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
-      "drafted": "BB $0",
-      "id": "0503",
+      "drafted": "Draft 3.12 $2 (2023)",
+      "id": "16204",
       "salary": "",
       "status": "ROSTER"
      },
@@ -1245,8 +1236,17 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
-      "drafted": "Draft 3.12 $2 (2023)",
-      "id": "16204",
+      "drafted": "Draft 4.05 $1(2022)",
+      "id": "15797",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0525",
       "salary": "",
       "status": "ROSTER"
      },
@@ -1261,20 +1261,20 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "1.06 2025",
-      "contractYear": "2/5",
-      "drafted": "1.06 (2025)",
-      "id": "17081",
-      "salary": "13",
-      "status": "INJURED_RESERVE"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "1.08 2021",
       "contractYear": "2/3",
       "drafted": "Auction $13 (2025)",
       "id": "15282",
       "salary": "16",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.06 2025",
+      "contractYear": "2/5",
+      "drafted": "1.06 (2025)",
+      "id": "17081",
+      "salary": "13",
       "status": "INJURED_RESERVE"
      },
      {
@@ -1305,7 +1305,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0007",
@@ -1411,15 +1411,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "Undrafted 2022",
-      "contractYear": "1/3",
-      "drafted": "Trade",
-      "id": "16080",
-      "salary": "6",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "Undrafted 2024",
       "contractYear": "1/3",
       "drafted": "BB $0",
@@ -1440,33 +1431,6 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
-      "drafted": "BB $2",
-      "id": "12678",
-      "salary": "2",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "BB $0",
-      "id": "17492",
-      "salary": "",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "BB $0",
-      "id": "0529",
-      "salary": "",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
       "drafted": "BB $0",
       "id": "15241",
       "salary": "",
@@ -1479,7 +1443,34 @@
       "drafted": "Auction $1",
       "id": "17047",
       "salary": "1",
-      "status": "INJURED_RESERVE"
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "0520",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.12 2025",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "17106",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "15730",
+      "salary": "1",
+      "status": "ROSTER"
      },
      {
       "contractInfo": "",
@@ -1497,6 +1488,15 @@
       "drafted": "Auction $11",
       "id": "14783",
       "salary": "11",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "Undrafted 2022",
+      "contractYear": "1/3",
+      "drafted": "Trade",
+      "id": "16080",
+      "salary": "6",
       "status": "INJURED_RESERVE"
      },
      {
@@ -1536,7 +1536,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0008",
@@ -1669,24 +1669,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "BB $0",
-      "id": "14095",
-      "salary": "",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "1.09 2025",
-      "contractYear": "2/5",
-      "drafted": "Trade",
-      "id": "17068",
-      "salary": "8",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "Undrafted 2022",
       "contractYear": "1/3",
       "drafted": "Auction $13",
@@ -1705,6 +1687,24 @@
      },
      {
       "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "14095",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "17074",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
       "contractStatus": "1.05 2024",
       "contractYear": "2/3",
       "drafted": "Draft 1.05 $35 (2024)",
@@ -1719,6 +1719,15 @@
       "drafted": "BB $11",
       "id": "16195",
       "salary": "11",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.09 2025",
+      "contractYear": "2/5",
+      "drafted": "Trade",
+      "id": "17068",
+      "salary": "8",
       "status": "INJURED_RESERVE"
      },
      {
@@ -1758,7 +1767,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0009",
@@ -1839,15 +1848,6 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "1/3",
-      "drafted": "Auction $1",
-      "id": "0518",
-      "salary": "1",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "1/3",
       "drafted": "BB $0",
       "id": "12616",
       "salary": "",
@@ -1918,11 +1918,11 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "1.01 2022",
+      "contractStatus": "2019",
       "contractYear": "1/3",
-      "drafted": "Trade",
-      "id": "15708",
-      "salary": "41",
+      "drafted": "Auction $1",
+      "id": "14136",
+      "salary": "1",
       "status": "ROSTER"
      },
      {
@@ -1936,11 +1936,11 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "2019",
+      "contractStatus": "1.01 2022",
       "contractYear": "1/3",
-      "drafted": "Auction $1",
-      "id": "14136",
-      "salary": "1",
+      "drafted": "Trade",
+      "id": "15708",
+      "salary": "41",
       "status": "INJURED_RESERVE"
      },
      {
@@ -1971,7 +1971,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0010",
@@ -2184,7 +2184,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0011",
@@ -2222,15 +2222,6 @@
       "contractYear": "1/3",
       "drafted": "Draft 3.06 $2 (2022)",
       "id": "15761",
-      "salary": "1",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "1/3",
-      "drafted": "Auction $1",
-      "id": "17171",
       "salary": "1",
       "status": "ROSTER"
      },
@@ -2354,6 +2345,15 @@
      {
       "contractInfo": "",
       "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13633",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
       "contractYear": "1/3",
       "drafted": "BB $11",
       "id": "17062",
@@ -2370,7 +2370,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    },
    {
     "id": "0012",
@@ -2583,7 +2583,7 @@
       "status": "TAXI_SQUAD"
      }
     ],
-    "week": "8"
+    "week": "9"
    }
   ]
  },

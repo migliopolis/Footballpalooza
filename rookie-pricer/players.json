@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-10-31",
+ "asOf": "2026-11-03",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
  "players": [
   {
@@ -16,56 +16,56 @@
    "pos": "WR",
    "school": "Texas",
    "adp": 4.6,
-   "nflPick": 12
+   "nflPick": 13
   },
   {
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
    "adp": 4.9,
-   "nflPick": 22
+   "nflPick": 23
   },
   {
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
    "adp": 5.4,
-   "nflPick": 7
+   "nflPick": 9
   },
   {
    "name": "Charlie Becker",
    "pos": "WR",
    "school": "Indiana",
    "adp": 5.7,
-   "nflPick": 7
+   "nflPick": 10
   },
   {
    "name": "Darian Mensah",
    "pos": "QB",
    "school": "Miami",
    "adp": 7.5,
-   "nflPick": 7
+   "nflPick": 6
   },
   {
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
    "adp": 7.7,
-   "nflPick": 22
+   "nflPick": 16
   },
   {
    "name": "Drew Mestemaker",
    "pos": "QB",
    "school": "Oklahoma State",
    "adp": 7.8,
-   "nflPick": 4
+   "nflPick": 5
   },
   {
    "name": "CJ Carr",
    "pos": "QB",
    "school": "Notre Dame",
    "adp": 12.3,
-   "nflPick": 15
+   "nflPick": 11
   },
   {
    "name": "Kewan Lacy",
@@ -79,7 +79,7 @@
    "pos": "WR",
    "school": "Rutgers",
    "adp": 12.5,
-   "nflPick": 31
+   "nflPick": 19
   },
   {
    "name": "Ahmad Hardy",
@@ -93,21 +93,21 @@
    "pos": "WR",
    "school": "Indiana",
    "adp": 13.9,
-   "nflPick": 22
+   "nflPick": 17
   },
   {
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 14.0,
-   "nflPick": 28
+   "nflPick": 8
   },
   {
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
    "adp": 14.3,
-   "nflPick": 21
+   "nflPick": 22
   },
   {
    "name": "Ryan Coleman-Williams",
@@ -121,7 +121,7 @@
    "pos": "TE",
    "school": "LSU",
    "adp": 16.6,
-   "nflPick": 16
+   "nflPick": 19
   },
   {
    "name": "Nate Frazier",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 24.8,
-   "nflPick": 24
+   "nflPick": 23
   },
   {
    "name": "Justice Haynes",

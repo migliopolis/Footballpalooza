@@ -1,13 +1,13 @@
 {
- "generated": "2026-10-28T07:47:41+00:00",
+ "generated": "2026-11-03T05:31:50+00:00",
  "first": 2019,
  "current": 2026,
  "totals": {
   "paid": 18018,
   "contracts": 1691,
   "players": 603,
-  "excludedWaivers": 216,
-  "excludedDollars": 1410,
+  "excludedWaivers": 219,
+  "excludedDollars": 1412,
   "biggest": {
    "id": "13604",
    "name": "Saquon Barkley",
@@ -1277,7 +1277,7 @@
      "fr": "0004",
      "sal": 66,
      "how": "Auction",
-     "pts": 147.7
+     "pts": 160.1
     },
     {
      "id": "16161",
@@ -1287,7 +1287,7 @@
      "fr": "0009",
      "sal": 63,
      "how": "Rookie deal",
-     "pts": 145.7
+     "pts": 153.3
     },
     {
      "id": "15281",
@@ -1297,7 +1297,7 @@
      "fr": "0006",
      "sal": 62,
      "how": "Auction",
-     "pts": 97.1
+     "pts": 128.2
     },
     {
      "id": "14802",
@@ -1307,7 +1307,7 @@
      "fr": "0001",
      "sal": 59,
      "how": "Keeper",
-     "pts": 137.5
+     "pts": 144.2
     },
     {
      "id": "13604",
@@ -1317,7 +1317,7 @@
      "fr": "0002",
      "sal": 58,
      "how": "Auction",
-     "pts": 38.1
+     "pts": 50.5
     },
     {
      "id": "16162",
@@ -1327,7 +1327,7 @@
      "fr": "0003",
      "sal": 55,
      "how": "Rookie deal",
-     "pts": 171.0
+     "pts": 195.8
     },
     {
      "id": "13130",
@@ -1347,7 +1347,7 @@
      "fr": "0010",
      "sal": 50,
      "how": "Auction",
-     "pts": 108.0
+     "pts": 109.8
     }
    ],
    "auctionTop12": 43.6,

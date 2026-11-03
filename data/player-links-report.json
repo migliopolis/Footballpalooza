@@ -1,8 +1,8 @@
 {
  "summary": {
-  "linked": 939,
-  "mfl": 926,
-  "spellingFixed": 50,
+  "linked": 942,
+  "mfl": 929,
+  "spellingFixed": 51,
   "name": 13,
   "unmatched": 3,
   "rosteredLinked": 260,
@@ -177,6 +177,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "2574511",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "14065",
+   "mflName": "Brett Rypien",
+   "pos": "QB",
+   "team": "TBB",
+   "fbp": null,
+   "espn": "3722362",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -426,7 +435,7 @@
    "mfl": "16612",
    "mflName": "Carson Steele",
    "pos": "RB",
-   "team": "PHI",
+   "team": "FA",
    "fbp": null,
    "espn": "4714365",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -549,6 +558,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "16176",
+   "mflName": "Deuce Vaughn",
+   "pos": "RB",
+   "team": "HOU",
+   "fbp": null,
+   "espn": "4431453",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "17738",
    "mflName": "Dominic Richardson",
    "pos": "RB",
@@ -585,12 +603,12 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "16173",
-   "mflName": "Eric Gray",
+   "mfl": "16385",
+   "mflName": "Emari Demercado",
    "pos": "RB",
-   "team": "CLE",
+   "team": "HOU",
    "fbp": null,
-   "espn": "4570561",
+   "espn": "4362478",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -681,6 +699,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "4611995",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "15260",
+   "mflName": "Jaret Patterson",
+   "pos": "RB",
+   "team": "CLE",
+   "fbp": null,
+   "espn": "4362452",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -780,15 +807,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4880638",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "17267",
-   "mflName": "Lan Larison",
-   "pos": "RB",
-   "team": "NEP",
-   "fbp": null,
-   "espn": "4698253",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -918,15 +936,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "16957",
-   "mflName": "Terrell Jennings",
-   "pos": "RB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4427600",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "14076",
    "mflName": "Trayveon Williams",
    "pos": "RB",
@@ -972,39 +981,12 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "16483",
-   "mflName": "Ben Sims",
-   "pos": "TE",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4373030",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "17696",
-   "mflName": "Carsen Ryan",
-   "pos": "TE",
-   "team": "CLE",
-   "fbp": null,
-   "espn": "4685540",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "17724",
    "mflName": "Dae'Quan Wright",
    "pos": "TE",
    "team": "FA",
    "fbp": null,
    "espn": "4838696",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16796",
-   "mflName": "Devin Culp",
-   "pos": "TE",
-   "team": "CLE",
-   "fbp": null,
-   "espn": "4361112",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1086,6 +1068,15 @@
    "team": "WAS",
    "fbp": null,
    "espn": "4430482",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "14876",
+   "mflName": "Josiah Deguara",
+   "pos": "TE",
+   "team": "SEA",
+   "fbp": null,
+   "espn": "3914151",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1521,15 +1512,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "17313",
-   "mflName": "Eli Pancol",
-   "pos": "WR",
-   "team": "IND",
-   "fbp": null,
-   "espn": "4430288",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "16453",
    "mflName": "Elijah Cooks",
    "pos": "WR",
@@ -1617,6 +1599,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "3061612",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "16624",
+   "mflName": "Jamari Thrash",
+   "pos": "WR",
+   "team": "LVR",
+   "fbp": null,
+   "espn": "4428678",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1728,15 +1719,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "13963",
-   "mflName": "KhaDarel Hodge",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "3047876",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "17532",
    "mflName": "Kobe Prentice",
    "pos": "WR",
@@ -1779,6 +1761,15 @@
    "team": "ATL",
    "fbp": null,
    "espn": "4689334",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "13669",
+   "mflName": "Malik Turner",
+   "pos": "WR",
+   "team": "SFO",
+   "fbp": null,
+   "espn": "3115928",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1926,15 +1917,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "16763",
-   "mflName": "Tejhaun Palmer",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4875912",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "15308",
    "mflName": "Terrace Marshall",
    "pos": "WR",
@@ -2013,15 +1995,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "2978109",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "13176",
-   "mflName": "Zay Jones",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "3059722",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   }
  ]
