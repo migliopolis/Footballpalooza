@@ -1162,3 +1162,19 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-bench summary{cursor:pointer;font-size:.78rem;font-weight:600;color:var(--muted);padding:4px 0}
 .lv-bench .lv-t{opacity:.8}
 @media (min-width:700px){.lv-sum{padding:12px 18px}.lv-lg{width:48px;height:48px}.lv-sc b{font-size:1.7rem}.lv-det{padding:10px 18px 14px}}
+/* scoreboard lineups on phones: photo above the name, names wrap instead of cutting off, fixed points/slot columns */
+@media (max-width:560px){
+  .lv-det{padding:6px 8px 8px}
+  .lv-t td{padding:6px 2px}
+  .lv-p{width:auto}
+  .lv-pts{width:2.7rem;font-size:.84rem}
+  .lv-pts.a{padding-right:5px!important}
+  .lv-pts.b{padding-left:5px!important}
+  .lv-slot{width:1.9rem;font-size:.55rem}
+  .lv-pc{display:block}
+  .lv-ph{display:block;width:28px;height:28px;margin:0 0 3px}
+  .lv-p.b .lv-ph{margin-left:auto}
+  .lv-nm{white-space:normal;overflow:visible;text-overflow:clip;font-size:.8rem;line-height:1.2;overflow-wrap:anywhere}
+  .lv-p small{font-size:.62rem;line-height:1.25}
+  .lv-names{font-size:.8rem}
+}
