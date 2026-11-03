@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0078';
+  const VERSION = '0.0079';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -11,10 +11,23 @@
     const btn = document.getElementById('share-btn'); if (!btn) return;
     const toast = msg => { let t = document.getElementById('share-toast'); if (!t) { t = document.createElement('div'); t.id = 'share-toast'; t.className = 'share-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
       t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 1800); };
+    // link previews never see the #route, so share the page's own preview page (share/<key>.html, built by
+    // scripts/share_pages.py): it names the page you're on, then forwards to it
+    let pages = {};
+    fetch('share/pages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { pages = j || {}; }).catch(() => {});
+    const shareUrl = () => {
+      const route = decodeURIComponent(location.hash.replace(/^#/, '')) || 'now';
+      const parts = route.split('/');
+      for (let n = parts.length; n > 0; n--) {
+        const r = parts.slice(0, n).join('/'), key = pages[r];
+        if (key) return new URL(`share/${key}.html${r === route ? '' : '?to=' + encodeURIComponent(route)}`, location.href.split('#')[0]).href;
+      }
+      return location.href;
+    };
     btn.addEventListener('click', async () => {
       const h = document.querySelector('#app h1');
       const title = (h ? h.textContent.trim().replace(/\s+/g, ' ') + ' · ' : '') + 'Footballpalooza';
-      const url = location.href;
+      const url = shareUrl();
       if (navigator.share) { try { await navigator.share({ title, url }); } catch (e) {} return; }
       try { await navigator.clipboard.writeText(url); toast('Link copied'); } catch (e) { toast(url); }
     });
