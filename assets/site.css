@@ -1185,3 +1185,55 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-weeks{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 10px}
 .lv-weeks button{min-width:2rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .78rem var(--mono);padding:4px 6px;border-radius:6px;cursor:pointer}
 .lv-weeks button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+
+/* ---------- Multiview planner (assets/multiview.js) ---------- */
+.mv-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 12px;font-size:.8rem;color:var(--muted)}
+.mv-sel{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+.mv-sel select{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:5px 8px;max-width:72vw}
+.mv-m{padding:12px 14px;margin-bottom:12px}
+.mv-mh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.mv-t{display:flex;align-items:center;gap:8px;min-width:0;font-size:.92rem}
+.mv-t.b{justify-content:flex-end;text-align:right}
+.mv-lg{width:30px;height:30px;object-fit:contain;flex:none}
+.mv-vs{font:700 .7rem var(--display);text-transform:uppercase;color:var(--muted)}
+.mv-win{margin-top:12px}
+.mv-win h4{margin:0 0 8px;font:700 .82rem var(--display);text-transform:uppercase;letter-spacing:.04em}
+.mv-win h4 small{font:400 .74rem var(--body);text-transform:none;letter-spacing:0;color:var(--muted);margin-left:4px}
+.mv-tiles{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media (min-width:600px){.mv-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:900px){.mv-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.mv-tile{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg);min-width:0}
+.mv-tile.rz{border-style:dashed}
+.mv-tile.quiet{opacity:.7}
+.mv-g{display:flex;align-items:baseline;justify-content:space-between;gap:6px;margin-bottom:6px}
+.mv-g b{font:700 .88rem var(--display)}
+.mv-g small{font-size:.66rem;color:var(--muted);white-space:nowrap}
+.mv-sides{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.mv-sides > .mv-who{flex:0 1 auto;min-width:0}
+.mv-sides > .mv-who.none{flex:none}
+.mv-who{list-style:none;margin:0;padding:0;font-size:.74rem;line-height:1.35;min-width:0}
+.mv-who.b{text-align:right}
+.mv-who li{display:flex;align-items:center;gap:0;margin-bottom:3px;min-width:0}
+.mv-who.b li{justify-content:flex-end}
+.mv-who .mv-nm{min-width:0;overflow-wrap:anywhere}
+.mv-who .pos,.mv-who .mv-nfl{flex:none}
+.mv-who .pos{margin-right:5px}
+.mv-who.b .pos{margin:0 0 0 5px}
+.mv-who.none{color:var(--muted)}
+.mv-cnt,.mv-rzn{font-size:.72rem;color:var(--muted);margin:2px 0 0}
+.mv-solos{list-style:none;margin:0;padding:0;font-size:.8rem}
+.mv-solos li{padding:4px 0;border-top:1px solid var(--line)}
+.mv-solos li:first-child{border-top:0}
+.mv-solos small{color:var(--muted)}
+.mv-solo{display:block;font-size:.74rem;color:var(--muted)}
+.mv-bye{font-size:.74rem;color:var(--muted);margin:10px 0 0}
+.mv-head{display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-start;gap:14px}
+.mv-head > div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.mv-logo{width:84px;height:auto;flex:none}
+@media (max-width:520px){.mv-logo{width:64px}}
+.mv-nfl{width:16px;height:16px;object-fit:contain;vertical-align:-3px;margin-left:5px}
+.mv-who.b .mv-nfl{margin:0 5px 0 0}
+.mv-nets{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.mv-net{display:inline-block;font:800 .58rem/1 var(--body);letter-spacing:.03em;padding:3px 5px;border-radius:4px;color:#fff;background:#555;white-space:nowrap}
+.mv-net.fox{background:#111}.mv-net.cbs{background:#1d4fa0}.mv-net.nbc{background:#5e3fa3}.mv-net.espn{background:#d00}.mv-net.abc{background:#000}
+.mv-net.pv{background:#00a8e1}.mv-net.nfln{background:#013369}.mv-net.nflx{background:#e50914}.mv-net.yt{background:#f00}

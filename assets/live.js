@@ -21,6 +21,7 @@
   let weekly = null, sched = null;
   const open = new Set(), openBench = new Set();
 
+  const onPage = () => /^#scores\/?$/.test(location.hash);   // the Scoreboard itself, not the Sunday Ticket Helper
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
   function load() {
     if (loading) return;
@@ -151,12 +152,12 @@
     if (!LIVE_URL) return;
     const ms = data ? pace() : POLL_MS;
     if (!ms) return;
-    timer = setTimeout(() => { if (location.hash.startsWith('#scores') && !document.hidden) load(); poll(); }, ms);
+    timer = setTimeout(() => { if (onPage() && !document.hidden) load(); poll(); }, ms);
   }
   // redraw just the scoreboard (keeps scroll position and which games are open)
   function paint() {
     const el = document.getElementById('lv-root');
-    if (el) el.innerHTML = body(); else if (X && location.hash.startsWith('#scores')) X.rerender();
+    if (el) el.innerHTML = body(); else if (X && onPage()) X.rerender();
     poll();
   }
 
@@ -279,7 +280,7 @@
     X = ctx;
     if (!data && !failed) load();
     poll();
-    return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof">Pick a week · tap a game for both lineups and stats${(X.seeds || []).length ? ' · numbers by a team are playoff seeds if the season ended today' : ''}</span></div><div id="lv-root">${body()}</div>`;
+    return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof">Pick a week · tap a game for both lineups and stats${(X.seeds || []).length ? ' · numbers by a team are playoff seeds if the season ended today' : ''}</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
   }
 
   document.addEventListener('toggle', e => {

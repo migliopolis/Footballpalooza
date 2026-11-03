@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0079';
+  const VERSION = '0.0080';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -594,14 +594,23 @@
   const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash.startsWith('#draft') || location.hash === '#awards') route(); } });
 
   /* ---------- router ---------- */
-  const TABS = ['scores', 'now', 'awards', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
+  const TABS = ['scores', 'multiview', 'now', 'awards', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
   const refCtx = () => ({ teams: state.teams, chip, esc, ppr: state.ppr, rerender: () => { if (location.hash.startsWith('#reference')) route(); } });
   let lastPage = '';
   function route() {
     const parts = location.hash.slice(1).split('/');
     const tab = TABS.includes(parts[0]) ? parts[0] : 'now';
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-    if (tab === 'scores') app.innerHTML = window.FBPLive ? FBPLive.render({ teams: state.teams, esc, nameOf, seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], weeksPlayed: (state.now || {}).weeksPlayed || 0, season: +(String((state.now || {}).season || '').match(/\d{4}/) || [new Date().getFullYear()])[0], rerender: () => { if (location.hash.startsWith('#scores')) route(); } }) : '<p class="error">The scoreboard didn’t load.</p>';
+    // Game Day: the live Scoreboard (#scores) and the Sunday Ticket Helper (#scores/ticket)
+    if (tab === 'multiview') { location.replace('#scores/ticket'); return; }
+    if (tab === 'scores') {
+      const ticket = parts[1] === 'ticket', season = +(String((state.now || {}).season || '').match(/\d{4}/) || [new Date().getFullYear()])[0];
+      const nav = `<nav class="rf-sub seg now-sub">${[['', 'Scoreboard'], ['ticket', 'Sunday Ticket Helper']].map(([k, l]) => `<a href="#scores${k ? '/' + k : ''}"${(ticket ? 'ticket' : '') === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+      const base = { teams: state.teams, esc, nameOf, nav, weeksPlayed: (state.now || {}).weeksPlayed || 0, season };
+      app.innerHTML = ticket
+        ? (window.FBPMultiview ? FBPMultiview.render(Object.assign({}, base, { abbr: id => (state.teams[id] || {}).abbr || nameOf(id), rerender: () => { if (location.hash.startsWith('#scores/ticket')) route(); } })) : '<p class="error">The Sunday Ticket Helper didn’t load.</p>')
+        : (window.FBPLive ? FBPLive.render(Object.assign({}, base, { seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], rerender: () => { if (/^#scores\/?$/.test(location.hash)) route(); } })) : '<p class="error">The scoreboard didn’t load.</p>');
+    }
     else if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
     else if (tab === 'awards') app.innerHTML = window.FBPAwards ? FBPAwards.render(draftCtx()) : '<p class="error">Awards didn’t load.</p>';
