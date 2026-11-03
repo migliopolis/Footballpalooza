@@ -3,6 +3,7 @@ name: Refresh league data
 on:
   schedule:
     - cron: '0 6 * * 2'    # Tuesdays 06:00 UTC = Monday 10 PM PST (11 PM during daylight time), after Monday night games
+    - cron: '30 17 * * *'  # daily 17:30 UTC = 9:30 AM PST (10:30 AM during daylight time), after MFL's 9 AM waivers
   workflow_dispatch:        # "Run workflow" button on the Actions tab
 
 permissions:
@@ -71,6 +72,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No data changes"
           else
-            git commit -m "Weekly data refresh"
+            git commit -m "League data refresh"
             git push
           fi
