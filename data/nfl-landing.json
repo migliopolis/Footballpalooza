@@ -8,28 +8,28 @@
    "team": "LAC",
    "pick": 1,
    "basis": "consensus",
-   "mocks": 20,
+   "mocks": 19,
    "mostMocked": "MIA"
   },
   "Jadan Baugh": {
-   "team": "NYG",
-   "pick": 22,
-   "basis": "recent",
-   "mocks": 20,
+   "team": "CIN",
+   "pick": 23,
+   "basis": "consensus",
+   "mocks": 19,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
    "team": "WSH",
    "pick": 9,
    "basis": "consensus",
-   "mocks": 21,
+   "mocks": 20,
    "mostMocked": "WSH"
   },
   "Drew Mestemaker": {
    "team": "MIA",
    "pick": 3,
    "basis": "consensus",
-   "mocks": 20,
+   "mocks": 19,
    "mostMocked": "MIA"
   },
   "Ahmad Hardy": {
@@ -43,7 +43,7 @@
    "team": "NYJ",
    "pick": 6,
    "basis": "consensus",
-   "mocks": 21,
+   "mocks": 20,
    "mostMocked": "NYJ"
   },
   "Kewan Lacy": {
@@ -54,31 +54,31 @@
    "mostMocked": "HOU"
   },
   "CJ Carr": {
-   "team": "WSH",
-   "pick": 9,
+   "team": "NO",
+   "pick": 8,
    "basis": "recent",
-   "mocks": 15,
+   "mocks": 14,
    "mostMocked": "NYJ"
   },
   "KJ Duff": {
-   "team": "SEA",
-   "pick": 17,
-   "basis": "consensus",
-   "mocks": 10,
+   "team": "DAL",
+   "pick": 20,
+   "basis": "recent",
+   "mocks": 9,
    "mostMocked": "KC"
   },
   "Cam Coleman": {
    "team": "LV",
    "pick": 14,
-   "basis": "recent",
-   "mocks": 21,
+   "basis": "consensus",
+   "mocks": 20,
    "mostMocked": "LV"
   },
   "Nick Marsh": {
-   "team": "LV",
-   "pick": 14,
+   "team": "SF",
+   "pick": 31,
    "basis": "consensus",
-   "mocks": 22,
+   "mocks": 21,
    "mostMocked": "KC"
   },
   "Nate Frazier": {
@@ -90,15 +90,15 @@
   },
   "Dante Moore": {
    "team": "CLE",
-   "pick": 16,
+   "pick": 18,
    "basis": "recent",
-   "mocks": 15,
+   "mocks": 14,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
-   "team": "NYJ",
-   "pick": 10,
-   "basis": "recent",
+   "team": "ARI",
+   "pick": 11,
+   "basis": "consensus",
    "mocks": 13,
    "mostMocked": "ARI"
   },
@@ -106,7 +106,7 @@
    "team": "CAR",
    "pick": 19,
    "basis": "recent",
-   "mocks": 22,
+   "mocks": 21,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -124,10 +124,10 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "DAL",
-   "pick": 20,
-   "basis": "recent",
-   "mocks": 20,
+   "team": "KC",
+   "pick": 24,
+   "basis": "consensus",
+   "mocks": 19,
    "mostMocked": "DEN"
   },
   "Deuce Alexander": {
@@ -145,17 +145,17 @@
    "mostMocked": "KC"
   },
   "Ryan Coleman-Williams": {
-   "team": "MIN",
-   "pick": 30,
+   "team": "TEN",
+   "pick": 28,
    "basis": "recent",
-   "mocks": 9,
+   "mocks": 8,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
-   "team": "WSH",
-   "pick": 9,
-   "basis": "recent",
-   "mocks": 19,
+   "team": "CLE",
+   "pick": 16,
+   "basis": "consensus",
+   "mocks": 18,
    "mostMocked": "CLE"
   },
   "Wyatt Young": {
