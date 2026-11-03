@@ -481,8 +481,19 @@ window.FBPRef = (() => {
     let body = '';
     if (b === 'career') body = `<h2 class="sec">Career points per game <small>regular season</small></h2>` + tbl(['#', 'lg', '!Franchise', 'PPG', 'GP', 'Points', 'W-L-T'],
       L.career_ppg.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise)}${nameCell(r.franchise, null, r.name)}<td><b>${r.ppg.toFixed(2)}</b></td><td>${r.games}</td><td>${n0(r.total_points)}</td><td>${esc(r.record)}</td></tr>`));
-    else if (b === 'season') body = `<h2 class="sec">Best seasons <small>regular-season points per game, full seasons</small></h2>` + tbl(['#', 'lg', '!Team', 'Year', 'PPG', 'GP', 'Points'],
-      L.season_ppg_top25.map(r => `<tr><td>${r.rank}</td>${lgCell(r.franchise)}<td class="t">${r.franchise ? `<a class="rf-nm" href="#reference/f-${r.franchise}">${esc(r.team)}</a>` : esc(r.team)}${r.champion ? ' <span class="rf-badge gold">🏆</span>' : ''}</td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td><b>${r.ppg.toFixed(2)}</b></td><td>${parseInt(r.record)}</td><td>${n1(r.total_pts)}</td></tr>`));
+    else if (b === 'season') {
+      // every team-season, best PPG first; tap a header to sort. This season counts as it goes (marked in progress).
+      const rows = L.season_ppg || L.season_ppg_top25 || [];
+      const rec = r => r.w == null ? '' : `${r.w}-${r.l}${r.t ? '-' + r.t : ''}`;
+      const pct = r => r.games ? ((r.w + 0.5 * (r.t || 0)) / r.games).toFixed(4) : '';
+      body = `<h2 class="sec">Seasons by points per game <small>regular season, every team, ${esc(String(rows.length))} seasons · tap a header to sort</small></h2>
+        <div class="card tbl-wrap"><table class="tbl rf-t sortable"><thead><tr>
+          <th data-sort="num" tabindex="0">#</th><th class="lg"><span class="sr">Logo</span></th><th class="t" data-sort="txt" tabindex="0">Team</th>
+          <th data-sort="num" tabindex="0" data-first="desc">Year</th><th data-sort="num" tabindex="0" data-first="desc" aria-sort="descending">PPG</th>
+          <th data-sort="num" tabindex="0" data-first="desc" title="Sorts by win percentage">Record</th><th data-sort="num" tabindex="0" data-first="desc">GP</th><th data-sort="num" tabindex="0" data-first="desc">Points</th>
+        </tr></thead><tbody>${rows.map(r => `<tr${r.in_progress ? ' class="rf-live"' : ''}><td>${r.rank}</td>${lgCell(r.franchise)}<td class="t" data-v="${esc(r.team)}">${r.franchise ? `<a class="rf-nm" href="#reference/f-${r.franchise}">${esc(r.team)}</a>` : esc(r.team)}${r.champion ? ' <span class="rf-badge gold">🏆</span>' : ''}${r.in_progress ? ' <span class="rf-badge">in progress</span>' : ''}</td>
+          <td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td><b>${r.ppg.toFixed(2)}</b></td><td data-v="${pct(r)}">${rec(r)}</td><td>${r.games != null ? r.games : parseInt(r.record)}</td><td>${n1(r.total_pts)}</td></tr>`).join('')}</tbody></table></div>`;
+    }
     else if (b === 'playoff') body = `<h2 class="sec">Best playoff runs <small>points per game, two playoff games or more</small></h2>` + tbl(['#', 'lg', '!Team', 'Year', 'PPG', 'W-L', 'Points'],
       L.playoff_ppg_top15.map(r => `<tr><td>${r.rank}</td>${lgCell(r.franchise)}<td class="t">${r.franchise ? `<a class="rf-nm" href="#reference/f-${r.franchise}">${esc(r.team)}</a>` : esc(r.team)}${r.champion ? ' <span class="rf-badge gold">🏆</span>' : ''}</td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td><b>${r.ppg.toFixed(2)}</b></td><td>${esc(r.record)}</td><td>${n1(r.total_pts)}</td></tr>`));
     else if (b === 'games') {

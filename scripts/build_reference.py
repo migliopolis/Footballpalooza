@@ -188,11 +188,12 @@ def derive(d):
                                'record': f"{c['w']}-{c['l']}-{c['t']}"} for fr, c in car.items()), key=lambda r: -r['ppg'])
 
     def per_season(rows):
-        acc = defaultdict(lambda: {'n': 0, 'pts': 0.0, 'w': 0, 'l': 0})
+        acc = defaultdict(lambda: {'n': 0, 'pts': 0.0, 'w': 0, 'l': 0, 't': 0})
         for s in rows:
             a = acc[(s['year'], s['franchise'])]; a['n'] += 1; a['pts'] += s['score']
             if s['result'] == 'W': a['w'] += 1
             elif s['result'] == 'L': a['l'] += 1
+            else: a['t'] += 1
         return acc
     is_champ = lambda y, fr: (champs.get(str(y)) or {}).get('champion') == fr
     ss = per_season(reg)
@@ -200,6 +201,11 @@ def derive(d):
     top = sorted(((k, a) for k, a in ss.items() if k[0] < cur or str(k[0]) in champs), key=lambda kv: -kv[1]['pts'] / kv[1]['n'])[:25]
     L['season_ppg_top25'] = [{'rank': i + 1, 'year': y, 'franchise': fr, 'team': name_in(fr, y), 'ppg': round(a['pts'] / a['n'], 2), 'record': f"{a['n']}gp",
                               'total_pts': f1(a['pts']), 'champion': is_champ(y, fr)} for i, ((y, fr), a) in enumerate(top)]
+    # every team-season, this one included (marked in progress until its champion is crowned), with its record
+    allss = sorted(ss.items(), key=lambda kv: -kv[1]['pts'] / kv[1]['n'])
+    L['season_ppg'] = [{'rank': i + 1, 'year': y, 'franchise': fr, 'team': name_in(fr, y), 'ppg': round(a['pts'] / a['n'], 2), 'games': a['n'],
+                        'w': a['w'], 'l': a['l'], 't': a['t'], 'total_pts': f1(a['pts']), 'champion': is_champ(y, fr),
+                        'in_progress': y >= cur and str(y) not in champs} for i, ((y, fr), a) in enumerate(allss)]
     ps = per_season([s for s in sides if s['po']])
     top = sorted(((k, a) for k, a in ps.items() if a['n'] >= 2), key=lambda kv: -kv[1]['pts'] / kv[1]['n'])[:15]   # two playoff games or more
     L['playoff_ppg_top15'] = [{'rank': i + 1, 'year': y, 'franchise': fr, 'team': name_in(fr, y), 'ppg': round(a['pts'] / a['n'], 2), 'record': f"{a['w']}-{a['l']}",
