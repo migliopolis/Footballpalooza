@@ -1105,3 +1105,47 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .brand small#season-label{display:flex;flex-direction:column;min-width:0;overflow:visible;line-height:1.25}
 .brand .sl-t{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .brand .sl-v{flex:none;white-space:nowrap}
+
+/* ---------- League Now > Scoreboard (assets/live.js) ---------- */
+.lv-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;font-size:.8rem;color:var(--muted)}
+.lv-all{flex:none;font:600 .78rem var(--body);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--fg);cursor:pointer}
+.lv-list{display:flex;flex-direction:column;gap:8px}
+.lv-g{padding:0;overflow:hidden}
+.lv-sum{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;width:100%;padding:10px 12px;background:none;border:0;color:inherit;font:inherit;cursor:pointer;text-align:left}
+.lv-side{display:flex;align-items:center;gap:10px;min-width:0}
+.lv-side.b{flex-direction:row-reverse;text-align:right}
+.lv-lg{width:40px;height:40px;object-fit:contain;flex:none;display:inline-flex;align-items:center;justify-content:center;font:700 .7rem var(--body)}
+.lv-sc{display:flex;flex-direction:column;line-height:1.1}
+.lv-sc b{font:700 1.45rem/1 var(--display);color:var(--muted);font-variant-numeric:tabular-nums}
+.lv-sc small{font-size:.66rem;letter-spacing:.06em;color:var(--muted);margin-top:3px}
+.lv-side.lead .lv-sc b{color:var(--fg)}
+.lv-mid{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}
+.lv-vs{font:700 .72rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+.lv-mid small{font-size:.66rem;color:var(--muted);white-space:nowrap}
+.lv-g.open .lv-sum{border-bottom:1px solid var(--line)}
+.lv-det{padding:8px 10px 10px}
+.lv-names{display:flex;justify-content:space-between;gap:10px;font-size:.84rem}
+.lv-names b:last-child,.lv-names small:last-child{text-align:right}
+.lv-left{margin:1px 0 6px;color:var(--muted);font-size:.72rem}
+.lv-t{width:100%;border-collapse:collapse;table-layout:fixed}
+.lv-t td{padding:5px 3px;border-top:1px solid var(--line);vertical-align:top}
+.lv-pts,.lv-slot{padding-top:9px!important}
+.lv-p{width:38%;overflow:hidden}
+.lv-p.b{text-align:right}
+.lv-nm{display:block;font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv-p small{display:block;font-size:.64rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv-pts{width:11%;font:700 .9rem var(--body);font-variant-numeric:tabular-nums}
+.lv-pts.a{text-align:right}
+.lv-pts.pre{color:var(--muted);font-weight:400}
+.lv-slot{width:2.2rem;text-align:center;font:700 .6rem var(--body);letter-spacing:.04em;color:var(--muted)}
+.lv-st.live{color:var(--ok);font-weight:700}
+.lv-p.live .lv-nm::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:4px;vertical-align:2px}
+.lv-p.b.live .lv-nm::before{display:none}
+.lv-p.b.live .lv-nm::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-left:4px;vertical-align:2px}
+.lv-p.empty{color:var(--muted)}
+.lv-stat{white-space:normal!important;color:var(--fg)!important;opacity:.75;margin-top:1px;line-height:1.25}
+.lv-seed{display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--accent);color:#fff;font:700 .6rem/1 var(--body);letter-spacing:0;margin:0 4px;vertical-align:1px}
+.lv-bench{margin-top:8px}
+.lv-bench summary{cursor:pointer;font-size:.78rem;font-weight:600;color:var(--muted);padding:4px 0}
+.lv-bench .lv-t{opacity:.8}
+@media (min-width:700px){.lv-sum{padding:12px 18px}.lv-lg{width:48px;height:48px}.lv-sc b{font-size:1.7rem}.lv-det{padding:10px 18px 14px}}
