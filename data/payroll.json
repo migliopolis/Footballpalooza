@@ -1,10 +1,10 @@
 {
- "generated": "2026-11-03T13:09:20+00:00",
+ "generated": "2026-11-03T22:30:06+00:00",
  "first": 2019,
  "current": 2026,
  "totals": {
-  "paid": 18018,
-  "contracts": 1691,
+  "paid": 18015,
+  "contracts": 1690,
   "players": 603,
   "excludedWaivers": 219,
   "excludedDollars": 1412,
@@ -1259,13 +1259,13 @@
   },
   {
    "year": 2026,
-   "total": 2323,
-   "contracts": 222,
+   "total": 2320,
+   "contracts": 221,
    "share": {
-    "RB": 45.5,
-    "WR": 39.5,
+    "RB": 45.6,
+    "WR": 39.6,
     "TE": 6.2,
-    "QB": 7.7,
+    "QB": 7.6,
     "DEF": 1.1
    },
    "top": [

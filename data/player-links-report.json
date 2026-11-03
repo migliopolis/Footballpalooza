@@ -5,8 +5,8 @@
   "spellingFixed": 51,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 260,
-  "rosteredTotal": 260
+  "rosteredLinked": 258,
+  "rosteredTotal": 258
  },
  "mismatch": [],
  "byName": [
@@ -186,15 +186,6 @@
    "team": "TBB",
    "fbp": null,
    "espn": "3722362",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "17240",
-   "mflName": "Cam Miller",
-   "pos": "QB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4693331",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1320,6 +1311,15 @@
    "team": "NYG",
    "fbp": null,
    "espn": "4362227",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "16751",
+   "mflName": "Bub Means",
+   "pos": "WR",
+   "team": "CLE",
+   "fbp": null,
+   "espn": "4427985",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
