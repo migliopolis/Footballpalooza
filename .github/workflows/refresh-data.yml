@@ -60,11 +60,14 @@ jobs:
       - name: Build the press box columns
         continue-on-error: true
         run: pip install markdown && python scripts/build_columns.py
+      - name: Build the share-link preview pages
+        continue-on-error: true
+        run: python scripts/share_pages.py
       - name: Commit changed data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add data rookie-pricer
+          git add data rookie-pricer share
           if git diff --cached --quiet; then
             echo "No data changes"
           else
