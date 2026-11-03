@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0075';
+  const VERSION = '0.0076';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -313,13 +313,15 @@
     const divTables = d.divisions.map(dv => {
       const rows = d.standings.filter(t => t.division === dv.id).sort((a, b) => a.divisionRank - b.divisionRank);
       const gb = v => v <= 0 ? '—' : (Number.isInteger(v) ? v : v.toFixed(1));
+      // points back: total points behind the league's top scorer
+      const top = Math.max(...d.standings.map(x => x.pf)), pb = t => t.pf >= top ? '—' : pts(top - t.pf);
       return `<div class="card"><h3 class="dvh">${esc(dv.name)}</h3><div class="tbl-wrap"><table class="tbl">
         <thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>GB</th><th class="hide-sm">Pct</th><th class="hide-sm" title="Division record">Div</th>
-          <th>PF</th><th class="hide-sm">PA</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th title="Average points over the last three games">L3 Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
+          <th>PF</th><th class="hide-sm">PA</th><th title="Points back: total points behind the league's top scorer">PB</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th title="Average points over the last three games">L3 Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
           <th title="All-play record: results against every team, every week">All-play</th><th class="hide-sm">Strk</th>${state.budgets ? `<th title="${state.budgets.season} auction budget, after trades">${state.budgets.season} $</th>` : ''}</tr></thead><tbody>
         ${rows.map(t => `<tr><td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true, after: (t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '') + elimTag(t.id) })}</td>
           <td>${t.w}-${t.l}-${t.t}</td><td>${gb(t.gb)}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
-          <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td>${l3(t.id)}</td><td class="hide-sm">${pts(t.pp)}</td>
+          <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td>${pb(t)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td>${l3(t.id)}</td><td class="hide-sm">${pts(t.pp)}</td>
           <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount < 0 ? '−' : '+'}$${Math.abs(x.amount)} ${x.note}`).join('\n\n') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
         </tbody></table></div></div>`;
     }).join('');
@@ -586,7 +588,7 @@
     const parts = location.hash.slice(1).split('/');
     const tab = TABS.includes(parts[0]) ? parts[0] : 'now';
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-    if (tab === 'scores') app.innerHTML = window.FBPLive ? FBPLive.render({ teams: state.teams, esc, nameOf, seeds: (state.now || {}).seeds || [], rerender: () => { if (location.hash.startsWith('#scores')) route(); } }) : '<p class="error">The scoreboard didn’t load.</p>';
+    if (tab === 'scores') app.innerHTML = window.FBPLive ? FBPLive.render({ teams: state.teams, esc, nameOf, seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], weeksPlayed: (state.now || {}).weeksPlayed || 0, rerender: () => { if (location.hash.startsWith('#scores')) route(); } }) : '<p class="error">The scoreboard didn’t load.</p>';
     else if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
     else if (tab === 'awards') app.innerHTML = window.FBPAwards ? FBPAwards.render(draftCtx()) : '<p class="error">Awards didn’t load.</p>';
