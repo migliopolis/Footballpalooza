@@ -1,4 +1,4 @@
-/* Scoreboard tab: this week's six games, live.
+/* Scoreboard tab: this week's six games, live, plus any earlier week (week picker; defaults to the current week).
    Each game is one line (logo, score, vs, score, logo) that opens into both lineups, slot by slot.
    Data is MFL's liveScoring export. Browsers can't read MFL directly from this site, so it comes through a small
    Cloudflare Worker relay (LIVE_URL, code in relay/worker.js). With LIVE_URL empty the page shows a saved sample
@@ -8,13 +8,17 @@
    (data/player-links.json), and so do injury designations (live, with data/espn/injuries.json as a fallback).
    Taxi squad and IR come from the weekly roster file (data/mfl/rosters.json); MFL's live scoring leaves them out.
    Polling: every 15 seconds while NFL games are on, every 5 minutes before kickoff, and not at all once the weekly
-   league update has the week in the books. */
+   league update has the week in the books. Earlier weeks come from the weekly results file (data/mfl/weeklyResults.json,
+   final lineups and points) with ESPN's box scores for that week; they never refresh. */
 (function () {
   const LIVE_URL = 'https://fbp-live.pmiglio-gchat.workers.dev/';   // Cloudflare Worker relay (relay/worker.js)
   const POLL_MS = 15000;
   const SLOTS = ['QB', 'RB', 'RB', 'WR', 'WR', 'TE', 'FLEX', 'DEF'];
   const SLOW_MS = 300000;
   let X = null, data = null, players = null, rosters = null, failed = false, loading = false, timer = null, stamp = null;
+  let view = null;                  // the week being shown; null = MFL's current week (live)
+  const hist = {};                  // earlier weeks, built from the weekly results file
+  let weekly = null, sched = null;
   const open = new Set(), openBench = new Set();
 
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
@@ -43,20 +47,24 @@
   // ESPN: kickoff times and clocks by NFL team, stat lines by ESPN athlete id
   const ESPN = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/';
   const TEAM = { GBP: 'GB', KCC: 'KC', NEP: 'NE', NOS: 'NO', SFO: 'SF', TBB: 'TB', LVR: 'LV', JAC: 'JAX', WAS: 'WSH', LA: 'LAR' };
-  let games = {}, stats = {}, links = null, espnAt = 0;
-  function loadEspn() {
-    if (Date.now() - espnAt < POLL_MS - 1000) return Promise.resolve();
-    espnAt = Date.now();
+  // per week: 'live' for the current week, else the week number
+  const E = {}, EW = () => E[view || 'live'] || { games: {}, stats: {} };
+  let links = null;
+  function loadEspn(w) {
+    const e = (E[w || 'live'] = E[w || 'live'] || { games: {}, stats: {}, at: 0 });
+    if (w ? e.at : Date.now() - e.at < POLL_MS - 1000) return Promise.resolve();   // an earlier week loads once
+    e.at = Date.now();
+    const games = e.games, stats = e.stats;
     const lk = links ? Promise.resolve(links) : fetch('data/player-links.json').then(r => r.ok ? r.json() : null).then(j => (links = (j && j.links) || {}));
-    return Promise.all([lk, fetch(ESPN + 'scoreboard').then(r => r.ok ? r.json() : null)]).then(([, sb]) => {
+    const url = w ? `scoreboard?seasontype=2&week=${w}&dates=${(X && X.season) || new Date().getFullYear()}` : 'scoreboard';
+    return Promise.all([lk, fetch(ESPN + url).then(r => r.ok ? r.json() : null)]).then(([, sb]) => {
       if (!sb) return;
-      const g = {};
+      const g = games;
       (sb.events || []).forEach(ev => {
         const st = ev.status || {}, t = st.type || {};
         const info = { id: ev.id, state: t.state, date: ev.date, detail: t.shortDetail, clock: st.displayClock, period: st.period, name: ev.shortName };
         ev.competitions[0].competitors.forEach(c => { g[c.team.abbreviation] = info; });
       });
-      games = g;
       // box scores only for games that have started; finished ones only once
       const want = [...new Set(Object.values(g).filter(x => x.state === 'in' || (x.state === 'post' && !stats['ev' + x.id])).map(x => x.id))];
       return Promise.all(want.map(id => fetch(ESPN + 'summary?event=' + id).then(r => r.ok ? r.json() : null).then(j => {
@@ -87,16 +95,16 @@
       injuries = Object.fromEntries(Object.entries(j || {}).map(([k, v]) => [k, { status: v.status, note: v.short || '' }]));
     })).catch(() => { injuries = injuries || {}; });
   }
-  const injTag = id => { const i = injuries && injuries[espnId(id)]; const t = i && INJ[i.status]; return t ? { t, title: `${i.status}${i.note ? ': ' + i.note : ''}` } : null; };
+  const injTag = id => { if (view) return null; const i = injuries && injuries[espnId(id)]; const t = i && INJ[i.status]; return t ? { t, title: `${i.status}${i.note ? ': ' + i.note : ''}` } : null; };
   const espnId = id => ((links && links[id]) || [])[0];
   const photo = id => {
     if (pos(id) === 'DEF') { const t = TEAM[info(id).team] || info(id).team || ''; return t ? `https://a.espncdn.com/i/teamlogos/nfl/500/${t.toLowerCase()}.png` : ''; }
     return espnId(id) ? `https://a.espncdn.com/i/headshots/nfl/players/full/${espnId(id)}.png` : '';
   };
-  const gameOf = id => games[TEAM[info(id).team] || info(id).team];
+  const gameOf = id => EW().games[TEAM[info(id).team] || info(id).team];
   // the stat line: passing, rushing, receiving, whatever he did
   function statLine(id) {
-    const r = stats[espnId(id)]; if (!r) return '';
+    const r = EW().stats[espnId(id)]; if (!r) return '';
     const n = v => +String(v || 0).split('/')[0] || 0, out = [];
     const ps = r.passing, ru = r.rushing, re = r.receiving, k = r.kicking;
     if (ps) out.push(`${ps['C/ATT']}, ${ps.YDS} yds${n(ps.TD) ? `, ${ps.TD} TD` : ''}${n(ps.INT) ? `, ${ps.INT} INT` : ''}`);
@@ -108,12 +116,32 @@
     if (fl) out.push(`${fl} fum lost`);
     return out.join(' · ');
   }
+  // an earlier week, shaped like MFL's live scoring: final lineups and points from the weekly results file
+  function loadHist(w) {
+    const need = [];
+    if (!weekly) need.push(fetch('data/mfl/weeklyResults.json').then(r => r.ok ? r.json() : {}).then(j => { weekly = j.weeks || {}; }));
+    if (!sched) need.push(fetch('data/mfl/schedule.json').then(r => r.ok ? r.json() : {}).then(j => { sched = ((j.schedule || {}).weeklySchedule) || []; }));
+    return Promise.all([...need, loadEspn(w)]).then(() => {
+      const wr = weekly[String(w)] || {}, wk = sched.find(x => +x.week === +w);
+      const fr = f => { const t = wr[f.id] || {}, s = t.s || [], n = t.n || [];
+        return { id: f.id, isHome: f.isHome, score: String(s.reduce((a, x) => a + x[1], 0)), gameSecondsRemaining: '0', playersYetToPlay: '0', playersCurrentlyPlaying: '0',
+                 players: { player: [...s.map(([id, v]) => ({ id, status: 'starter', score: String(v), gameSecondsRemaining: '0' })), ...n.map(([id, v]) => ({ id, status: 'nonstarter', score: String(v), gameSecondsRemaining: '0' }))] } }; };
+      hist[w] = { liveScoring: { week: String(w), matchup: ((wk || {}).matchup || []).map(m => ({ franchise: m.franchise.map(fr) })) } };
+    });
+  }
+  const cur = () => view ? hist[view] : data;
+  function showWeek(w) {
+    const live = data ? +data.liveScoring.week : 0;
+    view = !w || +w === live ? null : +w;
+    open.clear(); openBench.clear();
+    if (view && !hist[view]) { paint(); loadHist(view).then(paint).catch(paint); } else paint();
+  }
   // the week is in the books once the weekly league update has counted it
   const weekDone = () => !!(data && X && +data.liveScoring.week <= (X.weeksPlayed || 0));
   // fast while any NFL game is on (or about to start), slow before kickoff, stopped once the week is final
   function pace() {
-    if (weekDone()) return 0;
-    const gs = Object.values(games);
+    if (view || weekDone()) return 0;
+    const gs = Object.values((E.live || {}).games || {});
     if (!gs.length || gs.some(g => g.state === 'in')) return POLL_MS;
     const next = Math.min(...gs.filter(g => g.state === 'pre').map(g => Date.parse(g.date)));
     return isFinite(next) && next - Date.now() < 20 * 60000 ? POLL_MS : SLOW_MS;
@@ -173,16 +201,26 @@
   function body() {
     if (failed) return '<p class="error">The scoreboard didn’t load. Refresh the page to try again.</p>';
     if (!data) return '<p class="loading">Loading the scoreboard…</p>';
-    const L = data.liveScoring, esc = X.esc;
+    const esc = X.esc, liveW = +data.liveScoring.week, shownW = view || liveW;
+    // week picker: every week so far, the current week by default
+    const maxW = Math.max(liveW, X.weeksPlayed || 0);
+    const picker = `<div class="lv-weeks" role="group" aria-label="Week">${Array.from({ length: maxW }, (_, i) => i + 1).map(w =>
+      `<button type="button" data-lv-week="${w}" aria-pressed="${w === shownW}"${w === liveW ? ' title="Current week"' : ''}>${w}</button>`).join('')}</div>`;
+    if (view && !hist[view]) return picker + '<p class="loading">Loading week ' + view + '…</p>';
+    const L = cur().liveScoring;
     const tm = id => X.teams[id] || {};
     const seedOf = id => ((X.seeds || []).find(x => x.id === id) || {}).seed;
-    const seed = id => seedOf(id) ? `<span class="lv-seed${seedOf(id) > 3 ? ' wc' : ''}" title="${seedOf(id)} seed if the season ended today">${seedOf(id)}</span>` : '';
+    const seed = id => !view && seedOf(id) ? `<span class="lv-seed${seedOf(id) > 3 ? ' wc' : ''}" title="${seedOf(id)} seed if the season ended today">${seedOf(id)}</span>` : '';
     // record, place in the division and last-3 average (from the weekly league update)
     const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
     const stand = id => (X.standings || []).find(t => t.id === id);
-    const l3 = id => { const sc = (X.games || []).filter(g => g[1] === id || g[3] === id).sort((x, y) => x[0] - y[0]).slice(-3).map(g => g[1] === id ? g[2] : g[4]);
+    const upTo = g => !view || g[0] <= view;   // an earlier week shows the record and L3 as of that week
+    const l3 = id => { const sc = (X.games || []).filter(g => upTo(g) && (g[1] === id || g[3] === id)).sort((x, y) => x[0] - y[0]).slice(-3).map(g => g[1] === id ? g[2] : g[4]);
       return sc.length ? n1(sc.reduce((x, y) => x + y, 0) / sc.length) : ''; };
-    const meta = id => { const t = stand(id); if (!t) return '';
+    const recAt = id => { let w = 0, l = 0, t = 0; (X.games || []).filter(g => upTo(g) && (g[1] === id || g[3] === id)).forEach(g => {
+      const me = g[1] === id ? g[2] : g[4], op = g[1] === id ? g[4] : g[2]; me > op ? w++ : me < op ? l++ : t++; }); return `${w}-${l}${t ? '-' + t : ''}`; };
+    const meta = id => { if (view) return `${recAt(id)} after week ${view}${l3(id) ? ` · L3 ${l3(id)}` : ''}`;
+      const t = stand(id); if (!t) return '';
       return `${t.w}-${t.l}${t.t ? '-' + t.t : ''} · ${ord(t.divisionRank)} ${esc(t.divisionName || '')}${l3(id) ? ` · L3 ${l3(id)}` : ''}`; };
     // the week's highest and lowest scores, live
     const all = L.matchup.flatMap(m => m.franchise.map(f => +f.score)), hi = Math.max(...all), lo = Math.min(...all);
@@ -212,7 +250,7 @@
       // bench, then taxi squad, then IR, each side listed in its own column
       const group = (xa, xb, lbl) => Array.from({ length: Math.max(xa.length, xb.length) }, (_, i) =>
         `<tr>${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
-      const benchRows = group(bench(a), bench(b), 'BN') + group(extra(a, 'taxi'), extra(b, 'taxi'), 'TX') + group(extra(a, 'ir'), extra(b, 'ir'), 'IR');
+      const benchRows = group(bench(a), bench(b), 'BN') + (view ? '' : group(extra(a, 'taxi'), extra(b, 'taxi'), 'TX') + group(extra(a, 'ir'), extra(b, 'ir'), 'IR'));
       const left = f => { const c = counts(f); return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
       return `<article class="card lv-g${isOpen ? ' open' : ''}" data-lv-key="${key}">
         <button type="button" class="lv-sum" data-lv="${key}" aria-expanded="${isOpen}">
@@ -223,16 +261,16 @@
           <div class="lv-names"><b>${seed(a.id)}${esc(X.nameOf(a.id))}</b><b>${esc(X.nameOf(b.id))}${seed(b.id)}</b></div>
           <div class="lv-names lv-left"><small>${left(a)}</small><small>${left(b)}</small></div>
           <table class="lv-t"><tbody>${rows}</tbody></table>
-          ${benchRows ? `<details class="lv-bench"${openBench.has(key) ? ' open' : ''} data-lv-bench="${key}"><summary>Bench, taxi squad and IR</summary><table class="lv-t"><tbody>${benchRows}</tbody></table></details>` : ''}
+          ${benchRows ? `<details class="lv-bench"${openBench.has(key) ? ' open' : ''} data-lv-bench="${key}"><summary>${view ? 'Bench' : 'Bench, taxi squad and IR'}</summary><table class="lv-t"><tbody>${benchRows}</tbody></table></details>` : ''}
         </div></article>`;
     };
     const any = L.matchup.length;
     const t = stamp ? stamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '';
     const p = pace();
-    const status = data.sample ? '<b>Sample data.</b> Live scores start once the relay is set up.'
+    const status = view ? `<b>Week ${view} final.</b>` : data.sample ? '<b>Sample data.</b> Live scores start once the relay is set up.'
       : !p ? `<b>Final.</b> Week ${esc(L.week)} is in the books.`
       : p === SLOW_MS ? `Updated ${t} · checks every 5 minutes until games start` : `Updated ${t} · refreshes every ${POLL_MS / 1000} seconds`;
-    return `<div class="lv-bar"><span>${status}</span>
+    return `${picker}<div class="lv-bar"><span>${status}</span>
         <button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></div>
       <div class="lv-list">${L.matchup.map(game).join('')}</div>`;
   }
@@ -241,8 +279,7 @@
     X = ctx;
     if (!data && !failed) load();
     poll();
-    const wk = data ? data.liveScoring.week : '';
-    return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof">${wk ? `Week ${X.esc(wk)} · ` : ''}tap a game for both lineups and stats${(X.seeds || []).length ? ' · numbers by a team are playoff seeds if the season ended today' : ''}</span></div><div id="lv-root">${body()}</div>`;
+    return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof">Pick a week · tap a game for both lineups and stats${(X.seeds || []).length ? ' · numbers by a team are playoff seeds if the season ended today' : ''}</span></div><div id="lv-root">${body()}</div>`;
   }
 
   document.addEventListener('toggle', e => {
@@ -250,17 +287,19 @@
     d.open ? openBench.add(d.dataset.lvBench) : openBench.delete(d.dataset.lvBench);
   }, true);
   document.addEventListener('click', e => {
+    const wb = e.target.closest('[data-lv-week]');
+    if (wb && data) { showWeek(+wb.dataset.lvWeek); return; }
     const all = e.target.closest('[data-lv-all]');
     if (all && data) {
       open.clear();
-      if (all.dataset.lvAll === 'open') data.liveScoring.matchup.forEach(m => { const fs = m.franchise.slice().sort((a, b) => (+a.isHome) - (+b.isHome)); open.add(`${fs[0].id}-${fs[1].id}`); });
+      if (all.dataset.lvAll === 'open') cur().liveScoring.matchup.forEach(m => { const fs = m.franchise.slice().sort((a, b) => (+a.isHome) - (+b.isHome)); open.add(`${fs[0].id}-${fs[1].id}`); });
       paint(); return;
     }
     const b = e.target.closest('[data-lv]'); if (!b) return;
     const key = b.dataset.lv, g = b.closest('.lv-g'), on = !open.has(key);
     on ? open.add(key) : open.delete(key);
     g.classList.toggle('open', on); b.setAttribute('aria-expanded', on); g.querySelector('.lv-det').hidden = !on;
-    const btn = document.querySelector('[data-lv-all]'), n = data.liveScoring.matchup.length;
+    const btn = document.querySelector('[data-lv-all]'), n = cur().liveScoring.matchup.length;
     if (btn) { btn.dataset.lvAll = open.size === n ? 'close' : 'open'; btn.textContent = open.size === n ? 'Collapse all' : 'Expand all'; }
   });
 

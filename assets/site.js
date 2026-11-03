@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0077';
+  const VERSION = '0.0078';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -588,7 +588,7 @@
     const parts = location.hash.slice(1).split('/');
     const tab = TABS.includes(parts[0]) ? parts[0] : 'now';
     document.querySelectorAll('.tabs a').forEach(a => { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-    if (tab === 'scores') app.innerHTML = window.FBPLive ? FBPLive.render({ teams: state.teams, esc, nameOf, seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], weeksPlayed: (state.now || {}).weeksPlayed || 0, rerender: () => { if (location.hash.startsWith('#scores')) route(); } }) : '<p class="error">The scoreboard didn’t load.</p>';
+    if (tab === 'scores') app.innerHTML = window.FBPLive ? FBPLive.render({ teams: state.teams, esc, nameOf, seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], weeksPlayed: (state.now || {}).weeksPlayed || 0, season: +(String((state.now || {}).season || '').match(/\d{4}/) || [new Date().getFullYear()])[0], rerender: () => { if (location.hash.startsWith('#scores')) route(); } }) : '<p class="error">The scoreboard didn’t load.</p>';
     else if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
     else if (tab === 'awards') app.innerHTML = window.FBPAwards ? FBPAwards.render(draftCtx()) : '<p class="error">Awards didn’t load.</p>';

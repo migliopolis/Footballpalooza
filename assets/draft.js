@@ -337,6 +337,7 @@
       ${S.note ? `<p class="dr-note">${esc(S.note)}</p>` : ''}
       <div class="dr-controls">${teamSel}</div>
       <div class="dr-grid" data-mtab="${S.mtab}">
+        <div class="dr-top">
         <section class="dr-boardwrap" data-panel="board"><h2 class="sec">Draft board <small>${!S.started ? 'not started' : done ? 'final' : `pick ${S.cur + 1} of ${ord.length}`}</small></h2><ol class="card dr-board" id="dr-board">${board}</ol></section>
         <div class="dr-right">
           <section class="card dr-clock">${clock}</section>
@@ -349,9 +350,10 @@
             <ol class="dr-list">${rows || '<li class="muted">No ranked rookies left at this position.</li>'}</ol>${addForm}
             <p class="dr-foot">${av.length} of ${pool().length} rookies left. Ranks: <a href="${esc(S.data.board ? S.data.board.url : '#')}" target="_blank" rel="noopener">${esc(S.data.board ? S.data.board.name : 'rookie board')}</a>. ${S.nflOrder ? `Logos show each rookie’s projected landing spot from <a href="${esc(S.nflOrder.url)}" target="_blank" rel="noopener">Tankathon’s</a> projected NFL order. ` : ''}Prices use the Rookie Pricer formula (${Object.entries(S.cfg.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; rounds 3–4 $${S.cfg.flatSalaryByRound['3']}/$${S.cfg.flatSalaryByRound['4']}). <a href="rookie-pricer/">Open the Rookie Pricer</a></p>
           </section>
-        </div>
-        <section class="dr-haulsec" data-panel="hauls"><h2 class="sec">Team hauls <small>rookie salaries from this mock</small></h2>
+          <section class="dr-haulsec" data-panel="hauls"><h2 class="sec">Team hauls <small>rookie salaries from this mock</small></h2>
           ${hauls ? `<div class="dr-hauls">${hauls}</div>` : '<p class="muted dr-empty">No picks yet. Hauls fill in as the draft goes.</p>'}</section>
+        </div>
+        </div>
       </div>`;
   }
 
