@@ -1,6 +1,6 @@
 {
  "season": 2027,
- "asOf": "2026-11-03",
+ "asOf": "2026-11-04",
  "mode": "projected",
  "settings": {
   "windowDays": 60,
@@ -331,7 +331,7 @@
  "nflSources": [
   {
    "name": "NFL Mock Draft Database consensus mock (1 week) and recent mocks",
-   "date": "2026-11-03",
+   "date": "2026-11-04",
    "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
    "type": "mock",
    "weight": 3,
@@ -341,17 +341,17 @@
     "Darian Mensah": 6,
     "CJ Carr": 8,
     "Charlie Becker": 9,
-    "Arch Manning": 11,
-    "Cam Coleman": 14,
+    "Arch Manning": 10,
+    "Cam Coleman": 11,
+    "Dante Moore": 12,
+    "Nick Marsh": 14,
     "Trinidad Chambliss": 16,
-    "Dante Moore": 18,
-    "Trey'Dez Green": 19,
     "KJ Duff": 20,
     "Austin Simmons": 22,
-    "Jadan Baugh": 23,
     "Jamari Johnson": 24,
-    "Ryan Coleman-Williams": 28,
-    "Nick Marsh": 31
+    "Trey'Dez Green": 25,
+    "Jadan Baugh": 27,
+    "Ryan Coleman-Williams": 31
    },
    "note": "Round 1: the pick in the 1-week consensus mock. Others: median pick across mocks from the last 14 days (5+ mocks)."
   },

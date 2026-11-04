@@ -1,12 +1,12 @@
 {
  "summary": {
-  "linked": 942,
-  "mfl": 929,
+  "linked": 943,
+  "mfl": 930,
   "spellingFixed": 51,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 258,
-  "rosteredTotal": 258
+  "rosteredLinked": 259,
+  "rosteredTotal": 259
  },
  "mismatch": [],
  "byName": [
@@ -387,6 +387,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "16595",
+   "mflName": "Audric Estime",
+   "pos": "RB",
+   "team": "FA",
+   "fbp": null,
+   "espn": "4569682",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "15454",
    "mflName": "Avery Williams",
    "pos": "RB",
@@ -630,15 +639,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "15720",
-   "mflName": "Hassan Haskins",
-   "pos": "RB",
-   "team": "NEP",
-   "fbp": null,
-   "espn": "4372071",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "16871",
    "mflName": "Ian Wheeler",
    "pos": "RB",
@@ -690,15 +690,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4611995",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "15260",
-   "mflName": "Jaret Patterson",
-   "pos": "RB",
-   "team": "CLE",
-   "fbp": null,
-   "espn": "4362452",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1224,6 +1215,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17375",
+   "mflName": "Zaire Mitchell-Paden",
+   "pos": "TE",
+   "team": "HOU",
+   "fbp": null,
+   "espn": "4876006",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "16196",
    "mflName": "A.T. Perry",
    "pos": "WR",
@@ -1257,6 +1257,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "4428532",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "14548",
+   "mflName": "Alex Bachman",
+   "pos": "WR",
+   "team": "LAR",
+   "fbp": null,
+   "espn": "3919510",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1509,6 +1518,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "4258195",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "17313",
+   "mflName": "Eli Pancol",
+   "pos": "WR",
+   "team": "DEN",
+   "fbp": null,
+   "espn": "4430288",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
