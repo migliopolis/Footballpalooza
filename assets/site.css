@@ -868,6 +868,31 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .py-pr{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;padding:2px 0}
 @media (max-width:640px){.py-t .hide-sm{display:none}.py-lgs{max-width:96px}}
 .py-page .rf-ppr{display:none}
+/* ---------- Reference > Players ---------- */
+.pr-ctl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:0 0 10px}
+.pr-q{font:inherit;font-size:.9rem;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);min-width:0;flex:1 1 180px;max-width:260px}
+.pr-ctl .pr-seg{margin:0;flex-wrap:nowrap;align-items:center}
+.pr-lbl{font-size:.75rem;color:var(--muted);margin-right:2px}
+.pr-count{font-size:.78rem;color:var(--muted)}
+.pr-t td{vertical-align:top}
+.pr-t td.t{white-space:normal;min-width:180px}
+.pr-d summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.pr-d summary::-webkit-details-marker{display:none}
+.pr-d summary .py-who b::after{content:' ▸';color:var(--muted);font-weight:400;font-size:.8em}
+.pr-d[open] summary .py-who b::after{content:' ▾'}
+.pr-lgs{display:flex;flex-wrap:wrap;gap:3px;margin-left:38px}
+.pr-lgs img{width:18px;height:18px;object-fit:contain}
+.pr-tms{margin:8px 0 2px 38px;border-left:2px solid var(--line);padding-left:10px}
+.pr-tm{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:8px;align-items:center;padding:4px 0}
+.pr-tm img{width:20px;height:20px;object-fit:contain}
+.pr-tn,.pr-tr{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.pr-tr{align-items:flex-end}
+.pr-tn small,.pr-tr small{font-size:.7rem;color:var(--muted)}
+.pr-rsm{display:none}
+@media (max-width:640px){.pr-rsm{display:block;font-size:.7rem;color:var(--muted);font-weight:400}}
+@media (max-width:520px){.pr-t td.t{min-width:0;width:100%}.pr-lgs,.pr-tms{margin-left:0}.pr-ctl .pr-seg button{padding:5px 8px}
+  .pr-tm{grid-template-columns:20px minmax(0,1fr)}.pr-tr{grid-column:2;align-items:flex-start;flex-direction:row;gap:6px;align-items:baseline}}
+@media (max-width:520px){.rf-sub.seg:has(> a:nth-child(7)) a{font-size:min(.82rem,2.75vw);padding:7px 3px}}
 .py-sm{display:none}
 @media (max-width:640px){.py-sm{display:flex;margin:4px 0 0 38px;max-width:none}.py-sm img{width:16px;height:16px}}
 .py-page section+section,.py-page .py-two{margin-top:22px}.py-page .py-two section+section{margin-top:0}

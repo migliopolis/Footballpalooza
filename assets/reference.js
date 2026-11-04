@@ -2,7 +2,7 @@
    Data: data/reference.json, rebuilt each week by scripts/build_reference.py from the frozen
    history (data/reference/history.json) plus the current season from the MFL refresh.
    Routes: #reference, #reference/franchises, #reference/f-0001, #reference/seasons,
-           #reference/s-2025[/draft|auction|results[/wk]], #reference/records[/<board>]          */
+           #reference/s-2025[/draft|auction|results[/wk]], #reference/records[/<board>], #reference/players          */
 window.FBPRef = (() => {
   let D = null, loading = null, failed = false;
   const load = rerender => {
@@ -137,7 +137,7 @@ window.FBPRef = (() => {
   const firstYear = () => (PRE().length ? Math.min(...PRE().map(x => x.year)) : 2019);
 
   function nav(top) {
-    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']], top, true);
+    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/players', 'Players'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']], top, true);
   }
   function head(title, extra = '') {
     const m = D.meta;
@@ -555,6 +555,80 @@ window.FBPRef = (() => {
     return '<div class="py-page">' + top + tiles + career + shares + contracts + value + travel + bypos + notes + '</div>';
   }
 
+  /* ---------- players (data/player-records.json, built by scripts/player_records.py) ----------
+     each player's record as a starter: his team's result in the weeks he was in the starting lineup */
+  let PR = null, prLoading = false;
+  const loadPR = rerender => {
+    if (PR || prLoading) return; prLoading = true;
+    fetch('data/player-records.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(d => {
+        const F = d.fields, TF = d.team_fields;
+        d.list = d.players.map(a => { const p = {}; F.forEach((k, i) => p[k] = a[i]);
+          p.teams = p.teams.map(b => { const t = {}; TF.forEach((k, i) => t[k] = b[i]); t.n = t.w + t.l + t.t; return t; });
+          p.n = p.w + p.l + p.t; p.pn = p.pw + p.pl + p.pt;
+          p.pct = p.n ? (p.w + p.t / 2) / p.n : null; p.ppg = p.n ? p.pts / p.n : null; return p; });
+        PR = d; rerender();
+      }).catch(() => { PR = { failed: true }; rerender(); });
+  };
+  const PR_POS = ['All', 'QB', 'RB', 'WR', 'TE', 'DEF'], PR_MIN = [1, 10, 25, 50];
+  let prMin = 25, prPos = 'All', prQ = '';
+  const pct3 = v => v == null ? '—' : v.toFixed(3).replace(/^0/, '');
+  const yrs = a => a.length === 1 ? String(a[0]) : `${a[0]}–${String(a[a.length - 1]).slice(2)}`;
+  function prFilter(root) {
+    root = root || document.querySelector('.pr-page'); if (!root) return;
+    const q = prQ.trim().toLowerCase(); let shown = 0;
+    root.querySelectorAll('tbody tr[data-n]').forEach(tr => {
+      const ok = +tr.dataset.st >= (q ? 1 : prMin) && (prPos === 'All' || tr.dataset.pos === prPos) && (!q || tr.dataset.n.includes(q));
+      tr.hidden = !ok; if (ok) shown++;
+    });
+    const c = root.querySelector('.pr-count'); if (c) c.textContent = `${shown} player${shown === 1 ? '' : 's'}`;
+    root.querySelectorAll('[data-pr-pos]').forEach(b => b.setAttribute('aria-pressed', b.dataset.prPos === prPos));
+    root.querySelectorAll('[data-pr-min]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.prMin === prMin));
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-pr-pos],[data-pr-min]'); if (!b) return;
+    if (b.dataset.prPos) prPos = b.dataset.prPos; else prMin = +b.dataset.prMin;
+    prFilter();
+  });
+  document.addEventListener('input', e => { if (e.target.matches && e.target.matches('.pr-q')) { prQ = e.target.value; prFilter(); } });
+
+  function pagePlayers() {
+    const top = head('Players') + nav('#reference/players');
+    if (!PR) { loadPR(X.rerender); return top + '<p class="loading">Loading player records…</p>'; }
+    if (PR.failed) return top + '<p class="error">Player records didn’t load.</p>';
+    const m = window.FBP && FBP.media;
+    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
+    const L = PR.list, span = `${PR.first}–${PR.last}`;
+    // tiles: best and worst win rate with 40+ starts, most starts, most FBP teams
+    const q40 = L.filter(p => p.n >= 40), byPct = q40.slice().sort((a, b) => b.pct - a.pct || b.n - a.n);
+    const most = L.slice().sort((a, b) => b.n - a.n)[0], trav = L.filter(p => p.pos !== 'DEF').sort((a, b) => b.teams.length - a.teams.length || b.n - a.n)[0];
+    const tile = (lbl, big, p, sub2) => `<div class="card rf-tile"><span>${lbl}</span><b>${big}</b><small>${esc(p.name)}, ${sub2}</small></div>`;
+    const tiles = `<section class="rf-tiles">
+      ${byPct[0] ? tile('Best win rate', pct3(byPct[0].pct), byPct[0], `${rec(byPct[0].w, byPct[0].l, byPct[0].t)} · 40+ starts`) : ''}
+      ${byPct.length ? tile('Worst win rate', pct3(byPct[byPct.length - 1].pct), byPct[byPct.length - 1], `${rec(byPct[byPct.length - 1].w, byPct[byPct.length - 1].l, byPct[byPct.length - 1].t)} · 40+ starts`) : ''}
+      ${tile('Most starts', most.n, most, rec(most.w, most.l, most.t))}
+      ${tile('Most FBP teams', trav.teams.length, trav, `${trav.n} starts · not counting defenses`)}</section>`;
+    const tline = t => `<div class="pr-tm">${logo(t.franchise)}<span class="pr-tn"><a class="rf-nm" href="#reference/f-${t.franchise}">${esc(nm(t.franchise, t.years[t.years.length - 1]))}</a><small>${yrs(t.years)} · ${t.n} start${t.n === 1 ? '' : 's'}</small></span><span class="pr-tr"><b>${t.n ? rec(t.w, t.l, t.t) : '—'}</b><small>${t.n ? pct3((t.w + t.t / 2) / t.n) : ''}${t.pw + t.pl + t.pt ? ` · playoffs ${rec(t.pw, t.pl, t.pt)}` : ''}</small></span></div>`;
+    const rows = L.filter(p => p.n).sort((a, b) => b.pct - a.pct || b.n - a.n).map(p => `<tr data-n="${esc(p.name.toLowerCase())}" data-pos="${esc(p.pos)}" data-st="${p.n}">
+      <td class="t" data-v="${esc(p.name)}"><details class="pr-d"><summary><span class="py-who">${face(p)}<span><b>${esc(p.name)}</b><small>${esc(p.pos)} · ${p.teams.length} team${p.teams.length === 1 ? '' : 's'}</small></span></span><span class="pr-lgs">${p.teams.map(t => `<span class="py-lg" title="${esc(D.franchises[t.franchise] || '')}">${logo(t.franchise)}</span>`).join('')}</span></summary>
+        <div class="pr-tms">${p.teams.map(tline).join('')}</div></details></td>
+      <td>${p.n}</td><td data-v="${p.pct.toFixed(4)}"><b>${pct3(p.pct)}</b><small class="pr-rsm">${rec(p.w, p.l, p.t)}</small></td><td class="hide-sm" data-v="${p.w}">${rec(p.w, p.l, p.t)}</td>
+      <td class="hide-sm">${n1(p.ppg)}</td><td class="hide-sm" data-v="${p.pn ? ((p.pw + p.pt / 2) / p.pn).toFixed(4) : ''}">${p.pn ? rec(p.pw, p.pl, p.pt) : '—'}</td></tr>`).join('');
+    const ctl = `<div class="pr-ctl"><input class="pr-q" type="search" placeholder="Find a player" aria-label="Find a player" value="${esc(prQ)}">
+      <div class="lv-weeks pr-seg" role="group" aria-label="Position">${PR_POS.map(k => `<button type="button" data-pr-pos="${k}" aria-pressed="${k === prPos}">${k}</button>`).join('')}</div>
+      <div class="lv-weeks pr-seg" role="group" aria-label="Minimum starts"><span class="pr-lbl">Starts</span>${PR_MIN.map(k => `<button type="button" data-pr-min="${k}" aria-pressed="${k === prMin}">${k}+</button>`).join('')}</div>
+      <span class="pr-count"></span></div>`;
+    const table = `<section><h2 class="sec">Record when starting <small>regular season, ${span} · tap a player for his teams · tap a header to sort</small></h2>${ctl}
+      <div class="card tbl-wrap"><table class="tbl rf-t py-t pr-t sortable"><thead><tr>
+        <th class="t" data-sort="txt" tabindex="0">Player</th><th data-sort="num" tabindex="0" data-first="desc">Starts</th>
+        <th data-sort="num" tabindex="0" data-first="desc" aria-sort="descending">Win %</th><th class="hide-sm" data-sort="num" tabindex="0" data-first="desc" title="Sorts by wins">Record</th>
+        <th class="hide-sm" data-sort="num" tabindex="0" data-first="desc">PPG</th><th class="hide-sm" data-sort="num" tabindex="0" data-first="desc" title="Playoff record when starting; sorts by playoff win %">Playoffs</th>
+      </tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="rf-foot">A start is a week in an FBP starting lineup, and the record is his team’s result that week. Playoffs (round 1, semifinals, final) are counted separately; consolation games aren’t counted. ${PR.last} counts finished weeks so far. PPG is his points per start. Searching ignores the starts filter.</p></section>`;
+    setTimeout(() => prFilter(), 0);
+    return '<div class="py-page pr-page">' + top + tiles + table + '</div>';
+  }
+
   /* ---------- entry ---------- */
   /* ---------- Hall of Fame (data/reference/hall-of-fame.json, picked by the commissioner) ---------- */
   const HOF_CATS = [['player', 'Players', 'The greats who carried FBP rosters.'], ['team', 'Teams', 'Franchise seasons for the ages.'],
@@ -618,6 +692,7 @@ window.FBPRef = (() => {
     if (p === 'seasons') return pageSeasons();
     if (p.startsWith('s-')) return pageSeason(+p.slice(2), a, b ? +b : null);
     if (p === 'records') return pageRecords(a);
+    if (p === 'players') return pagePlayers();
     if (p === 'payroll') return pagePayroll(a ? +a : null);
     if (p === 'hof') return pageHof();
     return pageHome(ctx.ppr);
