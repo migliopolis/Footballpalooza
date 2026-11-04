@@ -10,7 +10,7 @@
 
   const logo = ab => `<img class="nf-lg" src="https://a.espncdn.com/i/teamlogos/nfl/500/${String(ab).toLowerCase()}.png" alt="" loading="lazy" onerror="this.remove()">`;
   const day = iso => new Date(iso).toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
-  const time = iso => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  const time = iso => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
   const onPage = () => location.hash.startsWith('#scores/nfl');
 
   function load(w) {
@@ -61,7 +61,7 @@
     const days = [];
     W.games.forEach(g => { const d = day(g.date); let D = days.find(x => x.d === d); if (!D) days.push(D = { d, games: [] }); D.games.push(g); });
     const done = W.games.length && W.games.every(g => g.state === 'post'), any = W.games.some(g => g.state === 'in');
-    const status = done ? `Week ${w} is final.` : any ? 'Games in progress · scores refresh every 30 seconds' : W.games.some(g => g.state === 'post') ? `Week ${w} so far` : `Week ${w} schedule · times are yours`;
+    const status = done ? `Week ${w} is final.` : any ? 'Games in progress · scores refresh every 30 seconds' : W.games.some(g => g.state === 'post') ? `Week ${w} so far` : `Week ${w} schedule · times in your time zone`;
     return picker + `<div class="lv-bar"><span>${status}</span></div>` +
       days.map(D => `<h3 class="nf-day">${D.d}</h3><div class="nf-grid">${D.games.map(row).join('')}</div>`).join('') +
       `<p class="nf-bye"><b>On bye:</b> ${W.byes.length ? W.byes.map(ab => `<span class="nf-byet">${logo(ab)}${esc(ab)}</span>`).join('') : 'nobody this week'}</p>`;

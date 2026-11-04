@@ -27,7 +27,7 @@
                [/cbs/i, 'CBS', 'cbs'], [/nbc|peacock/i, 'NBC', 'nbc'], [/netflix/i, 'Netflix', 'nflx'], [/youtube/i, 'YouTube', 'yt']];
   const nets = s => { const out = []; String(s || '').split('/').forEach(x => { const m = NET.find(([re]) => re.test(x)); const k = m ? m[2] : 'other';
     if (!out.some(o => o[0] === k)) out.push([k, m ? m[1] : x.trim()]); }); return out.filter(o => o[1]).map(([k, l]) => `<span class="mv-net ${k}">${l}</span>`).join(''); };
-  const local = iso => { const d = new Date(iso); return d.toLocaleDateString([], { weekday: 'short' }) + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
+  const local = iso => { const d = new Date(iso); return d.toLocaleDateString([], { weekday: 'short' }) + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }); };
 
   function load() {
     if (loading) return; loading = true;
@@ -132,7 +132,7 @@
     const cards = P.matchups.filter(([a, b]) => !pick || pick === `${a.id}-${b.id}`).map(([a, b]) => `<section class="card mv-m">
         <div class="mv-mh"><span class="mv-t">${logo(a.id)}<b>${esc(X.nameOf(a.id))}</b></span><span class="mv-vs">vs</span><span class="mv-t b"><b>${esc(X.nameOf(b.id))}</b>${logo(b.id)}</span></div>
         ${block([a, b])}</section>`).join('');
-    return head + `<div class="mv-bar"><span>Week ${P.week} · lineups as set in MFL right now · times are yours</span>${sel}</div>${cards}
+    return head + `<div class="mv-bar"><span>Week ${P.week} · lineups as set in MFL right now · times in your time zone</span>${sel}</div>${cards}
       <p class="rf-foot">Each window tries every set of three games and keeps the one with the most of the matchup's starters, then the one fairest to both teams, then the one with the most FBP starters overall. NFL schedule and networks from ESPN.</p>`;
   }
 

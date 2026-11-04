@@ -171,7 +171,7 @@
   };
   // a player's game: not started, in progress, or final
   const state = p => { const s = +p.gameSecondsRemaining; return s >= 3600 ? 'pre' : s > 0 ? 'live' : 'final'; };
-  const kick = iso => { const d = new Date(iso); return d.toLocaleDateString([], { weekday: 'short' }) + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
+  const kick = iso => { const d = new Date(iso); return d.toLocaleDateString([], { weekday: 'short' }) + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }); };
   const clock = p => {
     const s = +p.gameSecondsRemaining, g = gameOf(p.id);
     if (s >= 3600) return g && g.state === 'pre' ? kick(g.date) : 'Yet to play';
