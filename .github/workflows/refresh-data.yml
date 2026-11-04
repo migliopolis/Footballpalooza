@@ -55,6 +55,9 @@ jobs:
       - name: Build the Payroll page (player earnings)
         continue-on-error: true
         run: python scripts/payroll.py
+      - name: Player records (Reference > Players)
+        continue-on-error: true
+        run: python scripts/player_records.py
       - name: Build this week's matchups (League Now > Matchups)
         continue-on-error: true
         run: python scripts/matchups.py
