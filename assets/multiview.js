@@ -139,5 +139,5 @@
   document.addEventListener('change', e => {
     if (e.target && e.target.id === 'mv-pick') { pick = e.target.value; if (X) X.rerender(); }
   });
-  window.FBPMultiview = { render };
+  window.FBPMultiview = { render, nets };
 })();

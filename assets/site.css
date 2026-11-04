@@ -1237,3 +1237,25 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .mv-net{display:inline-block;font:800 .58rem/1 var(--body);letter-spacing:.03em;padding:3px 5px;border-radius:4px;color:#fff;background:#555;white-space:nowrap}
 .mv-net.fox{background:#111}.mv-net.cbs{background:#1d4fa0}.mv-net.nbc{background:#5e3fa3}.mv-net.espn{background:#d00}.mv-net.abc{background:#000}
 .mv-net.pv{background:#00a8e1}.mv-net.nfln{background:#013369}.mv-net.nflx{background:#e50914}.mv-net.yt{background:#f00}
+
+/* ---------- Game Day > NFL Scoreboard (assets/nfl.js) ---------- */
+.nf-day{margin:16px 0 8px;font:700 .82rem var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.nf-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media (min-width:700px){.nf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1100px){.nf-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.nf-g{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.nf-g.live{border-color:var(--ok)}
+.nf-teams{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.nf-t{display:flex;align-items:center;gap:8px;min-width:0}
+.nf-lg{width:26px;height:26px;object-fit:contain;flex:none}
+.nf-nm{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.nf-nm b{font:700 .9rem var(--display)}
+.nf-nm small{font-size:.66rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nf-sc{margin-left:auto;font:700 1.15rem var(--display);font-variant-numeric:tabular-nums}
+.nf-t.lose{opacity:.55}
+.nf-st{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px;text-align:right;min-width:5.5rem;padding-left:10px;border-left:1px solid var(--line)}
+.nf-st b{font-size:.8rem}
+.nf-live{color:var(--ok)}
+.nf-bye{margin:16px 0 0;font-size:.82rem;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.nf-byet{display:inline-flex;align-items:center;gap:4px;font-weight:600}
+.nf-byet .nf-lg{width:18px;height:18px}

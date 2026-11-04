@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0082';
+  const VERSION = '0.0083';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -605,9 +605,11 @@
     if (tab === 'multiview') { location.replace('#scores/ticket'); return; }
     if (tab === 'scores') {
       const ticket = parts[1] === 'ticket', season = +(String((state.now || {}).season || '').match(/\d{4}/) || [new Date().getFullYear()])[0];
-      const nav = `<nav class="rf-sub seg now-sub">${[['', 'Scoreboard'], ['ticket', 'Sunday Ticket Helper']].map(([k, l]) => `<a href="#scores${k ? '/' + k : ''}"${(ticket ? 'ticket' : '') === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+      const nav = `<nav class="rf-sub seg now-sub">${[['', 'Scoreboard'], ['ticket', 'Sunday Ticket Helper'], ['nfl', 'NFL Scoreboard']].map(([k, l]) => `<a href="#scores${k ? '/' + k : ''}"${(parts[1] || '') === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
       const base = { teams: state.teams, esc, nameOf, nav, weeksPlayed: (state.now || {}).weeksPlayed || 0, season };
-      app.innerHTML = ticket
+      app.innerHTML = parts[1] === 'nfl'
+        ? (window.FBPNfl ? FBPNfl.render(Object.assign({}, base, { rerender: () => { if (location.hash.startsWith('#scores/nfl')) route(); } })) : '<p class="error">The NFL scoreboard didn’t load.</p>')
+        : ticket
         ? (window.FBPMultiview ? FBPMultiview.render(Object.assign({}, base, { abbr: id => (state.teams[id] || {}).abbr || nameOf(id), rerender: () => { if (location.hash.startsWith('#scores/ticket')) route(); } })) : '<p class="error">The Sunday Ticket Helper didn’t load.</p>')
         : (window.FBPLive ? FBPLive.render(Object.assign({}, base, { seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], rerender: () => { if (/^#scores\/?$/.test(location.hash)) route(); } })) : '<p class="error">The scoreboard didn’t load.</p>');
     }
