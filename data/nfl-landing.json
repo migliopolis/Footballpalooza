@@ -8,7 +8,7 @@
    "team": "LAC",
    "pick": 1,
    "basis": "consensus",
-   "mocks": 14,
+   "mocks": 13,
    "mostMocked": "MIA"
   },
   "Jadan Baugh": {
@@ -22,14 +22,14 @@
    "team": "WSH",
    "pick": 9,
    "basis": "consensus",
-   "mocks": 15,
+   "mocks": 14,
    "mostMocked": "WSH"
   },
   "Drew Mestemaker": {
    "team": "MIA",
    "pick": 3,
    "basis": "consensus",
-   "mocks": 14,
+   "mocks": 13,
    "mostMocked": "MIA"
   },
   "Ahmad Hardy": {
@@ -43,7 +43,7 @@
    "team": "NYJ",
    "pick": 6,
    "basis": "consensus",
-   "mocks": 16,
+   "mocks": 15,
    "mostMocked": "NYJ"
   },
   "Kewan Lacy": {
@@ -78,7 +78,7 @@
    "team": "LV",
    "pick": 14,
    "basis": "consensus",
-   "mocks": 17,
+   "mocks": 16,
    "mostMocked": "KC"
   },
   "Nate Frazier": {
@@ -106,7 +106,7 @@
    "team": "JAX",
    "pick": 25,
    "basis": "consensus",
-   "mocks": 16,
+   "mocks": 15,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -155,7 +155,7 @@
    "team": "PIT",
    "pick": 27,
    "basis": "consensus",
-   "mocks": 14,
+   "mocks": 13,
    "mostMocked": "CLE"
   },
   "Wyatt Young": {

@@ -3,7 +3,7 @@
  "week": 9,
  "through": 8,
  "since": 2019,
- "generated": "2026-11-05T17:12:10+00:00",
+ "generated": "2026-11-05T20:43:08+00:00",
  "games": [
   {
    "away": "0003",
@@ -25,6 +25,8 @@
      "low": 85.3,
      "allPlay": "50-38",
      "winProb": 45,
+     "proj": 124.7,
+     "projZero": 0,
      "playoff": 42.0,
      "bye": 8.9,
      "ifWin": [
@@ -52,6 +54,8 @@
      "low": 101.2,
      "allPlay": "57-30-1",
      "winProb": 55,
+     "proj": 65.7,
+     "projZero": 2,
      "playoff": 84.5,
      "bye": 32.0,
      "ifWin": [
@@ -170,6 +174,8 @@
      "low": 70.2,
      "allPlay": "18-70",
      "winProb": 28,
+     "proj": 92.9,
+     "projZero": 0,
      "playoff": 1.8,
      "bye": 0.1,
      "ifWin": [
@@ -197,6 +203,8 @@
      "low": 71.2,
      "allPlay": "50-38",
      "winProb": 72,
+     "proj": 100.2,
+     "projZero": 0,
      "playoff": 37.9,
      "bye": 7.5,
      "ifWin": [
@@ -314,6 +322,8 @@
      "low": 65.0,
      "allPlay": "23-64-1",
      "winProb": 20,
+     "proj": 80.3,
+     "projZero": 0,
      "playoff": 5.1,
      "bye": 0.4,
      "ifWin": [
@@ -341,6 +351,8 @@
      "low": 100.2,
      "allPlay": "59-29",
      "winProb": 80,
+     "proj": 118.6,
+     "projZero": 0,
      "playoff": 87.8,
      "bye": 24.8,
      "ifWin": [
@@ -449,6 +461,8 @@
      "low": 89.2,
      "allPlay": "52-36",
      "winProb": 67,
+     "proj": 113.3,
+     "projZero": 0,
      "playoff": 67.7,
      "bye": 30.4,
      "ifWin": [
@@ -476,6 +490,8 @@
      "low": 76.1,
      "allPlay": "33-55",
      "winProb": 33,
+     "proj": 96.3,
+     "projZero": 0,
      "playoff": 0.2,
      "bye": 0.0,
      "ifWin": [
@@ -584,6 +600,8 @@
      "low": 57.8,
      "allPlay": "39-49",
      "winProb": 33,
+     "proj": 124.2,
+     "projZero": 0,
      "playoff": 94.8,
      "bye": 37.9,
      "ifWin": [
@@ -611,6 +629,8 @@
      "low": 89.5,
      "allPlay": "58-30",
      "winProb": 67,
+     "proj": 132.7,
+     "projZero": 0,
      "playoff": 84.1,
      "bye": 17.5,
      "ifWin": [
@@ -744,6 +764,8 @@
      "low": 70.0,
      "allPlay": "25-63",
      "winProb": 26,
+     "proj": 83.3,
+     "projZero": 0,
      "playoff": 1.0,
      "bye": 0.0,
      "ifWin": [
@@ -771,6 +793,8 @@
      "low": 90.1,
      "allPlay": "63-25",
      "winProb": 74,
+     "proj": 138.7,
+     "projZero": 0,
      "playoff": 93.1,
      "bye": 40.5,
      "ifWin": [
