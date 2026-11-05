@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0086",
+      "to": "0.0090",
+      "dates": "Nov 5, 2026",
+      "items": [
+        "Scoreboard chips for this season's award holders: 1st Team and 2nd Team All-FBP, MVP, RoY, ToY, Player of the Week and more, plus team chips like Top Manager, Luckiest and Unluckiest.",
+        "A who's-winning bar under VS on every Scoreboard game, tipping toward the team in the lead.",
+        "Notes on the Awards page and the Scoreboard that awards are leaders so far, not final until the regular season ends.",
+        "Scores line up in every Scoreboard game, and taxi squad and IR rows are tinted yellow and red.",
+        "This change log, in Settings, and Settings sections that fold open and closed.",
+        "The mock draft board holds still as picks fill in, then moves up one pick at a time to keep the pick on the clock centered."
+      ]
+    },
+    {
       "from": "0.0081",
       "to": "0.0085",
       "dates": "Nov 3, 2026",

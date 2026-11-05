@@ -404,16 +404,24 @@
     S.picks = S.picks.map(() => null); S.cur = 0; S.round = null; save();
     return true;
   }
-  // keep the pick on the clock about a third of the way down, so the next few teams show below it
+  // the board holds still while picks fill in; once the pick on the clock reaches the middle, the board moves up
+  // one pick at a time to keep it centered. The page re-renders on every pick, so the board's scroll is carried over.
+  let boardTop = 0;
   function after() {
     const tb = document.querySelector('.dr-mtabs');
     if (tb) document.documentElement.style.setProperty('--mtabs-h', tb.offsetHeight + 'px');
     const box = document.getElementById('dr-board'), now = box && box.querySelector('li.now');
-    if (!box || !now || !S.started) return;
+    if (box && !box.dataset.kept) {
+      box.dataset.kept = '1';
+      box.scrollTop = boardTop;                                      // pick up where the last render left off, no jump
+      box.addEventListener('scroll', () => { boardTop = box.scrollTop; }, { passive: true });
+    }
+    if (!box || !now || !S.started) { if (!S.started) boardTop = 0; return; }
     if (!window.matchMedia('(max-width:860px)').matches) {
       S.jumpTabs = false;          // desktop: the board scrolls inside its box
-      const top = now.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
-      box.scrollTo({ top: Math.max(0, top - box.clientHeight / 3), behavior: 'smooth' });
+      const mid = now.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - (box.clientHeight - now.offsetHeight) / 2;
+      const above = now.offsetTop < box.scrollTop;                    // a restart (or a scroll away) put the pick out of view
+      if (mid > box.scrollTop + 1 || above) box.scrollTo({ top: Math.max(0, mid), behavior: 'smooth' });   // otherwise only ever down
       return;
     }
     if (S.jumpTabs) {                                                 // the tab just switched itself: start at the top of it
@@ -421,12 +429,13 @@
       const tabs = document.querySelector('.dr-mtabs');
       if (tabs && S.mtab !== 'board') { requestAnimationFrame(() => window.scrollTo({ top: tabs.getBoundingClientRect().top + window.scrollY - document.querySelector('.top').offsetHeight, behavior: 'smooth' })); return; }
     }
-    if (S.mtab !== 'board') return;                                   // phones: scroll the page under the sticky header and tabs
+    if (S.mtab !== 'board') return;                                   // phones: the page scrolls under the sticky header and tabs
     requestAnimationFrame(() => {
       const tabs = document.querySelector('.dr-mtabs');
       const off = document.querySelector('.top').offsetHeight + (tabs ? tabs.offsetHeight : 0);
-      const target = off + (window.innerHeight - off) / 3;
-      window.scrollBy({ top: now.getBoundingClientRect().top - target, behavior: 'smooth' });
+      const r = now.getBoundingClientRect(), center = off + (window.innerHeight - off) / 2;
+      const dy = r.top + r.height / 2 - center;
+      if (dy > 1) window.scrollBy({ top: dy, behavior: 'smooth' });
     });
   }
   // shared with the other Rookie Draft tabs (assets/drafthub.js)
