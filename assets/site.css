@@ -1325,3 +1325,12 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .set-sec > summary::after{content:'';width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-4px 4px 0 0;transition:transform .2s}
 .set-sec[open] > summary::after{transform:rotate(-135deg);margin-top:4px}
 .set-body{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+
+/* MFL projections on the Scoreboard */
+.lv-pjt{font-size:.66rem;color:var(--muted);margin-top:2px;white-space:nowrap}
+.lv-side.b .lv-pjt{text-align:right}
+.lv-pj{display:block;font:400 .62rem var(--body);color:var(--muted);margin-top:1px}
+.lv-pj::before{content:'proj '}
+@media (max-width:520px){.lv-pj::before{content:'p '}}
+.lv-pre{color:var(--muted);font-weight:500}
+.lv-pj0{display:block;font:400 .58rem var(--body);color:var(--muted);letter-spacing:.04em}

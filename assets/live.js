@@ -23,6 +23,16 @@
   // this season's award holders, as chips by a name (data/awards.json, built by scripts/awards.py):
   // p: player id -> chips, t: franchise id -> chips, potw: week -> player of the week
   let honors = null;
+  // MFL's projected points for each week, scored with FBP's settings (data/mfl/projections.json, saved daily)
+  let proj = null;
+  const projOf = (id, wk) => { const w = proj && proj[String(wk)]; return w ? (w[id] || 0) : null; };
+  // a lineup's projected total: final players count what they scored, players yet to play their projection,
+  // players in a game what they have plus their projection for the time left
+  const projTotal = (f, wk) => { if (!proj || !proj[String(wk)]) return null;
+    return (f.players.player || []).filter(p => p.status === 'starter').reduce((t, p) => {
+      const pj = projOf(p.id, wk), st = state(p), sc = +p.score || 0;
+      return t + (st === 'pre' ? pj : st === 'live' ? sc + pj * Math.min(1, (+p.gameSecondsRemaining || 0) / 3600) : sc);
+    }, 0); };
   const P_AWARDS = { mvp: ['MVP', 'gold'], rookie: ['RoY', 'good'], value: ['Best Value', 'good'], waiver: ['Top Waiver', 'good'],
     high: ['High Game', 'good'], bench: ['Bench Points', 'meh'], contract: ['Worst Contract', 'meh'] };
   const T_AWARDS = { manager: ['Top Manager', 'good'], lucky: ['Luckiest', 'meh'], unlucky: ['Unluckiest', 'meh'] };
@@ -64,6 +74,7 @@
           (f.player || []).forEach(pl => { if (pl.status === 'TAXI_SQUAD') rosters[f.id].taxi.push(pl.id); else if (pl.status === 'INJURED_RESERVE') rosters[f.id].ir.push(pl.id); }); });
       }).catch(() => { rosters = {}; }),
       loadInjuries(),
+      proj ? Promise.resolve() : fetch('data/mfl/projections.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { proj = (j && j.players) || {}; }).catch(() => { proj = {}; }),
       honors ? Promise.resolve() : fetch('data/awards.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(readHonors).catch(() => { honors = { p: {}, t: {}, potw: {} }; }),
     ]).then(([d, p]) => {
       loading = false;
@@ -272,7 +283,9 @@
       const diff = sa - sb, share = sa + sb ? Math.max(6, Math.min(94, 50 + diff)) : 50;
       const tip = !sa && !sb ? 'Not started' : diff ? `${esc(X.nameOf(diff > 0 ? a.id : b.id))} ${done ? 'won' : 'leads'} by ${n1(Math.abs(diff))}` : 'Tied';
       const bar = `<span class="lv-tug" role="img" aria-label="${tip}" title="${tip}"><i class="${diff < 0 ? 'trail' : ''}" style="width:${share}%;background:${barColor(a.id)}"></i><i class="${diff > 0 ? 'trail' : ''}" style="width:${100 - share}%;background:${barColor(b.id)}"></i></span>`;
-      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}">${logo(f.id)}<span class="lv-sc"><b>${cls === 'b' ? heat(f) : ''}${n1(+f.score)}${cls === 'a' ? heat(f) : ''}</b><small>${seed(f.id)}${esc(tm(f.id).abbr || '')}</small></span></span>`;
+      const pa = projTotal(a, shownW), pb = projTotal(b, shownW), showProj = pa != null && pb != null && (!done || view);
+      const projLine = (v, cls) => showProj ? `<small class="lv-pjt" title="${view ? 'MFL’s projection before the games' : 'MFL’s projection: points so far plus the projection for what’s left'}">${view ? 'Proj' : 'Proj'} ${n1(v)}</small>` : '';
+      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}">${logo(f.id)}<span class="lv-sc"><b>${cls === 'b' ? heat(f) : ''}${n1(+f.score)}${cls === 'a' ? heat(f) : ''}</b><small>${seed(f.id)}${esc(tm(f.id).abbr || '')}</small>${projLine(cls === 'a' ? pa : pb, cls)}</span></span>`;
       const la = lineup(a), lb = lineup(b);
       // one player's two cells, mirrored on the right side: name | points  slot  points | name
       const cell = (p, cls) => {
@@ -281,7 +294,10 @@
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         const img = `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}">${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`;
         const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm">${cls === 'b' ? tag : ''}${esc(short(p.id))}${cls === 'a' ? tag : ''}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
-        const pt = `<td class="lv-pts ${cls} ${st}">${st === 'pre' || p.score == null ? '–' : n1(+p.score)}</td>`;
+        const pj = projOf(p.id, shownW);
+        // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
+        const pt = `<td class="lv-pts ${cls} ${st}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
+          : n1(+p.score) + (pj != null && (st !== 'final' || view) ? `<small class="lv-pj" title="MFL projection">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
       const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr>${cell(r.p, 'a')}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b')}</tr>`; }).join('');

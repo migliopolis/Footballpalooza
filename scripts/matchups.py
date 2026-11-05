@@ -59,6 +59,20 @@ def main():
         mine.setdefault(a, []).append((wk, sa)); mine.setdefault(b, []).append((wk, sb))
     pf_rank = {t['id']: i + 1 for i, t in enumerate(sorted(now['standings'], key=lambda t: -t['pf']))}
 
+    # MFL's projection for each team's lineup as it's set now (data/mfl/projections.json, from refresh_mfl.py)
+    try:
+        PJ = J('mfl/projections.json')
+    except Exception:
+        PJ = {}
+    pw_pts = (PJ.get('players') or {}).get(str(week)) or {}
+    lineups = (PJ.get('lineups') or {}) if PJ.get('lineupsWeek') == week else {}
+
+    def projected(tid):
+        st = lineups.get(tid) or []
+        if not pw_pts or not st:
+            return None, None
+        return round(sum(pw_pts.get(p, 0) for p in st), 1), sum(1 for p in st if not pw_pts.get(p))
+
     def tape(tid, opp):
         t, s = by[tid], sorted(mine.get(tid, []))
         sc = [x for _, x in s]
@@ -71,6 +85,7 @@ def main():
             high=max(sc) if sc else None, low=min(sc) if sc else None,
             allPlay=f"{t['allPlayW']}-{t['allPlayL']}" + (f"-{t['allPlayT']}" if t.get('allPlayT') else ''),
             winProb=g['winProb'] if g else None,
+            proj=projected(tid)[0], projZero=projected(tid)[1],
             playoff=o.get('playoff'), bye=o.get('bye'),
             ifWin=g['ifWin'][:2] if g else None, ifLoss=g['ifLoss'][:2] if g else None,
         )

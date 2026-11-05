@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0090';
+  const VERSION = '0.0091';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -498,6 +498,7 @@
         </div>
         ${a.winProb != null ? `<div class="mu-wp"><span>${a.winProb}%</span><div class="mu-bar"><i style="width:${a.winProb}%"></i></div><span>${b.winProb}%</span></div><p class="mu-cap">Win chance</p>` : ''}
         <div class="mu-tape">
+          ${a.proj != null && b.proj != null ? row('Projected this week', a.proj, b.proj, 'hi') : ''}
           ${row('Points', a.pf, b.pf, 'hi')}
           ${row('League rank', ord(a.pfRank), ord(b.pfRank))}
           ${row('Per week', a.avg, b.avg, 'hi')}

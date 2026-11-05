@@ -120,6 +120,44 @@ def fetch_weekly():
     save('weeklyResults', saved)
 
 
+def fetch_projections():
+    """MFL's projected points (scored with FBP's settings) for the week coming up, and each team's lineup
+    as it's set right now, for the Scoreboard and Matchups. Earlier weeks' projections are kept.
+    Saved as {week, players: {week: {player: points}}, lineups: {franchise: [starter ids]}}."""
+    path = os.path.join(OUT, 'projections.json')
+    try:
+        saved = json.load(open(path))
+    except Exception:
+        saved = {'players': {}}
+    try:
+        reg = int(json.load(open(os.path.join(OUT, 'league.json')))['league'].get('lastRegularSeasonWeek') or 14)
+    except Exception:
+        reg = 14
+    played = played_weeks()
+    week = (max(played) if played else 0) + 1
+    if week > reg + 3:
+        return
+    try:
+        raw = fetch('projectedScores', {'W': str(week)}).get('projectedScores', {})
+        pts = {p['id']: round(float(p['score']), 1) for p in as_list(raw.get('playerScore')) if p.get('score') not in (None, '')}
+        saved['players'][str(week)] = pts
+        saved['week'] = week
+        print(f'  ok   projectedScores week {week} ({len(pts)} players)')
+    except Exception as e:
+        print(f'  FAIL {e}  (kept the previous projections)')
+    time.sleep(1.1)
+    try:
+        live = fetch('liveScoring', {'W': str(week)}).get('liveScoring', {})
+        teams = [f for m in as_list(live.get('matchup')) for f in as_list(m.get('franchise'))] + as_list(live.get('franchise'))
+        saved['lineups'] = {f['id']: [p['id'] for p in as_list((f.get('players') or {}).get('player')) if p.get('status') == 'starter'] for f in teams}
+        saved['lineupsWeek'] = week
+        print(f'  ok   lineups week {week} ({len(teams)} teams)')
+    except Exception as e:
+        print(f'  FAIL {e}  (kept the previous lineups)')
+    saved['fetched'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+    save('projections', saved)
+
+
 def fetch_player_scores():
     """Weekly scores for every player taken in an FBP rookie draft, taxi squad included (MFL's weekly
     results leave the taxi squad out). Feeds the franchise pages' rookie draft history (pick_tenure.py)."""
@@ -246,6 +284,7 @@ def main():
     fetch_player_scores()
     fetch_transactions()
     fetch_auction_bids()
+    fetch_projections()
     save('_meta', {'season': SEASON, 'league': LEAGUE,
                    'fetched': datetime.now(timezone.utc).isoformat(timespec='seconds')})
     if failed_core:
