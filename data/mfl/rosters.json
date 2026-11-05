@@ -160,6 +160,15 @@
      },
      {
       "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Draft 2.03 $3 (2024)",
+      "id": "16584",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
       "contractStatus": "1.12 2023",
       "contractYear": "4/5",
       "drafted": "Draft 1.12 $5 (2023)",
@@ -360,15 +369,6 @@
       "drafted": "Draft 1.05 $20 (2021)",
       "id": "15281",
       "salary": "62",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "BB $1",
-      "id": "0526",
-      "salary": "1",
       "status": "ROSTER"
      },
      {
@@ -808,6 +808,15 @@
      },
      {
       "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $3",
+      "id": "16585",
+      "salary": "3",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
       "contractStatus": "2016",
       "contractYear": "",
       "drafted": "BB $0",
@@ -1207,15 +1216,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "Draft 4.05 $1(2022)",
-      "id": "15797",
-      "salary": "",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "1.06 2025",
       "contractYear": "2/5",
       "drafted": "1.06 (2025)",
@@ -1229,6 +1229,15 @@
       "contractYear": "",
       "drafted": "Draft 1.10 $7 (2023)",
       "id": "16152",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "17654",
       "salary": "",
       "status": "ROSTER"
      },

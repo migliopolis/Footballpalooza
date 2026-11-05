@@ -2,11 +2,11 @@
  "summary": {
   "linked": 943,
   "mfl": 930,
-  "spellingFixed": 51,
+  "spellingFixed": 52,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 259,
-  "rosteredTotal": 259
+  "rosteredLinked": 261,
+  "rosteredTotal": 261
  },
  "mismatch": [],
  "byName": [
@@ -711,15 +711,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "15262",
-   "mflName": "Jermar Jefferson",
-   "pos": "RB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4374033",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "13131",
    "mflName": "Joe Mixon",
    "pos": "RB",
@@ -1368,6 +1359,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "15589",
+   "mflName": "Cody White",
+   "pos": "WR",
+   "team": "LVR",
+   "fbp": null,
+   "espn": "4241983",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "16354",
    "mflName": "Colton Dowell",
    "pos": "WR",
@@ -1626,15 +1626,6 @@
    "team": "LVR",
    "fbp": null,
    "espn": "4428678",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "14848",
-   "mflName": "James Proche",
-   "pos": "WR",
-   "team": "CLE",
-   "fbp": null,
-   "espn": "3916204",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

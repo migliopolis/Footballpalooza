@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-04",
+ "asOf": "2026-11-05",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
  "players": [
   {
@@ -16,21 +16,21 @@
    "pos": "WR",
    "school": "Texas",
    "adp": 4.6,
-   "nflPick": 10
+   "nflPick": 15
   },
   {
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
    "adp": 4.9,
-   "nflPick": 28
+   "nflPick": 23
   },
   {
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
    "adp": 5.4,
-   "nflPick": 9
+   "nflPick": 14
   },
   {
    "name": "Charlie Becker",
@@ -51,7 +51,7 @@
    "pos": "QB",
    "school": "Oregon",
    "adp": 7.7,
-   "nflPick": 12
+   "nflPick": 11
   },
   {
    "name": "Drew Mestemaker",
@@ -93,14 +93,14 @@
    "pos": "WR",
    "school": "Indiana",
    "adp": 13.9,
-   "nflPick": 17
+   "nflPick": 16
   },
   {
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 14.0,
-   "nflPick": 15
+   "nflPick": 24
   },
   {
    "name": "Jamari Johnson",
@@ -114,7 +114,7 @@
    "pos": "WR",
    "school": "Alabama",
    "adp": 15.5,
-   "nflPick": 31
+   "nflPick": 29
   },
   {
    "name": "Trey'Dez Green",
