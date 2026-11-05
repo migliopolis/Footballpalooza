@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0088';
+  const VERSION = '0.0089';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -161,10 +161,10 @@
       .concat(ids.map(id => { const tm = state.teams[id]; return sw(id, { short: tm.abbr, full: nameOf(id) }, teamHeader(tm), tm.logo, teamAccent(tm, isDark())); })).join('');
     const seg = ['auto', 'light', 'dark'].map(m => `<button type="button" data-mode="${m}" aria-pressed="${state.mode === m}">${m === 'auto' ? 'Match device' : m[0].toUpperCase() + m.slice(1)}</button>`).join('');
     return `<div class="pagehead"><h1>Settings</h1><span class="asof">Saved on this device only</span></div>
-      <section class="card set"><h2>Page colors</h2><p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
-        <div class="swatches" role="group" aria-label="Page colors">${swatches}</div></section>
-      <section class="card set"><h2>Light or dark</h2><p>Match device follows your phone or computer’s setting.</p>
-        <div class="seg" role="group" aria-label="Light or dark">${seg}</div></section>
+      ${setSec('colors', 'Page colors', `<p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
+        <div class="swatches" role="group" aria-label="Page colors">${swatches}</div>`)}
+      ${setSec('mode', 'Light or dark', `<p>Match device follows your phone or computer’s setting.</p>
+        <div class="seg" role="group" aria-label="Light or dark">${seg}</div>`)}
       ${changelog()}`;
   }
   // Change log (data/changelog.json): one entry for every five site versions, newest first; the latest one starts open
@@ -176,10 +176,21 @@
       return '';
     }
     if (!(CL.entries || []).length) return '';
-    return `<section class="card set cl"><h2>Change log</h2><p>What’s new on the site, five versions at a time. You’re on v${esc(VERSION)}.</p>
+    return setSec('changelog', 'Change log', `<p>What’s new on the site, five versions at a time. You’re on v${esc(VERSION)}.</p>
       ${CL.entries.map((e, i) => `<details class="cl-e"${i ? '' : ' open'}><summary><b>v${esc(e.from)}–v${esc(e.to)}</b><small>${esc(e.dates)}</small></summary>
-        <ul>${e.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>`).join('')}</section>`;
+        <ul>${e.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>`).join('')}`, 'cl');
   }
+  // Settings sections open and close; they start closed, and the ones you open are remembered on this device
+  const SET_KEY = 'fbp-settings-open';
+  const setOpen = () => { try { return new Set(JSON.parse(localStorage.getItem(SET_KEY) || '[]')); } catch (e) { return new Set(); } };
+  function setSec(key, title, body, cls) {
+    return `<details class="card set set-sec${cls ? ' ' + cls : ''}" data-set-sec="${key}"${setOpen().has(key) ? ' open' : ''}><summary><h2>${title}</h2></summary><div class="set-body">${body}</div></details>`;
+  }
+  document.addEventListener('toggle', e => {
+    const d = e.target; if (!d.matches || !d.matches('[data-set-sec]')) return;
+    const c = setOpen(); d.open ? c.add(d.dataset.setSec) : c.delete(d.dataset.setSec);
+    try { localStorage.setItem(SET_KEY, JSON.stringify([...c])); } catch (err) {}
+  }, true);
 
   /* ---------- League Now ---------- */
   function pageNow() {

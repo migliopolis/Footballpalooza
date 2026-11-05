@@ -1317,3 +1317,11 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .cl-e summary small{color:var(--muted);font-size:.78rem}
 .cl-e ul{margin:8px 0 4px;padding-left:20px}
 .cl-e li{margin:4px 0;font-size:.88rem;line-height:1.4}
+
+/* Settings sections fold: tap the heading */
+.set-sec{gap:0}
+.set-sec > summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.set-sec > summary::-webkit-details-marker{display:none}
+.set-sec > summary::after{content:'';width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-4px 4px 0 0;transition:transform .2s}
+.set-sec[open] > summary::after{transform:rotate(-135deg);margin-top:4px}
+.set-body{display:flex;flex-direction:column;gap:12px;margin-top:12px}
