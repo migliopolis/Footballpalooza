@@ -1307,3 +1307,13 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 /* taxi squad rows tinted light yellow, IR rows light red */
 .lv-t tr.lv-r-tx td{background:rgba(240,200,40,.14)}
 .lv-t tr.lv-r-ir td{background:rgba(220,50,50,.09)}
+/* Settings > Change log */
+.cl-e{border-top:1px solid var(--line);padding:8px 0}
+.cl-e:first-of-type{margin-top:6px}
+.cl-e summary{cursor:pointer;display:flex;align-items:baseline;gap:10px;list-style:none}
+.cl-e summary::-webkit-details-marker{display:none}
+.cl-e summary::before{content:'▸';color:var(--muted);font-size:.8em}
+.cl-e[open] summary::before{content:'▾'}
+.cl-e summary small{color:var(--muted);font-size:.78rem}
+.cl-e ul{margin:8px 0 4px;padding-left:20px}
+.cl-e li{margin:4px 0;font-size:.88rem;line-height:1.4}

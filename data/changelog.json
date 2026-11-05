@@ -1,0 +1,57 @@
+{
+  "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
+  "entries": [
+    {
+      "from": "0.0081",
+      "to": "0.0085",
+      "dates": "Nov 3, 2026",
+      "items": [
+        "New NFL Scoreboard on Game Day: every week of the NFL season with scores, kickoff times, TV networks and byes, refreshing every 30 seconds while games are on.",
+        "Game times everywhere show your own time zone (PST, EST and so on).",
+        "New Reference > Players tab: every player's record when he's in an FBP starting lineup, back to 2019, plus every FBP team he's started for.",
+        "Reference > Records > Season PPG shows every team-season, this one included, with records and headers you can tap to sort.",
+        "League data now refreshes every morning after waivers, not just once a week, and a week only counts as played once its NFL games are final.",
+        "Rex Callahan's rumor-mill column on a seven-team playoff.",
+        "Menu reordered: Game Day, League Now, Awards, Rookie Draft, Reference, Off-Season, By-Laws, Settings."
+      ]
+    },
+    {
+      "from": "0.0076",
+      "to": "0.0080",
+      "dates": "Nov 2–3, 2026",
+      "items": [
+        "New Game Day tab, home of the Scoreboard and the new Sunday Ticket Helper: the best three games to put on multiview for each FBP matchup, window by window, with NFL RedZone as the fourth screen.",
+        "Scoreboard details: player photos, injury tags, playoff seeds, each team's record and last-three average, 🔥/🥶 for the week's high and low scores, and every team's bench, taxi squad and IR.",
+        "Scoreboard week picker to look back at any week's lineups and results, and lineups that fit on phones.",
+        "Shared links now preview as the page you shared (Playoff Picture, Draft Order, a column's headline) instead of plain Footballpalooza.",
+        "Standings add PB: how far each team is behind the league's top scorer.",
+        "Sal's Week 8 recap column.",
+        "Mock draft team hauls moved beside the draft board on desktop."
+      ]
+    },
+    {
+      "from": "0.0071",
+      "to": "0.0075",
+      "dates": "Nov 1–2, 2026",
+      "items": [
+        "New live Scoreboard: every FBP game with lineups, live points and player stats.",
+        "Trade of the Year shows the top five trades as headlines you can open.",
+        "A pick used in the same season's draft now counts as the player taken with it, and a player's points stop counting toward a trade once he leaves the team.",
+        "Trade of the Year leaves out commissioner pick bookkeeping.",
+        "Smaller press box headlines on League Now, newest column first.",
+        "The header always shows the site version."
+      ]
+    },
+    {
+      "from": "0.0066",
+      "to": "0.0070",
+      "dates": "Nov 1, 2026",
+      "items": [
+        "Share button in the header: opens your phone's share sheet for the page you're on.",
+        "Record-pace tags on the 1st Team All-FBP, with the best season ever at each position, and they wrap neatly on phones.",
+        "All-FBP player photos sit on their FBP team's colors.",
+        "Trade of the Year shows what traded picks turned into and how each deal has played out since."
+      ]
+    }
+  ]
+}

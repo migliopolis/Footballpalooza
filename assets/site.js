@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0087';
+  const VERSION = '0.0088';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -164,7 +164,21 @@
       <section class="card set"><h2>Page colors</h2><p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
         <div class="swatches" role="group" aria-label="Page colors">${swatches}</div></section>
       <section class="card set"><h2>Light or dark</h2><p>Match device follows your phone or computer’s setting.</p>
-        <div class="seg" role="group" aria-label="Light or dark">${seg}</div></section>`;
+        <div class="seg" role="group" aria-label="Light or dark">${seg}</div></section>
+      ${changelog()}`;
+  }
+  // Change log (data/changelog.json): one entry for every five site versions, newest first; the latest one starts open
+  let CL = null, clLoading = false;
+  function changelog() {
+    if (!CL) {
+      if (!clLoading) { clLoading = true; fetch('data/changelog.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : { entries: [] })
+        .then(j => { CL = j; if (location.hash === '#settings') route(); }).catch(() => { CL = { entries: [] }; }); }
+      return '';
+    }
+    if (!(CL.entries || []).length) return '';
+    return `<section class="card set cl"><h2>Change log</h2><p>What’s new on the site, five versions at a time. You’re on v${esc(VERSION)}.</p>
+      ${CL.entries.map((e, i) => `<details class="cl-e"${i ? '' : ' open'}><summary><b>v${esc(e.from)}–v${esc(e.to)}</b><small>${esc(e.dates)}</small></summary>
+        <ul>${e.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>`).join('')}</section>`;
   }
 
   /* ---------- League Now ---------- */
