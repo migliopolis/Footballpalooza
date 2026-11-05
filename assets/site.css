@@ -1342,3 +1342,17 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-side.b .lv-lgw .lv-seed{left:-5px}
 .lv-sc .lv-pjt{display:block;height:auto;margin-top:3px;font-size:.72rem}
 .lv-metarow small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:min(.66rem,2.75vw)}
+
+/* scores of any length stay on one line beside the bar: 🔥/🥶 ride on the logo's top corner, scores shrink to fit */
+.lv-lgw .lv-heat{position:absolute;top:-6px;margin:0;font-size:.85rem;line-height:1}
+.lv-side.a .lv-lgw .lv-heat{right:-6px}
+.lv-side.b .lv-lgw .lv-heat{left:-6px}
+.lv-sc{min-width:0}
+.lv-sc b{white-space:nowrap}
+@media (max-width:520px){
+  .lv-sum{gap:6px;padding:10px}
+  .lv-side{gap:7px}
+  .lv-lg{width:34px;height:34px}
+  .lv-sc b{font-size:min(1.45rem,6.4vw)}
+  .lv-sc .lv-pjt{font-size:min(.72rem,3vw)}
+}

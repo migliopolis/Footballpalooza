@@ -286,7 +286,7 @@
       const pa = projTotal(a, shownW), pb = projTotal(b, shownW), showProj = pa != null && pb != null && (!done || view);
       const projLine = v => showProj ? `<small class="lv-pjt" title="${view ? 'MFL’s projection before the games' : 'MFL’s projection: points so far plus the projection for what’s left'}">${n1(v)}</small>` : '';
       // the seed sits on the logo's inside bottom corner; the projection sits under the score
-      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}"><span class="lv-lgw">${logo(f.id)}${seed(f.id)}</span><span class="lv-sc"><b>${cls === 'b' ? heat(f) : ''}${n1(+f.score)}${cls === 'a' ? heat(f) : ''}</b>${projLine(cls === 'a' ? pa : pb)}</span></span>`;
+      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}"><span class="lv-lgw">${logo(f.id)}${seed(f.id)}${heat(f)}</span><span class="lv-sc"><b>${n1(+f.score)}</b>${projLine(cls === 'a' ? pa : pb)}</span></span>`;
       const la = lineup(a), lb = lineup(b);
       // one player's two cells, mirrored on the right side: name | points  slot  points | name
       const cell = (p, cls) => {
