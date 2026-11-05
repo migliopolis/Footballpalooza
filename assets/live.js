@@ -20,6 +20,33 @@
   const hist = {};                  // earlier weeks, built from the weekly results file
   let weekly = null, sched = null;
   const open = new Set(), openBench = new Set();
+  // this season's award holders, as chips by a name (data/awards.json, built by scripts/awards.py):
+  // p: player id -> chips, t: franchise id -> chips, potw: week -> player of the week
+  let honors = null;
+  const P_AWARDS = { mvp: ['MVP', 'gold'], rookie: ['RoY', 'good'], value: ['Best Value', 'good'], waiver: ['Top Waiver', 'good'],
+    high: ['High Game', 'good'], bench: ['Bench Points', 'meh'], contract: ['Worst Contract', 'meh'] };
+  const T_AWARDS = { manager: ['Top Manager', 'good'], lucky: ['Luckiest', 'meh'], unlucky: ['Unluckiest', 'meh'] };
+  function readHonors(j) {
+    const h = { p: {}, t: {}, potw: {} }, add = (m, id, c) => { if (id) (m[id] = m[id] || []).push(c); };
+    const af = (j && j.allFbp) || {};
+    [['first', '1st Team', 'gold'], ['second', '2nd Team', 'silver']].forEach(([k, l, c]) =>
+      (af[k] || []).forEach(x => x.player && add(h.p, x.player.id, { l, c, title: `All-FBP ${l}` })));
+    ((j && j.awards) || []).forEach(a => {
+      if (P_AWARDS[a.key] && (a.list || [])[0]) add(h.p, a.list[0].id, { l: P_AWARDS[a.key][0], c: P_AWARDS[a.key][1], title: `${a.title}: ${a.why}` });
+      if (T_AWARDS[a.key] && (a.teams || [])[0]) add(h.t, a.teams[0].team, { l: T_AWARDS[a.key][0], c: T_AWARDS[a.key][1], title: `${a.title}: ${a.teams[0].stat} · ${a.teams[0].sub}` });
+      // Trade of the Year: the top producer this season on the winning side, while he's still on that team
+      if (a.key === 'trade' && a.trade && a.trade.winner) {
+        const W = a.trade.winner, cur = (W.later || {}).current, rows = ((W.later || {}).rows || []).map(r => ({ id: r.id, pts: (r.pts || {})[cur] || 0 }));
+        const top = (rows.length ? rows : (W.players || []).map(x => ({ id: x.id, pts: x.pts || 0 }))).sort((x, y) => y.pts - x.pts)[0];
+        if (top && top.pts > 0) add(h.p, top.id, { l: 'ToY', c: 'good', team: W.team, title: `Trade of the Year: ${a.why}` });
+      }
+      if (a.key === 'week') Object.entries(a.weeks || {}).forEach(([w, L]) => { if (L && L[0]) h.potw[w] = L[0].id; });
+    });
+    h.thru = j && j.throughWeek; h.season = j && j.season; h.final = !!(j && j.final);
+    honors = h;
+  }
+  const chips = list => (list || []).map(c => `<span class="lv-af ${c.c}" title="${c.title.replace(/"/g, '&quot;')}">${c.l}</span>`).join('');
+  const playerChips = (id, wk, fid) => !honors ? '' : chips((honors.p[id] || []).filter(c => !c.team || c.team === fid).concat(honors.potw[wk] === id ? [{ l: 'POTW', c: 'good', title: `Player of the Week, week ${wk}` }] : []));
 
   const onPage = () => /^#scores\/?$/.test(location.hash);   // the Scoreboard itself, not the Sunday Ticket Helper
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
@@ -37,6 +64,7 @@
           (f.player || []).forEach(pl => { if (pl.status === 'TAXI_SQUAD') rosters[f.id].taxi.push(pl.id); else if (pl.status === 'INJURED_RESERVE') rosters[f.id].ir.push(pl.id); }); });
       }).catch(() => { rosters = {}; }),
       loadInjuries(),
+      honors ? Promise.resolve() : fetch('data/awards.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(readHonors).catch(() => { honors = { p: {}, t: {}, potw: {} }; }),
     ]).then(([d, p]) => {
       loading = false;
       if (!d || !d.liveScoring) { failed = !data; return; }
@@ -193,7 +221,7 @@
   }
   const bench = f => (f.players.player || []).filter(p => p.status !== 'starter').sort((a, b) => b.score - a.score);
   // taxi squad and IR players aren't in MFL's live scoring: their game state comes from ESPN, no points
-  const extra = (f, kind) => ((rosters || {})[f.id] || {})[kind] ? rosters[f.id][kind].map(id => {
+  const extra = (f, kind) => ((rosters || {})[f.id] || {})[kind] ? rosters[f.id][kind].filter(id => !(((f.players || {}).player) || []).some(x => x.id === id)).map(id => {
     const g = gameOf(id), secs = !g ? 0 : g.state === 'pre' ? 3600 : g.state === 'post' ? 0 : Math.max(1, (4 - Math.min(4, g.period || 1)) * 900 + (String(g.clock || '0:00').split(':').reduce((m, x) => m * 60 + (+x || 0), 0)));
     return { id, status: kind, score: null, gameSecondsRemaining: String(secs) };
   }) : [];
@@ -226,6 +254,11 @@
     // the week's highest and lowest scores, live
     const all = L.matchup.flatMap(m => m.franchise.map(f => +f.score)), hi = Math.max(...all), lo = Math.min(...all);
     const heat = f => +f.score === hi && hi > 0 ? '<span class="lv-heat" title="Highest score this week">🔥</span>' : +f.score === lo && hi > lo ? '<span class="lv-heat" title="Lowest score this week">🥶</span>' : '';
+    // a team's bar color: its primary, or its secondary when the primary is near white
+    const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
+    // of the team's two colors, the one closest to a mid tone, so it shows on light and dark backgrounds alike
+    const barColor = id => { const t = tm(id), c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
+      return c.length ? c.sort((x, y) => Math.abs(lum(x) - 0.5) - Math.abs(lum(y) - 0.5))[0] : 'var(--muted)'; };
     const logo = id => tm(id).logo ? `<img class="lv-lg" src="${tm(id).logo}" alt="">` : `<span class="lv-lg">${esc(tm(id).abbr || '')}</span>`;
     const game = (m, gi) => {
       const fs = m.franchise.slice().sort((a, b) => (+a.isHome) - (+b.isHome));   // away on the left
@@ -235,13 +268,17 @@
       const live = ca.live + cb.live, pre = ca.pre + cb.pre;
       const mid = done ? 'Final' : [live ? `${live} playing` : '', pre ? `${pre} to play` : ''].filter(Boolean).join(' · ');
       const key = `${a.id}-${b.id}`, isOpen = open.has(key);
+      // who's winning: the bar tips toward the leader, by how much he leads (a 50-point lead nearly fills it)
+      const diff = sa - sb, share = sa + sb ? Math.max(6, Math.min(94, 50 + diff)) : 50;
+      const tip = !sa && !sb ? 'Not started' : diff ? `${esc(X.nameOf(diff > 0 ? a.id : b.id))} ${done ? 'won' : 'leads'} by ${n1(Math.abs(diff))}` : 'Tied';
+      const bar = `<span class="lv-tug" role="img" aria-label="${tip}" title="${tip}"><i class="${diff < 0 ? 'trail' : ''}" style="width:${share}%;background:${barColor(a.id)}"></i><i class="${diff > 0 ? 'trail' : ''}" style="width:${100 - share}%;background:${barColor(b.id)}"></i></span>`;
       const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}">${logo(f.id)}<span class="lv-sc"><b>${cls === 'b' ? heat(f) : ''}${n1(+f.score)}${cls === 'a' ? heat(f) : ''}</b><small>${seed(f.id)}${esc(tm(f.id).abbr || '')}</small></span></span>`;
       const la = lineup(a), lb = lineup(b);
       // one player's two cells, mirrored on the right side: name | points  slot  points | name
       const cell = (p, cls) => {
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         const st = state(p), ph = photo(p.id), inj = injTag(p.id);
-        const tag = inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '';
+        const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         const img = `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}">${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`;
         const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm">${cls === 'b' ? tag : ''}${esc(short(p.id))}${cls === 'a' ? tag : ''}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
         const pt = `<td class="lv-pts ${cls} ${st}">${st === 'pre' || p.score == null ? '–' : n1(+p.score)}</td>`;
@@ -255,11 +292,11 @@
       const left = f => { const c = counts(f); return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
       return `<article class="card lv-g${isOpen ? ' open' : ''}" data-lv-key="${key}">
         <button type="button" class="lv-sum" data-lv="${key}" aria-expanded="${isOpen}">
-          ${side(a, 'a')}<span class="lv-mid"><span class="lv-vs">vs</span><small>${mid}</small></span>${side(b, 'b')}
+          ${side(a, 'a')}<span class="lv-mid"><span class="lv-vs">vs</span>${bar}<small>${mid}</small></span>${side(b, 'b')}
           <span class="lv-metarow"><small>${meta(a.id)}</small><small>${meta(b.id)}</small></span>
         </button>
         <div class="lv-det"${isOpen ? '' : ' hidden'}>
-          <div class="lv-names"><b>${seed(a.id)}${esc(X.nameOf(a.id))}</b><b>${esc(X.nameOf(b.id))}${seed(b.id)}</b></div>
+          <div class="lv-names"><b>${seed(a.id)}${esc(X.nameOf(a.id))}${honors ? chips(honors.t[a.id]) : ''}</b><b>${honors ? chips(honors.t[b.id]) : ''}${esc(X.nameOf(b.id))}${seed(b.id)}</b></div>
           <div class="lv-names lv-left"><small>${left(a)}</small><small>${left(b)}</small></div>
           <table class="lv-t"><tbody>${rows}</tbody></table>
           ${benchRows ? `<details class="lv-bench"${openBench.has(key) ? ' open' : ''} data-lv-bench="${key}"><summary>${view ? 'Bench' : 'Bench, taxi squad and IR'}</summary><table class="lv-t"><tbody>${benchRows}</tbody></table></details>` : ''}
@@ -273,7 +310,8 @@
       : p === SLOW_MS ? `Updated ${t} · checks every 5 minutes until games start` : `Updated ${t} · refreshes every ${POLL_MS / 1000} seconds`;
     return `${picker}<div class="lv-bar"><span>${status}</span>
         <button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></div>
-      <div class="lv-list">${L.matchup.map(game).join('')}</div>`;
+      <div class="lv-list">${L.matchup.map(game).join('')}</div>
+      ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
   }
 
   function render(ctx) {

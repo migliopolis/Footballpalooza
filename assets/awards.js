@@ -186,7 +186,8 @@ window.FBPAwards = (() => {
     const foot = S.final
       ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. All-FBP counts start with ${esc(A.honorsFrom || S.season)}. Trades count only what each side scored for its new team that season; a pick used in that season’s draft counts as the player taken with it. Team names are today’s.`
       : `Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. All-FBP counts start with ${esc(A.honorsFrom || S.season)} and include this season’s spot so far. Updated every Monday night.`;
-    return head(sub) +
+    const fluid = S.final ? '' : `<p class="rf-note aw-fluid"><b>Awards in progress.</b> These are the leaders through week ${S.throughWeek} of the ${S.season} season. Nothing is final until the regular season ends, so the All-FBP teams and every award can change from week to week.</p>`;
+    return head(sub) + fluid +
       fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first) + recNote()) +
       fold('allfbp2', '2nd Team All-FBP', S.allFbp.second, team(S.allFbp.second, true)) +
       `<section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.slice().sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
