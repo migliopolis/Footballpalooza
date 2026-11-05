@@ -287,7 +287,7 @@
       const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr>${cell(r.p, 'a')}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b')}</tr>`; }).join('');
       // bench, then taxi squad, then IR, each side listed in its own column
       const group = (xa, xb, lbl) => Array.from({ length: Math.max(xa.length, xb.length) }, (_, i) =>
-        `<tr>${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
+        `<tr class="lv-r-${lbl.toLowerCase()}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
       const benchRows = group(bench(a), bench(b), 'BN') + (view ? '' : group(extra(a, 'taxi'), extra(b, 'taxi'), 'TX') + group(extra(a, 'ir'), extra(b, 'ir'), 'IR'));
       const left = f => { const c = counts(f); return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
       return `<article class="card lv-g${isOpen ? ' open' : ''}" data-lv-key="${key}">
