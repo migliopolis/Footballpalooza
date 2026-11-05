@@ -284,8 +284,9 @@
       const tip = !sa && !sb ? 'Not started' : diff ? `${esc(X.nameOf(diff > 0 ? a.id : b.id))} ${done ? 'won' : 'leads'} by ${n1(Math.abs(diff))}` : 'Tied';
       const bar = `<span class="lv-tug" role="img" aria-label="${tip}" title="${tip}"><i class="${diff < 0 ? 'trail' : ''}" style="width:${share}%;background:${barColor(a.id)}"></i><i class="${diff > 0 ? 'trail' : ''}" style="width:${100 - share}%;background:${barColor(b.id)}"></i></span>`;
       const pa = projTotal(a, shownW), pb = projTotal(b, shownW), showProj = pa != null && pb != null && (!done || view);
-      const projLine = (v, cls) => showProj ? `<small class="lv-pjt" title="${view ? 'MFL’s projection before the games' : 'MFL’s projection: points so far plus the projection for what’s left'}">${view ? 'Proj' : 'Proj'} ${n1(v)}</small>` : '';
-      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}">${logo(f.id)}<span class="lv-sc"><b>${cls === 'b' ? heat(f) : ''}${n1(+f.score)}${cls === 'a' ? heat(f) : ''}</b><small>${seed(f.id)}${esc(tm(f.id).abbr || '')}</small>${projLine(cls === 'a' ? pa : pb, cls)}</span></span>`;
+      const projLine = v => showProj ? `<small class="lv-pjt" title="${view ? 'MFL’s projection before the games' : 'MFL’s projection: points so far plus the projection for what’s left'}">${n1(v)}</small>` : '';
+      // the seed sits on the logo's inside bottom corner; the projection sits under the score
+      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}"><span class="lv-lgw">${logo(f.id)}${seed(f.id)}</span><span class="lv-sc"><b>${cls === 'b' ? heat(f) : ''}${n1(+f.score)}${cls === 'a' ? heat(f) : ''}</b>${projLine(cls === 'a' ? pa : pb)}</span></span>`;
       const la = lineup(a), lb = lineup(b);
       // one player's two cells, mirrored on the right side: name | points  slot  points | name
       const cell = (p, cls) => {
