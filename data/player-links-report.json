@@ -381,7 +381,7 @@
    "mfl": "16595",
    "mflName": "Audric Estime",
    "pos": "RB",
-   "team": "FA",
+   "team": "NOS",
    "fbp": null,
    "espn": "4569682",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -945,6 +945,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17696",
+   "mflName": "Carsen Ryan",
+   "pos": "TE",
+   "team": "CLE",
+   "fbp": null,
+   "espn": "4685540",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "17724",
    "mflName": "Dae'Quan Wright",
    "pos": "TE",
@@ -1353,7 +1362,7 @@
    "mfl": "15589",
    "mflName": "Cody White",
    "pos": "WR",
-   "team": "LVR",
+   "team": "FA",
    "fbp": null,
    "espn": "4241983",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"

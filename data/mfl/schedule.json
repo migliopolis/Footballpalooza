@@ -834,13 +834,13 @@
         "id": "0011",
         "isHome": "0",
         "result": "T",
-        "spread": "7.3"
+        "spread": "24.9"
        },
        {
         "id": "0005",
         "isHome": "1",
         "result": "T",
-        "spread": "-7.3"
+        "spread": "-24.9"
        }
       ]
      },
@@ -850,13 +850,13 @@
         "id": "0010",
         "isHome": "0",
         "result": "T",
-        "spread": "-17"
+        "spread": "-19.2"
        },
        {
         "id": "0012",
         "isHome": "1",
         "result": "T",
-        "spread": "17"
+        "spread": "19.2"
        }
       ]
      },
