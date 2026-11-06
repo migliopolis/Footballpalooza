@@ -293,6 +293,12 @@
     const kicked = f => (f.players.player || []).some(p => { if (p.status !== 'starter') return false; const g = gameOf(p.id); return g ? g.state !== 'pre' : state(p) === 'live'; });
     const all = L.matchup.flatMap(m => m.franchise.map(f => +f.score)), hi = Math.max(...all);
     const played = L.matchup.flatMap(m => m.franchise.filter(kicked).map(f => +f.score)), lo = played.length ? Math.min(...played) : -1;
+    // the coldest player: the lowest-scoring starter league-wide among those whose NFL game has kicked off (byes and
+    // players yet to play don't count). His photo becomes the frozen one; ties all freeze.
+    const onField = p => { const g = gameOf(p.id); return g ? g.state !== 'pre' : state(p) === 'live'; };
+    const starters = L.matchup.flatMap(m => m.franchise.flatMap(f => (f.players.player || []).filter(p => p.status === 'starter' && onField(p))));
+    const coldPts = starters.length ? Math.min(...starters.map(p => +p.score || 0)) : null;
+    const coldest = new Set(starters.filter(p => (+p.score || 0) === coldPts).map(p => p.id));
     const heat = f => +f.score === hi && hi > 0 ? '<span class="lv-heat" title="Highest score this week">🔥</span>' : +f.score === lo && hi > lo && kicked(f) ? '<span class="lv-heat" title="Lowest score this week">🥶</span>' : '';
     // a team's bar color: its primary, or its secondary when the primary is near white
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
@@ -322,7 +328,9 @@
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         const st = state(p), ph = photo(p.id), inj = injTag(p.id);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
-        const img = `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}">${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`;
+        const cold = p.status === 'starter' && coldest.has(p.id);
+        const img = cold ? `<span class="lv-ph cold" title="Coldest player this week: ${n1(coldPts)} points"><img src="assets/players/coldest.jpg" alt="Coldest player this week"></span>`
+          : `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}">${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`;
         const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them

@@ -1364,3 +1364,7 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-nmt{white-space:nowrap}
 .lv-nm .lv-af,.lv-nm .lv-inj{margin:0}
 @media (max-width:520px){.lv-nm{overflow:visible}.lv-nmt{font-size:min(.8rem,3.9vw)}}
+
+/* the week's coldest starter wears the frozen photo */
+.lv-ph.cold{box-shadow:0 0 0 2px #8fc6ec}
+.lv-ph.cold img{object-fit:cover;width:100%;height:100%;border-radius:50%}
