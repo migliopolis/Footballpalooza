@@ -1365,6 +1365,35 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-nm .lv-af,.lv-nm .lv-inj{margin:0}
 @media (max-width:520px){.lv-nm{overflow:visible}.lv-nmt{font-size:min(.8rem,3.9vw)}}
 
-/* the week's coldest starter wears the frozen photo */
-.lv-ph.cold{box-shadow:0 0 0 2px #8fc6ec}
-.lv-ph.cold img{object-fit:cover;width:100%;height:100%;border-radius:50%}
+
+
+
+/* ---------- how a player is doing, on his Scoreboard photo: nuclear, hot, cold, bust, blank ---------- */
+.lv-ph[class*=" t-"]{position:relative;overflow:visible}
+.lv-ph[class*=" t-"] img{position:relative;z-index:3;border-radius:50%}
+/* hot: a flickering orange ring */
+.lv-ph.t-hot{animation:lvHotGlow 1.4s ease-in-out infinite alternate}
+.lv-ph.t-hot::before{content:'';position:absolute;inset:-3px;border-radius:50%;z-index:1;background:conic-gradient(from 0deg,#ffd23f,#ff6a00,#e8290b,#ff6a00,#ffd23f,#ff9a1f,#ffd23f);filter:blur(2px);animation:lvSpin 3s linear infinite}
+.lv-ph.t-hot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--sky-soft);z-index:2}
+@keyframes lvHotGlow{0%{box-shadow:0 0 0 2px #ff9a1f,0 0 6px 1px rgba(255,120,0,.55)}50%{box-shadow:0 0 0 2px #ffc93c,0 0 12px 4px rgba(255,90,0,.8)}100%{box-shadow:0 0 0 2px #ff7a1a,0 0 8px 2px rgba(255,140,0,.65)}}
+@keyframes lvSpin{to{transform:rotate(360deg)}}
+/* nuclear: the whole circle is rolling fire */
+.lv-ph.t-nuke{overflow:hidden;box-shadow:0 0 10px 2px rgba(255,90,0,.55)}
+.lv-ph.t-nuke::before{content:'';position:absolute;inset:-40% -10% -10%;z-index:1;background:radial-gradient(ellipse 30% 45% at 25% 85%,#fff2a8,rgba(255,200,60,0) 70%),radial-gradient(ellipse 28% 50% at 70% 80%,#ffe07a,rgba(255,170,40,0) 70%),radial-gradient(ellipse 40% 60% at 50% 95%,#ff9a1f,rgba(255,110,10,0) 75%),radial-gradient(ellipse 60% 70% at 50% 100%,#e8390b,rgba(200,30,5,0) 80%),linear-gradient(to top,#ff6a00,#c8240c 55%,#5c0e04);animation:lvBlaze .8s ease-in-out infinite alternate}
+.lv-ph.t-nuke::after{content:'';position:absolute;inset:0;z-index:2;border-radius:50%;background:radial-gradient(ellipse 22% 36% at 30% 92%,rgba(255,240,170,.9),transparent 70%),radial-gradient(ellipse 20% 32% at 72% 90%,rgba(255,230,140,.85),transparent 70%);animation:lvBlaze2 .6s ease-in-out infinite alternate}
+@keyframes lvBlaze{0%{transform:translateY(0) scaleY(1)}100%{transform:translateY(-7%) scaleY(1.08)}}
+@keyframes lvBlaze2{0%{opacity:.6;transform:translateY(4%)}100%{opacity:1;transform:translateY(-8%)}}
+/* cold: a pale blue ring that breathes, the face losing color */
+.lv-ph.t-cold{animation:lvFrost 2.6s ease-in-out infinite alternate}
+.lv-ph.t-cold img{filter:saturate(.45) brightness(1.04) contrast(.95)}
+.lv-ph.t-cold::after{content:'';position:absolute;inset:0;border-radius:50%;z-index:4;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 58%,rgba(210,236,255,.55) 78%,rgba(235,247,255,.85) 100%)}
+@keyframes lvFrost{0%{box-shadow:0 0 0 2px #a9d8f7,0 0 5px 1px rgba(150,205,240,.45)}100%{box-shadow:0 0 0 2px #cfeaff,0 0 11px 3px rgba(150,210,250,.7)}}
+/* bust: black-and-white under cracked ice */
+.lv-ph.t-bust{background:#cfe6f7;box-shadow:0 0 0 2px #e6f4ff,0 0 6px 1px rgba(120,180,225,.5)}
+.lv-ph.t-bust img{filter:grayscale(1) contrast(1.05) brightness(1.08)}
+.lv-ph.t-bust .ice{position:absolute;inset:0;border-radius:50%;z-index:4;pointer-events:none;overflow:hidden;background:linear-gradient(115deg,transparent 46%,rgba(255,255,255,.75) 47%,transparent 49%),linear-gradient(35deg,transparent 60%,rgba(255,255,255,.6) 61%,transparent 62.5%),linear-gradient(160deg,transparent 28%,rgba(255,255,255,.55) 29%,transparent 30.5%),radial-gradient(circle at 30% 25%,rgba(255,255,255,.55),transparent 35%),linear-gradient(to bottom,rgba(200,232,255,.35),rgba(170,215,245,.55));box-shadow:inset 0 0 0 2px rgba(255,255,255,.7),inset 0 0 8px 2px rgba(225,244,255,.9)}
+.lv-ph.t-bust .xt{position:absolute;z-index:5;color:#fff;text-shadow:0 0 3px #7cc0ee;font-size:9px;line-height:1;font-style:normal;pointer-events:none}
+.lv-ph.t-bust .xt.a{top:-8%;right:0}.lv-ph.t-bust .xt.b{bottom:0;left:-8%}.lv-ph.t-bust .xt.c{top:36%;right:-14%;font-size:7px}
+/* blank: the same circle, nobody home */
+.lv-ph.t-blank img{display:none}
+@media (prefers-reduced-motion:reduce){.lv-ph[class*=" t-"],.lv-ph[class*=" t-"]::before,.lv-ph[class*=" t-"]::after{animation:none!important}}

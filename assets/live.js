@@ -26,6 +26,25 @@
   // MFL's projected points for each week, scored with FBP's settings (data/mfl/projections.json, saved daily)
   let proj = null;
   const projOf = (id, wk) => { const w = proj && proj[String(wk)]; return w ? (w[id] || 0) : null; };
+  // how a player is doing, shown on his photo. Top down: nuclear (over his position's line), hot (well ahead of his
+  // projection), normal, cold (well behind it), bust (a big projection that collapsed), blank (0 points past halftime).
+  // Only players whose NFL game has kicked off; byes and players yet to play stay normal.
+  const NUKE = { QB: 35, RB: 30, WR: 30, TE: 25, DEF: 25 };
+  function tier(p, wk) {
+    const g = gameOf(p.id), st = state(p);
+    if (!(g ? g.state !== 'pre' : st === 'live') || p.score == null || p.score === '') return null;
+    const sc = +p.score || 0, pj = projOf(p.id, wk) || 0, fin = g ? g.state === 'post' : st === 'final';
+    const secs = +p.gameSecondsRemaining || 0, done = fin ? 1 : Math.max(0, Math.min(1, 1 - secs / 3600));
+    const pastHalf = fin || done >= 0.5 || (g && /half/i.test(g.detail || '')), pace = done > 0 ? sc / done : 0;
+    const line = NUKE[pos(p.id)];
+    if (line && sc >= line) return { k: 'nuke', title: `Nuclear: ${n1(sc)} points, over the ${line}-point line for a ${pos(p.id)}` };
+    if (pj > 0 && (fin ? sc >= 15 && sc >= pj * 1.5 : sc >= 10 && ((done >= 0.25 && pace >= pj * 1.5) || sc >= pj)))
+      return { k: 'hot', title: `Hot: ${n1(sc)} points against a ${n1(pj)} projection` };
+    if (sc === 0 && pastHalf) return { k: 'blank', title: fin ? 'No points this week' : 'No points through halftime' };
+    if (fin && (sc < 0 || (pj >= 12 && sc <= pj * 0.25))) return { k: 'bust', title: `Bust: ${n1(sc)} points${pj ? ` against a ${n1(pj)} projection` : ''}` };
+    if (pj >= 8 && pastHalf && (fin ? sc <= pj * 0.5 : pace <= pj * 0.5)) return { k: 'cold', title: `Cold: ${n1(sc)} points against a ${n1(pj)} projection` };
+    return null;
+  }
   // a lineup's projected total: final players count what they scored, players yet to play their projection,
   // players in a game what they have plus their projection for the time left
   const projTotal = (f, wk) => { if (!proj || !proj[String(wk)]) return null;
@@ -293,12 +312,7 @@
     const kicked = f => (f.players.player || []).some(p => { if (p.status !== 'starter') return false; const g = gameOf(p.id); return g ? g.state !== 'pre' : state(p) === 'live'; });
     const all = L.matchup.flatMap(m => m.franchise.map(f => +f.score)), hi = Math.max(...all);
     const played = L.matchup.flatMap(m => m.franchise.filter(kicked).map(f => +f.score)), lo = played.length ? Math.min(...played) : -1;
-    // the coldest player: the lowest-scoring starter league-wide among those whose NFL game has kicked off (byes and
-    // players yet to play don't count). His photo becomes the frozen one; ties all freeze.
-    const onField = p => { const g = gameOf(p.id); return g ? g.state !== 'pre' : state(p) === 'live'; };
-    const starters = L.matchup.flatMap(m => m.franchise.flatMap(f => (f.players.player || []).filter(p => p.status === 'starter' && onField(p))));
-    const coldPts = starters.length ? Math.min(...starters.map(p => +p.score || 0)) : null;
-    const coldest = new Set(starters.filter(p => (+p.score || 0) === coldPts).map(p => p.id));
+    // (the frozen-man photo for the week's coldest starter is retired for now; assets/players/coldest.jpg is kept)
     const heat = f => +f.score === hi && hi > 0 ? '<span class="lv-heat" title="Highest score this week">🔥</span>' : +f.score === lo && hi > lo && kicked(f) ? '<span class="lv-heat" title="Lowest score this week">🥶</span>' : '';
     // a team's bar color: its primary, or its secondary when the primary is near white
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
@@ -328,9 +342,8 @@
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         const st = state(p), ph = photo(p.id), inj = injTag(p.id);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
-        const cold = p.status === 'starter' && coldest.has(p.id);
-        const img = cold ? `<span class="lv-ph cold" title="Coldest player this week: ${n1(coldPts)} points"><img src="assets/players/coldest.jpg" alt="Coldest player this week"></span>`
-          : `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}">${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`;
+        const tr = tier(p, shownW), extra = tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
+        const img = `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${tr ? ' t-' + tr.k : ''}"${tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
         const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
