@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0106",
+      "to": "0.0110",
+      "dates": "Nov 6, 2026",
+      "items": [
+        "New League Now > Rosters, right after Standings: tap a team logo for its roster grouped by position, with bye weeks, FantasyPros rest-of-season ranks, this week's projections, season points and rank, award chips, and this year's salary plus future salaries with the escalators.",
+        "Tap any player for his box: the latest RotoWire news, his game log with FBP points each week, his NFL schedule, his FBP analytics and a salary breakdown.",
+        "Each team gets a Face of the Franchise and a points-by-week chart against the league average, with its toughest loss, luckiest win and record in above-average weeks.",
+        "The logo row scrolls away and the section tabs stay pinned at the top.",
+        "Swiping between sections works on iPhones."
+      ]
+    },
+    {
       "from": "0.0101",
       "to": "0.0105",
       "dates": "Nov 6, 2026",

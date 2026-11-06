@@ -62,9 +62,13 @@ window.FBPRosters = (function () {
     let body = '';
     if (r.pos === 'DEF' && (tab === 'news' || tab === 'log')) body = '<p class="ro-wait">Team defenses don’t have player news or a game log. See Schedule.</p>';
     else if (tab === 'news') {
-      const j = r.espn && espn('n' + r.espn, `https://site.api.espn.com/apis/fantasy/v2/games/ffl/news/players?playerId=${r.espn}&limit=4`);
+      const j = r.espn && espn('n' + r.espn, `https://site.api.espn.com/apis/fantasy/v2/games/ffl/news/players?playerId=${r.espn}&limit=12`);
       body = !r.espn ? noid : !j ? wait : j.failed ? fail : !(j.feed || []).length ? '<p class="ro-wait">No recent news.</p>'
-        : j.feed.map(n => `<div class="ro-nw"><b>${esc(n.headline || '')}</b>${n.story ? `<p>${esc(n.story)}</p>` : ''}<small>${n.type === 'Rotowire' ? 'RotoWire' : 'ESPN'} · ${when(n.published)}</small></div>`).join('');
+        : (() => { // RotoWire blurbs first; ESPN articles show just their summary, never the article body
+            const strip = x => String(x || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+            const rw = j.feed.filter(n => n.type === 'Rotowire'), list = (rw.length ? rw : j.feed).slice(0, 4);
+            return list.map(n => { const rot = n.type === 'Rotowire', txt = strip(rot ? n.story : n.description);
+              return `<div class="ro-nw"><b>${esc(strip(n.headline))}</b>${txt && txt !== strip(n.headline) ? `<p>${esc(txt)}</p>` : ''}<small>${rot ? 'RotoWire' : 'ESPN'} · ${when(n.published)}</small></div>`; }).join(''); })();
     } else if (tab === 'log') {
       const j = r.espn && espn('g' + r.espn, EAPI + r.espn + '/gamelog');
       if (!r.espn) body = noid; else if (!j) body = wait; else if (j.failed) body = fail;
