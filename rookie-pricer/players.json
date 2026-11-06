@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-05",
+ "asOf": "2026-11-06",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
  "players": [
   {
@@ -16,7 +16,7 @@
    "pos": "WR",
    "school": "Texas",
    "adp": 4.6,
-   "nflPick": 15
+   "nflPick": 14
   },
   {
    "name": "Jadan Baugh",
@@ -30,7 +30,7 @@
    "pos": "QB",
    "school": "Texas",
    "adp": 5.4,
-   "nflPick": 14
+   "nflPick": 10
   },
   {
    "name": "Charlie Becker",
@@ -51,7 +51,7 @@
    "pos": "QB",
    "school": "Oregon",
    "adp": 7.7,
-   "nflPick": 11
+   "nflPick": 28
   },
   {
    "name": "Drew Mestemaker",
@@ -65,7 +65,7 @@
    "pos": "QB",
    "school": "Notre Dame",
    "adp": 12.3,
-   "nflPick": 10
+   "nflPick": 11
   },
   {
    "name": "Kewan Lacy",
@@ -93,7 +93,7 @@
    "pos": "WR",
    "school": "Indiana",
    "adp": 13.9,
-   "nflPick": 16
+   "nflPick": 15
   },
   {
    "name": "Trinidad Chambliss",
@@ -114,14 +114,14 @@
    "pos": "WR",
    "school": "Alabama",
    "adp": 15.5,
-   "nflPick": 29
+   "nflPick": 19
   },
   {
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
    "adp": 16.6,
-   "nflPick": 24
+   "nflPick": 25
   },
   {
    "name": "Nate Frazier",
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 21.8,
-   "nflPick": 47
+   "nflPick": 31
   },
   {
    "name": "Mark Fletcher Jr.",
@@ -254,7 +254,7 @@
    "pos": "TE",
    "school": "Virginia Tech",
    "adp": 28.8,
-   "nflPick": 66
+   "nflPick": 34
   }
  ]
 }

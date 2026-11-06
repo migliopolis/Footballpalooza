@@ -5,8 +5,8 @@
   "spellingFixed": 52,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 261,
-  "rosteredTotal": 261
+  "rosteredLinked": 260,
+  "rosteredTotal": 260
  },
  "mismatch": [],
  "byName": [
@@ -240,6 +240,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "5084180",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "16156",
+   "mflName": "Jake Haener",
+   "pos": "QB",
+   "team": "NYG",
+   "fbp": null,
+   "espn": "4243322",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -954,6 +963,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17385",
+   "mflName": "Carter Runyon",
+   "pos": "TE",
+   "team": "LVR",
+   "fbp": null,
+   "espn": "5155825",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "17724",
    "mflName": "Dae'Quan Wright",
    "pos": "TE",
@@ -1314,15 +1332,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "16751",
-   "mflName": "Bub Means",
-   "pos": "WR",
-   "team": "CLE",
-   "fbp": null,
-   "espn": "4427985",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "13652",
    "mflName": "Cedrick Wilson",
    "pos": "WR",
@@ -1356,15 +1365,6 @@
    "team": "GBP",
    "fbp": null,
    "espn": "4431334",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "15589",
-   "mflName": "Cody White",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4241983",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

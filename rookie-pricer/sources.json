@@ -1,6 +1,6 @@
 {
  "season": 2027,
- "asOf": "2026-11-05",
+ "asOf": "2026-11-06",
  "mode": "projected",
  "settings": {
   "windowDays": 60,
@@ -331,7 +331,7 @@
  "nflSources": [
   {
    "name": "NFL Mock Draft Database consensus mock (1 week) and recent mocks",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
    "type": "mock",
    "weight": 3,
@@ -339,20 +339,22 @@
     "Jeremiah Smith": 1,
     "Drew Mestemaker": 3,
     "Darian Mensah": 6,
-    "CJ Carr": 8,
     "Charlie Becker": 9,
-    "Dante Moore": 11,
-    "Nick Marsh": 14,
-    "Arch Manning": 16,
-    "Cam Coleman": 17,
+    "CJ Carr": 10,
+    "Arch Manning": 11,
+    "Nick Marsh": 12,
+    "Cam Coleman": 15,
+    "LaNorris Sellers": 16,
+    "Ryan Coleman-Williams": 17,
     "KJ Duff": 20,
     "Jadan Baugh": 22,
     "Austin Simmons": 22,
     "Jamari Johnson": 24,
-    "Trey'Dez Green": 25,
+    "Trey'Dez Green": 26,
     "Trinidad Chambliss": 27,
-    "Ryan Coleman-Williams": 28,
-    "LaNorris Sellers": 30
+    "Luke Reynolds": 29,
+    "Dante Moore": 30,
+    "Reed Harris": 32
    },
    "note": "Round 1: the pick in the 1-week consensus mock. Others: median pick across mocks from the last 14 days (5+ mocks)."
   },
