@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0107';
+  const VERSION = '0.0108';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -648,7 +648,7 @@
       app.innerHTML = window.FBPRef ? FBPRef.render(refCtx(), path) : '<p class="error">The Reference section didn’t load.</p>';
       // a new page starts at the top; switching sub-tabs (weeks, boards) keeps your place
       const page = 'reference/' + (window.FBPRef ? FBPRef.pageKey(path) : '');
-      if (page !== lastPage && lastPage) window.scrollTo(0, 0);
+      if (page !== lastPage && lastPage) toTop();
       lastPage = page;
     }
     else if (tab === 'draft') {
@@ -657,7 +657,7 @@
       if (sub === 'mock') { app.innerHTML = window.FBPDraft ? FBPDraft.render(draftCtx()) : '<p class="error">The draft tool didn’t load.</p>'; if (window.FBPDraft) FBPDraft.after(); }
       else { app.innerHTML = window.FBPDraftHub ? FBPDraftHub.render(draftCtx(), sub) : '<p class="error">The Rookie Draft page didn’t load.</p>'; if (window.FBPDraftHub && FBPDraftHub.fit) { FBPDraftHub.fit(); if (document.fonts) document.fonts.ready.then(() => FBPDraftHub.fit()); } }
       const page = 'draft/' + sub;
-      if (page !== lastPage && lastPage.startsWith('draft/')) window.scrollTo(0, 0);
+      if (page !== lastPage && lastPage.startsWith('draft/')) toTop();
       lastPage = page;
     }
     else if (tab === 'bylaws') {
@@ -675,6 +675,14 @@
   // phones: swipe left or right anywhere on the page to go to the next or previous main section.
   // Ignored when the swipe starts on something that scrolls sideways (tables, chip rows, the draft board),
   // on a form control, with two fingers, or when it's more up-and-down than sideways.
+  // the logo row scrolls away and the section tabs stay pinned at the top. A new page starts at the top of its
+  // content: with the logo row already scrolled away it stays away, and it only comes back when you scroll to the top.
+  const brandH = () => { const b = document.querySelector('.top-in'); return b ? b.offsetHeight : 0; };
+  let pinned = false;   // whether the logo row was scrolled away just before this navigation
+  window.addEventListener('scroll', () => { pinned = window.scrollY >= brandH() - 1; }, { passive: true });
+  function toTop() { window.scrollTo(0, pinned ? brandH() : 0); }
+  let lastTab = (location.hash.slice(1).split('/')[0]) || 'now';
+
   function swipeTabs() {
     let x0 = 0, y0 = 0, x1 = 0, y1 = 0, t0 = 0, ok = false, why = '';
     const dbg = /[?&]swipe=debug/.test(location.search);
@@ -711,7 +719,6 @@
       note(`${e.type}: dx ${Math.round(dx)} → ${next || 'none'} (tab ${cur})`);
       if (cur < 0 || !next) return;
       location.hash = '#' + next;
-      window.scrollTo(0, 0);
     };
     document.addEventListener('touchend', end, { passive: true });
     document.addEventListener('touchcancel', end, { passive: true });
@@ -731,11 +738,14 @@
     } catch (e) { state.now = null; }
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
-    window.addEventListener('hashchange', route);
+    window.addEventListener('hashchange', () => { const tab = location.hash.slice(1).split('/')[0] || 'now';
+      route(); if (tab !== lastTab) { lastTab = tab; toTop(); } });
     swipeTabs();
     // sticky panels sit just under the header, whatever height it wraps to
-    const hdr = () => document.documentElement.style.setProperty('--hdr-h', document.querySelector('.top').offsetHeight + 'px');
-    hdr(); window.addEventListener('resize', hdr);
+    // --hdr-h is the part that stays pinned (the tabs); --brand-h is the logo row that scrolls away
+    const hdr = () => { const r = document.documentElement.style, top = document.querySelector('.top');
+      r.setProperty('--brand-h', brandH() + 'px'); r.setProperty('--hdr-h', (top.offsetHeight - brandH()) + 'px'); };
+    hdr(); window.addEventListener('resize', hdr); if (document.fonts) document.fonts.ready.then(hdr);
     app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
     app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) keepScroll(route); });
     app.addEventListener('click', e => {
