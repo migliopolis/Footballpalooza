@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0091",
+      "to": "0.0095",
+      "dates": "Nov 5, 2026",
+      "items": [
+        "MFL's projected points on the Scoreboard: each player's projection before kickoff, and a projected total under each team's score that updates live during games.",
+        "A Projected This Week row on each Matchups game, from the lineups as currently set.",
+        "Scoreboard cleanup on phones: seed chips sit on the logo corner, scores of any length fit beside the who's-winning bar, and the record line stays on one line.",
+        "Defenses show what they've earned their points with (points allowed, sacks, interceptions, fumble recoveries, TDs) and go by nickname, like Jaguars D.",
+        "Names and stat lines wrap cleanly on phones.",
+        "The 🥶 only goes to the lowest-scoring team that has actually had a player take the field."
+      ]
+    },
+    {
       "from": "0.0086",
       "to": "0.0090",
       "dates": "Nov 5, 2026",

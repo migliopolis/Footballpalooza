@@ -276,8 +276,11 @@
       const t = stand(id); if (!t) return '';
       return `${t.w}-${t.l}${t.t ? '-' + t.t : ''} · ${ord(t.divisionRank)} ${esc(t.divisionName || '')}${l3(id) ? ` · L3 ${l3(id)}` : ''}`; };
     // the week's highest and lowest scores, live
-    const all = L.matchup.flatMap(m => m.franchise.map(f => +f.score)), hi = Math.max(...all), lo = Math.min(...all);
-    const heat = f => +f.score === hi && hi > 0 ? '<span class="lv-heat" title="Highest score this week">🔥</span>' : +f.score === lo && hi > lo ? '<span class="lv-heat" title="Lowest score this week">🥶</span>' : '';
+    // 🥶 only goes to a team that has had someone play: a 0 because nobody's kicked off yet isn't a low score
+    const kicked = f => (f.players.player || []).some(p => { if (p.status !== 'starter') return false; const g = gameOf(p.id); return g ? g.state !== 'pre' : state(p) === 'live'; });
+    const all = L.matchup.flatMap(m => m.franchise.map(f => +f.score)), hi = Math.max(...all);
+    const played = L.matchup.flatMap(m => m.franchise.filter(kicked).map(f => +f.score)), lo = played.length ? Math.min(...played) : -1;
+    const heat = f => +f.score === hi && hi > 0 ? '<span class="lv-heat" title="Highest score this week">🔥</span>' : +f.score === lo && hi > lo && kicked(f) ? '<span class="lv-heat" title="Lowest score this week">🥶</span>' : '';
     // a team's bar color: its primary, or its secondary when the primary is near white
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
     // of the team's two colors, the one closest to a mid tone, so it shows on light and dark backgrounds alike
