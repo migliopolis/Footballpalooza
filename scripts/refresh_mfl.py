@@ -145,6 +145,17 @@ def fetch_projections():
         print(f'  ok   projectedScores week {week} ({len(pts)} players)')
     except Exception as e:
         print(f'  FAIL {e}  (kept the previous projections)')
+    # earlier weeks that were never saved (the projections file started in week 9): MFL still has them
+    for w in range(1, week):
+        if str(w) in saved['players']:
+            continue
+        time.sleep(1.1)
+        try:
+            raw = fetch('projectedScores', {'W': str(w)}).get('projectedScores', {})
+            saved['players'][str(w)] = {p['id']: round(float(p['score']), 1) for p in as_list(raw.get('playerScore')) if p.get('score') not in (None, '')}
+            print(f'  ok   projectedScores week {w} (backfill)')
+        except Exception as e:
+            print(f'  FAIL week {w}: {e}')
     time.sleep(1.1)
     try:
         live = fetch('liveScoring', {'W': str(week)}).get('liveScoring', {})

@@ -2,6 +2,17 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0096",
+      "to": "0.0100",
+      "dates": "Nov 5, 2026",
+      "items": [
+        "Scoreboard names stay on one line, shrinking to fit, with chips wrapping beneath.",
+        "Player photos on the Scoreboard light up by how a player is doing: a nuclear blaze for monster games, flames for players running hot against their projection, and cold, bust and blank looks for the ones letting their team down.",
+        "New Game Day > Players page: the week's top scorers at every position, with photos, FBP team logos, Show more, and free agents marked FA (with a checkbox to hide them).",
+        "Projections now go back to week 1, so past weeks show hot, cold and bust players too."
+      ]
+    },
+    {
       "from": "0.0091",
       "to": "0.0095",
       "dates": "Nov 5, 2026",
