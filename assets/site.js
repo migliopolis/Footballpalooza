@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0106';
+  const VERSION = '0.0107';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -701,7 +701,10 @@
       if (!ok) return note(`${e.type}: skipped (${why})`);
       ok = false;
       if (ms > 1000 || Math.abs(dx) < 50 || Math.abs(dx) < 1.5 * Math.abs(dy)) return note(`${e.type}: dx ${Math.round(dx)} dy ${Math.round(dy)} ${ms}ms, not a swipe`);
-      if (window.visualViewport && window.visualViewport.scale > 1.1) return note('zoomed in');   // the swipe is panning
+      // pinch-zoomed in, the swipe is panning the page. Some iPhones report a scale above 1 at normal zoom, so go by
+      // whether the visible area is actually narrower than the page
+      const vv = window.visualViewport, cw = document.documentElement.clientWidth;
+      if (vv && vv.width < cw * 0.9) return note(`zoomed in (showing ${Math.round(vv.width)} of ${cw}px, scale ${vv.scale.toFixed(2)})`);
       const tabs = [...document.querySelectorAll('.tabs a[data-tab]')].map(a => a.dataset.tab);
       const cur = tabs.indexOf(((document.querySelector('.tabs a[aria-current="page"]') || {}).dataset || {}).tab);
       const next = tabs[cur + (dx < 0 ? 1 : -1)];
