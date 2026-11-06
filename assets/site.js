@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0102';
+  const VERSION = '0.0103';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -383,7 +383,7 @@
       <td><b>${t.pwr ? t.pwr.toFixed(2) : '—'}</b></td><td>${t.w}-${t.l}${t.t ? '-' + t.t : ''}</td><td>${pts(t.pf)}</td><td class="hide-sm">${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('');
 
     const sub = (location.hash.split('/')[1] || '');
-    const nav = `<nav class="rf-sub seg now-sub">${[['', 'Standings'], ['matchups', 'Matchups'], ['power', 'Power Rankings'], ['playoffs', 'Playoff Picture']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    const nav = `<nav class="rf-sub seg now-sub">${[['', 'Standings'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
@@ -409,6 +409,7 @@
       </div>`;
 
     if (sub === 'matchups') return headTxt + pageMatchups(fp);
+    if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `
       <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div>
@@ -671,6 +672,36 @@
     if (active && active.parentElement.scrollWidth > active.parentElement.clientWidth) active.parentElement.scrollLeft = active.offsetLeft - 10;
   }
 
+  // phones: swipe left or right anywhere on the page to go to the next or previous main section.
+  // Ignored when the swipe starts on something that scrolls sideways (tables, chip rows, the draft board),
+  // on a form control, with two fingers, or when it's more up-and-down than sideways.
+  function swipeTabs() {
+    let x0 = 0, y0 = 0, t0 = 0, ok = false;
+    const sideScroller = el => { for (; el && el !== document.body; el = el.parentElement) {
+      if (el.matches('input,select,textarea,.tabs,[data-noswipe]')) return true;
+      const cs = getComputedStyle(el);
+      if (/(auto|scroll)/.test(cs.overflowX) && el.scrollWidth > el.clientWidth + 2) return true;
+    } return false; };
+    document.addEventListener('touchstart', e => {
+      ok = e.touches.length === 1 && !sideScroller(e.target);
+      if (!ok) return;
+      x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
+    }, { passive: true });
+    document.addEventListener('touchmove', e => { if (e.touches.length > 1) ok = false; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      if (!ok) return; ok = false;
+      const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+      if (Date.now() - t0 > 700 || Math.abs(dx) < 70 || Math.abs(dx) < 2 * Math.abs(dy)) return;
+      if (window.visualViewport && window.visualViewport.scale > 1.05) return;   // zoomed in: the swipe is panning
+      const tabs = [...document.querySelectorAll('.tabs a[data-tab]')].map(a => a.dataset.tab);
+      const cur = tabs.indexOf(((document.querySelector('.tabs a[aria-current="page"]') || {}).dataset || {}).tab);
+      const next = tabs[cur + (dx < 0 ? 1 : -1)];
+      if (cur < 0 || !next) return;
+      location.hash = '#' + next;
+      window.scrollTo(0, 0);
+    }, { passive: true });
+  }
+
   async function init() {
     try {
       const [now, teams] = await Promise.all([
@@ -686,6 +717,7 @@
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', route);
+    swipeTabs();
     // sticky panels sit just under the header, whatever height it wraps to
     const hdr = () => document.documentElement.style.setProperty('--hdr-h', document.querySelector('.top').offsetHeight + 'px');
     hdr(); window.addEventListener('resize', hdr);

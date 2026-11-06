@@ -48,6 +48,7 @@ def routes():
         'reference/seasons': ('Seasons', 'Every Footballpalooza season.'),
         'reference/records': ('Records', 'Footballpalooza record book.'),
         'reference/hof': ('Hall of Fame', 'The Footballpalooza Hall of Fame and the All-Time FBP Team.'),
+        'now/analytics': ('Analytics', 'The numbers behind the standings: lineups, luck, projections, lineup cost, salary value and playoff odds.'),
         'reference/players': ('Player Records', 'How often each player’s team wins when he starts, and every FBP team he’s started for.'),
         'reference/payroll': ('Payroll', 'Footballpalooza salaries and cap.'),
         'offseason': ('Off-Season', 'The Footballpalooza off-season workbook.'),
