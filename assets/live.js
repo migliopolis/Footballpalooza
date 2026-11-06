@@ -25,11 +25,16 @@
   let honors = null;
   // MFL's projected points for each week, scored with FBP's settings (data/mfl/projections.json, saved daily)
   let proj = null;
-  const projOf = (id, wk) => { const w = proj && proj[String(wk)]; return w ? (w[id] || 0) : null; };
+  const projOf = (id, wk) => { const w = proj && proj[String(wk)]; return w && w[id] != null ? w[id] : null; };   // null: no projection
   // how a player is doing, shown on his photo. Top down: nuclear (over his position's line), hot (well ahead of his
   // projection), normal, cold (well behind it), bust (a big projection that collapsed), blank (0 points past halftime).
   // Only players whose NFL game has kicked off; byes and players yet to play stay normal.
   const NUKE = { QB: 35, RB: 30, WR: 30, TE: 25, DEF: 25 };
+  // a player's photo with his tier on it (used by the Scoreboard and Players)
+  function photoHtml(p, wk) {
+    const tr = tier(p, wk), ph = photo(p.id), extra = tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
+    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${tr ? ' t-' + tr.k : ''}"${tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+  }
   function tier(p, wk) {
     const g = gameOf(p.id), st = state(p);
     if (!(g ? g.state !== 'pre' : st === 'live') || p.score == null || p.score === '') return null;
@@ -50,7 +55,7 @@
   const projTotal = (f, wk) => { if (!proj || !proj[String(wk)]) return null;
     return (f.players.player || []).filter(p => p.status === 'starter').reduce((t, p) => {
       const pj = projOf(p.id, wk), st = state(p), sc = +p.score || 0;
-      return t + (st === 'pre' ? pj : st === 'live' ? sc + pj * Math.min(1, (+p.gameSecondsRemaining || 0) / 3600) : sc);
+      return t + (st === 'pre' ? (pj || 0) : st === 'live' ? sc + (pj || 0) * Math.min(1, (+p.gameSecondsRemaining || 0) / 3600) : sc);
     }, 0); };
   const P_AWARDS = { mvp: ['MVP', 'gold'], rookie: ['RoY', 'good'], value: ['Best Value', 'good'], waiver: ['Top Waiver', 'good'],
     high: ['High Game', 'good'], bench: ['Bench Points', 'meh'], contract: ['Worst Contract', 'meh'] };
@@ -77,7 +82,7 @@
   const chips = list => (list || []).map(c => `<span class="lv-af ${c.c}" title="${c.title.replace(/"/g, '&quot;')}">${c.l}</span>`).join('');
   const playerChips = (id, wk, fid) => !honors ? '' : chips((honors.p[id] || []).filter(c => !c.team || c.team === fid).concat(honors.potw[wk] === id ? [{ l: 'POTW', c: 'good', title: `Player of the Week, week ${wk}` }] : []));
 
-  const onPage = () => /^#scores\/?$/.test(location.hash);   // the Scoreboard itself, not the Sunday Ticket Helper
+  const onPage = () => /^#scores(\/players)?\/?$/.test(location.hash);   // the Scoreboard and Players, not the Ticket Helper or NFL
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
   function load() {
     if (loading) return;
@@ -293,6 +298,7 @@
       `<button type="button" data-lv-week="${w}" aria-pressed="${w === shownW}"${w === liveW ? ' title="Current week"' : ''}>${w}</button>`).join('')}</div>`;
     if (view && !hist[view]) return picker + '<p class="loading">Loading week ' + view + '…</p>';
     const L = cur().liveScoring;
+    if (X.mode === 'players') return picker + playersBody(L, shownW);
     const tm = id => X.teams[id] || {};
     const seedOf = id => ((X.seeds || []).find(x => x.id === id) || {}).seed;
     const seed = id => !view && seedOf(id) ? `<span class="lv-seed${seedOf(id) > 3 ? ' wc' : ''}" title="${seedOf(id)} seed if the season ended today">${seedOf(id)}</span>` : '';
@@ -342,8 +348,7 @@
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         const st = state(p), ph = photo(p.id), inj = injTag(p.id);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
-        const tr = tier(p, shownW), extra = tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
-        const img = `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${tr ? ' t-' + tr.k : ''}"${tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+        const img = photoHtml(p, shownW);
         const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
@@ -381,11 +386,66 @@
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
   }
 
+  // Game Day > Players: the week's top scorers at each position among every FBP-rostered player, starters and bench,
+  // live. Only players whose NFL game has kicked off are ranked.
+  // free agents' points for a week, through the relay (?t=fa). An older relay that doesn't know ?t=fa sends live
+  // scoring back instead; then the page shows rostered players only and says the relay needs its update.
+  const fa = {}, faAt = {}; let faMissing = false;
+  // the Free agents checkbox (on by default; remembered on this device)
+  let plFa = true; try { plFa = localStorage.getItem('fbp-players-fa') !== '0'; } catch (e) {}
+  document.addEventListener('change', e => { if (!e.target.matches || !e.target.matches('[data-pl-fa]')) return;
+    plFa = e.target.checked; try { localStorage.setItem('fbp-players-fa', plFa ? '1' : '0'); } catch (err) {} paint(); });
+  function loadFa(w) {
+    if (!LIVE_URL || faMissing || (faAt[w] && Date.now() - faAt[w] < 60000)) return;
+    faAt[w] = Date.now();
+    fetch(`${LIVE_URL}?t=fa&w=${w}`, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => {
+      if (!j || !j.playerScores) { if (j && j.liveScoring) faMissing = true; return; }
+      fa[w] = [].concat(j.playerScores.playerScore || []).filter(x => players && players[x.id]).map(x => ({ id: x.id, score: x.score }));
+      if (X && X.mode === 'players') paint();
+    }).catch(() => {});
+  }
+  // a free agent's game clock in MFL's terms (seconds left out of 3600), from ESPN's scoreboard
+  const faSecs = id => { const g = gameOf(id); if (!g) return 0; if (g.state === 'post') return 0; if (g.state !== 'in') return 3600;
+    const [m, sec] = String(g.clock || '0:00').split(':').map(Number); return Math.max(0, (4 - Math.min(4, +g.period || 1)) * 900 + (m || 0) * 60 + (sec || 0)); };
+  const PL_POS = [['QB', 'Quarterbacks', 5], ['RB', 'Running backs', 8], ['WR', 'Wide receivers', 8], ['TE', 'Tight ends', 5], ['DEF', 'Defenses', 5]];
+  const plMore = new Set();
+  function playersBody(L, wk) {
+    const esc = X.esc, tm = id => X.teams[id] || {};
+    const flogo = id => tm(id).logo ? `<img class="pl-fbp" src="${tm(id).logo}" alt="" title="${esc(X.nameOf(id))}">` : `<span class="pl-fbp">${esc(tm(id).abbr || '')}</span>`;
+    const nlogo = id => { const t = TEAM[info(id).team] || info(id).team; return t ? `<img class="pl-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${String(t).toLowerCase()}.png" alt="" onerror="this.remove()">` : ''; };
+    const onField = p => { const g = gameOf(p.id); return g ? g.state !== 'pre' : state(p) === 'live'; };
+    const all = [];
+    L.matchup.forEach(m => m.franchise.forEach(f => (f.players.player || []).forEach(p => { if (onField(p)) all.push(Object.assign({ fid: f.id }, p)); })));
+    loadFa(wk);
+    (plFa ? fa[wk] || [] : []).forEach(x => { const p = { id: x.id, score: x.score, status: 'fa', fid: null, gameSecondsRemaining: String(faSecs(x.id)) }; if (onField(p)) all.push(p); });
+    if (!all.length) return '<p class="loading">No one has played yet this week. The leaderboard fills in once games kick off.</p>';
+    const sec = ([ps, title, n]) => {
+      const list = all.filter(p => pos(p.id) === ps).sort((a, b) => (+b.score || 0) - (+a.score || 0));
+      if (!list.length) return '';
+      const more = plMore.has(ps), show = list.slice(0, more ? 25 : n);
+      return `<section class="card pl-sec"><h2 class="pl-h">${title}</h2><ol class="pl-list">${show.map((p, i) => {
+        const tr = tier(p, wk), pj = projOf(p.id, wk), st = state(p);
+        return `<li class="pl-r${tr ? ' t-' + tr.k : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
+          <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && (tr.k === 'nuke' || tr.k === 'hot') ? `<span class="pl-tag ${tr.k}">${tr.k === 'nuke' ? 'Nuclear' : 'Hot'}</span>` : ''}</span>
+            <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
+            <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(X.nameOf(p.fid))}${p.status === 'starter' ? '' : ' · <i>bench</i>'}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
+          <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${pj != null ? `<small>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
+        ${list.length > n ? `<button type="button" class="pl-more" data-pl-more="${ps}">${more ? 'Show fewer' : `Show more (${Math.min(list.length, 25) - n})`}</button>` : ''}</section>`;
+    };
+    const live = all.some(p => state(p) === 'live');
+    return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${!plFa ? 'FBP-rostered players only' : faMissing ? 'FBP-rostered players (free agents show once the relay is updated)' : 'every player, rostered or free agent'}</span>
+      <label class="pl-chk"><input type="checkbox" data-pl-fa${plFa ? ' checked' : ''}> Include free agents</label></div>
+      <div class="pl-grid">${PL_POS.map(sec).join('')}</div>
+      <p class="rf-foot lv-foot">Ranked by points this week among players whose NFL game has kicked off. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection.</p>`;
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('[data-pl-more]'); if (!b) return; const k = b.dataset.plMore; plMore.has(k) ? plMore.delete(k) : plMore.add(k); paint(); });
+
   function render(ctx) {
     X = ctx;
     if (!data && !failed) load();
     poll();
     setTimeout(fitSoon, 0);
+    if (X.mode === 'players') return `<div class="pagehead"><h1>Players</h1><span class="asof">The week’s top scorers at every position, live · pick a week</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
     return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof">Pick a week · tap a game for both lineups and stats${(X.seeds || []).length ? ' · numbers by a team are playoff seeds if the season ended today' : ''}</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
   }
 

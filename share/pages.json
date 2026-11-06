@@ -44,5 +44,6 @@
 "reference/seasons": "reference_seasons",
 "scores": "scores",
 "scores/nfl": "scores_nfl",
+"scores/players": "scores_players",
 "scores/ticket": "scores_ticket"
 }

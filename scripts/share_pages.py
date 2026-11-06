@@ -36,6 +36,7 @@ def routes():
     r = {
         'scores': ('Scoreboard', f'Live scores, lineups and stats for every {season} Footballpalooza game.'),
         'scores/nfl': ('NFL Scoreboard', f'Every week of the {season} NFL season: scores, schedule, networks and byes.'),
+        'scores/players': ('Players', 'The week’s top scorers at every position, live, with who’s nuclear and who’s hot.'),
         'scores/ticket': ('Sunday Ticket Helper', 'The three games to put on your multiview for each FBP matchup, window by window.'),
         'now': ('Standings', f'{season} Footballpalooza standings{wk}.'),
         'now/matchups': (f"Week {mu.get('week')} Matchups" if mu.get('week') else 'Matchups', "This week's games, head to head."),

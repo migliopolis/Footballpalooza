@@ -1397,3 +1397,34 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 /* blank: the same circle, nobody home */
 .lv-ph.t-blank img{display:none}
 @media (prefers-reduced-motion:reduce){.lv-ph[class*=" t-"],.lv-ph[class*=" t-"]::before,.lv-ph[class*=" t-"]::after{animation:none!important}}
+
+/* ---------- Game Day > Players ---------- */
+.pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;align-items:start}
+.pl-sec{padding:12px 12px 8px}
+.pl-h{font:700 1rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.03em;margin:0 0 6px}
+.pl-list{list-style:none;margin:0;padding:0}
+.pl-r{display:grid;grid-template-columns:18px 34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.pl-r:first-child{border-top:0}
+.pl-rk{font-size:.75rem;color:var(--muted);text-align:right;font-weight:600}
+.pl-r .lv-ph{width:34px;height:34px;margin:0}
+.pl-who{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+.pl-nm{font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap;white-space:nowrap}
+.pl-who small{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-nfl,.pl-fbp{width:15px;height:15px;object-fit:contain;flex:none}
+.pl-own i{font-style:normal;color:var(--muted)}
+.pl-pts{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}
+.pl-pts b{font:700 1.15rem/1 var(--display)}
+.pl-pts small{font-size:.66rem;color:var(--muted);margin-top:2px}
+.pl-tag{font:700 .58rem/1 var(--body);padding:2px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
+.pl-tag.nuke{background:linear-gradient(90deg,#e8390b,#ff9a1f);color:#fff}
+.pl-tag.hot{background:#ffe1b8;color:#8a3a00}
+.pl-r.t-nuke .pl-pts b{color:#e04a0c}
+.pl-more{margin:6px 0 2px;font:inherit;font-size:.8rem;background:none;border:0;color:var(--accent,#2a7fbf);cursor:pointer;padding:4px 0}
+@media (max-width:520px){.pl-grid{grid-template-columns:1fr}.pl-r{gap:8px}}
+
+/* Game Day buttons: shorter labels on phones so all four fit */
+.sm-only{display:none}
+@media (max-width:560px){.lg-only{display:none}.sm-only{display:inline}.now-sub.seg a{padding-left:9px;padding-right:9px}}
+.pl-fa{font:700 .56rem/1 var(--body);padding:2px 4px;border-radius:3px;background:var(--line);color:var(--fg);letter-spacing:.04em;margin-right:2px}
+.pl-chk{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;white-space:nowrap;cursor:pointer;user-select:none}
+.pl-chk input{width:16px;height:16px;accent-color:var(--accent,#2a7fbf);margin:0}
