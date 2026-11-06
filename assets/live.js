@@ -35,8 +35,13 @@
     const tr = tier(p, wk), ph = photo(p.id), extra = tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
     return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${tr ? ' t-' + tr.k : ''}"${tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
+  // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
+  // A player who suited up and scored 0 still counts as having played.
+  const dnp = p => { if (pos(p.id) === 'DEF' || +p.score) return false; const g = gameOf(p.id), e = espnId(p.id), S = EW().stats;
+    return !!(g && e && S['ro' + g.id] && S['out:' + e]); };
   function tier(p, wk) {
     const g = gameOf(p.id), st = state(p);
+    if (dnp(p)) return null;
     if (!(g ? g.state !== 'pre' : st === 'live') || p.score == null || p.score === '') return null;
     const sc = +p.score || 0, pj = projOf(p.id, wk) || 0, fin = g ? g.state === 'post' : st === 'final';
     const secs = +p.gameSecondsRemaining || 0, done = fin ? 1 : Math.max(0, Math.min(1, 1 - secs / 3600));
@@ -128,9 +133,18 @@
         const st = ev.status || {}, t = st.type || {};
         const info = { id: ev.id, state: t.state, date: ev.date, detail: t.shortDetail, clock: st.displayClock, period: st.period, name: ev.shortName };
         const cs = ev.competitions[0].competitors;
+        info.tids = cs.map(c => c.team.id);
         cs.forEach(c => { const o = cs.find(x => x !== c) || {}; g[c.team.abbreviation] = Object.assign({}, info, { pa: o.score }); });
       });
       // box scores only for games that have started; finished ones only once
+      // game-day rosters, once a game has kicked off (inactives are set before kickoff): who was ruled out
+      const ros = [...new Map(Object.values(g).filter(x => x.state !== 'pre' && !stats['ro' + x.id]).map(x => [x.id, x])).values()];
+      const core = 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/';
+      const rosters = Promise.all(ros.map(x => Promise.all((x.tids || []).map(t => fetch(`${core}${x.id}/competitions/${x.id}/competitors/${t}/roster?limit=200`)
+        .then(r => r.ok ? r.json() : Promise.reject()))).then(rs => {
+          rs.forEach(r => (r.entries || []).forEach(a => { if (a.valid === false || a.didNotPlay) stats['out:' + a.playerId] = 1; }));
+          stats['ro' + x.id] = 1;
+        }).catch(() => null)));
       const want = [...new Set(Object.values(g).filter(x => x.state === 'in' || (x.state === 'post' && !stats['ev' + x.id])).map(x => x.id))];
       return Promise.all(want.map(id => fetch(ESPN + 'summary?event=' + id).then(r => r.ok ? r.json() : null).then(j => {
         if (!j || !j.boxscore) return;
@@ -143,7 +157,7 @@
           const row = (stats[a.athlete.id] = stats[a.athlete.id] || {});
           row[cat.name] = Object.fromEntries((cat.labels || []).map((l, i) => [l, a.stats[i]]));
         })));
-      }).catch(() => null)));
+      }).catch(() => null)).concat(rosters));
     }).catch(() => null);
   }
   // injury designations by ESPN id: live from ESPN, refreshed every 10 minutes; the saved weekly file if that fails
@@ -391,10 +405,7 @@
   // free agents' points for a week, through the relay (?t=fa). An older relay that doesn't know ?t=fa sends live
   // scoring back instead; then the page shows rostered players only and says the relay needs its update.
   const fa = {}, faAt = {}; let faMissing = false;
-  // the Free agents checkbox (on by default; remembered on this device)
-  let plFa = true; try { plFa = localStorage.getItem('fbp-players-fa') !== '0'; } catch (e) {}
-  document.addEventListener('change', e => { if (!e.target.matches || !e.target.matches('[data-pl-fa]')) return;
-    plFa = e.target.checked; try { localStorage.setItem('fbp-players-fa', plFa ? '1' : '0'); } catch (err) {} paint(); });
+  const plFa = true;
   function loadFa(w) {
     if (!LIVE_URL || faMissing || (faAt[w] && Date.now() - faAt[w] < 60000)) return;
     faAt[w] = Date.now();
@@ -413,7 +424,7 @@
     const esc = X.esc, tm = id => X.teams[id] || {};
     const flogo = id => tm(id).logo ? `<img class="pl-fbp" src="${tm(id).logo}" alt="" title="${esc(X.nameOf(id))}">` : `<span class="pl-fbp">${esc(tm(id).abbr || '')}</span>`;
     const nlogo = id => { const t = TEAM[info(id).team] || info(id).team; return t ? `<img class="pl-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${String(t).toLowerCase()}.png" alt="" onerror="this.remove()">` : ''; };
-    const onField = p => { const g = gameOf(p.id); return g ? g.state !== 'pre' : state(p) === 'live'; };
+    const onField = p => { const g = gameOf(p.id); return (g ? g.state !== 'pre' : state(p) === 'live') && !dnp(p); };
     const all = [];
     L.matchup.forEach(m => m.franchise.forEach(f => (f.players.player || []).forEach(p => { if (onField(p)) all.push(Object.assign({ fid: f.id }, p)); })));
     loadFa(wk);
@@ -428,15 +439,14 @@
         return `<li class="pl-r${tr ? ' t-' + tr.k : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
           <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && (tr.k === 'nuke' || tr.k === 'hot') ? `<span class="pl-tag ${tr.k}">${tr.k === 'nuke' ? 'Nuclear' : 'Hot'}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
-            <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(X.nameOf(p.fid))}${p.status === 'starter' ? '' : ' · <i>bench</i>'}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
+            <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${p.status === 'starter' ? '' : ' · <i>bench</i>'}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
           <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${pj != null ? `<small>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
         ${list.length > n ? `<button type="button" class="pl-more" data-pl-more="${ps}">${more ? 'Show fewer' : `Show more (${Math.min(list.length, 25) - n})`}</button>` : ''}</section>`;
     };
     const live = all.some(p => state(p) === 'live');
-    return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${!plFa ? 'FBP-rostered players only' : faMissing ? 'FBP-rostered players (free agents show once the relay is updated)' : 'every player, rostered or free agent'}</span>
-      <label class="pl-chk"><input type="checkbox" data-pl-fa${plFa ? ' checked' : ''}> Include free agents</label></div>
+    return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${faMissing || !fa[wk] ? 'FBP-rostered players' : 'every player, rostered or free agent'}</span></div>
       <div class="pl-grid">${PL_POS.map(sec).join('')}</div>
-      <p class="rf-foot lv-foot">Ranked by points this week among players whose NFL game has kicked off. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection.</p>`;
+      <p class="rf-foot lv-foot">Ranked by points this week among players who have taken the field this week. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection.</p>`;
   }
   document.addEventListener('click', e => { const b = e.target.closest('[data-pl-more]'); if (!b) return; const k = b.dataset.plMore; plMore.has(k) ? plMore.delete(k) : plMore.add(k); paint(); });
 
