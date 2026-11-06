@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0105';
+  const VERSION = '0.0106';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -676,30 +676,42 @@
   // Ignored when the swipe starts on something that scrolls sideways (tables, chip rows, the draft board),
   // on a form control, with two fingers, or when it's more up-and-down than sideways.
   function swipeTabs() {
-    let x0 = 0, y0 = 0, t0 = 0, ok = false;
-    const sideScroller = el => { for (; el && el !== document.body; el = el.parentElement) {
-      if (el.matches('input,select,textarea,.tabs,[data-noswipe]')) return true;
+    let x0 = 0, y0 = 0, x1 = 0, y1 = 0, t0 = 0, ok = false, why = '';
+    const dbg = /[?&]swipe=debug/.test(location.search);
+    const note = msg => { if (!dbg) return; let d = document.getElementById('sw-dbg');
+      if (!d) { d = document.createElement('div'); d.id = 'sw-dbg'; d.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;background:#000c;color:#fff;font:12px/1.3 monospace;padding:6px 8px;border-radius:6px;max-width:90vw'; document.body.appendChild(d); }
+      d.textContent = msg; };
+    const sideScroller = el => { for (; el && el.nodeType === 1 && el !== document.body; el = el.parentElement) {
+      if (el.matches('input,select,textarea,.tabs,[data-noswipe]')) return el.tagName.toLowerCase() + (el.className ? '.' + el.className : '');
       const cs = getComputedStyle(el);
-      if (/(auto|scroll)/.test(cs.overflowX) && el.scrollWidth > el.clientWidth + 2) return true;
-    } return false; };
+      if (/(auto|scroll)/.test(cs.overflowX) && el.scrollWidth > el.clientWidth + 2) return el.tagName.toLowerCase() + '.' + el.className;
+    } return ''; };
     document.addEventListener('touchstart', e => {
-      ok = e.touches.length === 1 && !sideScroller(e.target);
-      if (!ok) return;
-      x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
+      const t = e.touches[0]; x0 = x1 = t.clientX; y0 = y1 = t.clientY; t0 = Date.now();
+      why = e.touches.length > 1 ? 'two fingers' : sideScroller(e.target.nodeType === 1 ? e.target : e.target.parentElement);
+      ok = !why;
     }, { passive: true });
-    document.addEventListener('touchmove', e => { if (e.touches.length > 1) ok = false; }, { passive: true });
-    document.addEventListener('touchend', e => {
-      if (!ok) return; ok = false;
-      const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
-      if (Date.now() - t0 > 700 || Math.abs(dx) < 70 || Math.abs(dx) < 2 * Math.abs(dy)) return;
-      if (window.visualViewport && window.visualViewport.scale > 1.05) return;   // zoomed in: the swipe is panning
+    document.addEventListener('touchmove', e => { if (e.touches.length > 1) { ok = false; why = 'two fingers'; }
+      const t = e.touches[0]; if (t) { x1 = t.clientX; y1 = t.clientY; } }, { passive: true });
+    // iOS can end a swipe with touchcancel instead of touchend once it decides the page is scrolling; treat both the same
+    const end = e => {
+      const t = e.changedTouches && e.changedTouches[0];
+      if (t && e.type === 'touchend') { x1 = t.clientX; y1 = t.clientY; }
+      const dx = x1 - x0, dy = y1 - y0, ms = Date.now() - t0;
+      if (!ok) return note(`${e.type}: skipped (${why})`);
+      ok = false;
+      if (ms > 1000 || Math.abs(dx) < 50 || Math.abs(dx) < 1.5 * Math.abs(dy)) return note(`${e.type}: dx ${Math.round(dx)} dy ${Math.round(dy)} ${ms}ms, not a swipe`);
+      if (window.visualViewport && window.visualViewport.scale > 1.1) return note('zoomed in');   // the swipe is panning
       const tabs = [...document.querySelectorAll('.tabs a[data-tab]')].map(a => a.dataset.tab);
       const cur = tabs.indexOf(((document.querySelector('.tabs a[aria-current="page"]') || {}).dataset || {}).tab);
       const next = tabs[cur + (dx < 0 ? 1 : -1)];
+      note(`${e.type}: dx ${Math.round(dx)} → ${next || 'none'} (tab ${cur})`);
       if (cur < 0 || !next) return;
       location.hash = '#' + next;
       window.scrollTo(0, 0);
-    }, { passive: true });
+    };
+    document.addEventListener('touchend', end, { passive: true });
+    document.addEventListener('touchcancel', end, { passive: true });
   }
 
   async function init() {
