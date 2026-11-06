@@ -1,7 +1,14 @@
 /* League Now > Analytics (#now/analytics): this season's numbers behind the standings, from data/analytics.json
-   (scripts/analytics.py). Lineups, luck, projections, lineup cost, salary value and playoff odds week by week. */
+   (scripts/analytics.py). Lineups, luck, projections, lineup cost, salary value and playoff odds week by week.
+   Every table sorts by tapping a column header; every bar chart flips order with its sort button.
+   Each section folds closed by tapping its title, and the Collapse all button folds them all; which ones are
+   closed is remembered on this device. */
 window.FBPAnalytics = (function () {
   let A = null, loading = false, failed = false, X = null;
+  const sorts = {};             // table or chart id -> [column, direction]; direction -1 is high to low
+  let closed = new Set();
+  try { closed = new Set(JSON.parse(localStorage.getItem('fbp-an-closed') || '[]')); } catch (e) {}
+  const saveClosed = () => { try { localStorage.setItem('fbp-an-closed', JSON.stringify([...closed])); } catch (e) {} };
   function load() {
     if (A || loading) return;
     loading = true;
@@ -15,6 +22,20 @@ window.FBPAnalytics = (function () {
   const money = x => '$' + Math.round(x);
   const rec = t => `${t.w}-${t.l}${t.t ? '-' + t.t : ''}`;
   const SECS = [['lineups', 'Lineups'], ['luck', 'Luck'], ['proj', 'Projections'], ['cost', 'Lineup cost'], ['salary', 'Salary'], ['odds', 'Playoff odds']];
+  const CARDS = ['lineups', 'sundays', 'luck', 'proj', 'cost', 'costpos', 'pricier', 'points', 'salary', 'bargains', 'odds'];
+
+  // a sortable table. cols: [key, label, class, sortValue(row), cell(row)]; text columns sort A to Z first
+  function table(id, cols, rows, def, extraCls) {
+    if (!sorts[id]) sorts[id] = def;
+    const [k, d] = sorts[id];
+    const c = cols.find(x => x[0] === k) || cols[0];
+    const sorted = rows.slice().sort((a, b) => { const x = c[3](a), y = c[3](b);
+      return typeof x === 'string' ? d * x.localeCompare(y) : d * ((x == null ? -1e9 : x) - (y == null ? -1e9 : y)); });
+    const th = col => { const on = col[0] === k, txt = rows.length && typeof col[3](rows[0]) === 'string';
+      return `<th class="${col[2] || ''} an-sort" data-an-sort="${id}|${col[0]}" data-an-first="${txt ? 1 : -1}" aria-sort="${on ? (d < 0 ? 'descending' : 'ascending') : 'none'}">${col[1]}${on ? (d < 0 ? ' ▼' : ' ▲') : ''}</th>`; };
+    return `<div class="tbl-wrap"><table class="an-t${extraCls ? ' ' + extraCls : ''}"><thead><tr>${cols.map(th).join('')}</tr></thead><tbody>
+      ${sorted.map(r => `<tr>${cols.map(col => col[4](r)).join('')}</tr>`).join('')}</tbody></table></div>`;
+  }
 
   function render(ctx) {
     X = ctx; load();
@@ -25,73 +46,135 @@ window.FBPAnalytics = (function () {
     const lg = f => tm(f).logo ? `<img class="an-lg" src="${tm(f).logo}" alt="" loading="lazy">` : '<span class="an-lg"></span>';
     const ab = f => esc(tm(f).abbr || T[f].name);
     const nm = f => esc(T[f].name);
-    // bars from zero, sorted; diverging bars around zero
-    const bars = (key, fmt, sub, asc) => { const s = ids.filter(f => T[f][key] != null).sort((a, b) => asc ? T[a][key] - T[b][key] : T[b][key] - T[a][key]);
-      const mx = Math.max(...s.map(f => T[f][key])) || 1;
+    const teamCell = f => `<td class="an-tm">${lg(f)}${nm(f)}</td>`;
+    const abCell = f => `<td class="an-tm">${lg(f)}<span class="an-ab">${ab(f)}</span></td>`;
+    // bars from zero, and diverging bars around zero; each flips order with its sort button
+    const order = (id, key, best) => { if (!sorts[id]) sorts[id] = [key, best]; const d = sorts[id][1];
+      return ids.filter(f => T[f][key] != null).sort((a, b) => d * (T[a][key] - T[b][key])); };
+    const flip = (id, key, best, hi, lo) => { const d = (sorts[id] || [key, best])[1];
+      return `<button type="button" class="an-flip" data-an-sort="${id}|${key}" data-an-best="${best}">${d < 0 ? hi + ' ▼' : lo + ' ▲'}</button>`; };
+    const bars = (id, key, fmt, sub, best) => { const s = order(id, key, best), mx = Math.max(...s.map(f => T[f][key])) || 1;
       return `<div class="an-rows">${s.map(f => `<div class="an-r" title="${nm(f)}">${lg(f)}<span class="an-ab">${ab(f)}</span>
         <span class="an-trk"><span class="an-b" style="left:0;width:${100 * T[f][key] / mx}%"></span></span><span class="an-v">${fmt(T[f][key])}<small>${sub(T[f])}</small></span></div>`).join('')}</div>`; };
-    const div = (key, sub) => { const s = ids.slice().sort((a, b) => T[b][key] - T[a][key]);
-      const mx = Math.max(...s.map(f => Math.abs(T[f][key]))) || 1;
+    const div = (id, key, sub) => { const s = order(id, key, -1), mx = Math.max(...s.map(f => Math.abs(T[f][key]))) || 1;
       return `<div class="an-rows">${s.map(f => { const v = T[f][key], w = 50 * Math.abs(v) / mx;
         return `<div class="an-r" title="${nm(f)}">${lg(f)}<span class="an-ab">${ab(f)}</span>
         <span class="an-trk"><span class="an-mid"></span><span class="an-b ${v < 0 ? 'n' : 'p'}" style="left:${v < 0 ? 50 - w : 50}%;width:${w}%"></span></span><span class="an-v">${sg(v)}<small>${sub(T[f])}</small></span></div>`; }).join('')}</div>`; };
     const key = (p, n) => `<div class="an-key"><span><i class="p"></i>${p}</span><span><i class="n"></i>${n}</span></div>`;
-    const card = (id, title, why, body, wide) => `<section class="card an-card${wide ? ' wide' : ''}"${id ? ` id="an-${id}"` : ''}><h2>${title}</h2><p class="an-why">${why}</p>${body}</section>`;
-    const pl = (r, extra) => `<td>${lg(r.fr)}${esc(r.name)} <span class="an-pos">${esc(r.pos)}</span></td>${extra}`;
+    const card = (id, title, why, body, opts) => { opts = opts || {}; const shut = closed.has(id);
+      return `<section class="card an-card${opts.wide ? ' wide' : ''}${shut ? ' an-shut' : ''}" id="an-${id}">
+        <div class="an-hd"><button type="button" class="an-tog" data-an-tog="${id}" aria-expanded="${!shut}"><span class="an-car" aria-hidden="true"></span><h2>${title}</h2></button>${opts.tool || ''}</div>
+        <div class="an-bd"><p class="an-why">${why}</p>${body}</div></section>`; };
+    const plCell = r => `<td class="an-tm">${lg(r.fr)}${esc(r.name)} <span class="an-pos">${esc(r.pos)}</span></td>`;
+    const num = (v, fmt, bold) => `<td class="n">${bold ? '<b>' : ''}${fmt(v)}${bold ? '</b>' : ''}</td>`;
 
-    // lineup cost: where each team's starting dollars go, shaded by share of its lineup
+    // where the lineup money goes, shaded by each position's share of the team's lineup
     const POS = ['QB', 'RB', 'WR', 'TE', 'DEF'];
-    const posTbl = `<div class="tbl-wrap"><table class="an-t an-heat"><thead><tr><th>Team</th>${POS.map(p => `<th class="n">${p}</th>`).join('')}<th class="n">Total</th></tr></thead><tbody>
-      ${ids.slice().sort((a, b) => T[b].lineupCost - T[a].lineupCost).map(f => { const c = T[f].costPos || {}, tot = T[f].lineupCost || 1;
-        return `<tr><td>${lg(f)}<span class="an-ab">${ab(f)}</span></td>${POS.map(p => { const v = c[p] || 0, sh = v / tot;
-          return `<td class="n" style="--a:${Math.min(1, sh / 0.6).toFixed(2)}" title="${Math.round(100 * sh)}% of the lineup’s salary">${money(v)}</td>`; }).join('')}<td class="n"><b>${money(tot)}</b></td></tr>`; }).join('')}</tbody></table></div>`;
+    const share = (f, p) => ((T[f].costPos || {})[p] || 0) / (T[f].lineupCost || 1);
+    const posTbl = table('costpos', [
+      ['team', 'Team', '', f => T[f].name, abCell],
+      ...POS.map(p => [p, p, 'n', f => (T[f].costPos || {})[p] || 0,
+        f => `<td class="n" style="--a:${Math.min(1, share(f, p) / 0.6).toFixed(2)}" title="${Math.round(100 * share(f, p))}% of the lineup’s salary">${money((T[f].costPos || {})[p] || 0)}</td>`]),
+      ['tot', 'Total', 'n', f => T[f].lineupCost, f => num(T[f].lineupCost, money, true)],
+    ], ids, ['tot', -1], 'an-heat');
     const pr = A.pricier || [0, 0, 0], prN = pr[0] + pr[1] + pr[2];
 
     const odW = A.oddsWeeks || [];
-    const spark = o => { const v = o.map(x => x == null ? null : x); const pts = v.map((x, i) => x == null ? null : [(i * 84 / Math.max(1, v.length - 1) + 3), (23 - x * 20 / 100)]).filter(Boolean);
+    const spark = o => { const pts = o.map((x, i) => x == null ? null : [(i * 84 / Math.max(1, o.length - 1) + 3), (23 - x * 20 / 100)]).filter(Boolean);
       if (pts.length < 2) return '';
       const last = pts[pts.length - 1];
       return `<svg class="an-spark" viewBox="0 0 90 26" aria-hidden="true"><line x1="3" x2="87" y1="23" y2="23"/><polyline points="${pts.map(p => p.map(n => n.toFixed(1)).join(',')).join(' ')}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3"/></svg>`; };
+    const oNow = f => T[f].odds[T[f].odds.length - 1];
+    const oChg = f => (oNow(f) || 0) - (T[f].odds[0] || 0);
+    const cl = f => T[f].close, clPct = f => { const c = cl(f), n = c[0] + c[1] + c[2]; return n ? (c[0] + c[2] / 2) / n : null; };
+
+    const playerTbl = (id, rows, def, cols) => table(id, [['name', 'Player', '', r => r.name, plCell], ...cols], rows, def);
 
     const cards = [
       card('lineups', 'Points left on the bench', 'The gap between what each team started and the best lineup it could have started. Shorter is better.',
-        bars('left', f1, t => f1(t.eff) + '% of best', true)),
-      card('', 'Costliest Sundays', 'The single weeks with the most points left on the bench.',
-        `<div class="tbl-wrap"><table class="an-t"><thead><tr><th>Team</th><th class="n">Wk</th><th class="n">Started</th><th class="n">Best</th><th class="n">Left</th></tr></thead><tbody>
-        ${(A.leftWeeks || []).map(([d, w, f, a, o]) => `<tr><td>${lg(f)}${nm(f)}</td><td class="n">${w}</td><td class="n">${f1(a)}</td><td class="n">${f1(o)}</td><td class="n"><b>${f1(d)}</b></td></tr>`).join('')}</tbody></table></div>`),
+        bars('lineups', 'left', f1, t => f1(t.eff) + '% of best', 1), { tool: flip('lineups', 'left', 1, 'Most', 'Fewest') }),
+      card('sundays', 'Costliest Sundays', 'The single weeks with the most points left on the bench.',
+        table('sundays', [
+          ['team', 'Team', '', r => T[r[2]].name, r => teamCell(r[2])],
+          ['wk', 'Wk', 'n', r => r[1], r => num(r[1], String)],
+          ['act', 'Started', 'n', r => r[3], r => num(r[3], f1)],
+          ['opt', 'Best', 'n', r => r[4], r => num(r[4], f1)],
+          ['left', 'Left', 'n', r => r[0], r => num(r[0], f1, true)],
+        ], A.leftWeeks || [], ['left', -1])),
       card('luck', 'Luck: wins vs. expected', 'Actual wins minus the wins each team’s scoring would earn against an average schedule, from the all-play record.',
-        div('luck', t => rec(t) + ' · exp ' + f1(t.xw)) + key('More wins than the points deserve', 'Fewer')),
+        div('luck', 'luck', t => rec(t) + ' · exp ' + f1(t.xw)) + key('More wins than the points deserve', 'Fewer'), { tool: flip('luck', 'luck', -1, 'Luckiest', 'Unluckiest') }),
       card('proj', 'Beating the projections', `Points from each team’s starters above or below what MFL projected for them, weeks 1–${A.through} combined.`,
-        div('proj', t => f1(t.pf) + ' pts') + key('Starters outscored their projections', 'Fell short')),
+        div('proj', 'proj', t => f1(t.pf) + ' pts') + key('Starters outscored their projections', 'Fell short'), { tool: flip('proj', 'proj', -1, 'Most', 'Least') }),
       card('cost', 'Starting lineup cost', 'The average salary of each team’s starting lineup each week, and the points it returned per dollar.',
-        bars('lineupCost', money, t => f2(t.ptsPerDollar) + ' pts per $', false)),
-      card('', 'Where the lineup money goes', 'Average weekly salary started at each position. Darker cells are a bigger share of that team’s lineup.', posTbl),
-      card('', 'Does the pricier lineup win?', 'Every game this season, the team that started more salary against the team that started less.',
+        bars('cost', 'lineupCost', money, t => f2(t.ptsPerDollar) + ' pts per $', -1), { tool: flip('cost', 'lineupCost', -1, 'Priciest', 'Cheapest') }),
+      card('costpos', 'Where the lineup money goes', 'Average weekly salary started at each position. Darker cells are a bigger share of that team’s lineup.', posTbl),
+      card('pricier', 'Does the pricier lineup win?', 'Every game this season, the team that started more salary against the team that started less.',
         `<div class="an-hero"><b>${pr[0]}-${pr[1]}${pr[2] ? '-' + pr[2] : ''}</b><span>record of the pricier lineup${prN ? ` · ${Math.round(100 * (pr[0] + pr[2] / 2) / prN)}%` : ''}</span></div>
-        <h3>Biggest bargain wins</h3><div class="tbl-wrap"><table class="an-t"><thead><tr><th>Wk</th><th>Winner</th><th class="n">Started</th><th>Loser</th><th class="n">Started</th></tr></thead><tbody>
-        ${(A.cheapWins || []).map(([w, lo, lc, lp, hi, hc, hp]) => `<tr><td>${w}</td><td>${lg(lo)}<span class="an-ab">${ab(lo)}</span> ${f1(lp)}</td><td class="n">${money(lc)}</td><td>${lg(hi)}<span class="an-ab">${ab(hi)}</span> ${f1(hp)}</td><td class="n">${money(hc)}</td></tr>`).join('')}</tbody></table></div>`),
-      card('', 'Cheapest and priciest points', 'Salary per point each time a player started, for players with 3 or more starts.',
-        `<div class="an-two"><div><h3>Cheapest (10+ points a start)</h3><table class="an-t"><tbody>${(A.cheapStarters || []).map(r => `<tr>${pl(r, `<td class="n">${money(r.sal)}</td><td class="n">${f1(r.ppg)}/g</td><td class="n"><b>${f2(r.cpp)}</b></td>`)}</tr>`).join('')}</tbody></table></div>
-        <div><h3>Priciest ($15+)</h3><table class="an-t"><tbody>${(A.priceyStarters || []).map(r => `<tr>${pl(r, `<td class="n">${money(r.sal)}</td><td class="n">${f1(r.ppg)}/g</td><td class="n"><b>${f2(r.cpp)}</b></td>`)}</tr>`).join('')}</tbody></table></div></div>
-        <p class="an-note">Last column: dollars of salary per point per start. Lower is better.</p>`),
+        <h3>Biggest bargain wins</h3>` + table('cheapwins', [
+          ['wk', 'Wk', '', r => r[0], r => `<td>${r[0]}</td>`],
+          ['win', 'Winner', '', r => T[r[1]].name, r => `<td class="an-tm">${lg(r[1])}<span class="an-ab">${ab(r[1])}</span> ${f1(r[3])}</td>`],
+          ['wc', 'Started', 'n', r => r[2], r => num(r[2], money)],
+          ['lose', 'Loser', '', r => T[r[4]].name, r => `<td class="an-tm">${lg(r[4])}<span class="an-ab">${ab(r[4])}</span> ${f1(r[6])}</td>`],
+          ['lc', 'Started', 'n', r => r[5], r => num(r[5], money)],
+          ['gap', 'Gap', 'n', r => r[5] - r[2], r => num(r[5] - r[2], money, true)],
+        ], A.cheapWins || [], ['gap', -1])),
+      card('points', 'Cheapest and priciest points', 'Salary per point each time a player started, for players with 3 or more starts.',
+        `<h3>Cheapest (10+ points a start)</h3>` + playerTbl('cheapst', A.cheapStarters || [], ['cpp', 1], [
+          ['sal', 'Salary', 'n', r => r.sal, r => num(r.sal, money)], ['ppg', 'Pts/start', 'n', r => r.ppg, r => num(r.ppg, f1)],
+          ['cpp', '$/pt', 'n', r => r.cpp, r => num(r.cpp, f2, true)]]) +
+        `<h3>Priciest ($15+)</h3>` + playerTbl('pricest', A.priceyStarters || [], ['cpp', -1], [
+          ['sal', 'Salary', 'n', r => r.sal, r => num(r.sal, money)], ['ppg', 'Pts/start', 'n', r => r.ppg, r => num(r.ppg, f1)],
+          ['cpp', '$/pt', 'n', r => r.cpp, r => num(r.cpp, f2, true)]]) +
+        `<p class="an-note">$/pt: dollars of salary per point per start. Lower is better.</p>`),
       card('salary', 'Points per payroll dollar', 'Points started this season for every dollar of each team’s current payroll.',
-        bars('pfPerDollar', f2, t => money(t.payroll || 0) + ' payroll', false)),
-      card('', 'Bargains and letdowns', 'Points on FBP rosters this season per dollar of salary.',
-        `<div class="an-two"><div><h3>Best bargains ($5+)</h3><table class="an-t"><tbody>${(A.bargains || []).map(r => `<tr>${pl(r, `<td class="n">${money(r.sal)}</td><td class="n">${f1(r.pts)}</td><td class="n"><b>${f1(r.per)}</b>/$</td>`)}</tr>`).join('')}</tbody></table></div>
-        <div><h3>Priciest letdowns ($20+)</h3><table class="an-t"><tbody>${(A.letdowns || []).map(r => `<tr>${pl(r, `<td class="n">${money(r.sal)}</td><td class="n">${f1(r.pts)}</td><td class="n"><b>${f1(r.per)}</b>/$</td>`)}</tr>`).join('')}</tbody></table></div></div>`),
+        bars('salary', 'pfPerDollar', f2, t => money(t.payroll || 0) + ' payroll', -1), { tool: flip('salary', 'pfPerDollar', -1, 'Most', 'Fewest') }),
+      card('bargains', 'Bargains and letdowns', 'Points on FBP rosters this season per dollar of salary.',
+        `<h3>Best bargains ($5+)</h3>` + playerTbl('barg', A.bargains || [], ['per', -1], [
+          ['sal', 'Salary', 'n', r => r.sal, r => num(r.sal, money)], ['pts', 'Pts', 'n', r => r.pts, r => num(r.pts, f1)],
+          ['per', 'Pts/$', 'n', r => r.per, r => num(r.per, f1, true)]]) +
+        `<h3>Priciest letdowns ($20+)</h3>` + playerTbl('letd', A.letdowns || [], ['per', 1], [
+          ['sal', 'Salary', 'n', r => r.sal, r => num(r.sal, money)], ['pts', 'Pts', 'n', r => r.pts, r => num(r.pts, f1)],
+          ['per', 'Pts/$', 'n', r => r.per, r => num(r.per, f1, true)]])),
       card('odds', 'Playoff odds, week by week', `Each team’s chance to make the playoffs after every week${odW.length ? ` since week ${odW[0]}` : ''}, from the 20,000-run simulation. The lines grow as the season goes.`,
-        `<div class="tbl-wrap"><table class="an-t"><thead><tr><th>Team</th><th class="an-hs">Record</th><th>Trend</th><th class="n">Now</th><th class="n">Since wk ${odW[0] || ''}</th><th class="n">Close</th></tr></thead><tbody>
-        ${ids.slice().sort((a, b) => (T[b].odds.slice(-1)[0] || 0) - (T[a].odds.slice(-1)[0] || 0)).map(f => { const o = T[f].odds, now = o[o.length - 1], d = (now || 0) - (o[0] || 0), c = T[f].close;
-          return `<tr><td>${lg(f)}${nm(f)}</td><td class="an-hs">${rec(T[f])}</td><td>${spark(o)}</td><td class="n"><b>${f1(now)}%</b></td><td class="n ${d > 0 ? 'an-up' : d < 0 ? 'an-dn' : ''}">${d > 0 ? '▲' : d < 0 ? '▼' : ''} ${f1(Math.abs(d))}</td><td class="n">${c[0]}-${c[1]}${c[2] ? '-' + c[2] : ''}</td></tr>`; }).join('')}</tbody></table></div>
-        <p class="an-note">Close: record in games decided by under 10 points.</p>`, true),
+        table('odds', [
+          ['team', 'Team', '', f => T[f].name, teamCell],
+          ['rec', 'Record', 'an-hs', f => T[f].w + T[f].t / 2, f => `<td class="an-hs">${rec(T[f])}</td>`],
+          ['trend', 'Trend', '', oChg, f => `<td>${spark(T[f].odds)}</td>`],
+          ['now', 'Now', 'n', oNow, f => num(oNow(f), x => f1(x) + '%', true)],
+          ['chg', `Since wk ${odW[0] || ''}`, 'n', oChg, f => { const d = oChg(f); return `<td class="n ${d > 0 ? 'an-up' : d < 0 ? 'an-dn' : ''}">${d > 0 ? '▲' : d < 0 ? '▼' : ''} ${f1(Math.abs(d))}</td>`; }],
+          ['close', 'Close', 'n', clPct, f => { const c = cl(f); return `<td class="n">${c[0]}-${c[1]}${c[2] ? '-' + c[2] : ''}</td>`; }],
+        ], ids, ['now', -1]) + `<p class="an-note">Close: record in games decided by under 10 points.</p>`, { wide: true }),
     ];
-    return `<div class="an-jump">${SECS.map(([k, l]) => `<button type="button" data-an-jump="${k}">${l}</button>`).join('')}</div>
+    const allShut = CARDS.every(c => closed.has(c));
+    return `<div class="an-jump"><button type="button" class="an-all" data-an-all="${allShut ? 'open' : 'close'}">${allShut ? 'Expand all' : 'Collapse all'}</button>
+      ${SECS.map(([k, l]) => `<button type="button" data-an-jump="${k}">${l}</button>`).join('')}</div>
       <div class="an-grid">${cards.join('')}</div>
-      <p class="rf-foot">Through week ${A.through}. Best lineups are MFL’s optimal lineup each week. Salaries are what each player is paid on his FBP roster now; players since dropped use their 2026 auction price or waiver bid.</p>`;
+      <p class="rf-foot">Through week ${A.through}. Tap a column header to sort a table, and a section’s title to fold it. Best lineups are MFL’s optimal lineup each week. Salaries are what each player is paid on his FBP roster now; players since dropped use their 2026 auction price or waiver bid.</p>`;
   }
-  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-an-jump]'); if (!b) return;
-    const el = document.getElementById('an-' + b.dataset.anJump); if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hdr-h')) || 0) - 10;
-    window.scrollTo({ top, behavior: 'smooth' }); });
+
+  const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
+  document.addEventListener('click', e => {
+    const t = e.target.closest ? e.target : null; if (!t) return;
+    const s = t.closest('[data-an-sort]');
+    if (s) { const [id, k] = s.dataset.anSort.split('|'), cur = sorts[id];
+      if (s.dataset.anBest != null) sorts[id] = [k, -((cur || [k, +s.dataset.anBest])[1])];   // a chart's flip button
+      else sorts[id] = cur && cur[0] === k ? [k, -cur[1]] : [k, +s.dataset.anFirst];
+      return redraw(); }
+    const g = t.closest('[data-an-tog]');
+    if (g) { const id = g.dataset.anTog, sec = g.closest('.an-card');
+      if (closed.has(id)) closed.delete(id); else closed.add(id);
+      saveClosed();
+      sec.classList.toggle('an-shut', closed.has(id)); g.setAttribute('aria-expanded', String(!closed.has(id)));
+      const all = document.querySelector('[data-an-all]');
+      if (all) { const shut = CARDS.every(c => closed.has(c)); all.dataset.anAll = shut ? 'open' : 'close'; all.textContent = shut ? 'Expand all' : 'Collapse all'; }
+      return; }
+    const a = t.closest('[data-an-all]');
+    if (a) { if (a.dataset.anAll === 'close') CARDS.forEach(c => closed.add(c)); else closed.clear(); saveClosed(); return redraw(); }
+    const j = t.closest('[data-an-jump]');
+    if (j) { const k = j.dataset.anJump, el = document.getElementById('an-' + k); if (!el) return;
+      if (closed.has(k)) { closed.delete(k); saveClosed(); el.classList.remove('an-shut'); const b = el.querySelector('[data-an-tog]'); if (b) b.setAttribute('aria-expanded', 'true'); }
+      const top = el.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hdr-h')) || 0) - 10;
+      window.scrollTo({ top, behavior: 'smooth' }); }
+  });
   return { render };
 })();
