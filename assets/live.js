@@ -103,13 +103,18 @@
       (sb.events || []).forEach(ev => {
         const st = ev.status || {}, t = st.type || {};
         const info = { id: ev.id, state: t.state, date: ev.date, detail: t.shortDetail, clock: st.displayClock, period: st.period, name: ev.shortName };
-        ev.competitions[0].competitors.forEach(c => { g[c.team.abbreviation] = info; });
+        const cs = ev.competitions[0].competitors;
+        cs.forEach(c => { const o = cs.find(x => x !== c) || {}; g[c.team.abbreviation] = Object.assign({}, info, { pa: o.score }); });
       });
       // box scores only for games that have started; finished ones only once
       const want = [...new Set(Object.values(g).filter(x => x.state === 'in' || (x.state === 'post' && !stats['ev' + x.id])).map(x => x.id))];
       return Promise.all(want.map(id => fetch(ESPN + 'summary?event=' + id).then(r => r.ok ? r.json() : null).then(j => {
         if (!j || !j.boxscore) return;
         stats['ev' + id] = 1;
+        // a defense's day comes from the other team's numbers: sacks taken, interceptions thrown, fumbles lost
+        const T = (j.boxscore.teams || []).map(t => ({ ab: t.team.abbreviation, v: Object.fromEntries((t.statistics || []).reverse().map(x => [x.name, x.displayValue])) }));
+        T.forEach((t, i) => { const o = T[1 - i]; if (!o) return;
+          stats['def:' + t.ab] = { sk: +String(o.v.sacksYardsLost || '0').split('-')[0] || 0, int: +o.v.interceptions || 0, fr: +o.v.fumblesLost || 0, td: +t.v.defensiveTouchdowns || 0 }; });
         (j.boxscore.players || []).forEach(tm => (tm.statistics || []).forEach(cat => (cat.athletes || []).forEach(a => {
           const row = (stats[a.athlete.id] = stats[a.athlete.id] || {});
           row[cat.name] = Object.fromEntries((cat.labels || []).map((l, i) => [l, a.stats[i]]));
@@ -143,7 +148,15 @@
   };
   const gameOf = id => EW().games[TEAM[info(id).team] || info(id).team];
   // the stat line: passing, rushing, receiving, whatever he did
+  // keeps a stat together ("16 car") but lets it wrap after a comma
+  const keep = x => x.replace(/(,?) /g, (m, c) => c ? ', ' : '\u00a0');
   function statLine(id) {
+    if (pos(id) === 'DEF') {   // points allowed, sacks, takeaways, defensive scores
+      const ab = TEAM[info(id).team] || info(id).team, d = EW().stats['def:' + ab], gm = gameOf(id);
+      if (!d || !gm || gm.state === 'pre') return '';
+      const pl = (k, one, many) => `${k} ${k === 1 ? one : many}`;
+      return [`${gm.pa != null ? gm.pa : '?'} pts allowed`, d.sk && pl(d.sk, 'sack', 'sacks'), d.int && pl(d.int, 'INT', 'INT'), d.fr && pl(d.fr, 'fum rec', 'fum rec'), d.td && pl(d.td, 'TD', 'TD')].filter(Boolean).map(keep).join('\u00a0· ');
+    }
     const r = EW().stats[espnId(id)]; if (!r) return '';
     const n = v => +String(v || 0).split('/')[0] || 0, out = [];
     const ps = r.passing, ru = r.rushing, re = r.receiving, k = r.kicking;
@@ -154,7 +167,7 @@
     if (k) out.push(`FG ${k.FG}, XP ${k.XP}`);
     const fl = r.fumbles && n(r.fumbles.LOST);
     if (fl) out.push(`${fl} fum lost`);
-    return out.join(' · ');
+    return out.map(keep).join('\u00a0· ');   // a line break never starts with a dot, or splits "4 sacks"
   }
   // an earlier week, shaped like MFL's live scoring: final lineups and points from the weekly results file
   function loadHist(w) {
@@ -204,7 +217,7 @@
   const pos = id => { const p = info(id).position || ''; return p === 'Def' ? 'DEF' : p; };
   const short = id => {
     const nm = info(id).name || id;
-    if (pos(id) === 'DEF') return (nm.split(',')[1] || nm).trim() + ' D';
+    if (pos(id) === 'DEF') return (nm.split(',')[0] || nm).trim() + '\u00a0D';   // Jaguars D (the city is on the line below)
     const [last, first] = nm.split(',').map(s => s.trim());
     return first ? `${first[0]}. ${last}` : nm;
   };

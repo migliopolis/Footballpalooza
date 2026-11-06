@@ -1218,7 +1218,7 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
   .lv-pc{display:block}
   .lv-ph{display:block;width:28px;height:28px;margin:0 0 3px}
   .lv-p.b .lv-ph{margin-left:auto}
-  .lv-nm{white-space:normal;overflow:visible;text-overflow:clip;font-size:.8rem;line-height:1.2;overflow-wrap:anywhere}
+  .lv-nm{white-space:normal;overflow:visible;text-overflow:clip;font-size:.8rem;line-height:1.2;overflow-wrap:break-word;hyphens:manual}
   .lv-p small{font-size:.62rem;line-height:1.25}
   .lv-names{font-size:.8rem}
 }
