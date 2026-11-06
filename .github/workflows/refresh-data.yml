@@ -58,6 +58,9 @@ jobs:
       - name: Player records (Reference > Players)
         continue-on-error: true
         run: python scripts/player_records.py
+      - name: Rosters (League Now > Rosters)
+        continue-on-error: true
+        run: python scripts/rosters.py
       - name: Analytics (League Now > Analytics)
         continue-on-error: true
         run: python scripts/analytics.py
