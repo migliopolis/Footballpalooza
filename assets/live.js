@@ -210,8 +210,21 @@
   function paint() {
     const el = document.getElementById('lv-root');
     if (el) el.innerHTML = body(); else if (X && onPage()) X.rerender();
+    fitSoon();
     poll();
   }
+  // a name too long for its column (narrow phone, big text) shrinks a little to fit on one line, down to 70%
+  function fitNames(root) {
+    (root || document).querySelectorAll('.lv-nmt').forEach(n => {
+      n.style.fontSize = '';
+      const td = n.closest('td'); if (!td || !td.offsetWidth) return;
+      const cs = getComputedStyle(td), room = td.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      if (n.scrollWidth > room) { const fs = parseFloat(getComputedStyle(n).fontSize); n.style.fontSize = Math.max(fs * 0.7, fs * room / n.scrollWidth - 0.2) + 'px'; }
+    });
+  }
+  const fitSoon = () => requestAnimationFrame(() => fitNames(document.getElementById('lv-root')));
+  document.addEventListener('toggle', e => { if (e.target.closest && e.target.closest('#lv-root')) fitNames(e.target); }, true);
+  window.addEventListener('resize', () => { if (onPage()) fitSoon(); });
 
   const info = id => (players && players[id]) || {};
   const pos = id => { const p = info(id).position || ''; return p === 'Def' ? 'DEF' : p; };
@@ -310,7 +323,7 @@
         const st = state(p), ph = photo(p.id), inj = injTag(p.id);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         const img = `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}">${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`;
-        const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm">${cls === 'b' ? tag : ''}${esc(short(p.id))}${cls === 'a' ? tag : ''}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
+        const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
@@ -351,6 +364,7 @@
     X = ctx;
     if (!data && !failed) load();
     poll();
+    setTimeout(fitSoon, 0);
     return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof">Pick a week · tap a game for both lineups and stats${(X.seeds || []).length ? ' · numbers by a team are playoff seeds if the season ended today' : ''}</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
   }
 
@@ -371,6 +385,7 @@
     const key = b.dataset.lv, g = b.closest('.lv-g'), on = !open.has(key);
     on ? open.add(key) : open.delete(key);
     g.classList.toggle('open', on); b.setAttribute('aria-expanded', on); g.querySelector('.lv-det').hidden = !on;
+    if (on) fitNames(g);
     const btn = document.querySelector('[data-lv-all]'), n = cur().liveScoring.matchup.length;
     if (btn) { btn.dataset.lvAll = open.size === n ? 'close' : 'open'; btn.textContent = open.size === n ? 'Collapse all' : 'Expand all'; }
   });

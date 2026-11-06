@@ -1183,9 +1183,9 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-pts.pre{color:var(--muted);font-weight:400}
 .lv-slot{width:2.6rem;text-align:center;font:700 .6rem var(--body);letter-spacing:.04em;color:var(--muted)}
 .lv-st.live{color:var(--ok);font-weight:700}
-.lv-p.live .lv-nm::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:4px;vertical-align:2px}
-.lv-p.b.live .lv-nm::before{display:none}
-.lv-p.b.live .lv-nm::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-left:4px;vertical-align:2px}
+.lv-p.live .lv-nmt::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:4px;vertical-align:2px}
+.lv-p.b.live .lv-nmt::before{display:none}
+.lv-p.b.live .lv-nmt::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-left:4px;vertical-align:2px}
 .lv-p.empty{color:var(--muted)}
 .lv-stat{white-space:normal!important;color:var(--fg)!important;opacity:.75;margin-top:1px;line-height:1.25}
 .lv-seed{display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;padding:0 4px;border-radius:999px;background:var(--red-soft);color:var(--red);font:700 .6rem/1 var(--body);letter-spacing:0;margin:0 4px;vertical-align:1px}
@@ -1356,3 +1356,11 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
   .lv-sc b{font-size:min(1.45rem,6.4vw)}
   .lv-sc .lv-pjt{font-size:min(.72rem,3vw)}
 }
+
+/* a player's name never splits: it stays on one line, and his chips (Q, IR, 1st Team...) wrap to the next line instead.
+   Home side mirrors, chips to the left of the name. */
+.lv-nm{display:flex;flex-wrap:wrap;align-items:center;gap:2px 4px}
+.lv-p.b .lv-nm{flex-direction:row-reverse}
+.lv-nmt{white-space:nowrap}
+.lv-nm .lv-af,.lv-nm .lv-inj{margin:0}
+@media (max-width:520px){.lv-nm{overflow:visible}.lv-nmt{font-size:min(.8rem,3.9vw)}}
