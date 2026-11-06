@@ -33,8 +33,9 @@ window.FBPAnalytics = (function () {
       return typeof x === 'string' ? d * x.localeCompare(y) : d * ((x == null ? -1e9 : x) - (y == null ? -1e9 : y)); });
     const th = col => { const on = col[0] === k, txt = rows.length && typeof col[3](rows[0]) === 'string';
       return `<th class="${col[2] || ''} an-sort" data-an-sort="${id}|${col[0]}" data-an-first="${txt ? 1 : -1}" aria-sort="${on ? (d < 0 ? 'descending' : 'ascending') : 'none'}">${col[1]}${on ? (d < 0 ? ' ▼' : ' ▲') : ''}</th>`; };
-    return `<div class="tbl-wrap"><table class="an-t${extraCls ? ' ' + extraCls : ''}"><thead><tr>${cols.map(th).join('')}</tr></thead><tbody>
-      ${sorted.map(r => `<tr>${cols.map(col => col[4](r)).join('')}</tr>`).join('')}</tbody></table></div>`;
+    // a column with a logo (col[5]) gets it in its own cell pinned to the left, so it stays put when the table slides
+    return `<div class="tbl-wrap"><table class="an-t${extraCls ? ' ' + extraCls : ''}"><thead><tr>${cols.map(col => (col[5] ? '<th class="an-lgc"></th>' : '') + th(col)).join('')}</tr></thead><tbody>
+      ${sorted.map(r => `<tr>${cols.map(col => (col[5] ? `<td class="an-lgc">${col[5](r)}</td>` : '') + col[4](r)).join('')}</tr>`).join('')}</tbody></table></div>`;
   }
 
   function render(ctx) {
@@ -46,8 +47,8 @@ window.FBPAnalytics = (function () {
     const lg = f => tm(f).logo ? `<img class="an-lg" src="${tm(f).logo}" alt="" loading="lazy">` : '<span class="an-lg"></span>';
     const ab = f => esc(tm(f).abbr || T[f].name);
     const nm = f => esc(T[f].name);
-    const teamCell = f => `<td class="an-tm">${lg(f)}${nm(f)}</td>`;
-    const abCell = f => `<td class="an-tm">${lg(f)}<span class="an-ab">${ab(f)}</span></td>`;
+    const teamCell = f => `<td class="an-tm">${nm(f)}</td>`;
+    const abCell = f => `<td class="an-tm"><span class="an-ab">${ab(f)}</span></td>`;
     // bars from zero, and diverging bars around zero; each flips order with its sort button
     const order = (id, key, best) => { if (!sorts[id]) sorts[id] = [key, best]; const d = sorts[id][1];
       return ids.filter(f => T[f][key] != null).sort((a, b) => d * (T[a][key] - T[b][key])); };
@@ -65,14 +66,14 @@ window.FBPAnalytics = (function () {
       return `<section class="card an-card${opts.wide ? ' wide' : ''}${shut ? ' an-shut' : ''}" id="an-${id}">
         <div class="an-hd"><button type="button" class="an-tog" data-an-tog="${id}" aria-expanded="${!shut}"><span class="an-car" aria-hidden="true"></span><h2>${title}</h2></button>${opts.tool || ''}</div>
         <div class="an-bd"><p class="an-why">${why}</p>${body}</div></section>`; };
-    const plCell = r => `<td class="an-tm">${lg(r.fr)}${esc(r.name)} <span class="an-pos">${esc(r.pos)}</span></td>`;
+    const plCell = r => `<td class="an-tm">${esc(r.name)} <span class="an-pos">${esc(r.pos)}</span></td>`;
     const num = (v, fmt, bold) => `<td class="n">${bold ? '<b>' : ''}${fmt(v)}${bold ? '</b>' : ''}</td>`;
 
     // where the lineup money goes, shaded by each position's share of the team's lineup
     const POS = ['QB', 'RB', 'WR', 'TE', 'DEF'];
     const share = (f, p) => ((T[f].costPos || {})[p] || 0) / (T[f].lineupCost || 1);
     const posTbl = table('costpos', [
-      ['team', 'Team', '', f => T[f].name, abCell],
+      ['team', 'Team', '', f => T[f].name, abCell, lg],
       ...POS.map(p => [p, p, 'n', f => (T[f].costPos || {})[p] || 0,
         f => `<td class="n" style="--a:${Math.min(1, share(f, p) / 0.6).toFixed(2)}" title="${Math.round(100 * share(f, p))}% of the lineup’s salary">${money((T[f].costPos || {})[p] || 0)}</td>`]),
       ['tot', 'Total', 'n', f => T[f].lineupCost, f => num(T[f].lineupCost, money, true)],
@@ -88,14 +89,14 @@ window.FBPAnalytics = (function () {
     const oChg = f => (oNow(f) || 0) - (T[f].odds[0] || 0);
     const cl = f => T[f].close, clPct = f => { const c = cl(f), n = c[0] + c[1] + c[2]; return n ? (c[0] + c[2] / 2) / n : null; };
 
-    const playerTbl = (id, rows, def, cols) => table(id, [['name', 'Player', '', r => r.name, plCell], ...cols], rows, def);
+    const playerTbl = (id, rows, def, cols) => table(id, [['name', 'Player', '', r => r.name, plCell, r => lg(r.fr)], ...cols], rows, def);
 
     const cards = [
       card('lineups', 'Points left on the bench', 'The gap between what each team started and the best lineup it could have started. Shorter is better.',
         bars('lineups', 'left', f1, t => f1(t.eff) + '% of best', 1), { tool: flip('lineups', 'left', 1, 'Most', 'Fewest') }),
       card('sundays', 'Costliest Sundays', 'The single weeks with the most points left on the bench.',
         table('sundays', [
-          ['team', 'Team', '', r => T[r[2]].name, r => teamCell(r[2])],
+          ['team', 'Team', '', r => T[r[2]].name, r => teamCell(r[2]), r => lg(r[2])],
           ['wk', 'Wk', 'n', r => r[1], r => num(r[1], String)],
           ['act', 'Started', 'n', r => r[3], r => num(r[3], f1)],
           ['opt', 'Best', 'n', r => r[4], r => num(r[4], f1)],
@@ -137,7 +138,7 @@ window.FBPAnalytics = (function () {
           ['per', 'Pts/$', 'n', r => r.per, r => num(r.per, f1, true)]])),
       card('odds', 'Playoff odds, week by week', `Each team’s chance to make the playoffs after every week${odW.length ? ` since week ${odW[0]}` : ''}, from the 20,000-run simulation. The lines grow as the season goes.`,
         table('odds', [
-          ['team', 'Team', '', f => T[f].name, teamCell],
+          ['team', 'Team', '', f => T[f].name, teamCell, lg],
           ['rec', 'Record', 'an-hs', f => T[f].w + T[f].t / 2, f => `<td class="an-hs">${rec(T[f])}</td>`],
           ['trend', 'Trend', '', oChg, f => `<td>${spark(T[f].odds)}</td>`],
           ['now', 'Now', 'n', oNow, f => num(oNow(f), x => f1(x) + '%', true)],

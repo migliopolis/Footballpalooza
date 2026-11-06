@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0101",
+      "to": "0.0105",
+      "dates": "Nov 6, 2026",
+      "items": [
+        "New League Now > Analytics: points left on the bench, luck vs. expected wins, beating MFL's projections, playoff odds week by week, and a cost analysis of starting lineups (what each team starts in salary, where the money goes by position, and whether the pricier lineup wins).",
+        "Analytics tables sort by any column, charts flip order, sections fold up with a Collapse all button, and team logos stay pinned on the left when a table slides sideways.",
+        "Game Day > Players adds free agents, taxi squad and IR players, a Rostered players only checkbox, S/B/T tags for starter, bench and taxi, and leaves out players who were inactive.",
+        "Swipe left or right on a phone to move between the main sections.",
+        "Team records and playoff records stay on one line on Reference > Players."
+      ]
+    },
+    {
       "from": "0.0096",
       "to": "0.0100",
       "dates": "Nov 5, 2026",

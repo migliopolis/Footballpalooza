@@ -1508,3 +1508,9 @@ table.an-t{width:100%;border-collapse:collapse;font-size:.82rem;font-variant-num
 .an-jump .an-all{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 @media (prefers-reduced-motion:reduce){.an-car{transition:none}}
 .an-grid{align-items:start}
+/* Analytics tables: team logo pinned to the left when a table slides sideways */
+.an-t .an-lgc{position:sticky;left:0;z-index:1;background:var(--surface);width:1px;padding-right:6px}
+.an-t .an-lgc .an-lg{margin:0;display:block;max-width:none;width:20px;min-width:20px}
+.an-t td.an-tm,.an-t th.an-tm{white-space:nowrap}
+.an-heat td.an-lgc{background:var(--surface)}
+.an-t td.an-tm,.an-t th.an-sort:not(.n){padding-right:10px}
