@@ -1428,3 +1428,11 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .pl-fa{font:700 .56rem/1 var(--body);padding:2px 4px;border-radius:3px;background:var(--line);color:var(--fg);letter-spacing:.04em;margin-right:2px}
 .pl-chk{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;white-space:nowrap;cursor:pointer;user-select:none}
 .pl-chk input{width:16px;height:16px;accent-color:var(--accent,#2a7fbf);margin:0}
+/* Players page: lineup slot letter after the FBP team (S starter, B bench, T taxi, IR) */
+.pl-sl{display:inline-block;font:700 .56rem/1 var(--body);padding:2px 4px;border-radius:3px;margin-left:5px;letter-spacing:.04em;vertical-align:1px;background:var(--line);color:var(--fg)}
+.pl-sl.s{background:rgba(42,127,191,.16);color:#1d6aa3}
+.pl-sl.b{background:var(--line);color:var(--muted)}
+.pl-sl.t{background:rgba(240,200,40,.3);color:#7a5c00}
+.pl-sl.ir{background:rgba(220,60,60,.18);color:#a12a2a}
+:root[data-theme="dark"] .pl-sl.s{color:#8cc4ee}:root[data-theme="dark"] .pl-sl.t{color:#f0cf6a}:root[data-theme="dark"] .pl-sl.ir{color:#f08a8a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pl-sl.s{color:#8cc4ee}:root:not([data-theme="light"]) .pl-sl.t{color:#f0cf6a}:root:not([data-theme="light"]) .pl-sl.ir{color:#f08a8a}}

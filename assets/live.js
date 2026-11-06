@@ -402,19 +402,24 @@
 
   // Game Day > Players: the week's top scorers at each position among every FBP-rostered player, starters and bench,
   // live. Only players whose NFL game has kicked off are ranked.
-  // free agents' points for a week, through the relay (?t=fa). An older relay that doesn't know ?t=fa sends live
-  // scoring back instead; then the page shows rostered players only and says the relay needs its update.
-  const fa = {}, faAt = {}; let faMissing = false;
-  const plFa = true;
+  // every player's points for a week, through the relay (?t=all): free agents, plus taxi squad and IR players,
+  // who aren't in MFL's live scoring. A relay without ?t=all falls back to ?t=fa (free agents only).
+  const fa = {}, faAt = {}; let faMissing = false, faAll = true;
+  // the Rostered players only checkbox (off by default; remembered on this device)
+  let plRo = false; try { plRo = localStorage.getItem('fbp-players-ro') === '1'; } catch (e) {}
+  document.addEventListener('change', e => { if (!e.target.matches || !e.target.matches('[data-pl-ro]')) return;
+    plRo = e.target.checked; try { localStorage.setItem('fbp-players-ro', plRo ? '1' : '0'); } catch (err) {} paint(); });
   function loadFa(w) {
     if (!LIVE_URL || faMissing || (faAt[w] && Date.now() - faAt[w] < 60000)) return;
     faAt[w] = Date.now();
-    fetch(`${LIVE_URL}?t=fa&w=${w}`, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => {
-      if (!j || !j.playerScores) { if (j && j.liveScoring) faMissing = true; return; }
-      fa[w] = [].concat(j.playerScores.playerScore || []).filter(x => players && players[x.id]).map(x => ({ id: x.id, score: x.score }));
+    fetch(`${LIVE_URL}?t=${faAll ? 'all' : 'fa'}&w=${w}`, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => {
+      if (!j || !j.playerScores) { if (j && j.liveScoring) { if (faAll) { faAll = false; faAt[w] = 0; loadFa(w); } else faMissing = true; } return; }
+      fa[w] = [].concat(j.playerScores.playerScore || []).filter(x => players && players[x.id]).map(x => ({ id: x.id, score: x.score, fa: !faAll || x.isAvailable === '1' }));
       if (X && X.mode === 'players') paint();
     }).catch(() => {});
   }
+  // whose taxi squad or IR a player is on (today's rosters)
+  const reserveOf = id => { for (const [f, r] of Object.entries(rosters || {})) { if (r.taxi.includes(id)) return [f, 'taxi']; if (r.ir.includes(id)) return [f, 'ir']; } return null; };
   // a free agent's game clock in MFL's terms (seconds left out of 3600), from ESPN's scoreboard
   const faSecs = id => { const g = gameOf(id); if (!g) return 0; if (g.state === 'post') return 0; if (g.state !== 'in') return 3600;
     const [m, sec] = String(g.clock || '0:00').split(':').map(Number); return Math.max(0, (4 - Math.min(4, +g.period || 1)) * 900 + (m || 0) * 60 + (sec || 0)); };
@@ -424,11 +429,19 @@
     const esc = X.esc, tm = id => X.teams[id] || {};
     const flogo = id => tm(id).logo ? `<img class="pl-fbp" src="${tm(id).logo}" alt="" title="${esc(X.nameOf(id))}">` : `<span class="pl-fbp">${esc(tm(id).abbr || '')}</span>`;
     const nlogo = id => { const t = TEAM[info(id).team] || info(id).team; return t ? `<img class="pl-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${String(t).toLowerCase()}.png" alt="" onerror="this.remove()">` : ''; };
+    const SLOT = { starter: ['S', 'Starter'], taxi: ['T', 'Taxi squad'], ir: ['IR', 'Injured reserve'] };
+    const slot = st => { const [k, t] = SLOT[st] || ['B', 'Bench']; return `<span class="pl-sl ${k.toLowerCase()}" title="${t}">${k}</span>`; };
     const onField = p => { const g = gameOf(p.id); return (g ? g.state !== 'pre' : state(p) === 'live') && !dnp(p); };
     const all = [];
     L.matchup.forEach(m => m.franchise.forEach(f => (f.players.player || []).forEach(p => { if (onField(p)) all.push(Object.assign({ fid: f.id }, p)); })));
     loadFa(wk);
-    (plFa ? fa[wk] || [] : []).forEach(x => { const p = { id: x.id, score: x.score, status: 'fa', fid: null, gameSecondsRemaining: String(faSecs(x.id)) }; if (onField(p)) all.push(p); });
+    const seen = new Set(all.map(p => p.id));
+    (fa[wk] || []).forEach(x => { if (seen.has(x.id)) return;
+      const rs = x.fa ? null : reserveOf(x.id);
+      if (!x.fa && !rs) return;                       // rostered, but not in this week's lineups or on a taxi squad/IR
+      if (x.fa && plRo) return;
+      const p = { id: x.id, score: x.score, status: rs ? rs[1] : 'fa', fid: rs ? rs[0] : null, gameSecondsRemaining: String(faSecs(x.id)) };
+      if (onField(p)) all.push(p); });
     if (!all.length) return '<p class="loading">No one has played yet this week. The leaderboard fills in once games kick off.</p>';
     const sec = ([ps, title, n]) => {
       const list = all.filter(p => pos(p.id) === ps).sort((a, b) => (+b.score || 0) - (+a.score || 0));
@@ -439,14 +452,15 @@
         return `<li class="pl-r${tr ? ' t-' + tr.k : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
           <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && (tr.k === 'nuke' || tr.k === 'hot') ? `<span class="pl-tag ${tr.k}">${tr.k === 'nuke' ? 'Nuclear' : 'Hot'}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
-            <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${p.status === 'starter' ? '' : ' · <i>bench</i>'}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
+            <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${slot(p.status)}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
           <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${pj != null ? `<small>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
         ${list.length > n ? `<button type="button" class="pl-more" data-pl-more="${ps}">${more ? 'Show fewer' : `Show more (${Math.min(list.length, 25) - n})`}</button>` : ''}</section>`;
     };
     const live = all.some(p => state(p) === 'live');
-    return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${faMissing || !fa[wk] ? 'FBP-rostered players' : 'every player, rostered or free agent'}</span></div>
+    return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${plRo || faMissing || !fa[wk] ? 'FBP-rostered players' : 'every player, rostered or free agent'}</span>
+      ${faMissing ? '' : `<label class="pl-chk"><input type="checkbox" data-pl-ro${plRo ? ' checked' : ''}> Rostered players only</label>`}</div>
       <div class="pl-grid">${PL_POS.map(sec).join('')}</div>
-      <p class="rf-foot lv-foot">Ranked by points this week among players who have taken the field this week. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection.</p>`;
+      <p class="rf-foot lv-foot">Ranked by points this week among players who have taken the field this week. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection. S starter, B bench, T taxi squad, IR injured reserve.</p>`;
   }
   document.addEventListener('click', e => { const b = e.target.closest('[data-pl-more]'); if (!b) return; const k = b.dataset.plMore; plMore.has(k) ? plMore.delete(k) : plMore.add(k); paint(); });
 
