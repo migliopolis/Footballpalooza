@@ -1592,7 +1592,7 @@ table.ro-t{border-collapse:collapse;width:100%;font-size:.84rem;font-variant-num
 .ro-box{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;position:sticky;left:6px;width:100%;max-width:calc(100vw - 2 * var(--gut) - 30px)}
 .ro-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--sky-soft)}
 .ro-tabs::-webkit-scrollbar{display:none}
-.ro-tabs button{flex:1 0 auto;border:0;background:none;color:var(--muted);font:600 .76rem var(--body);padding:9px 8px;border-bottom:3px solid transparent;cursor:pointer}
+.ro-tabs button{flex:1 0 auto;border:0;background:none;color:var(--muted);font:600 .76rem var(--body);padding:9px 8px;white-space:nowrap;border-bottom:3px solid transparent;cursor:pointer}
 .ro-tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
 .ro-bb{padding:10px 12px 12px;color:var(--fg)}
 .ro-wait{color:var(--muted);margin:6px 0}
@@ -1627,3 +1627,17 @@ table.ro-bt{border-collapse:collapse;width:100%;font-size:.8rem;font-variant-num
 .ro-note small{color:var(--muted);font-size:.72rem}
 @media (prefers-reduced-motion:reduce){.ro-car{transition:none}}
 .ro-note hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+/* player profile row and journey */
+.ro-prof{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px 8px;border-bottom:1px solid var(--line)}
+.ro-pt{display:inline-flex;flex-direction:column;gap:1px;padding:5px 9px;border-radius:8px;background:var(--sky-soft);border-left:3px solid #4d6a85;min-width:0}
+.ro-pt.r{border-left-color:#c58b2b}
+.ro-pt b{font:700 .74rem/1.2 var(--body)}.ro-pt small{font-size:.66rem;color:var(--muted);line-height:1.25}
+ol.ro-jr{list-style:none;margin:0;padding:0}
+.ro-jr li{display:grid;grid-template-columns:62px 22px minmax(0,1fr);gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:.82rem}
+.ro-jr li:last-child{border-bottom:0}
+.ro-jr img,.ro-jr i{width:22px;height:22px;object-fit:contain;max-width:none}
+.ro-jd{font:600 .7rem/1.2 var(--mono);color:var(--muted)}
+.ro-jr li.k-drop span:last-child{color:var(--muted)}
+.ro-jr b{font:600 .72rem var(--mono)}
+
+@media (max-width:520px){.ro-tabs button{font-size:.7rem;padding:9px 5px}}

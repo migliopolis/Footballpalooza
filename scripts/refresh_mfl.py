@@ -169,6 +169,30 @@ def fetch_projections():
     save('projections', saved)
 
 
+def fetch_weekly_scores():
+    """Every player's points each played week, rostered or not (Rosters player profiles: Boom or Bust and the rest).
+    Weeks already saved are kept; the last two played weeks are fetched again in case of stat corrections."""
+    path = os.path.join(OUT, 'weeklyScores.json')
+    try:
+        saved = json.load(open(path))
+    except Exception:
+        saved = {'weeks': {}}
+    weeks = played_weeks()
+    for w in weeks:
+        if str(w) in saved['weeks'] and w < max(weeks) - 1:
+            continue
+        try:
+            raw = fetch('playerScores', {'W': str(w)}).get('playerScores', {})
+            saved['weeks'][str(w)] = {x['id']: round(float(x['score']), 1) for x in as_list(raw.get('playerScore')) if x.get('score') not in (None, '')}
+            print(f'  ok   weeklyScores week {w} ({len(saved["weeks"][str(w)])} players)')
+        except Exception as e:
+            print(f'  FAIL weeklyScores week {w}: {e}')
+        time.sleep(1.1)
+    saved['note'] = "Every player's league-scoring points by week (refresh_mfl.py)"
+    saved['fetched'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+    save('weeklyScores', saved)
+
+
 def fetch_player_scores():
     """Weekly scores for every player taken in an FBP rookie draft, taxi squad included (MFL's weekly
     results leave the taxi squad out). Feeds the franchise pages' rookie draft history (pick_tenure.py)."""
@@ -293,6 +317,7 @@ def main():
             print(f'  FAIL {e}  (kept the previous file)')
     fetch_weekly()
     fetch_player_scores()
+    fetch_weekly_scores()
     fetch_transactions()
     fetch_auction_bids()
     fetch_projections()

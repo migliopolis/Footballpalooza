@@ -291,6 +291,117 @@ def week_news(f, t, played, wr, names, espn, inj, trades, team_name):
     return out
 
 
+BIG = {'QB': 25, 'RB': 20, 'WR': 20, 'TE': 15}
+DUD = {'QB': 10, 'RB': 5, 'WR': 5, 'TE': 3}
+STARTER = {'QB': 16, 'RB': 10, 'WR': 10, 'TE': 7}
+
+
+def profiles(rows_by_team, weekly, played, pos, wks_of):
+    """scoring archetypes from every week's points: {player: [[label, why]]}, at most two per player.
+    weekly: {week: {player: pts}} for all players (falls back to FBP-roster weeks when missing)."""
+    top3 = {}
+    for w, sc in weekly.items():
+        byp = collections.defaultdict(list)
+        for pid, v in sc.items():
+            byp[pos.get(pid)].append(v)
+        for p_, vals in byp.items():
+            vals.sort(reverse=True)
+            top3[(w, p_)] = vals[2] if len(vals) >= 3 else (vals[-1] if vals else 999)
+    out = {}
+    for f, rows in rows_by_team.items():
+        for r in rows:
+            p_ = r['pos']
+            if p_ not in BIG:
+                continue
+            pts = [weekly[w][r['id']] for w in weekly if r['id'] in weekly[w]] if weekly else [v[0] for v in wks_of(r['id']).values()]
+            n = len(pts)
+            if n < 4:
+                continue
+            tot = sum(pts); mean = tot / n
+            sd = (sum((x - mean) ** 2 for x in pts) / n) ** .5
+            srt = sorted(pts); p25 = srt[max(0, int(n * .25) - (1 if n % 4 == 0 else 0))]
+            bigs = sum(x >= BIG[p_] for x in pts); duds = sum(x < DUD[p_] for x in pts)
+            tops = sum(1 for w in weekly if r['id'] in weekly[w] and weekly[w][r['id']] >= top3.get((w, p_), 999)) if weekly else 0
+            bench_big = sum(1 for v in wks_of(r['id']).values() if not v[1] and v[0] >= BIG[p_])
+            cand = []
+            if bigs >= 2 and duds >= 2:
+                cand.append((3, 'Boom or Bust', f'{bigs} weeks of {BIG[p_]}+ and {duds} under {DUD[p_]}'))
+            if mean >= STARTER[p_] and duds == 0 and sd / mean <= .35:
+                cand.append((3, 'Mr. Reliable', f'no week under {DUD[p_]}, and few swings either way'))
+            elif p25 >= STARTER[p_]:
+                cand.append((2, 'High Floor', f'even his bottom quarter of weeks is {p25:.1f}+'))
+            if p25 < DUD[p_] and mean >= STARTER[p_] and not (bigs >= 2 and duds >= 2):
+                cand.append((2, 'Low Floor', f'a quarter of his weeks are under {DUD[p_]}'))
+            if tops >= 2:
+                cand.append((3, 'Ceiling Chaser', f'top 3 at {p_} in {tops} weeks'))
+            if n >= 5 and tot > 0 and max(pts) >= .4 * tot:
+                cand.append((1, 'One-Week Wonder', f'{max(pts):.1f} of his {tot:.1f} points came in one week'))
+            if bench_big >= 2:
+                cand.append((2, 'Bench Bomb', f'{bench_big} weeks of {BIG[p_]}+ on an FBP bench'))
+            cand.sort(key=lambda c: -c[0])
+            if cand:
+                out[r['id']] = [[c[1], c[2]] for c in cand[:2]]
+    return out
+
+
+def journeys(ids, cur, abbr, names):
+    """every FBP move for each player: drafts, auctions, trades, waiver and free-agent pickups, releases
+    (transactions from 2021 on; auctions and drafts from the start)"""
+    ev = collections.defaultdict(list)
+    for y in range(2019, cur + 1):
+        tx = (load(D('mfl', 'transactions.json') if y == cur else D('history', str(y), 'transactions.json'), {}) or {}).get('transactions') or []
+        for x in tx:
+            ts = int(x.get('timestamp') or 0); f = x.get('franchise'); ty = x.get('type')
+            if ty in ('BBID_WAIVER', 'FREE_AGENT'):
+                parts = (x.get('transaction', '') + '||').split('|')
+                adds = [p for p in parts[0].split(',') if p]
+                drops = [p for p in (parts[2] if ty == 'BBID_WAIVER' else parts[1]).split(',') if p]
+                bid = parts[1] if ty == 'BBID_WAIVER' else ''
+                for p in adds:
+                    if p in ids:
+                        try: b = f' for ${float(bid):.0f}' if bid and float(bid) else ''
+                        except ValueError: b = ''
+                        ev[p].append([ts, f, 'waiver' if ty == 'BBID_WAIVER' else 'fa',
+                                      f'Claimed off waivers{b}' if ty == 'BBID_WAIVER' else 'Signed as a free agent'])
+                for p in drops:
+                    if p in ids:
+                        ev[p].append([ts, f, 'drop', 'Released'])
+            elif ty == 'TRADE':
+                f2 = x.get('franchise2')
+                for gave, to, frm in (('franchise1_gave_up', f2, f), ('franchise2_gave_up', f, f2)):
+                    for p in x.get(gave, '').split(','):
+                        if p in ids:
+                            ev[p].append([ts, to, 'trade', f'Traded from {abbr(frm)}'])
+    ref = load(D('reference.json'), {}) or {}
+    for y, lst in (ref.get('auction_results') or {}).items():
+        for a in lst:
+            if a['player_id'] in ids:
+                ts = int(a.get('timestamp') or datetime(int(y), 8, 25, tzinfo=timezone.utc).timestamp())
+                ev[a['player_id']].append([ts, a['franchise'], 'auction', f"Won at auction for ${a['price']}"])
+    au = (((load(D('mfl', 'auctionResults.json'), {}) or {}).get('auctionResults') or {}).get('auctionUnit') or {}).get('auction')
+    for a in as_list(au):
+        if a['player'] in ids:
+            ev[a['player']].append([int(a.get('lastBidTime') or 0), a['franchise'], 'auction', f"Won at auction for ${a['winningBid']}"])
+    for y, lst in (ref.get('draft_classes') or {}).items():
+        for a in lst:
+            if a['player_id'] in ids:
+                ev[a['player_id']].append([int(datetime(int(y), 6, 20, tzinfo=timezone.utc).timestamp()), a['franchise'], 'draft', f"Drafted {int(a['round'])}.{a['pick']} in the rookie draft"])
+    dr = (((load(D('mfl', 'draftResults.json'), {}) or {}).get('draftResults') or {}).get('draftUnit') or {}).get('draftPick')
+    for a in as_list(dr):
+        if a.get('player') in ids:
+            ev[a['player']].append([int(a.get('timestamp') or 0), a['franchise'], 'draft', f"Drafted {int(a['round'])}.{a['pick']} in the rookie draft"])
+    out = {}
+    for p, lst in ev.items():
+        seen, uniq = set(), []
+        for e in sorted(lst):
+            yr = datetime.fromtimestamp(e[0], timezone.utc).year
+            k = (yr, e[1], e[2]) if e[2] in ('auction', 'draft') else (e[0] // 60, e[1], e[2])
+            if k not in seen:
+                seen.add(k); uniq.append(e)
+        out[p] = uniq
+    return out
+
+
 def main():
     ln = load(D('league-now.json'))
     played = int(ln['weeksPlayed'])
@@ -415,6 +526,14 @@ def main():
     paa_order = sorted(out_t, key=lambda f: -out_t[f]['paa'])
     for f in out_t:
         out_t[f]['paaRank'] = paa_order.index(f) + 1
+    # player profiles (scoring archetypes) and FBP journeys
+    weekly = {w: v for w, v in ((load(D('mfl', 'weeklyScores.json'), {}) or {}).get('weeks') or {}).items() if int(w) <= played}
+    prof = profiles({f: t['rows'] for f, t in out_t.items()}, weekly, played, pos, lambda pid: wks.get(pid, {}))
+    jour = journeys({r['id'] for t in out_t.values() for r in t['rows']}, cur, abbr, names)
+    for t in out_t.values():
+        for r in t['rows']:
+            if r['id'] in prof: r['prof'] = prof[r['id']]
+            if r['id'] in jour: r['jour'] = jour[r['id']]
     face = face_of_franchise(cur, {f: [r['id'] for r in t['rows'] if r['pos'] != 'DEF'] for f, t in out_t.items()}, names, pos, espn)
     for f, v in face.items():
         out_t[f]['face'] = v

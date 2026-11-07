@@ -25,7 +25,7 @@ window.FBPRosters = (function () {
   const POS = ['QB', 'RB', 'WR', 'TE', 'DEF'];
   const GRP = { QB: 'Quarterbacks', RB: 'Running backs', WR: 'Wide receivers', TE: 'Tight ends', DEF: 'Defense' };
   const YEARS = k => (R.season || 2026) + 1 + k;
-  const TABS = [['news', 'News'], ['log', 'Game log'], ['sched', 'Schedule'], ['an', 'Analytics'], ['sal', 'Salary']];
+  const TABS = [['news', 'News'], ['log', 'Game log'], ['sched', 'Schedule'], ['an', 'Analytics'], ['sal', 'Salary'], ['jour', 'Journey']];
   const STEP = { 3: [3, 6], 5: [3, 6, 9, 12], 6: [0, 3, 6, 9, 12] };
   const NFL_ESPN = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
   const STAT = { QB: [['passing', ['CMP', 'ATT', 'YDS', 'TD', 'INT']], ['rushing', ['CAR', 'YDS', 'TD']]],
@@ -58,6 +58,36 @@ window.FBPRosters = (function () {
     ...[0, 1, 2, 3, 4].map(k => ['y' + k, String(YEARS(k)), r => r.fut && r.fut[k] != null ? r.fut[k] : null]),
   ];
 
+  // the player's profile: scoring archetypes from the weekly data, plus role labels read from his ESPN game log
+  function role(r) {
+    if (!r.espn || !['QB', 'RB', 'WR', 'TE'].includes(r.pos)) return [];
+    const j = espn('g' + r.espn, EAPI + r.espn + '/gamelog');
+    if (!j || j.failed) return [];
+    const stt = (j.seasonTypes || []).find(x => /Regular/.test(x.displayName || '')) || (j.seasonTypes || [])[0];
+    const labels = j.labels || [], evs = []; ((stt && stt.categories) || []).forEach(c => (c.events || []).forEach(e => evs.push(e.stats)));
+    const n = evs.length; if (n < 3) return [];
+    const sum = (cat, lab) => { let off = 0; for (const c of (j.categories || [])) { if (c.name === cat) { const i = labels.slice(off, off + c.count).indexOf(lab); return i < 0 ? 0 : evs.reduce((s, st) => s + (parseFloat(st[off + i]) || 0), 0); } off += c.count; } return 0; };
+    const out = [], g = x => x / n;
+    if (r.pos === 'QB') {
+      if (g(sum('passing', 'ATT')) >= 36) out.push(['Volume King', `${g(sum('passing', 'ATT')).toFixed(0)} pass attempts a game`]);
+      if (g(sum('rushing', 'YDS')) >= 30) out.push(['Dual Threat', `${g(sum('rushing', 'YDS')).toFixed(0)} rushing yards a game`]);
+    } else if (r.pos === 'RB') {
+      const tch = g(sum('rushing', 'CAR') + sum('receiving', 'REC')), td = g(sum('rushing', 'TD') + sum('receiving', 'TD'));
+      if (tch >= 18) out.push(['Volume King', `${tch.toFixed(1)} touches a game`]);
+      else if (td >= .6 && tch < 13) out.push(['TD-Dependent', `${td.toFixed(1)} TDs a game on ${tch.toFixed(1)} touches`]);
+      if (g(sum('receiving', 'REC')) >= 3.5) out.push(['Pass-Catching Back', `${g(sum('receiving', 'REC')).toFixed(1)} catches a game`]);
+    } else {
+      const tg = g(sum('receiving', 'TGTS')), td = g(sum('receiving', 'TD'));
+      if (tg >= (r.pos === 'TE' ? 7 : 9)) out.push(['Volume King', `${tg.toFixed(1)} targets a game`]);
+      else if (td >= .5 && tg < (r.pos === 'TE' ? 5 : 6)) out.push(['TD-Dependent', `${td.toFixed(1)} TDs a game on ${tg.toFixed(1)} targets`]);
+    }
+    return out;
+  }
+  function profile(r) {
+    const tags = (r.prof || []).map(p => [...p, 's']).concat(role(r).map(p => [...p, 'r']));
+    if (!tags.length) return '';
+    return `<div class="ro-prof">${tags.map(([l, why, k]) => `<span class="ro-pt ${k}"><b>${l}</b><small>${why}</small></span>`).join('')}</div>`;
+  }
   function box(r, t, ctx) {
     const esc = ctx.esc, tab = tabOf[r.id] || 'news';
     const head = `<div class="ro-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-ro-tab="${r.id}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
@@ -85,10 +115,10 @@ window.FBPRosters = (function () {
           return ''; };
         const C = (STAT[r.pos] || []).flatMap(([cat, labs]) => labs.map(l => [cat, l]));
         const evs = Object.entries(j.events || {}).filter(([id]) => byEv[id]).sort((a, b) => (a[1].week || 0) - (b[1].week || 0));
-        body = !evs.length ? '<p class="ro-wait">No games yet this season.</p>' : `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Wk</th><th class="l">Opp</th><th class="l">Result</th>${C.map(([c, l]) =>
-          `<th>${c === 'rushing' && r.pos !== 'RB' ? 'Ru ' : c === 'receiving' && r.pos === 'RB' ? 'Re ' : ''}${l}</th>`).join('')}<th>FBP pts</th></tr></thead><tbody>
+        body = !evs.length ? '<p class="ro-wait">No games yet this season.</p>' : `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Wk</th><th class="l">Opp</th><th class="l">Result</th><th>FBP pts</th>${C.map(([c, l]) =>
+          `<th>${c === 'rushing' && r.pos !== 'RB' ? 'Ru ' : c === 'receiving' && r.pos === 'RB' ? 'Re ' : ''}${l}</th>`).join('')}</tr></thead><tbody>
           ${evs.map(([id, e]) => { const fp = fpts(e.week);
-            return `<tr><td class="l">${e.week || ''}</td><td class="l ro-op">${e.atVs || ''} ${nflLogo((e.opponent || {}).abbreviation)}${esc((e.opponent || {}).abbreviation || '')}</td><td class="l">${esc(e.gameResult || '')} ${esc(e.score || '')}</td>${C.map(([c, l]) => `<td>${esc(String(pick(byEv[id], c, l) || ''))}</td>`).join('')}<td><b>${fp ? fp[0].toFixed(1) : '—'}</b>${fp ? `<small>${fp[1] ? 'started' : 'bench'}${fp[2] !== t.abbr ? ' · ' + esc(fp[2]) : ''}</small>` : ''}</td></tr>`; }).join('')}</tbody></table></div>
+            return `<tr><td class="l">${e.week || ''}</td><td class="l ro-op">${e.atVs || ''} ${nflLogo((e.opponent || {}).abbreviation)}${esc((e.opponent || {}).abbreviation || '')}</td><td class="l">${esc(e.gameResult || '')} ${esc(e.score || '')}</td><td><b>${fp ? fp[0].toFixed(1) : '—'}</b>${fp ? `<small>${fp[1] ? 'started' : 'bench'}${fp[2] !== t.abbr ? ' · ' + esc(fp[2]) : ''}</small>` : ''}</td>${C.map(([c, l]) => `<td>${esc(String(pick(byEv[id], c, l) || ''))}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div>
           <p class="ro-bnote">FBP points are league scoring, for weeks he was on an FBP roster.</p>`;
       }
     } else if (tab === 'sched') {
@@ -127,7 +157,14 @@ window.FBPRosters = (function () {
       body = `<div class="ro-yrs">${yrs.map(y => `<div><small>${y[0]}</small><b>$${y[1]}</b><span>${y[2]}</span></div>`).join('')}${N ? `<div class="fy"><small>${YEARS((r.fut || []).length)}</small><b>FA</b><span>back to the auction</span></div>` : ''}</div>
         <p class="ro-bnote">Acquired: <b>${esc(r.acq || '—')}</b>${r.newDeal ? ' (a new 3-year veteran deal)' : ''}. ${N === 6 ? 'Taxi rookie: a full first season on taxi earns the 6th year with salary frozen in year 2. ' : ''}${N ? `Owed ${$(owed)} through ${R.season + (r.fut || []).length}, escalators included.` : ''}</p>`;
     }
-    return `<div class="ro-box">${head}<div class="ro-bb">${body}</div></div>`;
+    if (tab === 'jour') {
+      const J = r.jour || [];
+      body = !J.length ? '<p class="ro-wait">No FBP moves on record for him yet.</p>'
+        : `<ol class="ro-jr">${J.slice().reverse().map(([ts, f, kind, what]) => { const tt = ctx.teams[f] || {};
+            return `<li class="k-${kind}"><span class="ro-jd">${new Date(ts * 1000).toLocaleDateString([], { month: 'short', year: 'numeric' })}</span>${tt.logo ? `<img src="${tt.logo}" alt="" loading="lazy">` : '<i></i>'}<span><b>${esc(tt.abbr || f)}</b> ${esc(what)}</span></li>`; }).join('')}</ol>
+          <p class="ro-bnote">Newest first. Trades and pickups are on record from 2021; auctions and rookie drafts go back to the start.</p>`;
+    }
+    return `<div class="ro-box">${profile(r)}${head}<div class="ro-bb">${body}</div></div>`;
   }
 
   // points by week, against the league average, low and high
@@ -205,6 +242,8 @@ window.FBPRosters = (function () {
     const F = t.face, n = (t.weeks || []).length;
     const faceLine = F ? [`${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''}`, `${F.starts} starts`,
       ...Object.entries(F.honors || {}).map(([k, v]) => `${v > 1 ? v + '× ' : ''}${k}`), F.titles ? `${F.titles > 1 ? F.titles + '× ' : ''}champion` : ''].filter(Boolean).join(' · ') : '';
+    requestAnimationFrame(() => document.querySelectorAll('.ro-tabs').forEach(tl => { const on = tl.querySelector('[aria-selected="true"]');
+      if (on && (on.offsetLeft + on.offsetWidth > tl.scrollLeft + tl.clientWidth || on.offsetLeft < tl.scrollLeft)) tl.scrollLeft = on.offsetLeft - 8; }));
     requestAnimationFrame(() => { const el = document.querySelector('.ro-pick'); if (!el) return;
       if (pickX != null) el.scrollLeft = pickX;
       else { const on = el.querySelector('[aria-selected="true"]'); if (on && on.offsetLeft + on.offsetWidth > el.clientWidth) el.scrollLeft = on.offsetLeft - (el.clientWidth - on.offsetWidth) / 2; } });
