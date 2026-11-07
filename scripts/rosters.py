@@ -165,10 +165,12 @@ def ordinal(n):
 
 
 def season_note(f, t, s, std, mu, started, names, abbr_name):
-    """a short paragraph on the team's season so far, from the standings, scores, odds and next game (facts only)"""
+    """State of the Team: a short paragraph on the season (facts, then a line or two of read on them) and, separately,
+    the next game. Returns {'body': ..., 'next': ...}. The read comes from signals in the numbers (record vs. all-play,
+    lineup efficiency, recent form, how much the lineup leans on one player, week-to-week swings), never put-downs."""
     W = t['weeks']
     if not W:
-        return ''
+        return {}
     rec = f"{s['w']}-{s['l']}" + (f"-{s['t']}" if s.get('t') else '')
     pf_rank = sorted(std, key=lambda x: -x['pf']).index(s) + 1
     seed = s.get('seed')
@@ -190,6 +192,48 @@ def season_note(f, t, s, std, mu, started, names, abbr_name):
                    + (f", ahead of {names.get(top[1][0], top[1][0])} ({top[1][1]:.1f})." if len(top) > 1 else '.'))
     hi = max(W, key=lambda x: x['pts']); lo = min(W, key=lambda x: x['pts'])
     out.append(f"Their best week was {hi['pts']:.1f} in week {hi['w']}; their lowest, {lo['pts']:.1f} in week {lo['w']}.")
+    # the read: score each signal by how far it sits from normal and keep the two strongest
+    n = len(W); g = s['w'] + s['l'] + s.get('t', 0)
+    ap_n = s['allPlayW'] + s['allPlayL'] + s.get('allPlayT', 0)
+    xw = (s['allPlayW'] + s.get('allPlayT', 0) / 2) / ap_n * g if ap_n else s['w']
+    luck = s['w'] + s.get('t', 0) / 2 - xw
+    eff = s['pf'] / s['pp'] if s.get('pp') else None
+    league_eff = sum(x['pf'] for x in std) / sum(x['pp'] for x in std if x.get('pp'))
+    avg = s['pf'] / n
+    sd = (sum((x['pts'] - avg) ** 2 for x in W) / n) ** .5
+    top_share = top[0][1] / s['pf'] if top and s['pf'] else 0
+    lead = names.get(top[0][0], '') if top else ''
+    pick = lambda *v: v[int(f) % len(v)]   # two wordings per read, so teams with the same read don't sound alike
+    reads = []
+    if luck >= 1.2:
+        reads.append((luck, pick("The record has run ahead of the scoring, so the close ones have broken their way; keeping that up means the points need to catch up to the wins.",
+                                 "They've won more than the points alone would predict. That's a credit to timing, and the next step is scoring like the record says.")))
+    elif luck <= -1.2:
+        reads.append((-luck, pick("The scoring says this team is better than its record. Weeks like theirs tend to turn into wins over time, so the standings may still come around.",
+                                  "They've drawn some tough matchups on good weeks; the scoring is there, and the wins usually follow it.")))
+    if eff is not None and eff - league_eff >= .025:
+        reads.append(((eff - league_eff) * 50, pick("The lineup calls have been sharp, with few points left sitting on the bench.",
+                                                    "Start/sit has been a strength: the right guys are usually the ones in the lineup.")))
+    elif eff is not None and league_eff - eff >= .025:
+        reads.append(((league_eff - eff) * 50, pick("There have been points left on the bench, which is the good kind of problem: the depth is there, and tighter start/sit calls could swing a close week.",
+                                                    "The bench has been outscoring some of the starters. The talent is on the roster; picking the right week for each player is the next gain.")))
+    if n >= 4 and l3 - avg >= 10:
+        reads.append(((l3 - avg) / 8, pick("The arrow is pointing up, with the last few weeks the best stretch of the year.", "They're playing their best football right now.")))
+    elif n >= 4 and avg - l3 >= 10:
+        reads.append(((avg - l3) / 8, pick("The last few weeks have been quieter than the start, so getting back to that early-season form is the job now.",
+                                           "The early-season pace has cooled; a couple of strong weeks would get things back on track.")))
+    if top_share >= .2:
+        reads.append(((top_share - .15) * 20, pick(f"{lead} has carried a big share of the load, and the lineup goes as he goes.",
+                                                   f"A lot runs through {lead}; more help around him would make this lineup harder to slow down.")))
+    if sd >= 30:
+        reads.append(((sd - 26) / 6, pick("Week to week this team can look like a contender or an underdog, and finding a steadier floor would go a long way.",
+                                          "Few teams swing more from week to week: when it clicks it's among the league's best.")))
+    elif sd <= 14 and n >= 4:
+        reads.append(((17 - sd) / 4, pick("They've been one of the steadier teams in the league, rarely blowing up and rarely falling flat.",
+                                          "Consistency is the calling card: you know roughly what you'll get each week.")))
+    for _, line in sorted(reads, key=lambda r: -r[0])[:2]:
+        out.append(line)
+    nxt = ''
     if mu:
         opp = mu['opp']; p = mu['me']
         line = f"Up next: {abbr_name(opp)} in week {mu['week']}"
@@ -199,8 +243,52 @@ def season_note(f, t, s, std, mu, started, names, abbr_name):
             line += f". A win would move their playoff odds from {p['playoff']:.0f}% to {p['ifWin'][0]:.0f}%; a loss, to {p['ifLoss'][0]:.0f}%."
         else:
             line += '.'
-        out.append(line)
-    return ' '.join(out)
+        nxt = line
+    return {'body': ' '.join(out), 'next': nxt}
+
+
+NFL_NICK = {'Cardinals','Falcons','Ravens','Bills','Panthers','Bears','Bengals','Browns','Cowboys','Broncos','Lions','Packers','Texans','Colts','Jaguars','Chiefs','Raiders','Chargers','Rams','Dolphins','Vikings','Patriots','Saints','Giants','Jets','Eagles','Steelers','49ers','Seahawks','Buccaneers','Titans','Commanders'}
+
+
+def week_news(f, t, played, wr, names, espn, inj, trades, team_name):
+    """last week's game and the team's news (trades in the past week, injuries to regular starters)"""
+    W = t['weeks']; last = W[-1] if W else None
+    out = {}
+    if last and last.get('opp'):
+        st_ = sorted((wr.get(str(last['w'])) or {}).get(f, {}).get('s', []), key=lambda x: -x[1])
+        def who(pid):
+            n = names.get(pid, pid)
+            if any(r['id'] == pid and r['pos'] == 'DEF' for r in t['rows']) or n.split(' ')[-1] in NFL_NICK:
+                return f"the {n.split(' ')[-1]} defense's"
+            return f"{n}'" + ('' if n.endswith('s') else 's')
+        lead = f", led by {who(st_[0][0])} {st_[0][1]:.1f}" if st_ else ''
+        verb = {'W': 'beat', 'L': 'lost to', 'T': 'tied'}.get(last['res'], 'played')
+        out['last'] = f"Week {last['w']}: {verb} {team_name(last['opp'])} {last['pts']:.1f} to {last['oppPts']:.1f}{lead}."
+    news = []
+    for tr in trades:
+        if f in (tr['a'], tr['b']):
+            got, gave = (tr['toA'], tr['toB']) if f == tr['a'] else (tr['toB'], tr['toA'])
+            other = tr['b'] if f == tr['a'] else tr['a']
+            if got or gave:
+                news.append(f"Traded with {team_name(other)}: got {', '.join(got) or 'picks'} for {', '.join(gave) or 'picks'}.")
+    # injuries that matter: out, doubtful or on IR, for a regular starter (3+ starts for this team) or a player
+    # FantasyPros ranks as a starter the rest of the way
+    starts = collections.Counter(pid for w in range(1, played + 1) for pid, _ in ((wr.get(str(w)) or {}).get(f, {}).get('s', [])))
+    big = {'QB': 15, 'TE': 12, 'RB': 30, 'WR': 36}
+    hurt = []
+    for r in t['rows']:
+        i = inj.get(str(r.get('espn') or ''))
+        if not i or i.get('status') not in ('Out', 'Doubtful', 'Injured Reserve'):
+            continue
+        if starts.get(r['id'], 0) < 3 and not (r.get('ecrPos') and r['ecrPos'] <= big.get(r['pos'], 0)):
+            continue
+        what = {'Out': 'is out', 'Doubtful': 'is doubtful', 'Injured Reserve': 'is on injured reserve'}[i['status']]
+        hurt.append(f"{r['name']} {what}{' (' + i['type'].lower() + ')' if i.get('type') else ''}")
+    if hurt:
+        news.append('Injuries: ' + '; '.join(hurt) + '.')
+    if news:
+        out['news'] = ' '.join(news)
+    return out
 
 
 def main():
@@ -287,7 +375,7 @@ def main():
         s = st.get(f['id'], {})
         W = team_weeks.get(f['id'], [])
         # first name and last initial; a two-word last name uses its first word (Collin Del Cuore -> Collin D.)
-        out_t[f['id']] = {'name': fr.get(f['id'], {}).get('name', f['id']), 'owner': f"{o[0]} {o[1][0]}." if len(o) > 1 else (o[0] if o else ''),
+        out_t[f['id']] = {'name': fr.get(f['id'], {}).get('name', f['id']).strip(), 'owner': f"{o[0]} {o[1][0]}." if len(o) > 1 else (o[0] if o else ''),
                           'rec': [s.get('w', 0), s.get('l', 0), s.get('t', 0)], 'pf': s.get('pf', 0),
                           'paa': round(sum(x['pts'] - x['avg'] for x in W), 1), 'weeks': W, 'rows': rows}
     # season-so-far note for each team
@@ -303,16 +391,34 @@ def main():
         for me, opp in ((g['home'], g['away']), (g['away'], g['home'])):
             nxt[me] = {'week': mj.get('week'), 'opp': opp, 'me': (g.get('teams') or {}).get(me, {})}
     std = ln['standings']
-    for f, t in out_t.items():
-        if f in st:
-            t['note'] = season_note(f, t, st[f], std, nxt.get(f), started_by[f], names, lambda x: (fr.get(x) or {}).get('name', x))
+    # written once a week: when a new week has been played. The daily refreshes keep that week's notes.
+    prev = load(D('rosters.json'), {}) or {}
+    tname = lambda x: (fr.get(x) or {}).get('name', x).strip()
+    if prev.get('noteWeek') == played:
+        for f, t in out_t.items():
+            if (prev.get('teams') or {}).get(f, {}).get('note'):
+                t['note'] = prev['teams'][f]['note']
+    else:
+        inj = load(D('espn', 'injuries.json'), {}) or {}
+        since = datetime.now(timezone.utc).timestamp() - 8 * 86400
+        trades = []
+        for x in (load(D('mfl', 'transactions.json'), {}) or {}).get('transactions') or []:
+            if x.get('type') == 'TRADE' and int(x.get('timestamp') or 0) >= since:
+                pl_ = lambda v: [names.get(p, p) for p in v.split(',') if p and not p.startswith(('FP_', 'DP_'))]
+                trades.append({'a': x['franchise'], 'b': x.get('franchise2'), 'toA': pl_(x.get('franchise2_gave_up', '')), 'toB': pl_(x.get('franchise1_gave_up', ''))})
+        for f, t in out_t.items():
+            if f in st:
+                note = season_note(f, t, st[f], std, nxt.get(f), started_by[f], names, tname)
+                if note:
+                    note.update(week_news(f, t, played, wr, names, espn, inj, trades, tname))
+                    t['note'] = note
     paa_order = sorted(out_t, key=lambda f: -out_t[f]['paa'])
     for f in out_t:
         out_t[f]['paaRank'] = paa_order.index(f) + 1
     face = face_of_franchise(cur, {f: [r['id'] for r in t['rows'] if r['pos'] != 'DEF'] for f, t in out_t.items()}, names, pos, espn)
     for f, v in face.items():
         out_t[f]['face'] = v
-    out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': cur, 'through': played, 'projWeek': int(pw),
+    out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': cur, 'through': played, 'projWeek': int(pw), 'noteWeek': played,
            'ecrUpdated': ecr.get('updated'), 'teams': out_t}
     with open(D('rosters.json'), 'w', encoding='utf-8') as fh:
         json.dump(out, fh, separators=(',', ':'), ensure_ascii=False)

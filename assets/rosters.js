@@ -7,7 +7,8 @@ window.FBPRosters = (function () {
   let R = null, loading = false, failed = false, X = null;
   let sort = ['sal', -1];
   let pickX = null;
-  let wkShut = false; try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
+  let wkShut = false, noteShut = false;
+  try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; noteShut = localStorage.getItem('fbp-ro-note') === 'shut'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
   const open = new Set(), tabOf = {}, cache = {};
   function load() {
     if (R || loading) return;
@@ -215,7 +216,8 @@ window.FBPRosters = (function () {
         <div class="ro-tile ro-face">${F ? `<span class="ro-fph" ${F.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${F.espn}.png)"` : ''}></span><div><small>Face of the Franchise</small><b>${esc(F.name)}</b><span>${esc(F.pos)} · ${esc(faceLine)}</span></div>` : '<div><small>Face of the Franchise</small><b>—</b></div>'}</div>
         <div class="ro-tile"><small>Top contract</small><b>${top ? $(top.sal) : '—'}</b><span>${top ? esc(top.name) : ''}</span></div>
       </div>
-      ${t.note ? `<section class="card ro-card ro-note"><h2>Season so far</h2><p>${esc(t.note)}</p><small>Through week ${R.through} · from the standings, scores and the playoff simulation</small></section>` : ''}
+      ${t.note && t.note.body ? `<section class="card ro-card ro-note ro-fold${noteShut ? ' shut' : ''}"><button type="button" class="ro-tog" data-ro-fold="note" aria-expanded="${!noteShut}"><span class="ro-car" aria-hidden="true"></span><h2>State of the Team</h2></button>
+        <div class="ro-fb"><p>${esc(t.note.body)}</p>${t.note.last || t.note.news ? `<hr>${t.note.last ? `<p><b>Last week.</b> ${esc(t.note.last.replace(/^Week \d+: /, '').replace(/^./, c => c.toUpperCase()))}</p>` : ''}${t.note.news ? `<p><b>Team news.</b> ${esc(t.note.news)}</p>` : ''}` : ''}${t.note.next ? `<hr><p>${esc(t.note.next)}</p>` : ''}<small>Through week ${R.through} · from the standings, scores and the playoff simulation</small></div></section>` : ''}
       ${weekly(t, esc, tmx)}
       <section class="card ro-card"><h2>Roster</h2><p class="ro-why">Tap a column to sort; players stay grouped by position. Tap a player to open his news, game log, schedule, analytics and salary. Slide the table for future salaries.</p>
         <div class="tbl-wrap ro-wrap"><table class="ro-t"><thead><tr><th class="ro-ph"></th>${head}</tr></thead>
@@ -228,6 +230,8 @@ window.FBPRosters = (function () {
   document.addEventListener('click', e => {
     const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick')) return;
     const pk = t.closest('.ro-pick'); if (pk) { pickX = pk.scrollLeft; return; }
+    const nt = t.closest('[data-ro-fold="note"]'); if (nt) { noteShut = !noteShut; try { localStorage.setItem('fbp-ro-note', noteShut ? 'shut' : 'open'); } catch (err) {}
+      nt.closest('.ro-fold').classList.toggle('shut', noteShut); nt.setAttribute('aria-expanded', String(!noteShut)); return; }
     const wt = t.closest('[data-ro-wk]'); if (wt) { wkShut = !wkShut; try { localStorage.setItem('fbp-ro-wk', wkShut ? 'shut' : 'open'); } catch (err) {}
       wt.closest('.ro-fold').classList.toggle('shut', wkShut); wt.setAttribute('aria-expanded', String(!wkShut)); return; }
     const tb = t.closest('[data-ro-tab]'); if (tb) { const [id, k] = tb.dataset.roTab.split('|'); tabOf[id] = k; return redraw(); }
