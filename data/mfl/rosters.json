@@ -160,6 +160,15 @@
      },
      {
       "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "15727",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
       "contractStatus": "1.12 2023",
       "contractYear": "4/5",
       "drafted": "Draft 1.12 $5 (2023)",
@@ -1162,15 +1171,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "2017",
-      "contractYear": "",
-      "drafted": "BB $0",
-      "id": "13113",
-      "salary": "",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
       "drafted": "Draft 2.01 $4 (2023)",
@@ -1229,6 +1229,15 @@
       "contractYear": "",
       "drafted": "BB $0",
       "id": "17654",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0517",
       "salary": "",
       "status": "ROSTER"
      },
@@ -1678,15 +1687,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "1/3",
-      "drafted": "BB $11",
-      "id": "16195",
-      "salary": "11",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "1.05 2024",
       "contractYear": "2/3",
       "drafted": "Draft 1.05 $35 (2024)",
@@ -1701,6 +1701,15 @@
       "drafted": "Trade",
       "id": "17068",
       "salary": "8",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "1/3",
+      "drafted": "BB $11",
+      "id": "16195",
+      "salary": "11",
       "status": "INJURED_RESERVE"
      },
      {
@@ -1896,6 +1905,15 @@
       "drafted": "Trade",
       "id": "15708",
       "salary": "41",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $4",
+      "id": "14057",
+      "salary": "4",
       "status": "ROSTER"
      },
      {

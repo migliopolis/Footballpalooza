@@ -30,7 +30,7 @@
    "pos": "QB",
    "school": "Texas",
    "adp": 5.4,
-   "nflPick": 10
+   "nflPick": 7
   },
   {
    "name": "Charlie Becker",
@@ -51,7 +51,7 @@
    "pos": "QB",
    "school": "Oregon",
    "adp": 7.7,
-   "nflPick": 28
+   "nflPick": 11
   },
   {
    "name": "Drew Mestemaker",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 24.8,
-   "nflPick": 28
+   "nflPick": 30
   },
   {
    "name": "Justice Haynes",
@@ -254,7 +254,7 @@
    "pos": "TE",
    "school": "Virginia Tech",
    "adp": 28.8,
-   "nflPick": 34
+   "nflPick": 66
   }
  ]
 }

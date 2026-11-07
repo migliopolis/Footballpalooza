@@ -5,8 +5,8 @@
   "spellingFixed": 51,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 259,
-  "rosteredTotal": 259
+  "rosteredLinked": 260,
+  "rosteredTotal": 260
  },
  "mismatch": [],
  "byName": [
@@ -951,15 +951,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "3049698",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "17696",
-   "mflName": "Carsen Ryan",
-   "pos": "TE",
-   "team": "CLE",
-   "fbp": null,
-   "espn": "4685540",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

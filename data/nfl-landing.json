@@ -89,16 +89,16 @@
    "mostMocked": "MIN"
   },
   "Dante Moore": {
-   "team": "MIN",
-   "pick": 30,
+   "team": "ARI",
+   "pick": 11,
    "basis": "consensus",
    "mocks": 10,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
-   "team": "ARI",
-   "pick": 11,
-   "basis": "consensus",
+   "team": "NO",
+   "pick": 8,
+   "basis": "recent",
    "mocks": 9,
    "mostMocked": "ARI"
   },
@@ -138,9 +138,9 @@
    "mostMocked": "BUF"
   },
   "Luke Reynolds": {
-   "team": "DEN",
-   "pick": 29,
-   "basis": "consensus",
+   "team": "KC",
+   "pick": null,
+   "basis": "most",
    "mocks": 1,
    "mostMocked": "KC"
   },
@@ -188,8 +188,8 @@
   },
   "Austin Simmons": {
    "team": "MIN",
-   "pick": null,
-   "basis": "most",
+   "pick": 30,
+   "basis": "consensus",
    "mocks": 4,
    "mostMocked": "MIN"
   },
