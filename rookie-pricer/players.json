@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-06",
+ "asOf": "2026-11-07",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
  "players": [
   {
@@ -58,14 +58,14 @@
    "pos": "QB",
    "school": "Oklahoma State",
    "adp": 7.8,
-   "nflPick": 5
+   "nflPick": 4
   },
   {
    "name": "CJ Carr",
    "pos": "QB",
    "school": "Notre Dame",
    "adp": 12.3,
-   "nflPick": 11
+   "nflPick": 10
   },
   {
    "name": "Kewan Lacy",
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 21.8,
-   "nflPick": 31
+   "nflPick": 32
   },
   {
    "name": "Mark Fletcher Jr.",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 24.8,
-   "nflPick": 23
+   "nflPick": 28
   },
   {
    "name": "Justice Haynes",

@@ -1,13 +1,13 @@
 {
- "generated": "2026-11-06T07:40:18+00:00",
+ "generated": "2026-11-07T05:36:39+00:00",
  "first": 2019,
  "current": 2026,
  "totals": {
   "paid": 18014,
   "contracts": 1689,
   "players": 603,
-  "excludedWaivers": 222,
-  "excludedDollars": 1455,
+  "excludedWaivers": 221,
+  "excludedDollars": 1453,
   "biggest": {
    "id": "13604",
    "name": "Saquon Barkley",

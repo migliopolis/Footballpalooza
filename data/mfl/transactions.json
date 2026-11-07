@@ -1,6 +1,18 @@
 {
- "fetched": "2026-11-06T07:37:46+00:00",
+ "fetched": "2026-11-07T05:34:05+00:00",
  "transactions": [
+  {
+   "franchise": "0002",
+   "timestamp": "1794005464",
+   "transaction": "|15799,",
+   "type": "FREE_AGENT"
+  },
+  {
+   "franchise": "0004",
+   "timestamp": "1793984400",
+   "transaction": "17033,|0.00|17069,",
+   "type": "BBID_WAIVER"
+  },
   {
    "franchise": "0009",
    "timestamp": "1793926884",

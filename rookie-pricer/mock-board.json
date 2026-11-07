@@ -1,13 +1,13 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-06",
+ "asOf": "2026-11-07",
  "board": {
   "name": "Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys)",
   "url": "https://www.footballguys.com/article/2027-dynasty-rookie-rankings-big-board-v4",
   "date": "2026-10-21"
  },
- "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-06); players no NFL source mentions price as undrafted.",
+ "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-07); players no NFL source mentions price as undrafted.",
  "players": [
   {
    "rank": 1,
@@ -35,7 +35,7 @@
    "name": "Drew Mestemaker",
    "pos": "QB",
    "school": "Oklahoma State",
-   "nflPick": 5
+   "nflPick": 4
   },
   {
    "rank": 5,
@@ -63,7 +63,7 @@
    "name": "CJ Carr",
    "pos": "QB",
    "school": "Notre Dame",
-   "nflPick": 11
+   "nflPick": 10
   },
   {
    "rank": 9,
@@ -203,7 +203,7 @@
    "name": "Reed Harris",
    "pos": "WR",
    "school": "Arizona State",
-   "nflPick": 31
+   "nflPick": 32
   },
   {
    "rank": 29,
@@ -217,7 +217,7 @@
    "name": "Austin Simmons",
    "pos": "QB",
    "school": "Missouri",
-   "nflPick": 23
+   "nflPick": 28
   },
   {
    "rank": 31,

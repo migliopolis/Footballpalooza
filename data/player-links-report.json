@@ -2,11 +2,11 @@
  "summary": {
   "linked": 943,
   "mfl": 930,
-  "spellingFixed": 52,
+  "spellingFixed": 51,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 260,
-  "rosteredTotal": 260
+  "rosteredLinked": 259,
+  "rosteredTotal": 259
  },
  "mismatch": [],
  "byName": [
@@ -963,15 +963,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "17385",
-   "mflName": "Carter Runyon",
-   "pos": "TE",
-   "team": "LVR",
-   "fbp": null,
-   "espn": "5155825",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "17724",
    "mflName": "Dae'Quan Wright",
    "pos": "TE",
@@ -1842,6 +1833,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "3121410",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "12188",
+   "mflName": "Phillip Dorsett",
+   "pos": "WR",
+   "team": "LVR",
+   "fbp": null,
+   "espn": "2579604",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
