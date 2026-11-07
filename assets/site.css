@@ -1588,7 +1588,7 @@ table.ro-t{border-collapse:collapse;width:100%;font-size:.84rem;font-variant-num
 .ro-chip.t{background:#f0c836;color:#2b2100}.ro-chip.i{background:#d64545;color:#fff}
 .ro-chip.gold{background:#e8c24a;color:#2b2100}.ro-chip.silver{background:#c9ced6;color:#1d2228}.ro-chip.good{background:#2a7fbf;color:#fff}.ro-chip.meh{background:#5d6773;color:#fff}
 /* the player box */
-.ro-t tr.ro-det td{padding:6px 6px 10px;background:var(--bg);text-align:left;white-space:normal}
+.ro-t tr.ro-det > td{padding:6px 6px 10px;background:var(--bg);text-align:left;white-space:normal}
 .ro-box{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;position:sticky;left:6px;width:100%;max-width:calc(100vw - 2 * var(--gut) - 30px)}
 .ro-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--sky-soft)}
 .ro-tabs::-webkit-scrollbar{display:none}
@@ -1616,3 +1616,13 @@ table.ro-bt{border-collapse:collapse;width:100%;font-size:.8rem;font-variant-num
   :root:not([data-theme="light"]) .ro-wk .bar.l,:root:not([data-theme="light"]) .ro-key i.kl{fill:#3c5163;background:#3c5163}}
 .ro-t tr.tx .ro-ph{background:linear-gradient(rgba(240,200,40,.14),rgba(240,200,40,.14)),var(--surface)}
 .ro-t tr.ir .ro-ph{background:linear-gradient(rgba(220,50,50,.09),rgba(220,50,50,.09)),var(--surface)}
+.ro-op{white-space:nowrap}
+.ro-nfl{width:18px;height:18px;object-fit:contain;vertical-align:-4px;margin:0 4px 0 2px}
+.ro-tog{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;margin:0 0 4px;color:inherit;cursor:pointer;width:100%;text-align:left}
+.ro-tog h2{margin:0}
+.ro-car{flex:none;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .15s}
+.ro-fold.shut .ro-car{transform:rotate(-45deg)}
+.ro-fold.shut .ro-fb{display:none}
+.ro-note p{margin:0 0 6px;font-size:.9rem;line-height:1.5}
+.ro-note small{color:var(--muted);font-size:.72rem}
+@media (prefers-reduced-motion:reduce){.ro-car{transition:none}}

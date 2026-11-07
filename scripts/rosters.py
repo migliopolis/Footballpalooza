@@ -160,6 +160,49 @@ def face_of_franchise(cur, rostered, names, pos, espn):
     return out
 
 
+def ordinal(n):
+    return f"{n}{'th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def season_note(f, t, s, std, mu, started, names, abbr_name):
+    """a short paragraph on the team's season so far, from the standings, scores, odds and next game (facts only)"""
+    W = t['weeks']
+    if not W:
+        return ''
+    rec = f"{s['w']}-{s['l']}" + (f"-{s['t']}" if s.get('t') else '')
+    pf_rank = sorted(std, key=lambda x: -x['pf']).index(s) + 1
+    seed = s.get('seed')
+    where = (f"{ordinal(s['divisionRank'])} in the {s['divisionName']}" if s.get('divisionName') else '')
+    spot = f"the {seed} seed today" if seed else "outside the playoff picture today"
+    out = [f"{t['name']} {'are' if t['name'].endswith('s') and not t['name'].endswith('ss') else 'is'} {rec}, {where} and {spot}, "
+           f"with {s['pf']:,.1f} points ({ordinal(pf_rank)} in the league)."]
+    st = s.get('streak') or ''
+    last3 = W[-3:]; l3 = sum(x['pts'] for x in last3) / len(last3)
+    if st[:1] in 'WL' and st[1:].isdigit() and int(st[1:]) >= 2:
+        out.append(f"They've {'won' if st[0] == 'W' else 'lost'} {int(st[1:])} straight, averaging {l3:.1f} over the last three weeks.")
+    else:
+        lw = W[-1]
+        out.append(f"They {'won' if lw['res'] == 'W' else 'lost' if lw['res'] == 'L' else 'tied'} in week {lw['w']}, {lw['pts']:.1f} to {lw['oppPts']:.1f} against {abbr_name(lw['opp'])}, "
+                   f"and have averaged {l3:.1f} over the last three weeks.")
+    top = sorted(started.items(), key=lambda kv: -kv[1])[:2]
+    if top:
+        out.append(f"{names.get(top[0][0], top[0][0])} leads the lineup with {top[0][1]:.1f} points started"
+                   + (f", ahead of {names.get(top[1][0], top[1][0])} ({top[1][1]:.1f})." if len(top) > 1 else '.'))
+    hi = max(W, key=lambda x: x['pts']); lo = min(W, key=lambda x: x['pts'])
+    out.append(f"Their best week was {hi['pts']:.1f} in week {hi['w']}; their lowest, {lo['pts']:.1f} in week {lo['w']}.")
+    if mu:
+        opp = mu['opp']; p = mu['me']
+        line = f"Up next: {abbr_name(opp)} in week {mu['week']}"
+        if p.get('winProb') is not None:
+            line += f", where the site gives them a {p['winProb']}% chance to win"
+        if p.get('playoff') is not None and p.get('ifWin') and p.get('ifLoss') and 0.5 < p['playoff'] < 99.5:
+            line += f". A win would move their playoff odds from {p['playoff']:.0f}% to {p['ifWin'][0]:.0f}%; a loss, to {p['ifLoss'][0]:.0f}%."
+        else:
+            line += '.'
+        out.append(line)
+    return ' '.join(out)
+
+
 def main():
     ln = load(D('league-now.json'))
     played = int(ln['weeksPlayed'])
@@ -247,6 +290,22 @@ def main():
         out_t[f['id']] = {'name': fr.get(f['id'], {}).get('name', f['id']), 'owner': f"{o[0]} {o[1][0]}." if len(o) > 1 else (o[0] if o else ''),
                           'rec': [s.get('w', 0), s.get('l', 0), s.get('t', 0)], 'pf': s.get('pf', 0),
                           'paa': round(sum(x['pts'] - x['avg'] for x in W), 1), 'weeks': W, 'rows': rows}
+    # season-so-far note for each team
+    started_by = collections.defaultdict(lambda: collections.defaultdict(float))
+    for w, ft in wr.items():
+        if int(w) <= played:
+            for f, t in ft.items():
+                for pid, x in t.get('s', []):
+                    started_by[f][pid] += x
+    mj = load(D('matchups.json'), {}) or {}
+    nxt = {}
+    for g in mj.get('games', []):
+        for me, opp in ((g['home'], g['away']), (g['away'], g['home'])):
+            nxt[me] = {'week': mj.get('week'), 'opp': opp, 'me': (g.get('teams') or {}).get(me, {})}
+    std = ln['standings']
+    for f, t in out_t.items():
+        if f in st:
+            t['note'] = season_note(f, t, st[f], std, nxt.get(f), started_by[f], names, lambda x: (fr.get(x) or {}).get('name', x))
     paa_order = sorted(out_t, key=lambda f: -out_t[f]['paa'])
     for f in out_t:
         out_t[f]['paaRank'] = paa_order.index(f) + 1
