@@ -6,6 +6,7 @@
 window.FBPRosters = (function () {
   let R = null, loading = false, failed = false, X = null;
   let sort = ['sal', -1];
+  let pickX = null;   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
   const open = new Set(), tabOf = {}, cache = {};
   function load() {
     if (R || loading) return;
@@ -182,25 +183,30 @@ window.FBPRosters = (function () {
         return `<td>${v != null ? $(v) : r.fut && k === r.fut.length ? '<span class="ro-fa">FA</span>' : ''}</td>`; }).join('');
       const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' ? '<span class="ro-chip i">IR</span>' : '';
       const aw = (r.hon || []).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
-      const img = r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : '';
+      // defenses get their NFL team's logo; players their ESPN headshot
+      const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
+        : r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : '';
       const n = Object.keys(r.wks).length, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}></span></td>
-        <td class="l ro-nm"><b>${esc(r.name)}</b>${chip}${aw}<small>${r.pos} · ${esc(r.nfl || 'FA')}${r.age ? ' · ' + r.age : ''}</small></td>
+        <td class="l ro-nm"><b>${esc(r.name)}</b>${chip}${aw}<small>${r.pos} · ${esc(r.nfl || 'FA')}${r.age ? ' · age ' + r.age : ''}</small></td>
         <td>${r.bye || '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td><td>${fx(r.proj, 1)}</td>
         <td>${r.pts ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td>
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
         ${isOpen ? `<tr class="ro-det"><td colspan="${NC}">${box(r, t, ctx)}</td></tr>` : ''}`;
     };
-    const grp = (label, list) => list.length ? `<tr class="ro-grp"><td colspan="${NC}">${label} · ${list.length} · ${$(list.reduce((s, r) => s + r.sal, 0))}</td></tr>` + sorted(list).map(row).join('') : '';
+    const grp = (label, list) => list.length ? `<tr class="ro-grp"><td colspan="${NC}"><span>${label} · ${list.length} · ${$(list.reduce((s, r) => s + r.sal, 0))}</span></td></tr>` + sorted(list).map(row).join('') : '';
     const head = C.map(([k, l]) => { const on = sort[0] === k;
       return `<th class="ro-sort${k === 'name' ? ' l' : ''}${k === 'sal' ? ' gap' : ''}" data-ro-sort="${k}" aria-sort="${on ? (sort[1] < 0 ? 'descending' : 'ascending') : 'none'}">${l}${on ? (sort[1] < 0 ? ' ▼' : ' ▲') : ''}</th>`; }).join('');
     const top = rows.slice().sort((a, b) => b.sal - a.sal)[0];
     const F = t.face, n = (t.weeks || []).length;
     const faceLine = F ? [`${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''}`, `${F.starts} starts`,
       ...Object.entries(F.honors || {}).map(([k, v]) => `${v > 1 ? v + '× ' : ''}${k}`), F.titles ? `${F.titles > 1 ? F.titles + '× ' : ''}champion` : ''].filter(Boolean).join(' · ') : '';
+    requestAnimationFrame(() => { const el = document.querySelector('.ro-pick'); if (!el) return;
+      if (pickX != null) el.scrollLeft = pickX;
+      else { const on = el.querySelector('[aria-selected="true"]'); if (on && on.offsetLeft + on.offsetWidth > el.clientWidth) el.scrollLeft = on.offsetLeft - (el.clientWidth - on.offsetWidth) / 2; } });
     return `<div class="ro-pick" role="tablist" aria-label="Teams">${ids.map(f => `<a href="#now/rosters/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`).join('')}</div>
-      <div class="ro-th" style="--tc:${tmx(pickd).primary || 'var(--line)'}">${lg(pickd, 'ro-tl')}<div><h2>${esc(t.name)}</h2><p>${esc(t.owner)} · ${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''} · ${t.pf.toFixed(1)} points</p></div></div>
+      <div class="ro-th" style="--tc:${tmx(pickd).primary || 'var(--line)'}">${lg(pickd, 'ro-tl')}<div><h2>${esc(t.name)}</h2><p>${esc(t.owner)} · ${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}<br>${t.pf.toFixed(1)} points</p></div></div>
       <div class="ro-tiles">
         <div class="ro-tile"><small>${R.season} payroll</small><b>${$(pay)}</b><span>${act.length} active · ${tx.length} taxi · ${ir.length} IR</span></div>
         <div class="ro-tile"><small>Vs. league average</small><b>${sg(n ? t.paa / n : 0)}</b><span>points a week · ${ord(t.paaRank)} of 12</span></div>
@@ -218,6 +224,7 @@ window.FBPRosters = (function () {
 
   document.addEventListener('click', e => {
     const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick')) return;
+    const pk = t.closest('.ro-pick'); if (pk) { pickX = pk.scrollLeft; return; }
     const tb = t.closest('[data-ro-tab]'); if (tb) { const [id, k] = tb.dataset.roTab.split('|'); tabOf[id] = k; return redraw(); }
     if (t.closest('.ro-box')) return;
     const h = t.closest('[data-ro-sort]'); if (h) { const k = h.dataset.roSort; sort = sort[0] === k ? [k, -sort[1]] : [k, k === 'name' ? 1 : -1]; return redraw(); }

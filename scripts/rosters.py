@@ -243,7 +243,8 @@ def main():
         o = (fr.get(f['id'], {}).get('owner_name') or '').split()
         s = st.get(f['id'], {})
         W = team_weeks.get(f['id'], [])
-        out_t[f['id']] = {'name': fr.get(f['id'], {}).get('name', f['id']), 'owner': f'{o[0]} {o[-1][0]}.' if o else '',
+        # first name and last initial; a two-word last name uses its first word (Collin Del Cuore -> Collin D.)
+        out_t[f['id']] = {'name': fr.get(f['id'], {}).get('name', f['id']), 'owner': f"{o[0]} {o[1][0]}." if len(o) > 1 else (o[0] if o else ''),
                           'rec': [s.get('w', 0), s.get('l', 0), s.get('t', 0)], 'pf': s.get('pf', 0),
                           'paa': round(sum(x['pts'] - x['avg'] for x in W), 1), 'weeks': W, 'rows': rows}
     paa_order = sorted(out_t, key=lambda f: -out_t[f]['paa'])

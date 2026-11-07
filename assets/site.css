@@ -1561,7 +1561,7 @@ table.ro-pa{border-collapse:collapse;width:100%;font-size:.82rem;font-variant-nu
 .ro-ins div{background:var(--sky-soft);border-radius:10px;padding:9px 11px}
 .ro-ins small{display:block;font:600 .64rem/1.2 var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .ro-ins b{display:block;font:700 1.05rem/1.2 var(--display);margin:3px 0 2px}.ro-ins span{font-size:.76rem;color:var(--muted)}
-.ro-wrap{margin:0 -14px;padding:0 14px}
+.ro-wrap{margin:0;padding:0}
 table.ro-t{border-collapse:collapse;width:100%;font-size:.84rem;font-variant-numeric:tabular-nums}
 .ro-t th{font:600 .64rem/1 var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:right;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
 .ro-t th.l,.ro-t td.l{text-align:left}
@@ -1576,6 +1576,8 @@ table.ro-t{border-collapse:collapse;width:100%;font-size:.84rem;font-variant-num
 .ro-t .ro-ph{position:sticky;left:0;z-index:1;background:var(--surface);width:1px;padding-right:4px}
 .ro-t tr.ro-p:hover .ro-ph,.ro-t tr.ro-p.on .ro-ph{background:var(--sky-soft)}
 .ro-t .ro-ph span{display:block;width:34px;height:34px;border-radius:50%;background:var(--sky) center top/cover no-repeat}
+.ro-t .ro-ph span.ro-def{background-color:#fff;background-position:center;background-size:78%;box-shadow:inset 0 0 0 1px var(--line)}
+.ro-t tr.ro-grp td span{position:sticky;left:6px}
 .ro-nm b{font-weight:600}.ro-nm small{display:block;color:var(--muted);font-size:.72rem}
 .ro-m{font:600 .72rem/1 var(--mono);color:var(--muted)}
 .ro-s{font-weight:700}
@@ -1612,3 +1614,5 @@ table.ro-bt{border-collapse:collapse;width:100%;font-size:.8rem;font-variant-num
 :root[data-theme="dark"] .ro-wk .bar.l,:root[data-theme="dark"] .ro-key i.kl{fill:#3c5163;background:#3c5163}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ro-wk .bar.w,:root:not([data-theme="light"]) .ro-key i.kw{fill:#7f9bb5;background:#7f9bb5}
   :root:not([data-theme="light"]) .ro-wk .bar.l,:root:not([data-theme="light"]) .ro-key i.kl{fill:#3c5163;background:#3c5163}}
+.ro-t tr.tx .ro-ph{background:linear-gradient(rgba(240,200,40,.14),rgba(240,200,40,.14)),var(--surface)}
+.ro-t tr.ir .ro-ph{background:linear-gradient(rgba(220,50,50,.09),rgba(220,50,50,.09)),var(--surface)}
