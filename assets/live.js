@@ -48,7 +48,9 @@
     const pastHalf = fin || done >= 0.5 || (g && /half/i.test(g.detail || '')), pace = done > 0 ? sc / done : 0;
     const line = NUKE[pos(p.id)];
     if (line && sc >= line) return { k: 'nuke', title: `Nuclear: ${n1(sc)} points, over the ${line}-point line for a ${pos(p.id)}` };
-    if (pj > 0 && (fin ? sc >= 15 && sc >= pj * 1.5 : sc >= 10 && ((done >= 0.25 && pace >= pj * 1.5) || sc >= pj)))
+    // after the game, Hot marks a big game short of Nuclear: beat the projection by 5+ and reached 60% of the
+    // position's Nuclear line (QB 21, RB/WR 18, TE/DEF 15)
+    if (pj > 0 && (fin ? sc >= pj + 5 && sc >= (line || 25) * 0.6 : sc >= 10 && ((done >= 0.25 && pace >= pj * 1.5) || sc >= pj)))
       return { k: 'hot', title: `Hot: ${n1(sc)} points against a ${n1(pj)} projection` };
     if (sc === 0 && pastHalf) return { k: 'blank', title: fin ? 'No points this week' : 'No points through halftime' };
     if (fin && (sc < 0 || (pj >= 12 && sc <= pj * 0.25))) return { k: 'bust', title: `Bust: ${n1(sc)} points${pj ? ` against a ${n1(pj)} projection` : ''}` };

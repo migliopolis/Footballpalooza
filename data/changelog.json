@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0116",
+      "to": "0.0120",
+      "dates": "Nov 8, 2026",
+      "items": [
+        "New FBP Power Score on League Now > Power Rankings (beta): strength now, keepers, auction cash and draft picks, with keep/drop suggestions for next season that anyone can flip to see the effect. 2027 values are priced for SuperFlex, and rookies get a value floor from their NFL draft slot. MFL's rating stays below for comparison.",
+        "New Player Page: tap Player Page in a player's box on Rosters for his bio, news, game log, schedule, contract, FBP career, awards, NFL career stats and journey.",
+        "NFL Scores: tap a game to open its line score, top FBP scorers, scoring plays, leaders and team stats.",
+        "Scoreboard: NFL logos, each player's matchup (vs or @) with the weather, a football and RZ chip when his team has the ball, Defending for defenses, and press-and-hold to drag matchups into your own order. Stat lines use the space in the middle on phones.",
+        "Players filters (all, free agents, rostered, starters), every meeting in Matchups, prospect boxes with photos and school logos on the Big Board, and a Points Back column on FBP Home.",
+        "Big games stay Hot after the final whistle."
+      ]
+    },
+    {
       "from": "0.0111",
       "to": "0.0115",
       "dates": "Nov 7, 2026",
