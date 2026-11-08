@@ -48,7 +48,7 @@ window.FBPRosters = (function () {
   const cols = () => [
     ['name', 'Player', r => r.name],
     ['pts', 'Pts', r => r.pts],
-    ['ppw', 'Pts/wk', r => { const n = Object.keys(r.wks).length; return n ? r.pts / n : null; }],
+    ['ppw', 'Pts/wk', r => r.gp ? r.pts / r.gp : null],
     ['ecr', 'ECR', r => r.ecrPos == null ? null : -r.ecrPos],
     ['rk', 'Rank', r => r.rk == null ? null : -r.rk],
     ['bye', 'Bye', r => r.bye],
@@ -93,6 +93,7 @@ window.FBPRosters = (function () {
     const head = `<div class="ro-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-ro-tab="${r.id}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
     const wait = '<p class="ro-wait">Loading from ESPN…</p>', fail = '<p class="ro-wait">ESPN didn’t answer. Try again in a minute.</p>', noid = '<p class="ro-wait">No ESPN id for this player yet.</p>';
     const fpts = w => r.wks[String(w)];
+    const wv = w => { const v = (r.wsc || {})[String(w)]; return v == null ? null : v; };   // his points that week, wherever he was
     let body = '';
     if (r.pos === 'DEF' && (tab === 'news' || tab === 'log')) body = '<p class="ro-wait">Team defenses don’t have player news or a game log. See Schedule.</p>';
     else if (tab === 'news') {
@@ -118,8 +119,8 @@ window.FBPRosters = (function () {
         body = !evs.length ? '<p class="ro-wait">No games yet this season.</p>' : `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Wk</th><th class="l">Opp</th><th class="l">Result</th><th>FBP pts</th>${C.map(([c, l]) =>
           `<th>${c === 'rushing' && r.pos !== 'RB' ? 'Ru ' : c === 'receiving' && r.pos === 'RB' ? 'Re ' : ''}${l}</th>`).join('')}</tr></thead><tbody>
           ${evs.map(([id, e]) => { const fp = fpts(e.week);
-            return `<tr><td class="l">${e.week || ''}</td><td class="l ro-op">${e.atVs || ''} ${nflLogo((e.opponent || {}).abbreviation)}${esc((e.opponent || {}).abbreviation || '')}</td><td class="l">${esc(e.gameResult || '')} ${esc(e.score || '')}</td><td><b>${fp ? fp[0].toFixed(1) : '—'}</b>${fp ? `<small>${fp[1] ? 'started' : 'bench'}${fp[2] !== t.abbr ? ' · ' + esc(fp[2]) : ''}</small>` : ''}</td>${C.map(([c, l]) => `<td>${esc(String(pick(byEv[id], c, l) || ''))}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div>
-          <p class="ro-bnote">FBP points are league scoring, for weeks he was on an FBP roster.</p>`;
+            return `<tr><td class="l">${e.week || ''}</td><td class="l ro-op">${e.atVs || ''} ${nflLogo((e.opponent || {}).abbreviation)}${esc((e.opponent || {}).abbreviation || '')}</td><td class="l">${esc(e.gameResult || '')} ${esc(e.score || '')}</td><td><b>${fp ? fp[0].toFixed(1) : wv(e.week) != null ? wv(e.week).toFixed(1) : '—'}</b>${fp ? `<small>${fp[1] ? 'started' : 'bench'}${fp[2] !== t.abbr ? ' · ' + esc(fp[2]) : ''}</small>` : wv(e.week) != null ? `<small>${r.st === 'TAXI_SQUAD' ? 'taxi' : 'off lineup'}</small>` : ''}</td>${C.map(([c, l]) => `<td>${esc(String(pick(byEv[id], c, l) || ''))}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div>
+          <p class="ro-bnote">FBP points are league scoring. Started or bench shows his FBP lineup that week.</p>`;
       }
     } else if (tab === 'sched') {
       const code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase(), j = code && espn('s' + code, `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${code}/schedule`);
@@ -132,7 +133,7 @@ window.FBPRosters = (function () {
           const done = c.status && c.status.type && c.status.type.completed, fp = fpts(w);
           const sc = done ? `${me.winner ? 'W' : op.winner ? 'L' : 'T'} ${(me.score || {}).displayValue}-${(op.score || {}).displayValue}`
             : new Date(e.date).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-          out.push(`<tr class="${done ? 'pst' : ''}"><td class="l">${w}</td><td class="l ro-op">${me.homeAway === 'home' ? 'vs' : '@'} ${nflLogo(op.team && op.team.abbreviation)}${esc(op.team ? op.team.abbreviation : '')}</td><td class="l">${sc}</td><td>${done && fp ? fp[0].toFixed(1) : ''}</td></tr>`); }
+          out.push(`<tr class="${done ? 'pst' : ''}"><td class="l">${w}</td><td class="l ro-op">${me.homeAway === 'home' ? 'vs' : '@'} ${nflLogo(op.team && op.team.abbreviation)}${esc(op.team ? op.team.abbreviation : '')}</td><td class="l">${sc}</td><td>${done && fp ? fp[0].toFixed(1) : done && wv(w) != null ? wv(w).toFixed(1) : ''}</td></tr>`); }
         body = `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Wk</th><th class="l">Opp</th><th class="l">Result or kickoff</th><th>FBP pts</th></tr></thead><tbody>${out.join('')}</tbody></table></div>`;
       }
     } else if (tab === 'an') {
@@ -143,7 +144,7 @@ window.FBPRosters = (function () {
       const benched = mine.filter(x => !x.s).reduce((s, x) => s + x.pts, 0);
       const tile = (l, v, sub) => `<div><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
       body = `<div class="ro-g">
-        ${tile('Season', r.pts.toFixed(1), `${r.rk ? r.pos + r.rk + ' on FBP rosters' : '—'} · ${W.length ? (r.pts / W.length).toFixed(1) : '0.0'} a week`)}
+        ${tile('Season', r.pts.toFixed(1), `${r.rk ? r.pos + r.rk + ' at his position' : '—'} · ${r.gp ? (r.pts / r.gp).toFixed(1) : '0.0'} a game`)}
         ${tile('Started for ' + esc(t.abbr), `${S.length} of ${mine.length}`, `${sp.toFixed(1)} pts started · ${t.pf ? (100 * sp / t.pf).toFixed(1) : 0}% of the team’s points`)}
         ${tile('Left on the bench', benched.toFixed(1), `points scored while not in ${esc(t.abbr)}’s lineup`)}
         ${tile('Best week', best ? best.pts.toFixed(1) : '—', best ? `week ${best.w}` : 'no games yet')}
@@ -226,11 +227,11 @@ window.FBPRosters = (function () {
       // defenses get their NFL team's logo; players their ESPN headshot
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
         : r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : '';
-      const n = Object.keys(r.wks).length, isOpen = open.has(r.id);
+      const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}></span></td>
         <td class="l ro-nm"><b>${esc(r.name)}</b>${chip}${aw}<small>${r.pos} · ${esc(r.nfl || 'FA')}${r.age ? ' · age ' + r.age : ''}</small></td>
-        <td>${r.pts ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
+        <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td>${fx(r.proj, 1)}</td>
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
         ${isOpen ? `<tr class="ro-det"><td colspan="${NC}">${box(r, t, ctx)}</td></tr>` : ''}`;
@@ -262,7 +263,7 @@ window.FBPRosters = (function () {
         <div class="tbl-wrap ro-wrap"><table class="ro-t"><thead><tr><th class="ro-ph"></th>${head}</tr></thead>
         <tbody>${POS.map(p => grp(GRP[p], act.filter(r => r.pos === p))).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody>
         <tfoot><tr><td class="ro-ph"></td><td class="l">Total</td><td>${rows.reduce((s, r) => s + r.pts, 0).toFixed(1)}</td><td></td><td></td><td></td><td></td><td></td><td class="gap">${$(pay)}</td><td></td>${[0, 1, 2, 3, 4].map(k => `<td>${yr(k) ? $(yr(k)) : ''}</td>`).join('')}</tr></tfoot></table></div>
-        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points and rank count this season’s weeks on an FBP roster. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
+        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Pts/wk is per game, and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
       <p class="rf-foot">Through week ${R.through}. Face of the Franchise: the current player with the most history on this team, counting starts, seasons, All-FBP teams, MVPs, Rookie of the Year and championships, across every stint.</p>`;
   }
 

@@ -431,6 +431,17 @@ def main():
                 pts[pid] += x; wks.setdefault(pid, {})[w] = [x, 1, abbr(f)]
             for pid, x in t.get('n', []):
                 pts[pid] += x; wks.setdefault(pid, {})[w] = [x, 0, abbr(f)]
+    # season points and games for every player, rostered, taxi or free agent (MFL's weekly scores), with the FBP
+    # lineup weeks filling any gap. Rank is this season's points among everyone at the position.
+    wsc = collections.defaultdict(dict)
+    for w, sc in ((load(D('mfl', 'weeklyScores.json'), {}) or {}).get('weeks') or {}).items():
+        if int(w) <= played:
+            for pid, v in sc.items():
+                wsc[pid][w] = v
+    for pid, ws in wks.items():
+        for w, v in ws.items():
+            wsc[pid].setdefault(w, v[0])
+    pts = {pid: sum(ws.values()) for pid, ws in wsc.items()}
     byPos = collections.defaultdict(list)
     for pid, v in pts.items():
         byPos[pos.get(pid)].append((v, pid))
@@ -479,7 +490,7 @@ def main():
                          'espn': espn.get(pid, '') or '', 'st': p.get('status'), 'sal': s,
                          'cy': f'{n}/{N}' if N else '', 'newDeal': new_deal, 'fut': future(s, n, N, p.get('status')) if N else None,
                          'acq': a[2] if a else (p.get('drafted') or ''),
-                         'pts': round(pts.get(pid, 0), 1), 'wks': wks.get(pid, {}), 'rk': rk.get(pid),
+                         'pts': round(pts.get(pid, 0), 1), 'gp': len(wsc.get(pid, {})), 'wsc': wsc.get(pid, {}), 'wks': wks.get(pid, {}), 'rk': rk.get(pid),
                          'ecr': ec[0] if ec else None, 'ecrPos': ec[1] if ec else None, 'bye': byes.get(TM.get(nfl, nfl)),
                          'proj': PJ.get(pid), 'hon': H.get(pid, [])})
         o = (fr.get(f['id'], {}).get('owner_name') or '').split()
