@@ -1832,3 +1832,11 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .lv-bench .lv-t tr.lv-r-ir td.lv-p,.lv-bench .lv-t tr.lv-r-ir td.lv-pts{background:rgba(220,50,50,.09)}
 /* phones: the chips beside the photo wrap onto a second line rather than run into the points (RZ over Defending) */
 @media (max-width:560px){.lv-phw .lv-flags{flex-wrap:wrap;max-width:4.2rem;row-gap:3px}.lv-p.b .lv-phw .lv-flags{justify-content:flex-end}}
+/* pull to refresh (phones) */
+.ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top) - 44px);z-index:200;width:38px;height:38px;border-radius:50%;background:var(--surface);color:var(--fg);box-shadow:0 2px 8px rgba(0,0,0,.25);display:grid;place-items:center;font:700 1.1rem var(--body);transform:translate(-50%,0);opacity:0;transition:opacity .15s;pointer-events:none}
+.ptr.on{opacity:1}
+.ptr.go{background:var(--accent);color:#fff}
+.ptr.spin{transition:transform .2s}
+.ptr.spin .ptr-i{display:inline-block;animation:ptrspin .7s linear infinite}
+.ptr.spin .ptr-i::before{content:''}
+@keyframes ptrspin{to{transform:rotate(360deg)}}

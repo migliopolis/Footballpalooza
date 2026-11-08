@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0126';
+  const VERSION = '0.0127';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -685,6 +685,36 @@
   function toTop() { window.scrollTo(0, pinned ? brandH() : 0); }
   let lastTab = (location.hash.slice(1).split('/')[0]) || 'now';
 
+  // phones: pull down from the top of the page to reload it (the saved home-screen app has no pull-to-refresh of its own)
+  function pullRefresh() {
+    if (!('ontouchstart' in window)) return;
+    const ind = document.createElement('div');
+    ind.className = 'ptr'; ind.setAttribute('aria-hidden', 'true'); ind.innerHTML = '<span class="ptr-i">↓</span>';
+    document.body.appendChild(ind);
+    const NEED = 80;
+    let y0 = null, x0 = 0, d = 0;
+    const reset = () => { y0 = null; d = 0; ind.style.transform = ''; ind.classList.remove('on', 'go'); };
+    document.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1 || window.scrollY > 0 || document.querySelector('.lv-dragging')) return;
+      y0 = e.touches[0].clientY; x0 = e.touches[0].clientX; d = 0;
+    }, { passive: true });
+    document.addEventListener('touchmove', e => {
+      if (y0 == null) return;
+      const dy = e.touches[0].clientY - y0, dx = e.touches[0].clientX - x0;
+      // scrolling up, a sideways swipe, or the page has scrolled: not a pull
+      if (dy <= 0 || Math.abs(dx) > dy || window.scrollY > 0 || document.querySelector('.lv-dragging')) { reset(); return; }
+      d = Math.min(140, dy * .55);
+      ind.classList.add('on'); ind.classList.toggle('go', dy >= NEED * 1.6);
+      ind.style.transform = `translate(-50%, ${d}px) rotate(${Math.min(180, dy * 1.2)}deg)`;
+    }, { passive: true });
+    const end = () => {
+      if (y0 == null) return;
+      if (ind.classList.contains('go')) { ind.classList.add('spin'); ind.firstChild.textContent = '↻'; ind.style.transform = 'translate(-50%, 60px)'; setTimeout(() => location.reload(), 150); return; }
+      reset();
+    };
+    document.addEventListener('touchend', end, { passive: true });
+    document.addEventListener('touchcancel', end, { passive: true });
+  }
   function swipeTabs() {
     let x0 = 0, y0 = 0, x1 = 0, y1 = 0, t0 = 0, ok = false, why = '';
     const dbg = /[?&]swipe=debug/.test(location.search);
@@ -742,7 +772,7 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
     window.addEventListener('hashchange', () => { const tab = location.hash.slice(1).split('/')[0] || 'now';
       route(); if (tab !== lastTab) { lastTab = tab; toTop(); } });
-    swipeTabs();
+    swipeTabs(); pullRefresh();
     // sticky panels sit just under the header, whatever height it wraps to
     // --hdr-h is the part that stays pinned (the tabs); --brand-h is the logo row that scrolls away
     const hdr = () => { const r = document.documentElement.style, top = document.querySelector('.top');
