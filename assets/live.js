@@ -142,7 +142,7 @@
         cs.forEach(c => { const o = cs.find(x => x !== c) || {};
           const hasBall = t.state === 'in' && sit.possession && String(sit.possession) === String(c.team.id);
           const oppBall = t.state === 'in' && sit.possession && String(sit.possession) === String((o.team || {}).id);
-          g[c.team.abbreviation] = Object.assign({}, info, { pa: o.score, opp: (o.team || {}).abbreviation, home: c.homeAway === 'home',
+          g[c.team.abbreviation] = Object.assign({}, info, { pf: c.score, pa: o.score, opp: (o.team || {}).abbreviation, home: c.homeAway === 'home',
             ball: !!hasBall, rz: !!(sit.isRedZone && hasBall), defRz: !!(sit.isRedZone && oppBall) }); });
       });
       // box scores only for games that have started; finished ones only once
@@ -438,8 +438,11 @@
         const wx = g && g.state !== 'post' ? wxIcon(g.wx) : '';
         // his team and the opponent sit together as one matchup (BUF @ MIA as logos), then the clock
         // his team first either way, weather on the inside: left side "BUF @ MIA ☀", right side "☀ BUF @ MIA"
-        const vs = g && g.opp && g.state !== 'post' ? (g.home ? 'vs' : '@') : '', me = myT ? nflImg(myT, info(p.id).team) : '';
-        const mu = !myT ? '' : `<span class="lv-opp">${!vs ? me : cls === 'a' ? me + vs + nflImg(g.opp) + wx : wx + me + vs + nflImg(g.opp)}</span>`;
+        // once his game kicks off, each team's score sits by its logo (his team's score bold): "BUF 24 @ MIA 17"
+        const vs = g && g.opp ? (g.home ? 'vs' : '@') : '', on = g && g.state !== 'pre' && g.pf != null;
+        const me = myT ? nflImg(myT, info(p.id).team) + (on ? `<b class="lv-gs">${esc(String(g.pf))}</b>` : '') : '';
+        const them = vs ? nflImg(g.opp) + (on ? `<span class="lv-gs">${esc(String(g.pa))}</span>` : '') : '';
+        const mu = !myT ? '' : `<span class="lv-opp">${!vs ? me : cls === 'a' ? me + vs + them + wx : wx + me + vs + them}</span>`;
         const bottom = [slot === pos(p.id) ? '' : pos(p.id), mu, `<span class="lv-st ${st}">${clock(p)}</span>`].filter(Boolean);
         // the ball: a football beside his photo when his NFL team has it, RZ in the red zone; a defense on the field
         // gets Defending, and RZ when the other team is in the red zone
@@ -539,7 +542,7 @@
       const more = plMore.has(ps), show = list.slice(0, more ? 25 : n);
       return `<section class="card pl-sec"><h2 class="pl-h">${title}</h2><ol class="pl-list">${show.map((p, i) => {
         const tr = tier(p, wk), pj = projOf(p.id, wk), st = state(p);
-        return `<li class="pl-r${tr ? ' t-' + tr.k : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
+        return `<li class="pl-r${tr ? ' t-' + tr.k : ''}${st === 'final' ? ' fin' : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
           <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && (tr.k === 'nuke' || tr.k === 'hot') ? `<span class="pl-tag ${tr.k}">${tr.k === 'nuke' ? 'Nuclear' : 'Hot'}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
             <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${slot(p.status)}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
