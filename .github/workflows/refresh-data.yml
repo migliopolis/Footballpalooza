@@ -61,6 +61,9 @@ jobs:
       - name: Rosters (League Now > Rosters)
         continue-on-error: true
         run: python scripts/rosters.py
+      - name: FBP Power Score (League Now > Power Rankings)
+        continue-on-error: true
+        run: python scripts/power.py
       - name: Analytics (League Now > Analytics)
         continue-on-error: true
         run: python scripts/analytics.py
