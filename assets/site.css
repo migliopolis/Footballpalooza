@@ -1830,3 +1830,5 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .lv-bench .lv-t td.lv-p.final,.lv-bench .lv-t td.lv-pts.final{background:rgba(120,130,140,.12)}
 .lv-bench .lv-t tr.lv-r-tx td.lv-p,.lv-bench .lv-t tr.lv-r-tx td.lv-pts{background:rgba(240,200,40,.14)}
 .lv-bench .lv-t tr.lv-r-ir td.lv-p,.lv-bench .lv-t tr.lv-r-ir td.lv-pts{background:rgba(220,50,50,.09)}
+/* phones: the chips beside the photo wrap onto a second line rather than run into the points (RZ over Defending) */
+@media (max-width:560px){.lv-phw .lv-flags{flex-wrap:wrap;max-width:4.2rem;row-gap:3px}.lv-p.b .lv-phw .lv-flags{justify-content:flex-end}}
