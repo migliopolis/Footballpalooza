@@ -161,7 +161,7 @@
         // a defense's day comes from the other team's numbers: sacks taken, interceptions thrown, fumbles lost
         const T = (j.boxscore.teams || []).map(t => ({ ab: t.team.abbreviation, v: Object.fromEntries((t.statistics || []).reverse().map(x => [x.name, x.displayValue])) }));
         T.forEach((t, i) => { const o = T[1 - i]; if (!o) return;
-          stats['def:' + t.ab] = { sk: +String(o.v.sacksYardsLost || '0').split('-')[0] || 0, int: +o.v.interceptions || 0, fr: +o.v.fumblesLost || 0, td: +t.v.defensiveTouchdowns || 0 }; });
+          stats['def:' + t.ab] = { sk: +String(o.v.sacksYardsLost || '0').split('-')[0] || 0, int: +o.v.interceptions || 0, fr: +o.v.fumblesLost || 0, td: +t.v.defensiveTouchdowns || 0, ya: +o.v.totalYards || 0 }; });
         (j.boxscore.players || []).forEach(tm => (tm.statistics || []).forEach(cat => (cat.athletes || []).forEach(a => {
           const row = (stats[a.athlete.id] = stats[a.athlete.id] || {});
           row[cat.name] = Object.fromEntries((cat.labels || []).map((l, i) => [l, a.stats[i]]));
@@ -273,6 +273,27 @@
     const fl = r.fumbles && n(r.fumbles.LOST);
     if (fl) out.push(`${fl} fum lost`);
     return out.map(keep).join('\u00a0· ');   // a line break never starts with a dot, or splits "4 sacks"
+  }
+  // a live estimate of FBP points from ESPN's box score, for players MFL's live feed doesn't cover (free agents, taxi
+  // squad, IR): MFL only posts their points once a game is final. FBP scoring (MFL rules for league 14482):
+  // pass yd .04, pass TD 4, INT -2; rush/rec yd .1, rush/rec TD 6, reception 1; return yd .05, return TD 6; fumble lost -2.
+  // Defense: points allowed (0 → 5 … 36+ → 0) plus yards allowed (under 200 → 5 … 500+ → 0), sack 1, INT 2, fumble
+  // recovery 1, TD 6. Two-point conversions, forced fumbles, blocks and safeties aren't in the box score, so they're missed.
+  function estimate(id) {
+    const n = v => +String(v || 0).split('/')[0] || 0;
+    if (pos(id) === 'DEF') {
+      const ab = TEAM[info(id).team] || info(id).team, d = EW().stats['def:' + ab], gm = gameOf(id);
+      if (!d || !gm || gm.state === 'pre' || gm.pa == null) return null;
+      const pa = +gm.pa, ya = d.ya;
+      const paP = pa <= 5 ? 5 : pa <= 10 ? 4 : pa <= 20 ? 3 : pa <= 29 ? 2 : pa <= 35 ? 1 : 0;
+      const yaP = ya < 200 ? 5 : ya < 300 ? 4 : ya < 400 ? 3 : ya < 450 ? 2 : ya < 500 ? 1 : 0;
+      return paP + yaP + d.sk + 2 * d.int + d.fr + 6 * d.td;
+    }
+    const r = EW().stats[espnId(id)]; if (!r) return null;
+    const ps = r.passing || {}, ru = r.rushing || {}, re = r.receiving || {}, kr = r.kickReturns || {}, pr = r.puntReturns || {}, fu = r.fumbles || {};
+    const v = .04 * n(ps.YDS) + 4 * n(ps.TD) - 2 * n(ps.INT) + .1 * n(ru.YDS) + 6 * n(ru.TD) + .1 * n(re.YDS) + 6 * n(re.TD) + n(re.REC)
+      + .05 * (n(kr.YDS) + n(pr.YDS)) + 6 * (n(kr.TD) + n(pr.TD)) - 2 * n(fu.LOST);
+    return Math.round(v * 100) / 100;
   }
   // an earlier week, shaped like MFL's live scoring: final lineups and points from the weekly results file
   function loadHist(w) {
@@ -536,6 +557,18 @@
       if (!x.fa && !rs) return;                       // rostered, but not in this week's lineups or on a taxi squad/IR
       const p = { id: x.id, score: x.score, status: rs ? rs[1] : 'fa', fid: rs ? rs[0] : null, gameSecondsRemaining: String(faSecs(x.id)) };
       if (onField(p)) all.push(p); });
+    // games still going (or just ended): MFL hasn't posted free agents', taxi or IR players' points yet, so estimate them
+    if (!view && players) {
+      all.forEach(p => seen.add(p.id));
+      Object.keys(players).forEach(id => {
+        if (seen.has(id) || !PL_POS.some(x => x[0] === pos(id))) return;
+        const g = gameOf(id); if (!g || g.state === 'pre') return;
+        const sc = estimate(id); if (sc == null) return;
+        const rs = reserveOf(id);
+        const p = { id, score: String(sc), est: true, status: rs ? rs[1] : 'fa', fid: rs ? rs[0] : null, gameSecondsRemaining: String(faSecs(id)) };
+        if (onField(p)) all.push(p);
+      });
+    }
     const keep = p => plShow === 'fa' ? !p.fid : plShow === 'ro' ? !!p.fid : plShow === 'st' ? p.status === 'starter' : true;
     const shown = all.filter(keep);
     const seg = `<div class="seg pl-show" role="tablist">${PL_SHOW.filter(([k]) => !(faMissing && k === 'fa')).map(([k, l]) => `<button type="button" role="tab" data-pl-show="${k}" aria-selected="${k === plShow}">${l}</button>`).join('')}</div>`;
@@ -550,14 +583,14 @@
           <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && (tr.k === 'nuke' || tr.k === 'hot') ? `<span class="pl-tag ${tr.k}">${tr.k === 'nuke' ? 'Nuclear' : 'Hot'}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
             <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${slot(p.status)}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
-          <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${pj != null ? `<small>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
+          <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${p.est ? '<small class="pl-est" title="Estimated from ESPN’s box score; MFL posts official points once his game is final">est.</small>' : ''}${pj != null ? `<small>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
         ${list.length > n ? `<button type="button" class="pl-more" data-pl-more="${ps}">${more ? 'Show fewer' : `Show more (${Math.min(list.length, 25) - n})`}</button>` : ''}</section>`;
     };
     const live = all.some(p => state(p) === 'live');
     const what = { all: faMissing || !fa[wk] ? 'FBP-rostered players' : 'every player, rostered or free agent', fa: 'free agents only', ro: 'FBP-rostered players', st: 'FBP starters only' }[plShow];
     return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${what}</span></div>${seg}
       <div class="pl-grid">${PL_POS.map(sec).join('')}</div>
-      <p class="rf-foot lv-foot">Ranked by points this week among players who have taken the field this week. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection. S starter, B bench, T taxi squad, IR injured reserve.</p>`;
+      <p class="rf-foot lv-foot">Ranked by points this week among players who have taken the field this week. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection. S starter, B bench, T taxi squad, IR injured reserve. Free agents, taxi squad and IR players whose games are under way show an estimate (est.) worked out from ESPN’s box score with FBP scoring, until MFL posts their official points after the game.</p>`;
   }
   document.addEventListener('click', e => { const b = e.target.closest('[data-pl-more]'); if (!b) return; const k = b.dataset.plMore; plMore.has(k) ? plMore.delete(k) : plMore.add(k); paint(); });
 
