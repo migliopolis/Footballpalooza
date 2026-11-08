@@ -3,7 +3,7 @@
  "week": 9,
  "through": 8,
  "since": 2019,
- "generated": "2026-11-07T21:04:43+00:00",
+ "generated": "2026-11-08T16:40:14+00:00",
  "games": [
   {
    "away": "0003",
@@ -145,6 +145,30 @@
       "w": 5,
       "sa": 143.2,
       "sb": 74.0,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 6,
+      "sa": 109.1,
+      "sb": 168.1,
+      "win": "0009",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 11,
+      "sa": 119.6,
+      "sb": 107.5,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 1,
+      "sa": 121.6,
+      "sb": 94.6,
       "win": "0003",
       "kind": "Regular season"
      }
@@ -296,6 +320,30 @@
       "sb": 79.3,
       "win": "0011",
       "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 11,
+      "sa": 138.8,
+      "sb": 125.6,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 11,
+      "sa": 134.0,
+      "sb": 105.6,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 1,
+      "sa": 100.6,
+      "sb": 138.1,
+      "win": "0005",
+      "kind": "Regular season"
      }
     ],
     "divisionGame": false
@@ -435,6 +483,38 @@
       "sb": 120.1,
       "win": "0007",
       "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 12,
+      "sa": 84.0,
+      "sb": 105.6,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 8,
+      "sa": 74.8,
+      "sb": 102.7,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 13,
+      "sa": 118.7,
+      "sb": 107.7,
+      "win": "0008",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 1,
+      "sa": 121.0,
+      "sb": 133.7,
+      "win": "0007",
+      "kind": "Regular season"
      }
     ],
     "divisionGame": false
@@ -572,6 +652,30 @@
       "w": 5,
       "sa": 139.1,
       "sb": 81.3,
+      "win": "0010",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 4,
+      "sa": 115.6,
+      "sb": 144.7,
+      "win": "0012",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 8,
+      "sa": 166.6,
+      "sb": 130.2,
+      "win": "0010",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 1,
+      "sa": 117.9,
+      "sb": 89.2,
       "win": "0010",
       "kind": "Regular season"
      }
@@ -738,6 +842,54 @@
       "sb": 113.5,
       "win": "0002",
       "kind": "Playoffs \u00b7 Semifinal"
+     },
+     {
+      "y": 2022,
+      "w": 2,
+      "sa": 133.9,
+      "sb": 146.9,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 16,
+      "sa": 89.3,
+      "sb": 159.7,
+      "win": "0001",
+      "kind": "Playoffs \u00b7 Semifinal"
+     },
+     {
+      "y": 2021,
+      "w": 10,
+      "sa": 113.4,
+      "sb": 100.3,
+      "win": "0002",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 8,
+      "sa": 133.5,
+      "sb": 143.3,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 12,
+      "sa": 63.8,
+      "sb": 105.7,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 1,
+      "sa": 95.5,
+      "sb": 75.6,
+      "win": "0002",
+      "kind": "Regular season"
      }
     ],
     "divisionGame": false
@@ -875,6 +1027,54 @@
       "w": 14,
       "sa": 86.4,
       "sb": 85.6,
+      "win": "0006",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 1,
+      "sa": 83.0,
+      "sb": 87.3,
+      "win": "0004",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 12,
+      "sa": 93.8,
+      "sb": 115.6,
+      "win": "0004",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 1,
+      "sa": 66.5,
+      "sb": 100.9,
+      "win": "0004",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 3,
+      "sa": 121.8,
+      "sb": 108.3,
+      "win": "0006",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 12,
+      "sa": 87.6,
+      "sb": 80.2,
+      "win": "0006",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 1,
+      "sa": 145.7,
+      "sb": 112.8,
       "win": "0006",
       "kind": "Regular season"
      }

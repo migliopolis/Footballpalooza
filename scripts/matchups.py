@@ -9,7 +9,7 @@ For each game in the next unplayed week:
   - win chance from the playoff simulation
   - stakes: each team's playoff and bye odds after a win and after a loss
   - the series since 2019: overall record, playoff meetings, current streak,
-    average score, biggest win each way, and the most recent meetings
+    average score, biggest win each way, and every meeting
 The game with the biggest combined playoff swing is tagged game of the week.
 """
 import json, os
@@ -116,7 +116,7 @@ def main():
             games=len(out), w={a: rec[a], b: rec[b]}, t=rec['tie'],
             avg={a: round(sum(pts[a]) / len(pts[a]), 1) if pts[a] else None, b: round(sum(pts[b]) / len(pts[b]), 1) if pts[b] else None},
             streak=dict(id=streak[0], n=streak[1]) if streak else None,
-            biggest=big, playoff=list(reversed(po)), recent=list(reversed(out))[:5],
+            biggest=big, playoff=list(reversed(po)), recent=list(reversed(out)),
             divisionGame=by[a]['division'] == by[b]['division'],
         )
 

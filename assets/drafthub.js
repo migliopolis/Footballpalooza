@@ -7,7 +7,7 @@
    Order, records, SOS and movement come from data/league-now.json (scripts/league_now.py); rookies,
    NFL landing spots and prices come from the Rookie Pricer files through FBPDraft.lib. */
 window.FBPDraftHub = (() => {
-  const H = { pos: 'ALL', adp: null };
+  const H = { pos: 'ALL', adp: null, open: new Set(), tab: {}, espn: null, cache: {} };
   let X;
   const L = () => window.FBPDraft && FBPDraft.lib;
   const esc = s => X.esc(s == null ? '' : s);
@@ -24,6 +24,59 @@ window.FBPDraftHub = (() => {
   function head(cur, sub) {
     const now = X.now;
     return `<div class="pagehead"><h1>Rookie Draft</h1><span class="asof">${now.draftYear || ''} rookie draft · order from Week ${now.weeksPlayed} standings${sub ? ' · ' + sub : ''}</span></div>${nav(cur)}`;
+  }
+  // ESPN college ids for the board (data/rookies-espn.json): photos, school logos and the prospect box
+  function loadEspn(rerender) {
+    if (H.espn) return;
+    H.espn = {};
+    fetch('data/rookies-espn.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { H.espn = j.players || {}; rerender(); }).catch(() => {});
+  }
+  const EA = 'https://site.web.api.espn.com/apis/common/v3/sports/football/college-football/athletes/';
+  function cf(key, url) {
+    if (H.cache[key]) return H.cache[key].data;
+    H.cache[key] = { data: null };
+    fetch(url).then(r => r.ok ? r.json() : Promise.reject()).then(j => { H.cache[key].data = j; X.rerender(); }).catch(() => { H.cache[key].data = { failed: true }; X.rerender(); });
+    return null;
+  }
+  const headshot = id => id ? `https://a.espncdn.com/i/headshots/college-football/players/full/${id}.png` : '';
+  const school = t => t ? `<img class="dh-sch" src="https://a.espncdn.com/i/teamlogos/ncaa/500/${t}.png" alt="" loading="lazy">` : '';
+  // the prospect box: Profile, College stats, News, FBP outlook
+  function prospect(p, ctx2) {
+    const e = (H.espn || {})[p.name] || {}, tab = H.tab[p.name] || 'out';
+    const tabs = [['out', 'FBP outlook'], ['stats', 'College stats'], ['bio', 'Profile'], ['news', 'News']];
+    const head = `<div class="ro-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" data-dh-tab="${esc(p.name)}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
+    const wait = '<p class="ro-wait">Loading from ESPN…</p>', fail = '<p class="ro-wait">ESPN didn’t answer. Try again in a minute.</p>', noid = '<p class="ro-wait">ESPN doesn’t have a college profile matched for him yet.</p>';
+    let body = '';
+    if (tab === 'out') {
+      const t = (k, v, sub) => `<div><small>${k}</small><b>${v}</b><span>${sub || ''}</span></div>`;
+      body = `<div class="ro-g">${t('Big board', '#' + p.rank, `${ctx2.posRank} · ${esc(ctx2.boardName)}`)}${t('ADP', ctx2.adp != null ? ctx2.adp.toFixed(1) : '—', 'Rookie Pricer blend of boards')}
+        ${t('Projected NFL pick', ctx2.nfl, ctx2.landingTxt)}${t('FBP pick if the draft follows the board', ctx2.at, ctx2.price)}
+        ${t('Salary at 1.01', '$' + ctx2.top, 'his price as the first pick')}${t('In our mock drafts', ctx2.mock, 'Rookie Draft > Mock Draft on this device')}</div>
+        <p class="ro-bnote">Rookie contracts run 5 years (6 with a full rookie season on taxi), escalating +$3, +$6, +$9, +$12.</p>`;
+    } else if (!e.id) body = noid;
+    else if (tab === 'stats') {
+      const j = cf('o' + e.id, EA + e.id + '/overview');
+      if (!j) body = wait; else if (j.failed) body = fail;
+      else {
+        const st = j.statistics || {}, labels = st.labels || [], cats = st.categories || [];
+        const rows = (st.splits || []).map(sp => `<tr><td class="l">${esc(sp.displayName || '')}</td>${(sp.stats || []).map(v => `<td>${esc(String(v))}</td>`).join('')}</tr>`).join('');
+        let off = 0; const groupHead = cats.map(c => { const h = `<th colspan="${c.count}">${esc(c.displayName)}</th>`; off += c.count; return h; }).join('');
+        body = rows ? `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th></th>${groupHead}</tr><tr><th class="l">Season</th>${labels.map(l => `<th>${esc(l)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>
+          <p class="ro-bnote">${esc(st.displayName || 'College stats')} from ESPN.</p>` : '<p class="ro-wait">No college stats yet.</p>';
+      }
+    } else if (tab === 'bio') {
+      const j = cf('a' + e.id, EA + e.id);
+      if (!j) body = wait; else if (j.failed) body = fail;
+      else { const a = j.athlete || j, t = a.team || {};
+        const f = (k, v) => v ? `<div><small>${k}</small><b>${esc(String(v))}</b></div>` : '';
+        body = `<div class="ro-yrs">${f('School', t.displayName || p.school)}${f('Position', (a.position || {}).displayName || p.pos)}${f('Class', (a.displayExperience || (a.experience || {}).displayValue || ''))}${f('Height', a.displayHeight)}${f('Weight', a.displayWeight)}${f('Jersey', a.displayJersey)}${f('Hometown', a.displayBirthPlace)}</div>`; }
+    } else if (tab === 'news') {
+      const j = cf('o' + e.id, EA + e.id + '/overview');
+      if (!j) body = wait; else if (j.failed) body = fail;
+      else { const n = (j.news || []).slice(0, 3);
+        body = n.length ? n.map(x => `<div class="ro-nw"><b>${esc(x.headline || '')}</b>${x.description ? `<p>${esc(x.description)}</p>` : ''}<small>ESPN${x.published ? ' · ' + new Date(x.published).toLocaleDateString([], { month: 'short', day: 'numeric' }) : ''}</small></div>`).join('') : '<p class="ro-wait">No recent news.</p>'; }
+    }
+    return `<div class="ro-box dh-box">${head}<div class="ro-bb">${body}</div></div>`;
   }
   // the rookies in board order, and the consensus ADP from the Rookie Pricer when it has one
   const board = () => L().data().players.slice().sort((a, b) => a.rank - b.rank);
@@ -61,21 +114,24 @@ window.FBPDraftHub = (() => {
       return `<tr>
         <td class="dh-pk"><b>${d.pick}</b><span class="dh-lg">${logo(d.id)}</span>${move(d.id, d.pick)}</td>
         <td class="t"><span class="dh-tm">${esc(s.name || abbr(d.id))}</span>${traded ? `<small class="dh-trade" title="Traded to ${esc(X.nameOf(d.owner))}">→ ${logo(d.owner)}${esc(abbr(d.owner))}</small>` : ''}</td>
-        <td class="dh-key">${playoff ? recTxt(s) : ppTxt(s)}</td><td>${playoff ? ppTxt(s) : recTxt(s)}</td><td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td class="dh-stk ${/^L/.test(s.streak || '') ? 'good' : /^W/.test(s.streak || '') ? 'bad' : ''}">${streak(s.streak)}</td>
+        <td class="dh-key">${playoff ? recTxt(s) : ppTxt(s)}</td>${playoff ? '' : `<td class="dh-pb">${pbTxt(d)}</td>`}<td>${playoff ? ppTxt(s) : recTxt(s)}</td>${playoff ? '<td></td>' : ''}<td>${pct3(s.pct)}</td><td>${gb(s)}</td><td>${pct3(s.sos)}</td><td class="dh-stk ${/^L/.test(s.streak || '') ? 'good' : /^W/.test(s.streak || '') ? 'bad' : ''}">${streak(s.streak)}</td>
         <td class="dh-sal">${p ? `<b>$${lib.price(p, slot)}</b><small>${esc(p.name)} ${posPill(p.pos)}</small>` : '—'}</td></tr>`;
     };
     // column labels under each section's divider, since the lead column differs
     const cols = playoff => `<tr class="dh-cols"><th class="dh-pk">Pick</th><th class="t">Team</th>${playoff
       ? '<th class="dh-key">Record</th><th title="Potential points">Pot. pts</th>'
-      : '<th class="dh-key" title="Potential points: lowest picks first">Pot. pts</th><th>Record</th>'}<th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th>Streak</th><th class="dh-sal">Salary</th></tr>`;
-    const div = (label, sub) => `<tr class="dh-div"><td colspan="9"><span class="dh-divl">${label}${sub ? `<small>${sub}</small>` : ''}</span></td></tr>`;
+      : '<th class="dh-key" title="Potential points: lowest picks first">Pot. pts</th><th class="dh-pb" title="Points back: potential points behind the team picking first">PB</th><th>Record</th>'}${playoff ? '<th></th>' : ''}<th>Win%</th><th>GB</th><th title="Average win% of the opponents still to play">SOS</th><th>Streak</th><th class="dh-sal">Salary</th></tr>`;
+    const div = (label, sub) => `<tr class="dh-div"><td colspan="10"><span class="dh-divl">${label}${sub ? `<small>${sub}</small>` : ''}</span></td></tr>`;
     const ord = now.draftOrder || [];
     const non = ord.filter(d => d.basis === 'lowest potential points'), po = ord.filter(d => d.basis !== 'lowest potential points');
+    // points back: how far each non-playoff team's potential points sit above the team picking first
+    const pp1 = non.length ? Number((st[non[0].id] || {}).pp || 0) : 0;
+    var pbTxt = d => { const v = Number((st[d.id] || {}).pp || 0) - pp1; return d === non[0] ? '—' : v.toFixed(1); };
     return head('', prev ? `movement since week ${prev.week}` : '') +
       `<section><h2 class="sec">${now.draftYear || ''} rookie draft order <small>round 1; rounds 2–4 repeat it</small></h2>
       <div class="card tbl-wrap"><table class="tbl dh-tbl dh-home"><tbody>
       ${div('Non-playoff teams', 'lowest potential points picks first')}${cols(false)}${non.map(d => row(d, false)).join('')}
-      <tr class="dh-gap"><td colspan="9"></td></tr>
+      <tr class="dh-gap"><td colspan="10"></td></tr>
       ${div('Playoff teams', 'projected finish; champion picks last')}${cols(true)}${po.map(d => row(d, true)).join('')}
       </tbody></table></div>
       <p class="rf-foot">Salary is what the projected rookie at that pick would cost: the board’s next-best player (<a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>), priced with his projected NFL landing spot. GB is games back of the worst record. SOS is the average win% of the opponents still to play. Colors are from the draft’s point of view: green is good for a team’s pick (moving up, losing streaks), red is bad. ${prev ? '' : 'Movement arrows start after Monday night’s refresh, the first week with a saved order to compare against.'}</p></section>
@@ -98,13 +154,19 @@ window.FBPDraftHub = (() => {
     all.forEach(p => { seen[p.pos] = (seen[p.pos] || 0) + 1; posRank[p.name] = p.pos + seen[p.pos]; });
     const list = all.filter(p => H.pos === 'ALL' || p.pos === H.pos);
     const groups = [[1, 12, 'Projected round 1'], [13, 24, 'Projected round 2'], [25, 36, 'Projected round 3'], [37, 48, 'Projected round 4'], [49, 999, 'Beyond pick 48']];
+    loadEspn(X.rerender);
+    const mockOf = name => { try { const m = JSON.parse(localStorage.getItem('fbp-mock-2027') || 'null'); if (!m || !m.picks) return null; const i = m.picks.indexOf(name); return i < 0 ? null : i; } catch (e) { return null; } };
     const row = p => {
       const slot = p.rank - 1, at = slot < 48 ? lib.slotLabel(slot) : '—';
-      const adp = H.adp && H.adp[p.name];
-      return `<tr><td class="dh-rk">${p.rank}</td><td class="t"><b>${esc(p.name)}</b> ${posPill(p.pos)}<small class="rf-by">${esc(p.school || '')} · ${posRank[p.name]}</small></td>
+      const adp = H.adp && H.adp[p.name], e = (H.espn || {})[p.name] || {}, isOpen = H.open.has(p.name);
+      const mk = mockOf(p.name);
+      const box = isOpen ? `<tr class="dh-det"><td colspan="7">${prospect(p, { posRank: posRank[p.name], boardName: lib.data().board ? lib.data().board.name : 'rookie board', adp,
+        nfl: lib.nflLabel(p.nflPick), landingTxt: p.nflPick ? 'from the Rookie Pricer’s mock-draft sources' : '', at, price: slot < 48 ? '$' + lib.price(p, slot) + ' salary' : 'priced as a late pick', top: lib.price(p, 0),
+        mock: mk != null ? lib.slotLabel(mk) : '—' })}</td></tr>` : '';
+      return `<tr class="dh-pr${isOpen ? ' on' : ''}" data-dh-p="${esc(p.name)}"><td class="dh-rk">${p.rank}</td><td class="t"><span class="dh-who"><span class="dh-ph"${e.id ? ` style="background-image:url(${headshot(e.id)})"` : ''}></span><span><b>${esc(p.name)}</b> ${posPill(p.pos)}<small class="rf-by">${school(e.team)}${esc(p.school || '')} · ${posRank[p.name]}</small></span></span></td>
         <td>${adp != null ? adp.toFixed(1) : '—'}</td>
         <td><span class="dh-nfl">${lib.nflLabel(p.nflPick)}${landing(p)}</span></td>
-        <td>${at}</td><td><b>${slot < 48 ? '$' + lib.price(p, slot) : '—'}</b></td><td>$${lib.price(p, 0)}</td></tr>`;
+        <td>${at}</td><td><b>${slot < 48 ? '$' + lib.price(p, slot) : '—'}</b></td><td>$${lib.price(p, 0)}</td></tr>${box}`;
     };
     const body = groups.map(([a, b, label]) => { const g = list.filter(p => p.rank >= a && p.rank <= b); return g.length ? `<tr class="dh-div"><td colspan="7">${label}<small>${a <= 48 ? `board ranks ${a}–${Math.min(b, all.length)}` : 'priced as a late pick'}</small></td></tr>${g.map(row).join('')}` : ''; }).join('');
     const posBtns = ['ALL', 'QB', 'RB', 'WR', 'TE'].map(k => `<button type="button" data-dh-pos="${k}" aria-pressed="${H.pos === k}">${k === 'ALL' ? 'All' : k}</button>`).join('');
@@ -113,7 +175,7 @@ window.FBPDraftHub = (() => {
       `<section><div class="dh-bar"><div class="seg" role="group" aria-label="Position">${posBtns}</div><span class="rf-foot">${counts}</span></div>
       <div class="card tbl-wrap"><table class="tbl rf-t dh-tbl"><thead><tr><th>#</th><th class="t">Rookie</th><th title="Average draft position across the Rookie Pricer’s boards">ADP</th><th title="Projected NFL pick and landing team">NFL</th><th title="Where he goes if the draft follows the board">FBP pick</th><th title="His salary at that FBP pick">Salary</th><th title="His salary if taken 1.01">At 1.01</th></tr></thead>
       <tbody>${body || '<tr><td colspan="7" class="muted">No rookies at this position.</td></tr>'}</tbody></table></div>
-      <p class="rf-foot">Order: <a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>. ADP is the Rookie Pricer’s blend of rookie boards. NFL picks: the Rookie Pricer’s mock-draft sources. Landing teams: <a href="https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027" target="_blank" rel="noopener">NFL Mock Draft Database</a> (consensus mock, then recent mocks), else the team holding his pick in ${lib.nflOrder() ? `<a href="${esc(lib.nflOrder().url)}" target="_blank" rel="noopener">Tankathon’s</a> projected order` : 'Tankathon’s projected order'}. Salaries use the 2027 formula (${Object.entries(C.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; $${C.minimumRounds1to2} minimum in rounds 1–2; rounds 3–4 $${C.flatSalaryByRound['3']}/$${C.flatSalaryByRound['4']}).</p></section>`;
+      <p class="rf-foot">Tap a rookie for his FBP outlook, college stats, profile and news (from ESPN). Order: <a href="${esc(lib.data().board ? lib.data().board.url : '#')}" target="_blank" rel="noopener">${esc(lib.data().board ? lib.data().board.name : 'rookie board')}</a>. ADP is the Rookie Pricer’s blend of rookie boards. NFL picks: the Rookie Pricer’s mock-draft sources. Landing teams: <a href="https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027" target="_blank" rel="noopener">NFL Mock Draft Database</a> (consensus mock, then recent mocks), else the team holding his pick in ${lib.nflOrder() ? `<a href="${esc(lib.nflOrder().url)}" target="_blank" rel="noopener">Tankathon’s</a> projected order` : 'Tankathon’s projected order'}. Salaries use the 2027 formula (${Object.entries(C.positions).map(([k, v]) => `${k} max $${v.max}`).join(', ')}; $${C.minimumRounds1to2} minimum in rounds 1–2; rounds 3–4 $${C.flatSalaryByRound['3']}/$${C.flatSalaryByRound['4']}).</p></section>`;
   }
 
   /* ---------- Full Order ---------- */
@@ -146,6 +208,11 @@ window.FBPDraftHub = (() => {
     return pageHome();
   }
   function click(e) {
+    const tb = e.target.closest('[data-dh-tab]');
+    if (tb) { const [n, k] = tb.dataset.dhTab.split('|'); H.tab[n] = k; return true; }
+    if (e.target.closest('.dh-box')) return false;
+    const pr = e.target.closest('[data-dh-p]');
+    if (pr && !e.target.closest('a')) { const n = pr.dataset.dhP; H.open.has(n) ? H.open.delete(n) : H.open.add(n); return true; }
     const b = e.target.closest('[data-dh-pos]');
     if (!b) return false;
     H.pos = b.dataset.dhPos; return true;

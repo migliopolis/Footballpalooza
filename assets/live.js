@@ -134,7 +134,14 @@
         const info = { id: ev.id, state: t.state, date: ev.date, detail: t.shortDetail, clock: st.displayClock, period: st.period, name: ev.shortName };
         const cs = ev.competitions[0].competitors;
         info.tids = cs.map(c => c.team.id);
-        cs.forEach(c => { const o = cs.find(x => x !== c) || {}; g[c.team.abbreviation] = Object.assign({}, info, { pa: o.score }); });
+        // weather (ESPN gives it before kickoff; indoor games say so), and who has the ball / red zone while live
+        const comp = ev.competitions[0], wx = ev.weather || comp.weather || null, sit = comp.situation || {};
+        info.wx = comp.venue && comp.venue.indoor ? { indoor: true } : wx ? { text: wx.displayValue || wx.conditionId || '', temp: wx.temperature != null ? wx.temperature : wx.highTemperature } : null;
+        cs.forEach(c => { const o = cs.find(x => x !== c) || {};
+          const hasBall = t.state === 'in' && sit.possession && String(sit.possession) === String(c.team.id);
+          const oppBall = t.state === 'in' && sit.possession && String(sit.possession) === String((o.team || {}).id);
+          g[c.team.abbreviation] = Object.assign({}, info, { pa: o.score, opp: (o.team || {}).abbreviation, home: c.homeAway === 'home',
+            ball: !!hasBall, rz: !!(sit.isRedZone && hasBall), defRz: !!(sit.isRedZone && oppBall) }); });
       });
       // box scores only for games that have started; finished ones only once
       // game-day rosters, once a game has kicked off (inactives are set before kickoff): who was ruled out
@@ -184,6 +191,64 @@
     if (pos(id) === 'DEF') { const t = TEAM[info(id).team] || info(id).team || ''; return t ? `https://a.espncdn.com/i/teamlogos/nfl/500/${t.toLowerCase()}.png` : ''; }
     return espnId(id) ? `https://a.espncdn.com/i/headshots/nfl/players/full/${espnId(id)}.png` : '';
   };
+  // NFL logos (ESPN), and a weather icon for a game
+  const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
+  const nflImg = (ab, label) => ab ? `<img class="lv-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${String(ab).toLowerCase()}.png" alt="${esc(label || ab)}" title="${esc(label || ab)}">` : '';
+  const wxIcon = w => { if (!w) return '';
+    if (w.indoor) return '<span class="lv-wx" title="Indoors">🏟️</span>';
+    const t = String(w.text || '').toLowerCase(), deg = w.temp != null ? ` · ${Math.round(w.temp)}°` : '';
+    const e = /snow|flurr|sleet/.test(t) ? '🌨️' : /thunder|storm/.test(t) ? '⛈️' : /rain|shower|drizzle/.test(t) ? '🌧️' : /fog|haze|mist/.test(t) ? '🌫️'
+      : /wind/.test(t) ? '💨' : /partly|mostly sunny|few clouds|intermittent/.test(t) ? '⛅' : /cloud|overcast/.test(t) ? '☁️' : /sun|clear|fair/.test(t) ? '☀️' : '🌡️';
+    return `<span class="lv-wx" title="${esc((w.text || 'Weather') + deg)}">${e}</span>`; };
+  // your own game order: press and hold a game, then drag it. Saved on this device as a list of franchises, so it
+  // carries over to other weeks (a game sorts by whichever of its two teams sits higher on the list).
+  let sbOrder = []; try { sbOrder = JSON.parse(localStorage.getItem('fbp-sb-order') || '[]'); } catch (e) {}
+  const ordered = ms => { if (!sbOrder.length) return ms;
+    const rk = f => { const i = sbOrder.indexOf(f); return i < 0 ? 999 : i; };
+    return ms.map((m, i) => [m, i]).sort((x, y) => (Math.min(...x[0].franchise.map(f => rk(f.id))) - Math.min(...y[0].franchise.map(f => rk(f.id)))) || x[1] - y[1]).map(x => x[0]); };
+  (function dragGames() {
+    let hold = null, drag = null, sx = 0, sy = 0, swallow = false;
+    const pt = e => e.touches ? e.touches[0] : e;
+    const start = e => {
+      const sum = e.target.closest && e.target.closest('.lv-sum'); if (!sum || (e.button != null && e.button !== 0)) return;
+      const card = sum.closest('.lv-g'), list = card && card.parentElement; if (!list || !list.classList.contains('lv-list')) return;
+      const p = pt(e); sx = p.clientX; sy = p.clientY;
+      hold = setTimeout(() => { hold = null;
+        drag = { card, list, y0: p.clientY, off0: card.offsetTop };
+        card.classList.add('lv-lift'); list.classList.add('lv-dragging');
+        if (navigator.vibrate) try { navigator.vibrate(12); } catch (err) {} }, 420);
+    };
+    const move = e => {
+      const p = pt(e);
+      if (hold && (Math.abs(p.clientX - sx) > 8 || Math.abs(p.clientY - sy) > 8)) { clearTimeout(hold); hold = null; }
+      if (!drag) return;
+      if (e.cancelable) e.preventDefault();   // dragging, not scrolling
+      const { card, list } = drag;
+      // move past a neighbor's midpoint and it trades places
+      const sibs = [...list.children].filter(c => c !== card);
+      const before = sibs.find(c => { const r = c.getBoundingClientRect(); return p.clientY < r.top + r.height / 2; });
+      if (before !== card.nextElementSibling) list.insertBefore(card, before || null);
+      // stay under the finger: how far it's been dragged, less how far its slot in the list has moved
+      card.style.transform = `translateY(${p.clientY - drag.y0 - (card.offsetTop - drag.off0)}px)`;
+      // keep the page scrolling when you drag near the edges
+      if (p.clientY < 90) window.scrollBy(0, -12); else if (p.clientY > window.innerHeight - 60) window.scrollBy(0, 12);
+    };
+    const end = () => {
+      if (hold) { clearTimeout(hold); hold = null; }
+      if (!drag) return;
+      const { card, list } = drag; drag = null; swallow = true;
+      card.style.transform = ''; card.classList.remove('lv-lift'); list.classList.remove('lv-dragging');
+      sbOrder = [...list.querySelectorAll('.lv-g')].flatMap(c => (c.dataset.lvKey || '').split('-'));
+      try { localStorage.setItem('fbp-sb-order', JSON.stringify(sbOrder)); } catch (err) {}
+      setTimeout(() => { swallow = false; }, 350);
+    };
+    document.addEventListener('touchstart', start, { passive: true });
+    document.addEventListener('touchmove', move, { passive: false });
+    document.addEventListener('touchend', end); document.addEventListener('touchcancel', end);
+    document.addEventListener('mousedown', start); document.addEventListener('mousemove', move); document.addEventListener('mouseup', end);
+    document.addEventListener('click', e => { if (swallow && e.target.closest && e.target.closest('.lv-g')) { e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener('contextmenu', e => { if (drag || hold) e.preventDefault(); });
+  })();
   const gameOf = id => EW().games[TEAM[info(id).team] || info(id).team];
   // the stat line: passing, rushing, receiving, whatever he did
   // keeps a stat together ("16 car") but lets it wrap after a comma
@@ -246,6 +311,7 @@
   }
   // redraw just the scoreboard (keeps scroll position and which games are open)
   function paint() {
+    if (document.querySelector('.lv-list.lv-dragging')) return setTimeout(paint, 800);   // don't redraw under a drag
     const el = document.getElementById('lv-root');
     if (el) el.innerHTML = body(); else if (X && onPage()) X.rerender();
     fitSoon();
@@ -358,19 +424,33 @@
       const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}"><span class="lv-lgw">${logo(f.id)}${seed(f.id)}${heat(f)}</span><span class="lv-sc"><b>${n1(+f.score)}</b>${projLine(cls === 'a' ? pa : pb)}</span></span>`;
       const la = lineup(a), lb = lineup(b);
       // one player's two cells, mirrored on the right side: name | points  slot  points | name
-      const cell = (p, cls) => {
+      const cell = (p, cls, slot) => {
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
-        const st = state(p), ph = photo(p.id), inj = injTag(p.id);
+        // FBP's own IR counts even when ESPN no longer lists the injury
+        const st = state(p), ph = photo(p.id), inj = injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         const img = photoHtml(p, shownW);
-        const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><small>${pos(p.id)} · ${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
+        // bottom row: position (only when it isn't the slot's, as in FLEX or the bench), his NFL team's logo, the game clock, then the opponent (vs at home, @ away) and the
+        // weather, toward the middle of the matchup
+        const g = gameOf(p.id), myT = TEAM[info(p.id).team] || info(p.id).team;
+        const wx = g && g.state !== 'post' ? wxIcon(g.wx) : '';
+        // his team and the opponent sit together as one matchup (BUF @ MIA as logos), then the clock
+        const vsOpp = g && g.opp && g.state !== 'post' ? `${g.home ? 'vs' : '@'}${nflImg(g.opp)}${wx}` : '';
+        const mu = myT ? `<span class="lv-opp">${cls === 'a' ? nflImg(myT, info(p.id).team) + vsOpp : vsOpp.replace(/^(vs|@)(.*)$/, '$2$1') + nflImg(myT, info(p.id).team)}</span>` : '';
+        const bottom = [slot === pos(p.id) ? '' : pos(p.id), mu, `<span class="lv-st ${st}">${clock(p)}</span>`].filter(Boolean);
+        // the ball: a football next to his name when his NFL team has it, RZ in the red zone; a defense on the field
+        // gets Defending, and RZ when the other team is in the red zone
+        const isD = pos(p.id) === 'DEF', live = g && g.state === 'in';
+        const flags = !live ? '' : isD ? (g.ball ? '' : `${g.defRz ? '<span class="lv-rz">RZ</span>' : ''}<span class="lv-def">Defending</span>`)
+          : g.ball ? `<span class="lv-ball" title="His team has the ball">🏈</span>${g.rz ? '<span class="lv-rz" title="In the red zone">RZ</span>' : ''}` : '';
+        const nm = `<td class="lv-p ${cls} ${st}"><div class="lv-pc">${img}<span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${flags ? `<span class="lv-flags">${flags}</span>` : ''}${tag}</span><small class="lv-bot">${bottom.join('')}</small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></div></td>`;
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
           : n1(+p.score) + (pj != null && (st !== 'final' || view) ? `<small class="lv-pj" title="MFL projection">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
-      const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr>${cell(r.p, 'a')}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b')}</tr>`; }).join('');
+      const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr>${cell(r.p, 'a', r.slot)}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b', o.slot || r.slot)}</tr>`; }).join('');
       // bench, then taxi squad, then IR, each side listed in its own column
       const group = (xa, xb, lbl) => Array.from({ length: Math.max(xa.length, xb.length) }, (_, i) =>
         `<tr class="lv-r-${lbl.toLowerCase()}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
@@ -396,7 +476,7 @@
       : p === SLOW_MS ? `Updated ${t} · checks every 5 minutes until games start` : `Updated ${t} · refreshes every ${POLL_MS / 1000} seconds`;
     return `${picker}<div class="lv-bar"><span>${status}</span>
         <button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></div>
-      <div class="lv-list">${L.matchup.map(game).join('')}</div>
+      <div class="lv-list">${ordered(L.matchup).map(game).join('')}</div>
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
   }
 
@@ -406,9 +486,12 @@
   // who aren't in MFL's live scoring. A relay without ?t=all falls back to ?t=fa (free agents only).
   const fa = {}, faAt = {}; let faMissing = false, faAll = true;
   // the Rostered players only checkbox (off by default; remembered on this device)
-  let plRo = false; try { plRo = localStorage.getItem('fbp-players-ro') === '1'; } catch (e) {}
-  document.addEventListener('change', e => { if (!e.target.matches || !e.target.matches('[data-pl-ro]')) return;
-    plRo = e.target.checked; try { localStorage.setItem('fbp-players-ro', plRo ? '1' : '0'); } catch (err) {} paint(); });
+  // who to show: All players, Free agents only, Rostered only, Starters only (remembered on this device)
+  const PL_SHOW = [['all', 'All players'], ['fa', 'Free agents'], ['ro', 'Rostered'], ['st', 'Starters']];
+  let plShow = 'all'; try { plShow = localStorage.getItem('fbp-players-show') || (localStorage.getItem('fbp-players-ro') === '1' ? 'ro' : 'all'); } catch (e) {}
+  if (!PL_SHOW.some(x => x[0] === plShow)) plShow = 'all';
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-pl-show]'); if (!b) return;
+    plShow = b.dataset.plShow; try { localStorage.setItem('fbp-players-show', plShow); } catch (err) {} paint(); });
   function loadFa(w) {
     if (!LIVE_URL || faMissing || (faAt[w] && Date.now() - faAt[w] < 60000)) return;
     faAt[w] = Date.now();
@@ -439,12 +522,14 @@
     (fa[wk] || []).forEach(x => { if (seen.has(x.id)) return;
       const rs = x.fa ? null : reserveOf(x.id);
       if (!x.fa && !rs) return;                       // rostered, but not in this week's lineups or on a taxi squad/IR
-      if (x.fa && plRo) return;
       const p = { id: x.id, score: x.score, status: rs ? rs[1] : 'fa', fid: rs ? rs[0] : null, gameSecondsRemaining: String(faSecs(x.id)) };
       if (onField(p)) all.push(p); });
+    const keep = p => plShow === 'fa' ? !p.fid : plShow === 'ro' ? !!p.fid : plShow === 'st' ? p.status === 'starter' : true;
+    const shown = all.filter(keep);
+    const seg = `<div class="seg pl-show" role="tablist">${PL_SHOW.filter(([k]) => !(faMissing && k === 'fa')).map(([k, l]) => `<button type="button" role="tab" data-pl-show="${k}" aria-selected="${k === plShow}">${l}</button>`).join('')}</div>`;
     if (!all.length) return '<p class="loading">No one has played yet this week. The leaderboard fills in once games kick off.</p>';
     const sec = ([ps, title, n]) => {
-      const list = all.filter(p => pos(p.id) === ps).sort((a, b) => (+b.score || 0) - (+a.score || 0));
+      const list = shown.filter(p => pos(p.id) === ps).sort((a, b) => (+b.score || 0) - (+a.score || 0));
       if (!list.length) return '';
       const more = plMore.has(ps), show = list.slice(0, more ? 25 : n);
       return `<section class="card pl-sec"><h2 class="pl-h">${title}</h2><ol class="pl-list">${show.map((p, i) => {
@@ -457,8 +542,8 @@
         ${list.length > n ? `<button type="button" class="pl-more" data-pl-more="${ps}">${more ? 'Show fewer' : `Show more (${Math.min(list.length, 25) - n})`}</button>` : ''}</section>`;
     };
     const live = all.some(p => state(p) === 'live');
-    return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${plRo || faMissing || !fa[wk] ? 'FBP-rostered players' : 'every player, rostered or free agent'}</span>
-      ${faMissing ? '' : `<label class="pl-chk"><input type="checkbox" data-pl-ro${plRo ? ' checked' : ''}> Rostered players only</label>`}</div>
+    const what = { all: faMissing || !fa[wk] ? 'FBP-rostered players' : 'every player, rostered or free agent', fa: 'free agents only', ro: 'FBP-rostered players', st: 'FBP starters only' }[plShow];
+    return `<div class="lv-bar"><span>${live ? 'Games in progress · updates with the scoreboard' : view ? `Week ${wk}` : 'Week ' + wk + ' so far'} · ${what}</span></div>${seg}
       <div class="pl-grid">${PL_POS.map(sec).join('')}</div>
       <p class="rf-foot lv-foot">Ranked by points this week among players who have taken the field this week. Nuclear: over 35 for a QB, 30 for a RB or WR, 25 for a TE or defense. Hot: well ahead of his MFL projection. S starter, B bench, T taxi squad, IR injured reserve.</p>`;
   }

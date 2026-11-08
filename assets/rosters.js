@@ -83,14 +83,14 @@ window.FBPRosters = (function () {
     }
     return out;
   }
-  function profile(r) {
+  function profile(r, href) {
     const tags = (r.prof || []).map(p => [...p, 's']).concat(role(r).map(p => [...p, 'r']));
-    if (!tags.length) return '';
-    return `<div class="ro-prof">${tags.map(([l, why, k]) => `<span class="ro-pt ${k}"><b>${l}</b><small>${why}</small></span>`).join('')}</div>`;
+    if (!tags.length && !href) return '';
+    return `<div class="ro-prof">${tags.map(([l, why, k]) => `<span class="ro-pt ${k}"><b>${l}</b><small>${why}</small></span>`).join('')}${href ? `<a class="ro-pp" href="${href}">Player Page<span aria-hidden="true"> ›</span></a>` : ''}</div>`;
   }
-  function box(r, t, ctx) {
-    const esc = ctx.esc, tab = tabOf[r.id] || 'news';
-    const head = `<div class="ro-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-ro-tab="${r.id}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
+  // one tab's content; the Player Page shows them all at once (full: more news)
+  function part(r, t, ctx, tab, full) {
+    const esc = ctx.esc;
     const wait = '<p class="ro-wait">Loading from ESPN…</p>', fail = '<p class="ro-wait">ESPN didn’t answer. Try again in a minute.</p>', noid = '<p class="ro-wait">No ESPN id for this player yet.</p>';
     const fpts = w => r.wks[String(w)];
     const wv = w => { const v = (r.wsc || {})[String(w)]; return v == null ? null : v; };   // his points that week, wherever he was
@@ -101,7 +101,7 @@ window.FBPRosters = (function () {
       body = !r.espn ? noid : !j ? wait : j.failed ? fail : !(j.feed || []).length ? '<p class="ro-wait">No recent news.</p>'
         : (() => { // RotoWire blurbs first; ESPN articles show just their summary, never the article body
             const strip = x => String(x || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-            const rw = j.feed.filter(n => n.type === 'Rotowire'), list = (rw.length ? rw : j.feed).slice(0, 1);
+            const rw = j.feed.filter(n => n.type === 'Rotowire'), list = (rw.length ? rw : j.feed).slice(0, full ? 5 : 1);
             return list.map(n => { const rot = n.type === 'Rotowire', txt = strip(rot ? n.story : n.description);
               return `<div class="ro-nw"><b>${esc(strip(n.headline))}</b>${txt && txt !== strip(n.headline) ? `<p>${esc(txt)}</p>` : ''}<small>${rot ? 'RotoWire' : 'ESPN'} · ${when(n.published)}</small></div>`; }).join(''); })();
     } else if (tab === 'log') {
@@ -165,7 +165,126 @@ window.FBPRosters = (function () {
             return `<li class="k-${kind}"><span class="ro-jd">${new Date(ts * 1000).toLocaleDateString([], { month: 'short', year: 'numeric' })}</span>${tt.logo ? `<img src="${tt.logo}" alt="" loading="lazy">` : '<i></i>'}<span><b>${esc(tt.abbr || f)}</b> ${esc(what)}</span></li>`; }).join('')}</ol>
           <p class="ro-bnote">Newest first. Trades and pickups are on record from 2021; auctions and rookie drafts go back to the start.</p>`;
     }
-    return `<div class="ro-box">${profile(r)}${head}<div class="ro-bb">${body}</div></div>`;
+    return body;
+  }
+  function box(r, t, ctx) {
+    const tab = tabOf[r.id] || 'news';
+    const head = `<div class="ro-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-ro-tab="${r.id}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
+    return `<div class="ro-box">${profile(r, `#now/rosters/${t.fid}/${r.id}`)}${head}<div class="ro-bb">${part(r, t, ctx, tab)}</div></div>`;
+  }
+
+  // the Player Page (#now/rosters/<franchise>/<player>): everything the site has on one player
+  const CAREER = { QB: [['passing', ['GP', 'CMP', 'ATT', 'YDS', 'TD', 'INT', 'RTG']], ['rushing', ['CAR', 'YDS', 'TD']]],
+    RB: [['rushing', ['GP', 'CAR', 'YDS', 'AVG', 'TD']], ['receiving', ['REC', 'YDS', 'TD']]],
+    WR: [['receiving', ['GP', 'REC', 'TGTS', 'YDS', 'AVG', 'TD']], ['rushing', ['CAR', 'YDS']]],
+    TE: [['receiving', ['GP', 'REC', 'TGTS', 'YDS', 'AVG', 'TD']]] };
+  function careerStats(r, esc) {
+    const j = espn('c' + r.espn, EAPI + r.espn + '/stats');
+    if (!j) return '<p class="ro-wait">Loading from ESPN…</p>';
+    if (j.failed) return '<p class="ro-wait">ESPN didn’t answer. Try again in a minute.</p>';
+    const cats = Object.fromEntries((j.categories || []).map(c => [c.name, c]));
+    const want = (CAREER[r.pos] || []).filter(([c]) => cats[c] && (cats[c].statistics || []).length);
+    if (!want.length) return '<p class="ro-wait">No NFL stats on record.</p>';
+    const key = x => x.season.year + '|' + (x.teamSlug || x.teamId), seasons = [];
+    want.forEach(([c]) => cats[c].statistics.forEach(x => { if (!seasons.some(s => s.k === key(x))) seasons.push({ k: key(x), y: x.season.year, slug: x.teamSlug }); }));
+    seasons.sort((a, b) => b.y - a.y);
+    const val = (c, lab, x) => { const i = cats[c].labels.indexOf(lab); return i < 0 || !x ? '' : x.stats[i]; };
+    const cols = want.flatMap(([c, labs], wi) => labs.filter(l => cats[c].labels.includes(l) && !(wi && l === 'GP')).map(l => [c, l]));
+    const hdr = cols.map(([c, l], i) => `<th${i && cols[i - 1][0] !== c ? ' class="gap"' : ''}>${c === 'rushing' && r.pos !== 'RB' && l !== 'GP' ? 'Ru ' : c === 'receiving' && r.pos === 'RB' ? 'Re ' : ''}${l}</th>`).join('');
+    const ab = slug => ((j.teams || {})[slug] || {}).abbreviation || '';
+    const rows = seasons.map(S => `<tr><td class="l">${S.y}</td><td class="l ro-op">${nflLogo(NFL_ESPN[ab(S.slug)] || ab(S.slug))}${esc(ab(S.slug))}</td>${cols.map(([c, l], i) => {
+      const x = cats[c].statistics.find(z => key(z) === S.k); return `<td${i && cols[i - 1][0] !== c ? ' class="gap"' : ''}>${esc(String(val(c, l, x) || ''))}</td>`; }).join('')}</tr>`).join('');
+    const tot = `<tr class="pp-tot"><td class="l" colspan="2">Career</td>${cols.map(([c, l], i) => { const k = cats[c].labels.indexOf(l); return `<td${i && cols[i - 1][0] !== c ? ' class="gap"' : ''}>${esc(String((cats[c].totals || [])[k] || ''))}</td>`; }).join('')}</tr>`;
+    return `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Year</th><th class="l">Team</th>${hdr}</tr></thead><tbody>${rows}${tot}</tbody></table></div>`;
+  }
+  function weekBars(r, t) {
+    const n = Math.max(R.through || 0, ...Object.keys(r.wsc || {}).map(Number));
+    if (!n) return '';
+    const W = Array.from({ length: n }, (_, i) => { const w = i + 1, v = (r.wsc || {})[String(w)], k = r.wks[String(w)];
+      return { w, v, cls: v == null ? 'none' : k && k[2] === t.abbr ? (k[1] ? 'st' : 'bn') : k ? 'ot' : 'fa', who: k ? k[2] : '' }; });
+    const top = Math.max(10, Math.ceil(Math.max(...W.map(d => d.v || 0)) / 10) * 10), w = 600, h = 180, pl = 32, pb = 24, pt = 8;
+    const cw = (w - pl - 6) / n, bw = Math.min(30, cw * .6), y = v => pt + (h - pt - pb) * (1 - v / top), x = i => pl + cw * i + cw / 2;
+    const grid = [0, top / 2, top].map(v => `<line x1="${pl}" x2="${w - 6}" y1="${y(v)}" y2="${y(v)}" class="g"/><text x="${pl - 5}" y="${y(v) + 4}" class="ax" text-anchor="end">${v}</text>`).join('');
+    const bars = W.map((d, i) => `<g><title>Week ${d.w}: ${d.w === r.bye ? 'bye' : d.v == null ? 'no game' : d.v.toFixed(1) + (d.cls === 'st' ? ' · started' : d.cls === 'bn' ? ' · bench' : d.cls === 'ot' ? ' · with ' + d.who : ' · not on an FBP lineup')}</title>${d.w === r.bye ? `<text x="${x(i)}" y="${y(0) - 6}" class="ax" text-anchor="middle">bye</text>` : d.v != null ? `<rect x="${x(i) - bw / 2}" y="${y(d.v)}" width="${bw}" height="${Math.max(1, y(0) - y(d.v))}" rx="3" class="pb ${d.cls}"/>` : `<text x="${x(i)}" y="${y(0) - 4}" class="ax" text-anchor="middle">–</text>`}<text x="${x(i)}" y="${h - 7}" class="ax" text-anchor="middle">${d.w}</text></g>`).join('');
+    const avg = r.gp ? r.pts / r.gp : 0;
+    return `<svg class="ro-wk pp-wk" viewBox="0 0 ${w} ${h}" role="img" aria-label="FBP points by week">${grid}${avg ? `<line x1="${pl}" x2="${w - 6}" y1="${y(avg)}" y2="${y(avg)}" class="pp-avg"/>` : ''}${bars}</svg>
+      <div class="ro-key"><span><i class="pk st"></i>Started</span><span><i class="pk bn"></i>Bench</span>${W.some(d => d.cls === 'ot') ? '<span><i class="pk ot"></i>Another FBP team</span>' : ''}${W.some(d => d.cls === 'fa') ? '<span><i class="pk fa"></i>Taxi or free agent</span>' : ''}<span><i class="pk av"></i>His average, ${avg.toFixed(1)}</span></div>`;
+  }
+  function fbpCareer(r, ctx) {
+    const esc = ctx.esc, j = espn('PR', 'data/player-records.json');
+    if (!j) return '<p class="ro-wait">Loading…</p>';
+    if (j.failed) return '<p class="ro-wait">Career records didn’t load.</p>';
+    const a = (j.players || []).find(p => p[0] === r.id);
+    if (!a) return '<p class="ro-wait">He hasn’t started an FBP game yet.</p>';
+    const P = {}; j.fields.forEach((k, i) => P[k] = a[i]);
+    const T = P.teams.map(b => { const o = {}; j.team_fields.forEach((k, i) => o[k] = b[i]); return o; });
+    const n = P.w + P.l + P.t, rec = (w, l, tt) => `${w}-${l}${tt ? '-' + tt : ''}`, pn = P.pw + P.pl + P.pt;
+    const yrs = a2 => a2.length === 1 ? String(a2[0]) : `${a2[0]}–${String(a2[a2.length - 1]).slice(2)}`;
+    return `<div class="ro-g">
+        <div><small>Starts</small><b>${n}</b><span>${j.first}–${j.last}</span></div>
+        <div><small>Record as a starter</small><b>${rec(P.w, P.l, P.t)}</b><span>${n ? ((P.w + P.t / 2) / n).toFixed(3).replace(/^0/, '') : '—'} win pct</span></div>
+        <div><small>Points as a starter</small><b>${P.pts.toFixed(1)}</b><span>${n ? (P.pts / n).toFixed(1) : '—'} a start</span></div>
+        <div><small>Playoffs</small><b>${pn ? rec(P.pw, P.pl, P.pt) : '—'}</b><span>${pn ? P.popts.toFixed(1) + ' playoff points' : 'no playoff starts'}</span></div>
+      </div>
+      <div class="tbl-wrap"><table class="ro-bt pp-ct"><thead><tr><th class="l">FBP team</th><th class="l">Seasons</th><th>Starts</th><th>Record</th><th>Playoffs</th></tr></thead><tbody>
+        ${T.sort((x, z) => (z.w + z.l + z.t) - (x.w + x.l + x.t)).map(o => { const tt = ctx.teams[o.franchise] || {};
+          return `<tr><td class="l ro-op">${tt.logo ? `<img class="pp-fl" src="${tt.logo}" alt="">` : ''}${esc(tt.abbr || o.franchise)}</td><td class="l">${yrs(o.years)}</td><td>${o.w + o.l + o.t}</td><td>${rec(o.w, o.l, o.t)}</td><td>${o.pw + o.pl + o.pt ? rec(o.pw, o.pl, o.pt) : '—'}</td></tr>`; }).join('')}</tbody></table></div>
+      <p class="ro-bnote">Records count the weeks he was in the starting lineup, from ${j.first}.</p>`;
+  }
+  function honors(r, ctx) {
+    const esc = ctx.esc, af = espn('AF', 'data/awards/all-fbp.json'), hf = espn('HOF', 'data/reference/hall-of-fame.json');
+    if (!af || !hf) return '<p class="ro-wait">Loading…</p>';
+    const items = [];
+    (r.hon || []).forEach(h => items.push([R.season, `<span class="ro-chip ${h[1]}">${esc(h[0])}</span>`, esc(h[2]) + ' (so far this season)']));
+    Object.entries((af && af.franchises) || {}).forEach(([f, list]) => (list || []).filter(p => p.id === r.id).forEach(p => (p.years || []).forEach(yy => {
+      const tt = ctx.teams[f] || {}, team = esc(tt.abbr || f);
+      items.push([+yy.year, `<span class="ro-chip ${yy.tier === 1 ? 'gold' : 'silver'}">${yy.tier === 1 ? '1st Team' : '2nd Team'}</span>`, `All-FBP ${yy.tier === 1 ? 'first' : 'second'} team with ${team} · ${(+yy.pts).toFixed(1)} pts in ${yy.starts} starts`]);
+      if (yy.mvp) items.push([+yy.year, '<span class="ro-chip gold">MVP</span>', `FBP Most Valuable Player with ${team}`]);
+      if (yy.champ) items.push([+yy.year, '<span class="ro-chip good">Champ</span>', `Won the FBP title with ${team}`]); })));
+    const hof = ((hf && hf.inductees) || []).filter(x => x.player_id === r.id);
+    const list = items.sort((a, b) => b[0] - a[0]).map(([y, chip, what]) => `<li><span class="ro-jd">${y}</span>${chip}<span>${what}</span></li>`).join('');
+    return (hof.length ? hof.map(x => `<div class="pp-hof"><b>Hall of Fame · class of ${esc(String(x.class))}</b>${x.stat ? `<small>${esc(x.stat)}</small>` : ''}${x.blurb ? `<p>${esc(x.blurb)}</p>` : ''}</div>`).join('') : '')
+      + (list ? `<ol class="pp-hon">${list}</ol>` : hof.length ? '' : '<p class="ro-wait">No FBP awards yet. All-FBP teams go back to 2021.</p>');
+  }
+  function playerPage(r, t, ctx) {
+    const esc = ctx.esc, tm = ctx.teams[t.fid] || {}, def = r.pos === 'DEF';
+    const code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase();
+    const a = r.espn && !def ? espn('a' + r.espn, EAPI + r.espn) : null, at = (a && a.athlete) || {};
+    const photo = def && code ? `<span class="pp-ph pp-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${code}.png)"></span>`
+      : `<span class="pp-ph"${r.espn ? ` style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : ''}></span>`;
+    const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' ? '<span class="ro-chip i">IR</span>' : '';
+    const aw = (r.hon || []).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
+    const bio = [['Age', r.age || at.age], ['Size', [at.displayHeight, at.displayWeight].filter(Boolean).join(', ')], ['College', (at.college || {}).name],
+      ['Drafted', at.displayDraft], ['Experience', at.displayExperience], ['From', at.displayBirthPlace]].filter(x => x[1]);
+    const n = r.gp || 0;
+    const tile = (l, v, sub) => `<div class="ro-tile"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
+    const sec = (title, body, cls) => body ? `<section class="card ro-card pp-sec${cls ? ' ' + cls : ''}"><h2>${title}</h2>${body}</section>` : '';
+    return `<div class="pp">
+      <a class="pp-back" href="#now/rosters/${t.fid}"><span aria-hidden="true">←</span> ${esc(t.name)} roster</a>
+      <div class="pp-hero" style="--tc:${tm.primary || 'var(--line)'}">${photo}
+        <div class="pp-id"><h2>${esc(r.name)}${chip}${aw}</h2>
+          <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
+          <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${esc(t.name)}${r.st === 'TAXI_SQUAD' ? ' · taxi squad' : r.st === 'INJURED_RESERVE' ? ' · injured reserve' : ''}</p></div></div>
+      ${bio.length ? `<dl class="pp-bio">${bio.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join('')}</dl>` : ''}
+      ${profile(r)}
+      <div class="ro-tiles pp-tiles">
+        ${tile(`${R.season} points`, r.gp ? r.pts.toFixed(1) : '—', r.rk ? `${r.pos}${r.rk} at his position` : 'no games yet')}
+        ${tile('Per game', n ? (r.pts / n).toFixed(1) : '—', `${n} game${n === 1 ? '' : 's'}`)}
+        ${tile('Rest of season', r.ecrPos ? r.pos + r.ecrPos : '—', r.ecr ? `FantasyPros #${r.ecr} overall` : 'FantasyPros consensus')}
+        ${tile(`Week ${R.projWeek}`, fx(r.proj, 1), `MFL projection${r.bye ? ' · bye week ' + r.bye : ''}`)}
+        ${tile('Salary', $(r.sal), `${r.cy ? 'contract year ' + r.cy : 'no contract year'}${r.fut && r.fut.length ? ' · ' + $(r.fut[0]) + ' next year' : ''}`)}
+      </div>
+      ${sec(`${R.season} FBP points by week`, weekBars(r, t))}
+      ${def ? '' : sec('Latest news', part(r, t, ctx, 'news', true))}
+      ${sec('Season analytics', part(r, t, ctx, 'an'))}
+      ${def ? '' : sec(`${R.season} game log`, part(r, t, ctx, 'log'))}
+      <div class="pp-two">${sec('Schedule', part(r, t, ctx, 'sched'))}${sec('Contract', part(r, t, ctx, 'sal'))}</div>
+      ${sec('FBP career', fbpCareer(r, ctx))}
+      ${sec('Awards and honors', honors(r, ctx))}
+      ${def || !r.espn || !CAREER[r.pos] ? '' : sec('NFL career stats', careerStats(r, esc))}
+      ${sec('FBP journey', part(r, t, ctx, 'jour'))}
+      <p class="rf-foot">Through week ${R.through}. NFL stats, bio, news and schedules come from ESPN; points are FBP scoring.</p>
+    </div>`;
   }
 
   // points by week, against the league average, low and high
@@ -201,14 +320,20 @@ window.FBPRosters = (function () {
     </div></section>`;
   }
 
-  function render(ctx, sub) {
+  let lastPid = '', rosterY = 0;
+  function render(ctx, sub, pid) {
     X = ctx; load();
+    if (R && pid !== lastPid) {   // the Player Page opens at the top; the back arrow returns to where you were on the roster
+      if (pid && !lastPid) rosterY = window.scrollY;
+      const y = pid ? 0 : rosterY; requestAnimationFrame(() => window.scrollTo(0, y)); lastPid = pid;
+    }
     if (failed) return '<p class="error">Rosters didn’t load. Refresh the page to try again.</p>';
     if (!R) return '<p class="loading">Loading rosters…</p>';
     const esc = ctx.esc, tmx = f => ctx.teams[f] || {};
     const ids = Object.keys(R.teams).sort((a, b) => R.teams[a].name.localeCompare(R.teams[b].name));
     const pickd = (sub && R.teams[sub]) ? sub : (ctx.myTeam && R.teams[ctx.myTeam]) ? ctx.myTeam : ids[0];
-    const t = R.teams[pickd]; t.abbr = tmx(pickd).abbr || '';
+    const t = R.teams[pickd]; t.abbr = tmx(pickd).abbr || ''; t.fid = pickd;
+    if (pid) { const r = t.rows.find(x => x.id === pid); if (r) return playerPage(r, t, ctx); }
     const lg = (f, cls) => tmx(f).logo ? `<img class="${cls || ''}" src="${tmx(f).logo}" alt="" loading="lazy">` : '';
     const rows = t.rows, C = cols(), val = (r, k) => C.find(c => c[0] === k)[2](r);
     const act = rows.filter(r => r.st === 'ROSTER'), tx = rows.filter(r => r.st === 'TAXI_SQUAD'), ir = rows.filter(r => r.st === 'INJURED_RESERVE');
@@ -230,7 +355,7 @@ window.FBPRosters = (function () {
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}></span></td>
-        <td class="l ro-nm"><b>${esc(r.name)}</b>${chip}${aw}<small>${r.pos} · ${esc(r.nfl || 'FA')}${r.age ? ' · age ' + r.age : ''}</small></td>
+        <td class="l ro-nm"><b>${esc(r.name)}</b>${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
         <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td>${fx(r.proj, 1)}</td>
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>

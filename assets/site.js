@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0115';
+  const VERSION = '0.0116';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -375,7 +375,7 @@
         <span class="sx">${o ? `<b>${fp(o.seeds[5])}</b>${dlt(t.id, 'seed6', o.seeds[5])}<small>chance at 6</small>` : ''}</span></div>`;
     }).join('');
 
-    // Power Rankings: MFL's power rating for now (our own formula comes later)
+    // Power Rankings: the FBP Power Score (assets/power.js), then MFL's power rating for comparison
     const pr = d.standings.slice().sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99));
     const hasPwr = pr.some(t => t.pwr);
     const powerRows = pr.map((t, i) => `<tr><td class="pr-n">${t.pwrRank || i + 1}</td><td class="pr-mv">${rankMove(t.id, 'pwrRank', t.pwrRank)}</td>
@@ -383,12 +383,12 @@
       <td><b>${t.pwr ? t.pwr.toFixed(2) : '—'}</b></td><td>${t.w}-${t.l}${t.t ? '-' + t.t : ''}</td><td>${pts(t.pf)}</td><td class="hide-sm">${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('');
 
     const sub = (location.hash.split('/')[1] || '');
-    const nav = `<nav class="rf-sub seg now-sub">${[['', 'Standings'], ['rosters', 'Rosters'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    const nav = `<nav class="rf-sub seg now-sub ln-sub">${[['', 'Standings'], ['rosters', 'Rosters'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
-    if (sub === 'power') return headTxt + `
-      <section><h2 class="sec">Power Rankings <small>MFL’s power rating for now; our own formula is coming</small></h2>
+    if (sub === 'power') return headTxt + (window.FBPPower ? FBPPower.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/power')) route(); } }) : '') + `
+      <section><h2 class="sec">MFL Power Rating <small>MFL’s own formula, for comparison</small></h2>
       ${hasPwr ? `<div class="card tbl-wrap"><table class="tbl pr-tbl"><thead><tr><th>#</th><th><span class="sr">Change</span></th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th title="MFL power rating">Rating</th><th>Record</th><th>PF</th><th class="hide-sm">All-play</th><th class="hide-sm">Strk</th></tr></thead><tbody>${powerRows}</tbody></table></div>`
         : '<div class="card soon"><p>Power rankings fill in after the next weekly refresh.</p></div>'}
       ${P ? '' : '<p class="rf-foot">Movement arrows start with the second weekly refresh that has rankings saved.</p>'}</section>`;
@@ -410,7 +410,7 @@
 
     if (sub === 'matchups') return headTxt + pageMatchups(fp);
     if (sub === 'rosters') return headTxt + (window.FBPRosters ? FBPRosters.render({ teams: state.teams, esc, myTeam: state.themeTeam,
-      rerender: () => { if (location.hash.startsWith('#now/rosters')) route(); } }, location.hash.split('/')[2] || '') : '<p class="error">Rosters didn’t load.</p>');
+      rerender: () => { if (location.hash.startsWith('#now/rosters')) route(); } }, location.hash.split('/')[2] || '', location.hash.split('/')[3] || '') : '<p class="error">Rosters didn’t load.</p>');
     if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `
@@ -514,11 +514,11 @@
         <div class="mu-ser"><h4>Head to head <small>since ${M.since}, playoffs included</small></h4>
           <p class="mu-lead"><b>${lead}</b>${strk ? ` · ${strk}` : ''}</p>
           <p class="mu-avg">Average score in the series: ${esc(short(g.away))} ${pts(s.avg[g.away])}, ${esc(short(g.home))} ${pts(s.avg[g.home])}</p>
-          ${big ? `<ul class="mu-big">${big}</ul>` : ''}${po}
+          ${big ? `<p class="mu-bigh">Largest victory in the series</p><ul class="mu-big">${big}</ul>` : ''}${po}
         </div>
         ${a.ifWin || b.ifWin ? `<div class="mu-stakes"><h4>What's at stake</h4><table class="mu-stt"><thead><tr><th></th><th colspan="2">Playoffs</th><th colspan="2">Bye</th></tr>
           <tr><th></th><th>Win</th><th>Loss</th><th>Win</th><th>Loss</th></tr></thead><tbody>${stRow(g.away, a)}${stRow(g.home, b)}</tbody></table></div>` : ''}
-        ${meet ? `<details class="all"><summary>Last ${s.recent.length} meetings <small>${s.games} all-time</small></summary><ul class="mu-meet">${meet}</ul></details>` : ''}
+        ${meet ? `<details class="all"><summary>All ${s.recent.length} meetings <small>newest first</small></summary><ul class="mu-meet">${meet}</ul></details>` : ''}
       </article>`;
     };
     const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);

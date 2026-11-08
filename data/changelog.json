@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0111",
+      "to": "0.0115",
+      "dates": "Nov 7, 2026",
+      "items": [
+        "Rosters: State of the Team, a weekly write-up for each team with last week's result, team news and what's up next. It folds closed.",
+        "Rosters: season points, points per game and position rank count every player's full season, taxi and free-agent weeks included.",
+        "Player boxes get profile labels (scoring styles like Mr. Reliable, and roles like Volume King) and a Journey tab with every FBP move he's made.",
+        "Defenses show their NFL logo, owners show as first name and last initial, and the team-logo row keeps its place when you pick a team.",
+        "The game log lists FBP points right after the result, and NFL logos show in the game log and schedule."
+      ]
+    },
+    {
       "from": "0.0106",
       "to": "0.0110",
       "dates": "Nov 6, 2026",
