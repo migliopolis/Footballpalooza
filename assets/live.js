@@ -351,8 +351,12 @@
     return `Q${q} ${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
   };
   // starters in lineup order: QB, RB, RB, WR, WR, TE, FLEX, DEF
+  // MFL lists starters in a changing order (by points), so slots are filled in a fixed order instead: highest
+  // projection first (then player id), so the extra RB/WR/TE in FLEX stays put as scores change
   function lineup(f) {
-    const st = (f.players.player || []).filter(p => p.status === 'starter');
+    const wk = view || +((data || {}).liveScoring || {}).week;
+    const st = (f.players.player || []).filter(p => p.status === 'starter')
+      .sort((a, b) => ((projOf(b.id, wk) || 0) - (projOf(a.id, wk) || 0)) || (a.id < b.id ? -1 : 1));
     const left = st.slice(), out = [];
     for (const s of SLOTS) {
       const ok = s === 'FLEX' ? ['RB', 'WR', 'TE'] : [s];
