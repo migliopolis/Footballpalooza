@@ -1,13 +1,13 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-07",
+ "asOf": "2026-11-08",
  "board": {
   "name": "Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys)",
   "url": "https://www.footballguys.com/article/2027-dynasty-rookie-rankings-big-board-v4",
   "date": "2026-10-21"
  },
- "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-07); players no NFL source mentions price as undrafted.",
+ "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-08); players no NFL source mentions price as undrafted.",
  "players": [
   {
    "rank": 1,
@@ -21,7 +21,7 @@
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
-   "nflPick": 23
+   "nflPick": 11
   },
   {
    "rank": 3,
@@ -49,7 +49,7 @@
    "name": "Darian Mensah",
    "pos": "QB",
    "school": "Miami",
-   "nflPick": 6
+   "nflPick": 7
   },
   {
    "rank": 7,
@@ -84,7 +84,7 @@
    "name": "Nick Marsh",
    "pos": "WR",
    "school": "Indiana",
-   "nflPick": 15
+   "nflPick": 22
   },
   {
    "rank": 12,
@@ -98,7 +98,7 @@
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
-   "nflPick": 11
+   "nflPick": 18
   },
   {
    "rank": 14,
@@ -112,7 +112,7 @@
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
-   "nflPick": 25
+   "nflPick": 17
   },
   {
    "rank": 16,
@@ -154,7 +154,7 @@
    "name": "Ryan Coleman-Williams",
    "pos": "WR",
    "school": "Alabama",
-   "nflPick": 19
+   "nflPick": 23
   },
   {
    "rank": 22,
@@ -168,7 +168,7 @@
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
-   "nflPick": 24
+   "nflPick": 8
   },
   {
    "rank": 24,
@@ -203,7 +203,7 @@
    "name": "Reed Harris",
    "pos": "WR",
    "school": "Arizona State",
-   "nflPick": 32
+   "nflPick": 47
   },
   {
    "rank": 29,
@@ -217,7 +217,7 @@
    "name": "Austin Simmons",
    "pos": "QB",
    "school": "Missouri",
-   "nflPick": 30
+   "nflPick": 28
   },
   {
    "rank": 31,
@@ -273,7 +273,7 @@
    "name": "LaNorris Sellers",
    "pos": "QB",
    "school": "South Carolina",
-   "nflPick": 26
+   "nflPick": 97
   },
   {
    "rank": 39,
@@ -308,7 +308,7 @@
    "name": "Jayden Maiava",
    "pos": "QB",
    "school": "USC",
-   "nflPick": 62
+   "nflPick": 34
   },
   {
    "rank": 44,

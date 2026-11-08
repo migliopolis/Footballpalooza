@@ -654,7 +654,7 @@
      "id": "12616",
      "name": "Jacoby Brissett",
      "pos": "QB",
-     "nfl": "ARI",
+     "nfl": "BAL",
      "espn": "2578570",
      "team": "0009",
      "pts": 62.6,
@@ -1747,7 +1747,7 @@
    ]
   }
  ],
- "generated": "2026-11-07T21:04:43+00:00",
+ "generated": "2026-11-08T21:21:50+00:00",
  "basis": {
   "throughWeek": 7,
   "teams": [

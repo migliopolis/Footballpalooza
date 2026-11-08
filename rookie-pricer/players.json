@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-07",
+ "asOf": "2026-11-08",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
  "players": [
   {
@@ -23,7 +23,7 @@
    "pos": "RB",
    "school": "Florida",
    "adp": 4.9,
-   "nflPick": 23
+   "nflPick": 11
   },
   {
    "name": "Arch Manning",
@@ -44,14 +44,14 @@
    "pos": "QB",
    "school": "Miami",
    "adp": 7.5,
-   "nflPick": 6
+   "nflPick": 7
   },
   {
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
    "adp": 7.7,
-   "nflPick": 11
+   "nflPick": 18
   },
   {
    "name": "Drew Mestemaker",
@@ -93,14 +93,14 @@
    "pos": "WR",
    "school": "Indiana",
    "adp": 13.9,
-   "nflPick": 15
+   "nflPick": 22
   },
   {
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 14.0,
-   "nflPick": 24
+   "nflPick": 8
   },
   {
    "name": "Jamari Johnson",
@@ -114,14 +114,14 @@
    "pos": "WR",
    "school": "Alabama",
    "adp": 15.5,
-   "nflPick": 19
+   "nflPick": 23
   },
   {
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
    "adp": 16.6,
-   "nflPick": 25
+   "nflPick": 17
   },
   {
    "name": "Nate Frazier",
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 21.8,
-   "nflPick": 32
+   "nflPick": 47
   },
   {
    "name": "Mark Fletcher Jr.",
@@ -184,14 +184,14 @@
    "pos": "QB",
    "school": "USC",
    "adp": 24.3,
-   "nflPick": 62
+   "nflPick": 34
   },
   {
    "name": "Austin Simmons",
    "pos": "QB",
    "school": "Missouri",
    "adp": 24.8,
-   "nflPick": 30
+   "nflPick": 28
   },
   {
    "name": "Justice Haynes",

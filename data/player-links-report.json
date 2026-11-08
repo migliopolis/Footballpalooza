@@ -144,6 +144,15 @@
  "unmatched": [],
  "staleId": [
   {
+   "mfl": "16171",
+   "mflName": "Kendre Miller",
+   "pos": "RB",
+   "team": "FA",
+   "fbp": "0001",
+   "espn": "4599739",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "12801",
    "mflName": "Tyreek Hill",
    "pos": "WR",
@@ -240,15 +249,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "5084180",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16156",
-   "mflName": "Jake Haener",
-   "pos": "QB",
-   "team": "NYG",
-   "fbp": null,
-   "espn": "4243322",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -384,15 +384,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4360294",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16595",
-   "mflName": "Audric Estime",
-   "pos": "RB",
-   "team": "NOS",
-   "fbp": null,
-   "espn": "4569682",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1167,6 +1158,15 @@
    "team": "ARI",
    "fbp": null,
    "espn": "4259324",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "17774",
+   "mflName": "Treyton Welch",
+   "pos": "TE",
+   "team": "FA",
+   "fbp": null,
+   "espn": "4430684",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
