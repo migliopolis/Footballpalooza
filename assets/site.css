@@ -1795,3 +1795,9 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
   .lv-p .lv-ext{width:calc(100% + 3.6rem);position:relative;z-index:1}
   .lv-p.b .lv-ext{margin-left:-3.6rem}
 }
+/* the ball, RZ and Defending sit beside the photo, toward the middle of the matchup */
+.lv-phw{display:flex;align-items:center;gap:4px;flex:none}
+.lv-p.b .lv-phw{flex-direction:row-reverse}
+.lv-phw .lv-flags{flex-direction:column;align-items:flex-start;gap:3px}
+.lv-p.b .lv-phw .lv-flags{align-items:flex-end}
+@media (max-width:560px){.lv-phw .lv-flags{flex-direction:row;gap:3px}.lv-phw .lv-ball{font-size:.8rem}.lv-phw .lv-rz,.lv-phw .lv-def{font-size:.55rem;padding:2px 4px}}
