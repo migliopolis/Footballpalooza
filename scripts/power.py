@@ -14,6 +14,9 @@ per start, or the position average for a newcomer, so a short or injured season 
 figure adjusts for age by position. Points above replacement (the first player past the league's starters at the
 position) turn into auction dollars: the league's auction pot is split by position the way FBP auctions have spent it
 over the last five years (RBs draw most of the money, defenses very little), then spread over those points.
+Next season is SuperFlex (by-laws Article XVII), so 2027 values use a deeper QB replacement level (about 1.8 starting
+QBs a team) and give QBs 25% of the money, taking the rest from the other positions in proportion. Young players on
+rookie deals get a floor from their NFL draft slot while they develop; QBs keep it longest.
 
 Suggested keep: a player under contract for next season whose auction value beats his next-year salary, with at most
 two veteran QBs (by-law). It's only a suggestion; the page lets anyone flip it on their own device.
@@ -28,6 +31,14 @@ load = lambda p, d=None: json.load(open(p, encoding='utf-8')) if os.path.exists(
 
 TEAMS = 12
 STARTERS = {'QB': 1, 'RB': 2.5, 'WR': 2.5, 'TE': 1.25, 'DEF': 1}   # per team, FLEX split across RB/WR/TE
+# 2027 adds a SuperFlex starter (by-laws Article XVII): most teams will start a second QB there
+STARTERS_SF = {'QB': 1.8, 'RB': 2.4, 'WR': 2.4, 'TE': 1.15, 'DEF': 1}
+SF_QB_SHARE = .25   # share of auction money QBs should draw in SuperFlex (one-QB FBP auctions gave them about 7%)
+# rookie-deal floor: what NFL draft capital is worth while a young player develops, by position and NFL draft pick.
+# QBs get the longest leash (full value through his second season, 60% in his third); others 70% in their second.
+FLOOR = {'QB': [(5, 30), (15, 20), (32, 14), (64, 6), (999, 2)], 'RB': [(10, 18), (32, 12), (64, 6), (999, 2)],
+         'WR': [(10, 18), (32, 12), (64, 6), (999, 2)], 'TE': [(32, 8), (64, 4), (999, 1)]}
+LEASH = {'QB': {1: 1.0, 2: 1.0, 3: .6}, 'RB': {1: 1.0, 2: .7}, 'WR': {1: 1.0, 2: .7}, 'TE': {1: 1.0, 2: .7}}
 GAMES = 13          # FBP regular-season games a year (weeks 1-14 less a bye)
 ROSTER = 20         # active roster, for open spots
 SHRINK = 3          # games of the position average mixed into a player's per-game figure
@@ -109,6 +120,38 @@ def main():
         tp = sum(par(p, proj(r)) for _, r in rows if r['pos'] == p)
         dpp[p] = pot * share[p] / tp if tp else 0
 
+    # next season is SuperFlex: a deeper QB replacement level and a bigger QB share of the money
+    repl_sf = {}
+    for p, n in STARTERS_SF.items():
+        c = sorted((proj(r) for _, r in rows if r['pos'] == p), reverse=True)
+        i = int(round(n * TEAMS))
+        repl_sf[p] = c[i] if len(c) > i else (c[-1] if c else 0)
+    par_sf = lambda pos, g: max(0.0, (g - repl_sf.get(pos, 0)) * GAMES)
+    share_sf = {p: SF_QB_SHARE if p == 'QB' else share[p] * (1 - SF_QB_SHARE) / ((1 - share['QB']) or 1) for p in STARTERS}
+    dpp_sf = {}
+    for p in STARTERS:
+        tp = sum(par_sf(p, proj(r)) for _, r in rows if r['pos'] == p)
+        dpp_sf[p] = pot * share_sf[p] / tp if tp else 0
+    MP = load(D('mfl', 'players.json'), {})
+    MF = MP.get('fields', [])
+    draft = {}
+    for pid, v in (MP.get('players') or {}).items():
+        x = dict(zip(MF, v))
+        try:
+            draft[pid] = (int(x['draft_year']), (int(x['draft_round']) - 1) * 32 + int(x['draft_pick']))
+        except (ValueError, TypeError, KeyError):
+            pass
+    def floor(r):
+        d, steps = draft.get(r['id']), FLOOR.get(r['pos'])
+        if not d or not steps:
+            return 0, None
+        yr = season + 1 - d[0] + 1                     # his NFL season number next year
+        f = LEASH[r['pos']].get(yr, 0)
+        if not f:
+            return 0, None
+        base = next(v for cut, v in steps if d[1] <= cut)
+        return base * f, d[1]
+
     budget = {f: float(B.get('default', 200)) for f in R['teams']}
     for tr in B.get('trades', []) + B.get('adjustments', []):
         for f, v in (tr.get('cash') or {}).items():
@@ -158,9 +201,16 @@ def main():
         for r in t['rows']:
             nxt = (r.get('fut') or [None])[0]
             v27 = proj(r) * age_factor(r['pos'], r.get('age'))
-            val = round(1 + par(r['pos'], v27) * dpp.get(r['pos'], 0), 1) if nxt is not None else 0
-            players.append({'id': r['id'], 'name': r['name'], 'pos': r['pos'], 'age': r.get('age'), 'st': r['st'],
-                            'sal': r['sal'], 'next': nxt, 'yrs': len(r.get('fut') or []), 'val': val, 'ppg': round(proj(r), 1)})
+            val = 1 + par_sf(r['pos'], v27) * dpp_sf.get(r['pos'], 0) if nxt is not None else 0
+            fl, pick = floor(r)
+            why = None
+            if nxt is not None and fl > val:
+                val, why = fl, f'rookie-deal floor: NFL pick {pick}'
+            pl = {'id': r['id'], 'name': r['name'], 'pos': r['pos'], 'age': r.get('age'), 'st': r['st'],
+                  'sal': r['sal'], 'next': nxt, 'yrs': len(r.get('fut') or []), 'val': round(val, 1), 'ppg': round(proj(r), 1)}
+            if why:
+                pl['why'] = why
+            players.append(pl)
         # suggested keeps: value beats salary, two veteran QBs at most
         keep = [p for p in players if p['next'] is not None and p['val'] > p['next']]
         qbs = sorted((p for p in keep if p['pos'] == 'QB'), key=lambda p: p['next'] - p['val'])[2:]
@@ -171,10 +221,10 @@ def main():
                     'ros': round(sum(proj(r) for r in lineup), 1), 'lineup': [r['id'] for r in lineup],
                     'budget': budget.get(fid, 200), 'players': sorted(players, key=lambda p: -p['val']), 'picks': sorted(picks.get(fid, []), key=lambda p: (p['y'], p['r'], p['s'] or 99))}
     json.dump({'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': season, 'through': R.get('through'),
-               'next': season + 1, 'roster': ROSTER, 'dpp': {p: round(v, 3) for p, v in dpp.items()}, 'share': {p: round(v, 3) for p, v in share.items()}, 'repl': {p: round(v, 1) for p, v in repl.items()},
+               'next': season + 1, 'roster': ROSTER, 'dpp': {p: round(v, 3) for p, v in dpp_sf.items()}, 'share': {p: round(v, 3) for p, v in share_sf.items()}, 'repl': {p: round(v, 1) for p, v in repl_sf.items()}, 'superflex': True,
                'weights': {'now': 35, 'keep': 30, 'cash': 20, 'picks': 15}, 'teams': out},
               open(D('power.json'), 'w', encoding='utf-8'), separators=(',', ':'))
-    print('power.json:', len(out), 'teams', {p: round(v, 2) for p, v in dpp.items()})
+    print('power.json:', len(out), 'teams', {p: round(v, 2) for p, v in dpp_sf.items()}, repl_sf)
 
 
 if __name__ == '__main__':
