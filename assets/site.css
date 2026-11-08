@@ -1803,3 +1803,8 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 @media (max-width:560px){.lv-phw .lv-flags{flex-direction:row;gap:3px}.lv-phw .lv-ball{font-size:.8rem}.lv-phw .lv-rz,.lv-phw .lv-def{font-size:.55rem;padding:2px 4px}}
 .pw-beta{margin:0 0 10px;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,#e8c24a 18%,var(--surface));border-left:4px solid #e8c24a;font-size:.8rem;line-height:1.4}
 .pw-beta b{display:inline-block;font:700 .62rem var(--body);text-transform:uppercase;letter-spacing:.06em;background:#e8c24a;color:#2b2100;padding:2px 6px;border-radius:4px;margin-right:6px;vertical-align:1px}
+/* Scoreboard: a player in the red zone gets a red tint across his half of the row, fading toward the middle */
+.lv-t td.lv-p.a.lv-inrz{background:linear-gradient(to right,rgba(214,69,69,.2),rgba(214,69,69,.12))}
+.lv-t td.lv-pts.a.lv-inrz{background:linear-gradient(to right,rgba(214,69,69,.12),rgba(214,69,69,.04))}
+.lv-t td.lv-p.b.lv-inrz{background:linear-gradient(to left,rgba(214,69,69,.2),rgba(214,69,69,.12))}
+.lv-t td.lv-pts.b.lv-inrz{background:linear-gradient(to left,rgba(214,69,69,.12),rgba(214,69,69,.04))}
