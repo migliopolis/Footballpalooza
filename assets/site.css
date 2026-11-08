@@ -1788,3 +1788,10 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 @media (max-width:600px){.pw-tbl .lg img{width:22px;height:22px}.pw-tbl td.t{max-width:5.2rem}.pw-tbl td.t small{white-space:normal}.pw-tot b{font-size:1.05rem}.pw-tbl th{font-size:.6rem}.pw-tbl th:first-child,.pw-tbl td:first-child{padding-left:8px}}
 .tbl.pw-tbl td.t{min-width:0;max-width:none}
 @media (max-width:600px){.tbl.pw-tbl td.t{min-width:4.6rem;max-width:5.6rem;white-space:normal}}
+/* phones: the matchup line and stat line run under the points, into the middle of the matchup */
+.lv-ext{display:block}
+@media (max-width:560px){
+  .lv-p{overflow:visible}
+  .lv-p .lv-ext{width:calc(100% + 3.6rem);position:relative;z-index:1}
+  .lv-p.b .lv-ext{margin-left:-3.6rem}
+}
