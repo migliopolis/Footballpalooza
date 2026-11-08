@@ -1817,3 +1817,16 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .pl-r.fin{background:rgba(120,130,140,.1);margin:0 -6px;padding-left:6px;padding-right:6px}
 :root[data-theme="dark"] .pl-r.fin{background:rgba(160,170,180,.08)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pl-r.fin{background:rgba(160,170,180,.08)}}
+/* starter tints fade from the outside edge toward the middle; bench players whose game is over get solid grey;
+   taxi squad and IR rows keep their own solid tints */
+.lv-t td.lv-p.a.lv-inrz{background:linear-gradient(to right,rgba(214,69,69,.24),rgba(214,69,69,.1))}
+.lv-t td.lv-pts.a.lv-inrz{background:linear-gradient(to right,rgba(214,69,69,.1),rgba(214,69,69,0))}
+.lv-t td.lv-p.b.lv-inrz{background:linear-gradient(to left,rgba(214,69,69,.24),rgba(214,69,69,.1))}
+.lv-t td.lv-pts.b.lv-inrz{background:linear-gradient(to left,rgba(214,69,69,.1),rgba(214,69,69,0))}
+.lv-t td.lv-p.a.final{background:linear-gradient(to right,rgba(120,130,140,.18),rgba(120,130,140,.07))}
+.lv-t td.lv-pts.a.final{background:linear-gradient(to right,rgba(120,130,140,.07),rgba(120,130,140,0))}
+.lv-t td.lv-p.b.final{background:linear-gradient(to left,rgba(120,130,140,.18),rgba(120,130,140,.07))}
+.lv-t td.lv-pts.b.final{background:linear-gradient(to left,rgba(120,130,140,.07),rgba(120,130,140,0))}
+.lv-bench .lv-t td.lv-p.final,.lv-bench .lv-t td.lv-pts.final{background:rgba(120,130,140,.12)}
+.lv-bench .lv-t tr.lv-r-tx td.lv-p,.lv-bench .lv-t tr.lv-r-tx td.lv-pts{background:rgba(240,200,40,.14)}
+.lv-bench .lv-t tr.lv-r-ir td.lv-p,.lv-bench .lv-t tr.lv-r-ir td.lv-pts{background:rgba(220,50,50,.09)}
