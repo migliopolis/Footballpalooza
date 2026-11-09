@@ -1,0 +1,98 @@
+/* League Now > Stats: every player's FBP points by week this season, from data/stats.json (scripts/stats.py).
+   Filters in one row: how many to show, position, week range and whose players; tap any header to sort.
+   Week cells carry the Heat Check label (Nuclear, Hot, Cold, Bust, Witness Protection) as a tint when he earned one.
+   The upcoming week's NFL opponent comes from ESPN's scoreboard. Your own team's rows are highlighted. */
+window.FBPStats = (function () {
+  let S = null, A = null, failed = false, loading = false, X = null, opp = null, oppWk = 0;
+  const F = { top: 50, pos: '', from: 1, to: 0, who: '' };
+  let sort = ['pts', -1];
+  try { Object.assign(F, JSON.parse(localStorage.getItem('fbp-stats') || '{}')); } catch (e) {}
+  const save = () => { try { localStorage.setItem('fbp-stats', JSON.stringify(F)); } catch (e) {} };
+  const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
+  const ab = t => NFLE[t] || (t || '').toLowerCase();
+  const logo = t => t ? `<img class="st-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${ab(t)}.png" alt="" loading="lazy">` : '';
+  const HC = { N: 'nuke', H: 'hot', C: 'cold', B: 'bust', W: 'wp' };
+  const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
+  function load() {
+    if (S || loading || failed) return;
+    loading = true;
+    Promise.all([fetch('data/stats.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()),
+      fetch('data/analytics.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)])
+      .then(([s, a]) => { S = s; A = a; loading = false; loadOpp(); redraw(); }, () => { failed = true; loading = false; redraw(); });
+  }
+  // the next week's NFL opponents
+  function loadOpp() {
+    oppWk = (S.weeks[S.weeks.length - 1] || 0) + 1;
+    fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?seasontype=2&week=${oppWk}&dates=${S.season}`)
+      .then(r => r.ok ? r.json() : null).then(j => { if (!j) return; opp = {};
+        (j.events || []).forEach(ev => { const cs = ((ev.competitions || [])[0] || {}).competitors || [];
+          cs.forEach(c => { const o = cs.find(x => x !== c); if (o) opp[c.team.abbreviation.toLowerCase()] = { t: o.team.abbreviation, home: c.homeAway === 'home' }; }); });
+        redraw(); }).catch(() => {});
+  }
+
+  function render(ctx) {
+    X = ctx; load();
+    if (failed) return '<p class="error">Stats didn’t load.</p>';
+    if (!S) return '<p class="loading">Loading stats…</p>';
+    const esc = ctx.esc, W = S.weeks, last = W[W.length - 1] || 0;
+    const to = Math.min(F.to || last, last), from = Math.min(F.from || 1, to);
+    const wi = W.map((w, i) => [w, i]).filter(([w]) => w >= from && w <= to);
+    const HP = (A && A.heatPlayers) || {}, HW = (A && A.heatWeeks) || [];
+    const team = f => ctx.teams[f] || {};
+    let rows = S.rows.filter(r => !F.pos || (F.pos === 'FLEX' ? ['RB', 'WR', 'TE'].includes(r.p) : r.p === F.pos))
+      .filter(r => !F.who || (F.who === 'ro' ? r.f : F.who === 'fa' ? !r.f : r.f === F.who))
+      .map(r => { const sc = wi.map(([, i]) => r.w[i]);
+        const pts = sc.reduce((a, v) => a + (v || 0), 0), gp = sc.filter((v, k) => v != null && wi[k][0] !== r.bye).length;
+        return Object.assign({}, r, { pts, avg: gp ? pts / gp : 0, gp }); });
+    const key = { pts: r => r.pts, avg: r => r.avg, name: r => r.n, sal: r => r.sal == null ? -1 : r.sal, bye: r => r.bye || 0,
+      own: r => r.f ? (team(r.f).abbr || r.f) : 'zz', nfl: r => r.t || 'zz' };
+    const kf = sort[0].startsWith('w') ? (r => { const k = W.indexOf(+sort[0].slice(1)); return r.w[k] == null ? -99 : r.w[k]; }) : key[sort[0]] || key.pts;
+    rows.sort((a, b) => { const x = kf(a), y = kf(b); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * sort[1] || b.pts - a.pts; });
+    const shown = F.top ? rows.slice(0, F.top) : rows;
+    const th = (k, l, cls) => `<th class="${cls || ''}${sort[0] === k ? ' on' : ''}" data-st-sort="${k}">${l}${sort[0] === k ? (sort[1] < 0 ? ' ▾' : ' ▴') : ''}</th>`;
+    const sel = (k, opts, cur = F[k]) => `<select data-st-f="${k}" aria-label="${k}">${opts.map(([v, l]) => `<option value="${v}"${String(cur) === String(v) ? ' selected' : ''}>${l}</option>`).join('')}</select>`;
+    const wkOpts = W.map(w => [w, w]);
+    const teamsOpt = Object.keys(ctx.teams).sort((a, b) => (team(a).name || '').localeCompare(team(b).name || '')).map(f => [f, team(f).name || f]);
+    const filters = `<div class="st-f">
+      <label>Top ${sel('top', [[25, 25], [50, 50], [100, 100], [0, 'All']])}</label>
+      ${sel('pos', [['', 'All positions'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'RB/WR/TE'], ['DEF', 'DEF']])}
+      <label>Weeks ${sel('from', wkOpts, from)} to ${sel('to', wkOpts, to)}</label>
+      ${sel('who', [['', 'All players'], ['ro', 'Rostered'], ['fa', 'Free agents'], ...teamsOpt])}
+    </div>`;
+    const me = ctx.myTeam;
+    const body = shown.map((r, i) => {
+      const t = r.f ? team(r.f) : null, h = HP[r.id];
+      const cells = wi.map(([w, k]) => { const v = r.w[k], hk = h && HW.indexOf(w) >= 0 ? HC[h.w[HW.indexOf(w)]] : '';
+        return w === r.bye ? '<td class="st-w st-bye">B</td>' : `<td class="st-w${hk ? ' ' + hk : ''}">${v == null ? '' : v.toFixed(1)}</td>`; }).join('');
+      const o = opp && r.t ? opp[ab(r.t)] : null;
+      const nm = r.f ? `<a href="#now/rosters/${r.f}/${r.id}">${esc(r.n)}</a>` : esc(r.n);
+      return `<tr class="${r.f && r.f === me ? 'st-me' : ''}"><td class="st-n">${i + 1}</td>
+        <td class="st-pl"><span>${nm}</span><small>${r.p}${r.t ? ` · ${logo(r.t)}${esc(r.t)}` : ' · FA'}</small></td>
+        <td class="n"><b>${r.pts.toFixed(1)}</b></td><td class="n">${r.avg.toFixed(2)}</td>${cells}
+        <td class="st-op">${!r.t ? '' : o ? `${o.home ? 'vs' : '@'} ${logo(o.t)}` : opp ? '<span class="st-byew">BYE</span>' : ''}</td>
+        <td class="st-own">${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="">` : ''}${esc(t.abbr || r.f)}${r.sl ? ` <i>${r.sl}</i>` : ''}` : '<span class="st-fa">FA</span>'}</td>
+        <td class="n">${r.bye || ''}</td><td class="n">${r.sal != null ? '$' + Math.round(r.sal) : ''}</td><td class="n">${r.cy || ''}</td></tr>`; }).join('');
+    return `<section><h2 class="sec">Stats <small>FBP points by week, ${S.season}</small></h2>
+      ${filters}
+      <div class="card tbl-wrap st-wrap"><table class="st-t"><thead>
+        <tr><th></th><th class="st-pl"></th><th></th><th></th><th class="st-grp" colspan="${wi.length}">Weekly points</th><th colspan="5"></th></tr>
+        <tr><th class="st-n">#</th>${th('name', 'Player', 'st-pl')}${th('pts', 'Pts', 'n')}${th('avg', 'Avg', 'n')}${wi.map(([w]) => th('w' + w, w, 'n st-w')).join('')}
+        ${th('nfl', `Wk ${oppWk}`, 'st-op')}${th('own', 'FBP team', 'st-own')}${th('bye', 'Bye', 'n')}${th('sal', 'Salary', 'n')}<th class="n">Contract</th></tr></thead>
+        <tbody>${body || `<tr><td colspan="${wi.length + 9}" class="st-none">No players match.</td></tr>`}</tbody></table></div>
+      <p class="rf-foot">Showing ${shown.length} of ${rows.length}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Your team’s players are highlighted.</p>
+    </section>`;
+  }
+
+  document.addEventListener('click', e => {
+    const h = e.target.closest && e.target.closest('[data-st-sort]'); if (!h) return;
+    const k = h.dataset.stSort; sort = sort[0] === k ? [k, -sort[1]] : [k, k === 'name' || k === 'own' || k === 'nfl' ? 1 : -1]; redraw();
+  });
+  document.addEventListener('change', e => {
+    const s = e.target.closest && e.target.closest('[data-st-f]'); if (!s) return;
+    const k = s.dataset.stF; F[k] = ['top', 'from', 'to'].includes(k) ? +s.value : s.value;
+    if (k === 'from' && F.to && F.from > F.to) F.to = F.from;
+    if (k === 'to' && F.from > F.to) F.from = F.to;
+    save(); redraw();
+  });
+  return { render };
+})();
