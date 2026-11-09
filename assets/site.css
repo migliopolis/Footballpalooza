@@ -1897,7 +1897,7 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .st-t .n{text-align:right}
 .st-t td.st-n{color:var(--muted);font-size:.72rem;text-align:right}
 .st-t .st-pl{position:sticky;left:0;z-index:1;background:var(--surface);text-align:left;min-width:9.5rem;max-width:12rem;box-shadow:1px 0 0 var(--line)}
-.st-t td.st-pl span{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.st-t td.st-pl .st-nm{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis}
 .st-t td.st-pl a{color:inherit;text-decoration:none}
 .st-t td.st-pl small{display:flex;align-items:center;gap:3px;font-size:.66rem;color:var(--muted)}
 .st-nfl{width:16px;height:16px;object-fit:contain;vertical-align:middle;max-width:none}
@@ -1925,3 +1925,23 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .st-pick button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent);color:var(--fg)}
 @media (max-width:560px){.st-pick{flex-wrap:nowrap;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none}.st-pick::-webkit-scrollbar{display:none}.st-pick button{flex:none}}
 .st-who{margin:0 0 10px}
+@media (min-width:521px){.rf-sub.seg.ln-sub{max-width:100%;width:max-content;flex-wrap:wrap}}
+/* Stats player cell: name, then FBP logo + team, position, NFL logo, award chips */
+.st-t td.st-pl small{display:flex;align-items:center;flex-wrap:wrap;gap:3px;font-size:.66rem;color:var(--muted);margin-top:1px}
+.st-t td.st-pl small b{color:var(--fg);font-weight:700}
+.st-t td.st-pl small i{font-style:normal;font-size:.56rem;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:0 2px}
+.st-dot{color:var(--muted)}
+.st-fl{margin-right:1px}
+.st-ch{font-size:.54rem!important;padding:1px 4px!important;line-height:1.2;margin-left:1px}
+.st-t td.st-heat,.st-t th.st-heat{border-right:1px solid var(--line)}
+.st-t .st-pl{max-width:14rem;min-width:11rem}
+.st-t td.st-pl .st-nm{white-space:nowrap}
+/* phones: #, Player, Pts and Avg fill the screen; Heat and the weeks are a swipe away */
+@media (max-width:560px){
+  .st-wrap{container-type:inline-size}
+  .st-t th.st-n,.st-t td.st-n,.st-t th.st-pl,.st-t td.st-pl,.st-t th.st-pts,.st-t td.st-pts,.st-t th.st-avg,.st-t td.st-avg{box-sizing:border-box}
+  .st-t th.st-n,.st-t td.st-n{width:26px;min-width:26px;max-width:26px;padding-left:2px;padding-right:4px}
+  .st-t .st-pl{width:calc(100cqw - 132px);min-width:calc(100cqw - 132px);max-width:calc(100cqw - 132px)}
+  .st-t th.st-pts,.st-t td.st-pts{width:56px;min-width:56px}
+  .st-t th.st-avg,.st-t td.st-avg{width:50px;min-width:50px}
+}

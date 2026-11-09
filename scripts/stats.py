@@ -44,7 +44,7 @@ def main():
             'id': pid, 'n': (first + ' ' + last).strip() if p.get('position') != 'Def' else last + ' D',
             'p': 'DEF' if p['position'] == 'Def' else p['position'], 't': team if team != 'FA' else '', 'e': p.get('espn_id') or '',
             'bye': byes.get(TO_FP.get(team, team)), 'f': fid, 'sl': SLOT.get(r['st'], '') if r else None,
-            'sal': r['sal'] if r else None, 'cy': r['cy'] if r else None,
+            'sal': r['sal'] if r else None, 'cy': r['cy'] if r else None, 'hon': [h[:2] for h in r.get('hon', [])] if r else [],
             'w': [None if s is None else round(float(s), 1) for s in sc],
         })
     json.dump({'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': R.get('season'),

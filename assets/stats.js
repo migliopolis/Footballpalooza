@@ -14,6 +14,7 @@ window.FBPStats = (function () {
   const ab = t => NFLE[t] || (t || '').toLowerCase();
   const logo = t => t ? `<img class="st-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${ab(t)}.png" alt="" loading="lazy">` : '';
   const HC = { N: 'nuke', H: 'hot', C: 'cold', B: 'bust', W: 'wp' };
+  const SHORT = { '1st Team': '1st', '2nd Team': '2nd', 'Top Waiver': 'Waiver', 'High Game': 'High', 'Worst Contract': 'Worst $', 'Best Value': 'Value', 'Bench Points': 'Bench' };
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   function load() {
     if (S || loading || failed) return;
@@ -40,13 +41,15 @@ window.FBPStats = (function () {
     const to = Math.min(F.to || last, last), from = Math.min(F.from || 1, to);
     const wi = W.map((w, i) => [w, i]).filter(([w]) => w >= from && w <= to);
     const HP = (A && A.heatPlayers) || {}, HW = (A && A.heatWeeks) || [];
+    const HV = { N: 3, H: 1, C: -1, B: -2, W: -3 };
     const team = f => ctx.teams[f] || {};
     let rows = S.rows.filter(r => !F.pos || (F.pos === 'FLEX' ? ['RB', 'WR', 'TE'].includes(r.p) : r.p === F.pos))
       .filter(r => !F.who || (F.who === 'ro' ? r.f : F.who === 'fa' ? !r.f : r.f === F.who))
       .map(r => { const sc = wi.map(([, i]) => r.w[i]);
         const pts = sc.reduce((a, v) => a + (v || 0), 0), gp = sc.filter((v, k) => v != null && wi[k][0] !== r.bye).length;
-        return Object.assign({}, r, { pts, avg: gp ? pts / gp : 0, gp }); });
-    const key = { pts: r => r.pts, avg: r => r.avg, name: r => r.n, sal: r => r.sal == null ? -1 : r.sal, bye: r => r.bye || 0,
+        const h = HP[r.id], heat = h ? wi.reduce((a, [w]) => { const c = h.w[HW.indexOf(w)]; return a + (HV[c] || 0); }, 0) : 0;
+        return Object.assign({}, r, { pts, avg: gp ? pts / gp : 0, gp, heat }); });
+    const key = { pts: r => r.pts, avg: r => r.avg, heat: r => r.heat, name: r => r.n, sal: r => r.sal == null ? -1 : r.sal, bye: r => r.bye || 0,
       own: r => r.f ? (team(r.f).abbr || r.f) : 'zz', nfl: r => r.t || 'zz' };
     const kf = sort[0].startsWith('w') ? (r => { const k = W.indexOf(+sort[0].slice(1)); return r.w[k] == null ? -99 : r.w[k]; }) : key[sort[0]] || key.pts;
     rows.sort((a, b) => { const x = kf(a), y = kf(b); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * sort[1] || b.pts - a.pts; });
@@ -71,19 +74,19 @@ window.FBPStats = (function () {
       const o = opp && r.t ? opp[ab(r.t)] : null;
       const nm = r.f ? `<a href="#now/rosters/${r.f}/${r.id}">${esc(r.n)}</a>` : esc(r.n);
       return `<tr class="${r.f && r.f === me ? 'st-me' : ''}"><td class="st-n">${i + 1}</td>
-        <td class="st-pl"><span>${nm}</span><small>${r.p}${r.t ? ` · ${logo(r.t)}${esc(r.t)}` : ' · FA'}</small></td>
-        <td class="n"><b>${r.pts.toFixed(1)}</b></td><td class="n">${r.avg.toFixed(2)}</td>${cells}
+        <td class="st-pl"><span class="st-nm">${nm}</span><small>${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || r.f)}</b>${r.sl ? `<i>${r.sl}</i>` : ''}` : '<b class="st-fa">FA</b>'}<span class="st-dot">·</span>${r.p}${r.t ? logo(r.t) : ''}${(r.hon || []).map(([l, c]) => `<span class="ro-chip ${c} st-ch" title="${esc(l)}"><span class="lg-only">${esc(l)}</span><span class="sm-only">${esc(SHORT[l] || l)}</span></span>`).join('')}</small></td>
+        <td class="n st-pts"><b>${r.pts.toFixed(1)}</b></td><td class="n st-avg">${r.avg.toFixed(2)}</td>
+        <td class="n st-heat"><b class="${r.heat > 0 ? 'hc-pos' : r.heat < 0 ? 'hc-neg' : ''}">${r.heat > 0 ? '+' : ''}${r.heat}</b></td>${cells}
         <td class="st-op">${!r.t ? '' : o ? `${o.home ? 'vs' : '@'} ${logo(o.t)}` : opp ? '<span class="st-byew">BYE</span>' : ''}</td>
-        <td class="st-own">${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="">` : ''}${esc(t.abbr || r.f)}${r.sl ? ` <i>${r.sl}</i>` : ''}` : '<span class="st-fa">FA</span>'}</td>
         <td class="n">${r.bye || ''}</td><td class="n">${r.sal != null ? '$' + Math.round(r.sal) : ''}</td><td class="n">${r.cy || ''}</td></tr>`; }).join('');
     return `<section><h2 class="sec">Stats <small>FBP points by week, ${S.season}</small></h2>
       ${picker}${filters}
       <div class="card tbl-wrap st-wrap"><table class="st-t"><thead>
-        <tr><th></th><th class="st-pl"></th><th></th><th></th><th class="st-grp" colspan="${wi.length}">Weekly points</th><th colspan="5"></th></tr>
-        <tr><th class="st-n">#</th>${th('name', 'Player', 'st-pl')}${th('pts', 'Pts', 'n')}${th('avg', 'Avg', 'n')}${wi.map(([w]) => th('w' + w, w, 'n st-w')).join('')}
-        ${th('nfl', `Wk ${oppWk}`, 'st-op')}${th('own', 'FBP team', 'st-own')}${th('bye', 'Bye', 'n')}${th('sal', 'Salary', 'n')}<th class="n">Contract</th></tr></thead>
+        <tr><th class="st-n"></th><th class="st-pl"></th><th></th><th></th><th></th><th class="st-grp" colspan="${wi.length}">Weekly points</th><th colspan="4"></th></tr>
+        <tr><th class="st-n">#</th>${th('name', 'Player', 'st-pl')}${th('pts', 'Pts', 'n st-pts')}${th('avg', 'Avg', 'n st-avg')}${th('heat', 'Heat', 'n st-heat')}${wi.map(([w]) => th('w' + w, w, 'n st-w')).join('')}
+        ${th('nfl', `Wk ${oppWk}`, 'st-op')}${th('bye', 'Bye', 'n')}${th('sal', 'Salary', 'n')}<th class="n">Contract</th></tr></thead>
         <tbody>${body || `<tr><td colspan="${wi.length + 9}" class="st-none">No players match.</td></tr>`}</tbody></table></div>
-      <p class="rf-foot">Showing ${shown.length} of ${rows.length}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Tap a team’s logo to highlight its players; tap it again to clear.</p>
+      <p class="rf-foot">Showing ${shown.length} of ${rows.length}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Heat: the Heat Check score for the weeks shown (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3). Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Tap a team’s logo to highlight its players; tap it again to clear.</p>
     </section>`;
   }
 
