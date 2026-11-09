@@ -1964,3 +1964,8 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .pl-show{border-radius:6px}
 @media (max-width:520px){.rf-sub.seg a,.rf-sub.seg.now-sub a,.rf-sub.seg.ln-sub a{padding-left:5px;padding-right:5px}}
 @media (max-width:520px){.rf-sub.seg,.rf-sub.seg.ln-sub{width:100%;max-width:100%}.rf-sub.seg a{flex:1 1 auto}}
+/* Records boards: one connected grid of equal buttons, three across */
+.rf-sub.rf-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;max-width:560px;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface);margin:4px 0 14px}
+.rf-sub.rf-grid a{display:flex;align-items:center;justify-content:center;text-align:center;border:0;border-radius:0;padding:9px 6px;line-height:1.2;font-size:.8rem;border-left:1px solid var(--line);border-top:1px solid var(--line)}
+.rf-sub.rf-grid a:nth-child(3n+1){border-left:0}
+.rf-sub.rf-grid a:nth-child(-n+3){border-top:0}

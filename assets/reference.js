@@ -118,7 +118,7 @@ window.FBPRef = (() => {
   }
   const lastDone = () => Math.max(...Object.keys(D.championships).map(Number));
   const years = () => D.meta.years_covered.slice().sort((a, b) => a - b);
-  const sub = (items, cur, seg) => `<nav class="rf-sub${seg ? ' seg' : ''}">${items.map(([h, l]) => `<a href="${h}"${h === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+  const sub = (items, cur, seg, cls) => `<nav class="rf-sub${seg ? ' seg' : ''}${cls ? ' ' + cls : ''}">${items.map(([h, l]) => `<a href="${h}"${h === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
   const lum = h => { h = (h || '#888').replace('#', ''); const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); return (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
 
   /* P-PPR (Settings): adds the pre-2019, non-PPR seasons. Only finishes exist for those years so far,
@@ -470,7 +470,7 @@ window.FBPRef = (() => {
   }
 
   /* ---------- records ---------- */
-  const BOARDS = [['career', 'Career PPG'], ['season', 'Season PPG'], ['playoff', 'Playoff PPG'], ['games', 'Single games'], ['margins', 'Blowouts & nail-biters'], ['stretch', 'Two-game stretches']];
+  const BOARDS = [['career', 'Career PPG'], ['season', 'Season PPG'], ['playoff', 'Playoff PPG'], ['games', 'Single games'], ['margins', 'Blowouts &amp; nail&#8209;biters'], ['stretch', 'Two&#8209;game stretches']];
   function tbl(cols, rows) {
     return `<div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr>${cols.map(c => c === 'lg' ? '<th class="lg"><span class="sr">Logo</span></th>' : c[0] === '!' ? `<th class="t">${c.slice(1)}</th>` : `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
   }
@@ -506,7 +506,7 @@ window.FBPRef = (() => {
       body = m('Biggest blowouts', L.biggest_blowouts) + '<div style="height:18px"></div>' + m('Closest finishes', L.closest_games);
     } else body = `<h2 class="sec">Best two-game stretches <small>back-to-back games, any week</small></h2>` + tbl(['#', 'lg', '!Team', 'Total', 'Year', 'Games'],
       L.top_two_game_stretches.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.total)}</b></td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td>wk ${r.week_a} ${n1(r.score_a)} + wk ${r.week_b} ${n1(r.score_b)}</td></tr>`));
-    return head('Records') + nav('#reference/records') + (PRE().length ? '<p class="rf-note">P-PPR is on, but there are no game scores before 2019, so records cover 2019 on. See the blind spots on the Reference home.</p>' : '') + sub(BOARDS.map(([k, l]) => [`#reference/records/${k}`, l]), `#reference/records/${b}`) + `<section>${body}</section>`;
+    return head('Records') + nav('#reference/records') + (PRE().length ? '<p class="rf-note">P-PPR is on, but there are no game scores before 2019, so records cover 2019 on. See the blind spots on the Reference home.</p>' : '') + sub(BOARDS.map(([k, l]) => [`#reference/records/${k}`, l]), `#reference/records/${b}`, false, 'rf-grid') + `<section>${body}</section>`;
   }
 
   /* ---------- payroll (data/payroll.json, built by scripts/payroll.py) ---------- */
