@@ -1969,3 +1969,28 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .rf-sub.rf-grid a{display:flex;align-items:center;justify-content:center;text-align:center;border:0;border-radius:0;padding:9px 6px;line-height:1.2;font-size:.8rem;border-left:1px solid var(--line);border-top:1px solid var(--line)}
 .rf-sub.rf-grid a:nth-child(3n+1){border-left:0}
 .rf-sub.rf-grid a:nth-child(-n+3){border-top:0}
+/* award chips: full label normally, short label in the compact view */
+.lv-af .cs{display:none}
+.lv-btns{display:flex;gap:6px;flex:none}
+.lv-cmp[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* Scoreboard compact view (basic): each starter is just his photo, his name underneath, and his points toward the
+   middle, mirrored on the other side; no stat, matchup or chip lines, and no team-name section */
+.lv-compact .lv-names{display:none}
+.lv-compact .lv-ext,.lv-compact .lv-nm .lv-af{display:none}
+.lv-compact .lv-det{padding-top:4px}
+.lv-compact .lv-t td{padding-top:5px;padding-bottom:5px;vertical-align:middle}
+.lv-compact .lv-pc{display:block}
+.lv-compact .lv-ph{display:block;width:30px;height:30px;margin:0 0 2px}
+.lv-compact .lv-p.b .lv-ph{margin-left:auto}
+.lv-compact .lv-nm{font-size:.8rem;line-height:1.15}
+/* compact: the 1st/2nd team chip, ball and RZ sit in a row beside the photo, toward the middle:
+   left side photo · chip · ball · RZ; right side RZ · ball · chip · photo */
+.lv-pchip{display:none}
+.lv-compact .lv-pchip{display:inline-block;flex:none;font-size:.52rem;padding:1px 3px}
+.lv-compact .lv-phw{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.lv-compact .lv-ph{margin:0}
+.lv-compact .lv-p.b .lv-ph{margin-left:0}
+.lv-compact .lv-p.b .lv-phw{flex-direction:row-reverse;justify-content:flex-start}
+.lv-compact .lv-phw .lv-flags{flex-direction:row;flex-wrap:nowrap;max-width:none}
+.lv-compact .lv-p.b .lv-phw .lv-flags{flex-direction:row-reverse}

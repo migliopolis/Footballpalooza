@@ -86,7 +86,14 @@
     h.thru = j && j.throughWeek; h.season = j && j.season; h.final = !!(j && j.final);
     honors = h;
   }
-  const chips = list => (list || []).map(c => `<span class="lv-af ${c.c}" title="${c.title.replace(/"/g, '&quot;')}">${c.l}</span>`).join('');
+  // award chips carry a short label too, for the compact view (1st Team → 1st)
+  const CHIP_SHORT = { '1st Team': '1st', '2nd Team': '2nd', 'Top Waiver': 'Waiver', 'High Game': 'High', 'Worst Contract': 'Worst $', 'Best Value': 'Value', 'Bench Points': 'Bench' };
+  const chips = list => (list || []).map(c => `<span class="lv-af ${c.c}" title="${c.title.replace(/"/g, '&quot;')}"><span class="cf">${c.l}</span><span class="cs">${CHIP_SHORT[c.l] || c.l}</span></span>`).join('');
+  // compact view: a whole matchup on one phone screen (photo, name, short chip and points only), saved on this device
+  let compact = false; try { compact = localStorage.getItem('fbp-sb-compact') === '1'; } catch (e) {}
+  // compact view: just the All-FBP team chip (1st / 2nd), shown beside the photo
+  const teamChip = (id, fid) => !honors ? '' : (honors.p[id] || []).filter(c => (!c.team || c.team === fid) && /^(1st|2nd) Team$/.test(c.l))
+    .map(c => `<span class="lv-af lv-pchip ${c.c}" title="${c.title.replace(/"/g, '&quot;')}">${CHIP_SHORT[c.l]}</span>`).join('');
   const playerChips = (id, wk, fid) => !honors ? '' : chips((honors.p[id] || []).filter(c => !c.team || c.team === fid).concat(honors.potw[wk] === id ? [{ l: 'POTW', c: 'good', title: `Player of the Week, week ${wk}` }] : []));
 
   const onPage = () => /^#scores(\/players)?\/?$/.test(location.hash);   // the Scoreboard and Players, not the Ticket Helper or NFL
@@ -349,7 +356,21 @@
       if (n.scrollWidth > room) { const fs = parseFloat(getComputedStyle(n).fontSize); n.style.fontSize = Math.max(fs * 0.7, fs * room / n.scrollWidth - 0.2) + 'px'; }
     });
   }
-  const fitSoon = () => requestAnimationFrame(() => fitNames(document.getElementById('lv-root')));
+  // compact view: the starters stretch to fill the screen under the score header, so the whole matchup is one screenshot
+  function fitCompact(root) {
+    const ls = (root || document).querySelector('.lv-list.lv-compact'); if (!ls) return;
+    const top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr-h')) || 50;
+    ls.querySelectorAll('.lv-g.open').forEach(g => {
+      const t = g.querySelector('.lv-det > .lv-t'); if (!t) return;
+      t.style.removeProperty('--rowh');
+      const sum = g.querySelector('.lv-sum'), bn = g.querySelector('.lv-bench > summary');
+      const avail = window.innerHeight - top - sum.offsetHeight - (bn ? bn.offsetHeight + 8 : 0) - 12;
+      const h = Math.max(40, Math.min(96, Math.floor(avail / (t.rows.length || 9))));
+      t.style.setProperty('--rowh', h + 'px');
+      t.classList.toggle('lv-big', h >= 58);
+    });
+  }
+  const fitSoon = () => requestAnimationFrame(() => { fitNames(document.getElementById('lv-root')); fitCompact(document.getElementById('lv-root')); });
   document.addEventListener('toggle', e => { if (e.target.closest && e.target.closest('#lv-root')) fitNames(e.target); }, true);
   window.addEventListener('resize', () => { if (onPage()) fitSoon(); });
 
@@ -476,7 +497,7 @@
           : g.ball ? `<span class="lv-ball" title="His team has the ball">🏈</span>${g.rz ? '<span class="lv-rz" title="In the red zone">RZ</span>' : ''}` : '';
         // in the red zone (his offense there, or his defense defending it): a red tint across his half of the row
         const rzOn = live && (isD ? !g.ball && g.defRz : g.ball && g.rz), rzc = rzOn ? ' lv-inrz' : '';
-        const nm = `<td class="lv-p ${cls} ${st}${rzc}"><div class="lv-pc"><span class="lv-phw">${img}${flags ? `<span class="lv-flags">${flags}</span>` : ''}</span><span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><span class="lv-ext"><small class="lv-bot">${bottom.join('')}</small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></span></div></td>`;
+        const nm = `<td class="lv-p ${cls} ${st}${rzc}"><div class="lv-pc"><span class="lv-phw">${img}${teamChip(p.id, (cls === 'a' ? a : b).id)}${flags ? `<span class="lv-flags">${flags}</span>` : ''}</span><span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><span class="lv-ext"><small class="lv-bot">${bottom.join('')}</small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></span></div></td>`;
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}${rzc}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
@@ -508,8 +529,8 @@
       : !p ? `<b>Final.</b> Week ${esc(L.week)} is in the books.`
       : p === SLOW_MS ? `Updated ${t} · checks every 5 minutes until games start` : `Updated ${t} · refreshes every ${POLL_MS / 1000} seconds`;
     return `${picker}<div class="lv-bar"><span>${status}</span>
-        <button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></div>
-      <div class="lv-list">${ordered(L.matchup).map(game).join('')}</div>
+        <span class="lv-btns"><button type="button" class="lv-all lv-cmp" data-lv-cmp aria-pressed="${compact}">Compact</button><button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></span></div>
+      <div class="lv-list${compact ? ' lv-compact' : ''}">${ordered(L.matchup).map(game).join('')}</div>
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
   }
 
@@ -610,6 +631,9 @@
   document.addEventListener('click', e => {
     const wb = e.target.closest('[data-lv-week]');
     if (wb && data) { showWeek(+wb.dataset.lvWeek); return; }
+    const cb = e.target.closest('[data-lv-cmp]');
+    if (cb) { compact = !compact; try { localStorage.setItem('fbp-sb-compact', compact ? '1' : '0'); } catch (e2) {}
+      cb.setAttribute('aria-pressed', compact); const ls = document.querySelector('.lv-list'); if (ls) ls.classList.toggle('lv-compact', compact); fitSoon(); return; }
     const all = e.target.closest('[data-lv-all]');
     if (all && data) {
       open.clear();
@@ -620,7 +644,7 @@
     const key = b.dataset.lv, g = b.closest('.lv-g'), on = !open.has(key);
     on ? open.add(key) : open.delete(key);
     g.classList.toggle('open', on); b.setAttribute('aria-expanded', on); g.querySelector('.lv-det').hidden = !on;
-    if (on) fitNames(g);
+    if (on) { fitNames(g); fitCompact(g.parentElement.parentElement); }
     const btn = document.querySelector('[data-lv-all]'), n = cur().liveScoring.matchup.length;
     if (btn) { btn.dataset.lvAll = open.size === n ? 'close' : 'open'; btn.textContent = open.size === n ? 'Collapse all' : 'Expand all'; }
   });
