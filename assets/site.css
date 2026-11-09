@@ -1945,3 +1945,7 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
   .st-t th.st-pts,.st-t td.st-pts{width:56px;min-width:56px}
   .st-t th.st-avg,.st-t td.st-avg{width:50px;min-width:50px}
 }
+/* Stats: the pinned copy of the header row */
+.st-float{position:fixed;z-index:30;overflow:hidden;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 2px 4px rgba(0,0,0,.08)}
+.st-float table{margin:0}
+.st-float thead tr:first-child{display:none}

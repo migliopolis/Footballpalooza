@@ -74,7 +74,7 @@ window.FBPStats = (function () {
       const o = opp && r.t ? opp[ab(r.t)] : null;
       const nm = r.f ? `<a href="#now/rosters/${r.f}/${r.id}">${esc(r.n)}</a>` : esc(r.n);
       return `<tr class="${r.f && r.f === me ? 'st-me' : ''}"><td class="st-n">${i + 1}</td>
-        <td class="st-pl"><span class="st-nm">${nm}</span><small>${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || r.f)}</b>${r.sl ? `<i>${r.sl}</i>` : ''}` : '<b class="st-fa">FA</b>'}<span class="st-dot">·</span>${r.p}${r.t ? logo(r.t) : ''}${(r.hon || []).map(([l, c]) => `<span class="ro-chip ${c} st-ch" title="${esc(l)}"><span class="lg-only">${esc(l)}</span><span class="sm-only">${esc(SHORT[l] || l)}</span></span>`).join('')}</small></td>
+        <td class="st-pl"><span class="st-nm">${nm}</span><small>${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="${esc(t.abbr || r.f)}" title="${esc(t.name || r.f)}">` : `<b>${esc(t.abbr || r.f)}</b>`}${r.sl ? `<i>${r.sl}</i>` : ''}` : '<b class="st-fa">FA</b>'}<span class="st-dot">·</span>${r.p}${r.t ? logo(r.t) : ''}${(r.hon || []).map(([l, c]) => `<span class="ro-chip ${c} st-ch" title="${esc(l)}"><span class="lg-only">${esc(l)}</span><span class="sm-only">${esc(SHORT[l] || l)}</span></span>`).join('')}</small></td>
         <td class="n st-pts"><b>${r.pts.toFixed(1)}</b></td><td class="n st-avg">${r.avg.toFixed(2)}</td>
         <td class="n st-heat"><b class="${r.heat > 0 ? 'hc-pos' : r.heat < 0 ? 'hc-neg' : ''}">${r.heat > 0 ? '+' : ''}${r.heat}</b></td>${cells}
         <td class="st-op">${!r.t ? '' : o ? `${o.home ? 'vs' : '@'} ${logo(o.t)}` : opp ? '<span class="st-byew">BYE</span>' : ''}</td>
@@ -105,5 +105,31 @@ window.FBPStats = (function () {
     if (k === 'to' && F.from > F.to) F.from = F.to;
     save(); redraw();
   });
-  return { render };
+  // the header row stays pinned under the site's menu while you scroll down the table: a copy of the header, fixed in
+  // place, matched to the table's column widths and kept in step with its sideways scroll
+  let floatEl = null, floatFor = null;
+  function syncFloat() {
+    const wrap = document.querySelector('.st-wrap');
+    if (!wrap) { if (floatEl) { floatEl.remove(); floatEl = null; floatFor = null; } return; }
+    const tbl = wrap.querySelector('table'), head = tbl && tbl.tHead; if (!head) return;
+    const bar = document.querySelector('.top'), top = bar ? Math.max(0, bar.getBoundingClientRect().bottom) : 0;
+    const r = wrap.getBoundingClientRect(), hh = head.getBoundingClientRect().height;
+    if (!(r.top < top && r.bottom > top + hh * 2)) { if (floatEl) floatEl.style.display = 'none'; return; }
+    if (!floatEl || floatFor !== tbl) {
+      if (floatEl) floatEl.remove();
+      floatEl = document.createElement('div'); floatEl.className = 'st-float'; floatEl.setAttribute('aria-hidden', 'true');
+      const t = document.createElement('table'); t.className = tbl.className; t.style.width = tbl.offsetWidth + 'px';
+      const c = head.cloneNode(true); t.appendChild(c);
+      const a = head.querySelectorAll('th'), b = c.querySelectorAll('th');
+      a.forEach((th, i) => { const w = th.getBoundingClientRect().width + 'px'; Object.assign(b[i].style, { width: w, minWidth: w, maxWidth: w, boxSizing: 'border-box' }); });
+      floatEl.appendChild(t); document.body.appendChild(floatEl); floatFor = tbl;
+    }
+    Object.assign(floatEl.style, { display: '', top: top + 'px', left: r.left + 'px', width: wrap.clientWidth + 'px' });
+    floatEl.scrollLeft = wrap.scrollLeft;
+  }
+  document.addEventListener('scroll', syncFloat, { passive: true, capture: true });
+  window.addEventListener('resize', () => { if (floatEl) { floatEl.remove(); floatEl = null; floatFor = null; } syncFloat(); });
+  window.addEventListener('hashchange', () => setTimeout(syncFloat, 50));
+  const render0 = render;
+  return { render: ctx => { const html = render0(ctx); requestAnimationFrame(syncFloat); return html; } };
 })();
