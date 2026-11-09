@@ -184,6 +184,8 @@ def main():
             return 'cold'
         return None
     ws = (load(D('mfl', 'weeklyScores.json'), {}) or {}).get('weeks', {})
+    MP = load(D('mfl', 'players.json'), {}) or {}
+    nfl = {k: v[MP['fields'].index('team')] for k, v in (MP.get('players') or {}).items()} if 'team' in MP.get('fields', []) else {}
     hw = [w for w in weeks if w in ws]
     pj_of = lambda w, pid: float((proj.get(w) or {}).get(pid) or 0)
     heat_t = {f: {k: 0 for k in HEAT} | {'starts': 0} for f in st}
@@ -221,7 +223,7 @@ def main():
         if not gp or not any(cnt.values()) and len(games) < 5:
             continue
         heat_p[pid] = {'n': names.get(pid, pid), 'p': p, 'fr': on_now.get(pid), 'g': gp, 'c': [cnt[k] for k in HEAT],
-                       's': sum(cnt[k] * v for k, v in HEAT.items()), 'w': ''.join(line), 'e': espn.get(pid, '') or ''}
+                       's': sum(cnt[k] * v for k, v in HEAT.items()), 'w': ''.join(line), 'e': espn.get(pid, '') or '', 't': nfl.get(pid, '')}
         if len(games) >= 5:
             mp = sum(g[1] for g in games) / len(games)
             if mp >= 8:

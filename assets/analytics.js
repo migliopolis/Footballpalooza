@@ -89,6 +89,8 @@ window.FBPAnalytics = (function () {
     const oChg = f => (oNow(f) || 0) - (T[f].odds[0] || 0);
     const cl = f => T[f].close, clPct = f => { const c = cl(f), n = c[0] + c[1] + c[2]; return n ? (c[0] + c[2] / 2) / n : null; };
 
+    const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
+    const nflLg = t => t && t !== 'FA' ? `<img class="an-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${esc(t)}" title="${esc(t)}" loading="lazy">` : '<span class="an-pos">FA</span>';
     const HT = A.heatTeams || {}, HP = A.heatPts || {}, HW = A.heatWeeks || [];
     const HK = [['nuke', 'Nuc'], ['hot', 'Hot'], ['cold', 'Cold'], ['bust', 'Bust'], ['wp', 'WP']];
     const hwTxt = HW.length ? `${HW[0]}–${HW[HW.length - 1]}` : '';
@@ -136,6 +138,7 @@ window.FBPAnalytics = (function () {
         table('heatplayers', [
           ['name', 'Player', '', r => r.n, r => `<td class="an-tm">${esc(r.n)} <span class="an-pos">${esc(r.p)}</span></td>`, r => r.fr ? lg(r.fr) : '<span class="an-lg an-fa">FA</span>'],
           ['g', 'G', 'n', r => r.g, r => num(r.g, String)],
+          ['nfl', 'NFL', 'an-nflc', r => r.t || '', r => `<td class="an-nflc">${nflLg(r.t)}</td>`],
           ...HK.map(([k, l], i) => [k, l, 'n', r => r.c[i], r => `<td class="n hc-c ${k}">${r.c[i] || '·'}</td>`]),
           ['score', 'Heat', 'n', r => r.s, r => `<td class="n"><b class="${r.s > 0 ? 'hc-pos' : r.s < 0 ? 'hc-neg' : ''}">${r.s > 0 ? '+' : ''}${r.s}</b></td>`],
           ['wk', 'Weeks', 'an-hs', r => r.s, r => `<td class="an-hs"><span class="hc-row">${[...r.w].map((c, i) => `<i class="${({ N: 'nuke', H: 'hot', C: 'cold', B: 'bust', W: 'wp', '-': 'off' })[c] || ''}" title="Week ${HW[i]}"></i>`).join('')}</span></td>`],

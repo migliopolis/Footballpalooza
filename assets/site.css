@@ -1876,3 +1876,10 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .an-sc circle.p{fill:#2a7fbf}.an-sc circle.n{fill:#d9762b}
 /* Heat Score: hot (positive) in orange, cold (negative) in blue */
 .hc-pos,.hc-s.up{color:var(--hc-hot)!important}.hc-neg,.hc-s.dn{color:var(--hc-cold)!important}
+.an-t td.an-nflc,.an-t th.an-nflc{text-align:center;width:1px}
+.an-nfl{width:22px;height:22px;object-fit:contain;vertical-align:middle;max-width:none}
+.pp-more{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.pp-more summary{cursor:pointer;font:600 .8rem var(--body);color:var(--accent);list-style-position:inside}
+.pp-more .ro-nw{margin-top:12px}
+.hc-chip{display:inline-block;margin-left:5px;padding:2px 4px;border-radius:4px;font:800 .56rem/1 var(--body);color:#fff;vertical-align:1px;letter-spacing:.02em}
+.hc-chip.nuke{background:var(--hc-nuke)}.hc-chip.hot{background:var(--hc-hot)}.hc-chip.cold{background:var(--hc-cold)}.hc-chip.bust{background:var(--hc-bust)}.hc-chip.wp{background:var(--hc-wp)}

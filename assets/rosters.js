@@ -61,6 +61,13 @@ window.FBPRosters = (function () {
     return `<td class="ro-wo"><span class="ro-vs">${o.home ? 'vs' : '@'}</span>${nflLogo(o.ab)}</td>`; };
   // Heat Check for one player: his Nuclear / Hot / Cold / Bust / Witness Protection weeks and Heat Score (data/analytics.json)
   const HEATK = [['N', 'Nuclear', 'nuke'], ['H', 'Hot', 'hot'], ['C', 'Cold', 'cold'], ['B', 'Bust', 'bust'], ['W', 'Witness Protection', 'wp']];
+  // the label he earned in a week (Nuclear, Hot, Cold, Bust, Witness Protection), as a small chip
+  function heatChip(r, w) {
+    const A = espn('AN', 'data/analytics.json'); if (!A || A.failed) return '';
+    const h = (A.heatPlayers || {})[r.id], i = (A.heatWeeks || []).indexOf(+w); if (!h || i < 0) return '';
+    const c = h.w[i], k = HEATK.find(x => x[0] === c); if (!k) return '';
+    return `<span class="hc-chip ${k[2]}" title="${k[1]}">${c === 'W' ? 'WP' : c}</span>`;
+  }
   function heatStrip(r) {
     const A = espn('AN', 'data/analytics.json');
     if (!A || A.failed) return '';
@@ -131,8 +138,10 @@ window.FBPRosters = (function () {
         : (() => { // RotoWire blurbs first; ESPN articles show just their summary, never the article body
             const strip = x => String(x || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
             const rw = j.feed.filter(n => n.type === 'Rotowire'), list = (rw.length ? rw : j.feed).slice(0, full ? 5 : 1);
-            return list.map(n => { const rot = n.type === 'Rotowire', txt = strip(rot ? n.story : n.description);
-              return `<div class="ro-nw"><b>${esc(strip(n.headline))}</b>${txt && txt !== strip(n.headline) ? `<p>${esc(txt)}</p>` : ''}<small>${rot ? 'RotoWire' : 'ESPN'} · ${when(n.published)}</small></div>`; }).join(''); })();
+            const item = n => { const rot = n.type === 'Rotowire', txt = strip(rot ? n.story : n.description);
+              return `<div class="ro-nw"><b>${esc(strip(n.headline))}</b>${txt && txt !== strip(n.headline) ? `<p>${esc(txt)}</p>` : ''}<small>${rot ? 'RotoWire' : 'ESPN'} · ${when(n.published)}</small></div>`; };
+            // the Player Page: the latest report up top, older ones folded underneath
+            return item(list[0]) + (list.length > 1 ? `<details class="pp-more"><summary>More recent news (${list.length - 1})</summary>${list.slice(1).map(item).join('')}</details>` : ''); })();
     } else if (tab === 'log') {
       const j = r.espn && espn('g' + r.espn, EAPI + r.espn + '/gamelog');
       if (!r.espn) body = noid; else if (!j) body = wait; else if (j.failed) body = fail;
@@ -148,7 +157,7 @@ window.FBPRosters = (function () {
         body = !evs.length ? '<p class="ro-wait">No games yet this season.</p>' : `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Wk</th><th class="l">Opp</th><th class="l">Result</th><th>FBP pts</th>${C.map(([c, l]) =>
           `<th>${c === 'rushing' && r.pos !== 'RB' ? 'Ru ' : c === 'receiving' && r.pos === 'RB' ? 'Re ' : ''}${l}</th>`).join('')}</tr></thead><tbody>
           ${evs.map(([id, e]) => { const fp = fpts(e.week);
-            return `<tr><td class="l">${e.week || ''}</td><td class="l ro-op">${e.atVs || ''} ${nflLogo((e.opponent || {}).abbreviation)}${esc((e.opponent || {}).abbreviation || '')}</td><td class="l">${esc(e.gameResult || '')} ${esc(e.score || '')}</td><td><b>${fp ? fp[0].toFixed(1) : wv(e.week) != null ? wv(e.week).toFixed(1) : '—'}</b>${fp ? `<small>${fp[1] ? 'started' : 'bench'}${fp[2] !== t.abbr ? ' · ' + esc(fp[2]) : ''}</small>` : wv(e.week) != null ? `<small>${r.st === 'TAXI_SQUAD' ? 'taxi' : 'off lineup'}</small>` : ''}</td>${C.map(([c, l]) => `<td>${esc(String(pick(byEv[id], c, l) || ''))}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div>
+            return `<tr><td class="l">${e.week || ''}</td><td class="l ro-op">${e.atVs || ''} ${nflLogo((e.opponent || {}).abbreviation)}${esc((e.opponent || {}).abbreviation || '')}</td><td class="l">${esc(e.gameResult || '')} ${esc(e.score || '')}</td><td><b>${fp ? fp[0].toFixed(1) : wv(e.week) != null ? wv(e.week).toFixed(1) : '—'}</b>${heatChip(r, e.week)}${fp ? `<small>${fp[1] ? 'started' : 'bench'}${fp[2] !== t.abbr ? ' · ' + esc(fp[2]) : ''}</small>` : wv(e.week) != null ? `<small>${r.st === 'TAXI_SQUAD' ? 'taxi' : 'off lineup'}</small>` : ''}</td>${C.map(([c, l]) => `<td>${esc(String(pick(byEv[id], c, l) || ''))}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div>
           <p class="ro-bnote">FBP points are league scoring. Started or bench shows his FBP lineup that week.</p>`;
       }
     } else if (tab === 'sched') {
@@ -162,7 +171,7 @@ window.FBPRosters = (function () {
           const done = c.status && c.status.type && c.status.type.completed, fp = fpts(w);
           const sc = done ? `${me.winner ? 'W' : op.winner ? 'L' : 'T'} ${(me.score || {}).displayValue}-${(op.score || {}).displayValue}`
             : new Date(e.date).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-          out.push(`<tr class="${done ? 'pst' : ''}"><td class="l">${w}</td><td class="l ro-op">${me.homeAway === 'home' ? 'vs' : '@'} ${nflLogo(op.team && op.team.abbreviation)}${esc(op.team ? op.team.abbreviation : '')}</td><td class="l">${sc}</td><td>${done && fp ? fp[0].toFixed(1) : done && wv(w) != null ? wv(w).toFixed(1) : ''}</td></tr>`); }
+          out.push(`<tr class="${done ? 'pst' : ''}"><td class="l">${w}</td><td class="l ro-op">${me.homeAway === 'home' ? 'vs' : '@'} ${nflLogo(op.team && op.team.abbreviation)}${esc(op.team ? op.team.abbreviation : '')}</td><td class="l">${sc}</td><td>${done && fp ? fp[0].toFixed(1) : done && wv(w) != null ? wv(w).toFixed(1) : ''}${done ? heatChip(r, w) : ''}</td></tr>`); }
         body = `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Wk</th><th class="l">Opp</th><th class="l">Result or kickoff</th><th>FBP pts</th></tr></thead><tbody>${out.join('')}</tbody></table></div>`;
       }
     } else if (tab === 'an') {
