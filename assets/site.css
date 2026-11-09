@@ -2001,3 +2001,9 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 :root[data-theme="dark"] .lv-ph .dnp-st{background:rgba(0,0,0,.35);mix-blend-mode:normal;color:#ff5a5a;border-color:#ff5a5a}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lv-ph .dnp-st{background:rgba(0,0,0,.35);mix-blend-mode:normal;color:#ff5a5a;border-color:#ff5a5a}}
 @media (min-width:700px){.lv-ph .dnp-st{font-size:.56rem}}
+/* Rosters team picker: same as Stats, logos only, six across in two rows, all on screen */
+.ro-pick{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;max-width:420px;overflow:visible!important;margin:0 0 12px!important;padding:0!important}
+.ro-pick a{width:auto!important;padding:5px 2px;border-radius:6px}
+.ro-pick a[aria-selected="true"]{padding:4px 1px}
+.ro-pick img{width:34px;height:34px}
+.ro-pick b{display:none}
