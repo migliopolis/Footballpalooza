@@ -130,14 +130,14 @@ window.FBPAnalytics = (function () {
         table('heatteams', [
           ['team', 'Team', '', f => T[f].name, abCell, lg],
           ...HK.map(([k, l]) => [k, l, 'n', f => HT[f][k], f => `<td class="n hc-c ${k}">${HT[f][k] || '·'}</td>`]),
-          ['score', 'Heat', 'n', f => HT[f].score, f => `<td class="n"><b class="${HT[f].score > 0 ? 'an-up' : HT[f].score < 0 ? 'an-dn' : ''}">${HT[f].score > 0 ? '+' : ''}${HT[f].score}</b></td>`],
+          ['score', 'Heat', 'n', f => HT[f].score, f => `<td class="n"><b class="${HT[f].score > 0 ? 'hc-pos' : HT[f].score < 0 ? 'hc-neg' : ''}">${HT[f].score > 0 ? '+' : ''}${HT[f].score}</b></td>`],
         ], ids.filter(f => HT[f]), ['score', -1])),
       card('heatplayers', 'Heat Check: players', 'Every player’s Nuclear, Hot, Cold, Bust and Witness Protection games this season, wherever he played, and his Heat Score. Tap a column to sort; the top 25 show.',
         table('heatplayers', [
           ['name', 'Player', '', r => r.n, r => `<td class="an-tm">${esc(r.n)} <span class="an-pos">${esc(r.p)}</span></td>`, r => r.fr ? lg(r.fr) : '<span class="an-lg an-fa">FA</span>'],
           ['g', 'G', 'n', r => r.g, r => num(r.g, String)],
           ...HK.map(([k, l], i) => [k, l, 'n', r => r.c[i], r => `<td class="n hc-c ${k}">${r.c[i] || '·'}</td>`]),
-          ['score', 'Heat', 'n', r => r.s, r => `<td class="n"><b class="${r.s > 0 ? 'an-up' : r.s < 0 ? 'an-dn' : ''}">${r.s > 0 ? '+' : ''}${r.s}</b></td>`],
+          ['score', 'Heat', 'n', r => r.s, r => `<td class="n"><b class="${r.s > 0 ? 'hc-pos' : r.s < 0 ? 'hc-neg' : ''}">${r.s > 0 ? '+' : ''}${r.s}</b></td>`],
           ['wk', 'Weeks', 'an-hs', r => r.s, r => `<td class="an-hs"><span class="hc-row">${[...r.w].map((c, i) => `<i class="${({ N: 'nuke', H: 'hot', C: 'cold', B: 'bust', W: 'wp', '-': 'off' })[c] || ''}" title="Week ${HW[i]}"></i>`).join('')}</span></td>`],
         ], Object.values(A.heatPlayers || {}), ['score', -1], '', 25), { wide: true }),
       card('proj', 'Beating the projections', `Points from each team’s starters above or below what MFL projected for them, weeks 1–${A.through} combined.`,
