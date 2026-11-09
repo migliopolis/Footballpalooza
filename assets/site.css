@@ -1994,3 +1994,10 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .lv-compact .lv-p.b .lv-phw{flex-direction:row-reverse;justify-content:flex-start}
 .lv-compact .lv-phw .lv-flags{flex-direction:row;flex-wrap:nowrap;max-width:none}
 .lv-compact .lv-p.b .lv-phw .lv-flags{flex-direction:row-reverse}
+/* inactive (DNP): grey, faded photo with a red rubber stamp slanted across it */
+.lv-ph.t-dnp{position:relative;overflow:visible}
+.lv-ph.t-dnp img{filter:grayscale(1) contrast(.9);opacity:.45;border-radius:50%}
+.lv-ph .dnp-st{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-18deg);font:900 .5rem/1 var(--display,system-ui);font-style:normal;letter-spacing:.06em;color:#d62828;border:1.5px solid #d62828;border-radius:3px;padding:2px 3px;background:rgba(255,255,255,.55);white-space:nowrap;pointer-events:none;mix-blend-mode:multiply;text-shadow:0 0 1px rgba(214,40,40,.4)}
+:root[data-theme="dark"] .lv-ph .dnp-st{background:rgba(0,0,0,.35);mix-blend-mode:normal;color:#ff5a5a;border-color:#ff5a5a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lv-ph .dnp-st{background:rgba(0,0,0,.35);mix-blend-mode:normal;color:#ff5a5a;border-color:#ff5a5a}}
+@media (min-width:700px){.lv-ph .dnp-st{font-size:.56rem}}

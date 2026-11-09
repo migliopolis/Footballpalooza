@@ -32,8 +32,10 @@
   const NUKE = { QB: 35, RB: 30, WR: 30, TE: 25, DEF: 25 };
   // a player's photo with his tier on it (used by the Scoreboard and Players)
   function photoHtml(p, wk) {
-    const tr = tier(p, wk), ph = photo(p.id), extra = tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
-    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${tr ? ' t-' + tr.k : ''}"${tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+    const tr = tier(p, wk), ph = photo(p.id), out = dnp(p);
+    // inactive: the photo goes grey with a red DNP rubber stamp across it
+    const extra = out ? '<i class="dnp-st">DNP</i>' : tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
+    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}"${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
   // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
   // A player who suited up and scored 0 still counts as having played.
@@ -475,7 +477,7 @@
       const cell = (p, cls, slot) => {
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         // FBP's own IR counts even when ESPN no longer lists the injury
-        const st = state(p), ph = photo(p.id), inj = injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
+        const st = state(p), ph = photo(p.id), inj = (dnp(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : null) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         const img = photoHtml(p, shownW);
         // bottom row: position (only when it isn't the slot's, as in FLEX or the bench), his NFL team's logo, the game clock, then the opponent (vs at home, @ away) and the
