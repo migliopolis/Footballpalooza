@@ -44,6 +44,33 @@ window.FBPRosters = (function () {
   const when = iso => { const d = new Date(iso), h = (Date.now() - d) / 36e5;
     return h < 24 ? Math.max(1, Math.round(h)) + 'h ago' : h < 24 * 7 ? Math.round(h / 24) + 'd ago' : d.toLocaleDateString([], { month: 'short', day: 'numeric' }); };
 
+  // each NFL team's opponent in a week, from ESPN's scoreboard for that week: { ab, home } or { bye: true }
+  const SB = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?seasontype=2&week=';
+  function nflWeek(w) {
+    const j = espn('sb' + w, SB + w + '&dates=' + R.season);
+    if (!j || j.failed) return null;
+    const m = {};
+    (j.events || []).forEach(ev => { const cs = ((ev.competitions || [])[0] || {}).competitors || [];
+      cs.forEach(c => { const o = cs.find(x => x !== c); if (o) m[c.team.abbreviation.toLowerCase()] = { ab: o.team.abbreviation.toLowerCase(), home: c.homeAway === 'home' }; }); });
+    return m;
+  }
+  const oppOf = (r, w) => { if (!r.nfl) return null; const m = nflWeek(w); if (!m) return null;
+    return m[NFL_ESPN[r.nfl] || r.nfl.toLowerCase()] || (r.bye === w ? { bye: true } : null); };
+  const oppCell = (r, w) => { const o = oppOf(r, w); if (!r.nfl) return '<td class="ro-wo">—</td>';
+    if (!o) return '<td class="ro-wo"></td>'; if (o.bye) return '<td class="ro-wo ro-bye">BYE</td>';
+    return `<td class="ro-wo"><span class="ro-vs">${o.home ? 'vs' : '@'}</span>${nflLogo(o.ab)}</td>`; };
+  // Heat Check for one player: his Nuclear / Hot / Cold / Bust / Witness Protection weeks and Heat Score (data/analytics.json)
+  const HEATK = [['N', 'Nuclear', 'nuke'], ['H', 'Hot', 'hot'], ['C', 'Cold', 'cold'], ['B', 'Bust', 'bust'], ['W', 'Witness Protection', 'wp']];
+  function heatStrip(r) {
+    const A = espn('AN', 'data/analytics.json');
+    if (!A || A.failed) return '';
+    const h = (A.heatPlayers || {})[r.id], wk = A.heatWeeks || [];
+    if (!h) return `<p class="ro-bnote">Heat Check: no Nuclear, Hot, Cold, Bust or Witness Protection weeks${wk.length ? ` through week ${wk[wk.length - 1]}` : ''}.</p>`;
+    const cnt = HEATK.map(([c, l, k], i) => h.c[i] ? `<span class="hc-n ${k}"><b>${h.c[i]}</b> ${l}</span>` : '').join('');
+    const cells = wk.map((w, i) => { const c = h.w[i] || '-', k = (HEATK.find(x => x[0] === c) || [])[2];
+      return `<span class="hc-w${k ? ' ' + k : c === '-' ? ' off' : ''}" title="Week ${w}: ${k ? HEATK.find(x => x[0] === c)[1] : c === '-' ? 'no game' : 'played'}"><small>${w}</small><i>${k ? c === 'W' ? 'WP' : c : ''}</i></span>`; }).join('');
+    return `<div class="hc-p"><div class="hc-top"><b>Heat Check</b><span class="hc-s ${h.s > 0 ? 'up' : h.s < 0 ? 'dn' : ''}">${h.s > 0 ? '+' : ''}${h.s}</span><span class="hc-cnt">${cnt} <span class="hc-g">in ${h.g} games</span></span></div><div class="hc-wks">${cells}</div></div>`;
+  }
   // sortable columns: key, label, value (text sorts A to Z first; missing values sink)
   const cols = () => [
     ['name', 'Player', r => r.name],
@@ -53,6 +80,8 @@ window.FBPRosters = (function () {
     ['rk', 'Rank', r => r.rk == null ? null : -r.rk],
     ['bye', 'Bye', r => r.bye],
     ['proj', `Wk ${R.projWeek} proj`, r => r.proj],
+    ['o0', `Wk ${R.projWeek}`, r => (oppOf(r, R.projWeek) || {}).ab || null],
+    ['o1', `Wk ${R.projWeek + 1}`, r => (oppOf(r, R.projWeek + 1) || {}).ab || null],
     ['sal', String(R.season), r => r.sal],
     ['cy', 'Yr', r => r.fut ? r.fut.length : -1],
     ...[0, 1, 2, 3, 4].map(k => ['y' + k, String(YEARS(k)), r => r.fut && r.fut[k] != null ? r.fut[k] : null]),
@@ -151,6 +180,7 @@ window.FBPRosters = (function () {
         ${tile(`${bar}+ point weeks`, `${W.filter(x => x.pts >= bar).length} of ${W.length}`, `under ${Math.round(bar / 3)}: ${W.filter(x => x.pts < bar / 3).length}`)}
         ${tile('Rest of season', r.ecrPos ? r.pos + r.ecrPos : '—', `${r.ecr ? 'FantasyPros #' + r.ecr + ' overall · ' : ''}week ${R.projWeek} projection ${fx(r.proj, 1)}`)}
       </div>`;
+      body += heatStrip(r);
     } else if (tab === 'sal') {
       const m = /(\d+)\/(\d+)/.exec(r.cy || ''), n = m ? +m[1] : 0, N = m ? (r.st === 'TAXI_SQUAD' && +m[2] === 5 && n === 1 ? 6 : +m[2]) : 0;
       const yrs = [[R.season, r.sal, n ? `Year ${n} of ${N}` : 'No contract year']].concat((r.fut || []).map((v, k) => [YEARS(k), v, `Year ${n + k + 1} · +$${STEP[N] ? STEP[N][n + k - 1] : ''}`]));
@@ -357,7 +387,7 @@ window.FBPRosters = (function () {
         <td class="ro-ph"><span ${img}></span></td>
         <td class="l ro-nm"><b>${esc(r.name)}</b>${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
         <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
-        <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td>${fx(r.proj, 1)}</td>
+        <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td>${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
         ${isOpen ? `<tr class="ro-det"><td colspan="${NC}">${box(r, t, ctx)}</td></tr>` : ''}`;
     };

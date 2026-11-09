@@ -4,6 +4,9 @@
 Lineups: points started vs. the best lineup each team could have started (MFL's optimal score).
 Luck: wins vs. the wins the all-play record says a team's scoring deserves; close games (under 10 points).
 Projections: starters' points vs. MFL's projection for them that week (data/mfl/projections.json).
+Heat Check: every game this season labeled Nuclear, Hot, Cold, Bust or Witness Protection with the Scoreboard's
+after-the-game rules, counted for each team's starters and for every player, plus a Heat Score. Projection accuracy:
+each player's average miss against his weekly MFL projection (data/mfl/weeklyScores.json).
 Lineup cost: the salary of each week's starting lineup. A player's salary is what he's paid on an FBP roster
 now; a player since dropped uses his 2026 auction price or waiver bid. Players with no salary found are left out
 of the dollar figures and counted in 'unpriced'.
@@ -161,12 +164,80 @@ def main():
     cheap_starters = sorted([x for x in starters if x['cpp'] is not None and x['ppg'] >= 10], key=lambda x: x['cpp'])[:8]
     pricey_starters = sorted([x for x in starters if x['cpp'] is not None and x['sal'] >= 15], key=lambda x: -x['cpp'])[:8]
 
+    # Heat Check: every game rescored with the Scoreboard's after-the-game labels (assets/live.js tier()):
+    # Nuclear at or over the position's line; Hot: beat the projection by 5+ and reached 60% of the Nuclear line;
+    # Witness Protection: no points; Bust: below zero, or a quarter of a 12+ projection or less; Cold: half of an 8+
+    # projection or less. Heat Score: Nuclear +3, Hot +1, Cold -1, Bust -2, Witness Protection -3.
+    NUKE = {'QB': 35, 'RB': 30, 'WR': 30, 'TE': 25, 'DEF': 25}
+    HEAT = {'nuke': 3, 'hot': 1, 'cold': -1, 'bust': -2, 'wp': -3}
+    def tier(p, sc, pj):
+        line = NUKE.get(p)
+        if line and sc >= line:
+            return 'nuke'
+        if pj > 0 and sc >= pj + 5 and sc >= (line or 25) * .6:
+            return 'hot'
+        if sc == 0:
+            return 'wp'
+        if sc < 0 or (pj >= 12 and sc <= pj * .25):
+            return 'bust'
+        if pj >= 8 and sc <= pj * .5:
+            return 'cold'
+        return None
+    ws = (load(D('mfl', 'weeklyScores.json'), {}) or {}).get('weeks', {})
+    hw = [w for w in weeks if w in ws]
+    pj_of = lambda w, pid: float((proj.get(w) or {}).get(pid) or 0)
+    heat_t = {f: {k: 0 for k in HEAT} | {'starts': 0} for f in st}
+    for w in hw:
+        for f, t in wr[w].items():
+            if f not in heat_t:
+                continue
+            for pid, sc in t.get('s', []):
+                heat_t[f]['starts'] += 1
+                k = tier(pos.get(pid, ''), float(sc), pj_of(w, pid))
+                if k:
+                    heat_t[f][k] += 1
+    for f, h in heat_t.items():
+        h['score'] = sum(h[k] * v for k, v in HEAT.items())
+    CODE = {'nuke': 'N', 'hot': 'H', 'cold': 'C', 'bust': 'B', 'wp': 'W', None: '.'}
+    heat_p, acc = {}, []
+    for pid in {p for w in hw for p in ws[w]}:
+        p = pos.get(pid, '')
+        if p not in NUKE:
+            continue
+        cnt, line, gp, games = {k: 0 for k in HEAT}, [], 0, []
+        for w in hw:
+            sc = ws[w].get(pid)
+            pj = pj_of(w, pid)
+            # a game counts when he scored, or MFL projected him for 3+ (a zero with no projection is a week off)
+            if sc is None or (float(sc) == 0 and pj < 3):
+                line.append('-'); continue
+            sc = float(sc); gp += 1
+            k = tier(p, sc, pj)
+            if k:
+                cnt[k] += 1
+            line.append(CODE[k])
+            if pj >= 3:
+                games.append((sc, pj))
+        if not gp or not any(cnt.values()) and len(games) < 5:
+            continue
+        heat_p[pid] = {'n': names.get(pid, pid), 'p': p, 'fr': on_now.get(pid), 'g': gp, 'c': [cnt[k] for k in HEAT],
+                       's': sum(cnt[k] * v for k, v in HEAT.items()), 'w': ''.join(line), 'e': espn.get(pid, '') or ''}
+        if len(games) >= 5:
+            mp = sum(g[1] for g in games) / len(games)
+            if mp >= 8:
+                acc.append({'id': pid, 'name': names.get(pid, pid), 'pos': p, 'fr': on_now.get(pid), 'g': len(games),
+                            'pj': r1(mp), 'sc': r1(sum(g[0] for g in games) / len(games)),
+                            'mae': r1(sum(abs(g[0] - g[1]) for g in games) / len(games)),
+                            'bias': r1(sum(g[0] - g[1] for g in games) / len(games)),
+                            'hit': round(100 * sum(1 for g in games if abs(g[0] - g[1]) <= .25 * g[1]) / len(games))})
+
     cheap_wins.sort(key=lambda g: g[5] - g[2], reverse=True)
     out = {
         'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': ln.get('season'), 'through': played,
         'teams': out_t, 'oddsWeeks': odds_weeks, 'leftWeeks': left_weeks[:8],
         'pricier': pricier, 'cheapWins': cheap_wins[:6],
         'bargains': bargains, 'letdowns': letdowns, 'cheapStarters': cheap_starters, 'priceyStarters': pricey_starters,
+        'heatWeeks': [int(w) for w in hw], 'heatPts': HEAT, 'heatTeams': heat_t, 'heatPlayers': heat_p, 'acc': acc,
     }
     with open(D('analytics.json'), 'w', encoding='utf-8') as fh:
         json.dump(out, fh, separators=(',', ':'), ensure_ascii=False)

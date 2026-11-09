@@ -1840,3 +1840,37 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .ptr.spin .ptr-i{display:inline-block;animation:ptrspin .7s linear infinite}
 .ptr.spin .ptr-i::before{content:''}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
+/* Rosters: each player's NFL opponent this week and next */
+.ro-t td.ro-wo{white-space:nowrap;text-align:left}
+.ro-wo .ro-vs{font-size:.66rem;color:var(--muted);margin-right:3px;vertical-align:middle}
+.ro-wo .ro-nfl{width:20px;height:20px;vertical-align:middle}
+.ro-wo.ro-bye{font:700 .62rem var(--body);letter-spacing:.04em;color:var(--muted)}
+/* Heat Check: Nuclear / Hot / Cold / Bust / Witness Protection */
+:root{--hc-nuke:#e8590c;--hc-hot:#f08c00;--hc-cold:#4dabf7;--hc-bust:#7048e8;--hc-wp:#868e96}
+.hc-c.nuke{color:var(--hc-nuke)}.hc-c.hot{color:var(--hc-hot)}.hc-c.cold{color:var(--hc-cold)}.hc-c.bust{color:var(--hc-bust)}.hc-c.wp{color:var(--hc-wp)}
+.hc-c{font-weight:700}
+.hc-row{display:inline-flex;gap:2px;vertical-align:middle}
+.hc-row i{width:9px;height:14px;border-radius:2px;background:var(--line)}
+.hc-row i.off{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.hc-row i.nuke,.hc-w.nuke{background:var(--hc-nuke)}.hc-row i.hot,.hc-w.hot{background:var(--hc-hot)}.hc-row i.cold,.hc-w.cold{background:var(--hc-cold)}.hc-row i.bust,.hc-w.bust{background:var(--hc-bust)}.hc-row i.wp,.hc-w.wp{background:var(--hc-wp)}
+.an-lg.an-fa{display:inline-grid;place-items:center;font:700 .5rem var(--body);color:var(--muted);border:1px solid var(--line);border-radius:50%}
+.hc-p{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.hc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:.8rem}
+.hc-s{font:800 1rem var(--display)}.hc-s.up{color:var(--ok)}.hc-s.dn{color:#c0392b}
+.hc-cnt{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:.74rem}
+.hc-n b{font-weight:800}.hc-n.nuke b{color:var(--hc-nuke)}.hc-n.hot b{color:var(--hc-hot)}.hc-n.cold b{color:var(--hc-cold)}.hc-n.bust b{color:var(--hc-bust)}.hc-n.wp b{color:var(--hc-wp)}
+.hc-g{color:var(--muted)}
+.hc-wks{display:flex;gap:3px;flex-wrap:wrap}
+.hc-w{width:30px;height:34px;border-radius:6px;background:var(--sky-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.hc-w small{font-size:.55rem;color:var(--muted)}
+.hc-w i{font:800 .7rem var(--body);font-style:normal;color:#fff;margin-top:2px;min-height:.7rem}
+.hc-w.off{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.hc-w.nuke small,.hc-w.hot small,.hc-w.cold small,.hc-w.bust small,.hc-w.wp small{color:rgba(255,255,255,.85)}
+/* projection accuracy chart */
+.an-sc{width:100%;max-width:640px;display:block;margin:4px 0 6px}
+.an-sc .g{stroke:var(--line)}
+.an-sc .dg{stroke:var(--fg);stroke-dasharray:5 4;opacity:.5}
+.an-sc .ax{font-size:10px;fill:var(--muted)}
+.an-sc .lb{font-size:10px;fill:var(--fg)}
+.an-sc circle{stroke:var(--surface);stroke-width:2;opacity:.85}
+.an-sc circle.p{fill:#2a7fbf}.an-sc circle.n{fill:#d9762b}

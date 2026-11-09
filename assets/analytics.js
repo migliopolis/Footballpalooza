@@ -21,11 +21,11 @@ window.FBPAnalytics = (function () {
   const sg = x => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x).toFixed(1);
   const money = x => '$' + Math.round(x);
   const rec = t => `${t.w}-${t.l}${t.t ? '-' + t.t : ''}`;
-  const SECS = [['lineups', 'Lineups'], ['luck', 'Luck'], ['proj', 'Projections'], ['cost', 'Lineup cost'], ['salary', 'Salary'], ['odds', 'Playoff odds']];
-  const CARDS = ['lineups', 'sundays', 'luck', 'proj', 'cost', 'costpos', 'pricier', 'points', 'salary', 'bargains', 'odds'];
+  const SECS = [['lineups', 'Lineups'], ['luck', 'Luck'], ['heatteams', 'Heat Check'], ['proj', 'Projections'], ['acc', 'Accuracy'], ['cost', 'Lineup cost'], ['salary', 'Salary'], ['odds', 'Playoff odds']];
+  const CARDS = ['lineups', 'sundays', 'luck', 'heatteams', 'heatplayers', 'proj', 'acc', 'cost', 'costpos', 'pricier', 'points', 'salary', 'bargains', 'odds'];
 
   // a sortable table. cols: [key, label, class, sortValue(row), cell(row)]; text columns sort A to Z first
-  function table(id, cols, rows, def, extraCls) {
+  function table(id, cols, rows, def, extraCls, limit) {
     if (!sorts[id]) sorts[id] = def;
     const [k, d] = sorts[id];
     const c = cols.find(x => x[0] === k) || cols[0];
@@ -35,7 +35,7 @@ window.FBPAnalytics = (function () {
       return `<th class="${col[2] || ''} an-sort" data-an-sort="${id}|${col[0]}" data-an-first="${txt ? 1 : -1}" aria-sort="${on ? (d < 0 ? 'descending' : 'ascending') : 'none'}">${col[1]}${on ? (d < 0 ? ' ▼' : ' ▲') : ''}</th>`; };
     // a column with a logo (col[5]) gets it in its own cell pinned to the left, so it stays put when the table slides
     return `<div class="tbl-wrap"><table class="an-t${extraCls ? ' ' + extraCls : ''}"><thead><tr>${cols.map(col => (col[5] ? '<th class="an-lgc"></th>' : '') + th(col)).join('')}</tr></thead><tbody>
-      ${sorted.map(r => `<tr>${cols.map(col => (col[5] ? `<td class="an-lgc">${col[5](r)}</td>` : '') + col[4](r)).join('')}</tr>`).join('')}</tbody></table></div>`;
+      ${(limit ? sorted.slice(0, limit) : sorted).map(r => `<tr>${cols.map(col => (col[5] ? `<td class="an-lgc">${col[5](r)}</td>` : '') + col[4](r)).join('')}</tr>`).join('')}</tbody></table></div>`;
   }
 
   function render(ctx) {
@@ -89,6 +89,28 @@ window.FBPAnalytics = (function () {
     const oChg = f => (oNow(f) || 0) - (T[f].odds[0] || 0);
     const cl = f => T[f].close, clPct = f => { const c = cl(f), n = c[0] + c[1] + c[2]; return n ? (c[0] + c[2] / 2) / n : null; };
 
+    const HT = A.heatTeams || {}, HP = A.heatPts || {}, HW = A.heatWeeks || [];
+    const HK = [['nuke', 'Nuc'], ['hot', 'Hot'], ['cold', 'Cold'], ['bust', 'Bust'], ['wp', 'WP']];
+    const hwTxt = HW.length ? `${HW[0]}–${HW[HW.length - 1]}` : '';
+    const ACC = A.acc || [];
+    const accCols = [['name', 'Player', '', r => r.name, plCell, r => r.fr ? lg(r.fr) : '<span class="an-lg an-fa">FA</span>'],
+      ['g', 'G', 'n', r => r.g, r => num(r.g, String)], ['pj', 'Proj', 'n', r => r.pj, r => num(r.pj, f1)], ['sc', 'Actual', 'n', r => r.sc, r => num(r.sc, f1)],
+      ['mae', 'Miss', 'n', r => r.mae, r => num(r.mae, f1, true)],
+      ['bias', 'Vs. proj', 'n', r => r.bias, r => `<td class="n ${r.bias > 0 ? 'an-up' : r.bias < 0 ? 'an-dn' : ''}">${sg(r.bias)}</td>`],
+      ['hit', 'Within 25%', 'n', r => r.hit, r => num(r.hit, x => x + '%')]];
+    // average projection (x) against average actual (y), with the "as projected" diagonal
+    const accChart = () => { if (!ACC.length) return '';
+      const mx = Math.ceil(Math.max(...ACC.map(r => Math.max(r.pj, r.sc))) / 5) * 5, W = 560, H = 300, pl = 36, pb = 30, pt = 8, pr = 10;
+      const x = v => pl + (W - pl - pr) * v / mx, y = v => pt + (H - pt - pb) * (1 - v / mx);
+      const ticks = Array.from({ length: mx / 5 + 1 }, (_, i) => i * 5);
+      const top = new Set(ACC.slice().sort((a, b) => Math.abs(b.bias) - Math.abs(a.bias)).slice(0, 4).map(r => r.id));
+      return `<svg class="an-sc" viewBox="0 0 ${W} ${H}" role="img" aria-label="Average projection against average points">
+        ${ticks.map(t => `<line class="g" x1="${x(0)}" x2="${x(mx)}" y1="${y(t)}" y2="${y(t)}"/><text class="ax" x="${pl - 6}" y="${y(t) + 4}" text-anchor="end">${t}</text><text class="ax" x="${x(t)}" y="${H - 12}" text-anchor="middle">${t}</text>`).join('')}
+        <line class="dg" x1="${x(0)}" y1="${y(0)}" x2="${x(mx)}" y2="${y(mx)}"/>
+        <text class="ax" x="${(pl + W - pr) / 2}" y="${H - 1}" text-anchor="middle">average projection</text>
+        ${ACC.map(r => `<circle class="${r.bias >= 0 ? 'p' : 'n'}" cx="${x(r.pj).toFixed(1)}" cy="${y(r.sc).toFixed(1)}" r="5"><title>${esc(r.name)} (${r.pos}): projected ${f1(r.pj)}, scored ${f1(r.sc)} a game · miss ${f1(r.mae)}</title></circle>`).join('')}
+        ${ACC.filter(r => top.has(r.id)).map((r, i) => `<text class="lb" x="${(x(r.pj) + 7).toFixed(1)}" y="${(y(r.sc) + (i % 2 ? 12 : -4)).toFixed(1)}">${esc(r.name.split(' ').slice(-1)[0])}</text>`).join('')}
+      </svg>${key('Beat his projections', 'Fell short')}`; };
     const playerTbl = (id, rows, def, cols) => table(id, [['name', 'Player', '', r => r.name, plCell, r => lg(r.fr)], ...cols], rows, def);
 
     const cards = [
@@ -104,8 +126,26 @@ window.FBPAnalytics = (function () {
         ], A.leftWeeks || [], ['left', -1])),
       card('luck', 'Luck: wins vs. expected', 'Actual wins minus the wins each team’s scoring would earn against an average schedule, from the all-play record.',
         div('luck', 'luck', t => rec(t) + ' · exp ' + f1(t.xw)) + key('More wins than the points deserve', 'Fewer'), { tool: flip('luck', 'luck', -1, 'Luckiest', 'Unluckiest') }),
+      card('heatteams', 'Heat Check: teams', `How often each team’s starters went Nuclear, Hot, Cold, Bust or into Witness Protection (no points), weeks ${hwTxt}. Heat Score: Nuclear +${HP.nuke}, Hot +${HP.hot}, Cold ${HP.cold}, Bust ${HP.bust}, Witness Protection ${HP.wp}.`,
+        table('heatteams', [
+          ['team', 'Team', '', f => T[f].name, abCell, lg],
+          ...HK.map(([k, l]) => [k, l, 'n', f => HT[f][k], f => `<td class="n hc-c ${k}">${HT[f][k] || '·'}</td>`]),
+          ['score', 'Heat', 'n', f => HT[f].score, f => `<td class="n"><b class="${HT[f].score > 0 ? 'an-up' : HT[f].score < 0 ? 'an-dn' : ''}">${HT[f].score > 0 ? '+' : ''}${HT[f].score}</b></td>`],
+        ], ids.filter(f => HT[f]), ['score', -1])),
+      card('heatplayers', 'Heat Check: players', 'Every player’s Nuclear, Hot, Cold, Bust and Witness Protection games this season, wherever he played, and his Heat Score. Tap a column to sort; the top 25 show.',
+        table('heatplayers', [
+          ['name', 'Player', '', r => r.n, r => `<td class="an-tm">${esc(r.n)} <span class="an-pos">${esc(r.p)}</span></td>`, r => r.fr ? lg(r.fr) : '<span class="an-lg an-fa">FA</span>'],
+          ['g', 'G', 'n', r => r.g, r => num(r.g, String)],
+          ...HK.map(([k, l], i) => [k, l, 'n', r => r.c[i], r => `<td class="n hc-c ${k}">${r.c[i] || '·'}</td>`]),
+          ['score', 'Heat', 'n', r => r.s, r => `<td class="n"><b class="${r.s > 0 ? 'an-up' : r.s < 0 ? 'an-dn' : ''}">${r.s > 0 ? '+' : ''}${r.s}</b></td>`],
+          ['wk', 'Weeks', 'an-hs', r => r.s, r => `<td class="an-hs"><span class="hc-row">${[...r.w].map((c, i) => `<i class="${({ N: 'nuke', H: 'hot', C: 'cold', B: 'bust', W: 'wp', '-': 'off' })[c] || ''}" title="Week ${HW[i]}"></i>`).join('')}</span></td>`],
+        ], Object.values(A.heatPlayers || {}), ['score', -1], '', 25), { wide: true }),
       card('proj', 'Beating the projections', `Points from each team’s starters above or below what MFL projected for them, weeks 1–${A.through} combined.`,
         div('proj', 'proj', t => f1(t.pf) + ' pts') + key('Starters outscored their projections', 'Fell short'), { tool: flip('proj', 'proj', -1, 'Most', 'Least') }),
+      card('acc', 'Projection accuracy', 'How close each player lands to his weekly MFL projection, for players projected for 8+ points a game on average with 5 or more games. Each dot is a player: above the line he’s beaten his projections, below he’s fallen short.',
+        accChart() + `<h3>Closest to his projections</h3>` + table('accbest', accCols, ACC, ['mae', 1], '', 10) +
+        `<h3>Least predictable</h3>` + table('accworst', accCols, ACC, ['mae', -1], '', 10) +
+        `<p class="an-note">Miss: his average gap from the projection, either way. Vs. proj: on average above (+) or below (−) it. Within 25%: share of games he landed within a quarter of his projection.</p>`, { wide: true }),
       card('cost', 'Starting lineup cost', 'The average salary of each team’s starting lineup each week, and the points it returned per dollar.',
         bars('cost', 'lineupCost', money, t => f2(t.ptsPerDollar) + ' pts per $', -1), { tool: flip('cost', 'lineupCost', -1, 'Priciest', 'Cheapest') }),
       card('costpos', 'Where the lineup money goes', 'Average weekly salary started at each position. Darker cells are a bigger share of that team’s lineup.', posTbl),
