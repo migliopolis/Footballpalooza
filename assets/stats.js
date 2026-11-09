@@ -1,12 +1,14 @@
 /* League Now > Stats: every player's FBP points by week this season, from data/stats.json (scripts/stats.py).
    Filters in one row: how many to show, position, week range and whose players; tap any header to sort.
    Week cells carry the Heat Check label (Nuclear, Hot, Cold, Bust, Witness Protection) as a tint when he earned one.
-   The upcoming week's NFL opponent comes from ESPN's scoreboard. Your own team's rows are highlighted. */
+   The upcoming week's NFL opponent comes from ESPN's scoreboard. Tap a team logo up top to highlight its players. */
 window.FBPStats = (function () {
   let S = null, A = null, failed = false, loading = false, X = null, opp = null, oppWk = 0;
   const F = { top: 50, pos: '', from: 1, to: 0, who: '' };
+  let hl = '';   // the team whose players are highlighted (tap a logo; tap again to clear)
   let sort = ['pts', -1];
   try { Object.assign(F, JSON.parse(localStorage.getItem('fbp-stats') || '{}')); } catch (e) {}
+  if (!['', 'fa', 'ro'].includes(F.who)) F.who = '';
   const save = () => { try { localStorage.setItem('fbp-stats', JSON.stringify(F)); } catch (e) {} };
   const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
   const ab = t => NFLE[t] || (t || '').toLowerCase();
@@ -52,14 +54,16 @@ window.FBPStats = (function () {
     const th = (k, l, cls) => `<th class="${cls || ''}${sort[0] === k ? ' on' : ''}" data-st-sort="${k}">${l}${sort[0] === k ? (sort[1] < 0 ? ' ▾' : ' ▴') : ''}</th>`;
     const sel = (k, opts, cur = F[k]) => `<select data-st-f="${k}" aria-label="${k}">${opts.map(([v, l]) => `<option value="${v}"${String(cur) === String(v) ? ' selected' : ''}>${l}</option>`).join('')}</select>`;
     const wkOpts = W.map(w => [w, w]);
-    const teamsOpt = Object.keys(ctx.teams).sort((a, b) => (team(a).name || '').localeCompare(team(b).name || '')).map(f => [f, team(f).name || f]);
     const filters = `<div class="st-f">
       <label>Top ${sel('top', [[25, 25], [50, 50], [100, 100], [0, 'All']])}</label>
       ${sel('pos', [['', 'All positions'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'RB/WR/TE'], ['DEF', 'DEF']])}
       <label>Weeks ${sel('from', wkOpts, from)} to ${sel('to', wkOpts, to)}</label>
-      ${sel('who', [['', 'All players'], ['ro', 'Rostered'], ['fa', 'Free agents'], ...teamsOpt])}
-    </div>`;
-    const me = ctx.myTeam;
+    </div>
+    <div class="seg pl-show st-who" role="tablist" aria-label="Which players">${[['', 'All players'], ['fa', 'Free agents'], ['ro', 'Rostered']].map(([v, l]) =>
+      `<button type="button" role="tab" data-st-who="${v}" aria-selected="${F.who === v}">${l}</button>`).join('')}</div>`;
+    const me = hl;
+    const picker = `<div class="st-pick" role="group" aria-label="Highlight a team’s players">${Object.keys(ctx.teams).sort((a, b) => (team(a).abbr || '').localeCompare(team(b).abbr || '')).map(f =>
+      `<button type="button" data-st-hl="${f}" aria-pressed="${f === hl}" title="${esc(team(f).name || f)}">${team(f).logo ? `<img src="${team(f).logo}" alt="">` : ''}<span>${esc(team(f).abbr || f)}</span></button>`).join('')}</div>`;
     const body = shown.map((r, i) => {
       const t = r.f ? team(r.f) : null, h = HP[r.id];
       const cells = wi.map(([w, k]) => { const v = r.w[k], hk = h && HW.indexOf(w) >= 0 ? HC[h.w[HW.indexOf(w)]] : '';
@@ -73,17 +77,21 @@ window.FBPStats = (function () {
         <td class="st-own">${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="">` : ''}${esc(t.abbr || r.f)}${r.sl ? ` <i>${r.sl}</i>` : ''}` : '<span class="st-fa">FA</span>'}</td>
         <td class="n">${r.bye || ''}</td><td class="n">${r.sal != null ? '$' + Math.round(r.sal) : ''}</td><td class="n">${r.cy || ''}</td></tr>`; }).join('');
     return `<section><h2 class="sec">Stats <small>FBP points by week, ${S.season}</small></h2>
-      ${filters}
+      ${picker}${filters}
       <div class="card tbl-wrap st-wrap"><table class="st-t"><thead>
         <tr><th></th><th class="st-pl"></th><th></th><th></th><th class="st-grp" colspan="${wi.length}">Weekly points</th><th colspan="5"></th></tr>
         <tr><th class="st-n">#</th>${th('name', 'Player', 'st-pl')}${th('pts', 'Pts', 'n')}${th('avg', 'Avg', 'n')}${wi.map(([w]) => th('w' + w, w, 'n st-w')).join('')}
         ${th('nfl', `Wk ${oppWk}`, 'st-op')}${th('own', 'FBP team', 'st-own')}${th('bye', 'Bye', 'n')}${th('sal', 'Salary', 'n')}<th class="n">Contract</th></tr></thead>
         <tbody>${body || `<tr><td colspan="${wi.length + 9}" class="st-none">No players match.</td></tr>`}</tbody></table></div>
-      <p class="rf-foot">Showing ${shown.length} of ${rows.length}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Your team’s players are highlighted.</p>
+      <p class="rf-foot">Showing ${shown.length} of ${rows.length}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Tap a team’s logo to highlight its players; tap it again to clear.</p>
     </section>`;
   }
 
   document.addEventListener('click', e => {
+    const wb = e.target.closest && e.target.closest('[data-st-who]');
+    if (wb) { F.who = wb.dataset.stWho; save(); return redraw(); }
+    const b = e.target.closest && e.target.closest('[data-st-hl]');
+    if (b) { hl = hl === b.dataset.stHl ? '' : b.dataset.stHl; return redraw(); }
     const h = e.target.closest && e.target.closest('[data-st-sort]'); if (!h) return;
     const k = h.dataset.stSort; sort = sort[0] === k ? [k, -sort[1]] : [k, k === 'name' || k === 'own' || k === 'nfl' ? 1 : -1]; redraw();
   });

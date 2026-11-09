@@ -1919,3 +1919,9 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .st-none{text-align:center;color:var(--muted);padding:20px}
 .st-k{display:inline-block;padding:0 4px;border-radius:3px}
 .st-k.nuke{background:color-mix(in srgb,var(--hc-nuke) 26%,transparent)}.st-k.hot{background:color-mix(in srgb,var(--hc-hot) 20%,transparent)}.st-k.cold{background:color-mix(in srgb,var(--hc-cold) 20%,transparent)}.st-k.bust{background:color-mix(in srgb,var(--hc-bust) 20%,transparent)}.st-k.wp{background:color-mix(in srgb,var(--hc-wp) 22%,transparent)}
+.st-pick{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.st-pick button{display:flex;flex-direction:column;align-items:center;gap:2px;width:52px;padding:6px 2px 4px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:700 .56rem var(--body);cursor:pointer}
+.st-pick button img{width:30px;height:30px;object-fit:contain}
+.st-pick button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent);color:var(--fg)}
+@media (max-width:560px){.st-pick{flex-wrap:nowrap;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none}.st-pick::-webkit-scrollbar{display:none}.st-pick button{flex:none}}
+.st-who{margin:0 0 10px}
