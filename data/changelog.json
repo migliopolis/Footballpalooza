@@ -2,6 +2,38 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0131",
+      "to": "0.0135",
+      "dates": "Nov 9, 2026",
+      "items": [
+        "New Stats page on League Now: every player's FBP points by week, with filters for how many, position, week range and All players / Free agents / Rostered, sortable columns, a Heat column, award chips, and Heat Check tints on each week.",
+        "Tap a team logo on Stats to highlight its players. On phones the table opens on the player, points and average, and its header row stays pinned as you scroll.",
+        "Menu buttons across the site are now one connected bar with square corners, so more fits on a phone; the League Now menu shows Analytics again on desktop."
+      ]
+    },
+    {
+      "from": "0.0126",
+      "to": "0.0130",
+      "dates": "Nov 8–9, 2026",
+      "items": [
+        "Pull down from the top of any page on your phone to reload it.",
+        "Heat Check in Analytics: how often each team's starters and every player went Nuclear, Hot, Cold, Bust or into Witness Protection, with a Heat Score; chips for those weeks show on game logs and schedules.",
+        "Projection accuracy in Analytics: who lands closest to his MFL projections and who misses most.",
+        "Rosters shows each player's NFL opponent this week and next. Game Day's menu now runs Scoreboard, Players, NFL Scores, Ticket Helper.",
+        "The Player Page shows the latest news report, with older ones folded underneath."
+      ]
+    },
+    {
+      "from": "0.0121",
+      "to": "0.0125",
+      "dates": "Nov 8, 2026",
+      "items": [
+        "Scoreboard: NFL game scores in each player's matchup line, a red tint for players in the red zone, and a grey tint once a player's game is over (fading toward the middle for starters).",
+        "Players no longer jump between WR and FLEX as scores change.",
+        "Game Day Players shows live estimated points for free agents, taxi and IR players until MFL posts official numbers."
+      ]
+    },
+    {
       "from": "0.0116",
       "to": "0.0120",
       "dates": "Nov 8, 2026",

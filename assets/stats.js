@@ -66,7 +66,7 @@ window.FBPStats = (function () {
       `<button type="button" role="tab" data-st-who="${v}" aria-selected="${F.who === v}">${l}</button>`).join('')}</div>`;
     const me = hl;
     const picker = `<div class="st-pick" role="group" aria-label="Highlight a team’s players">${Object.keys(ctx.teams).sort((a, b) => (team(a).abbr || '').localeCompare(team(b).abbr || '')).map(f =>
-      `<button type="button" data-st-hl="${f}" aria-pressed="${f === hl}" title="${esc(team(f).name || f)}">${team(f).logo ? `<img src="${team(f).logo}" alt="">` : ''}<span>${esc(team(f).abbr || f)}</span></button>`).join('')}</div>`;
+      `<button type="button" data-st-hl="${f}" aria-pressed="${f === hl}" title="${esc(team(f).name || f)}">${team(f).logo ? `<img src="${team(f).logo}" alt="${esc(team(f).abbr || f)}">` : `<span>${esc(team(f).abbr || f)}</span>`}</button>`).join('')}</div>`;
     const body = shown.map((r, i) => {
       const t = r.f ? team(r.f) : null, h = HP[r.id];
       const cells = wi.map(([w, k]) => { const v = r.w[k], hk = h && HW.indexOf(w) >= 0 ? HC[h.w[HW.indexOf(w)]] : '';

@@ -1949,3 +1949,18 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .st-float{position:fixed;z-index:30;overflow:hidden;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 2px 4px rgba(0,0,0,.08)}
 .st-float table{margin:0}
 .st-float thead tr:first-child{display:none}
+/* Stats logo row: 6 across, two rows, logos only */
+.st-pick{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;max-width:420px}
+.st-pick button{width:auto;padding:5px 2px;border-radius:6px}
+.st-pick button img{width:34px;height:34px}
+@media (max-width:560px){.st-pick{display:grid;overflow:visible;padding:0}.st-pick button{flex:initial}}
+/* selection buttons: square-ish corners, no gaps, one connected bar */
+.seg{border-radius:6px}
+.rf-sub.seg{gap:0!important;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.rf-sub.seg a{border:0;border-radius:0;border-left:1px solid var(--line)}
+.rf-sub.seg a:first-child{border-left:0}
+.rf-sub.seg a[aria-current="page"]{border-color:var(--fg)}
+.rf-sub a{border-radius:6px}
+.pl-show{border-radius:6px}
+@media (max-width:520px){.rf-sub.seg a,.rf-sub.seg.now-sub a,.rf-sub.seg.ln-sub a{padding-left:5px;padding-right:5px}}
+@media (max-width:520px){.rf-sub.seg,.rf-sub.seg.ln-sub{width:100%;max-width:100%}.rf-sub.seg a{flex:1 1 auto}}
