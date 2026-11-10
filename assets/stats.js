@@ -49,7 +49,7 @@ window.FBPStats = (function () {
       .filter(r => !F.who || (F.who === 'ro' ? r.f : F.who === 'fa' ? !r.f : r.f === F.who))
       .filter(r => { const t = fold(q).split(' ').filter(Boolean); if (!t.length) return true; const n = fold(r.n); return t.every(x => n.includes(x)); })
       .map(r => { const sc = wi.map(([, i]) => r.w[i]);
-        const pts = sc.reduce((a, v) => a + (v || 0), 0), gp = sc.filter((v, k) => v != null && wi[k][0] !== r.bye).length;
+        const pts = sc.reduce((a, v) => a + (v || 0), 0), gp = sc.filter(v => v != null).length;   // a traded player can carry his new team's bye over a week he played
         const h = HP[r.id], heat = h ? wi.reduce((a, [w]) => { const c = h.w[HW.indexOf(w)]; return a + (HV[c] || 0); }, 0) : 0;
         return Object.assign({}, r, { pts, avg: gp ? pts / gp : 0, gp, heat }); });
     const key = { pts: r => r.pts, avg: r => r.avg, heat: r => r.heat, name: r => r.n, sal: r => r.sal == null ? -1 : r.sal, bye: r => r.bye || 0,
@@ -74,7 +74,7 @@ window.FBPStats = (function () {
     const body = shown.map((r, i) => {
       const t = r.f ? team(r.f) : null, h = HP[r.id];
       const cells = wi.map(([w, k]) => { const v = r.w[k], hk = h && HW.indexOf(w) >= 0 ? HC[h.w[HW.indexOf(w)]] : '';
-        return w === r.bye ? '<td class="st-w st-bye">B</td>' : `<td class="st-w${hk ? ' ' + hk : ''}">${v == null ? '' : v.toFixed(1)}</td>`; }).join('');
+        return w === r.bye && v == null ? '<td class="st-w st-bye">B</td>' : `<td class="st-w${hk ? ' ' + hk : ''}">${v == null ? '' : v.toFixed(1)}</td>`; }).join('');
       const o = opp && r.t ? opp[ab(r.t)] : null;
       const nm = r.f ? `<a href="#now/rosters/${r.f}/${r.id}">${esc(r.n)}</a>` : esc(r.n);
       return `<tr class="${r.f && r.f === me ? 'st-me' : ''}"><td class="st-n">${i + 1}</td>

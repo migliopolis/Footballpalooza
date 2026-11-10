@@ -1,0 +1,6 @@
+{
+  "_note": "NFL team fixes for trades MFL hasn't picked up yet: \"<MFL player id>\": {\"from\": MFL's old team, \"to\": new team}. Applied to data/mfl/players.json by scripts/refresh_mfl.py on every refresh, only while MFL still shows the old team, so an entry goes quiet once MFL catches up and can be deleted. Team codes are MFL's (KCC, SFO, LVR).",
+  "10700": {"name": "Kirk Cousins", "from": "LVR", "to": "MIN", "why": "traded to Minnesota, Nov 10, 2026"},
+  "11222": {"name": "Keenan Allen", "from": "IND", "to": "SFO", "why": "traded to San Francisco, Nov 10, 2026"},
+  "16187": {"name": "Josh Downs", "from": "IND", "to": "KCC", "why": "traded to Kansas City, Nov 10, 2026"}
+}

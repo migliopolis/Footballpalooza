@@ -286,6 +286,33 @@ def fetch_auction_bids():
         print(f'  FAIL {e}  (kept the previous file)')
 
 
+def apply_team_overrides():
+    """data/nfl-team-overrides.json: NFL trades MFL hasn't caught up with. Each fix applies only while MFL still
+    shows the player's old team, so it stops on its own once MFL updates."""
+    path = os.path.join(OUT, 'players.json')
+    try:
+        fixes = json.load(open(os.path.join(ROOT, 'data', 'nfl-team-overrides.json')))
+        saved = json.load(open(path))
+    except Exception:
+        return
+    ti = saved.get('fields', []).index('team') if 'team' in saved.get('fields', []) else None
+    if ti is None:
+        return
+    changed = 0
+    for pid, fx in fixes.items():
+        row = (saved.get('players') or {}).get(pid)
+        if pid.startswith('_') or not isinstance(fx, dict) or not row:
+            continue
+        if row[ti] == fx.get('from') and fx.get('to'):
+            row[ti] = fx['to']
+            changed += 1
+            print(f'  fix  {fx.get("name", pid)}: {fx["from"]} -> {fx["to"]}')
+        elif row[ti] == fx.get('to'):
+            print(f'  note {fx.get("name", pid)}: MFL now has {fx["to"]}; this override can be deleted')
+    if changed:
+        save('players', saved)
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     print(f'Season {SEASON}, league {LEAGUE}, API key {"set" if KEY else "not set"}')
@@ -315,6 +342,7 @@ def main():
                   f'{sum(1 for v in compact.values() if v[3])} with ESPN ids)')
         except Exception as e:
             print(f'  FAIL {e}  (kept the previous file)')
+    apply_team_overrides()
     fetch_weekly()
     fetch_player_scores()
     fetch_weekly_scores()
