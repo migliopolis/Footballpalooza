@@ -2118,3 +2118,6 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .hof-at .aw-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#b8e2f8,#ffffff,#e6d6ff,#c4eeff,#ffffff,#b8e2f8);background-size:200% 100%;animation:medTrim 5s linear infinite}
 @keyframes medTrim{from{background-position:0% 0}to{background-position:200% 0}}
 @media (prefers-reduced-motion:reduce){.m-diamond,.hof-at .aw-card::before{animation:none}}
+tr.st-go{cursor:pointer}
+tr.st-go:hover td{background:var(--sky-soft)}
+tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}

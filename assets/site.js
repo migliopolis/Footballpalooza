@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0145';
+  const VERSION = '0.0146';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -357,7 +357,7 @@
         <thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>GB</th><th class="hide-sm">Pct</th><th class="hide-sm" title="Division record">Div</th>
           <th>PF</th><th class="hide-sm">PA</th><th title="Points back: total points behind the league's top scorer">PB</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th title="Average points over the last three games">L3 Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
           <th title="All-play record: results against every team, every week">All-play</th><th class="hide-sm">Strk</th>${state.budgets ? `<th title="${state.budgets.season} auction budget, after trades">${state.budgets.season} $</th>` : ''}</tr></thead><tbody>
-        ${rows.map(t => `<tr><td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true, after: (t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '') + elimTag(t.id) })}</td>
+        ${rows.map(t => `<tr class="st-go" data-go="#now/rosters/${t.id}" tabindex="0" title="${esc(t.name)} roster"><td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true, after: (t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '') + elimTag(t.id) })}</td>
           <td>${t.w}-${t.l}-${t.t}</td><td>${gb(t.gb)}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
           <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td>${pb(t)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td>${l3(t.id)}</td><td class="hide-sm">${pts(t.pp)}</td>
           <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount < 0 ? '−' : '+'}$${Math.abs(x.amount)} ${x.note}`).join('\n\n') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
@@ -773,7 +773,12 @@
     } catch (e) { state.now = null; }
     applyMode();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if (location.hash === '#settings') route(); });
-    window.addEventListener('hashchange', () => { const tab = location.hash.slice(1).split('/')[0] || 'now';
+    // League Now > Standings: tap a team's row to open its roster (the elimination tags keep their own tap)
+  document.addEventListener('click', e => { const r = e.target.closest && e.target.closest('tr.st-go[data-go]');
+    if (r && !e.target.closest('.ex, a, button')) location.hash = r.dataset.go; });
+  document.addEventListener('keydown', e => { const r = e.target.closest && e.target.closest('tr.st-go[data-go]');
+    if (r && e.key === 'Enter') location.hash = r.dataset.go; });
+  window.addEventListener('hashchange', () => { const tab = location.hash.slice(1).split('/')[0] || 'now';
       route(); if (tab !== lastTab) { lastTab = tab; toTop(); } });
     swipeTabs(); pullRefresh();
     // sticky panels sit just under the header, whatever height it wraps to
