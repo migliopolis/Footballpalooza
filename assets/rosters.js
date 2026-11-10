@@ -417,13 +417,13 @@ window.FBPRosters = (function () {
         <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>
         <td class="l ro-nm"><b>${esc(r.name)}</b>${injChip(r)}${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
         <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
-        <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td>${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
+        <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td class="c">${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
         ${isOpen ? `<tr class="ro-det"><td colspan="${NC}">${box(r, t, ctx)}</td></tr>` : ''}`;
     };
     const grp = (label, list) => list.length ? `<tr class="ro-grp"><td colspan="${NC}"><span>${label} · ${list.length} · ${$(list.reduce((s, r) => s + r.sal, 0))}</span></td></tr>` + sorted(list).map(row).join('') : '';
     const head = C.map(([k, l]) => { const on = sort[0] === k;
-      return `<th class="ro-sort${k === 'name' ? ' l' : ''}${k === 'sal' ? ' gap' : ''}" data-ro-sort="${k}" aria-sort="${on ? (sort[1] < 0 ? 'descending' : 'ascending') : 'none'}">${l}${on ? (sort[1] < 0 ? ' ▼' : ' ▲') : ''}</th>`; }).join('');
+      return `<th class="ro-sort${k === 'name' ? ' l' : ''}${k === 'sal' ? ' gap' : ''}${k === 'proj' || k === 'o0' || k === 'o1' ? ' c' : ''}" data-ro-sort="${k}" aria-sort="${on ? (sort[1] < 0 ? 'descending' : 'ascending') : 'none'}">${l}${on ? (sort[1] < 0 ? ' ▼' : ' ▲') : ''}</th>`; }).join('');
     const top = rows.slice().sort((a, b) => b.sal - a.sal)[0];
     const F = t.face, n = (t.weeks || []).length;
     const faceLine = F ? [`${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''}`, `${F.starts} starts`,
