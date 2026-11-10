@@ -2131,3 +2131,21 @@ tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .ro-t th.c,.ro-t td.c,.ro-t td.ro-wo{text-align:center}
 .ro-t td.ro-wo .ro-vs{display:inline-block;width:1.5em;text-align:right;margin-right:4px}
 .ro-t td.ro-wo .ro-vs+*{vertical-align:middle}
+/* player search: Rosters (all 12 rosters, jumps to the Player Page) and Stats (filters the table) */
+.st-q{flex:1 1 180px;max-width:240px}
+.ro-find{position:relative;margin:0 0 12px;max-width:420px}
+.ro-find .ro-q{max-width:none;width:100%;box-sizing:border-box}
+.ro-res{position:absolute;z-index:40;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.14);overflow:hidden auto;max-height:min(70vh,440px)}
+.ro-res a{display:flex;align-items:center;gap:10px;padding:7px 12px;color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line)}
+.ro-res a:last-child{border-bottom:0}
+.ro-res a:hover,.ro-res a.on{background:var(--sky-soft)}
+.ro-res .ro-ph{padding:0;flex:none}
+.ro-rn{flex:1;min-width:0;display:flex;flex-direction:column}
+.ro-rn b{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ro-rn small{color:var(--muted);font-size:.74rem}
+.ro-rt{display:flex;flex-direction:column;align-items:center;gap:2px;flex:none}
+.ro-rt img{width:26px;height:26px;object-fit:contain}
+.ro-rt b{font:600 .6rem/1 var(--mono)}
+.ro-none{margin:0;padding:12px;color:var(--muted);font-size:.85rem}
+.ro-res .ro-ph span{display:block;width:34px;height:34px;border-radius:50%;background:var(--sky) center top/cover no-repeat}
+.ro-res .ro-ph span.ro-def{background-color:#fff;background-position:center;background-size:78%;box-shadow:inset 0 0 0 1px var(--line)}

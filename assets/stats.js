@@ -7,6 +7,8 @@ window.FBPStats = (function () {
   const F = { top: 50, pos: '', from: 1, to: 0, who: '' };
   let hl = '';   // the team whose players are highlighted (tap a logo; tap again to clear)
   let sort = ['pts', -1];
+  let q = '';   // the player search; not saved, and it looks past the Top limit
+  const fold = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, '');
   try { Object.assign(F, JSON.parse(localStorage.getItem('fbp-stats') || '{}')); } catch (e) {}
   if (!['', 'fa', 'ro'].includes(F.who)) F.who = '';
   const save = () => { try { localStorage.setItem('fbp-stats', JSON.stringify(F)); } catch (e) {} };
@@ -45,6 +47,7 @@ window.FBPStats = (function () {
     const team = f => ctx.teams[f] || {};
     let rows = S.rows.filter(r => !F.pos || (F.pos === 'FLEX' ? ['RB', 'WR', 'TE'].includes(r.p) : r.p === F.pos))
       .filter(r => !F.who || (F.who === 'ro' ? r.f : F.who === 'fa' ? !r.f : r.f === F.who))
+      .filter(r => { const t = fold(q).split(' ').filter(Boolean); if (!t.length) return true; const n = fold(r.n); return t.every(x => n.includes(x)); })
       .map(r => { const sc = wi.map(([, i]) => r.w[i]);
         const pts = sc.reduce((a, v) => a + (v || 0), 0), gp = sc.filter((v, k) => v != null && wi[k][0] !== r.bye).length;
         const h = HP[r.id], heat = h ? wi.reduce((a, [w]) => { const c = h.w[HW.indexOf(w)]; return a + (HV[c] || 0); }, 0) : 0;
@@ -53,11 +56,12 @@ window.FBPStats = (function () {
       own: r => r.f ? (team(r.f).abbr || r.f) : 'zz', nfl: r => r.t || 'zz' };
     const kf = sort[0].startsWith('w') ? (r => { const k = W.indexOf(+sort[0].slice(1)); return r.w[k] == null ? -99 : r.w[k]; }) : key[sort[0]] || key.pts;
     rows.sort((a, b) => { const x = kf(a), y = kf(b); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * sort[1] || b.pts - a.pts; });
-    const shown = F.top ? rows.slice(0, F.top) : rows;
+    const shown = F.top && !q.trim() ? rows.slice(0, F.top) : rows;
     const th = (k, l, cls) => `<th class="${cls || ''}${sort[0] === k ? ' on' : ''}" data-st-sort="${k}">${l}${sort[0] === k ? (sort[1] < 0 ? ' ▾' : ' ▴') : ''}</th>`;
     const sel = (k, opts, cur = F[k]) => `<select data-st-f="${k}" aria-label="${k}">${opts.map(([v, l]) => `<option value="${v}"${String(cur) === String(v) ? ' selected' : ''}>${l}</option>`).join('')}</select>`;
     const wkOpts = W.map(w => [w, w]);
     const filters = `<div class="st-f">
+      <input class="pr-q st-q" type="search" placeholder="Find a player" aria-label="Find a player" autocomplete="off" value="${esc(q)}">
       <label>Top ${sel('top', [[25, 25], [50, 50], [100, 100], [0, 'All']])}</label>
       ${sel('pos', [['', 'All positions'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'RB/WR/TE'], ['DEF', 'DEF']])}
       <label>Weeks ${sel('from', wkOpts, from)} to ${sel('to', wkOpts, to)}</label>
@@ -86,7 +90,7 @@ window.FBPStats = (function () {
         <tr><th class="st-n">#</th>${th('name', 'Player', 'st-pl')}${th('pts', 'Pts', 'n st-pts')}${th('avg', 'Avg', 'n st-avg')}${th('heat', 'Heat', 'n st-heat')}${wi.map(([w]) => th('w' + w, w, 'n st-w')).join('')}
         ${th('nfl', `Wk ${oppWk}`, 'st-op')}${th('bye', 'Bye', 'n')}${th('sal', 'Salary', 'n')}<th class="n">Contract</th></tr></thead>
         <tbody>${body || `<tr><td colspan="${wi.length + 9}" class="st-none">No players match.</td></tr>`}</tbody></table></div>
-      <p class="rf-foot">Showing ${shown.length} of ${rows.length}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Heat: the Heat Check score for the weeks shown (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3). Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Tap a team’s logo to highlight its players; tap it again to clear.</p>
+      <p class="rf-foot st-foot">Showing ${shown.length} of ${rows.length}${q.trim() ? ' matching “' + esc(q.trim()) + '”' : ''}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Heat: the Heat Check score for the weeks shown (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3). Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Tap a team’s logo to highlight its players; tap it again to clear. Searching shows every match, past the Top limit.</p>
     </section>`;
   }
 
@@ -97,6 +101,14 @@ window.FBPStats = (function () {
     if (b) { hl = hl === b.dataset.stHl ? '' : b.dataset.stHl; return redraw(); }
     const h = e.target.closest && e.target.closest('[data-st-sort]'); if (!h) return;
     const k = h.dataset.stSort; sort = sort[0] === k ? [k, -sort[1]] : [k, k === 'name' || k === 'own' || k === 'nfl' ? 1 : -1]; redraw();
+  });
+  // typing swaps only the table and its count, so the search box keeps focus and the keyboard stays up
+  document.addEventListener('input', e => {
+    if (!(e.target.matches && e.target.matches('.st-q'))) return;
+    q = e.target.value;
+    const tmp = document.createElement('div'); tmp.innerHTML = render0(X);
+    [['.st-wrap'], ['.st-foot']].forEach(([c]) => { const a = document.querySelector(c), b = tmp.querySelector(c); if (a && b) a.replaceWith(b); });
+    requestAnimationFrame(syncFloat);
   });
   document.addEventListener('change', e => {
     const s = e.target.closest && e.target.closest('[data-st-f]'); if (!s) return;

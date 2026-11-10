@@ -10,6 +10,43 @@ window.FBPRosters = (function () {
   let wkShut = false, noteShut = false;
   try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; noteShut = localStorage.getItem('fbp-ro-note') === 'shut'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
   const open = new Set(), tabOf = {}, cache = {};
+  // player search across all 12 rosters: the results list redraws in place as you type, so the box keeps focus
+  let findQ = '';
+  const fold = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, '');
+  function findHits() {
+    const t = fold(findQ).split(' ').filter(Boolean); if (!R || !t.length) return null;
+    const out = [];
+    Object.entries(R.teams).forEach(([f, tm]) => tm.rows.forEach(r => { const n = fold(r.name);
+      if (t.every(x => n.includes(x))) out.push({ r, f, lead: n.startsWith(t[0]) || n.split(' ').some(w => w.startsWith(t[0])) }); }));
+    return out.sort((a, b) => (b.lead - a.lead) || b.r.sal - a.r.sal).slice(0, 8);
+  }
+  function findList() {
+    const hits = findHits(); if (!hits) return '';
+    const esc = X.esc, tmx = f => X.teams[f] || {};
+    if (!hits.length) return '<div class="ro-res" role="listbox"><p class="ro-none">No rostered player matches. Free agents are on the Stats page.</p></div>';
+    return `<div class="ro-res" role="listbox">${hits.map(({ r, f }, i) => {
+      const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
+        : r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : '';
+      const st = r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : '';
+      return `<a role="option" href="#now/rosters/${f}/${r.id}" data-ro-hit${i === 0 ? ' class="on"' : ''}><span class="ro-ph"><span ${img}></span></span>
+        <span class="ro-rn"><b>${esc(r.name)}</b><small>${r.pos}${r.nfl ? ' · ' + esc(r.nfl) : ''} · ${$(r.sal)}${st}</small></span>
+        <span class="ro-rt">${tmx(f).logo ? `<img src="${tmx(f).logo}" alt="">` : ''}<b>${esc(tmx(f).abbr || '')}</b></span></a>`; }).join('')}</div>`;
+  }
+  function findBox(esc) {
+    return `<div class="ro-find"><input class="pr-q ro-q" type="search" placeholder="Find a player on any roster" aria-label="Find a player on any roster" autocomplete="off" value="${esc(findQ)}">${findList()}</div>`;
+  }
+  const findRedraw = () => { const box = document.querySelector('.ro-find'); if (!box) return;
+    const old = box.querySelector('.ro-res'); if (old) old.remove(); box.insertAdjacentHTML('beforeend', findList()); };
+  document.addEventListener('input', e => { if (e.target.matches && e.target.matches('.ro-q')) { findQ = e.target.value; findRedraw(); } });
+  document.addEventListener('keydown', e => {
+    if (!(e.target.matches && e.target.matches('.ro-q'))) return;
+    const list = [...document.querySelectorAll('[data-ro-hit]')], i = list.findIndex(a => a.classList.contains('on'));
+    if (e.key === 'Escape') { findQ = ''; e.target.value = ''; findRedraw(); return; }
+    if (!list.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); const j = (i + (e.key === 'ArrowDown' ? 1 : -1) + list.length) % list.length;
+      list.forEach((a, k) => a.classList.toggle('on', k === j)); list[j].scrollIntoView({ block: 'nearest' }); }
+    if (e.key === 'Enter') { e.preventDefault(); findQ = ''; location.hash = list[Math.max(i, 0)].getAttribute('href').slice(1); }
+  });
   function load() {
     if (R || loading) return;
     loading = true;
@@ -434,6 +471,7 @@ window.FBPRosters = (function () {
       if (pickX != null) el.scrollLeft = pickX;
       else { const on = el.querySelector('[aria-selected="true"]'); if (on && on.offsetLeft + on.offsetWidth > el.clientWidth) el.scrollLeft = on.offsetLeft - (el.clientWidth - on.offsetWidth) / 2; } });
     return `<div class="ro-pick" role="tablist" aria-label="Teams">${ids.map(f => `<a href="#now/rosters/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`).join('')}</div>
+      ${findBox(esc)}
       <div class="ro-th" style="--tc:${tmx(pickd).primary || 'var(--line)'}">${lg(pickd, 'ro-tl')}<div><h2>${esc(t.name)}</h2><p>${esc(t.owner)} · ${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}<br>${t.pf.toFixed(1)} points</p></div></div>
       <div class="ro-tiles">
         <div class="ro-tile"><small>${R.season} payroll</small><b>${$(pay)}</b><span>${act.length} active · ${tx.length} taxi · ${ir.length} IR</span></div>
@@ -455,6 +493,7 @@ window.FBPRosters = (function () {
   document.addEventListener('click', e => {
     const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick')) return;
     const pk = t.closest('.ro-pick'); if (pk) { pickX = pk.scrollLeft; return; }
+    if (t.closest('[data-ro-hit]')) { findQ = ''; return; }
     const nt = t.closest('[data-ro-fold="note"]'); if (nt) { noteShut = !noteShut; try { localStorage.setItem('fbp-ro-note', noteShut ? 'shut' : 'open'); } catch (err) {}
       nt.closest('.ro-fold').classList.toggle('shut', noteShut); nt.setAttribute('aria-expanded', String(!noteShut)); return; }
     const wt = t.closest('[data-ro-wk]'); if (wt) { wkShut = !wkShut; try { localStorage.setItem('fbp-ro-wk', wkShut ? 'shut' : 'open'); } catch (err) {}
