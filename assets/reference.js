@@ -670,7 +670,7 @@ window.FBPRef = (() => {
         e.mvp ? `<span class="hof-tag mvp" title="Most starter points in ${e.year}">${e.year} MVP</span>` : '',
         e.titleMvp ? `<span class="hof-tag tmvp" title="The champion's top scorer in the ${e.year} title game${e.titlePts != null ? ': ' + n1(e.titlePts) + ' points' : ''}">Title game MVP</span>` : ''].join('');
       return `<div class="card aw-card"><span class="aw-slot">${e.slot}</span>
-        <span class="aw-ph lg${e.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${badges}</span>
+        <span class="aw-ph lg m-diamond${e.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${badges}</span>
         <b class="aw-nm">${esc(nmx)}</b><span class="aw-sub"><span class="pos ${e.pos}">${e.pos}</span> ${esc(e.nfl || '')} · <b>${e.year}</b></span>
         <span class="aw-fbp hof-fbp">${names}</span>${tags ? `<span class="hof-tags">${tags}</span>` : ''}
         <span class="aw-stats"><span><b>${n1(e.pts)}</b>pts</span><span><b>${n1(e.ppg)}</b>per start</span><span><b>${e.starts}</b>starts</span></span></div>`;

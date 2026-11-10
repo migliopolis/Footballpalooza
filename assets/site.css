@@ -2078,3 +2078,43 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 @media (max-width:520px){.ro-pick,.st-pick{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))}.ro-pick a,.st-pick button{width:auto!important}}
 .hs-cen{grid-template-columns:repeat(12,minmax(0,1fr))}
 @media (max-width:760px){.hs-cen{grid-template-columns:repeat(6,minmax(0,1fr))}}
+/* League Now sections on phones: two rows of four */
+@media (max-width:520px){
+  .rf-sub.seg.ln-sub{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible}
+  .rf-sub.seg.ln-sub a{min-width:0;padding:8px 2px;font-size:.82rem;border-left:1px solid var(--line);border-top:1px solid var(--line)}
+  .rf-sub.seg.ln-sub a:nth-child(4n+1){border-left:0}
+  .rf-sub.seg.ln-sub a:nth-child(-n+4){border-top:0}
+}
+/* All-FBP this season: gold (1st Team) or silver (2nd Team) behind the player photo with a matching ring, everywhere his
+   photo shows. The Hall of Fame's All-Time team is diamond, on that page only. Heat effects (Nuclear flames, Bust ice) keep
+   the background during the game; the ring always shows. */
+:root{
+  --med-gold:radial-gradient(circle at 30% 25%,#fff6c9 0,#f3d36b 28%,#c99a2e 58%,#8a6416 85%,#d9b24a 100%);
+  --med-silver:radial-gradient(circle at 30% 25%,#ffffff 0,#e3e7ec 30%,#aab2bc 60%,#6f7883 88%,#c9cfd6 100%);
+  --med-diamond:linear-gradient(135deg,#ffffff 0%,#dff4ff 14%,#b8e2f8 28%,#ffffff 40%,#d9ecff 52%,#efe2ff 64%,#c4eeff 78%,#ffffff 90%,#d6f2ff 100%);
+  --ring-gold:0 0 0 2px #d4a72c,0 0 0 3px #8a6416;
+  --ring-silver:0 0 0 2px #b9c0c8,0 0 0 3px #6f7883;
+  --ring-diamond:0 0 0 2px #f2fbff,0 0 0 3px #8fb3c8,0 0 10px 1px rgba(150,215,255,.65);
+}
+.m-gold:not(.t-nuke):not(.t-bust){background:var(--med-gold)!important}
+.m-silver:not(.t-nuke):not(.t-bust){background:var(--med-silver)!important}
+.m-gold{box-shadow:var(--ring-gold)!important}
+.m-silver{box-shadow:var(--ring-silver)!important}
+.lv-ph.t-hot.m-gold::after{background:var(--med-gold)}
+.lv-ph.t-hot.m-silver::after{background:var(--med-silver)}
+.lv-ph.t-nuke.m-gold{box-shadow:var(--ring-gold),0 0 10px 2px rgba(255,90,0,.55)!important}
+.lv-ph.t-nuke.m-silver{box-shadow:var(--ring-silver),0 0 10px 2px rgba(255,90,0,.55)!important}
+.lv-ph.m-gold img,.lv-ph.m-silver img{border-radius:50%}
+/* photos drawn as a background image (Rosters, Player Page, Hospital): the metal is a second background layer */
+[data-med="gold"]{--med:var(--med-gold);box-shadow:var(--ring-gold)!important}
+[data-med="silver"]{--med:var(--med-silver);box-shadow:var(--ring-silver)!important}
+[data-med]{background-size:cover,cover!important;background-position:center top,center!important;background-repeat:no-repeat!important}
+.pp-ph[data-med]{border-color:transparent}
+.hs-ph[data-med]{filter:none}
+/* Hall of Fame: diamond photo and a diamond trim across the top of each All-Time team card */
+.m-diamond{background:var(--med-diamond)!important;background-size:220% 220%!important;box-shadow:var(--ring-diamond)!important;animation:medSheen 6s ease-in-out infinite alternate}
+@keyframes medSheen{from{background-position:0% 0%}to{background-position:100% 100%}}
+.hof-at .aw-card{border-top:0!important;overflow:hidden}
+.hof-at .aw-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#b8e2f8,#ffffff,#e6d6ff,#c4eeff,#ffffff,#b8e2f8);background-size:200% 100%;animation:medTrim 5s linear infinite}
+@keyframes medTrim{from{background-position:0% 0}to{background-position:200% 0}}
+@media (prefers-reduced-motion:reduce){.m-diamond,.hof-at .aw-card::before{animation:none}}

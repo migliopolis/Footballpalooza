@@ -29,7 +29,8 @@ window.FBPAwards = (() => {
     const m = media();
     const src = p.pos === 'DEF' ? (m ? m.nflLogo(p.nfl) : '') : (p.espn && m ? m.headshot(p.espn) : '');
     const fb = (X.teams[p.team] || {}).logo || '';
-    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}"${tint && teamBg(p.team) ? ` style="${teamBg(p.team)}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}</span>`;
+    const md = (((S || A) || {}).allFbp || {}), mc = (md.first || []).some(e => e.player && e.player.id === p.id) ? ' m-gold' : (md.second || []).some(e => e.player && e.player.id === p.id) ? ' m-silver' : '';
+    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}${mc}"${tint && teamBg(p.team) ? ` style="${teamBg(p.team)}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}</span>`;
   }
   // won the title that season: trophy opposite the team badge
   const trophy = p => `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the ${esc((S || A).season)} title${p.champTeam && p.champTeam !== p.team ? ' with ' + esc(tname(p.champTeam)) : ''}">🏆</span>`;

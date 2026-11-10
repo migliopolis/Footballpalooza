@@ -2,6 +2,21 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0141",
+      "to": "0.0145",
+      "dates": "Nov 9, 2026",
+      "items": [
+        "New: League Now > Hospital (beta). Every injured player on an FBP roster, sorted into wards by expected stay (Triage, Observation, Ward, Long-term care, Season-ending), with a census of each team's injured points and salary. Tap a patient to see his injury, expected return week, recent production, the latest report and a short guide to that kind of injury.",
+        "1st Team and 2nd Team All-FBP players get a gold or silver background and ring behind their photo everywhere it shows: the Scoreboard, Players, Rosters, the Player Page, Awards and the Hospital. The Hall of Fame's All-Time team is diamond, with a diamond trim across the top of each card.",
+        "Press box columns can lead with a photo, caption and credit, and shared links to a column show that photo. Sal's Week 9 recap is the first.",
+        "Team logo pickers on Rosters, Stats and the Hospital sit in one row on desktop and two rows of six on phones, like Reference > Franchises.",
+        "Once a week is in the books, the Scoreboard moves on to the next week right away, with each team's lineup, projected points and the matchups, instead of waiting for MFL to turn the page.",
+        "State of the Team's Up next line shows the coming week's opponent, and its win chance and playoff swing update with every refresh.",
+        "On phones, the League Now section buttons sit in two rows of four.",
+        "The Scoreboard's defense chip reads ON D."
+      ]
+    },
+    {
       "from": "0.0136",
       "to": "0.0140",
       "dates": "Nov 9, 2026",

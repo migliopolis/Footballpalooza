@@ -31,11 +31,13 @@
   // Only players whose NFL game has kicked off; byes and players yet to play stay normal.
   const NUKE = { QB: 35, RB: 30, WR: 30, TE: 25, DEF: 25 };
   // a player's photo with his tier on it (used by the Scoreboard and Players)
+  // All-FBP 1st or 2nd Team this season: a gold or silver photo (FBP.medal styles, site.css)
+  const medal = id => { const L = (honors && honors.p[id]) || []; return L.some(c => c.l === '1st Team') ? ' m-gold' : L.some(c => c.l === '2nd Team') ? ' m-silver' : ''; };
   function photoHtml(p, wk) {
     const tr = tier(p, wk), ph = photo(p.id), out = dnp(p);
     // inactive: the photo goes grey with a red DNP rubber stamp across it
     const extra = out ? '<i class="dnp-st">DNP</i>' : tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
-    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}"${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}"${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
   // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
   // A player who suited up and scored 0 still counts as having played.
@@ -100,10 +102,15 @@
 
   const onPage = () => /^#scores(\/players)?\/?$/.test(location.hash);   // the Scoreboard and Players, not the Ticket Helper or NFL
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
+  // the week to show live: the one after the last week the league update has counted. MFL's own current week can lag
+  // a day behind (it still said week 9 on Monday night after week 9 was final), so ask for the next week by number.
+  let askedW = -1;
+  const nextW = () => X && X.weeksPlayed && X.weeksPlayed < 17 ? X.weeksPlayed + 1 : 0;
   function load() {
     if (loading) return;
     loading = true;
-    const src = LIVE_URL || 'data/live-sample.json';
+    const nw = nextW(); askedW = nw;
+    const src = LIVE_URL ? LIVE_URL + (nw ? `?w=${nw}` : '') : 'data/live-sample.json';
     Promise.all([
       fetch(src, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null),
       players ? Promise.resolve(players) : fetch('data/mfl/players.json').then(r => r.ok ? r.json() : null),
@@ -136,7 +143,8 @@
     e.at = Date.now();
     const games = e.games, stats = e.stats;
     const lk = links ? Promise.resolve(links) : fetch('data/player-links.json').then(r => r.ok ? r.json() : null).then(j => (links = (j && j.links) || {}));
-    const url = w ? `scoreboard?seasontype=2&week=${w}&dates=${(X && X.season) || new Date().getFullYear()}` : 'scoreboard';
+    const lw = w || (data ? +data.liveScoring.week : nextW());
+    const url = lw ? `scoreboard?seasontype=2&week=${lw}&dates=${(X && X.season) || new Date().getFullYear()}` : 'scoreboard';
     return Promise.all([lk, fetch(ESPN + url).then(r => r.ok ? r.json() : null)]).then(([, sb]) => {
       if (!sb) return;
       const g = games;
@@ -619,7 +627,7 @@
 
   function render(ctx) {
     X = ctx;
-    if (!data && !failed) load();
+    if ((!data && !failed) || (data && nextW() !== askedW && !loading)) load();
     poll();
     setTimeout(fitSoon, 0);
     if (X.mode === 'players') return `<div class="pagehead"><h1>Players</h1><span class="asof">The week’s top scorers at every position, live · pick a week</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;

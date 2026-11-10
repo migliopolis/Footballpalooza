@@ -105,6 +105,7 @@ window.FBPHospital = (function () {
     return out;
   }
 
+  const med = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : '';
   function card(x, ctx) {
     const { r, i } = x, esc = ctx.esc, t = ctx.teams[r.f] || {}, o = open.has(r.id), ex = exp.has(r.id);
     const st = { 'Questionable': ['Q', 'q'], 'Doubtful': ['D', 'd'], 'Out': ['OUT', 'o'], 'Injured Reserve': ['IR', 'ir'] }[i.status] || [i.status, 'o'];
@@ -115,7 +116,7 @@ window.FBPHospital = (function () {
     const slot = r.sl === 'IR' ? '<i class="hs-slot">FBP IR</i>' : r.sl === 'T' ? '<i class="hs-slot">Taxi</i>' : '';
     return `<article class="hs-card card${ex ? ' hs-open' : ''}">
       <div class="hs-top" data-hs-ex="${r.id}" role="button" tabindex="0" aria-expanded="${ex}">
-        <span class="hs-ph" style="background-image:url(${head(r.e)})">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
+        <span class="hs-ph"${med(r) ? ` data-med="${med(r)}"` : ''} style="background-image:url(${head(r.e)}),var(--med,none)">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
         <span class="hs-id"><b>${esc(r.n)}</b><small>${r.p} ${nflLogo(r.t) || 'FA'}${r.f ? '' : ' · Free agent'}${r.sal != null ? ` · $${r.sal}` : ''} ${slot}<span class="hs-what">· ${esc(i.type || 'Undisclosed')}</span></small></span>
         <span class="hs-st hs-${st[1]}">${st[0]}</span><span class="hs-car" aria-hidden="true">${ex ? '▴' : '▾'}</span>
       </div>

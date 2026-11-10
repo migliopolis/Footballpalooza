@@ -164,6 +164,21 @@ def ordinal(n):
     return f"{n}{'th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 
+def next_line(mu, abbr_name):
+    """the Up next line: the next opponent, the win chance, and what a win or a loss does to the playoff odds"""
+    if not mu:
+        return ''
+    opp = mu['opp']; p = mu['me']
+    line = f"Up next: {abbr_name(opp)} in week {mu['week']}"
+    if p.get('winProb') is not None:
+        line += f", where the site gives them a {p['winProb']}% chance to win"
+    if p.get('playoff') is not None and p.get('ifWin') and p.get('ifLoss') and 0.5 < p['playoff'] < 99.5:
+        line += f". A win would move their playoff odds from {p['playoff']:.0f}% to {p['ifWin'][0]:.0f}%; a loss, to {p['ifLoss'][0]:.0f}%."
+    else:
+        line += '.'
+    return line
+
+
 def season_note(f, t, s, std, mu, started, names, abbr_name):
     """State of the Team: a short paragraph on the season (facts, then a line or two of read on them) and, separately,
     the next game. Returns {'body': ..., 'next': ...}. The read comes from signals in the numbers (record vs. all-play,
@@ -233,17 +248,7 @@ def season_note(f, t, s, std, mu, started, names, abbr_name):
                                           "Consistency is the calling card: you know roughly what you'll get each week.")))
     for _, line in sorted(reads, key=lambda r: -r[0])[:2]:
         out.append(line)
-    nxt = ''
-    if mu:
-        opp = mu['opp']; p = mu['me']
-        line = f"Up next: {abbr_name(opp)} in week {mu['week']}"
-        if p.get('winProb') is not None:
-            line += f", where the site gives them a {p['winProb']}% chance to win"
-        if p.get('playoff') is not None and p.get('ifWin') and p.get('ifLoss') and 0.5 < p['playoff'] < 99.5:
-            line += f". A win would move their playoff odds from {p['playoff']:.0f}% to {p['ifWin'][0]:.0f}%; a loss, to {p['ifLoss'][0]:.0f}%."
-        else:
-            line += '.'
-        nxt = line
+    nxt = next_line(mu, abbr_name)
     return {'body': ' '.join(out), 'next': nxt}
 
 
@@ -507,11 +512,14 @@ def main():
             for f, t in ft.items():
                 for pid, x in t.get('s', []):
                     started_by[f][pid] += x
-    mj = load(D('matchups.json'), {}) or {}
+    # each team's next game, from the playoff odds in league-now.json (built earlier in the same refresh; matchups.json
+    # is built after this script, so reading it here gave last week's opponent)
     nxt = {}
-    for g in mj.get('games', []):
-        for me, opp in ((g['home'], g['away']), (g['away'], g['home'])):
-            nxt[me] = {'week': mj.get('week'), 'opp': opp, 'me': (g.get('teams') or {}).get(me, {})}
+    for f_, o in ((ln.get('odds') or {}).get('teams') or {}).items():
+        g = next((g for g in o.get('ownGames') or [] if g.get('week', 0) > played), None)
+        if g:
+            nxt[f_] = {'week': g['week'], 'opp': g['opp'], 'me': {'winProb': g.get('winProb'), 'playoff': o.get('playoff'),
+                                                                   'ifWin': g.get('ifWin'), 'ifLoss': g.get('ifLoss')}}
     std = ln['standings']
     # written once a week: when a new week has been played. The daily refreshes keep that week's notes.
     prev = load(D('rosters.json'), {}) or {}
@@ -520,6 +528,7 @@ def main():
         for f, t in out_t.items():
             if (prev.get('teams') or {}).get(f, {}).get('note'):
                 t['note'] = prev['teams'][f]['note']
+                t['note']['next'] = next_line(nxt.get(f), tname)   # the odds change daily, so Up next is always rebuilt
     else:
         inj = load(D('espn', 'injuries.json'), {}) or {}
         since = datetime.now(timezone.utc).timestamp() - 8 * 86400

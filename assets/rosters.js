@@ -92,6 +92,8 @@ window.FBPRosters = (function () {
       if (k && !k.failed) { if (!k._m) k._m = Object.fromEntries(Object.entries(k).filter(([key]) => key !== '_m').map(([id, v]) => [id, { status: v.status, note: v.short || '' }])); return k._m; } }
     return {};
   }
+  // All-FBP 1st or 2nd Team this season: a gold or silver photo
+  const medalOf = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : '';
   const injChip = r => { if (!r.espn) return ''; const i = injMap()[r.espn], t = i && INJ[i.status]; if (!t) return '';
     return `<span class="ro-inj" title="${X && X.esc ? X.esc(i.status + (i.note ? ': ' + i.note : '')) : i.status}">${t}</span>`; };
   // sortable columns: key, label, value (text sorts A to Z first; missing values sink)
@@ -306,7 +308,7 @@ window.FBPRosters = (function () {
     const code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase();
     const a = r.espn && !def ? espn('a' + r.espn, EAPI + r.espn) : null, at = (a && a.athlete) || {};
     const photo = def && code ? `<span class="pp-ph pp-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${code}.png)"></span>`
-      : `<span class="pp-ph"${r.espn ? ` style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : ''}></span>`;
+      : `<span class="pp-ph"${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}${r.espn ? ` style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png),var(--med,none)"` : ''}></span>`;
     const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' ? '<span class="ro-chip i">IR</span>' : '';
     const aw = (r.hon || []).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
     const bio = [['Age', r.age || at.age], ['Size', [at.displayHeight, at.displayWeight].filter(Boolean).join(', ')], ['College', (at.college || {}).name],
@@ -406,10 +408,10 @@ window.FBPRosters = (function () {
       const aw = (r.hon || []).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
       // defenses get their NFL team's logo; players their ESPN headshot
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
-        : r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : '';
+        : r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png),var(--med,none)"` : '';
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
-        <td class="ro-ph"><span ${img}></span></td>
+        <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>
         <td class="l ro-nm"><b>${esc(r.name)}</b>${injChip(r)}${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
         <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td>${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
