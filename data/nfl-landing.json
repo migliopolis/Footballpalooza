@@ -19,9 +19,9 @@
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
-   "team": "HOU",
-   "pick": 11,
-   "basis": "recent",
+   "team": "WSH",
+   "pick": 7,
+   "basis": "consensus",
    "mocks": 6,
    "mostMocked": "WSH"
   },
@@ -40,9 +40,9 @@
    "mostMocked": "HOU"
   },
   "Darian Mensah": {
-   "team": "WSH",
-   "pick": 7,
-   "basis": "recent",
+   "team": "NYJ",
+   "pick": 6,
+   "basis": "consensus",
    "mocks": 9,
    "mostMocked": "CLE"
   },
@@ -89,22 +89,22 @@
    "mostMocked": "MIN"
   },
   "Dante Moore": {
-   "team": "KC",
-   "pick": 24,
-   "basis": "recent",
+   "team": "PIT",
+   "pick": 26,
+   "basis": "consensus",
    "mocks": 8,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
    "team": "ARI",
    "pick": 9,
-   "basis": "consensus",
+   "basis": "recent",
    "mocks": 6,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
-   "team": "KC",
-   "pick": 24,
+   "team": "CIN",
+   "pick": 23,
    "basis": "consensus",
    "mocks": 10,
    "mostMocked": "CAR"
@@ -124,8 +124,8 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "DET",
-   "pick": 27,
+   "team": "DEN",
+   "pick": 29,
    "basis": "consensus",
    "mocks": 10,
    "mostMocked": "DEN"
@@ -145,15 +145,15 @@
    "mostMocked": "DEN"
   },
   "Ryan Coleman-Williams": {
-   "team": "LV",
-   "pick": 15,
-   "basis": "recent",
+   "team": "BUF",
+   "pick": 32,
+   "basis": "consensus",
    "mocks": 5,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
-   "team": "PIT",
-   "pick": 26,
+   "team": "ARI",
+   "pick": 9,
    "basis": "consensus",
    "mocks": 7,
    "mostMocked": "NYJ"
@@ -173,9 +173,9 @@
    "mostMocked": "LAR"
   },
   "Reed Harris": {
-   "team": "KC",
-   "pick": null,
-   "basis": "most",
+   "team": "PHI",
+   "pick": 25,
+   "basis": "consensus",
    "mocks": 2,
    "mostMocked": "KC"
   },

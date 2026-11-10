@@ -3,7 +3,7 @@
  "week": 10,
  "through": 9,
  "since": 2019,
- "generated": "2026-11-10T06:35:59+00:00",
+ "generated": "2026-11-10T13:54:20+00:00",
  "games": [
   {
    "away": "0010",
@@ -1051,7 +1051,7 @@
      "low": 57.8,
      "allPlay": "48-50-1",
      "winProb": 63,
-     "proj": 116.0,
+     "proj": 108.5,
      "projZero": 0,
      "playoff": 99.5,
      "bye": 66.2,
