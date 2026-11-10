@@ -66,11 +66,13 @@ def routes():
         r[f'reference/s-{y}'] = (f'{y} Season', f'The {y} Footballpalooza season.')
     for c in cols.get('columns') or []:
         who = ((cols.get('columnists') or {}).get(c.get('author')) or {}).get('name', '')
-        r[f"now/column/{c['slug']}"] = (c['title'], (c.get('teaser') or '') + (f' By {who}.' if who else ''))
+        r[f"now/column/{c['slug']}"] = (c['title'], (c.get('teaser') or '') + (f' By {who}.' if who else ''), c.get('image') or '')
     return r
 
 
-def page(route, title, desc):
+def page(route, title, desc, img=''):
+    big = bool(img)
+    img = SITE + img if img else ICON
     t, d = html.escape(f'{title} · Footballpalooza'), html.escape(desc)
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
@@ -80,9 +82,9 @@ def page(route, title, desc):
 <meta property="og:site_name" content="Footballpalooza">
 <meta property="og:title" content="{t}">
 <meta property="og:description" content="{d}">
-<meta property="og:image" content="{ICON}">
+<meta property="og:image" content="{html.escape(img)}">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="{'summary_large_image' if big else 'summary'}">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 <script>(function(){{var q=new URLSearchParams(location.search).get('to');var r={json.dumps(route)};
 if(!q||(q!==r&&q.indexOf(r+'/')!==0))q=r;location.replace('../#'+q);}})();</script>
@@ -96,10 +98,10 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     r = routes()
     keys = {}
-    for route, (title, desc) in r.items():
+    for route, (title, desc, *img) in r.items():
         key = re.sub(r'[^a-z0-9-]+', '_', route.lower()).strip('_')
         keys[route] = key
-        open(os.path.join(OUT, key + '.html'), 'w', encoding='utf-8').write(page(route, title, desc))
+        open(os.path.join(OUT, key + '.html'), 'w', encoding='utf-8').write(page(route, title, desc, *img))
     keep = {k + '.html' for k in keys.values()} | {'pages.json'}
     for f in os.listdir(OUT):
         if f.endswith('.html') and f not in keep:

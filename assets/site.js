@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0141';
+  const VERSION = '0.0142';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -455,6 +455,7 @@
       <a class="col-back" href="#now">← League Now</a>
       <p class="col-kick">From the press box · ${esc(c.kicker)}</p>
       <h1 class="col-h1">${esc(c.title)}</h1>
+      ${c.image ? `<figure class="col-hero"><img src="${esc(c.image)}" alt="${esc(c.caption || '')}">${c.caption || c.credit ? `<figcaption>${esc(c.caption || '')}${c.credit ? ` <span>${esc(c.credit)}</span>` : ''}</figcaption>` : ''}</figure>` : ''}
       <div class="col-byline">${colAvatar(a, true)}<span><b>${esc(a.name)}</b><small>${esc(a.title || '')} · ${colDate(c.date)} · ${c.minutes} min read</small></span></div>
       <div class="col-body">${c.html}</div>
       ${a.bio ? `<p class="col-bio">${colAvatar(a)}<span><b>${esc(a.name)}</b> ${esc(a.bio)}</span></p>` : ''}
