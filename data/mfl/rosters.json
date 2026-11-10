@@ -265,15 +265,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "2.09 2021",
-      "contractYear": "2/3",
-      "drafted": "Trade (2025)",
-      "id": "15259",
-      "salary": "7",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "",
       "contractYear": "2/3",
       "drafted": "BB $5 (2025)",
@@ -404,6 +395,15 @@
       "contractYear": "2/3",
       "drafted": "Draft 3.09 $2 (2023)",
       "id": "16206",
+      "salary": "7",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "2.09 2021",
+      "contractYear": "2/3",
+      "drafted": "Trade (2025)",
+      "id": "15259",
       "salary": "7",
       "status": "INJURED_RESERVE"
      },

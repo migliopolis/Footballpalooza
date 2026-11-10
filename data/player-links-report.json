@@ -2,7 +2,7 @@
  "summary": {
   "linked": 945,
   "mfl": 932,
-  "spellingFixed": 51,
+  "spellingFixed": 52,
   "name": 13,
   "unmatched": 3,
   "rosteredLinked": 260,
@@ -708,6 +708,15 @@
    "team": "MIA",
    "fbp": null,
    "espn": "3122976",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "15262",
+   "mflName": "Jermar Jefferson",
+   "pos": "RB",
+   "team": "ARI",
+   "fbp": null,
+   "espn": "4374033",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1851,15 +1860,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "3121410",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "12188",
-   "mflName": "Phillip Dorsett",
-   "pos": "WR",
-   "team": "LVR",
-   "fbp": null,
-   "espn": "2579604",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
