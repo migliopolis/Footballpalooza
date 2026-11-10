@@ -5,6 +5,7 @@
    closed is remembered on this device. */
 window.FBPAnalytics = (function () {
   let A = null, loading = false, failed = false, X = null;
+  const accF = { teams: new Set(), pos: '' };   // Projection accuracy filters: FBP teams (none picked = all) and a position
   const sorts = {};             // table or chart id -> [column, direction]; direction -1 is high to low
   let closed = new Set();
   try { closed = new Set(JSON.parse(localStorage.getItem('fbp-an-closed') || '[]')); } catch (e) {}
@@ -94,19 +95,23 @@ window.FBPAnalytics = (function () {
     const HT = A.heatTeams || {}, HP = A.heatPts || {}, HW = A.heatWeeks || [];
     const HK = [['nuke', 'Nuc'], ['hot', 'Hot'], ['cold', 'Cold'], ['bust', 'Bust'], ['wp', 'WP']];
     const hwTxt = HW.length ? `${HW[0]}–${HW[HW.length - 1]}` : '';
-    const ACC = A.acc || [];
+    const ACC_ALL = A.acc || [];
+    const ACC = ACC_ALL.filter(r => (!accF.teams.size || accF.teams.has(r.fr)) && (!accF.pos || r.pos === accF.pos));
+    const accFilters = `<div class="an-accf"><div class="st-pick an-accpick" role="group" aria-label="FBP teams">${ids.map(f => `<button type="button" data-an-accteam="${f}" aria-pressed="${accF.teams.has(f)}" title="${esc((T[f] || {}).name || f)}">${tm(f).logo ? `<img src="${tm(f).logo}" alt="${esc(tm(f).abbr || f)}">` : esc(f)}</button>`).join('')}</div>
+      <div class="seg an-accpos" role="group" aria-label="Position">${['', 'QB', 'RB', 'WR', 'TE', 'DEF'].map(k => `<button type="button" data-an-accpos="${k}" aria-pressed="${accF.pos === k}">${k || 'All'}</button>`).join('')}</div>
+      ${accF.teams.size || accF.pos ? `<p class="an-accn">${ACC.length} of ${ACC_ALL.length} players · <button type="button" class="an-accclr" data-an-accclr>Clear</button></p>` : ''}</div>`;
     const accCols = [['name', 'Player', '', r => r.name, plCell, r => r.fr ? lg(r.fr) : '<span class="an-lg an-fa">FA</span>'],
       ['g', 'G', 'n', r => r.g, r => num(r.g, String)], ['pj', 'Proj', 'n', r => r.pj, r => num(r.pj, f1)], ['sc', 'Actual', 'n', r => r.sc, r => num(r.sc, f1)],
       ['mae', 'Miss', 'n', r => r.mae, r => num(r.mae, f1, true)],
       ['bias', 'Vs. proj', 'n', r => r.bias, r => `<td class="n ${r.bias > 0 ? 'an-up' : r.bias < 0 ? 'an-dn' : ''}">${sg(r.bias)}</td>`],
       ['hit', 'Within 25%', 'n', r => r.hit, r => num(r.hit, x => x + '%')]];
     // average projection (x) against average actual (y), with the "as projected" diagonal
-    const accChart = () => { if (!ACC.length) return '';
-      const mx = Math.ceil(Math.max(...ACC.map(r => Math.max(r.pj, r.sc))) / 5) * 5, W = 560, H = 300, pl = 36, pb = 30, pt = 8, pr = 10;
+    const accChart = () => { if (!ACC.length) return accFilters + '<p class="loading">No players match these filters.</p>';
+      const mx = Math.ceil(Math.max(...ACC_ALL.map(r => Math.max(r.pj, r.sc))) / 5) * 5, W = 560, H = 300, pl = 36, pb = 30, pt = 8, pr = 10;
       const x = v => pl + (W - pl - pr) * v / mx, y = v => pt + (H - pt - pb) * (1 - v / mx);
       const ticks = Array.from({ length: mx / 5 + 1 }, (_, i) => i * 5);
-      const top = new Set(ACC.slice().sort((a, b) => Math.abs(b.bias) - Math.abs(a.bias)).slice(0, 4).map(r => r.id));
-      return `<svg class="an-sc" viewBox="0 0 ${W} ${H}" role="img" aria-label="Average projection against average points">
+      const top = new Set(ACC.slice().sort((a, b) => Math.abs(b.bias) - Math.abs(a.bias)).slice(0, ACC.length <= 10 ? 10 : 4).map(r => r.id));
+      return accFilters + `<svg class="an-sc" viewBox="0 0 ${W} ${H}" role="img" aria-label="Average projection against average points">
         ${ticks.map(t => `<line class="g" x1="${x(0)}" x2="${x(mx)}" y1="${y(t)}" y2="${y(t)}"/><text class="ax" x="${pl - 6}" y="${y(t) + 4}" text-anchor="end">${t}</text><text class="ax" x="${x(t)}" y="${H - 12}" text-anchor="middle">${t}</text>`).join('')}
         <line class="dg" x1="${x(0)}" y1="${y(0)}" x2="${x(mx)}" y2="${y(mx)}"/>
         <text class="ax" x="${(pl + W - pr) / 2}" y="${H - 1}" text-anchor="middle">average projection</text>
@@ -204,6 +209,11 @@ window.FBPAnalytics = (function () {
       if (s.dataset.anBest != null) sorts[id] = [k, -((cur || [k, +s.dataset.anBest])[1])];   // a chart's flip button
       else sorts[id] = cur && cur[0] === k ? [k, -cur[1]] : [k, +s.dataset.anFirst];
       return redraw(); }
+    const at = t.closest('[data-an-accteam]');
+    if (at) { const f = at.dataset.anAccteam; accF.teams.has(f) ? accF.teams.delete(f) : accF.teams.add(f); return redraw(); }
+    const ap = t.closest('[data-an-accpos]');
+    if (ap) { accF.pos = ap.dataset.anAccpos; return redraw(); }
+    if (t.closest('[data-an-accclr]')) { accF.teams.clear(); accF.pos = ''; return redraw(); }
     const g = t.closest('[data-an-tog]');
     if (g) { const id = g.dataset.anTog, sec = g.closest('.an-card');
       if (closed.has(id)) closed.delete(id); else closed.add(id);

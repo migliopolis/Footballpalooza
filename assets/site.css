@@ -2121,3 +2121,9 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 tr.st-go{cursor:pointer}
 tr.st-go:hover td{background:var(--sky-soft)}
 tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.an-accf{margin:0 0 10px;display:flex;flex-direction:column;gap:8px}
+.an-accpick{margin:0}
+.an-accpos{align-self:flex-start}
+.an-accpos button{padding:6px 12px}
+.an-accn{margin:0;font-size:.8rem;color:var(--muted)}
+.an-accclr{background:none;border:0;padding:0;color:var(--accent);font:600 .8rem var(--body);cursor:pointer}
