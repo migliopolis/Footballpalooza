@@ -78,6 +78,22 @@ window.FBPRosters = (function () {
       return `<span class="hc-w${k ? ' ' + k : c === '-' ? ' off' : ''}" title="Week ${w}: ${k ? HEATK.find(x => x[0] === c)[1] : c === '-' ? 'no game' : 'played'}"><small>${w}</small><i>${k ? c === 'W' ? 'WP' : c : ''}</i></span>`; }).join('');
     return `<div class="hc-p"><div class="hc-top"><b>Heat Check</b><span class="hc-s ${h.s > 0 ? 'up' : h.s < 0 ? 'dn' : ''}">${h.s > 0 ? '+' : ''}${h.s}</span><span class="hc-cnt">${cnt} <span class="hc-g">in ${h.g} games</span></span></div><div class="hc-wks">${cells}</div></div>`;
   }
+  // current NFL injury designation (ESPN's injury report; the daily snapshot if ESPN can't be reached)
+  const INJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'Injured Reserve': 'IR', 'Suspension': 'SUS', 'Day-To-Day': 'DTD', 'Physically Unable to Perform': 'PUP' };
+  function injMap() {
+    const j = espn('INJ', 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries');
+    if (j && !j.failed) {
+      if (!j._m) { j._m = {}; (j.injuries || []).forEach(t => (t.injuries || []).forEach(i => { const a = i.athlete || {}; let id = a.id;
+        if (!id) (a.links || []).some(l => { const m = /\/id\/(\d+)/.exec(l.href || ''); if (m) id = m[1]; return !!m; });
+        if (id) j._m[id] = { status: i.status, note: i.shortComment || '' }; })); }
+      return j._m;
+    }
+    if (j && j.failed) { const k = espn('INJF', 'data/espn/injuries.json');
+      if (k && !k.failed) { if (!k._m) k._m = Object.fromEntries(Object.entries(k).filter(([key]) => key !== '_m').map(([id, v]) => [id, { status: v.status, note: v.short || '' }])); return k._m; } }
+    return {};
+  }
+  const injChip = r => { if (!r.espn) return ''; const i = injMap()[r.espn], t = i && INJ[i.status]; if (!t) return '';
+    return `<span class="ro-inj" title="${X && X.esc ? X.esc(i.status + (i.note ? ': ' + i.note : '')) : i.status}">${t}</span>`; };
   // sortable columns: key, label, value (text sorts A to Z first; missing values sink)
   const cols = () => [
     ['name', 'Player', r => r.name],
@@ -301,7 +317,7 @@ window.FBPRosters = (function () {
     return `<div class="pp">
       <a class="pp-back" href="#now/rosters/${t.fid}"><span aria-hidden="true">←</span> ${esc(t.name)} roster</a>
       <div class="pp-hero" style="--tc:${tm.primary || 'var(--line)'}">${photo}
-        <div class="pp-id"><h2>${esc(r.name)}${chip}${aw}</h2>
+        <div class="pp-id"><h2>${esc(r.name)}${injChip(r)}${chip}${aw}</h2>
           <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
           <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${esc(t.name)}${r.st === 'TAXI_SQUAD' ? ' · taxi squad' : r.st === 'INJURED_RESERVE' ? ' · injured reserve' : ''}</p></div></div>
       ${bio.length ? `<dl class="pp-bio">${bio.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join('')}</dl>` : ''}
@@ -394,7 +410,7 @@ window.FBPRosters = (function () {
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}></span></td>
-        <td class="l ro-nm"><b>${esc(r.name)}</b>${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
+        <td class="l ro-nm"><b>${esc(r.name)}</b>${injChip(r)}${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
         <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td>${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>

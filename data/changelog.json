@@ -2,6 +2,17 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0136",
+      "to": "0.0140",
+      "dates": "Nov 9, 2026",
+      "items": [
+        "Scoreboard Compact view: tap Compact for a whole matchup on one phone screen: each starter's photo, name, points and projection, with the 1st/2nd Team chip, ball and RZ beside the photo.",
+        "Inactive players get a red IN chip and a grey photo with a DNP stamp.",
+        "Rosters shows each player's current NFL injury designation (Q, D, O, IR…), and the team picker shows all twelve logos in two rows of six, like Stats.",
+        "Records boards sit in a tidy three-across grid, and the All players / Free agents / Rostered / Starters bar fits phones cleanly."
+      ]
+    },
+    {
       "from": "0.0131",
       "to": "0.0135",
       "dates": "Nov 9, 2026",

@@ -2007,3 +2007,10 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .ro-pick a[aria-selected="true"]{padding:4px 1px}
 .ro-pick img{width:34px;height:34px}
 .ro-pick b{display:none}
+/* All players / Free agents / Rostered / Starters: equal, tighter buttons so the bar fits a phone with room */
+.seg.pl-show{display:flex;width:100%;max-width:560px}
+.seg.pl-show button{flex:1 1 0;min-width:0;padding:8px 4px;text-align:center;white-space:nowrap}
+@media (max-width:560px){.seg.pl-show button{font-size:.78rem;padding:8px 2px}}
+/* Rosters: current NFL injury designation (Q, D, O, IR…) next to the name */
+.ro-inj{display:inline-block;font:700 .56rem/1 var(--body);padding:2px 4px;border-radius:3px;background:var(--red);color:#fff;margin-left:5px;vertical-align:2px;cursor:help}
+.pp-id h2 .ro-inj{font-size:.62rem;padding:3px 5px;vertical-align:4px}
