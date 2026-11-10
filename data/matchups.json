@@ -1,581 +1,498 @@
 {
  "season": "FOOTBALLPALOOZA 2026",
- "week": 9,
- "through": 8,
+ "week": 10,
+ "through": 9,
  "since": 2019,
- "generated": "2026-11-10T00:52:19+00:00",
+ "generated": "2026-11-10T06:35:59+00:00",
  "games": [
   {
-   "away": "0003",
-   "home": "0009",
-   "teams": {
-    "0003": {
-     "id": "0003",
-     "w": 4,
-     "l": 4,
-     "t": 0,
-     "seed": null,
-     "division": "Central",
-     "pf": 954.8,
-     "pfRank": 6,
-     "avg": 119.3,
-     "last3": 123.0,
-     "streak": "W1",
-     "high": 159.8,
-     "low": 85.3,
-     "allPlay": "50-38",
-     "winProb": 45,
-     "proj": 124.7,
-     "projZero": 0,
-     "playoff": 42.0,
-     "bye": 8.9,
-     "ifWin": [
-      57.7,
-      15.4
-     ],
-     "ifLoss": [
-      29.2,
-      3.7
-     ]
-    },
-    "0009": {
-     "id": "0009",
-     "w": 5,
-     "l": 2,
-     "t": 1,
-     "seed": 2,
-     "division": "West",
-     "pf": 998.4,
-     "pfRank": 4,
-     "avg": 124.8,
-     "last3": 117.0,
-     "streak": "L1",
-     "high": 161.3,
-     "low": 101.2,
-     "allPlay": "57-30-1",
-     "winProb": 55,
-     "proj": 118.1,
-     "projZero": 0,
-     "playoff": 84.5,
-     "bye": 32.0,
-     "ifWin": [
-      93.2,
-      43.2
-     ],
-     "ifLoss": [
-      73.7,
-      18.2
-     ]
-    }
-   },
-   "series": {
-    "games": 8,
-    "w": {
-     "0003": 4,
-     "0009": 4
-    },
-    "t": 0,
-    "avg": {
-     "0003": 122.7,
-     "0009": 122.4
-    },
-    "streak": {
-     "id": "0009",
-     "n": 3
-    },
-    "biggest": {
-     "0003": {
-      "y": 2022,
-      "w": 5,
-      "margin": 69.2,
-      "score": "143.2-74.0"
-     },
-     "0009": {
-      "y": 2021,
-      "w": 6,
-      "margin": 59.0,
-      "score": "168.1-109.1"
-     }
-    },
-    "playoff": [
-     {
-      "y": 2024,
-      "w": 15,
-      "sa": 88.5,
-      "sb": 144.0,
-      "win": "0009",
-      "kind": "Playoffs \u00b7 Round 1"
-     }
-    ],
-    "recent": [
-     {
-      "y": 2025,
-      "w": 9,
-      "sa": 128.8,
-      "sb": 140.1,
-      "win": "0009",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2024,
-      "w": 15,
-      "sa": 88.5,
-      "sb": 144.0,
-      "win": "0009",
-      "kind": "Playoffs \u00b7 Round 1"
-     },
-     {
-      "y": 2024,
-      "w": 9,
-      "sa": 140.7,
-      "sb": 171.1,
-      "win": "0009",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2023,
-      "w": 5,
-      "sa": 130.0,
-      "sb": 79.7,
-      "win": "0003",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2022,
-      "w": 5,
-      "sa": 143.2,
-      "sb": 74.0,
-      "win": "0003",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2021,
-      "w": 6,
-      "sa": 109.1,
-      "sb": 168.1,
-      "win": "0009",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2020,
-      "w": 11,
-      "sa": 119.6,
-      "sb": 107.5,
-      "win": "0003",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2019,
-      "w": 1,
-      "sa": 121.6,
-      "sb": 94.6,
-      "win": "0003",
-      "kind": "Regular season"
-     }
-    ],
-    "divisionGame": false
-   },
-   "swing": 48.0,
-   "gotw": true
-  },
-  {
-   "away": "0011",
-   "home": "0005",
-   "teams": {
-    "0011": {
-     "id": "0011",
-     "w": 3,
-     "l": 5,
-     "t": 0,
-     "seed": null,
-     "division": "East",
-     "pf": 726.2,
-     "pfRank": 12,
-     "avg": 90.8,
-     "last3": 79.7,
-     "streak": "L1",
-     "high": 111.2,
-     "low": 70.2,
-     "allPlay": "18-70",
-     "winProb": 28,
-     "proj": 100.6,
-     "projZero": 0,
-     "playoff": 1.8,
-     "bye": 0.1,
-     "ifWin": [
-      5.1,
-      0.2
-     ],
-     "ifLoss": [
-      0.5,
-      0.0
-     ]
-    },
-    "0005": {
-     "id": "0005",
-     "w": 4,
-     "l": 4,
-     "t": 0,
-     "seed": null,
-     "division": "Central",
-     "pf": 940.1,
-     "pfRank": 7,
-     "avg": 117.5,
-     "last3": 77.7,
-     "streak": "L3",
-     "high": 164.3,
-     "low": 71.2,
-     "allPlay": "50-38",
-     "winProb": 72,
-     "proj": 117.8,
-     "projZero": 0,
-     "playoff": 37.9,
-     "bye": 7.5,
-     "ifWin": [
-      45.0,
-      9.9
-     ],
-     "ifLoss": [
-      20.1,
-      1.5
-     ]
-    }
-   },
-   "series": {
-    "games": 8,
-    "w": {
-     "0011": 6,
-     "0005": 2
-    },
-    "t": 0,
-    "avg": {
-     "0011": 122.7,
-     "0005": 106.5
-    },
-    "streak": {
-     "id": "0011",
-     "n": 2
-    },
-    "biggest": {
-     "0011": {
-      "y": 2022,
-      "w": 2,
-      "margin": 92.6,
-      "score": "171.9-79.3"
-     },
-     "0005": {
-      "y": 2019,
-      "w": 1,
-      "margin": 37.5,
-      "score": "138.1-100.6"
-     }
-    },
-    "playoff": [
-     {
-      "y": 2023,
-      "w": 16,
-      "sa": 96.6,
-      "sb": 100.2,
-      "win": "0005",
-      "kind": "Playoffs \u00b7 Semifinal"
-     }
-    ],
-    "recent": [
-     {
-      "y": 2025,
-      "w": 9,
-      "sa": 127.7,
-      "sb": 120.1,
-      "win": "0011",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2024,
-      "w": 9,
-      "sa": 93.2,
-      "sb": 65.9,
-      "win": "0011",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2023,
-      "w": 16,
-      "sa": 96.6,
-      "sb": 100.2,
-      "win": "0005",
-      "kind": "Playoffs \u00b7 Semifinal"
-     },
-     {
-      "y": 2023,
-      "w": 2,
-      "sa": 118.6,
-      "sb": 117.2,
-      "win": "0011",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2022,
-      "w": 2,
-      "sa": 171.9,
-      "sb": 79.3,
-      "win": "0011",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2021,
-      "w": 11,
-      "sa": 138.8,
-      "sb": 125.6,
-      "win": "0011",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2020,
-      "w": 11,
-      "sa": 134.0,
-      "sb": 105.6,
-      "win": "0011",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2019,
-      "w": 1,
-      "sa": 100.6,
-      "sb": 138.1,
-      "win": "0005",
-      "kind": "Regular season"
-     }
-    ],
-    "divisionGame": false
-   },
-   "swing": 29.5
-  },
-  {
-   "away": "0008",
-   "home": "0007",
-   "teams": {
-    "0008": {
-     "id": "0008",
-     "w": 3,
-     "l": 4,
-     "t": 1,
-     "seed": null,
-     "division": "East",
-     "pf": 732.3,
-     "pfRank": 11,
-     "avg": 91.5,
-     "last3": 96.6,
-     "streak": "W1",
-     "high": 127.1,
-     "low": 65.0,
-     "allPlay": "23-64-1",
-     "winProb": 20,
-     "proj": 89.9,
-     "projZero": 0,
-     "playoff": 5.1,
-     "bye": 0.4,
-     "ifWin": [
-      15.0,
-      1.8
-     ],
-     "ifLoss": [
-      2.6,
-      0.1
-     ]
-    },
-    "0007": {
-     "id": "0007",
-     "w": 4,
-     "l": 4,
-     "t": 0,
-     "seed": 5,
-     "division": "Central",
-     "pf": 1041.1,
-     "pfRank": 1,
-     "avg": 130.1,
-     "last3": 131.0,
-     "streak": "W2",
-     "high": 174.8,
-     "low": 100.2,
-     "allPlay": "59-29",
-     "winProb": 80,
-     "proj": 129.9,
-     "projZero": 0,
-     "playoff": 87.8,
-     "bye": 24.8,
-     "ifWin": [
-      90.8,
-      28.9
-     ],
-     "ifLoss": [
-      75.6,
-      8.3
-     ]
-    }
-   },
-   "series": {
-    "games": 9,
-    "w": {
-     "0008": 1,
-     "0007": 8
-    },
-    "t": 0,
-    "avg": {
-     "0008": 99.1,
-     "0007": 115.0
-    },
-    "streak": {
-     "id": "0007",
-     "n": 7
-    },
-    "biggest": {
-     "0008": {
-      "y": 2019,
-      "w": 13,
-      "margin": 11.0,
-      "score": "118.7-107.7"
-     },
-     "0007": {
-      "y": 2023,
-      "w": 11,
-      "margin": 28.6,
-      "score": "131.3-102.7"
-     }
-    },
-    "playoff": [],
-    "recent": [
-     {
-      "y": 2025,
-      "w": 9,
-      "sa": 96.8,
-      "sb": 106.6,
-      "win": "0007",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2024,
-      "w": 9,
-      "sa": 97.7,
-      "sb": 115.5,
-      "win": "0007",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2023,
-      "w": 11,
-      "sa": 102.7,
-      "sb": 131.3,
-      "win": "0007",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2022,
-      "w": 11,
-      "sa": 100.5,
-      "sb": 112.0,
-      "win": "0007",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2021,
-      "w": 4,
-      "sa": 95.8,
-      "sb": 120.1,
-      "win": "0007",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2020,
-      "w": 12,
-      "sa": 84.0,
-      "sb": 105.6,
-      "win": "0007",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2020,
-      "w": 8,
-      "sa": 74.8,
-      "sb": 102.7,
-      "win": "0007",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2019,
-      "w": 13,
-      "sa": 118.7,
-      "sb": 107.7,
-      "win": "0008",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2019,
-      "w": 1,
-      "sa": 121.0,
-      "sb": 133.7,
-      "win": "0007",
-      "kind": "Regular season"
-     }
-    ],
-    "divisionGame": false
-   },
-   "swing": 27.6
-  },
-  {
    "away": "0010",
-   "home": "0012",
+   "home": "0003",
    "teams": {
     "0010": {
      "id": "0010",
      "w": 5,
-     "l": 3,
+     "l": 4,
+     "t": 0,
+     "seed": null,
+     "division": "Central",
+     "pf": 1043.1,
+     "pfRank": 6,
+     "avg": 115.9,
+     "last3": 105.9,
+     "streak": "L1",
+     "high": 151.4,
+     "low": 82.5,
+     "allPlay": "54-45",
+     "winProb": 47,
+     "proj": 95.8,
+     "projZero": 1,
+     "playoff": 48.9,
+     "bye": 8.2,
+     "ifWin": [
+      70.4,
+      15.3
+     ],
+     "ifLoss": [
+      29.8,
+      1.9
+     ]
+    },
+    "0003": {
+     "id": "0003",
+     "w": 5,
+     "l": 4,
+     "t": 0,
+     "seed": 5,
+     "division": "Central",
+     "pf": 1076.6,
+     "pfRank": 5,
+     "avg": 119.6,
+     "last3": 131.6,
+     "streak": "W2",
+     "high": 159.8,
+     "low": 85.3,
+     "allPlay": "58-41",
+     "winProb": 53,
+     "proj": 111.2,
+     "projZero": 1,
+     "playoff": 66.6,
+     "bye": 11.7,
+     "ifWin": [
+      84.0,
+      19.2
+     ],
+     "ifLoss": [
+      47.0,
+      3.2
+     ]
+    }
+   },
+   "series": {
+    "games": 11,
+    "w": {
+     "0010": 4,
+     "0003": 7
+    },
+    "t": 0,
+    "avg": {
+     "0010": 109.9,
+     "0003": 117.0
+    },
+    "streak": {
+     "id": "0003",
+     "n": 2
+    },
+    "biggest": {
+     "0010": {
+      "y": 2021,
+      "w": 10,
+      "margin": 64.7,
+      "score": "116.8-52.1"
+     },
+     "0003": {
+      "y": 2019,
+      "w": 9,
+      "margin": 58.2,
+      "score": "134.3-76.1"
+     }
+    },
+    "playoff": [
+     {
+      "y": 2019,
+      "w": 15,
+      "sa": 153.0,
+      "sb": 143.4,
+      "win": "0010",
+      "kind": "Playoffs \u00b7 Semifinal"
+     }
+    ],
+    "recent": [
+     {
+      "y": 2026,
+      "w": 4,
+      "sa": 89.2,
+      "sb": 91.8,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 10,
+      "sa": 112.4,
+      "sb": 149.7,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 4,
+      "sa": 137.0,
+      "sb": 128.2,
+      "win": "0010",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 10,
+      "sa": 103.8,
+      "sb": 111.0,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 4,
+      "sa": 73.5,
+      "sb": 122.5,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2023,
+      "w": 9,
+      "sa": 112.3,
+      "sb": 131.2,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 9,
+      "sa": 120.4,
+      "sb": 73.8,
+      "win": "0010",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 10,
+      "sa": 116.8,
+      "sb": 52.1,
+      "win": "0010",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 7,
+      "sa": 114.0,
+      "sb": 149.2,
+      "win": "0003",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 15,
+      "sa": 153.0,
+      "sb": 143.4,
+      "win": "0010",
+      "kind": "Playoffs \u00b7 Semifinal"
+     },
+     {
+      "y": 2019,
+      "w": 9,
+      "sa": 76.1,
+      "sb": 134.3,
+      "win": "0003",
+      "kind": "Regular season"
+     }
+    ],
+    "divisionGame": true
+   },
+   "swing": 77.6,
+   "gotw": true
+  },
+  {
+   "away": "0005",
+   "home": "0007",
+   "teams": {
+    "0005": {
+     "id": "0005",
+     "w": 4,
+     "l": 5,
+     "t": 0,
+     "seed": null,
+     "division": "Central",
+     "pf": 996.7,
+     "pfRank": 8,
+     "avg": 110.7,
+     "last3": 67.3,
+     "streak": "L4",
+     "high": 164.3,
+     "low": 56.6,
+     "allPlay": "50-49",
+     "winProb": 31,
+     "proj": 114.6,
+     "projZero": 0,
+     "playoff": 13.6,
+     "bye": 0.6,
+     "ifWin": [
+      26.4,
+      1.8
+     ],
+     "ifLoss": [
+      7.9,
+      0.0
+     ]
+    },
+    "0007": {
+     "id": "0007",
+     "w": 5,
+     "l": 4,
      "t": 0,
      "seed": 3,
      "division": "Central",
-     "pf": 960.6,
-     "pfRank": 5,
-     "avg": 120.1,
-     "last3": 128.9,
+     "pf": 1192.7,
+     "pfRank": 1,
+     "avg": 132.5,
+     "last3": 148.1,
      "streak": "W3",
-     "high": 151.4,
-     "low": 89.2,
-     "allPlay": "52-36",
-     "winProb": 67,
-     "proj": 115.5,
+     "high": 174.8,
+     "low": 100.2,
+     "allPlay": "70-29",
+     "winProb": 69,
+     "proj": 128.5,
      "projZero": 0,
-     "playoff": 67.7,
-     "bye": 30.4,
+     "playoff": 96.2,
+     "bye": 31.3,
      "ifWin": [
-      76.5,
-      37.7
+      98.0,
+      39.6
      ],
      "ifLoss": [
-      49.5,
-      15.6
+      92.0,
+      12.5
+     ]
+    }
+   },
+   "series": {
+    "games": 15,
+    "w": {
+     "0005": 3,
+     "0007": 12
+    },
+    "t": 0,
+    "avg": {
+     "0005": 107.7,
+     "0007": 129.0
+    },
+    "streak": {
+     "id": "0007",
+     "n": 1
+    },
+    "biggest": {
+     "0005": {
+      "y": 2021,
+      "w": 12,
+      "margin": 15.0,
+      "score": "120.2-105.2"
+     },
+     "0007": {
+      "y": 2024,
+      "w": 10,
+      "margin": 63.3,
+      "score": "134.9-71.6"
+     }
+    },
+    "playoff": [
+     {
+      "y": 2023,
+      "w": 17,
+      "sa": 126.6,
+      "sb": 135.3,
+      "win": "0007",
+      "kind": "Championship"
+     },
+     {
+      "y": 2021,
+      "w": 15,
+      "sa": 68.9,
+      "sb": 111.0,
+      "win": "0007",
+      "kind": "Playoffs \u00b7 Round 1"
+     }
+    ],
+    "recent": [
+     {
+      "y": 2026,
+      "w": 4,
+      "sa": 114.1,
+      "sb": 174.8,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 10,
+      "sa": 135.4,
+      "sb": 133.5,
+      "win": "0005",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 4,
+      "sa": 120.2,
+      "sb": 106.8,
+      "win": "0005",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 10,
+      "sa": 71.6,
+      "sb": 134.9,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 4,
+      "sa": 72.6,
+      "sb": 124.3,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2023,
+      "w": 17,
+      "sa": 126.6,
+      "sb": 135.3,
+      "win": "0007",
+      "kind": "Championship"
+     },
+     {
+      "y": 2023,
+      "w": 14,
+      "sa": 93.3,
+      "sb": 109.6,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2023,
+      "w": 1,
+      "sa": 98.4,
+      "sb": 118.8,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 14,
+      "sa": 127.9,
+      "sb": 164.6,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 1,
+      "sa": 123.5,
+      "sb": 133.6,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 15,
+      "sa": 68.9,
+      "sb": 111.0,
+      "win": "0007",
+      "kind": "Playoffs \u00b7 Round 1"
+     },
+     {
+      "y": 2021,
+      "w": 12,
+      "sa": 120.2,
+      "sb": 105.2,
+      "win": "0005",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 1,
+      "sa": 117.9,
+      "sb": 129.2,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 5,
+      "sa": 83.7,
+      "sb": 93.2,
+      "win": "0007",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 12,
+      "sa": 140.8,
+      "sb": 159.7,
+      "win": "0007",
+      "kind": "Regular season"
+     }
+    ],
+    "divisionGame": true
+   },
+   "swing": 24.5
+  },
+  {
+   "away": "0009",
+   "home": "0012",
+   "teams": {
+    "0009": {
+     "id": "0009",
+     "w": 5,
+     "l": 3,
+     "t": 1,
+     "seed": 4,
+     "division": "West",
+     "pf": 1101.7,
+     "pfRank": 4,
+     "avg": 122.4,
+     "last3": 117.7,
+     "streak": "L2",
+     "high": 161.3,
+     "low": 101.2,
+     "allPlay": "63-35-1",
+     "winProb": 71,
+     "proj": 104.4,
+     "projZero": 0,
+     "playoff": 84.9,
+     "bye": 16.0,
+     "ifWin": [
+      89.9,
+      20.5
+     ],
+     "ifLoss": [
+      72.8,
+      5.2
      ]
     },
     "0012": {
      "id": "0012",
-     "w": 2,
+     "w": 3,
      "l": 6,
      "t": 0,
      "seed": null,
      "division": "West",
-     "pf": 797.0,
+     "pf": 890.9,
      "pfRank": 9,
-     "avg": 99.6,
-     "last3": 97.6,
-     "streak": "L2",
+     "avg": 99.0,
+     "last3": 95.9,
+     "streak": "W1",
      "high": 117.6,
      "low": 76.1,
-     "allPlay": "33-55",
-     "winProb": 33,
-     "proj": 96.3,
-     "projZero": 0,
-     "playoff": 0.2,
+     "allPlay": "38-61",
+     "winProb": 29,
+     "proj": 90.3,
+     "projZero": 1,
+     "playoff": 0.3,
      "bye": 0.0,
      "ifWin": [
-      0.5,
+      1.0,
       0.0
      ],
      "ifLoss": [
@@ -585,178 +502,608 @@
     }
    },
    "series": {
-    "games": 8,
+    "games": 11,
     "w": {
-     "0010": 5,
-     "0012": 3
+     "0009": 5,
+     "0012": 6
     },
     "t": 0,
     "avg": {
-     "0010": 119.0,
-     "0012": 106.4
+     "0009": 104.7,
+     "0012": 110.0
     },
     "streak": {
-     "id": "0010",
-     "n": 1
+     "id": "0009",
+     "n": 2
     },
     "biggest": {
-     "0010": {
-      "y": 2021,
-      "w": 5,
-      "margin": 57.8,
-      "score": "139.1-81.3"
+     "0009": {
+      "y": 2025,
+      "w": 10,
+      "margin": 48.1,
+      "score": "121.6-73.5"
      },
      "0012": {
-      "y": 2020,
-      "w": 4,
-      "margin": 29.1,
-      "score": "144.7-115.6"
+      "y": 2022,
+      "w": 2,
+      "margin": 35.6,
+      "score": "107.9-72.3"
      }
     },
     "playoff": [],
     "recent": [
      {
-      "y": 2025,
-      "w": 9,
-      "sa": 110.1,
-      "sb": 90.4,
-      "win": "0010",
+      "y": 2026,
+      "w": 4,
+      "sa": 126.9,
+      "sb": 104.9,
+      "win": "0009",
       "kind": "Regular season"
      },
      {
-      "y": 2024,
-      "w": 9,
-      "sa": 110.1,
-      "sb": 130.1,
+      "y": 2025,
+      "w": 10,
+      "sa": 121.6,
+      "sb": 73.5,
+      "win": "0009",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 4,
+      "sa": 117.6,
+      "sb": 130.9,
       "win": "0012",
       "kind": "Regular season"
      },
      {
+      "y": 2024,
+      "w": 10,
+      "sa": 114.2,
+      "sb": 109.7,
+      "win": "0009",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 4,
+      "sa": 107.7,
+      "sb": 99.7,
+      "win": "0009",
+      "kind": "Regular season"
+     },
+     {
       "y": 2023,
-      "w": 6,
-      "sa": 117.9,
-      "sb": 100.5,
-      "win": "0010",
+      "w": 2,
+      "sa": 111.6,
+      "sb": 130.4,
+      "win": "0012",
       "kind": "Regular season"
      },
      {
       "y": 2022,
-      "w": 6,
-      "sa": 75.1,
-      "sb": 84.9,
+      "w": 2,
+      "sa": 72.3,
+      "sb": 107.9,
       "win": "0012",
       "kind": "Regular season"
      },
      {
       "y": 2021,
-      "w": 5,
-      "sa": 139.1,
-      "sb": 81.3,
-      "win": "0010",
+      "w": 4,
+      "sa": 108.7,
+      "sb": 96.7,
+      "win": "0009",
       "kind": "Regular season"
      },
      {
       "y": 2020,
-      "w": 4,
-      "sa": 115.6,
-      "sb": 144.7,
+      "w": 12,
+      "sa": 95.5,
+      "sb": 128.8,
+      "win": "0012",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 5,
+      "sa": 92.3,
+      "sb": 118.1,
       "win": "0012",
       "kind": "Regular season"
      },
      {
       "y": 2019,
-      "w": 8,
-      "sa": 166.6,
-      "sb": 130.2,
-      "win": "0010",
+      "w": 4,
+      "sa": 83.6,
+      "sb": 109.3,
+      "win": "0012",
+      "kind": "Regular season"
+     }
+    ],
+    "divisionGame": true
+   },
+   "swing": 18.1
+  },
+  {
+   "away": "0001",
+   "home": "0004",
+   "teams": {
+    "0001": {
+     "id": "0001",
+     "w": 4,
+     "l": 5,
+     "t": 0,
+     "seed": 6,
+     "division": "West",
+     "pf": 1133.5,
+     "pfRank": 3,
+     "avg": 125.9,
+     "last3": 117.5,
+     "streak": "L3",
+     "high": 173.5,
+     "low": 89.5,
+     "allPlay": "65-34",
+     "winProb": 48,
+     "proj": 132.1,
+     "projZero": 0,
+     "playoff": 87.6,
+     "bye": 4.9,
+     "ifWin": [
+      93.4,
+      10.2
+     ],
+     "ifLoss": [
+      82.3,
+      0.1
+     ]
+    },
+    "0004": {
+     "id": "0004",
+     "w": 6,
+     "l": 3,
+     "t": 0,
+     "seed": 2,
+     "division": "West",
+     "pf": 1158.8,
+     "pfRank": 2,
+     "avg": 128.8,
+     "last3": 126.2,
+     "streak": "W1",
+     "high": 153.7,
+     "low": 90.1,
+     "allPlay": "72-26-1",
+     "winProb": 52,
+     "proj": 138.7,
+     "projZero": 0,
+     "playoff": 98.7,
+     "bye": 61.1,
+     "ifWin": [
+      99.8,
+      78.2
+     ],
+     "ifLoss": [
+      97.6,
+      42.6
+     ]
+    }
+   },
+   "series": {
+    "games": 13,
+    "w": {
+     "0001": 9,
+     "0004": 4
+    },
+    "t": 0,
+    "avg": {
+     "0001": 130.3,
+     "0004": 111.3
+    },
+    "streak": {
+     "id": "0001",
+     "n": 4
+    },
+    "biggest": {
+     "0001": {
+      "y": 2025,
+      "w": 10,
+      "margin": 64.3,
+      "score": "174.4-110.1"
+     },
+     "0004": {
+      "y": 2022,
+      "w": 4,
+      "margin": 23.0,
+      "score": "118.6-95.6"
+     }
+    },
+    "playoff": [],
+    "recent": [
+     {
+      "y": 2026,
+      "w": 4,
+      "sa": 157.7,
+      "sb": 153.7,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 10,
+      "sa": 174.4,
+      "sb": 110.1,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 4,
+      "sa": 135.5,
+      "sb": 112.2,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 10,
+      "sa": 109.6,
+      "sb": 103.3,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 4,
+      "sa": 109.5,
+      "sb": 128.4,
+      "win": "0004",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2023,
+      "w": 10,
+      "sa": 128.7,
+      "sb": 82.1,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2023,
+      "w": 4,
+      "sa": 129.4,
+      "sb": 91.2,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 10,
+      "sa": 130.9,
+      "sb": 90.4,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 4,
+      "sa": 95.6,
+      "sb": 118.6,
+      "win": "0004",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 14,
+      "sa": 129.3,
+      "sb": 80.9,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 3,
+      "sa": 130.8,
+      "sb": 97.7,
+      "win": "0001",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 4,
+      "sa": 159.2,
+      "sb": 170.4,
+      "win": "0004",
       "kind": "Regular season"
      },
      {
       "y": 2019,
-      "w": 1,
-      "sa": 117.9,
-      "sb": 89.2,
-      "win": "0010",
+      "w": 4,
+      "sa": 102.9,
+      "sb": 108.1,
+      "win": "0004",
       "kind": "Regular season"
      }
     ],
-    "divisionGame": false
+    "divisionGame": true
    },
-   "swing": 27.5
+   "swing": 13.3
+  },
+  {
+   "away": "0008",
+   "home": "0011",
+   "teams": {
+    "0008": {
+     "id": "0008",
+     "w": 3,
+     "l": 5,
+     "t": 1,
+     "seed": null,
+     "division": "East",
+     "pf": 815.6,
+     "pfRank": 11,
+     "avg": 90.6,
+     "last3": 90.3,
+     "streak": "L1",
+     "high": 127.1,
+     "low": 65.0,
+     "allPlay": "27-71-1",
+     "winProb": 53,
+     "proj": 76.8,
+     "projZero": 0,
+     "playoff": 1.8,
+     "bye": 0.0,
+     "ifWin": [
+      3.2,
+      0.1
+     ],
+     "ifLoss": [
+      0.2,
+      0.0
+     ]
+    },
+    "0011": {
+     "id": "0011",
+     "w": 4,
+     "l": 5,
+     "t": 0,
+     "seed": null,
+     "division": "East",
+     "pf": 790.7,
+     "pfRank": 12,
+     "avg": 87.9,
+     "last3": 76.1,
+     "streak": "W1",
+     "high": 111.2,
+     "low": 64.5,
+     "allPlay": "19-80",
+     "winProb": 47,
+     "proj": 103.6,
+     "projZero": 0,
+     "playoff": 1.8,
+     "bye": 0.0,
+     "ifWin": [
+      3.5,
+      0.0
+     ],
+     "ifLoss": [
+      0.3,
+      0.0
+     ]
+    }
+   },
+   "series": {
+    "games": 13,
+    "w": {
+     "0008": 5,
+     "0011": 8
+    },
+    "t": 0,
+    "avg": {
+     "0008": 99.5,
+     "0011": 99.6
+    },
+    "streak": {
+     "id": "0011",
+     "n": 1
+    },
+    "biggest": {
+     "0008": {
+      "y": 2022,
+      "w": 10,
+      "margin": 54.7,
+      "score": "129.7-75.0"
+     },
+     "0011": {
+      "y": 2025,
+      "w": 4,
+      "margin": 42.3,
+      "score": "137.3-95.0"
+     }
+    },
+    "playoff": [],
+    "recent": [
+     {
+      "y": 2026,
+      "w": 4,
+      "sa": 66.6,
+      "sb": 88.3,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 10,
+      "sa": 94.5,
+      "sb": 79.9,
+      "win": "0008",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2025,
+      "w": 4,
+      "sa": 95.0,
+      "sb": 137.3,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 10,
+      "sa": 95.5,
+      "sb": 107.7,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 4,
+      "sa": 132.5,
+      "sb": 89.7,
+      "win": "0008",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2023,
+      "w": 10,
+      "sa": 95.2,
+      "sb": 105.4,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2023,
+      "w": 4,
+      "sa": 93.3,
+      "sb": 114.0,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 10,
+      "sa": 129.7,
+      "sb": 75.0,
+      "win": "0008",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2022,
+      "w": 4,
+      "sa": 70.5,
+      "sb": 91.3,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 14,
+      "sa": 112.2,
+      "sb": 106.9,
+      "win": "0008",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2021,
+      "w": 3,
+      "sa": 89.7,
+      "sb": 107.5,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2020,
+      "w": 4,
+      "sa": 109.9,
+      "sb": 115.1,
+      "win": "0011",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2019,
+      "w": 4,
+      "sa": 109.4,
+      "sb": 76.1,
+      "win": "0008",
+      "kind": "Regular season"
+     }
+    ],
+    "divisionGame": true
+   },
+   "swing": 6.2
   },
   {
    "away": "0002",
-   "home": "0001",
+   "home": "0006",
    "teams": {
     "0002": {
      "id": "0002",
-     "w": 6,
+     "w": 7,
      "l": 2,
      "t": 0,
      "seed": 1,
      "division": "East",
-     "pf": 853.3,
-     "pfRank": 8,
-     "avg": 106.7,
-     "last3": 104.4,
-     "streak": "W2",
+     "pf": 1000.0,
+     "pfRank": 7,
+     "avg": 111.1,
+     "last3": 132.2,
+     "streak": "W3",
      "high": 155.7,
      "low": 57.8,
-     "allPlay": "39-49",
-     "winProb": 33,
-     "proj": 116.3,
+     "allPlay": "48-50-1",
+     "winProb": 63,
+     "proj": 116.0,
      "projZero": 0,
-     "playoff": 94.8,
-     "bye": 37.9,
+     "playoff": 99.5,
+     "bye": 66.2,
      "ifWin": [
-      98.9,
-      61.0
+      99.9,
+      78.5
      ],
      "ifLoss": [
-      92.8,
-      26.6
+      98.9,
+      45.0
      ]
     },
-    "0001": {
-     "id": "0001",
-     "w": 4,
-     "l": 4,
+    "0006": {
+     "id": "0006",
+     "w": 2,
+     "l": 7,
      "t": 0,
-     "seed": 6,
-     "division": "West",
-     "pf": 1022.3,
-     "pfRank": 2,
-     "avg": 127.8,
-     "last3": 120.1,
-     "streak": "L2",
-     "high": 173.5,
-     "low": 89.5,
-     "allPlay": "58-30",
-     "winProb": 67,
-     "proj": 132.7,
+     "seed": null,
+     "division": "East",
+     "pf": 861.9,
+     "pfRank": 10,
+     "avg": 95.8,
+     "last3": 90.3,
+     "streak": "L1",
+     "high": 118.4,
+     "low": 70.0,
+     "allPlay": "28-71",
+     "winProb": 37,
+     "proj": 49.0,
      "projZero": 0,
-     "playoff": 84.1,
-     "bye": 17.5,
+     "playoff": 0.0,
+     "bye": 0.0,
      "ifWin": [
-      89.9,
-      23.8
+      0.1,
+      0.0
      ],
      "ifLoss": [
-      72.3,
-      4.4
+      0.0,
+      0.0
      ]
     }
    },
    "series": {
     "games": 11,
     "w": {
-     "0002": 5,
-     "0001": 6
+     "0002": 6,
+     "0006": 5
     },
     "t": 0,
     "avg": {
-     "0002": 117.5,
-     "0001": 117.2
+     "0002": 113.4,
+     "0006": 107.8
     },
     "streak": {
      "id": "0002",
@@ -764,324 +1111,121 @@
     },
     "biggest": {
      "0002": {
-      "y": 2025,
-      "w": 9,
-      "margin": 64.9,
-      "score": "165.8-100.9"
-     },
-     "0001": {
       "y": 2021,
-      "w": 16,
-      "margin": 70.4,
-      "score": "159.7-89.3"
+      "w": 4,
+      "margin": 66.5,
+      "score": "165.1-98.6"
+     },
+     "0006": {
+      "y": 2024,
+      "w": 4,
+      "margin": 42.9,
+      "score": "157.0-114.1"
      }
     },
     "playoff": [
      {
-      "y": 2023,
-      "w": 15,
-      "sa": 91.5,
-      "sb": 118.9,
-      "win": "0001",
-      "kind": "Playoffs \u00b7 Round 1"
-     },
-     {
       "y": 2022,
-      "w": 16,
-      "sa": 133.6,
-      "sb": 113.5,
+      "w": 17,
+      "sa": 113.2,
+      "sb": 90.2,
       "win": "0002",
-      "kind": "Playoffs \u00b7 Semifinal"
-     },
-     {
-      "y": 2021,
-      "w": 16,
-      "sa": 89.3,
-      "sb": 159.7,
-      "win": "0001",
-      "kind": "Playoffs \u00b7 Semifinal"
+      "kind": "Championship"
      }
     ],
     "recent": [
      {
+      "y": 2026,
+      "w": 4,
+      "sa": 102.5,
+      "sb": 73.1,
+      "win": "0002",
+      "kind": "Regular season"
+     },
+     {
       "y": 2025,
-      "w": 9,
-      "sa": 165.8,
-      "sb": 100.9,
-      "win": "0002",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2024,
-      "w": 9,
-      "sa": 131.5,
-      "sb": 140.1,
-      "win": "0001",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2023,
-      "w": 15,
-      "sa": 91.5,
-      "sb": 118.9,
-      "win": "0001",
-      "kind": "Playoffs \u00b7 Round 1"
-     },
-     {
-      "y": 2023,
-      "w": 2,
-      "sa": 141.1,
-      "sb": 84.7,
-      "win": "0002",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2022,
-      "w": 16,
-      "sa": 133.6,
-      "sb": 113.5,
-      "win": "0002",
-      "kind": "Playoffs \u00b7 Semifinal"
-     },
-     {
-      "y": 2022,
-      "w": 2,
-      "sa": 133.9,
-      "sb": 146.9,
-      "win": "0001",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2021,
-      "w": 16,
-      "sa": 89.3,
-      "sb": 159.7,
-      "win": "0001",
-      "kind": "Playoffs \u00b7 Semifinal"
-     },
-     {
-      "y": 2021,
       "w": 10,
-      "sa": 113.4,
-      "sb": 100.3,
-      "win": "0002",
+      "sa": 83.5,
+      "sb": 107.3,
+      "win": "0006",
       "kind": "Regular season"
      },
-     {
-      "y": 2020,
-      "w": 8,
-      "sa": 133.5,
-      "sb": 143.3,
-      "win": "0001",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2019,
-      "w": 12,
-      "sa": 63.8,
-      "sb": 105.7,
-      "win": "0001",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2019,
-      "w": 1,
-      "sa": 95.5,
-      "sb": 75.6,
-      "win": "0002",
-      "kind": "Regular season"
-     }
-    ],
-    "divisionGame": false
-   },
-   "swing": 23.7
-  },
-  {
-   "away": "0006",
-   "home": "0004",
-   "teams": {
-    "0006": {
-     "id": "0006",
-     "w": 2,
-     "l": 6,
-     "t": 0,
-     "seed": null,
-     "division": "East",
-     "pf": 779.3,
-     "pfRank": 10,
-     "avg": 97.4,
-     "last3": 95.6,
-     "streak": "W1",
-     "high": 118.4,
-     "low": 70.0,
-     "allPlay": "25-63",
-     "winProb": 26,
-     "proj": 99.3,
-     "projZero": 0,
-     "playoff": 1.0,
-     "bye": 0.0,
-     "ifWin": [
-      3.0,
-      0.0
-     ],
-     "ifLoss": [
-      0.3,
-      0.0
-     ]
-    },
-    "0004": {
-     "id": "0004",
-     "w": 5,
-     "l": 3,
-     "t": 0,
-     "seed": 4,
-     "division": "West",
-     "pf": 1012.1,
-     "pfRank": 3,
-     "avg": 126.5,
-     "last3": 120.7,
-     "streak": "L1",
-     "high": 153.7,
-     "low": 90.1,
-     "allPlay": "63-25",
-     "winProb": 74,
-     "proj": 138.9,
-     "projZero": 0,
-     "playoff": 93.1,
-     "bye": 40.5,
-     "ifWin": [
-      95.8,
-      47.5
-     ],
-     "ifLoss": [
-      85.6,
-      21.1
-     ]
-    }
-   },
-   "series": {
-    "games": 11,
-    "w": {
-     "0006": 7,
-     "0004": 4
-    },
-    "t": 0,
-    "avg": {
-     "0006": 101.9,
-     "0004": 97.3
-    },
-    "streak": {
-     "id": "0004",
-     "n": 1
-    },
-    "biggest": {
-     "0006": {
-      "y": 2024,
-      "w": 9,
-      "margin": 46.4,
-      "score": "141.9-95.5"
-     },
-     "0004": {
-      "y": 2021,
-      "w": 1,
-      "margin": 34.4,
-      "score": "100.9-66.5"
-     }
-    },
-    "playoff": [],
-    "recent": [
      {
       "y": 2025,
-      "w": 9,
-      "sa": 85.2,
-      "sb": 101.0,
-      "win": "0004",
+      "w": 4,
+      "sa": 107.9,
+      "sb": 109.4,
+      "win": "0006",
       "kind": "Regular season"
      },
      {
       "y": 2024,
-      "w": 9,
-      "sa": 141.9,
-      "sb": 95.5,
+      "w": 10,
+      "sa": 85.3,
+      "sb": 120.3,
+      "win": "0006",
+      "kind": "Regular season"
+     },
+     {
+      "y": 2024,
+      "w": 4,
+      "sa": 114.1,
+      "sb": 157.0,
       "win": "0006",
       "kind": "Regular season"
      },
      {
       "y": 2023,
-      "w": 14,
-      "sa": 117.7,
-      "sb": 91.9,
-      "win": "0006",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2023,
-      "w": 1,
-      "sa": 91.5,
-      "sb": 90.9,
-      "win": "0006",
+      "w": 11,
+      "sa": 130.5,
+      "sb": 103.6,
+      "win": "0002",
       "kind": "Regular season"
      },
      {
       "y": 2022,
-      "w": 14,
-      "sa": 86.4,
-      "sb": 85.6,
+      "w": 17,
+      "sa": 113.2,
+      "sb": 90.2,
+      "win": "0002",
+      "kind": "Championship"
+     },
+     {
+      "y": 2022,
+      "w": 11,
+      "sa": 132.0,
+      "sb": 143.3,
       "win": "0006",
       "kind": "Regular season"
      },
      {
-      "y": 2022,
-      "w": 1,
-      "sa": 83.0,
-      "sb": 87.3,
-      "win": "0004",
-      "kind": "Regular season"
-     },
-     {
       "y": 2021,
-      "w": 12,
-      "sa": 93.8,
-      "sb": 115.6,
-      "win": "0004",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2021,
-      "w": 1,
-      "sa": 66.5,
-      "sb": 100.9,
-      "win": "0004",
+      "w": 4,
+      "sa": 165.1,
+      "sb": 98.6,
+      "win": "0002",
       "kind": "Regular season"
      },
      {
       "y": 2020,
-      "w": 3,
-      "sa": 121.8,
-      "sb": 108.3,
-      "win": "0006",
+      "w": 6,
+      "sa": 94.0,
+      "sb": 67.4,
+      "win": "0002",
       "kind": "Regular season"
      },
      {
       "y": 2019,
-      "w": 12,
-      "sa": 87.6,
-      "sb": 80.2,
-      "win": "0006",
-      "kind": "Regular season"
-     },
-     {
-      "y": 2019,
-      "w": 1,
-      "sa": 145.7,
-      "sb": 112.8,
-      "win": "0006",
+      "w": 4,
+      "sa": 119.7,
+      "sb": 115.9,
+      "win": "0002",
       "kind": "Regular season"
      }
     ],
-    "divisionGame": false
+    "divisionGame": true
    },
-   "swing": 12.9
+   "swing": 1.1
   }
  ]
 }
