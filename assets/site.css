@@ -2019,3 +2019,62 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .col-hero img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;object-position:50% 25%;border-radius:4px;background:var(--line,#ddd)}
 .col-hero figcaption{font-size:.78rem;color:var(--muted);margin-top:6px;line-height:1.35}
 .col-hero figcaption span{opacity:.8}
+
+/* Hospital */
+.hs-hero{display:flex;align-items:center;gap:14px;padding:14px 16px;margin:0 0 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);border-left:6px solid #c8211a}
+.hs-hero h2{margin:0;font:700 1.5rem/1.1 var(--display);text-transform:uppercase}
+.hs-hero p{margin:2px 0 0;color:var(--muted);font-size:.85rem}
+.hs-cross{flex:none;width:34px;height:34px;position:relative}
+.hs-cross::before,.hs-cross::after{content:"";position:absolute;background:#c8211a;border-radius:2px}
+.hs-cross::before{left:12px;top:0;width:10px;height:34px}.hs-cross::after{top:12px;left:0;width:34px;height:10px}
+.hs-cen{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:0 0 14px}
+.hs-cb{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--fg);font:inherit;cursor:pointer;min-width:0}
+.hs-cb.on{outline:2px solid #c8211a;outline-offset:-2px}
+.hs-cb img{width:30px;height:30px;object-fit:contain}
+.hs-cb b{font:600 .78rem var(--display);letter-spacing:.03em}
+.hs-cb span{font:700 .95rem var(--display)}
+.hs-cb small{font-size:.64rem;color:var(--muted);text-align:center;line-height:1.2}
+.hs-who{margin:0 0 18px}
+.hs-ward{margin:0 0 22px}
+.hs-cnt{font:700 .8rem var(--body);background:var(--line);border-radius:10px;padding:1px 8px}
+.hs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:10px}
+.hs-card{padding:12px;display:flex;flex-direction:column;gap:10px;border-top:4px solid var(--hs-c,#888)}
+.hs-w-triage{--hs-c:#e0a100}.hs-w-obs{--hs-c:#e06a00}.hs-w-ward{--hs-c:#c8211a}.hs-w-ltc{--hs-c:#7a1fa2}.hs-w-season{--hs-c:#333}
+.hs-w-triage .sec,.hs-w-obs .sec,.hs-w-ward .sec,.hs-w-ltc .sec,.hs-w-season .sec{border-left:4px solid var(--hs-c);padding-left:8px}
+.hs-top{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center}
+.hs-ph{position:relative;width:56px;height:56px;border-radius:50%;background:#dfe5ec center 20%/cover no-repeat;filter:grayscale(.35)}
+.hs-fbp{position:absolute;right:-6px;bottom:-4px;width:24px;height:24px;object-fit:contain;background:var(--surface);border-radius:50%;padding:2px;border:1px solid var(--line)}
+.hs-id b{display:block;font-size:1rem;line-height:1.2}
+.hs-id small{display:flex;flex-wrap:wrap;align-items:center;gap:4px;color:var(--muted);font-size:.78rem}
+.hs-nfl{width:16px;height:16px;object-fit:contain}
+.hs-slot{font:700 .6rem var(--body);font-style:normal;background:var(--line);color:var(--fg);padding:1px 4px;border-radius:3px}
+.hs-st{font:700 .72rem/1 var(--body);padding:5px 7px;border-radius:4px;color:#fff;background:#c8211a}
+.hs-st.hs-q{background:#e0a100;color:#111}.hs-st.hs-d{background:#e06a00}.hs-st.hs-ir{background:#7a1fa2}
+.hs-dx{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 10px;background:var(--bg);border-radius:6px}
+.hs-dx small,.hs-vit small{display:block;font:600 .62rem var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.hs-dx b{font-size:.92rem}.hs-dx b+small{display:block;text-transform:none;letter-spacing:0;font-weight:400}
+.hs-vit{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center}
+.hs-vit b{display:block;font:700 1.15rem/1.1 var(--display)}
+.hs-vit i{font-style:normal;font-size:.65rem;color:var(--muted)}
+.hs-tbd{color:var(--muted);font-size:.9rem!important}
+.hs-rep{margin:0;font-size:.85rem;line-height:1.4;border-left:3px solid var(--line);padding-left:8px}
+.hs-rep small{color:var(--muted)}
+.hs-more{align-self:flex-start;background:none;border:0;padding:0;color:var(--accent);font:600 .8rem var(--body);cursor:pointer}
+.hs-note{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:.82rem}
+.hs-note dt{font-weight:700;color:var(--muted)}.hs-note dd{margin:0}
+.hs-soon p{margin:0;padding:12px;color:var(--muted);font-size:.85rem}
+@media (max-width:640px){.hs-grid{grid-template-columns:1fr}.hs-cb small{display:none}.hs-cen{gap:4px}}
+.hs-grid{align-items:start}
+.hs-card{gap:0}
+.hs-top{cursor:pointer;grid-template-columns:56px minmax(0,1fr) auto 14px}
+.hs-car{color:var(--muted);font-size:.8rem;text-align:center}
+.hs-what{color:var(--fg)}
+.hs-body{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+/* team pickers on Rosters and Stats match Reference > Franchises: one row on desktop, six over six on phones */
+.ro-pick,.st-pick{display:flex!important;flex-wrap:wrap;gap:6px;max-width:none}
+.ro-pick a,.st-pick button{width:40px!important;height:40px;padding:0!important;display:grid;place-items:center}
+.ro-pick a[aria-selected="true"]{padding:0!important}
+.ro-pick img,.st-pick button img{width:30px;height:30px}
+@media (max-width:520px){.ro-pick,.st-pick{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))}.ro-pick a,.st-pick button{width:auto!important}}
+.hs-cen{grid-template-columns:repeat(12,minmax(0,1fr))}
+@media (max-width:760px){.hs-cen{grid-template-columns:repeat(6,minmax(0,1fr))}}
