@@ -493,9 +493,9 @@
         const mu = !myT ? '' : `<span class="lv-opp">${!vs ? me : cls === 'a' ? me + vs + them + wx : wx + me + vs + them}</span>`;
         const bottom = [slot === pos(p.id) ? '' : pos(p.id), mu, `<span class="lv-st ${st}">${clock(p)}</span>`].filter(Boolean);
         // the ball: a football beside his photo when his NFL team has it, RZ in the red zone; a defense on the field
-        // gets Defending, and RZ when the other team is in the red zone
+        // gets ON D, and RZ when the other team is in the red zone
         const isD = pos(p.id) === 'DEF', live = g && g.state === 'in';
-        const flags = !live ? '' : isD ? (g.ball ? '' : `${g.defRz ? '<span class="lv-rz">RZ</span>' : ''}<span class="lv-def">Defending</span>`)
+        const flags = !live ? '' : isD ? (g.ball ? '' : `${g.defRz ? '<span class="lv-rz">RZ</span>' : ''}<span class="lv-def" title="Defending">ON D</span>`)
           : g.ball ? `<span class="lv-ball" title="His team has the ball">🏈</span>${g.rz ? '<span class="lv-rz" title="In the red zone">RZ</span>' : ''}` : '';
         // in the red zone (his offense there, or his defense defending it): a red tint across his half of the row
         const rzOn = live && (isD ? !g.ball && g.defRz : g.ball && g.rz), rzc = rzOn ? ' lv-inrz' : '';
