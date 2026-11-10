@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0146",
+      "to": "0.0150",
+      "dates": "Nov 10, 2026",
+      "items": [
+        "Tap a team on League Now > Standings to open its roster.",
+        "Projection accuracy on League Now > Analytics filters by FBP team (pick as many as you like) and by position. The chart and both tables follow the filters.",
+        "Players in an FBP IR slot no longer get a second IR chip on the roster page; they keep only their NFL injury chip. The Player Page shows one IR chip at most.",
+        "The installed app, taskbar and browser tab use the FBP shield on a transparent background. Phone home screens keep the square icon.",
+        "On Rosters, the week's projection and the two opponent columns are centered under their headers, with the opponent logos lined up."
+      ]
+    },
+    {
       "from": "0.0141",
       "to": "0.0145",
       "dates": "Nov 9, 2026",
