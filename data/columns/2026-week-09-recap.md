@@ -10,13 +10,13 @@ caption: Joe Burrow, MR. FROBOT's red-hot quarterback
 credit: Photo by Kevin Sabitus/Getty Images
 teaser: MR. FROBOT win a third straight and take the Central, Fully Cooked sit alone atop the West later in a season than they ever have, and Bullish on da Bears open a three-game lead on the rest of the East.
 ---
-It's a tale of two franchises. The best team this league has had since it went PPR is back where it usually is. The worst team this league has had since it went PPR is in first place. If you had both of those on your card in September, you're lying.
+It's a tale of two franchises. The most successful franchise in league history is back where it usually is. The team with the worst record since this league went PPR is in first place. If you had both of those on your card in September, you're lying.
 
 ## FROBOT are back
 
 **MR. FROBOT started 2-4. They're now leading the Central.** Three straight wins: 139.3, 153.4 and 151.6 this week, the top score in the league. That's 148 a game over three weeks. They have the most points in the league (1,192.7), the No. 1 power ranking, and the 3 seed. Three teams are 5-4 in the Central. FROBOT hold the tiebreak on total points, and it isn't close.
 
-None of this should surprise anyone. From 2019 through last year, FROBOT went 71-29-1. That's a .703 winning percentage, almost 90 points better than anybody else's. They finished first in the regular season three times, went 13-1 in 2024, and won the title in 2023. Last year's 8-5 counted as a down year for them. The slow start this year was the strange part. This is just them getting back to normal.
+None of this should surprise anyone. Go back to the league's first season in 2011 and nobody has won more. Sean's franchise has four titles (2012, 2014, 2016 and 2023) and six trips to the title game, both the most in league history. Since the switch to PPR in 2019, Mailing It In have more rings, two to FROBOT's one, but nobody wins more often week to week. FROBOT are 71-29-1 in that stretch, a .703 winning percentage and almost 90 points better than anybody else. They finished first in the regular season three times and went 13-1 in 2024. Last year's 8-5 counted as a down year for them. The slow start this year was the strange part. This is just them getting back to normal.
 
 The engine is the Cincinnati stack. Joe Burrow has 39.5 and 29.5 the last two weeks. Tee Higgins added 20.2 this week. And CeeDee Lamb, who doesn't even play in Cincinnati, put up 33.5. The computer has FROBOT's playoff chances up from 88% to 96%, and their odds of winning the Central from 38% to 60%.
 
