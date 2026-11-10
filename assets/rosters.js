@@ -309,7 +309,9 @@ window.FBPRosters = (function () {
     const a = r.espn && !def ? espn('a' + r.espn, EAPI + r.espn) : null, at = (a && a.athlete) || {};
     const photo = def && code ? `<span class="pp-ph pp-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${code}.png)"></span>`
       : `<span class="pp-ph"${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}${r.espn ? ` style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png),var(--med,none)"` : ''}></span>`;
-    const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' ? '<span class="ro-chip i">IR</span>' : '';
+    // FBP IR slot chip, unless his NFL injury chip already says IR
+    const nflIR = r.espn && (injMap()[r.espn] || {}).status === 'Injured Reserve';
+    const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' && !nflIR ? '<span class="ro-chip i" title="In an FBP IR slot">IR</span>' : '';
     const aw = (r.hon || []).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
     const bio = [['Age', r.age || at.age], ['Size', [at.displayHeight, at.displayWeight].filter(Boolean).join(', ')], ['College', (at.college || {}).name],
       ['Drafted', at.displayDraft], ['Experience', at.displayExperience], ['From', at.displayBirthPlace]].filter(x => x[1]);
@@ -404,7 +406,8 @@ window.FBPRosters = (function () {
     const row = r => {
       const yrs = [0, 1, 2, 3, 4].map(k => { const v = r.fut ? r.fut[k] : undefined;
         return `<td>${v != null ? $(v) : r.fut && k === r.fut.length ? '<span class="ro-fa">FA</span>' : ''}</td>`; }).join('');
-      const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' ? '<span class="ro-chip i">IR</span>' : '';
+      // the roster already groups him under Injured reserve, so his FBP IR slot gets no chip here; any NFL injury chip stays
+      const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : '';
       const aw = (r.hon || []).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
       // defenses get their NFL team's logo; players their ESPN headshot
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
