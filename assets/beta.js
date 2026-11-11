@@ -100,7 +100,8 @@ window.FBPBeta = (function () {
   /* ---------- Beta landing: a button per experiment ---------- */
   const sub = () => location.hash.slice(1).split('/')[1] || '';
   const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the prototype ratings.'],
-    ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2021.']];
+    ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2021.'],
+    ['power', 'Power Rankings', 'The FBP Power Score: strength now, projected keepers, auction cash and picks. Still being tuned.']];
   function betaHead(cur) {
     return `<div class="pagehead"><h1>Beta</h1><span class="asof">Testing ground for things that aren’t finished</span></div>
 <nav class="seg bt-sub">${[['', 'All'], ...BETA.map(([k, l]) => [k, l])].map(([k, l]) => `<a href="#beta${k ? '/' + k : ''}"${cur === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
@@ -109,6 +110,7 @@ window.FBPBeta = (function () {
     X = ctx;
     const s0 = sub();
     if (s0 === 'trade') return betaHead('trade') + (window.FBPTrade ? FBPTrade.render(ctx) : '<p class="error">The Trading Floor didn’t load.</p>');
+    if (s0 === 'power') return betaHead('power') + (window.FBPPower ? FBPPower.render(ctx) : '<p class="error">The Power Rankings didn’t load.</p>');
     if (s0 !== 'cards') return betaHead('') + `<div class="bt-grid">${BETA.map(([k, l, d]) => `<a class="bt-btn" href="#beta/${k}"><b>${l}</b><span>${d}</span></a>`).join('')}</div>`;
     return betaHead('cards') + renderCards(ctx);
   }

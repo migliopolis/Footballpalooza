@@ -1,8 +1,8 @@
-/* League Now > Power Rankings: the FBP Power Score, from data/power.json (scripts/power.py).
+/* Beta > Power Rankings: the FBP Power Score, from data/power.json (scripts/power.py).
    Four parts, each scored 0-100 against the league (50 is average; every 20 points is one standard deviation):
    Strength now 35%, Keepers 30%, Auction cash 20%, Draft picks 15%. Keepers and cash follow the keep/drop choices:
    the suggestions come from the data, and anyone can flip a player on their own device (saved in this browser) to see
-   how dropping or keeping him changes his team and the league. MFL's own rating stays in its table below. */
+   how dropping or keeping him changes his team and the league. MFL's own rating is on League Now > Power Rankings. */
 window.FBPPower = (function () {
   let P = null, loading = false, failed = false, X = null;
   const open = new Set();

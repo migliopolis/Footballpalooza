@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0163';
+  const VERSION = '0.0164';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -394,8 +394,9 @@
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
-    if (sub === 'power') return headTxt + (window.FBPPower ? FBPPower.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/power')) route(); } }) : '') + `
-      <section><h2 class="sec">MFL Power Rating <small>MFL’s own formula, for comparison</small></h2>
+    // the FBP Power Score is in Beta (#beta/power) while projected keepers are being tuned
+    if (sub === 'power') return headTxt + `
+      <section><h2 class="sec">MFL Power Rating <small>MFL’s own formula · our FBP Power Score is being tuned in <a href="#beta/power">Beta</a></small></h2>
       ${hasPwr ? `<div class="card tbl-wrap"><table class="tbl pr-tbl"><thead><tr><th>#</th><th><span class="sr">Change</span></th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th title="MFL power rating">Rating</th><th>Record</th><th>PF</th><th class="hide-sm">All-play</th><th class="hide-sm">Strk</th></tr></thead><tbody>${powerRows}</tbody></table></div>`
         : '<div class="card soon"><p>Power rankings fill in after the next weekly refresh.</p></div>'}
       ${P ? '' : '<p class="rf-foot">Movement arrows start with the second weekly refresh that has rankings saved.</p>'}</section>`;
