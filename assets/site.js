@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0154';
+  const VERSION = '0.0155';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -34,7 +34,9 @@
   })();   // pages use it to reset saved state after an update
   const app = document.getElementById('app');
   const state = { now: null, teams: {}, ppr: false, budgets: null, round: '1', themeTeam: '', mode: 'auto', open: new Set(), bylaws: null, blOpen: new Set() };
-  try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
+  try { state.ppr = localStorage.getItem('fbp-ppr') === '1'; state.themeTeam = localStorage.getItem('fbp-theme-team') || ''; state.defTeam = localStorage.getItem('fbp-default-team') || ''; state.mode = localStorage.getItem('fbp-mode') || 'auto'; } catch (e) {}
+  // the default team (Settings) opens team pickers on that team; with none set, the page-colors team stands in, as before
+  const myTeam = () => state.defTeam || state.themeTeam;
   const nameOf = id => ((state.now && state.now.standings.find(s => s.id === id)) || {}).name || (state.teams[id] || {}).abbr || id;
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -160,7 +162,12 @@
     const swatches = [sw('', { short: 'FBP', full: 'Footballpalooza (default)' }, FBP_DEFAULT, 'assets/icon-192.png', '#c8211a')]
       .concat(ids.map(id => { const tm = state.teams[id]; return sw(id, { short: tm.abbr, full: nameOf(id) }, teamHeader(tm), tm.logo, teamAccent(tm, isDark())); })).join('');
     const seg = ['auto', 'light', 'dark'].map(m => `<button type="button" data-mode="${m}" aria-pressed="${state.mode === m}">${m === 'auto' ? 'Match device' : m[0].toUpperCase() + m.slice(1)}</button>`).join('');
+    const dt = ids.map(id => { const tm = state.teams[id];
+      return `<button type="button" data-defteam="${id}" aria-pressed="${state.defTeam === id}" title="${esc(nameOf(id))}">${tm.logo ? `<img src="${tm.logo}" alt="${esc(tm.abbr || id)}">` : `<span>${esc(tm.abbr || id)}</span>`}</button>`; }).join('');
     return `<div class="pagehead"><h1>Settings</h1><span class="asof">Saved on this device only</span></div>
+      ${setSec('team', 'Default team', `<p>Pages with a team picker open on this team: Rosters, Stats and Projection accuracy on League Now, the Mock Draft, and Franchises in Reference. You can still pick any team on those pages.${state.defTeam ? ` <b>${esc(nameOf(state.defTeam))}</b> is your default.` : ''}</p>
+        <div class="st-pick dt-pick" role="group" aria-label="Default team">${dt}</div>
+        <div class="seg dt-clear"><button type="button" data-defteam="" aria-pressed="${!state.defTeam}">No default team</button></div>`)}
       ${setSec('colors', 'Page colors', `<p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
         <div class="swatches" role="group" aria-label="Page colors">${swatches}</div>`)}
       ${setSec('mode', 'Light or dark', `<p>Match device follows your phone or computer’s setting.</p>
@@ -409,10 +416,10 @@
       </div>`;
 
     if (sub === 'matchups') return headTxt + pageMatchups(fp);
-    if (sub === 'stats') return headTxt + (window.FBPStats ? FBPStats.render({ teams: state.teams, esc, myTeam: state.themeTeam, rerender: () => { if (location.hash.startsWith('#now/stats')) route(); } }) : '');
-    if (sub === 'rosters') return headTxt + (window.FBPRosters ? FBPRosters.render({ teams: state.teams, esc, myTeam: state.themeTeam,
+    if (sub === 'stats') return headTxt + (window.FBPStats ? FBPStats.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/stats')) route(); } }) : '');
+    if (sub === 'rosters') return headTxt + (window.FBPRosters ? FBPRosters.render({ teams: state.teams, esc, myTeam: myTeam(),
       rerender: () => { if (location.hash.startsWith('#now/rosters')) route(); } }, location.hash.split('/')[2] || '', location.hash.split('/')[3] || '') : '<p class="error">Rosters didn’t load.</p>');
-    if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
+    if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
     if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `
@@ -425,7 +432,7 @@
     if (state.columns || state.columnsLoading) return;
     state.columnsLoading = true;
     fetch('data/columns.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)
-      .then(j => { state.columns = j || { columns: [], columnists: {} }; if (location.hash === '' || location.hash.startsWith('#now')) route(); });
+      .then(j => { state.columns = j || { columns: [], columnists: {} }; if (location.hash === '' || location.hash.startsWith('#now') || location.hash.startsWith('#press')) route(); });
   }
   const colDate = d => { const t = new Date(d + 'T12:00:00'); return isNaN(t) ? d : t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
   function colAvatar(a, big) {
@@ -444,7 +451,7 @@
     if (!state.columns) { loadColumns(); return ''; }
     const C = state.columns.columns.slice(0, 3); if (!C.length) return '';
     return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map(c => { const a = state.columns.columnists[c.author] || { name: c.author };
-      return `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span>${colAvatar(a)}</span></li>`; }).join('')}</ul></section>`;
+      return `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span>${colAvatar(a)}</span></li>`; }).join('')}</ul><a class="col-all" href="#press">All ${state.columns.columns.length} articles in the Press Box →</a></section>`;
   }
   function pageColumn(slug) {
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the column…</p>'; }
@@ -453,16 +460,42 @@
     const a = state.columns.columnists[c.author] || { name: c.author };
     const more = C.filter(x => x.slug !== c.slug).slice(0, 6);
     return `<article class="col-page">
-      <a class="col-back" href="#now">← League Now</a>
+      <a class="col-back" href="#press">← Press Box</a>
       <p class="col-kick">From the press box · ${esc(c.kicker)}</p>
       <h1 class="col-h1">${esc(c.title)}</h1>
       ${c.image ? `<figure class="col-hero"><img src="${esc(c.image)}" alt="${esc(c.caption || '')}">${c.caption || c.credit ? `<figcaption>${esc(c.caption || '')}${c.credit ? ` <span>${esc(c.credit)}</span>` : ''}</figcaption>` : ''}</figure>` : ''}
       <div class="col-byline">${colAvatar(a, true)}<span><b>${esc(a.name)}</b><small>${esc(a.title || '')} · ${colDate(c.date)} · ${c.minutes} min read</small></span></div>
       <div class="col-body">${c.html}</div>
       ${a.bio ? `<p class="col-bio">${colAvatar(a)}<span><b>${esc(a.name)}</b> ${esc(a.bio)}</span></p>` : ''}
-      ${more.length ? `<h2 class="sec">More from the press box</h2><div class="card col-more">${more.map(x => `<a href="#now/column/${x.slug}"><b>${esc(x.title)}</b><small>${esc(x.kicker)} · ${colDate(x.date)}</small></a>`).join('')}</div>` : ''}
+      ${more.length ? `<h2 class="sec">More from the press box</h2><div class="card col-more">${more.map(x => `<a href="#now/column/${x.slug}"><b>${esc(x.title)}</b><small>${esc(x.kicker)} · ${colDate(x.date)}</small></a>`).join('')}</div><a class="col-all" href="#press">Every article in the Press Box →</a>` : ''}
     </article>`;
   }
+
+  /* ---------- Press Box (#press): every column, newest first, grouped by week; tap a writer to filter ---------- */
+  let pbWho = '';
+  function pagePress() {
+    if (!state.columns) { loadColumns(); return '<p class="loading">Loading the Press Box…</p>'; }
+    const all = state.columns.columns, W = state.columns.columnists;
+    if (!all.length) return '<div class="card soon"><h2>Press Box</h2><p>No columns yet.</p></div>';
+    const who = [...new Set(all.map(c => c.author))];
+    if (pbWho && !who.includes(pbWho)) pbWho = '';
+    const C = pbWho ? all.filter(c => c.author === pbWho) : all;
+    const person = k => W[k] || { name: k };
+    const card = (c, lead) => { const a = person(c.author);
+      return `<a class="pb-card${lead ? ' pb-lead' : ''}${c.image ? ' has-img' : ''}" href="#now/column/${c.slug}">
+        ${c.image ? `<span class="pb-img"><img src="${esc(c.image)}" alt="" loading="lazy"></span>` : ''}
+        <span class="pb-txt"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="pb-teas">${esc(c.teaser)}</span>` : ''}
+        <span class="pb-by">${colAvatar(a)}<span>${esc(a.name)} · ${colAgo(c.date)} · ${c.minutes} min read</span></span></span></a>`; };
+    const weeks = []; C.forEach((c, i) => { if (i === 0 && !pbWho) return; const k = `${c.season}-${c.week}`; let g = weeks.find(x => x.k === k); if (!g) weeks.push(g = { k, w: c.week, list: [] }); g.list.push(c); });
+    return `<section class="pb">
+      <h1 class="pb-h1">Press Box</h1>
+      <p class="pb-sub">Recaps, previews, the trade desk and the rumor mill, from the FBP press box.</p>
+      <div class="pb-who" role="group" aria-label="Filter by writer"><button type="button" data-pb-who=""${pbWho ? '' : ' aria-pressed="true"'}>Everyone</button>${who.map(k => `<button type="button" data-pb-who="${esc(k)}"${pbWho === k ? ' aria-pressed="true"' : ''}>${colAvatar(person(k))}${esc(person(k).name)}</button>`).join('')}</div>
+      ${pbWho ? '' : card(C[0], true)}
+      ${weeks.map(g => `<h2 class="sec">Week ${g.w}</h2><div class="pb-list">${g.list.map(c => card(c)).join('')}</div>`).join('')}
+    </section>`;
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('[data-pb-who]'); if (!b) return; pbWho = b.dataset.pbWho; route(); });
 
   /* ---------- Matchups: this week's games with a head-to-head breakdown (data/matchups.json, built by scripts/matchups.py) ---------- */
   function loadMatchups() {
@@ -623,11 +656,11 @@
     window.scrollTo(0, y);
     if (location.hash === '#draft/mock' && window.FBPDraft) FBPDraft.after();   // the board follows the pick on the clock
   }
-  const draftCtx = () => ({ now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash.startsWith('#draft') || location.hash === '#awards') route(); } });
+  const draftCtx = () => ({ myTeam: myTeam(), now: state.now, teams: state.teams, chip, esc, nameOf, rerender: () => { if (location.hash.startsWith('#draft') || location.hash === '#awards') route(); } });
 
   /* ---------- router ---------- */
-  const TABS = ['scores', 'multiview', 'now', 'awards', 'reference', 'offseason', 'draft', 'bylaws', 'settings'];
-  const refCtx = () => ({ teams: state.teams, chip, esc, ppr: state.ppr, rerender: () => { if (location.hash.startsWith('#reference')) route(); } });
+  const TABS = ['scores', 'multiview', 'now', 'awards', 'reference', 'offseason', 'press', 'draft', 'bylaws', 'settings'];
+  const refCtx = () => ({ teams: state.teams, chip, esc, ppr: state.ppr, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#reference')) route(); } });
   let lastPage = '';
   function route() {
     const parts = location.hash.slice(1).split('/');
@@ -647,6 +680,7 @@
     }
     else if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
+    else if (tab === 'press') app.innerHTML = pagePress();
     else if (tab === 'awards') app.innerHTML = window.FBPAwards ? FBPAwards.render(draftCtx()) : '<p class="error">Awards didn’t load.</p>';
     else if (tab === 'reference') {
       const path = parts.slice(1);
@@ -817,6 +851,13 @@
           if (top < 0) window.scrollBy(0, top);
           if (e.detail === 0) el.querySelector(':scope > .bl-sum').focus({ preventScroll: true });
         }
+        return;
+      }
+      const dtb = e.target.closest('[data-defteam]');
+      if (dtb) {
+        state.defTeam = dtb.dataset.defteam; try { localStorage.setItem('fbp-default-team', state.defTeam); } catch (x) {}
+        const y = window.scrollY; route(); window.scrollTo(0, y);
+        const again = document.querySelector(`[data-defteam="${state.defTeam}"]`); if (again) again.focus({ preventScroll: true });
         return;
       }
       const sw = e.target.closest('.swatch'), md = e.target.closest('[data-mode]'), pp = e.target.closest('[data-ppr]');

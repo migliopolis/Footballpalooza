@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0151",
+      "to": "0.0155",
+      "dates": "Nov 10, 2026",
+      "items": [
+        "Player search on League Now > Rosters looks across all 12 rosters and jumps to the Player Page. On Stats, the search filters the table and shows every match, past the Top limit.",
+        "NFL trade deadline: Kirk Cousins (MIN), Keenan Allen (SF) and Josh Downs (KC) show their new teams. A traded player's old games no longer show as byes.",
+        "Devin Cho's Superflex column: who's ready for the two-QB league and who isn't. Devin and Rex Callahan now have photos on their bylines.",
+        "Rex Callahan's rumor mill on a taxi-squad exemption for rookie QBs, plus an update on the seventh playoff spot.",
+        "New Press Box tab collects every column, newest first and grouped by week, with a filter for each writer. Standings links to it under the latest three, and every column links back to it.",
+        "Settings has a Default team. Rosters, Stats, Projection accuracy, the Mock Draft and Reference > Franchises open on that team; Reference itself still opens on Home."
+      ]
+    },
+    {
       "from": "0.0146",
       "to": "0.0150",
       "dates": "Nov 10, 2026",

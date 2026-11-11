@@ -5,7 +5,8 @@
    closed is remembered on this device. */
 window.FBPAnalytics = (function () {
   let A = null, loading = false, failed = false, X = null;
-  const accF = { teams: new Set(), pos: '' };   // Projection accuracy filters: FBP teams (none picked = all) and a position
+  const accF = { teams: new Set(), pos: '' };
+  let accSeed = null;   // the default team last applied to the filter   // Projection accuracy filters: FBP teams (none picked = all) and a position
   const sorts = {};             // table or chart id -> [column, direction]; direction -1 is high to low
   let closed = new Set();
   try { closed = new Set(JSON.parse(localStorage.getItem('fbp-an-closed') || '[]')); } catch (e) {}
@@ -41,6 +42,7 @@ window.FBPAnalytics = (function () {
 
   function render(ctx) {
     X = ctx; load();
+    if ((ctx.myTeam || '') !== accSeed) { accSeed = ctx.myTeam || ''; accF.teams = new Set(accSeed ? [accSeed] : []); }
     if (failed) return '<p class="error">Analytics didn’t load. Refresh the page to try again.</p>';
     if (!A) return '<p class="loading">Loading analytics…</p>';
     const esc = ctx.esc, T = A.teams, ids = Object.keys(T);

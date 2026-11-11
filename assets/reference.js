@@ -687,7 +687,7 @@ window.FBPRef = (() => {
     if (!D) { load(ctx.rerender); return '<p class="loading">Loading league history…</p>'; }
     const [p, a, b] = path;
     if (!p) return pageHome(ctx.ppr);
-    if (p === 'franchises') return pageFranchises();
+    if (p === 'franchises') return X.myTeam && D.franchises[X.myTeam] ? pageFranchise(X.myTeam) : pageFranchises();
     if (p.startsWith('f-')) return pageFranchise(p.slice(2));
     if (p === 'seasons') return pageSeasons();
     if (p.startsWith('s-')) return pageSeason(+p.slice(2), a, b ? +b : null);

@@ -5,7 +5,7 @@
 window.FBPStats = (function () {
   let S = null, A = null, failed = false, loading = false, X = null, opp = null, oppWk = 0;
   const F = { top: 50, pos: '', from: 1, to: 0, who: '' };
-  let hl = '';   // the team whose players are highlighted (tap a logo; tap again to clear)
+  let hl = '', hlSeed = null;   // hlSeed: the default team last applied, so a new default re-highlights   // the team whose players are highlighted (tap a logo; tap again to clear)
   let sort = ['pts', -1];
   let q = '';   // the player search; not saved, and it looks past the Top limit
   const fold = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, '');
@@ -39,6 +39,7 @@ window.FBPStats = (function () {
     X = ctx; load();
     if (failed) return '<p class="error">Stats didn’t load.</p>';
     if (!S) return '<p class="loading">Loading stats…</p>';
+    if ((ctx.myTeam || '') !== hlSeed) { hlSeed = ctx.myTeam || ''; hl = hlSeed; }
     const esc = ctx.esc, W = S.weeks, last = W[W.length - 1] || 0;
     const to = Math.min(F.to || last, last), from = Math.min(F.from || 1, to);
     const wi = W.map((w, i) => [w, i]).filter(([w]) => w >= from && w <= to);

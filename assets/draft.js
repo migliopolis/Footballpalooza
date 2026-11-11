@@ -7,7 +7,7 @@
   const S = { cfg: null, data: null, loading: false, err: null, mode: 'mine', my: '', picks: [], custom: [],
               cur: 0, pos: 'ALL', sort: 'adp', round: null, sig: '', note: '', mtab: 'players', timer: null, simAll: false, started: false, openP: null, taxi: new Map(), showTaken: true, prevTurn: null };
   const DELAY = 800;   // pause between computer picks (ms)
-  try { const m = localStorage.getItem('fbp-myteam'); if (m) S.my = m; const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; S.showTaken = localStorage.getItem('fbp-draft-taken') !== '0'; } catch (e) {}
+  try { const m = localStorage.getItem('fbp-myteam'); if (m) { S.my = m; S.myPicked = true; } const t = localStorage.getItem('fbp-draft-tab'); if (t) S.mtab = t; S.showTaken = localStorage.getItem('fbp-draft-taken') !== '0'; } catch (e) {}
 
   /* ---- price formula (same as the Rookie Pricer) ---- */
   const interp = (a, p) => {
@@ -231,6 +231,8 @@
     const ord = order(now);
     const sig = ord.map(o => o.owner).join(',');
     if (S.sig !== sig) restore(ord);
+    // until you pick a team here, the mock draft follows the default team from Settings
+    if (!S.myPicked && ctx.myTeam && teams[ctx.myTeam]) S.my = ctx.myTeam;
     if (!S.my || !teams[S.my]) S.my = ord.length ? ord[0].owner : Object.keys(teams)[0];
     setTimeout(() => schedule(ctx), 0);
     const done = S.cur >= ord.length;
@@ -400,7 +402,7 @@
     if (e.target.dataset && e.target.dataset.drTaxisel) { S.taxi.set(e.target.dataset.drTaxisel, e.target.value); return true; }
     if (e.target.id === 'dr-mode') { stop(); S.mode = e.target.value; S.round = null; save(); return true; }
     if (e.target.id !== 'dr-my') return false;
-    stop(); S.started = false; S.my = e.target.value; try { localStorage.setItem('fbp-myteam', S.my); } catch (x) {}
+    stop(); S.started = false; S.my = e.target.value; S.myPicked = true; try { localStorage.setItem('fbp-myteam', S.my); } catch (x) {}
     S.picks = S.picks.map(() => null); S.cur = 0; S.round = null; save();
     return true;
   }
