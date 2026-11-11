@@ -102,7 +102,7 @@ window.FBPTrade = (function () {
   function vOwners() {
     const ids = Object.keys(D.teams).sort((a, b) => (D.habits[b].total - D.habits[a].total) || nm(a).localeCompare(nm(b)));
     const max = Math.max(1, ...ids.map(f => Math.max(...Object.values(D.habits[f].perSeason))));
-    return `<p class="tf-why">Every MFL trade since 2021, counted per team. Cash and FAAB aren’t recorded in MFL, so they’re not here.</p>
+    return `<p class="tf-why">Every MFL trade since 2021, counted per team. Auction cash is from the commissioner’s trade log (2022 on); FAAB isn’t recorded.</p>
      <div class="tf-teams">${ids.map(f => { const h = D.habits[f];
       const bars = Object.entries(h.perSeason).map(([y, n]) => `<div class="tf-bar"><i style="height:${n / max * 100}%"></i><b>${n}</b><span>${y.slice(2)}</span></div>`).join('');
       return `<section class="tf-card${f === (X && X.myTeam) ? ' tf-mine' : ''}"><h3>${logo(f)}${esc(nm(f))}</h3>
@@ -111,7 +111,8 @@ window.FBPTrade = (function () {
        <dl class="tf-dl"><div><dt>Most often with</dt><dd>${h.partners.length ? h.partners.map(([p, n]) => `${esc(nm(p))} (${n})`).join(', ') : '–'}</dd></div>
         <div><dt>When</dt><dd>${h.inSeason} during the season, ${h.offSeason} in the off-season</dd></div>
         <div><dt>Players</dt><dd>${h.playersIn} in, ${h.playersOut} out</dd></div>
-        <div><dt>Picks</dt><dd>${h.picksIn} in, ${h.picksOut} out</dd></div></dl></section>`; }).join('')}</div>`;
+        <div><dt>Picks</dt><dd>${h.picksIn} in, ${h.picksOut} out</dd></div>
+        <div><dt>Auction cash</dt><dd>${money(h.cashIn)} in, ${money(h.cashOut)} out</dd></div></dl></section>`; }).join('')}</div>`;
   }
 
   function vHistory() {
@@ -119,11 +120,11 @@ window.FBPTrade = (function () {
     const qq = fold(q.trim());
     const L = D.trades.filter(t => (!season || String(t.season) === season) && (!teamSel || t.a === teamSel || t.b === teamSel)
       && (!qq || fold([nm(t.a), nm(t.b)].concat(t.aGave.concat(t.bGave).map(x => x.t)).join(' ')).includes(qq)));
-    const side = (f, got) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got</h4><ul>${got.length ? got.map(x => `<li>${x.k === 'p' && x.pos ? `<span class="tf-pos">${esc(x.pos)}</span>` : x.k === 'pick' ? '<span class="tf-pos">PK</span>' : ''}${esc(x.t)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
+    const side = (f, got) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got</h4><ul>${got.length ? got.map(x => `<li>${x.k === 'p' && x.pos ? `<span class="tf-pos">${esc(x.pos)}</span>` : x.k === 'pick' ? '<span class="tf-pos">PK</span>' : x.k === 'cash' ? '<span class="tf-pos tf-cash">$</span>' : ''}${esc(x.t)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
     return `<div class="tf-filters"><input type="search" class="tf-q" placeholder="Search a player or team" value="${esc(q)}" aria-label="Search trades">
       <select class="tf-season" aria-label="Season"><option value="">All seasons</option>${seasons.map(y => `<option${String(y) === season ? ' selected' : ''}>${y}</option>`).join('')}</select>
       <select class="tf-team" aria-label="Team"><option value="">All teams</option>${Object.keys(D.teams).sort((a, b) => nm(a).localeCompare(nm(b))).map(f => `<option value="${f}"${f === teamSel ? ' selected' : ''}>${esc(nm(f))}</option>`).join('')}</select></div>
-     <p class="tf-sub tf-count">${L.length} trade${L.length === 1 ? '' : 's'}. Cash and FAAB aren’t recorded in MFL.</p>
+     <p class="tf-sub tf-count">${L.length} trade${L.length === 1 ? '' : 's'}. Auction cash is from the commissioner’s trade log; FAAB isn’t recorded.</p>
      <div class="tf-hist">${L.slice(0, 150).map(t => `<article class="tf-tr"><p class="tf-date">${date(t.ts)}</p><div class="tf-sides">${side(t.a, t.bGave)}${side(t.b, t.aGave)}</div></article>`).join('') || '<p class="tf-sub">No trades match.</p>'}</div>`;
   }
 
@@ -135,7 +136,7 @@ window.FBPTrade = (function () {
      <p class="tf-dl-line" id="tf-clock">${countdown()}</p>
      <nav class="seg tf-tabs">${Object.entries(V).map(([k, [l]]) => `<button type="button" data-tfv="${k}" aria-pressed="${k === view}">${l}</button>`).join('')}</nav>
      <div class="tf-view">${V[view][1]()}</div>
-     <p class="bc-foot">Beta. Ratings are the prototype OVR from Player Cards. Outlook comes from the playoff odds: Contending 75%+, In the mix 25–75%, Building under 25%. Contracts, picks and trades are from MFL.</p></section>`;
+     <p class="bc-foot">Beta. Ratings are the prototype OVR from Player Cards. Outlook comes from the playoff odds: Contending 75%+, In the mix 25–75%, Building under 25%. Contracts, picks, trades and the block are from MFL; auction cash in trades is from the commissioner’s trade log.</p></section>`;
   }
 
   let wired = false;

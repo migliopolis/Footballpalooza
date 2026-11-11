@@ -11,7 +11,7 @@ Environment:
   MFL_HOST     default www47.myfantasyleague.com
 Standard library only.
 """
-import json, os, sys, time, urllib.parse, urllib.request
+import json, os, re, sys, time, urllib.parse, urllib.request
 from datetime import datetime, timezone, timedelta
 
 LEAGUE = '14482'
@@ -330,6 +330,12 @@ def main():
     try:
         tb = fetch('tradeBait', {'INCLUDE_DRAFT_PICKS': '1'})
         tb['fetched'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+        # the repo is public: drop any email address or phone number an owner typed into "in exchange for"
+        for b in (tb.get('tradeBaits') or {}).get('tradeBait') or []:
+            if isinstance(b, dict) and b.get('inExchangeFor'):
+                t = re.sub(r'[\w.+-]+@[\w-]+(\.[\w-]+)+', '', b['inExchangeFor'])
+                t = re.sub(r'\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b', '', t)
+                b['inExchangeFor'] = re.sub(r'\s{2,}', ' ', t).strip(' .,;')
         save('tradeBait', tb)
         print('  ok   tradeBait')
     except Exception as e:

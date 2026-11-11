@@ -4,7 +4,8 @@ Reads what the refresh already saved and writes data/trading-floor.json:
   teams   outlook from the playoff odds, 2026 payroll, the cost of keeping everyone worth keeping in 2027,
           depth by position, QB count against the 2-QB keeper limit, rookie picks owned
   targets good players on teams outside the playoff race, expiring contracts, big 2027 raises, keeper crunches
-  trades  every MFL trade since 2021 (players and picks; cash and FAAB aren't recorded in MFL)
+  trades  every MFL trade since 2021: players and picks from MFL, plus auction cash, which MFL doesn't record
+          (data/trade-cash.json from the commissioner's trade log for 2022-26; data/budgets.json for new 2027 cash)
   habits  per team, plain counts from that history: trades a season, partners, timing, picks in and out
   block   MFL Trade Bait (owners add players from their team page in MFL), when the refresh has fetched it
 
@@ -23,6 +24,13 @@ GOOD, KEEP = 80, 75                         # OVR: a weekly starter; worth keepi
 NEED = {'QB': 1, 'RB': 2, 'WR': 2, 'TE': 1} # 2026 lineup (Flex aside)
 NEED27 = {'QB': 2, 'RB': 2, 'WR': 2, 'TE': 1}   # 2027 adds the SuperFlex, so a second QB becomes a starter for most teams
 ORD = {1: '1st', 2: '2nd', 3: '3rd', 4: '4th'}
+
+
+def private(s):
+    # the site is public: never repeat an email address or phone number an owner typed into MFL
+    s = re.sub(r'[\w.+-]+@[\w-]+(\.[\w-]+)+', '', s)
+    s = re.sub(r'\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b', '', s)
+    return re.sub(r'\s{2,}', ' ', s).strip(' .,;')
 
 
 def as_list(x):
@@ -159,6 +167,30 @@ def main():
             trades.append({'ts': ts, 'season': y, 'a': t['franchise'], 'b': t['franchise2'], 'aGave': g1, 'bGave': g2})
     trades.sort(key=lambda t: -t['ts'])
 
+    # auction cash: MFL doesn't carry it, so add it from the trade log and the 2027 budgets file
+    def add_cash(t, giver, amt, y):
+        side = 'aGave' if giver == t['a'] else 'bGave'
+        t[side].append({'k': 'cash', 'amt': amt, 'y': y, 't': f'${amt} of {y} auction cash'})
+        t['cash'] = True
+    by_ts = {t['ts']: t for t in trades}
+    for c in (load(D('trade-cash.json'), {}) or {}).get('trades', []):
+        t = by_ts.get(c['ts'])
+        if t:
+            for x in c['cash']:
+                add_cash(t, x['f'], x['amt'], x['y'])
+    B = load(D('budgets.json'), {}) or {}
+    for bt in B.get('trades') or []:
+        cash = bt.get('cash') or {}
+        pair = set(cash)
+        cands = [t for t in trades if t['season'] == B.get('season', 2027) - 1 and {t['a'], t['b']} == pair]
+        if not cands or any(t.get('cash') for t in cands if len(cands) == 1):
+            continue
+        t = next((t for t in cands if not t.get('cash')), None)
+        if t:
+            for f, v in cash.items():
+                if v < 0:
+                    add_cash(t, f, -v, B.get('season', 2027))
+
     # ---------- habits: plain counts ----------
     habits = {}
     for f in teams:
@@ -176,6 +208,8 @@ def main():
                      'picksIn': sum(1 for t in mine for x in got(t) if x['k'] == 'pick'),
                      'playersOut': sum(1 for t in mine for x in gave(t) if x['k'] == 'p'),
                      'playersIn': sum(1 for t in mine for x in got(t) if x['k'] == 'p'),
+                     'cashOut': sum(x['amt'] for t in mine for x in gave(t) if x['k'] == 'cash'),
+                     'cashIn': sum(x['amt'] for t in mine for x in got(t) if x['k'] == 'cash'),
                      'last': mine[0]['ts'] if mine else None, 'this': per.get(2026, 0)}
 
     # ---------- the block (MFL Trade Bait) ----------
@@ -191,7 +225,7 @@ def main():
                     x.update(row(P[x['id']]))
             if items or b.get('inExchangeFor'):
                 block.append({'f': f, 'ts': int(b['timestamp']) if b.get('timestamp') else None, 'items': items,
-                              'wants': (b.get('inExchangeFor') or '').strip()})
+                              'wants': private((b.get('inExchangeFor') or '').strip())})
 
     out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'deadline': DEADLINE, 'cap': CAP,
            'note': 'Beta. Ratings are the prototype OVR. Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',

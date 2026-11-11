@@ -1,0 +1,33 @@
+{
+ "encoding": "utf-8",
+ "fetched": "2026-11-11T16:32:23+00:00",
+ "tradeBaits": {
+  "tradeBait": [
+   {
+    "franchise_id": "0001",
+    "inExchangeFor": "Fantasy Football assets",
+    "timestamp": "1788055680",
+    "willGiveUp": "17030,14071,14802"
+   },
+   {
+    "franchise_id": "0004",
+    "inExchangeFor": "",
+    "timestamp": "1792643659",
+    "willGiveUp": "15290,17473"
+   },
+   {
+    "franchise_id": "0012",
+    "inExchangeFor": "",
+    "timestamp": "1792728460",
+    "willGiveUp": "16598"
+   },
+   {
+    "franchise_id": "0006",
+    "inExchangeFor": "Cash and picks",
+    "timestamp": "1793812586",
+    "willGiveUp": "15712,16175,15284,14861"
+   }
+  ]
+ },
+ "version": "1.0"
+}
