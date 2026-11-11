@@ -156,10 +156,10 @@ window.FBPBeta = (function () {
  <div class="bc-bar-row seg">${seg('bp', pos, [['ALL', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE']])}</div>
  <div class="bc-bar-row seg">${seg('bw', who, [['fbp', 'FBP rosters'], ['fa', 'Free agents'], ['all', 'Everyone']])}
   ${who !== 'fa' ? `<select class="bc-team" aria-label="FBP team"><option value="">All FBP teams</option>${teams.map(t => `<option value="${esc(t)}"${t === team ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select>` : ''}</div>
+ <button type="button" class="bc-tiltbtn" hidden>📱 Turn on phone tilt</button>
  <p class="bc-count">${L.length} player${L.length === 1 ? '' : 's'}, best first</p>
  <div class="bc-grid">${vis.map(card).join('') || '<p class="bc-none">Nobody here.</p>'}</div>
  ${L.length > shown ? `<button type="button" class="bc-more" data-bmore="1">Show ${Math.min(PAGE, L.length - shown)} more</button>` : ''}
- <button type="button" class="bc-tiltbtn" hidden>Turn on phone tilt</button>
  <p class="bc-foot">Ratings are a prototype and will change. Season lines and combine data: <a href="https://github.com/nflverse" target="_blank" rel="noopener">nflverse</a> (CC BY 4.0); 2026 points are FBP’s own scoring. Action photos: Wikimedia Commons contributors, credited on the back of each card.</p>
 </section>`;
   }
@@ -176,16 +176,34 @@ window.FBPBeta = (function () {
     const img = el.querySelector('.bc-action');
     if (img) img.addEventListener('error', () => { const h = img.dataset.head; img.outerHTML = `<img class="bc-head" src="${h}" alt="">`; }, { once: true });
   }
+  // Phone tilt. Measured against a resting position that slowly follows how you're holding the phone, so any grip
+  // works and the card settles back flat when you hold still. One update per frame, only for cards on screen.
+  let base = null, last = null, frame = 0;
+  const seen = new Set();
   function orient(e) {
-    if (reduce()) return;
-    const g = Math.max(-25, Math.min(25, e.gamma || 0)), b = Math.max(-25, Math.min(25, (e.beta || 0) - 45));
-    document.querySelectorAll('.bc-tilt').forEach(el => { el.style.setProperty('--ry', (g * .7) + 'deg'); el.style.setProperty('--rx', (-b * .5) + 'deg');
-      el.style.setProperty('--gx', (50 + g * 2) + '%'); el.style.setProperty('--gy', (40 + b * 2) + '%'); el.classList.add('moving'); });
+    if (e.beta == null || e.gamma == null) return;
+    if (!base) base = { b: e.beta, g: e.gamma };
+    base.b += (e.beta - base.b) * .03; base.g += (e.gamma - base.g) * .03;
+    last = { b: e.beta - base.b, g: e.gamma - base.g };
+    if (!frame) frame = requestAnimationFrame(paint);
   }
+  function paint() {
+    frame = 0; if (!last) return;
+    const g = Math.max(-20, Math.min(20, last.g)), b = Math.max(-20, Math.min(20, last.b));
+    seen.forEach(el => { if (!el.isConnected) { seen.delete(el); return; }
+      el.style.setProperty('--ry', (g * 1.1) + 'deg'); el.style.setProperty('--rx', (-b * .9) + 'deg');
+      el.style.setProperty('--gx', (50 + g * 2.5) + '%'); el.style.setProperty('--gy', (40 + b * 2.5) + '%'); el.classList.add('moving'); });
+  }
+  function flip(t) { t.classList.toggle('flipped'); t.classList.add('turning'); clearTimeout(t._turn); t._turn = setTimeout(() => t.classList.remove('turning'), 650); }
+  function startTilt() { if (orientOn) return; orientOn = true; base = null; addEventListener('deviceorientation', orient); }
+  let vio = null;
   function after() {
     const page = document.querySelector('.bc-page'); if (!page || !D) return;
     const byE = {}; D.cards.forEach(c => { byE[c.e] = c; });
     if (io) io.disconnect();
+    if (vio) vio.disconnect();
+    seen.clear();
+    vio = 'IntersectionObserver' in window ? new IntersectionObserver(ents => ents.forEach(en => { if (en.isIntersecting) seen.add(en.target); else seen.delete(en.target); })) : null;
     io = 'IntersectionObserver' in window ? new IntersectionObserver(ents => ents.forEach(en => {
       if (!en.isIntersecting) return; io.unobserve(en.target);
       const el = en.target, c = byE[el.dataset.e]; if (!c || c.photo || PHOTO[c.e] !== undefined) return;
@@ -195,6 +213,7 @@ window.FBPBeta = (function () {
     page.querySelectorAll('.bc-tilt').forEach(el => {
       fallback(el);
       if (io) io.observe(el);
+      if (vio) vio.observe(el);
       el.addEventListener('pointermove', e => {
         if (reduce() || e.pointerType === 'touch') return;
         const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
@@ -205,12 +224,12 @@ window.FBPBeta = (function () {
     });
     const sel = page.querySelector('.bc-team');
     if (sel) sel.addEventListener('change', () => { team = sel.value; shown = PAGE; redraw(); });
-    // phone tilt: iOS asks permission first
-    if (!orientOn && window.DeviceOrientationEvent) {
+    // phone tilt: iPhones ask permission first (the button near the top); other phones just start
+    if (!orientOn && window.DeviceOrientationEvent && matchMedia('(pointer: coarse)').matches) {
       if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         const b = page.querySelector('.bc-tiltbtn'); b.hidden = false;
-        b.onclick = () => DeviceOrientationEvent.requestPermission().then(s => { if (s === 'granted') { addEventListener('deviceorientation', orient); orientOn = true; b.hidden = true; } }).catch(() => {});
-      } else { addEventListener('deviceorientation', orient); orientOn = true; }
+        b.onclick = () => DeviceOrientationEvent.requestPermission().then(st => { if (st === 'granted') { startTilt(); b.hidden = true; } else b.textContent = 'Tilt is blocked in Settings > Safari > Motion & Orientation Access'; }).catch(() => {});
+      } else if (!reduce()) startTilt();
     }
     if (!wired) {   // one delegated click/key handler for the whole page
       wired = true;
@@ -219,11 +238,11 @@ window.FBPBeta = (function () {
         const b = e.target.closest('[data-bp],[data-bw],[data-bmore]');
         if (b) { if (b.dataset.bp) { pos = b.dataset.bp; shown = PAGE; } else if (b.dataset.bw) { who = b.dataset.bw; shown = PAGE; } else shown += PAGE; redraw(); return; }
         if (e.target.closest('a')) return;
-        const t = e.target.closest('.bc-tilt'); if (t) t.classList.toggle('flipped');
+        const t = e.target.closest('.bc-tilt'); if (t) flip(t);
       });
       document.addEventListener('keydown', e => {
         const t = e.target.closest && e.target.closest('.bc-tilt');
-        if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); t.classList.toggle('flipped'); }
+        if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); flip(t); }
       });
     }
   }
