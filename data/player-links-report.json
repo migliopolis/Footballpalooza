@@ -5,8 +5,8 @@
   "spellingFixed": 51,
   "name": 14,
   "unmatched": 3,
-  "rosteredLinked": 260,
-  "rosteredTotal": 260
+  "rosteredLinked": 259,
+  "rosteredTotal": 259
  },
  "mismatch": [],
  "byName": [
@@ -1915,6 +1915,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "4570242",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "16422",
+   "mflName": "Nikko Remigio",
+   "pos": "WR",
+   "team": "KCC",
+   "fbp": null,
+   "espn": "4372716",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

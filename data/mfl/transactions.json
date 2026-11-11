@@ -1,6 +1,12 @@
 {
- "fetched": "2026-11-11T18:39:32+00:00",
+ "fetched": "2026-11-11T23:37:36+00:00",
  "transactions": [
+  {
+   "franchise": "0009",
+   "timestamp": "1794432644",
+   "transaction": "|14833,",
+   "type": "FREE_AGENT"
+  },
   {
    "franchise": "0006",
    "timestamp": "1794416400",
