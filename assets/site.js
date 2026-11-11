@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0160';
+  const VERSION = '0.0161';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -681,7 +681,7 @@
     else if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
     else if (tab === 'press') app.innerHTML = pagePress();
-    else if (tab === 'beta') { app.innerHTML = window.FBPBeta ? FBPBeta.render({ esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#beta')) route(); } }) : '<p class="error">The Beta page didn’t load.</p>'; if (window.FBPBeta) FBPBeta.after(); }
+    else if (tab === 'beta') { app.innerHTML = window.FBPBeta ? FBPBeta.render({ esc, nameOf, teams: state.teams, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#beta')) route(); } }) : '<p class="error">The Beta page didn’t load.</p>'; if (window.FBPBeta) FBPBeta.after(); }
     else if (tab === 'awards') app.innerHTML = window.FBPAwards ? FBPAwards.render(draftCtx()) : '<p class="error">Awards didn’t load.</p>';
     else if (tab === 'reference') {
       const path = parts.slice(1);
