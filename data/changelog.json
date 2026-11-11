@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0166",
+      "to": "0.0170",
+      "dates": "Nov 11, 2026",
+      "items": [
+        "Trading Floor: “How it played out” now counts playoff points from real playoff games (not consolation games), and trade cards fit phone screens.",
+        "FBP Journey timelines: every stop in a player's FBP career, with team logos, how he arrived (A auction, D draft, T trade, W waivers) and how he left. Vertical on phones, side-by-side lanes on wider screens, with a Show details switch. On the Player Page, in Reference > Players (Player Journey, up to three players at once) and in each Trading Floor trade.",
+        "2019 and 2020 waiver claims, free-agent pickups and trades are now on record, so journeys and the trade history go back to 2019.",
+        "The footer and League Now header show when the data was last refreshed and whether it was an automatic or a commissioner refresh.",
+        "New ticker under the tabs: MFL Power Rating with each team's change since last week and a season sparkline, then Heat Check (team Heat Scores, the 12 hottest and 12 coldest players). Swipe it either way, tap anything to open that page, or hide it in Settings."
+      ]
+    },
+    {
       "from": "0.0156",
       "to": "0.0160",
       "dates": "Nov 10–11, 2026",

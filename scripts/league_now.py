@@ -412,7 +412,7 @@ def snapshot(data):
     out = {}
     for i, t in enumerate(data['standings'], 1):
         o = odds.get(t['id']) or {}
-        out[t['id']] = {'rank': i, 'seed': seed.get(t['id']), 'pwrRank': t.get('pwrRank'), 'allPlayW': t['allPlayW'],
+        out[t['id']] = {'rank': i, 'seed': seed.get(t['id']), 'pwrRank': t.get('pwrRank'), 'pwr': t.get('pwr'), 'allPlayW': t['allPlayW'],
                         'playoff': o.get('playoff'), 'bye': o.get('bye'), 'division': o.get('division'),
                         'seed1': o.get('seed1'), 'seed6': (o.get('seeds') or [None] * 7)[5]}
     return out

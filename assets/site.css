@@ -2488,19 +2488,21 @@ tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .foot-refresh{font-size:.8rem;color:var(--muted)}.foot-refresh b{color:var(--fg)}
 
 /* ---------- Ticker (under the tabs) ---------- */
-.ticker{overflow:hidden;background:#0d1014;color:#e9edf1;border-top:1px solid rgba(255,255,255,.08);font:600 .78rem/1 var(--mono);white-space:nowrap;
+.ticker{overflow:hidden;background:#0d1014;color:#e9edf1;border-top:1px solid rgba(255,255,255,.08);font:600 .78rem/1 var(--mono);white-space:nowrap;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;
   -webkit-mask:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);mask:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent)}
+.ticker:active{cursor:grabbing}
 .ticker[hidden]{display:none}
-.tk-track{display:flex;width:max-content;animation:tk-roll 60s linear infinite}
-.ticker:hover .tk-track,.ticker:focus-within .tk-track{animation-play-state:paused}
-@keyframes tk-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tk-track{display:flex;width:max-content;will-change:transform}
 .tk-run{display:flex;align-items:center;padding:7px 0}
-.tk-h{font:700 .66rem var(--body);letter-spacing:.12em;text-transform:uppercase;color:#0d1014;background:#f2c94c;padding:3px 7px;border-radius:3px;margin:0 10px 0 14px}
-.tk-i{display:inline-flex;align-items:baseline;gap:6px;padding:0 4px;color:inherit;text-decoration:none}
+.tk-h{font:700 .66rem var(--body);letter-spacing:.12em;text-transform:uppercase;color:#0d1014;background:#f2c94c;padding:3px 7px;border-radius:3px;margin:0 8px 0 6px;text-decoration:none}
+.tk-heat{background:#ff8a3d}.tk-hot{background:#ffb3a1}.tk-cold{background:#9fd2ff}
+.tk-i{display:inline-flex;align-items:center;gap:6px;padding:0 4px;color:inherit;text-decoration:none}
 .tk-i:hover b{text-decoration:underline}
-.tk-r{color:#8a96a3;font-size:.7rem}
+.tk-r{color:#8a96a3;font-size:.7rem}.tk-r sup{font-size:.58rem;margin-left:1px}.tk-r sup.up{color:#4cd07d}.tk-r sup.dn{color:#ff6b62}
 .tk-i b{letter-spacing:.04em}
-.tk-v{color:#cfd6dd}
+.tk-v{color:#cfd6dd}.tk-v.hot{color:#ff9d5c}.tk-v.cold{color:#7cc4ff}
+.tk-p{color:#8a96a3;font-size:.66rem}
 .tk-d.up{color:#4cd07d}.tk-d.dn{color:#ff6b62}.tk-d.eq{color:#8a96a3}
+.tk-sp{overflow:visible}.tk-sp polyline{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.tk-sp.up polyline{stroke:#4cd07d}.tk-sp.dn polyline{stroke:#ff6b62}
 .tk-sep{color:#4a5560;padding:0 10px}
-@media (prefers-reduced-motion: reduce){.ticker{overflow-x:auto;-webkit-mask:none;mask:none}.tk-track{animation:none}.tk-run[aria-hidden]{display:none}}

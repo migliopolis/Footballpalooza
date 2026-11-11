@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0169';
+  const VERSION = '0.0170';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -817,35 +817,107 @@
   }
   /* ---------- Ticker: a strip under the tabs that scrolls league info like a stock ticker ----------
      It lives in the header, outside the page area, so moving between pages never restarts it; a reload picks up where
-     it left off (the start time is kept for this browser session). For now: MFL Power Rating, rank movement since last
-     week. More items will join it. Settings > Ticker hides it. */
+     it left off (its position is kept for this browser session). Press or hover to pause; swipe or drag it either way
+     to catch something you missed. Tap a section label or an item to open that page. Settings > Ticker hides it.
+     Sections: MFL Power (rating, change since last week, a sparkline of the season so far) and Heat Check (each
+     team's Heat Score, then the 12 hottest and 12 coldest rostered players). */
   state.ticker = true; try { state.ticker = localStorage.getItem('fbp-ticker') !== '0'; } catch (e) {}
+  let TKH = null, TKA = null, tkLoading = false;
+  function tkLoad() {
+    if (tkLoading) return; tkLoading = true;
+    Promise.all([fetch('data/league-now-history.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch('data/analytics.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)])
+      .then(([h, a]) => { TKH = h; TKA = a; ticker(); });
+  }
+  const spark = vals => {
+    const v = vals.filter(x => x != null); if (v.length < 2) return '';
+    const lo = Math.min(...v), hi = Math.max(...v), W = 34, H = 12, k = hi - lo || 1;
+    const pts = v.map((x, i) => `${(i / (v.length - 1) * W).toFixed(1)},${(H - (x - lo) / k * H).toFixed(1)}`).join(' ');
+    const up = v[v.length - 1] >= v[v.length - 2];
+    return `<svg class="tk-sp ${up ? 'up' : 'dn'}" viewBox="-1 -1 ${W + 2} ${H + 2}" width="${W + 2}" height="${H + 2}" aria-hidden="true"><polyline points="${pts}"/></svg>`;
+  };
+  const short = n => { const p = String(n || '').split(' '); return p.length > 1 ? `${p[0][0]}. ${p.slice(1).join(' ').replace(/ (Jr\.|Sr\.|II|III|IV)$/, '')}` : n; };
   function tickerItems() {
     const d = state.now; if (!d || !d.standings) return [];
-    const P = d.prev && d.prev.teams;
+    const P = d.prev && d.prev.teams, out = [];
     const rows = d.standings.filter(t => t.pwr).sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99));
-    if (!rows.length) return [];
-    const items = [`<span class="tk-h">MFL Power</span>`];
-    rows.forEach(t => {
-      const tm = state.teams[t.id] || {}, was = P && P[t.id] && P[t.id].pwrRank, mv = was && t.pwrRank ? was - t.pwrRank : 0;
-      items.push(`<a class="tk-i" href="#now/power" title="${esc(nameOf(t.id))}: #${t.pwrRank}, rating ${t.pwr.toFixed(2)}${was ? `, ${mv > 0 ? 'up ' + mv : mv < 0 ? 'down ' + -mv : 'no change'} since week ${d.prev.week}` : ''}">
-        <span class="tk-r">${t.pwrRank}</span><b>${esc(tm.abbr || t.id)}</b><span class="tk-v">${t.pwr.toFixed(2)}</span>${was ? `<span class="tk-d ${mv > 0 ? 'up' : mv < 0 ? 'dn' : 'eq'}">${mv > 0 ? '▲' + mv : mv < 0 ? '▼' + -mv : '–'}</span>` : ''}</a>`);
-    });
-    return items;
+    if (rows.length) {
+      const W = TKH ? Object.keys(TKH.weeks).map(Number).sort((a, b) => a - b) : [];
+      out.push(`<a class="tk-h" href="#now/power" title="MFL Power Rankings">MFL Power</a>`);
+      rows.forEach(t => {
+        const tm = state.teams[t.id] || {}, was = P && P[t.id], wr = was && was.pwrRank, mv = wr && t.pwrRank ? wr - t.pwrRank : 0;
+        const dp = was && was.pwr != null ? t.pwr - was.pwr : null;
+        const hist = W.map(w => ((TKH.weeks[w] || {})[t.id] || {}).pwr);
+        out.push(`<a class="tk-i" href="#now/power" title="${esc(nameOf(t.id))}: #${t.pwrRank}, rating ${t.pwr.toFixed(2)}${dp != null ? ` (${dp >= 0 ? '+' : ''}${dp.toFixed(2)} since week ${d.prev.week})` : ''}${wr ? `, ${mv > 0 ? 'up ' + mv : mv < 0 ? 'down ' + -mv : 'same rank'}` : ''}">
+          <span class="tk-r">${t.pwrRank}${mv ? `<sup class="${mv > 0 ? 'up' : 'dn'}">${mv > 0 ? '↑' : '↓'}${Math.abs(mv)}</sup>` : ''}</span><b>${esc(tm.abbr || t.id)}</b><span class="tk-v">${t.pwr.toFixed(2)}</span>
+          ${dp != null ? `<span class="tk-d ${dp > 0.004 ? 'up' : dp < -0.004 ? 'dn' : 'eq'}">${dp > 0.004 ? '▲' : dp < -0.004 ? '▼' : '–'}${Math.abs(dp).toFixed(2)}</span>` : ''}${spark(hist)}</a>`);
+      });
+    }
+    const A = TKA;
+    if (A && A.heatTeams) {
+      const go = '#now/analytics', hw = (A.heatWeeks || []).length;
+      out.push(`<a class="tk-h tk-heat" href="${go}" data-tk-jump="heatteams" title="Heat Check on League Now > Analytics">Heat Check</a>`);
+      Object.entries(A.heatTeams).sort((a, b) => b[1].score - a[1].score).forEach(([f, h]) => {
+        const tm = state.teams[f] || {};
+        out.push(`<a class="tk-i" href="${go}" data-tk-jump="heatteams" title="${esc(nameOf(f))}: Heat Score ${h.score}, weeks 1–${hw}"><b>${esc(tm.abbr || f)}</b><span class="tk-v ${h.score > 0 ? 'hot' : h.score < 0 ? 'cold' : ''}">${h.score > 0 ? '+' : ''}${h.score}</span></a>`);
+      });
+      const pl = Object.entries(A.heatPlayers || {}).filter(([, p]) => p.fr).map(([id, p]) => Object.assign({ id }, p));
+      const hot = pl.slice().sort((a, b) => b.s - a.s).slice(0, 12), cold = pl.slice().sort((a, b) => a.s - b.s).slice(0, 12);
+      const pi = (p, cls) => { const tm = state.teams[p.fr] || {};
+        return `<a class="tk-i" href="#now/rosters/${p.fr}/${p.id}" title="${esc(p.n)} (${esc(p.p)}, ${esc(nameOf(p.fr))}): Heat Score ${p.s}"><b>${esc(short(p.n))}</b><span class="tk-p">${esc(p.p)} ${esc(tm.abbr || '')}</span><span class="tk-v ${cls}">${p.s > 0 ? '+' : ''}${p.s}</span></a>`; };
+      out.push(`<a class="tk-h tk-hot" href="#now/analytics" data-tk-jump="heatteams">🔥 Hottest</a>`); hot.forEach(p => out.push(pi(p, 'hot')));
+      out.push(`<a class="tk-h tk-cold" href="#now/analytics" data-tk-jump="heatteams">🧊 Coldest</a>`); cold.forEach(p => out.push(pi(p, 'cold')));
+    }
+    return out;
+  }
+  // the motion: a position that drifts left about 45 pixels a second; dragging moves it, pressing or hovering holds it
+  const TK = { x: 0, w: 0, speed: 45, hold: false, drag: null, resume: 0, last: 0, raf: 0, track: null, moved: false, saved: 0 };
+  const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function tkFrame(t) {
+    const dt = TK.last ? Math.min(0.1, (t - TK.last) / 1000) : 0; TK.last = t;
+    if (TK.track && TK.w) {
+      if (!TK.hold && !TK.drag && Date.now() > TK.resume && !reduceMotion() && !document.hidden) TK.x -= TK.speed * dt;
+      if (TK.x <= -TK.w) TK.x += TK.w; else if (TK.x > 0) TK.x -= TK.w;
+      TK.track.style.transform = `translate3d(${TK.x.toFixed(1)}px,0,0)`;
+      if (t - TK.saved > 1000) { TK.saved = t; try { sessionStorage.setItem('fbp-ticker-pos', JSON.stringify({ x: TK.x, at: Date.now() })); } catch (e) {} }
+    }
+    TK.raf = requestAnimationFrame(tkFrame);
   }
   function ticker() {
     const el = document.getElementById('ticker'); if (!el) return;
+    if (!TKH && !tkLoading && state.ticker) tkLoad();
     const items = tickerItems();
-    if (!state.ticker || !items.length) { el.hidden = true; el.innerHTML = ''; window.dispatchEvent(new Event('resize')); return; }
+    if (!state.ticker || !items.length) { el.hidden = true; el.innerHTML = ''; TK.track = null; window.dispatchEvent(new Event('resize')); return; }
     const run = items.join('<span class="tk-sep" aria-hidden="true">•</span>') + '<span class="tk-sep" aria-hidden="true">•</span>';
-    el.hidden = false;
+    const had = !!TK.track;
+    el.hidden = false; el.setAttribute('aria-label', 'League ticker'); el.setAttribute('data-noswipe', '');
     el.innerHTML = `<div class="tk-track"><div class="tk-run">${run}</div><div class="tk-run" aria-hidden="true">${run}</div></div>`;
-    el.setAttribute('aria-label', 'League ticker');
-    const w = el.querySelector('.tk-run').scrollWidth, dur = Math.max(20, w / 45);   // about 45 pixels a second
-    let t0 = Date.now(); try { t0 = +sessionStorage.getItem('fbp-ticker-t0') || t0; sessionStorage.setItem('fbp-ticker-t0', t0); } catch (e) {}
-    const tr = el.querySelector('.tk-track');
-    tr.style.animationDuration = dur + 's';
-    tr.style.animationDelay = -(((Date.now() - t0) / 1000) % dur) + 's';
+    TK.track = el.querySelector('.tk-track'); TK.w = el.querySelector('.tk-run').scrollWidth;
+    if (!had) {   // first build this page load: carry on from where this session left it
+      try { const sv = JSON.parse(sessionStorage.getItem('fbp-ticker-pos') || 'null');
+        if (sv) TK.x = sv.x - (reduceMotion() ? 0 : TK.speed * Math.min(600, (Date.now() - sv.at) / 1000)); } catch (e) {}
+    }
+    if (!TK.raf) TK.raf = requestAnimationFrame(tkFrame);
+    if (!el.dataset.wired) {
+      el.dataset.wired = '1';
+      el.addEventListener('mouseenter', () => { TK.hold = true; });
+      el.addEventListener('mouseleave', () => { TK.hold = false; });
+      el.addEventListener('pointerdown', e => { TK.drag = { x0: e.clientX, y0: e.clientY, start: TK.x, id: e.pointerId }; TK.moved = false; });
+      el.addEventListener('pointermove', e => {
+        const g = TK.drag; if (!g || e.pointerId !== g.id) return;
+        const dx = e.clientX - g.x0;
+        if (!TK.moved && Math.abs(dx) > 5 && Math.abs(dx) > Math.abs(e.clientY - g.y0)) { TK.moved = true; try { el.setPointerCapture(g.id); } catch (x) {} }
+        if (TK.moved) TK.x = g.start + dx;
+      });
+      const up = () => { if (!TK.drag) return; TK.drag = null; TK.resume = Date.now() + (TK.moved ? 1500 : 800); };
+      el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+      el.addEventListener('click', e => {
+        if (TK.moved) { e.preventDefault(); e.stopPropagation(); TK.moved = false; return; }
+        const j = e.target.closest('[data-tk-jump]');
+        if (j) setTimeout(() => { const b = document.querySelector(`[data-an-jump="${j.dataset.tkJump}"]`); if (b) b.click(); }, 350);
+      }, true);
+      el.addEventListener('dragstart', e => e.preventDefault());
+    }
     window.dispatchEvent(new Event('resize'));   // the pinned header got taller
   }
   async function init() {
