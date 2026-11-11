@@ -250,6 +250,39 @@ def main():
                 block.append({'f': f, 'ts': int(b['timestamp']) if b.get('timestamp') else None, 'items': items,
                               'wants': private((b.get('inExchangeFor') or '').strip())})
 
+    # ---------- the ticker's feed: latest moves (last 10 days) and the block, small enough to load on every page ----------
+    abbr = {f: ((load(D('teams.json'), {}) or {}).get('teams', {}).get(f) or {}).get('abbr', f) for f in teams}
+    tj = (load(D('mfl', 'transactions.json'), {}) or {}).get('transactions') or []
+    tj = tj.get('transaction') if isinstance(tj, dict) else tj
+    cutoff = datetime.now(timezone.utc).timestamp() - 10 * 86400
+    moves = []
+    for x in as_list(tj):
+        ts = int(x.get('timestamp') or 0)
+        if ts < cutoff:
+            continue
+        ty, f = x.get('type'), x.get('franchise')
+        if ty in ('BBID_WAIVER', 'FREE_AGENT'):
+            parts = (x.get('transaction', '') + '||').split('|')
+            adds = [q for q in parts[0].split(',') if q]
+            bid = parts[1] if ty == 'BBID_WAIVER' else ''
+            for q in adds:
+                n, pos = pname(q)
+                try:
+                    b = f' (${float(bid):.0f})' if bid and float(bid) else ''
+                except ValueError:
+                    b = ''
+                moves.append({'ts': ts, 'k': 'W' if ty == 'BBID_WAIVER' else 'F', 'f': f, 'id': q, 't': f"{'claimed' if ty == 'BBID_WAIVER' else 'signed'} {n}{b}", 'pos': pos})
+    for t in trades:
+        if t['ts'] >= cutoff:
+            moves.append({'ts': t['ts'], 'k': 'T', 'f': t['a'], 'f2': t['b'],
+                          't': ' for '.join([' + '.join(x['t'] for x in t['aGave']) or 'nothing', ' + '.join(x['t'] for x in t['bGave']) or 'nothing'])})
+    moves.sort(key=lambda m: -m['ts'])
+    feed = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'deadline': DEADLINE, 'moves': moves[:20],
+            'block': [{'f': b['f'], 'items': [x.get('n') or x['t'] for x in b['items']]} for b in block]}
+    with open(D('ticker.json'), 'w') as fh:
+        json.dump(feed, fh, separators=(',', ':'), ensure_ascii=False)
+        fh.write('\n')
+
     out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': int((load(D('mfl', '_meta.json'), {}) or {}).get('season') or 2026), 'deadline': DEADLINE, 'cap': CAP,
            'note': 'Beta. Ratings are the prototype OVR. Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',
            'teams': teams, 'targets': targets, 'trades': trades, 'habits': habits,

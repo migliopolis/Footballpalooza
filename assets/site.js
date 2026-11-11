@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0170';
+  const VERSION = '0.0171';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -171,7 +171,12 @@
       ${setSec('colors', 'Page colors', `<p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
         <div class="swatches" role="group" aria-label="Page colors">${swatches}</div>`)}
       ${setSec('ticker', 'Ticker', `<p>The scrolling strip under the tabs. It keeps running as you move between pages.</p>
-        <div class="seg" role="group" aria-label="Ticker"><button type="button" data-ticker="on" aria-pressed="${state.ticker}">Show</button><button type="button" data-ticker="off" aria-pressed="${!state.ticker}">Hide</button></div>`)}
+        <div class="seg" role="group" aria-label="Ticker"><button type="button" data-ticker="on" aria-pressed="${state.ticker}">Show</button><button type="button" data-ticker="off" aria-pressed="${!state.ticker}">Hide</button></div>
+        ${state.ticker ? `<p class="tk-cfg-h">What it shows, in order. Tick the ones you want; drag <b>☰</b> (or use the arrows) to change the order.</p>
+        <ol class="tk-cfg">${tkOrder().map((k, i, a) => { const lab = (TK_SECS.find(x => x[0] === k) || [k, k])[1], on = !(tkCfg.off || []).includes(k);
+          return `<li data-tk-k="${k}" class="${on ? '' : 'off'}"><span class="tk-grip" aria-hidden="true">☰</span><label><input type="checkbox" data-tk-on="${k}"${on ? ' checked' : ''}> ${lab}</label>
+            <span class="tk-ar"><button type="button" data-tk-mv="${k}|-1"${i ? '' : ' disabled'} aria-label="Move ${lab} up">↑</button><button type="button" data-tk-mv="${k}|1"${i < a.length - 1 ? '' : ' disabled'} aria-label="Move ${lab} down">↓</button></span></li>`; }).join('')}</ol>
+        <div class="seg"><button type="button" data-tk-reset="1">Back to the default order</button></div>` : ''}`)}
       ${setSec('mode', 'Light or dark', `<p>Match device follows your phone or computer’s setting.</p>
         <div class="seg" role="group" aria-label="Light or dark">${seg}</div>`)}
       ${changelog()}`;
@@ -822,13 +827,21 @@
      Sections: MFL Power (rating, change since last week, a sparkline of the season so far) and Heat Check (each
      team's Heat Score, then the 12 hottest and 12 coldest rostered players). */
   state.ticker = true; try { state.ticker = localStorage.getItem('fbp-ticker') !== '0'; } catch (e) {}
-  let TKH = null, TKA = null, tkLoading = false;
+  let TKH = null, TKA = null, TKF = null, tkLoading = false;
   function tkLoad() {
     if (tkLoading) return; tkLoading = true;
-    Promise.all([fetch('data/league-now-history.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch('data/analytics.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)])
-      .then(([h, a]) => { TKH = h; TKA = a; ticker(); });
+    const get = u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
+    Promise.all([get('data/league-now-history.json'), get('data/analytics.json'), get('data/ticker.json')])
+      .then(([h, a, f]) => { TKH = h; TKA = a; TKF = f; ticker(); });
   }
+  // the sections, in their default order; Settings > Ticker turns each on or off and drags them into any order
+  const TK_SECS = [['deadline', 'Trade deadline countdown'], ['power', 'MFL Power Rating'], ['heat', 'Heat Check: teams'],
+    ['hot', 'Hottest players'], ['cold', 'Coldest players'], ['odds', 'Playoff odds'], ['matchups', 'This week’s matchups'],
+    ['scores', 'Last week’s scores'], ['block', 'Trade block'], ['moves', 'Latest moves']];
+  let tkCfg = { order: [], off: [] };
+  try { tkCfg = Object.assign(tkCfg, JSON.parse(localStorage.getItem('fbp-ticker-sections') || '{}')); } catch (e) {}
+  const tkOrder = () => { const ids = TK_SECS.map(x => x[0]), o = (tkCfg.order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
+  const tkSave = () => { try { localStorage.setItem('fbp-ticker-sections', JSON.stringify(tkCfg)); } catch (e) {} };
   const spark = vals => {
     const v = vals.filter(x => x != null); if (v.length < 2) return '';
     const lo = Math.min(...v), hi = Math.max(...v), W = 34, H = 12, k = hi - lo || 1;
@@ -839,36 +852,53 @@
   const short = n => { const p = String(n || '').split(' '); return p.length > 1 ? `${p[0][0]}. ${p.slice(1).join(' ').replace(/ (Jr\.|Sr\.|II|III|IV)$/, '')}` : n; };
   function tickerItems() {
     const d = state.now; if (!d || !d.standings) return [];
-    const P = d.prev && d.prev.teams, out = [];
-    const rows = d.standings.filter(t => t.pwr).sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99));
-    if (rows.length) {
+    const P = d.prev && d.prev.teams, A = TKA, F = TKF, O = d.odds && d.odds.teams, ab = f => esc((state.teams[f] || {}).abbr || f);
+    const S = {};
+    S.deadline = () => {
+      const dl = Date.parse((F && F.deadline) || '2026-12-03T17:00:00Z'), ms = dl - Date.now(); if (!(ms > 0)) return [];
+      const dd = Math.floor(ms / 864e5), hh = Math.floor(ms % 864e5 / 36e5);
+      return [`<a class="tk-h tk-dl" href="#beta/trade">Trade deadline</a>`, `<a class="tk-i" href="#beta/trade"><b>${dd ? dd + 'd ' : ''}${hh}h</b><span class="tk-p">Thu, Dec 3 · 12 PM EST</span></a>`];
+    };
+    S.power = () => {
+      const rows = d.standings.filter(t => t.pwr).sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99)); if (!rows.length) return [];
       const W = TKH ? Object.keys(TKH.weeks).map(Number).sort((a, b) => a - b) : [];
-      out.push(`<a class="tk-h" href="#now/power" title="MFL Power Rankings">MFL Power</a>`);
-      rows.forEach(t => {
-        const tm = state.teams[t.id] || {}, was = P && P[t.id], wr = was && was.pwrRank, mv = wr && t.pwrRank ? wr - t.pwrRank : 0;
-        const dp = was && was.pwr != null ? t.pwr - was.pwr : null;
-        const hist = W.map(w => ((TKH.weeks[w] || {})[t.id] || {}).pwr);
-        out.push(`<a class="tk-i" href="#now/power" title="${esc(nameOf(t.id))}: #${t.pwrRank}, rating ${t.pwr.toFixed(2)}${dp != null ? ` (${dp >= 0 ? '+' : ''}${dp.toFixed(2)} since week ${d.prev.week})` : ''}${wr ? `, ${mv > 0 ? 'up ' + mv : mv < 0 ? 'down ' + -mv : 'same rank'}` : ''}">
-          <span class="tk-r">${t.pwrRank}${mv ? `<sup class="${mv > 0 ? 'up' : 'dn'}">${mv > 0 ? '↑' : '↓'}${Math.abs(mv)}</sup>` : ''}</span><b>${esc(tm.abbr || t.id)}</b><span class="tk-v">${t.pwr.toFixed(2)}</span>
-          ${dp != null ? `<span class="tk-d ${dp > 0.004 ? 'up' : dp < -0.004 ? 'dn' : 'eq'}">${dp > 0.004 ? '▲' : dp < -0.004 ? '▼' : '–'}${Math.abs(dp).toFixed(2)}</span>` : ''}${spark(hist)}</a>`);
-      });
-    }
-    const A = TKA;
-    if (A && A.heatTeams) {
-      const go = '#now/analytics', hw = (A.heatWeeks || []).length;
-      out.push(`<a class="tk-h tk-heat" href="${go}" data-tk-jump="heatteams" title="Heat Check on League Now > Analytics">Heat Check</a>`);
-      Object.entries(A.heatTeams).sort((a, b) => b[1].score - a[1].score).forEach(([f, h]) => {
-        const tm = state.teams[f] || {};
-        out.push(`<a class="tk-i" href="${go}" data-tk-jump="heatteams" title="${esc(nameOf(f))}: Heat Score ${h.score}, weeks 1–${hw}"><b>${esc(tm.abbr || f)}</b><span class="tk-v ${h.score > 0 ? 'hot' : h.score < 0 ? 'cold' : ''}">${h.score > 0 ? '+' : ''}${h.score}</span></a>`);
-      });
-      const pl = Object.entries(A.heatPlayers || {}).filter(([, p]) => p.fr).map(([id, p]) => Object.assign({ id }, p));
-      const hot = pl.slice().sort((a, b) => b.s - a.s).slice(0, 12), cold = pl.slice().sort((a, b) => a.s - b.s).slice(0, 12);
-      const pi = (p, cls) => { const tm = state.teams[p.fr] || {};
-        return `<a class="tk-i" href="#now/rosters/${p.fr}/${p.id}" title="${esc(p.n)} (${esc(p.p)}, ${esc(nameOf(p.fr))}): Heat Score ${p.s}"><b>${esc(short(p.n))}</b><span class="tk-p">${esc(p.p)} ${esc(tm.abbr || '')}</span><span class="tk-v ${cls}">${p.s > 0 ? '+' : ''}${p.s}</span></a>`; };
-      out.push(`<a class="tk-h tk-hot" href="#now/analytics" data-tk-jump="heatteams">🔥 Hottest</a>`); hot.forEach(p => out.push(pi(p, 'hot')));
-      out.push(`<a class="tk-h tk-cold" href="#now/analytics" data-tk-jump="heatteams">🧊 Coldest</a>`); cold.forEach(p => out.push(pi(p, 'cold')));
-    }
-    return out;
+      return [`<a class="tk-h" href="#now/power" title="MFL Power Rankings">MFL Power</a>`].concat(rows.map(t => {
+        const was = P && P[t.id], wr = was && was.pwrRank, mv = wr && t.pwrRank ? wr - t.pwrRank : 0;
+        const dp = was && was.pwr != null ? t.pwr - was.pwr : null, hist = W.map(w => ((TKH.weeks[w] || {})[t.id] || {}).pwr);
+        return `<a class="tk-i" href="#now/power" title="${esc(nameOf(t.id))}: #${t.pwrRank}, rating ${t.pwr.toFixed(2)}${dp != null ? ` (${dp >= 0 ? '+' : ''}${dp.toFixed(2)} since week ${d.prev.week})` : ''}">
+          <span class="tk-r">${t.pwrRank}${mv ? `<sup class="${mv > 0 ? 'up' : 'dn'}">${mv > 0 ? '↑' : '↓'}${Math.abs(mv)}</sup>` : ''}</span><b>${ab(t.id)}</b><span class="tk-v">${t.pwr.toFixed(2)}</span>
+          ${dp != null ? `<span class="tk-d ${dp > 0.004 ? 'up' : dp < -0.004 ? 'dn' : 'eq'}">${dp > 0.004 ? '▲' : dp < -0.004 ? '▼' : '–'}${Math.abs(dp).toFixed(2)}</span>` : ''}${spark(hist)}</a>`; }));
+    };
+    const heatGo = 'href="#now/analytics" data-tk-jump="heatteams"';
+    S.heat = () => !(A && A.heatTeams) ? [] : [`<a class="tk-h tk-heat" ${heatGo}>Heat Check</a>`].concat(Object.entries(A.heatTeams).sort((a, b) => b[1].score - a[1].score)
+      .map(([f, h]) => `<a class="tk-i" ${heatGo} title="${esc(nameOf(f))}: Heat Score ${h.score}"><b>${ab(f)}</b><span class="tk-v ${h.score > 0 ? 'hot' : h.score < 0 ? 'cold' : ''}">${h.score > 0 ? '+' : ''}${h.score}</span></a>`));
+    const pl = () => Object.entries((A && A.heatPlayers) || {}).filter(([, p]) => p.fr).map(([id, p]) => Object.assign({ id }, p));
+    const pi = (p, cls) => `<a class="tk-i" href="#now/rosters/${p.fr}/${p.id}" title="${esc(p.n)} (${esc(p.p)}, ${esc(nameOf(p.fr))}): Heat Score ${p.s}"><b>${esc(short(p.n))}</b><span class="tk-p">${esc(p.p)} ${ab(p.fr)}</span><span class="tk-v ${cls}">${p.s > 0 ? '+' : ''}${p.s}</span></a>`;
+    S.hot = () => !A ? [] : [`<a class="tk-h tk-hot" ${heatGo}>🔥 Hottest</a>`].concat(pl().sort((a, b) => b.s - a.s).slice(0, 12).map(p => pi(p, 'hot')));
+    S.cold = () => !A ? [] : [`<a class="tk-h tk-cold" ${heatGo}>🧊 Coldest</a>`].concat(pl().sort((a, b) => a.s - b.s).slice(0, 12).map(p => pi(p, 'cold')));
+    S.odds = () => !O ? [] : [`<a class="tk-h tk-odds" href="#now/playoffs">Playoff odds</a>`].concat(Object.entries(O).sort((a, b) => b[1].playoff - a[1].playoff).map(([f, o]) => {
+      const was = P && P[f] && P[f].playoff, dv = was != null ? o.playoff - was : null, pc = v => v >= 99.5 ? '>99' : v > 0 && v < 0.5 ? '<1' : Math.round(v);
+      return `<a class="tk-i" href="#now/playoffs" title="${esc(nameOf(f))}: ${o.playoff}% to make the playoffs"><b>${ab(f)}</b><span class="tk-v">${pc(o.playoff)}%</span>${dv != null && Math.abs(dv) >= 0.5 ? `<span class="tk-d ${dv > 0 ? 'up' : 'dn'}">${dv > 0 ? '▲' : '▼'}${Math.abs(Math.round(dv))}</span>` : ''}</a>`; }));
+    S.matchups = () => {
+      const up = d.upcoming || []; if (!up.length) return [];
+      const wk = up[0][0], wp = (f, opp) => { const g = ((O || {})[f] || {}).ownGames || []; const x = g.find(z => z.week === wk && z.opp === opp); return x ? x.winProb : null; };
+      return [`<a class="tk-h tk-mu" href="#now/matchups">Week ${wk}</a>`].concat(up.filter(g => g[0] === wk).map(([, a, b]) => { const pa = wp(a, b), pb = pa == null ? null : 100 - pa;
+        return `<a class="tk-i" href="#now/matchups"><b>${ab(a)}</b>${pa != null ? `<span class="tk-v ${pa >= 50 ? 'fav' : ''}">${pa}%</span>` : ''}<span class="tk-p">vs</span><b>${ab(b)}</b>${pb != null ? `<span class="tk-v ${pb > 50 ? 'fav' : ''}">${pb}%</span>` : ''}</a>`; }));
+    };
+    S.scores = () => {
+      const G = d.games || []; if (!G.length) return [];
+      const wk = Math.max(...G.map(g => g[0]));
+      return [`<a class="tk-h tk-sc" href="#now">Week ${wk} final</a>`].concat(G.filter(g => g[0] === wk).map(([, a, sa, b, sb]) => {
+        const aw = sa > sb, bw = sb > sa;
+        return `<a class="tk-i" href="#now"><b class="${aw ? '' : 'tk-l'}">${ab(a)}</b><span class="tk-v ${aw ? 'win' : ''}">${sa.toFixed(1)}</span><span class="tk-p">–</span><b class="${bw ? '' : 'tk-l'}">${ab(b)}</b><span class="tk-v ${bw ? 'win' : ''}">${sb.toFixed(1)}</span></a>`; }));
+    };
+    S.block = () => !(F && F.block && F.block.length) ? [] : [`<a class="tk-h tk-bl" href="#beta/trade">On the block</a>`].concat(F.block.map(b =>
+      `<a class="tk-i" href="#beta/trade"><b>${ab(b.f)}</b><span class="tk-v">${esc(b.items.map(short).join(', '))}</span></a>`));
+    S.moves = () => !(F && F.moves && F.moves.length) ? [] : [`<a class="tk-h tk-mv" href="#beta/trade">Latest moves</a>`].concat(F.moves.map(m =>
+      m.k === 'T' ? `<a class="tk-i" href="#beta/trade"><span class="tk-p">⇄</span><b>${ab(m.f)}</b><span class="tk-p">&amp;</span><b>${ab(m.f2)}</b><span class="tk-v">${esc(m.t)}</span></a>`
+        : `<a class="tk-i" href="#now/rosters/${m.f}/${m.id}"><b>${ab(m.f)}</b><span class="tk-v">${esc(m.t)}</span><span class="tk-p">${new Date(m.ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></a>`));
+    const off = new Set(tkCfg.off || []);
+    return tkOrder().filter(k => !off.has(k)).flatMap(k => S[k] ? S[k]() : []);
   }
   // the motion: a position that drifts left about 45 pixels a second; dragging moves it, pressing or hovering holds it
   const TK = { x: 0, w: 0, speed: 45, hold: false, drag: null, resume: 0, last: 0, raf: 0, track: null, moved: false, saved: 0 };
@@ -920,6 +950,37 @@
     }
     window.dispatchEvent(new Event('resize'));   // the pinned header got taller
   }
+  // Settings > Ticker: tick a section on or off, and drag ☰ to reorder (mouse or finger)
+  document.addEventListener('change', e => {
+    const c = e.target.closest && e.target.closest('[data-tk-on]'); if (!c) return;
+    const off = new Set(tkCfg.off || []); c.checked ? off.delete(c.dataset.tkOn) : off.add(c.dataset.tkOn);
+    tkCfg.off = [...off]; tkSave(); ticker(); c.closest('li').classList.toggle('off', !c.checked);
+  });
+  (function dragTickerRows() {
+    let drag = null;
+    document.addEventListener('pointerdown', e => {
+      const g = e.target.closest && e.target.closest('.tk-grip'); if (!g) return;
+      const li = g.closest('li'), list = li.parentElement; e.preventDefault();
+      drag = { li, list, y0: e.clientY, off0: li.offsetTop, id: e.pointerId };
+      li.classList.add('lift'); list.classList.add('dragging');
+      try { g.setPointerCapture(e.pointerId); } catch (x) {}
+    });
+    document.addEventListener('pointermove', e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const { li, list } = drag, sibs = [...list.children].filter(c => c !== li);
+      const before = sibs.find(c => { const r = c.getBoundingClientRect(); return e.clientY < r.top + r.height / 2; });
+      if (before !== li.nextElementSibling) list.insertBefore(li, before || null);
+      li.style.transform = `translateY(${e.clientY - drag.y0 - (li.offsetTop - drag.off0)}px)`;
+    });
+    const end = e => {
+      if (!drag || (e && e.pointerId !== drag.id)) return;
+      const { li, list } = drag; drag = null;
+      li.style.transform = ''; li.classList.remove('lift'); list.classList.remove('dragging');
+      tkCfg.order = [...list.children].map(c => c.dataset.tkK); tkSave(); ticker();
+      list.querySelectorAll('li').forEach((c, i, a) => { const [u, d] = c.querySelectorAll('[data-tk-mv]'); u.disabled = !i; d.disabled = i === a.length - 1; });
+    };
+    document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
+  })();
   async function init() {
     try {
       const [now, teams] = await Promise.all([
@@ -987,6 +1048,15 @@
         state.defTeam = dtb.dataset.defteam; try { localStorage.setItem('fbp-default-team', state.defTeam); } catch (x) {}
         const y = window.scrollY; route(); window.scrollTo(0, y);
         const again = document.querySelector(`[data-defteam="${state.defTeam}"]`); if (again) again.focus({ preventScroll: true });
+        return;
+      }
+      const tmv = e.target.closest('[data-tk-mv],[data-tk-reset]');
+      if (tmv) {
+        if (tmv.dataset.tkReset) tkCfg = { order: [], off: [] };
+        else { const [k, dir] = tmv.dataset.tkMv.split('|'), o = tkOrder(), i = o.indexOf(k), j = i + +dir;
+          if (j >= 0 && j < o.length) { [o[i], o[j]] = [o[j], o[i]]; tkCfg.order = o; } }
+        tkSave(); ticker(); const y = window.scrollY; route(); window.scrollTo(0, y);
+        const again = document.querySelector(tmv.dataset.tkReset ? '[data-tk-reset]' : `[data-tk-mv="${tmv.dataset.tkMv}"]`); if (again && !again.disabled) again.focus({ preventScroll: true });
         return;
       }
       const tk = e.target.closest('[data-ticker]');
