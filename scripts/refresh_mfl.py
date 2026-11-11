@@ -326,6 +326,15 @@ def main():
             if t in CORE:
                 failed_core.append(t)
         time.sleep(1.1)
+    # Trade Bait: what owners have put on the block in MFL (Trading Floor). Optional; picks included.
+    try:
+        tb = fetch('tradeBait', {'INCLUDE_DRAFT_PICKS': '1'})
+        tb['fetched'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+        save('tradeBait', tb)
+        print('  ok   tradeBait')
+    except Exception as e:
+        print(f'  FAIL {e}  (kept the previous file)')
+    time.sleep(1.1)
     if players_stale():
         # MFL serves the player list only from api.myfantasyleague.com. DETAILS=1 adds the
         # ESPN id (player photos), the SportsData id, NFL draft slot, college and birthdate.

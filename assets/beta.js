@@ -97,16 +97,29 @@ window.FBPBeta = (function () {
     return D.cards.filter(c => (pos === 'ALL' || c.p === pos) && (who === 'all' || (who === 'fa' ? !own(c) : !!own(c))) && (!team || who === 'fa' || own(c) === team))
       .sort((a, b) => (b.o - a.o) || ((a.r || 999) - (b.r || 999)));
   }
+  /* ---------- Beta landing: a button per experiment ---------- */
+  const sub = () => location.hash.slice(1).split('/')[1] || '';
+  const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the prototype ratings.'],
+    ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2021.']];
+  function betaHead(cur) {
+    return `<div class="pagehead"><h1>Beta</h1><span class="asof">Testing ground for things that aren’t finished</span></div>
+<nav class="seg bt-sub">${[['', 'All'], ...BETA.map(([k, l]) => [k, l])].map(([k, l]) => `<a href="#beta${k ? '/' + k : ''}"${cur === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+  }
   function render(ctx) {
     X = ctx;
+    const s0 = sub();
+    if (s0 === 'trade') return betaHead('trade') + (window.FBPTrade ? FBPTrade.render(ctx) : '<p class="error">The Trading Floor didn’t load.</p>');
+    if (s0 !== 'cards') return betaHead('') + `<div class="bt-grid">${BETA.map(([k, l, d]) => `<a class="bt-btn" href="#beta/${k}"><b>${l}</b><span>${d}</span></a>`).join('')}</div>`;
+    return betaHead('cards') + renderCards(ctx);
+  }
+  function renderCards(ctx) {
     if (!D) { load(); return failed ? '<p class="error">The player cards didn’t load. Refresh the page to try again.</p>' : '<p class="loading">Loading player cards…</p>'; }
     if (!seeded) { seeded = true; if (ctx.myTeam && D.cards.some(c => own(c) === ctx.myTeam)) team = ctx.myTeam; }
     const teams = [...new Set(D.cards.map(own).filter(Boolean))].map(id => [id, ctx.nameOf ? ctx.nameOf(id) : id]).sort((a, b) => a[1].localeCompare(b[1]));
     const L = list(), vis = L.slice(0, shown);
     if (view === 'stack' && at > L.length) at = L.length;
     const seg = (attr, cur, opts) => opts.map(([k, l]) => `<button type="button" data-${attr}="${k}" aria-pressed="${k === cur}">${l}</button>`).join('');
-    return `<div class="pagehead"><h1>Beta</h1><span class="asof">Testing ground for things that aren’t finished</span></div>
-<section class="bc-page">
+    return `<section class="bc-page">
  <h2 class="bc-h">Player Cards</h2>
  <p class="bc-intro">A trading card for every player, built on the prototype player ratings. Tap a card to flip it; move your mouse over it, or tilt your phone, to catch the foil. The big number is <b>OVR</b>, one rating for how good he is as a fantasy player: <b>90+</b> holo, <b>80s</b> gold, <b>70s</b> silver, under 70 bronze. Special fronts: <b>1st</b> and <b>2nd Team All-FBP</b> so far this season get their own backgrounds, and anyone who scored 30+ FBP points last week is <b>on fire</b>.</p>
  <div class="bc-bar-row seg">${seg('bv', view, [['stack', 'Stack'], ['grid', 'Grid']])}</div>
@@ -240,6 +253,7 @@ window.FBPBeta = (function () {
   }
 
   function after() {
+    if (sub() === 'trade') { if (window.FBPTrade) FBPTrade.after(); return; }
     const page = document.querySelector('.bc-page'); if (!page || !D) return;
     if (vio) vio.disconnect();
     seen.clear();
