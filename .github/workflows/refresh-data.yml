@@ -70,6 +70,9 @@ jobs:
       - name: Analytics (League Now > Analytics)
         continue-on-error: true
         run: python scripts/analytics.py
+      - name: Trading Floor (Beta > Trading Floor)
+        continue-on-error: true
+        run: python scripts/trading_floor.py
       - name: Build this week's matchups (League Now > Matchups)
         continue-on-error: true
         run: python scripts/matchups.py
