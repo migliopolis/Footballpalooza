@@ -8,7 +8,8 @@
    Exposes window.FBPBeta.render(ctx) and .after(); site.js routes #beta to it. */
 window.FBPBeta = (function () {
   let D = null, T = null, failed = false, loading = false, X = null;
-  let pos = 'ALL', who = 'fbp', team = '', shown = 24, seeded = false;
+  let pos = 'ALL', who = 'fbp', team = '', shown = 24, seeded = false, view = 'stack', at = 0;
+  const gone = [];                  // stack: which way each swiped card left (-1 left, 1 right), so Back returns it from that side
   const PAGE = 24;
   const PHOTO = {};                 // espn id -> {u, by, lic, src} or false (searched, nothing usable)
   const CACHE = 'fbp-beta-photo-v1', WEEK = 6048e5;
@@ -148,18 +149,21 @@ window.FBPBeta = (function () {
     if (!seeded) { seeded = true; const mine = ctx.myTeam && ctx.nameOf ? ctx.nameOf(ctx.myTeam) : ''; if (mine && D.cards.some(c => c.f === mine)) team = mine; }
     const teams = [...new Set(D.cards.map(c => c.f).filter(f => f !== 'FA'))].sort((a, b) => a.localeCompare(b));
     const L = list(), vis = L.slice(0, shown);
+    if (view === 'stack' && at > L.length) at = L.length;
     const seg = (attr, cur, opts) => opts.map(([k, l]) => `<button type="button" data-${attr}="${k}" aria-pressed="${k === cur}">${l}</button>`).join('');
     return `<div class="pagehead"><h1>Beta</h1><span class="asof">Testing ground for things that aren’t finished</span></div>
 <section class="bc-page">
  <h2 class="bc-h">Player Cards</h2>
  <p class="bc-intro">A trading card for every player, built on the prototype player ratings. Tap a card to flip it; move your mouse over it, or tilt your phone, to catch the foil. The big number is <b>OVR</b>, one rating for how good he is as a fantasy player: <b>90+</b> holo, <b>80s</b> gold, <b>70s</b> silver, under 70 bronze. Action photos come from Wikimedia Commons as each card comes into view; players without a usable free photo keep their headshot.</p>
+ <div class="bc-bar-row seg">${seg('bv', view, [['stack', 'Stack'], ['grid', 'Grid']])}</div>
  <div class="bc-bar-row seg">${seg('bp', pos, [['ALL', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE']])}</div>
  <div class="bc-bar-row seg">${seg('bw', who, [['fbp', 'FBP rosters'], ['fa', 'Free agents'], ['all', 'Everyone']])}
   ${who !== 'fa' ? `<select class="bc-team" aria-label="FBP team"><option value="">All FBP teams</option>${teams.map(t => `<option value="${esc(t)}"${t === team ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select>` : ''}</div>
  <button type="button" class="bc-tiltbtn" hidden>📱 Turn on phone tilt</button>
- <p class="bc-count">${L.length} player${L.length === 1 ? '' : 's'}, best first</p>
- <div class="bc-grid">${vis.map(card).join('') || '<p class="bc-none">Nobody here.</p>'}</div>
- ${L.length > shown ? `<button type="button" class="bc-more" data-bmore="1">Show ${Math.min(PAGE, L.length - shown)} more</button>` : ''}
+ <p class="bc-count">${L.length} player${L.length === 1 ? '' : 's'}, best first${view === 'stack' && L.length ? '. Swipe a card away to see the next one; Back brings it back.' : ''}</p>
+ ${view === 'stack' ? (L.length ? `<div class="bc-stackwrap"><div class="bc-deck" data-noswipe></div>
+  <div class="bc-deckbar"><button type="button" class="bc-undo" data-bundo="1">↶ Back</button><span class="bc-pos" aria-live="polite"></span></div></div>` : '<p class="bc-none">Nobody here.</p>') : `<div class="bc-grid">${vis.map(card).join('') || '<p class="bc-none">Nobody here.</p>'}</div>`}
+ ${view === 'grid' && L.length > shown ? `<button type="button" class="bc-more" data-bmore="1">Show ${Math.min(PAGE, L.length - shown)} more</button>` : ''}
  <p class="bc-foot">Ratings are a prototype and will change. Season lines and combine data: <a href="https://github.com/nflverse" target="_blank" rel="noopener">nflverse</a> (CC BY 4.0); 2026 points are FBP’s own scoring. Action photos: Wikimedia Commons contributors, credited on the back of each card.</p>
 </section>`;
   }
@@ -196,10 +200,105 @@ window.FBPBeta = (function () {
   }
   function flip(t) { t.classList.toggle('flipped'); t.classList.add('turning'); clearTimeout(t._turn); t._turn = setTimeout(() => t.classList.remove('turning'), 650); }
   function startTilt() { if (orientOn) return; orientOn = true; base = null; addEventListener('deviceorientation', orient); }
-  let vio = null;
+  let vio = null, byE = null;
+  function wireCard(el) {
+    fallback(el);
+    if (io) io.observe(el);
+    if (vio) vio.observe(el);
+    el.addEventListener('pointermove', e => {
+      if (reduce() || e.pointerType === 'touch') return;
+      const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      el.style.setProperty('--ry', ((x - .5) * 22) + 'deg'); el.style.setProperty('--rx', ((.5 - y) * 18) + 'deg');
+      el.style.setProperty('--gx', (x * 100) + '%'); el.style.setProperty('--gy', (y * 100) + '%'); el.classList.add('moving');
+    });
+    el.addEventListener('pointerleave', () => { el.style.setProperty('--ry', '0deg'); el.style.setProperty('--rx', '0deg'); el.classList.remove('moving'); });
+  }
+
+  /* ---------- the stack: top card plus two peeking out underneath ---------- */
+  const DEPTH = 3;
+  let deck = null, deckL = [], drag = null;
+  function mk(i) {
+    const w = document.createElement('div'); w.className = 'bc-item'; w.dataset.i = i;
+    w.innerHTML = card(deckL[i]); wireCard(w.querySelector('.bc-tilt')); return w;
+  }
+  function restack() {
+    deck.querySelectorAll('.bc-item:not(.bc-out)').forEach(w => {
+      const d = +w.dataset.i - at;
+      w.style.setProperty('--d', d); w.style.zIndex = 50 - d; w.classList.toggle('bc-top', d === 0);
+      if (d) w.setAttribute('aria-hidden', 'true'); else w.removeAttribute('aria-hidden');
+      const t = w.querySelector('.bc-tilt'); if (t) t.tabIndex = d ? -1 : 0;
+    });
+    let end = deck.querySelector('.bc-end');
+    if (at >= deckL.length && !end) { end = document.createElement('div'); end.className = 'bc-end';
+      end.innerHTML = `<b>That’s everybody.</b><button type="button" data-brestart="1">Start over</button>`; deck.appendChild(end); }
+    else if (at < deckL.length && end) end.remove();
+    const pos = document.querySelector('.bc-pos'); if (pos) pos.textContent = `${Math.min(at + 1, deckL.length)} of ${deckL.length}`;
+    const u = document.querySelector('.bc-undo'); if (u) u.disabled = at === 0;
+  }
+  function buildDeck() {
+    deck.innerHTML = '';
+    for (let i = at; i < Math.min(at + DEPTH, deckL.length); i++) deck.appendChild(mk(i));
+    restack();
+  }
+  function advance(dir) {
+    const top = deck.querySelector('.bc-item.bc-top'); if (!top) return;
+    gone[at] = dir; top.classList.add('bc-out'); top.classList.remove('bc-top');
+    top.style.transition = 'transform .35s ease-in, opacity .35s ease-in';
+    top.style.transform = `translate(${dir * 130}%, 4%) rotate(${dir * 24}deg)`; top.style.opacity = '0';
+    setTimeout(() => top.remove(), 400);
+    at++;
+    if (at + DEPTH - 1 < deckL.length) deck.appendChild(mk(at + DEPTH - 1));
+    restack();
+    const nt = deck.querySelector('.bc-top .bc-tilt'); if (nt && document.activeElement && document.activeElement.closest('.bc-deck')) nt.focus({ preventScroll: true });
+  }
+  function undo() {
+    if (at <= 0) return;
+    at--;
+    const w = mk(at), dir = gone[at] || -1;
+    w.style.transition = 'none'; w.style.transform = `translate(${dir * 130}%, 4%) rotate(${dir * 24}deg)`; w.style.opacity = '0';
+    deck.appendChild(w);
+    deck.querySelectorAll('.bc-item:not(.bc-out)').forEach(x => { if (+x.dataset.i >= at + DEPTH) x.remove(); });
+    restack();
+    void w.offsetWidth;
+    w.style.transition = ''; w.style.transform = ''; w.style.opacity = '';
+  }
+  function wireDeck() {
+    deck.addEventListener('pointerdown', e => {
+      const w = e.target.closest('.bc-item.bc-top'); if (!w || e.button > 0) return;
+      drag = { w, x: e.clientX, y: e.clientY, t: Date.now(), dx: 0, dy: 0, moved: false, id: e.pointerId, link: !!e.target.closest('a') };
+    });
+    deck.addEventListener('pointermove', e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      drag.dx = e.clientX - drag.x; drag.dy = e.clientY - drag.y;
+      if (!drag.moved && Math.abs(drag.dx) > 8 && Math.abs(drag.dx) > Math.abs(drag.dy)) {
+        drag.moved = true; drag.t = Date.now();
+        try { drag.w.setPointerCapture(drag.id); } catch (_) {}
+        drag.w.style.transition = 'none';
+      }
+      if (drag.moved) drag.w.style.transform = `translate(${drag.dx}px, ${drag.dy * .15}px) rotate(${drag.dx * .05}deg)`;
+    });
+    const release = e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const d = drag; drag = null;
+      if (!d.moved) {
+        if (e.type === 'pointerup' && Math.abs(d.dx) < 10 && Math.abs(d.dy) < 10 && !d.link) flip(d.w.querySelector('.bc-tilt'));
+        return;
+      }
+      const v = Math.abs(d.dx) / Math.max(1, Date.now() - d.t);
+      if (e.type === 'pointerup' && (Math.abs(d.dx) > Math.min(110, d.w.offsetWidth * .35) || (Math.abs(d.dx) > 40 && v > .45))) advance(d.dx > 0 ? 1 : -1);
+      else { d.w.style.transition = ''; d.w.style.transform = ''; }
+    };
+    deck.addEventListener('pointerup', release);
+    deck.addEventListener('pointercancel', release);
+    deck.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); advance(e.key === 'ArrowRight' ? 1 : -1); }
+      else if (e.key === 'Backspace') { e.preventDefault(); undo(); }
+    });
+  }
+
   function after() {
     const page = document.querySelector('.bc-page'); if (!page || !D) return;
-    const byE = {}; D.cards.forEach(c => { byE[c.e] = c; });
+    if (!byE) { byE = {}; D.cards.forEach(c => { byE[c.e] = c; }); }
     if (io) io.disconnect();
     if (vio) vio.disconnect();
     seen.clear();
@@ -210,20 +309,11 @@ window.FBPBeta = (function () {
       PHOTO[c.e] = false;   // in flight; don't search twice
       findPhoto(c, p => { PHOTO[c.e] = p; if (p) document.querySelectorAll(`.bc-tilt[data-e="${c.e}"]`).forEach(x => swapIn(x, c, p)); });
     }), { rootMargin: '300px 0px' }) : null;
-    page.querySelectorAll('.bc-tilt').forEach(el => {
-      fallback(el);
-      if (io) io.observe(el);
-      if (vio) vio.observe(el);
-      el.addEventListener('pointermove', e => {
-        if (reduce() || e.pointerType === 'touch') return;
-        const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-        el.style.setProperty('--ry', ((x - .5) * 22) + 'deg'); el.style.setProperty('--rx', ((.5 - y) * 18) + 'deg');
-        el.style.setProperty('--gx', (x * 100) + '%'); el.style.setProperty('--gy', (y * 100) + '%'); el.classList.add('moving');
-      });
-      el.addEventListener('pointerleave', () => { el.style.setProperty('--ry', '0deg'); el.style.setProperty('--rx', '0deg'); el.classList.remove('moving'); });
-    });
+    page.querySelectorAll('.bc-grid .bc-tilt').forEach(wireCard);
+    deck = page.querySelector('.bc-deck');
+    if (deck) { deckL = list(); wireDeck(); buildDeck(); }
     const sel = page.querySelector('.bc-team');
-    if (sel) sel.addEventListener('change', () => { team = sel.value; shown = PAGE; redraw(); });
+    if (sel) sel.addEventListener('change', () => { team = sel.value; shown = PAGE; at = 0; redraw(); });
     // phone tilt: iPhones ask permission first (the button near the top); other phones just start
     if (!orientOn && window.DeviceOrientationEvent && matchMedia('(pointer: coarse)').matches) {
       if (typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -235,9 +325,12 @@ window.FBPBeta = (function () {
       wired = true;
       document.addEventListener('click', e => {
         if (!document.querySelector('.bc-page')) return;
-        const b = e.target.closest('[data-bp],[data-bw],[data-bmore]');
-        if (b) { if (b.dataset.bp) { pos = b.dataset.bp; shown = PAGE; } else if (b.dataset.bw) { who = b.dataset.bw; shown = PAGE; } else shown += PAGE; redraw(); return; }
-        if (e.target.closest('a')) return;
+        if (e.target.closest('[data-bundo]')) { undo(); return; }
+        if (e.target.closest('[data-brestart]')) { at = 0; buildDeck(); return; }
+        const b = e.target.closest('[data-bp],[data-bw],[data-bv],[data-bmore]');
+        if (b) { if (b.dataset.bp) { pos = b.dataset.bp; shown = PAGE; at = 0; } else if (b.dataset.bw) { who = b.dataset.bw; shown = PAGE; at = 0; }
+          else if (b.dataset.bv) view = b.dataset.bv; else shown += PAGE; redraw(); return; }
+        if (e.target.closest('a') || e.target.closest('.bc-deck')) return;   // the stack flips on its own tap handling
         const t = e.target.closest('.bc-tilt'); if (t) flip(t);
       });
       document.addEventListener('keydown', e => {
