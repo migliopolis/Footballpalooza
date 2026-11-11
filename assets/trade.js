@@ -119,7 +119,8 @@ window.FBPTrade = (function () {
   const has = (t, k) => t.aGave.concat(t.bGave).some(x => x.k === k);
   const kindOk = t => !kind ? true : kind === 'picks' ? has(t, 'pick') : kind === 'cash' ? has(t, 'cash')
     : kind === 'players' ? !has(t, 'pick') && !has(t, 'cash') && has(t, 'p') : kind === 'pickswap' ? has(t, 'pick') && !has(t, 'p') : true;
-  const swing = t => Math.abs(((t.outA || {}).total || 0) - ((t.outB || {}).total || 0));
+  const all = o => o ? (o.total || 0) + (o.po || 0) : 0;
+  const swing = t => Math.abs(all(t.outA) - all(t.outB));
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
   function vHistory() {
     const seasons = [...new Set(D.trades.map(t => t.season))];
@@ -130,18 +131,19 @@ window.FBPTrade = (function () {
     if (hsort === 'swing') L = L.slice().sort((a, b) => swing(b) - swing(a));
     const tag = x => x.k === 'p' && x.pos ? `<span class="tf-pos">${esc(x.pos)}</span>` : x.k === 'pick' ? '<span class="tf-pos">PK</span>' : x.k === 'cash' ? '<span class="tf-pos tf-cash">$</span>' : '';
     const became = (x, f) => x.became ? ` <span class="tf-became">→ ${esc(x.became.n)} <small>${esc(x.became.pos || '')}${x.k === 'pick' && !/pick \d/.test(x.t) ? ` · ${x.became.y} ${x.became.slot}` : ''}${x.became.by && x.became.by !== f ? ` · taken by ${esc(nm(x.became.by))}` : ''}</small></span>` : '';
-    const side = (f, got, out) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got${out ? ` <span class="tf-tot">${n1(out.total)} pts</span>` : ''}</h4><ul>${got.length ? got.map(x => `<li>${tag(x)}${esc(x.t)}${became(x, f)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
+    const side = (f, got, out) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got${out ? ` <span class="tf-tot">${n1(out.total)} pts${out.po ? ` + ${n1(out.po)} playoffs` : ''}</span>` : ''}</h4><ul>${got.length ? got.map(x => `<li>${tag(x)}${esc(x.t)}${became(x, f)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
     const later = t => {
       const S = [[t.a, t.outA], [t.b, t.outB]].filter(([, o]) => o && o.rows.length);
       if (!S.length) return '';
       const years = [...new Set(S.flatMap(([, o]) => o.years))].sort();
-      const a = t.outA ? t.outA.total : 0, b = t.outB ? t.outB.total : 0;
-      const lead = a === b ? 'Even so far.' : `${esc(nm(a > b ? t.a : t.b))} by ${n1(Math.abs(a - b))} so far.`;
-      const tbl = ([f, o]) => `<div class="tf-lt"><h5>${logo(f)}${esc(nm(f))} <span class="tf-tot">${n1(o.total)} pts</span></h5><div class="tbl-wrap"><table class="tbl tf-ltbl"><thead><tr><th class="t">Player</th>${years.map(y => `<th>${y === String(D.season) ? y + '*' : y}</th>`).join('')}<th>Total</th></tr></thead><tbody>
-        ${o.rows.map(r => { const tot = Object.values(r.pts).reduce((x, v) => x + v, 0); return `<tr><td class="t">${esc(r.n)} <small>${esc(r.pos || '')}</small>${r.via ? `<small class="tf-via">via ${esc(r.via)}</small>` : ''}</td>${years.map(y => `<td>${y in r.pts ? n1(r.pts[y]) : ''}</td>`).join('')}<td><b>${n1(tot)}</b></td></tr>`; }).join('')}
+      const a = all(t.outA), b = all(t.outB), anyPo = S.some(([, o]) => o.po);
+      const lead = a === b ? 'Even so far.' : `${esc(nm(a > b ? t.a : t.b))} by ${n1(Math.abs(a - b))} so far${anyPo ? ', playoffs included' : ''}.`;
+      const tbl = ([f, o]) => `<div class="tf-lt"><h5>${logo(f)}${esc(nm(f))} <span class="tf-tot">${n1(o.total)} pts${o.po ? ` + ${n1(o.po)} playoffs` : ''}</span></h5><div class="tbl-wrap"><table class="tbl tf-ltbl"><thead><tr><th class="t">Player</th>${years.map(y => `<th>${y === String(D.season) ? y + '*' : y}</th>`).join('')}<th>Total</th>${anyPo ? '<th>Playoffs</th>' : ''}</tr></thead><tbody>
+        ${o.rows.map(r => { const tot = Object.values(r.pts).reduce((x, v) => x + v, 0), pt = Object.values(r.po || {}).reduce((x, v) => x + v, 0);
+          return `<tr><td class="t">${esc(r.n)} <small>${esc(r.pos || '')}</small>${r.via ? `<small class="tf-via">via ${esc(r.via)}</small>` : ''}</td>${years.map(y => `<td>${y in r.pts ? n1(r.pts[y]) : ''}${(r.po || {})[y] ? `<small class="tf-po">+${n1(r.po[y])} PO</small>` : ''}</td>`).join('')}<td><b>${n1(tot)}</b></td>${anyPo ? `<td>${pt ? `<b>${n1(pt)}</b>` : ''}</td>` : ''}</tr>`; }).join('')}
         </tbody></table></div></div>`;
       return `<details class="tf-later"><summary>How it played out <small>${lead}</small></summary>${S.map(tbl).join('')}
-        <p class="tf-sub">Regular-season points scored as a starter for the team that got him, from the trade season until that team let him go. A pick counts from the season the player was taken. * this season so far. The same numbers as Awards &gt; Trade of the Year.</p></details>`;
+        <p class="tf-sub">Points scored as a starter for the team that got him, from the trade season until that team let him go. Playoff points count real playoff games only (not consolation games); PO under a season is that season’s playoffs. A pick counts from the season the player was taken. * this season so far. Regular-season numbers match Awards &gt; Trade of the Year.</p></details>`;
     };
     return `<div class="tf-filters"><input type="search" class="tf-q" placeholder="Search a player or team" value="${esc(q)}" aria-label="Search trades">
       <select class="tf-season" aria-label="Season"><option value="">All seasons</option>${seasons.map(y => `<option${String(y) === season ? ' selected' : ''}>${y}</option>`).join('')}</select>

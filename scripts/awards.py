@@ -495,6 +495,8 @@ class Followups:
     def __init__(self):
         ref = load(D('reference.json'), {}) or {}
         self.po = ref.get('playoff_weeks_by_year') or {}
+        self.brackets = ref.get('playoff_brackets') or {}
+        self.pweekly = {}
         meta = load(D('mfl', '_meta.json'), {}) or {}
         self.cur_year = int(meta.get('season') or 2026)
         self.weekly, self.listed, self.tcache = {}, {}, {}
@@ -519,6 +521,28 @@ class Followups:
                 for pid, pts in t.get('s', []):
                     out[(pid, fr)][int(w)] = out[(pid, fr)].get(int(w), 0) + pts
         self.weekly[y] = out
+        return out
+
+    def playoff_pts(self, y):
+        """(player, team) -> {week: starter points} in that team's real playoff games (round 1, semifinal, final;
+        consolation games don't count). Empty until the season's bracket is in the reference data."""
+        if y in self.pweekly:
+            return self.pweekly[y]
+        b = self.brackets.get(str(y)) or {}
+        played = set()
+        for wk, games in ((b.get('round1_week'), b.get('round1_games')), (b.get('semi_week'), b.get('semifinal_games')),
+                          (b.get('championship_week'), [b.get('championship_game')])):
+            for g in games or []:
+                if wk and g:
+                    played |= {(int(wk), g.get('franchiseA')), (int(wk), g.get('franchiseB'))}
+        out = defaultdict(dict)
+        for w, frs in (self._wr(y).get('weeks') or {}).items():
+            for fr, t in frs.items():
+                if (int(w), fr) not in played:
+                    continue
+                for pid, pts in t.get('s', []):
+                    out[(pid, fr)][int(w)] = out[(pid, fr)].get(int(w), 0) + pts
+        self.pweekly[y] = out
         return out
 
     def listed_with(self, y):
@@ -552,8 +576,9 @@ class Followups:
                 return y, 1   # not kept at the keeper deadline
         return None
 
-    def side(self, fr, players, picks, season, ts):
-        """players: [{id, name, pos}] received; picks: traded pick codes received. Returns (became, later)."""
+    def side(self, fr, players, picks, season, ts, playoffs=False):
+        """players: [{id, name, pos}] received; picks: traded pick codes received. Returns (became, later).
+        With playoffs, each row also gets 'po' (starter points in that team's playoff games) and later 'poTotal'."""
         cur_year = self.cur_year
         became = {k: drafted(k, season) for k in picks or []}
         became = {k: v for k, v in became.items() if v}
@@ -570,9 +595,21 @@ class Followups:
                     continue
                 wk = self.season_pts(y).get((pid, fr), {})
                 pts[str(y)] = round(sum(v for w, v in wk.items() if not (end and y == end[0] and w >= end[1])), 1)
-            rows.append({'id': pid, 'name': nm, 'pos': pos, 'via': via, 'pts': pts})
+            row = {'id': pid, 'name': nm, 'pos': pos, 'via': via, 'pts': pts}
+            if playoffs:
+                po = {}
+                for y in years:
+                    if str(y) not in pts:
+                        continue
+                    v = round(sum(v for w, v in self.playoff_pts(y).get((pid, fr), {}).items() if not (end and y == end[0] and w >= end[1])), 1)
+                    if v:
+                        po[str(y)] = v
+                row['po'] = po
+            rows.append(row)
         later = {'years': [str(y) for y in years], 'current': str(cur_year), 'rows': rows,
                  'total': round(sum(v for r in rows for v in r['pts'].values()), 1)} if years else None
+        if later and playoffs:
+            later['poTotal'] = round(sum(v for r in rows for v in r['po'].values()), 1)
         return became, later
 
 

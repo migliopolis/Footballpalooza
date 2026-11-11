@@ -202,15 +202,15 @@ def main():
             for me, got in (('a', t['bGave']), ('b', t['aGave'])):
                 players = [{'id': x['id'], 'name': x['t'], 'pos': x.get('pos', '')} for x in got if x['k'] == 'p']
                 picks = [x['code'] for x in got if x['k'] == 'pick']
-                became, later = F.side(t[me], players, picks, t['season'], t['ts'])
+                became, later = F.side(t[me], players, picks, t['season'], t['ts'], playoffs=True)
                 for x in got:
                     b = became.get(x.get('code')) if x['k'] == 'pick' else None
                     if b:
                         x['became'] = {'n': b['name'], 'pos': b['pos'], 'y': b['year'], 'slot': b['slot'], 'by': b.get('by')}
                 if later:
                     via = {x['code']: x['t'] for x in got if x['k'] == 'pick'}
-                    t['out' + me.upper()] = {'total': later['total'], 'years': later['years'],
-                                             'rows': [{'n': r['name'], 'pos': r['pos'], 'via': via.get(r['via']) if r['via'] else None, 'pts': r['pts']} for r in later['rows']]}
+                    t['out' + me.upper()] = {'total': later['total'], 'po': later.get('poTotal', 0), 'years': later['years'],
+                                             'rows': [{'n': r['name'], 'pos': r['pos'], 'via': via.get(r['via']) if r['via'] else None, 'pts': r['pts'], 'po': r.get('po') or {}} for r in later['rows']]}
     except Exception as e:   # the history still shows without it
         print('  trade follow-ups skipped:', type(e).__name__, str(e)[:200])
 

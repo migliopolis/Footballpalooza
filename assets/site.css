@@ -2420,3 +2420,5 @@ tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tf-lt{margin-top:8px}.tf-lt h5{margin:0 0 4px;font:700 .84rem var(--body);display:flex;align-items:center;gap:4px}
 .tf-ltbl td,.tf-ltbl th{font-size:.8rem;font-variant-numeric:tabular-nums}
 .tf-via{display:block;color:var(--muted)}
+.tf-po{display:block;color:var(--ok);font-size:.68rem}
+.tf-hist{grid-template-columns:minmax(0,1fr)}.tf-tr{min-width:0}.tf-later .tbl-wrap{overflow-x:auto}.tf-sides>*{min-width:0}
