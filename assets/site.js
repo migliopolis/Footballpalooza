@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0168';
+  const VERSION = '0.0169';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -170,6 +170,8 @@
         <div class="seg dt-clear"><button type="button" data-defteam="" aria-pressed="${!state.defTeam}">No default team</button></div>`)}
       ${setSec('colors', 'Page colors', `<p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
         <div class="swatches" role="group" aria-label="Page colors">${swatches}</div>`)}
+      ${setSec('ticker', 'Ticker', `<p>The scrolling strip under the tabs. It keeps running as you move between pages.</p>
+        <div class="seg" role="group" aria-label="Ticker"><button type="button" data-ticker="on" aria-pressed="${state.ticker}">Show</button><button type="button" data-ticker="off" aria-pressed="${!state.ticker}">Hide</button></div>`)}
       ${setSec('mode', 'Light or dark', `<p>Match device follows your phone or computer’s setting.</p>
         <div class="seg" role="group" aria-label="Light or dark">${seg}</div>`)}
       ${changelog()}`;
@@ -813,6 +815,39 @@
     const h = document.getElementById('ln-refresh'); if (h) h.textContent = refreshText(true);
     else if (/^#now(\/)?$|^#?$/.test(location.hash) && state.now) route();   // League Now header was drawn before this loaded
   }
+  /* ---------- Ticker: a strip under the tabs that scrolls league info like a stock ticker ----------
+     It lives in the header, outside the page area, so moving between pages never restarts it; a reload picks up where
+     it left off (the start time is kept for this browser session). For now: MFL Power Rating, rank movement since last
+     week. More items will join it. Settings > Ticker hides it. */
+  state.ticker = true; try { state.ticker = localStorage.getItem('fbp-ticker') !== '0'; } catch (e) {}
+  function tickerItems() {
+    const d = state.now; if (!d || !d.standings) return [];
+    const P = d.prev && d.prev.teams;
+    const rows = d.standings.filter(t => t.pwr).sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99));
+    if (!rows.length) return [];
+    const items = [`<span class="tk-h">MFL Power</span>`];
+    rows.forEach(t => {
+      const tm = state.teams[t.id] || {}, was = P && P[t.id] && P[t.id].pwrRank, mv = was && t.pwrRank ? was - t.pwrRank : 0;
+      items.push(`<a class="tk-i" href="#now/power" title="${esc(nameOf(t.id))}: #${t.pwrRank}, rating ${t.pwr.toFixed(2)}${was ? `, ${mv > 0 ? 'up ' + mv : mv < 0 ? 'down ' + -mv : 'no change'} since week ${d.prev.week}` : ''}">
+        <span class="tk-r">${t.pwrRank}</span><b>${esc(tm.abbr || t.id)}</b><span class="tk-v">${t.pwr.toFixed(2)}</span>${was ? `<span class="tk-d ${mv > 0 ? 'up' : mv < 0 ? 'dn' : 'eq'}">${mv > 0 ? '▲' + mv : mv < 0 ? '▼' + -mv : '–'}</span>` : ''}</a>`);
+    });
+    return items;
+  }
+  function ticker() {
+    const el = document.getElementById('ticker'); if (!el) return;
+    const items = tickerItems();
+    if (!state.ticker || !items.length) { el.hidden = true; el.innerHTML = ''; window.dispatchEvent(new Event('resize')); return; }
+    const run = items.join('<span class="tk-sep" aria-hidden="true">•</span>') + '<span class="tk-sep" aria-hidden="true">•</span>';
+    el.hidden = false;
+    el.innerHTML = `<div class="tk-track"><div class="tk-run">${run}</div><div class="tk-run" aria-hidden="true">${run}</div></div>`;
+    el.setAttribute('aria-label', 'League ticker');
+    const w = el.querySelector('.tk-run').scrollWidth, dur = Math.max(20, w / 45);   // about 45 pixels a second
+    let t0 = Date.now(); try { t0 = +sessionStorage.getItem('fbp-ticker-t0') || t0; sessionStorage.setItem('fbp-ticker-t0', t0); } catch (e) {}
+    const tr = el.querySelector('.tk-track');
+    tr.style.animationDuration = dur + 's';
+    tr.style.animationDelay = -(((Date.now() - t0) / 1000) % dur) + 's';
+    window.dispatchEvent(new Event('resize'));   // the pinned header got taller
+  }
   async function init() {
     try {
       const [now, teams] = await Promise.all([
@@ -824,6 +859,7 @@
       fetch('data/mfl/_meta.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(m => { state.meta = m; showRefresh(); }).catch(() => {});
       const yr = (now.season.match(/\d{4}/) || [''])[0];
       // season on one line, the version under it
+      ticker();
       document.getElementById('season-label').innerHTML = `<span class="sl-t">${yr ? `${yr} season` : 'League hub'}</span><span class="sl-v">v ${VERSION}</span>`;
     } catch (e) { state.now = null; }
     applyMode();
@@ -879,6 +915,13 @@
         state.defTeam = dtb.dataset.defteam; try { localStorage.setItem('fbp-default-team', state.defTeam); } catch (x) {}
         const y = window.scrollY; route(); window.scrollTo(0, y);
         const again = document.querySelector(`[data-defteam="${state.defTeam}"]`); if (again) again.focus({ preventScroll: true });
+        return;
+      }
+      const tk = e.target.closest('[data-ticker]');
+      if (tk) {
+        state.ticker = tk.dataset.ticker === 'on'; try { localStorage.setItem('fbp-ticker', state.ticker ? '1' : '0'); } catch (x) {}
+        ticker(); const y = window.scrollY; route(); window.scrollTo(0, y);
+        const again = document.querySelector(`[data-ticker="${tk.dataset.ticker}"]`); if (again) again.focus({ preventScroll: true });
         return;
       }
       const sw = e.target.closest('.swatch'), md = e.target.closest('[data-mode]'), pp = e.target.closest('[data-ppr]');

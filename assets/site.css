@@ -2486,3 +2486,21 @@ tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tf-jy{margin-top:10px}.tf-jy h5{margin:0 0 6px;font:700 .84rem var(--body)}
 .jy-full{color:var(--muted);font-size:.76rem}
 .foot-refresh{font-size:.8rem;color:var(--muted)}.foot-refresh b{color:var(--fg)}
+
+/* ---------- Ticker (under the tabs) ---------- */
+.ticker{overflow:hidden;background:#0d1014;color:#e9edf1;border-top:1px solid rgba(255,255,255,.08);font:600 .78rem/1 var(--mono);white-space:nowrap;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);mask:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent)}
+.ticker[hidden]{display:none}
+.tk-track{display:flex;width:max-content;animation:tk-roll 60s linear infinite}
+.ticker:hover .tk-track,.ticker:focus-within .tk-track{animation-play-state:paused}
+@keyframes tk-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tk-run{display:flex;align-items:center;padding:7px 0}
+.tk-h{font:700 .66rem var(--body);letter-spacing:.12em;text-transform:uppercase;color:#0d1014;background:#f2c94c;padding:3px 7px;border-radius:3px;margin:0 10px 0 14px}
+.tk-i{display:inline-flex;align-items:baseline;gap:6px;padding:0 4px;color:inherit;text-decoration:none}
+.tk-i:hover b{text-decoration:underline}
+.tk-r{color:#8a96a3;font-size:.7rem}
+.tk-i b{letter-spacing:.04em}
+.tk-v{color:#cfd6dd}
+.tk-d.up{color:#4cd07d}.tk-d.dn{color:#ff6b62}.tk-d.eq{color:#8a96a3}
+.tk-sep{color:#4a5560;padding:0 10px}
+@media (prefers-reduced-motion: reduce){.ticker{overflow-x:auto;-webkit-mask:none;mask:none}.tk-track{animation:none}.tk-run[aria-hidden]{display:none}}

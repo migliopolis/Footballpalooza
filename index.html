@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Footballpalooza</title>
 <meta name="description" content="Footballpalooza league hub: standings, playoff picture, history, off-season tools, rookie draft and by-laws.">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=0.0168">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-shield-32.png?v=0.0168">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/app-icon-192.png?v=0.0168">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=0.0169">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-shield-32.png?v=0.0169">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/app-icon-192.png?v=0.0169">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="Footballpalooza">
 <meta name="theme-color" content="#bde2fa">
@@ -21,14 +21,14 @@ var v=JSON.parse(localStorage.getItem('fbp-theme-cache')||'{}'),r=document.docum
 if(v['--hdr-bg']){['--hdr-bg','--hdr-fg','--hdr-accent','--hdr-logo'].forEach(function(k){r.setProperty(k,v[k])});
 var d=m?m==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setProperty('--accent',d?v.dark:v.light);}}catch(e){}
 </script>
-<link rel="stylesheet" href="assets/site.css?v=0.0168">
+<link rel="stylesheet" href="assets/site.css?v=0.0169">
 </head>
 <body>
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#now" aria-label="Footballpalooza home">
-      <img src="assets/fbp-shield-192.png?v=0.0168" alt="" width="46" height="46">
-      <span><i class="wordmark" role="img" aria-label="Footballpalooza"></i><small id="season-label"><span class="sl-t">League hub</span><span class="sl-v">v 0.0168</span></small></span>
+      <img src="assets/fbp-shield-192.png?v=0.0169" alt="" width="46" height="46">
+      <span><i class="wordmark" role="img" aria-label="Footballpalooza"></i><small id="season-label"><span class="sl-t">League hub</span><span class="sl-v">v 0.0169</span></small></span>
     </a>
     <button type="button" class="share-btn" id="share-btn" aria-label="Share this page" title="Share this page">
       <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M8.5 10.5H6.5a1.5 1.5 0 0 0-1.5 1.5v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12a1.5 1.5 0 0 0-1.5-1.5h-2"/></svg>
@@ -46,6 +46,7 @@ var d=m?m==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setPrope
     <a href="#settings" data-tab="settings">Settings</a>
     <a href="#beta" data-tab="beta">Beta</a>
   </nav>
+  <div class="ticker" id="ticker" hidden></div>
 </header>
 
 <main id="app" class="wrap" tabindex="-1">
@@ -58,21 +59,21 @@ var d=m?m==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setPrope
   <p><a href="index_2026.html">2026 off-season workbook</a> · <a href="rookie-pricer/">Rookie Pricer</a></p>
 </footer>
 
-<script src="assets/draft.js?v=0.0168"></script>
-<script src="assets/drafthub.js?v=0.0168"></script>
-<script src="assets/reference.js?v=0.0168"></script>
-<script src="assets/awards.js?v=0.0168"></script>
-<script src="assets/live.js?v=0.0168"></script>
-<script src="assets/multiview.js?v=0.0168"></script>
-<script src="assets/nfl.js?v=0.0168"></script>
-<script src="assets/journey.js?v=0.0168"></script>
-<script src="assets/rosters.js?v=0.0168"></script>
-<script src="assets/power.js?v=0.0168"></script>
-<script src="assets/stats.js?v=0.0168"></script>
-<script src="assets/hospital.js?v=0.0168"></script>
-<script src="assets/analytics.js?v=0.0168"></script>
-<script src="assets/trade.js?v=0.0168"></script>
-<script src="assets/beta.js?v=0.0168"></script>
-<script src="assets/site.js?v=0.0168"></script>
+<script src="assets/draft.js?v=0.0169"></script>
+<script src="assets/drafthub.js?v=0.0169"></script>
+<script src="assets/reference.js?v=0.0169"></script>
+<script src="assets/awards.js?v=0.0169"></script>
+<script src="assets/live.js?v=0.0169"></script>
+<script src="assets/multiview.js?v=0.0169"></script>
+<script src="assets/nfl.js?v=0.0169"></script>
+<script src="assets/journey.js?v=0.0169"></script>
+<script src="assets/rosters.js?v=0.0169"></script>
+<script src="assets/power.js?v=0.0169"></script>
+<script src="assets/stats.js?v=0.0169"></script>
+<script src="assets/hospital.js?v=0.0169"></script>
+<script src="assets/analytics.js?v=0.0169"></script>
+<script src="assets/trade.js?v=0.0169"></script>
+<script src="assets/beta.js?v=0.0169"></script>
+<script src="assets/site.js?v=0.0169"></script>
 </body>
 </html>
