@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0156",
+      "to": "0.0160",
+      "dates": "Nov 10–11, 2026",
+      "items": [
+        "Injury chips are back for players on long-term IR, PUP or suspension (Achane, Tracy and others) that ESPN's weekly injury report leaves out.",
+        "New Beta tab after Settings, for trying out unfinished features. First up: Player Cards, a trading card for every player built on the prototype player ratings, with a foil by tier (holo 90+, gold 80s, silver 70s, bronze), a stat back you flip to, and tilt on mouse or phone.",
+        "Cards come in a stack: swipe the top card away to see the next one, Back brings them back one at a time, tap to flip. A Grid view shows them all at once.",
+        "Action photos come from Wikimedia Commons with credit on the back; players without a usable free photo keep their headshot. The search now skips other people who share a player's name (Cam Ward the hockey goalie, Michael Thomas the safety).",
+        "Phone tilt works however you're holding the phone, and the iPhone tilt button sits at the top of the page."
+      ]
+    },
+    {
       "from": "0.0151",
       "to": "0.0155",
       "dates": "Nov 10, 2026",

@@ -12,7 +12,7 @@ window.FBPBeta = (function () {
   const gone = [];                  // stack: which way each swiped card left (-1 left, 1 right), so Back returns it from that side
   const PAGE = 24;
   const PHOTO = {};                 // espn id -> {u, by, lic, src} or false (searched, nothing usable)
-  const CACHE = 'fbp-beta-photo-v1', WEEK = 6048e5;
+  const CACHE = 'fbp-beta-photo-v2', WEEK = 6048e5;
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
 
@@ -40,7 +40,7 @@ window.FBPBeta = (function () {
   /* ---------- Wikimedia Commons search ---------- */
   const fold = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
   const strip = h => String(h || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-  const NOPE = /(logo|signature|autograph|card|jersey number|uniform|helmet|stadium|map|draft day|press conference|with fans|wedding|svg)/;
+  const NOPE = /\b(logo|signature|autograph|card|jersey number|uniform|helmet|stadium|map|draft day|press conference|with fans|wedding|svg)\b/;   // whole words: 'card' mustn't catch Cardinals
   function score(page, c) {
     const ii = (page.imageinfo || [])[0]; if (!ii) return -1;
     const m = ii.extmetadata || {}, title = fold(page.title);
@@ -52,10 +52,22 @@ window.FBPBeta = (function () {
     const cats = fold((m.Categories || {}).value), desc = fold(strip((m.ImageDescription || {}).value));
     const hay = title + ' ' + cats + ' ' + desc;
     if (NOPE.test(title)) return -1;
-    let s = 0;
-    if (/american football|nfl|football player|football game|training camp|minicamp|preseason/.test(hay)) s += 4;
-    const tm = T && T[c.tm]; if (tm && tm.nickname && hay.includes(fold(tm.nickname))) s += 3;
+    // his NFL teams, now and the past three seasons
+    const mine = new Set([c.tm].concat(Object.values(c.L || {}).map(l => l[12])).map(a => a === 'LA' ? 'LAR' : a).filter(Boolean));
+    const nick = a => T && T[a] && T[a].nickname ? fold(T[a].nickname) : '';
+    const club = [...mine].some(a => nick(a) && hay.includes(nick(a)));
+    // another player with his name: a different position or sport, or (in a photo from his own NFL years) another NFL team.
+    // Full team names only ("Arizona Cardinals"), since college teams share nicknames (Louisville Cardinals).
+    if (/\b(linebacker|safety|cornerback|defensive (end|back|tackle|lineman)|nose tackle|offensive (lineman|tackle|guard)|kicker|punter|long snapper|goaltender|goalie|hockey|nhl|baseball|mlb|basketball|nba|soccer|politician)\b/.test(hay)) return -1;
     const yr = +(((m.DateTimeOriginal || {}).value || '').match(/(19|20)\d\d/) || [0])[0];
+    const first = Math.min(...Object.keys(c.L || {}).map(Number).concat(9999));
+    if (yr >= first && T && Object.keys(T).some(a => !mine.has(a) && T[a].name && hay.includes(fold(T[a].name)))) return -1;
+    // and it has to be a football photo
+    const fb = /american football|\bnfl\b|football player|football game|training camp|minicamp|preseason|college football/.test(hay);
+    if (!fb && !club) return -1;
+    let s = 0;
+    if (fb) s += 4;
+    if (club) s += 3;
     if (yr >= 2023) s += 3; else if (yr >= 2020) s += 2; else if (yr && yr < 2015) s -= 3;
     if (ii.height >= ii.width) s += 2;                 // portrait suits the card
     if (/cropped/.test(title)) s += 1;
@@ -66,7 +78,7 @@ window.FBPBeta = (function () {
   function pump() {
     while (active < 3 && queue.length) {
       const [c, done] = queue.shift(); active++;
-      const q = encodeURIComponent(`"${c.n}"`);
+      const q = encodeURIComponent(`"${c.n}" football`);
       fetch(`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${q}&gsrnamespace=6&gsrlimit=20&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=800&format=json&origin=*`)
         .then(r => r.ok ? r.json() : null)
         .then(j => {
