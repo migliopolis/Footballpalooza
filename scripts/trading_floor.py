@@ -11,7 +11,7 @@ Reads what the refresh already saved and writes data/trading-floor.json:
 
 Player ratings come from data/beta-cards.json (the prototype ratings). Nothing here grades a player or an owner.
 """
-import json, os, re, collections
+import json, os, re, sys, collections
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -144,10 +144,10 @@ def main():
     def item(tok, season):
         if tok.startswith('FP_'):
             _, orig, y, r = tok.split('_')
-            return {'k': 'pick', 'y': int(y), 'r': int(r), 'from': orig, 't': f"{y} {ORD.get(int(r), r + 'th')} ({name.get(orig, orig)})"}
+            return {'k': 'pick', 'code': tok, 'y': int(y), 'r': int(r), 'from': orig, 't': f"{y} {ORD.get(int(r), r + 'th')} ({name.get(orig, orig)})"}
         if tok.startswith('DP_'):
             _, r, p = tok.split('_')
-            return {'k': 'pick', 'y': season, 'r': int(r) + 1, 't': f'{season} pick {int(r) + 1}.{int(p) + 1:02d}'}
+            return {'k': 'pick', 'code': tok, 'y': season, 'r': int(r) + 1, 't': f'{season} pick {int(r) + 1}.{int(p) + 1:02d}'}
         if tok.startswith('BB_'):
             return {'k': 'faab', 't': f'${tok[3:]} FAAB'}
         n, pos = pname(tok)
@@ -191,6 +191,29 @@ def main():
                 if v < 0:
                     add_cash(t, f, -v, B.get('season', 2027))
 
+    # ---------- how each trade played out (the same numbers as Awards > Trade of the Year) ----------
+    # Each used pick becomes the player taken with it; each side's haul gets its starter points for that team from
+    # the trade season on, until the team lets him go.
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import awards as AW
+        F = AW.Followups()
+        for t in trades:
+            for me, got in (('a', t['bGave']), ('b', t['aGave'])):
+                players = [{'id': x['id'], 'name': x['t'], 'pos': x.get('pos', '')} for x in got if x['k'] == 'p']
+                picks = [x['code'] for x in got if x['k'] == 'pick']
+                became, later = F.side(t[me], players, picks, t['season'], t['ts'])
+                for x in got:
+                    b = became.get(x.get('code')) if x['k'] == 'pick' else None
+                    if b:
+                        x['became'] = {'n': b['name'], 'pos': b['pos'], 'y': b['year'], 'slot': b['slot'], 'by': b.get('by')}
+                if later:
+                    via = {x['code']: x['t'] for x in got if x['k'] == 'pick'}
+                    t['out' + me.upper()] = {'total': later['total'], 'years': later['years'],
+                                             'rows': [{'n': r['name'], 'pos': r['pos'], 'via': via.get(r['via']) if r['via'] else None, 'pts': r['pts']} for r in later['rows']]}
+    except Exception as e:   # the history still shows without it
+        print('  trade follow-ups skipped:', type(e).__name__, str(e)[:200])
+
     # ---------- habits: plain counts ----------
     habits = {}
     for f in teams:
@@ -227,7 +250,7 @@ def main():
                 block.append({'f': f, 'ts': int(b['timestamp']) if b.get('timestamp') else None, 'items': items,
                               'wants': private((b.get('inExchangeFor') or '').strip())})
 
-    out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'deadline': DEADLINE, 'cap': CAP,
+    out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': int((load(D('mfl', '_meta.json'), {}) or {}).get('season') or 2026), 'deadline': DEADLINE, 'cap': CAP,
            'note': 'Beta. Ratings are the prototype OVR. Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',
            'teams': teams, 'targets': targets, 'trades': trades, 'habits': habits,
            'block': block, 'blockFetched': block_fetched, 'blockOn': tb is not None}

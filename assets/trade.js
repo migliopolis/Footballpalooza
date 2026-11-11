@@ -5,7 +5,7 @@
    Exposes window.FBPTrade.render(ctx) and .after(); beta.js routes #beta/trade here. */
 window.FBPTrade = (function () {
   let D = null, failed = false, loading = false, X = null;
-  let view = 'block', pos = 'ALL', withCont = false, q = '', season = '', teamSel = '', tick = null;
+  let view = 'block', kind = '', hsort = 'new', pos = 'ALL', withCont = false, q = '', season = '', teamSel = '', tick = null;
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   const nm = f => (X && X.nameOf ? X.nameOf(f) : (D && D.teams[f] ? D.teams[f].name : f));
@@ -115,17 +115,41 @@ window.FBPTrade = (function () {
         <div><dt>Auction cash</dt><dd>${money(h.cashIn)} in, ${money(h.cashOut)} out</dd></div></dl></section>`; }).join('')}</div>`;
   }
 
+  const KIND = [['', 'All'], ['picks', 'With picks'], ['cash', 'With cash'], ['players', 'Players only'], ['pickswap', 'Picks only']];
+  const has = (t, k) => t.aGave.concat(t.bGave).some(x => x.k === k);
+  const kindOk = t => !kind ? true : kind === 'picks' ? has(t, 'pick') : kind === 'cash' ? has(t, 'cash')
+    : kind === 'players' ? !has(t, 'pick') && !has(t, 'cash') && has(t, 'p') : kind === 'pickswap' ? has(t, 'pick') && !has(t, 'p') : true;
+  const swing = t => Math.abs(((t.outA || {}).total || 0) - ((t.outB || {}).total || 0));
+  const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
   function vHistory() {
     const seasons = [...new Set(D.trades.map(t => t.season))];
     const qq = fold(q.trim());
-    const L = D.trades.filter(t => (!season || String(t.season) === season) && (!teamSel || t.a === teamSel || t.b === teamSel)
-      && (!qq || fold([nm(t.a), nm(t.b)].concat(t.aGave.concat(t.bGave).map(x => x.t)).join(' ')).includes(qq)));
-    const side = (f, got) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got</h4><ul>${got.length ? got.map(x => `<li>${x.k === 'p' && x.pos ? `<span class="tf-pos">${esc(x.pos)}</span>` : x.k === 'pick' ? '<span class="tf-pos">PK</span>' : x.k === 'cash' ? '<span class="tf-pos tf-cash">$</span>' : ''}${esc(x.t)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
+    const words = t => [nm(t.a), nm(t.b)].concat(t.aGave.concat(t.bGave).map(x => x.t + (x.became ? ' ' + x.became.n : '')));
+    let L = D.trades.filter(t => (!season || String(t.season) === season) && (!teamSel || t.a === teamSel || t.b === teamSel)
+      && kindOk(t) && (!qq || fold(words(t).join(' ')).includes(qq)));
+    if (hsort === 'swing') L = L.slice().sort((a, b) => swing(b) - swing(a));
+    const tag = x => x.k === 'p' && x.pos ? `<span class="tf-pos">${esc(x.pos)}</span>` : x.k === 'pick' ? '<span class="tf-pos">PK</span>' : x.k === 'cash' ? '<span class="tf-pos tf-cash">$</span>' : '';
+    const became = (x, f) => x.became ? ` <span class="tf-became">→ ${esc(x.became.n)} <small>${esc(x.became.pos || '')}${x.k === 'pick' && !/pick \d/.test(x.t) ? ` · ${x.became.y} ${x.became.slot}` : ''}${x.became.by && x.became.by !== f ? ` · taken by ${esc(nm(x.became.by))}` : ''}</small></span>` : '';
+    const side = (f, got, out) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got${out ? ` <span class="tf-tot">${n1(out.total)} pts</span>` : ''}</h4><ul>${got.length ? got.map(x => `<li>${tag(x)}${esc(x.t)}${became(x, f)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
+    const later = t => {
+      const S = [[t.a, t.outA], [t.b, t.outB]].filter(([, o]) => o && o.rows.length);
+      if (!S.length) return '';
+      const years = [...new Set(S.flatMap(([, o]) => o.years))].sort();
+      const a = t.outA ? t.outA.total : 0, b = t.outB ? t.outB.total : 0;
+      const lead = a === b ? 'Even so far.' : `${esc(nm(a > b ? t.a : t.b))} by ${n1(Math.abs(a - b))} so far.`;
+      const tbl = ([f, o]) => `<div class="tf-lt"><h5>${logo(f)}${esc(nm(f))} <span class="tf-tot">${n1(o.total)} pts</span></h5><div class="tbl-wrap"><table class="tbl tf-ltbl"><thead><tr><th class="t">Player</th>${years.map(y => `<th>${y === String(D.season) ? y + '*' : y}</th>`).join('')}<th>Total</th></tr></thead><tbody>
+        ${o.rows.map(r => { const tot = Object.values(r.pts).reduce((x, v) => x + v, 0); return `<tr><td class="t">${esc(r.n)} <small>${esc(r.pos || '')}</small>${r.via ? `<small class="tf-via">via ${esc(r.via)}</small>` : ''}</td>${years.map(y => `<td>${y in r.pts ? n1(r.pts[y]) : ''}</td>`).join('')}<td><b>${n1(tot)}</b></td></tr>`; }).join('')}
+        </tbody></table></div></div>`;
+      return `<details class="tf-later"><summary>How it played out <small>${lead}</small></summary>${S.map(tbl).join('')}
+        <p class="tf-sub">Regular-season points scored as a starter for the team that got him, from the trade season until that team let him go. A pick counts from the season the player was taken. * this season so far. The same numbers as Awards &gt; Trade of the Year.</p></details>`;
+    };
     return `<div class="tf-filters"><input type="search" class="tf-q" placeholder="Search a player or team" value="${esc(q)}" aria-label="Search trades">
       <select class="tf-season" aria-label="Season"><option value="">All seasons</option>${seasons.map(y => `<option${String(y) === season ? ' selected' : ''}>${y}</option>`).join('')}</select>
-      <select class="tf-team" aria-label="Team"><option value="">All teams</option>${Object.keys(D.teams).sort((a, b) => nm(a).localeCompare(nm(b))).map(f => `<option value="${f}"${f === teamSel ? ' selected' : ''}>${esc(nm(f))}</option>`).join('')}</select></div>
-     <p class="tf-sub tf-count">${L.length} trade${L.length === 1 ? '' : 's'}. Auction cash is from the commissioner’s trade log; FAAB isn’t recorded.</p>
-     <div class="tf-hist">${L.slice(0, 150).map(t => `<article class="tf-tr"><p class="tf-date">${date(t.ts)}</p><div class="tf-sides">${side(t.a, t.bGave)}${side(t.b, t.aGave)}</div></article>`).join('') || '<p class="tf-sub">No trades match.</p>'}</div>`;
+      <select class="tf-team" aria-label="Team"><option value="">All teams</option>${Object.keys(D.teams).sort((a, b) => nm(a).localeCompare(nm(b))).map(f => `<option value="${f}"${f === teamSel ? ' selected' : ''}>${esc(nm(f))}</option>`).join('')}</select>
+      <select class="tf-sort" aria-label="Sort"><option value="new"${hsort === 'new' ? ' selected' : ''}>Newest first</option><option value="swing"${hsort === 'swing' ? ' selected' : ''}>Biggest swing</option></select></div>
+     ${seg('tfk', kind, KIND)}
+     <p class="tf-sub tf-count">${L.length} trade${L.length === 1 ? '' : 's'}. Tap “How it played out” on a trade for each side’s points since. Auction cash is from the commissioner’s trade log; FAAB isn’t recorded.</p>
+     <div class="tf-hist">${L.slice(0, 150).map(t => `<article class="tf-tr"><p class="tf-date">${date(t.ts)}${hsort === 'swing' && (t.outA || t.outB) ? ` · swing ${n1(swing(t))} pts` : ''}</p><div class="tf-sides">${side(t.a, t.bGave, t.outA)}${side(t.b, t.aGave, t.outB)}</div>${later(t)}</article>`).join('') || '<p class="tf-sub">No trades match.</p>'}</div>`;
   }
 
   function render(ctx) {
@@ -146,13 +170,14 @@ window.FBPTrade = (function () {
     const qi = document.querySelector('.tf-q');
     if (qi) qi.addEventListener('input', () => { q = qi.value; const pos0 = qi.selectionStart; redraw(); const n = document.querySelector('.tf-q'); if (n) { n.focus(); try { n.setSelectionRange(pos0, pos0); } catch (_) {} } });
     const se = document.querySelector('.tf-season'); if (se) se.addEventListener('change', () => { season = se.value; redraw(); });
+    const so = document.querySelector('.tf-sort'); if (so) so.addEventListener('change', () => { hsort = so.value; redraw(); });
     const te = document.querySelector('.tf-team'); if (te) te.addEventListener('change', () => { teamSel = te.value; redraw(); });
     if (wired) return; wired = true;
     document.addEventListener('click', e => {
       if (!document.querySelector('.tf-page')) return;
-      const b = e.target.closest('[data-tfv],[data-tfp]');
+      const b = e.target.closest('[data-tfv],[data-tfp],[data-tfk]');
       if (!b) return;
-      if (b.dataset.tfv) view = b.dataset.tfv; else pos = b.dataset.tfp;
+      if (b.dataset.tfv) view = b.dataset.tfv; else if (b.dataset.tfk !== undefined) kind = b.dataset.tfk; else pos = b.dataset.tfp;
       redraw();
     });
     document.addEventListener('change', e => {

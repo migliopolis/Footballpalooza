@@ -2412,3 +2412,11 @@ tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tf-empty p{margin:0 0 6px}
 .tf-wants{margin:8px 0 0;font-size:.88rem}.tf-wants span{font:700 .62rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:6px}
 .tf-cash{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+
+.tf-became{color:var(--muted)}.tf-became small{color:var(--muted)}
+.tf-tot{font:600 .72rem var(--body);color:var(--muted);margin-left:4px}
+.tf-later{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
+.tf-later summary{cursor:pointer;font:600 .84rem var(--body)}.tf-later summary small{color:var(--muted);font-weight:500;margin-left:4px}
+.tf-lt{margin-top:8px}.tf-lt h5{margin:0 0 4px;font:700 .84rem var(--body);display:flex;align-items:center;gap:4px}
+.tf-ltbl td,.tf-ltbl th{font-size:.8rem;font-variant-numeric:tabular-nums}
+.tf-via{display:block;color:var(--muted)}
