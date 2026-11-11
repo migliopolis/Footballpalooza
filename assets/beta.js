@@ -73,8 +73,7 @@ window.FBPBeta = (function () {
      <div class="bc-shine"></div>
      <div class="bc-ovr"><b>${c.o}</b><span>${c.p}</span></div>
      <div class="bc-tr">${c.j ? `<div class="bc-num">${esc(c.j)}</div>` : ''}${ft && ft.logo ? `<img class="bc-fbp" src="${esc(ft.logo)}" alt="${esc(fname)}" title="${esc(fname)}" loading="lazy">` : ''}</div>
-     ${ribbon || heat ? `<div class="bc-badges">${ribbon}${heat}</div>` : ''}
-     <div class="bc-plate"><div class="bc-nm">${logo ? `<img src="${esc(logo)}" alt="${esc(c.tm)}" loading="lazy">` : ''}<div><span class="bc-first">${esc(first)}</span><span class="bc-last">${esc(last)}</span></div></div>
+     <div class="bc-plate">${ribbon || heat ? `<div class="bc-badges">${ribbon}${heat}</div>` : ''}<div class="bc-nm">${logo ? `<img src="${esc(logo)}" alt="${esc(c.tm)}" loading="lazy">` : ''}<div><span class="bc-first">${esc(first)}</span><span class="bc-last">${esc(last)}</span></div></div>
        <div class="bc-tag"><span>${esc(c.dev || '')}</span><span>${c.p}${c.r || ''} · ${esc(fname)}</span></div>
        <div class="bc-attrs">${(KEY[c.p] || []).map(k => `<span>${k}<b>${n(val(c, k))}</b></span>`).join('')}</div></div>
      <div class="bc-glare"></div></div></div>
