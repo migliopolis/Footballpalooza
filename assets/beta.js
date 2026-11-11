@@ -100,7 +100,7 @@ window.FBPBeta = (function () {
   /* ---------- Beta landing: a button per experiment ---------- */
   const sub = () => location.hash.slice(1).split('/')[1] || '';
   const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the prototype ratings.'],
-    ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2021.'],
+    ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2019.'],
     ['power', 'Power Rankings', 'The FBP Power Score: strength now, projected keepers, auction cash and picks. Still being tuned.']];
   function betaHead(cur) {
     return `<div class="pagehead"><h1>Beta</h1><span class="asof">Testing ground for things that aren’t finished</span></div>

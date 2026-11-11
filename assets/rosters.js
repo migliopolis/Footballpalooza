@@ -256,11 +256,9 @@ window.FBPRosters = (function () {
         <p class="ro-bnote">Acquired: <b>${esc(r.acq || '—')}</b>${r.newDeal ? ' (a new 3-year veteran deal)' : ''}. ${N === 6 ? 'Taxi rookie: a full first season on taxi earns the 6th year with salary frozen in year 2. ' : ''}${N ? `Owed ${$(owed)} through ${R.season + (r.fut || []).length}, escalators included.` : ''}</p>`;
     }
     if (tab === 'jour') {
-      const J = r.jour || [];
-      body = !J.length ? '<p class="ro-wait">No FBP moves on record for him yet.</p>'
-        : `<ol class="ro-jr">${J.slice().reverse().map(([ts, f, kind, what]) => { const tt = ctx.teams[f] || {};
-            return `<li class="k-${kind}"><span class="ro-jd">${new Date(ts * 1000).toLocaleDateString([], { month: 'short', year: 'numeric' })}</span>${tt.logo ? `<img src="${tt.logo}" alt="" loading="lazy">` : '<i></i>'}<span><b>${esc(tt.abbr || f)}</b> ${esc(what)}</span></li>`; }).join('')}</ol>
-          <p class="ro-bnote">Newest first. Trades and pickups are on record from 2021; auctions and rookie drafts go back to the start.</p>`;
+      // the timeline (assets/journey.js): vertical on phones, a lane on wider screens
+      body = window.FBPJourney ? FBPJourney.html([r.id], { teams: ctx.teams, nameOf: ctx.nameOf, esc, rerender: redraw })
+        : '<p class="ro-wait">The journey didn’t load.</p>';
     }
     return body;
   }

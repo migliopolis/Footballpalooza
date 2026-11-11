@@ -592,6 +592,46 @@ window.FBPRef = (() => {
   });
   document.addEventListener('input', e => { if (e.target.matches && e.target.matches('.pr-q')) { prQ = e.target.value; prFilter(); } });
 
+  /* ---------- Player Journey: up to three players' paths through FBP, side by side (assets/journey.js) ---------- */
+  let jyIds = [];
+  try { jyIds = JSON.parse(localStorage.getItem('fbp-journey-ids') || '[]').slice(0, 3); } catch (_) { jyIds = []; }
+  const jySave = () => { try { localStorage.setItem('fbp-journey-ids', JSON.stringify(jyIds)); } catch (_) {} };
+  const jyFold = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, '');
+  function journeySec() {
+    const J = window.FBPJourney; if (!J) return '';
+    const ctx = { teams: X.teams, nameOf: X.nameOf, esc, rerender: X.rerender };
+    if (!J.ready()) { J.load(X.rerender); return `<section><h2 class="sec">Player Journey</h2><p class="loading">Loading journeys…</p></section>`; }
+    const L = J.list(), by = Object.fromEntries(L.map(p => [p.id, p]));
+    jyIds = jyIds.filter(id => by[id]);
+    const chips = jyIds.map(id => `<span class="jy-pick">${esc(by[id].n)} <small>${esc(by[id].p || '')}</small><button type="button" data-jy-rm="${id}" aria-label="Remove ${esc(by[id].n)}">✕</button></span>`).join('');
+    return `<section class="jy-sec"><h2 class="sec">Player Journey <small>every stop in FBP · add up to three players to see them side by side</small></h2>
+      <div class="jy-find">${jyIds.length < 3 ? `<input type="search" class="jy-q" placeholder="Add a player" aria-label="Add a player to the journey" autocomplete="off">` : ''}${chips}${jyIds.length >= 3 ? '<small class="jy-full">Three is the most. Remove one to add another.</small>' : ''}</div>
+      ${jyIds.length ? `<div class="card jy-card">${J.html(jyIds, ctx)}</div>` : '<p class="rf-foot">Search for a player to see every team he’s been on, how he got there and how he left.</p>'}</section>`;
+  }
+  function jyResults(box) {
+    const J = window.FBPJourney, q = jyFold(box.querySelector('.jy-q').value.trim());
+    let r = box.querySelector('.jy-res'); if (r) r.remove();
+    if (q.length < 2 || !J.ready()) return;
+    const hits = J.list().filter(p => !jyIds.includes(p.id) && jyFold(p.n).includes(q))
+      .sort((a, b) => (jyFold(a.n).startsWith(q) ? 0 : 1) - (jyFold(b.n).startsWith(q) ? 0 : 1) || (b.now ? 1 : 0) - (a.now ? 1 : 0) || a.n.localeCompare(b.n)).slice(0, 8);
+    box.insertAdjacentHTML('beforeend', `<div class="jy-res" role="listbox">${hits.length ? hits.map((p, i) => `<button type="button" role="option" data-jy-add="${p.id}"${i === 0 ? ' class="on"' : ''}>${esc(p.n)} <small>${esc(p.p || '')}${p.now ? ' · ' + esc(X.nameOf ? X.nameOf(p.now) : p.now) : ''}</small></button>`).join('') : '<p class="ro-none">No FBP player matches.</p>'}</div>`);
+  }
+  document.addEventListener('input', e => { if (e.target.matches && e.target.matches('.jy-q')) jyResults(e.target.closest('.jy-find')); });
+  document.addEventListener('keydown', e => {
+    if (!e.target.matches || !e.target.matches('.jy-q')) return;
+    const box = e.target.closest('.jy-find'), B = [...box.querySelectorAll('[data-jy-add]')], i = B.findIndex(b => b.classList.contains('on'));
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!B.length) return; B.forEach(b => b.classList.remove('on')); B[(i + (e.key === 'ArrowDown' ? 1 : -1) + B.length) % B.length].classList.add('on'); }
+    else if (e.key === 'Enter' && i >= 0) { e.preventDefault(); B[i].click(); }
+    else if (e.key === 'Escape') { const r = box.querySelector('.jy-res'); if (r) r.remove(); }
+  });
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('[data-jy-add],[data-jy-rm]'); if (!a) return;
+    if (a.dataset.jyAdd) { if (jyIds.length < 3 && !jyIds.includes(a.dataset.jyAdd)) jyIds.push(a.dataset.jyAdd); }
+    else jyIds = jyIds.filter(id => id !== a.dataset.jyRm);
+    jySave(); const y = window.scrollY; X.rerender(); window.scrollTo(0, y);
+    if (a.dataset.jyAdd) setTimeout(() => { const q = document.querySelector('.jy-q'); if (q) q.focus({ preventScroll: true }); }, 0);
+  });
+
   function pagePlayers() {
     const top = head('Players') + nav('#reference/players');
     if (!PR) { loadPR(X.rerender); return top + '<p class="loading">Loading player records…</p>'; }
@@ -626,7 +666,7 @@ window.FBPRef = (() => {
       </tr></thead><tbody>${rows}</tbody></table></div>
       <p class="rf-foot">A start is a week in an FBP starting lineup, and the record is his team’s result that week. Playoffs (round 1, semifinals, final) are counted separately; consolation games aren’t counted. ${PR.last} counts finished weeks so far. PPG is his points per start. Searching ignores the starts filter.</p></section>`;
     setTimeout(() => prFilter(), 0);
-    return '<div class="py-page pr-page">' + top + tiles + table + '</div>';
+    return '<div class="py-page pr-page">' + top + tiles + journeySec() + table + '</div>';
   }
 
   /* ---------- entry ---------- */

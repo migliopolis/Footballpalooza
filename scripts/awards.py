@@ -505,7 +505,12 @@ class Followups:
         self.PT = PT
 
     def _wr(self, y):
-        return load(D('mfl', 'weeklyResults.json') if y == self.cur_year else D('history', str(y), 'weeklyResults.json'), {}) or {}
+        wr = load(D('mfl', 'weeklyResults.json') if y == self.cur_year else D('history', str(y), 'weeklyResults.json'), {}) or {}
+        if not wr.get('weeks'):
+            # 2019-20: MFL no longer serves weekly results; the starters were saved once (data/reference/starters-2019-2020.json)
+            S = ((load(D('reference', 'starters-2019-2020.json'), {}) or {}).get('seasons') or {}).get(str(y)) or {}
+            wr = {'weeks': {w: {fr: {'s': rows} for fr, rows in frs.items()} for w, frs in S.items()}}
+        return wr
 
     def season_pts(self, y):
         """(player, team) -> {week: starter points} for season y's regular season."""

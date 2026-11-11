@@ -4,7 +4,7 @@ Reads what the refresh already saved and writes data/trading-floor.json:
   teams   outlook from the playoff odds, 2026 payroll, the cost of keeping everyone worth keeping in 2027,
           depth by position, QB count against the 2-QB keeper limit, rookie picks owned
   targets good players on teams outside the playoff race, expiring contracts, big 2027 raises, keeper crunches
-  trades  every MFL trade since 2021: players and picks from MFL, plus auction cash, which MFL doesn't record
+  trades  every MFL trade since 2019: players and picks from MFL, plus auction cash, which MFL doesn't record
           (data/trade-cash.json from the commissioner's trade log for 2022-26; data/budgets.json for new 2027 cash)
   habits  per team, plain counts from that history: trades a season, partners, timing, picks in and out
   block   MFL Trade Bait (owners add players from their team page in MFL), when the refresh has fetched it
@@ -128,7 +128,7 @@ def main():
 
     # ---------- trade history (MFL, 2021 on) ----------
     names = {}
-    for y in range(2021, 2026):
+    for y in range(2019, 2026):
         pj = load(D('history', str(y), 'players.json'), {}) or {}
         for pid, v in (pj.get('players') or {}).items():
             names.setdefault(pid, (v[0], v[1]))
@@ -154,7 +154,7 @@ def main():
         return {'k': 'p', 'id': tok, 't': n, 'pos': pos}
 
     trades = []
-    for y in range(2021, 2027):
+    for y in range(2019, 2027):
         tj = load(D('history', str(y), 'transactions.json') if y < 2026 else D('mfl', 'transactions.json'), {}) or {}
         tx = tj.get('transactions')
         tx = tx.get('transaction') if isinstance(tx, dict) else tx
@@ -206,7 +206,7 @@ def main():
                 for x in got:
                     b = became.get(x.get('code')) if x['k'] == 'pick' else None
                     if b:
-                        x['became'] = {'n': b['name'], 'pos': b['pos'], 'y': b['year'], 'slot': b['slot'], 'by': b.get('by')}
+                        x['became'] = {'id': b['id'], 'n': b['name'], 'pos': b['pos'], 'y': b['year'], 'slot': b['slot'], 'by': b.get('by')}
                 if later:
                     via = {x['code']: x['t'] for x in got if x['k'] == 'pick'}
                     t['out' + me.upper()] = {'total': later['total'], 'po': later.get('poTotal', 0), 'years': later['years'],
@@ -224,7 +224,7 @@ def main():
         got = lambda t: t['bGave'] if t['a'] == f else t['aGave']
         months = collections.Counter(datetime.fromtimestamp(t['ts'], timezone.utc).month for t in mine)
         inseason = sum(v for m, v in months.items() if m in (9, 10, 11, 12))
-        habits[f] = {'total': len(mine), 'perSeason': {str(y): per.get(y, 0) for y in range(2021, 2027)},
+        habits[f] = {'total': len(mine), 'perSeason': {str(y): per.get(y, 0) for y in range(2019, 2027)},
                      'partners': [[p, n] for p, n in partners.most_common(3)],
                      'inSeason': inseason, 'offSeason': len(mine) - inseason,
                      'picksOut': sum(1 for t in mine for x in gave(t) if x['k'] == 'pick'),

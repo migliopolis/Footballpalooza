@@ -1,6 +1,6 @@
 /* Beta > Trading Floor: a resource for owners thinking about a trade.
    Data: data/trading-floor.json, built by scripts/trading_floor.py on each refresh (MFL rosters, contracts, picks,
-   trades since 2021 and Trade Bait; playoff odds from League Now; ratings from the prototype player cards).
+   trades since 2019 and Trade Bait; playoff odds from League Now; ratings from the prototype player cards).
    Facts only: nothing here grades a player, a contract or an owner.
    Exposes window.FBPTrade.render(ctx) and .after(); beta.js routes #beta/trade here. */
 window.FBPTrade = (function () {
@@ -102,11 +102,11 @@ window.FBPTrade = (function () {
   function vOwners() {
     const ids = Object.keys(D.teams).sort((a, b) => (D.habits[b].total - D.habits[a].total) || nm(a).localeCompare(nm(b)));
     const max = Math.max(1, ...ids.map(f => Math.max(...Object.values(D.habits[f].perSeason))));
-    return `<p class="tf-why">Every MFL trade since 2021, counted per team. Auction cash is from the commissioner’s trade log (2022 on); FAAB isn’t recorded.</p>
+    return `<p class="tf-why">Every MFL trade since 2019, counted per team. Auction cash is from the commissioner’s trade log (2022 on); FAAB isn’t recorded.</p>
      <div class="tf-teams">${ids.map(f => { const h = D.habits[f];
       const bars = Object.entries(h.perSeason).map(([y, n]) => `<div class="tf-bar"><i style="height:${n / max * 100}%"></i><b>${n}</b><span>${y.slice(2)}</span></div>`).join('');
       return `<section class="tf-card${f === (X && X.myTeam) ? ' tf-mine' : ''}"><h3>${logo(f)}${esc(nm(f))}</h3>
-       <p class="tf-sub">${h.total} trade${h.total === 1 ? '' : 's'} since 2021${h.last ? ' · last on ' + date(h.last) : ''}</p>
+       <p class="tf-sub">${h.total} trade${h.total === 1 ? '' : 's'} since 2019${h.last ? ' · last on ' + date(h.last) : ''}</p>
        <div class="tf-bars" aria-label="Trades per season">${bars}</div>
        <dl class="tf-dl"><div><dt>Most often with</dt><dd>${h.partners.length ? h.partners.map(([p, n]) => `${esc(nm(p))} (${n})`).join(', ') : '–'}</dd></div>
         <div><dt>When</dt><dd>${h.inSeason} during the season, ${h.offSeason} in the off-season</dd></div>
@@ -122,6 +122,18 @@ window.FBPTrade = (function () {
   const all = o => o ? (o.total || 0) + (o.po || 0) : 0;
   const swing = t => Math.abs(all(t.outA) - all(t.outB));
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
+  // everyone in the trade, players taken with the picks included: their whole FBP careers (assets/journey.js)
+  const jyIds = t => [...new Set(t.aGave.concat(t.bGave).map(x => x.k === 'p' ? x.id : x.became && x.became.id).filter(Boolean))];
+  function fillJourneys() {
+    if (!window.FBPJourney) return;
+    document.querySelectorAll('.tf-later[open] .tf-jy').forEach(el => {
+      if (el.dataset.done) return;
+      if (!FBPJourney.ready()) { FBPJourney.load(fillJourneys); return; }
+      el.dataset.done = '1';
+      el.insertAdjacentHTML('beforeend', FBPJourney.html(el.dataset.tfJy.split(','), { teams: X.teams, nameOf: X.nameOf, esc, rerender: fillJourneys }));
+    });
+  }
+  document.addEventListener('toggle', e => { if (e.target.matches && e.target.matches('.tf-later') && e.target.open) fillJourneys(); }, true);
   function vHistory() {
     const seasons = [...new Set(D.trades.map(t => t.season))];
     const qq = fold(q.trim());
@@ -143,6 +155,7 @@ window.FBPTrade = (function () {
           return `<tr><td class="t">${esc(r.n)} <small>${esc(r.pos || '')}</small>${r.via ? `<small class="tf-via">via ${esc(r.via)}</small>` : ''}</td>${years.map(y => `<td>${y in r.pts ? n1(r.pts[y]) : ''}${(r.po || {})[y] ? `<small class="tf-po">+${n1(r.po[y])} PO</small>` : ''}</td>`).join('')}<td><b>${n1(tot)}</b></td>${anyPo ? `<td>${pt ? `<b>${n1(pt)}</b>` : ''}</td>` : ''}</tr>`; }).join('')}
         </tbody></table></div></div>`;
       return `<details class="tf-later"><summary>How it played out <small>${lead}</small></summary>${S.map(tbl).join('')}
+        ${jyIds(t).length ? `<div class="tf-jy" data-tf-jy="${jyIds(t).join(',')}"><h5>Their FBP careers</h5></div>` : ''}
         <p class="tf-sub">Points scored as a starter for the team that got him, from the trade season until that team let him go. Playoff points count real playoff games only (not consolation games); PO under a season is that season’s playoffs. A pick counts from the season the player was taken. * this season so far. Regular-season numbers match Awards &gt; Trade of the Year.</p></details>`;
     };
     return `<div class="tf-filters"><input type="search" class="tf-q" placeholder="Search a player or team" value="${esc(q)}" aria-label="Search trades">
