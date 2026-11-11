@@ -123,6 +123,9 @@ window.FBPRosters = (function () {
       if (!j._m) { j._m = {}; (j.injuries || []).forEach(t => (t.injuries || []).forEach(i => { const a = i.athlete || {}; let id = a.id;
         if (!id) (a.links || []).some(l => { const m = /\/id\/(\d+)/.exec(l.href || ''); if (m) id = m[1]; return !!m; });
         if (id) j._m[id] = { status: i.status, note: i.shortComment || '' }; })); }
+      // ESPN's live report drops some long-term injuries; the daily snapshot (which adds them from team rosters) fills the gaps
+      const k = espn('INJF', 'data/espn/injuries.json');
+      if (k && !k.failed && !j._f) { j._f = true; Object.entries(k).forEach(([id, v]) => { if (id !== '_m' && v && v.status && !j._m[id]) j._m[id] = { status: v.status, note: v.short || '' }; }); }
       return j._m;
     }
     if (j && j.failed) { const k = espn('INJF', 'data/espn/injuries.json');

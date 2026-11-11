@@ -200,6 +200,8 @@
         if (id) out[id] = { status: i.status, note: i.shortComment || '' };
       }));
       injuries = out;
+      // fill in long-term injuries ESPN's live report leaves out, from the daily snapshot
+      return fetch('data/espn/injuries.json').then(r => r.ok ? r.json() : {}).then(s => { Object.entries(s || {}).forEach(([k, v]) => { if (v && v.status && !out[k]) out[k] = { status: v.status, note: v.short || '' }; }); }).catch(() => {});
     }).catch(() => fetch('data/espn/injuries.json').then(r => r.ok ? r.json() : {}).then(j => {
       injuries = Object.fromEntries(Object.entries(j || {}).map(([k, v]) => [k, { status: v.status, note: v.short || '' }]));
     })).catch(() => { injuries = injuries || {}; });

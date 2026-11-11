@@ -99,6 +99,28 @@ def injuries_feed():
     return out
 
 
+def fill_from_rosters():
+    """ESPN's league-wide injury report drops some long-term injuries (players on IR for weeks) that the team
+    rosters still list. Add anyone a roster shows as injured who isn't in injuries.json, using the roster status."""
+    try:
+        inj = json.load(open(os.path.join(OUT, 'injuries.json')))
+        ath = json.load(open(os.path.join(OUT, 'athletes.json')))
+    except Exception:
+        return 0
+    added = 0
+    for aid, a in ath.items():
+        st = (a.get('injury') or '').strip()
+        # only long-term statuses: week-to-week ones (Questionable, Out) come from the injury report itself
+        if st not in ('Injured Reserve', 'Physically Unable to Perform', 'Suspension') or aid in inj:
+            continue
+        inj[aid] = {'name': a.get('name'), 'team': a.get('team'), 'status': st, 'short': '', 'date': '',
+                    'type': '', 'return': '', 'from': 'roster'}
+        added += 1
+    if added:
+        save('injuries', inj)
+    return added
+
+
 def news_feed():
     raw = get(SITE + '/news?limit=40')
     out = []
@@ -141,6 +163,9 @@ def main():
         except Exception as e:
             meta['feeds'][name] = {**meta['feeds'].get(name, {}), 'ok': False, 'error': str(e)[:200], 'tried': run}
             print(f'  FAIL {name}: {e}  (kept the previous file)')
+    n = fill_from_rosters()
+    if n:
+        print(f'  ok   injuries: added {n} from team rosters')
     with open(meta_path, 'w') as f:
         json.dump(meta, f, indent=1)
         f.write('\n')
