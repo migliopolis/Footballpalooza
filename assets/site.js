@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0167';
+  const VERSION = '0.0168';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -392,7 +392,7 @@
     const sub = (location.hash.split('/')[1] || '');
     const nav = `<nav class="rf-sub seg now-sub ln-sub">${[['', 'Standings'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['hospital', 'Hospital']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
-        <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
+        <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${state.meta && state.meta.fetched ? ` · <span id="ln-refresh">${esc(refreshText(true))}</span>` : genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
     // the FBP Power Score is in Beta (#beta/power) while projected keepers are being tuned
     if (sub === 'power') return headTxt + `
@@ -795,6 +795,24 @@
     document.addEventListener('touchcancel', end, { passive: true });
   }
 
+  // How current the data is: when the last refresh pulled from MFL, and who started it (the schedule or the commissioner).
+  // Shown in the footer on every page and in the League Now header; times are in the viewer's own time zone.
+  function refreshText(short) {
+    const m = state.meta; if (!m || !m.fetched) return '';
+    const t = new Date(m.fetched); if (isNaN(t)) return '';
+    const mins = (Date.now() - t) / 6e4;
+    const ago = mins < 1 ? 'just now' : mins < 60 ? `${Math.round(mins)} min ago` : mins < 48 * 60 ? `${Math.round(mins / 60)} hr ago` : `${Math.round(mins / 1440)} days ago`;
+    const when = t.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+    const who = m.trigger === 'commissioner' ? 'Commissioner refresh' : m.trigger === 'automatic' ? 'Automatic refresh' : 'Data refreshed';
+    return short ? `${who.toLowerCase().replace('data refreshed', 'refreshed')} ${ago}` : `${who} ${when} (${ago})`;
+  }
+  function showRefresh() {
+    const el = document.getElementById('foot-refresh'); if (!el) return;
+    const txt = refreshText(); if (!txt) return;
+    el.innerHTML = `<b>${esc(txt)}</b><br>Automatic refreshes run every morning after MFL’s waivers process (about 9:30 AM Pacific) and Monday nights after the game; GitHub sometimes starts them late. Rosters, scores and transactions are as of the last refresh; the live Scoreboard updates on its own during games.`;
+    const h = document.getElementById('ln-refresh'); if (h) h.textContent = refreshText(true);
+    else if (/^#now(\/)?$|^#?$/.test(location.hash) && state.now) route();   // League Now header was drawn before this loaded
+  }
   async function init() {
     try {
       const [now, teams] = await Promise.all([
@@ -803,6 +821,7 @@
       ]);
       state.now = now; state.teams = teams.teams || {};
       try { state.budgets = await fetch('data/budgets.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null); } catch (e) { state.budgets = null; }
+      fetch('data/mfl/_meta.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(m => { state.meta = m; showRefresh(); }).catch(() => {});
       const yr = (now.season.match(/\d{4}/) || [''])[0];
       // season on one line, the version under it
       document.getElementById('season-label').innerHTML = `<span class="sl-t">${yr ? `${yr} season` : 'League hub'}</span><span class="sl-v">v ${VERSION}</span>`;

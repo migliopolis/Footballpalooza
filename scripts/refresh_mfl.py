@@ -364,7 +364,9 @@ def main():
     fetch_transactions()
     fetch_auction_bids()
     fetch_projections()
-    save('_meta', {'season': SEASON, 'league': LEAGUE,
+    # who started this refresh: the daily/Monday-night schedule, the commissioner's "Run workflow" button, or a local run
+    trig = {'schedule': 'automatic', 'workflow_dispatch': 'commissioner'}.get(os.environ.get('GITHUB_EVENT_NAME', ''), 'manual')
+    save('_meta', {'season': SEASON, 'league': LEAGUE, 'trigger': trig,
                    'fetched': datetime.now(timezone.utc).isoformat(timespec='seconds')})
     if failed_core:
         sys.exit(f'Core data failed: {", ".join(failed_core)}')
