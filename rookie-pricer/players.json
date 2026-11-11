@@ -1,8 +1,8 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-10",
- "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock; DLF superflex mock (round 1 only). Newer sources count more.",
+ "asOf": "2026-11-11",
+ "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
    "name": "Jeremiah Smith",
@@ -12,248 +12,248 @@
    "nflPick": 1
   },
   {
-   "name": "Cam Coleman",
-   "pos": "WR",
-   "school": "Texas",
-   "adp": 4.6,
-   "nflPick": 14
-  },
-  {
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
-   "adp": 4.9,
-   "nflPick": 22
+   "adp": 4.5,
+   "nflPick": 23
   },
   {
-   "name": "Arch Manning",
-   "pos": "QB",
+   "name": "Cam Coleman",
+   "pos": "WR",
    "school": "Texas",
-   "adp": 5.4,
-   "nflPick": 8
+   "adp": 4.9,
+   "nflPick": 14
   },
   {
    "name": "Charlie Becker",
    "pos": "WR",
    "school": "Indiana",
-   "adp": 5.7,
+   "adp": 5.4,
    "nflPick": 8
+  },
+  {
+   "name": "Arch Manning",
+   "pos": "QB",
+   "school": "Texas",
+   "adp": 5.7,
+   "nflPick": 7
+  },
+  {
+   "name": "Drew Mestemaker",
+   "pos": "QB",
+   "school": "Oklahoma State",
+   "adp": 6.6,
+   "nflPick": 4
   },
   {
    "name": "Darian Mensah",
    "pos": "QB",
    "school": "Miami",
-   "adp": 7.5,
+   "adp": 7.2,
    "nflPick": 6
   },
   {
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
-   "adp": 7.7,
-   "nflPick": 24
-  },
-  {
-   "name": "Drew Mestemaker",
-   "pos": "QB",
-   "school": "Oklahoma State",
-   "adp": 7.8,
-   "nflPick": 4
-  },
-  {
-   "name": "CJ Carr",
-   "pos": "QB",
-   "school": "Notre Dame",
-   "adp": 12.3,
-   "nflPick": 12
-  },
-  {
-   "name": "Kewan Lacy",
-   "pos": "RB",
-   "school": "Ole Miss",
-   "adp": 12.4,
-   "nflPick": 52
+   "adp": 8.1,
+   "nflPick": 25
   },
   {
    "name": "KJ Duff",
    "pos": "WR",
    "school": "Rutgers",
-   "adp": 12.5,
+   "adp": 11.9,
    "nflPick": 23
   },
   {
    "name": "Ahmad Hardy",
    "pos": "RB",
    "school": "Missouri",
-   "adp": 12.5,
+   "adp": 12.7,
    "nflPick": 73
   },
   {
-   "name": "Nick Marsh",
-   "pos": "WR",
-   "school": "Indiana",
-   "adp": 13.9,
-   "nflPick": 19
+   "name": "CJ Carr",
+   "pos": "QB",
+   "school": "Notre Dame",
+   "adp": 13.1,
+   "nflPick": 9
+  },
+  {
+   "name": "Kewan Lacy",
+   "pos": "RB",
+   "school": "Ole Miss",
+   "adp": 13.4,
+   "nflPick": 52
   },
   {
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
-   "adp": 14.0,
+   "adp": 13.5,
    "nflPick": 9
   },
   {
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
-   "adp": 14.3,
+   "adp": 13.9,
    "nflPick": 29
+  },
+  {
+   "name": "Nick Marsh",
+   "pos": "WR",
+   "school": "Indiana",
+   "adp": 14.1,
+   "nflPick": 19
   },
   {
    "name": "Ryan Coleman-Williams",
    "pos": "WR",
    "school": "Alabama",
-   "adp": 15.5,
+   "adp": 15.3,
    "nflPick": 32
   },
   {
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
-   "adp": 16.6,
+   "adp": 16.5,
    "nflPick": 23
   },
   {
    "name": "Nate Frazier",
    "pos": "RB",
    "school": "Georgia",
-   "adp": 20.3,
+   "adp": 20.6,
    "nflPick": 110
   },
   {
    "name": "Reed Harris",
    "pos": "WR",
    "school": "Arizona State",
-   "adp": 21.8,
+   "adp": 22.3,
    "nflPick": 25
   },
   {
    "name": "Mark Fletcher Jr.",
    "pos": "RB",
    "school": "Miami",
-   "adp": 22.0,
+   "adp": 22.5,
    "nflPick": 118
   },
   {
    "name": "Deuce Alexander",
    "pos": "WR",
    "school": "Ole Miss",
-   "adp": 22.1,
+   "adp": 22.6,
    "nflPick": 55
   },
   {
    "name": "LJ Martin",
    "pos": "RB",
    "school": "BYU",
-   "adp": 22.8,
+   "adp": 23.3,
    "nflPick": 123
   },
   {
    "name": "Mario Craver",
    "pos": "WR",
    "school": "Texas A&M",
-   "adp": 23.2,
+   "adp": 23.7,
    "nflPick": 67
   },
   {
    "name": "Omarion Miller",
    "pos": "WR",
    "school": "Arizona State",
-   "adp": 23.3,
+   "adp": 23.9,
    "nflPick": 65
-  },
-  {
-   "name": "Julian Sayin",
-   "pos": "QB",
-   "school": "Ohio State",
-   "adp": 23.7,
-   "nflPick": 120
   },
   {
    "name": "Jayden Maiava",
    "pos": "QB",
    "school": "USC",
-   "adp": 24.3,
+   "adp": 25.0,
    "nflPick": 62
+  },
+  {
+   "name": "Julian Sayin",
+   "pos": "QB",
+   "school": "Ohio State",
+   "adp": 25.6,
+   "nflPick": 120
   },
   {
    "name": "Austin Simmons",
    "pos": "QB",
    "school": "Missouri",
-   "adp": 24.8,
+   "adp": 25.6,
    "nflPick": 28
   },
   {
    "name": "Justice Haynes",
    "pos": "RB",
    "school": "Georgia Tech",
-   "adp": 25.0,
+   "adp": 25.8,
    "nflPick": 166
   },
   {
    "name": "Hollywood Smothers",
    "pos": "RB",
    "school": "Texas",
-   "adp": 25.3,
+   "adp": 26.2,
    "nflPick": 114
   },
   {
    "name": "Bryant Wesco Jr.",
    "pos": "WR",
    "school": "Clemson",
-   "adp": 26.1,
+   "adp": 27.0,
    "nflPick": 79
   },
   {
    "name": "Isaac Brown",
    "pos": "RB",
    "school": "Louisville",
-   "adp": 26.1,
+   "adp": 27.0,
    "nflPick": 128
   },
   {
    "name": "Duce Robinson",
    "pos": "WR",
    "school": "Florida State",
-   "adp": 26.5,
+   "adp": 27.5,
    "nflPick": 72
   },
   {
    "name": "Ryan Wingo",
    "pos": "WR",
    "school": "Texas",
-   "adp": 26.5,
+   "adp": 27.5,
    "nflPick": 70
   },
   {
    "name": "Wayshawn Parker",
    "pos": "RB",
    "school": "Utah",
-   "adp": 27.7,
+   "adp": 28.8,
    "nflPick": 187
   },
   {
    "name": "DeSean Bishop",
    "pos": "RB",
    "school": "Tennessee",
-   "adp": 28.0,
+   "adp": 29.1,
    "nflPick": 188
   },
   {
    "name": "Luke Reynolds",
    "pos": "TE",
    "school": "Virginia Tech",
-   "adp": 28.8,
+   "adp": 30.0,
    "nflPick": 66
   }
  ]

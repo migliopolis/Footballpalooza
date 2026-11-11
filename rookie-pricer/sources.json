@@ -1,6 +1,6 @@
 {
  "season": 2027,
- "asOf": "2026-11-10",
+ "asOf": "2026-11-11",
  "mode": "projected",
  "settings": {
   "windowDays": 60,
@@ -331,7 +331,7 @@
  "nflSources": [
   {
    "name": "NFL Mock Draft Database consensus mock (1 week) and recent mocks",
-   "date": "2026-11-10",
+   "date": "2026-11-11",
    "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
    "type": "mock",
    "weight": 3,
@@ -340,13 +340,13 @@
     "Drew Mestemaker": 3,
     "Darian Mensah": 6,
     "Charlie Becker": 7,
-    "Arch Manning": 9,
+    "CJ Carr": 8,
+    "Arch Manning": 8,
     "Trinidad Chambliss": 9,
-    "CJ Carr": 11,
     "Cam Coleman": 15,
     "LaNorris Sellers": 16,
     "Nick Marsh": 17,
-    "Jadan Baugh": 21,
+    "Jadan Baugh": 22,
     "KJ Duff": 22,
     "Trey'Dez Green": 23,
     "Reed Harris": 25,

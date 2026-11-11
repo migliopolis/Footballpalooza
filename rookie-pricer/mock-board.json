@@ -1,13 +1,13 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-10",
+ "asOf": "2026-11-11",
  "board": {
   "name": "Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys)",
   "url": "https://www.footballguys.com/article/2027-dynasty-rookie-rankings-big-board-v4",
   "date": "2026-10-21"
  },
- "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-10); players no NFL source mentions price as undrafted.",
+ "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-11); players no NFL source mentions price as undrafted.",
  "players": [
   {
    "rank": 1,
@@ -21,7 +21,7 @@
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
-   "nflPick": 22
+   "nflPick": 23
   },
   {
    "rank": 3,
@@ -63,7 +63,7 @@
    "name": "CJ Carr",
    "pos": "QB",
    "school": "Notre Dame",
-   "nflPick": 12
+   "nflPick": 9
   },
   {
    "rank": 9,
@@ -98,14 +98,14 @@
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
-   "nflPick": 24
+   "nflPick": 25
   },
   {
    "rank": 14,
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
-   "nflPick": 8
+   "nflPick": 7
   },
   {
    "rank": 15,
