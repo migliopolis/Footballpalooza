@@ -1,13 +1,13 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-11",
+ "asOf": "2026-11-12",
  "board": {
   "name": "Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys)",
   "url": "https://www.footballguys.com/article/2027-dynasty-rookie-rankings-big-board-v4",
   "date": "2026-10-21"
  },
- "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-11); players no NFL source mentions price as undrafted.",
+ "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-12); players no NFL source mentions price as undrafted.",
  "players": [
   {
    "rank": 1,
@@ -49,7 +49,7 @@
    "name": "Darian Mensah",
    "pos": "QB",
    "school": "Miami",
-   "nflPick": 6
+   "nflPick": 9
   },
   {
    "rank": 7,
@@ -63,7 +63,7 @@
    "name": "CJ Carr",
    "pos": "QB",
    "school": "Notre Dame",
-   "nflPick": 9
+   "nflPick": 10
   },
   {
    "rank": 9,
@@ -98,7 +98,7 @@
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
-   "nflPick": 25
+   "nflPick": 9
   },
   {
    "rank": 14,
@@ -112,7 +112,7 @@
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
-   "nflPick": 23
+   "nflPick": 15
   },
   {
    "rank": 16,
@@ -133,7 +133,7 @@
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
-   "nflPick": 29
+   "nflPick": 20
   },
   {
    "rank": 19,
@@ -154,7 +154,7 @@
    "name": "Ryan Coleman-Williams",
    "pos": "WR",
    "school": "Alabama",
-   "nflPick": 32
+   "nflPick": 17
   },
   {
    "rank": 22,
@@ -168,7 +168,7 @@
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
-   "nflPick": 9
+   "nflPick": 24
   },
   {
    "rank": 24,
@@ -203,7 +203,7 @@
    "name": "Reed Harris",
    "pos": "WR",
    "school": "Arizona State",
-   "nflPick": 25
+   "nflPick": 32
   },
   {
    "rank": 29,
@@ -217,7 +217,7 @@
    "name": "Austin Simmons",
    "pos": "QB",
    "school": "Missouri",
-   "nflPick": 28
+   "nflPick": 24
   },
   {
    "rank": 31,
