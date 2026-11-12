@@ -1046,6 +1046,16 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .col-heads li+li .col-ago{font-size:.72rem}
 .col-heads li+li .col-av{width:26px;height:26px;font-size:.6rem}
 @media (max-width:520px){.col-heads li+li .col-hkick{display:none}}
+/* the lead column on the front page: its photo, about half the width on a phone, beside the headline */
+.col-heads li.col-feat{display:block;padding:10px 0}
+.col-feat a{display:flex;gap:12px;align-items:flex-start}
+.col-fimg{flex:none;width:50%;max-width:300px;aspect-ratio:3/2;object-fit:cover;border-radius:8px;background:var(--line)}
+.col-ftxt{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px}
+.col-feat .col-hkick{margin:0}
+.col-feat a b{font:700 1rem/1.2 var(--display);text-transform:uppercase}
+.col-ftz{font-size:.84rem;line-height:1.4;color:var(--muted)}
+.col-fby{font-size:.74rem;color:var(--muted)}
+@media (max-width:640px){.col-ftz{display:none}.col-feat a b{font-size:.92rem}}
 /* phones turned sideways (and small tablets): keep team names on readable lines; the table scrolls instead */
 @media (min-width:521px){.tbl td.t{min-width:10.5rem}.tbl td.t .nm{overflow-wrap:normal}}
 
@@ -2516,7 +2526,8 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .tk-sp{overflow:visible}.tk-sp polyline{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
 .tk-sp.up polyline{stroke:#4cd07d}.tk-sp.dn polyline{stroke:#ff6b62}
 .tk-sep{color:#4a5560;padding:0 10px}
-.tk-dl{background:#ff5c5c;color:#fff}.tk-odds{background:#7be0a4}.tk-mu{background:#c9b6ff}.tk-sc{background:#d7dde4}.tk-bl{background:#ffd36e}.tk-mv{background:#8fe3e3}
+.tk-dl{background:#ff5c5c;color:#fff}.tk-odds{background:#7be0a4}.tk-mu{background:#c9b6ff}.tk-sc{background:#d7dde4}.tk-bl{background:#ffd36e}.tk-mv{background:#8fe3e3}.tk-pr{background:#f4a3c0}
+.tk-hl{text-transform:none}
 .tk-v.fav{color:#4cd07d}.tk-v.win{color:#fff}.tk-l{color:#8a96a3}
 /* Settings > Ticker list */
 .tk-cfg-h{margin:14px 0 6px}

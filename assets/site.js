@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0173';
+  const VERSION = '0.0174';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -438,7 +438,7 @@
     if (state.columns || state.columnsLoading) return;
     state.columnsLoading = true;
     fetch('data/columns.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)
-      .then(j => { state.columns = j || { columns: [], columnists: {} }; if (location.hash === '' || location.hash.startsWith('#now') || location.hash.startsWith('#press')) route(); });
+      .then(j => { state.columns = j || { columns: [], columnists: {} }; if (location.hash === '' || location.hash.startsWith('#now') || location.hash.startsWith('#press')) route(); ticker(); });
   }
   const colDate = d => { const t = new Date(d + 'T12:00:00'); return isNaN(t) ? d : t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
   function colAvatar(a, big) {
@@ -452,12 +452,15 @@
     const days = Math.round((n - t) / 864e5);
     return days <= 0 ? 'Today' : days === 1 ? 'Yesterday' : days < 7 ? `${days} days ago` : colDate(d);
   };
-  // front page: the latest columns as headline links (newest first)
+  // front page: the latest columns, newest first. The newest leads with its photo (about half the screen wide on a
+  // phone); the next two sit underneath as compact one-line links.
   function pressBox() {
     if (!state.columns) { loadColumns(); return ''; }
     const C = state.columns.columns.slice(0, 3); if (!C.length) return '';
-    return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map(c => { const a = state.columns.columnists[c.author] || { name: c.author };
-      return `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span>${colAvatar(a)}</span></li>`; }).join('')}</ul><a class="col-all" href="#press">All ${state.columns.columns.length} articles in the Press Box →</a></section>`;
+    const who = c => (state.columns.columnists[c.author] || { name: c.author }).name;
+    return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map((c, i) => i === 0
+      ? `<li class="col-feat"><a href="#now/column/${c.slug}">${c.image ? `<img class="col-fimg" src="${esc(c.image)}" alt="${esc(c.caption || '')}" loading="lazy">` : ''}<span class="col-ftxt"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="col-ftz">${esc(c.teaser)}</span>` : ''}<span class="col-fby">${esc(who(c))} · ${colAgo(c.date)}</span></span></a></li>`
+      : `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span></span></li>`).join('')}</ul><a class="col-all" href="#press">All ${state.columns.columns.length} articles in the Press Box →</a></section>`;
   }
   function pageColumn(slug) {
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the column…</p>'; }
@@ -836,16 +839,16 @@
   // the sections, in their default order; Settings > Ticker turns each on or off and drags them into any order
   const TK_SECS = [['deadline', 'Trade deadline countdown'], ['power', 'MFL Power Rating'], ['heat', 'Heat Check: teams'],
     ['hot', 'Hottest players'], ['cold', 'Coldest players'], ['odds', 'Playoff odds'], ['matchups', 'This week’s matchups'],
-    ['scores', 'Last week’s scores'], ['block', 'Trade block'], ['moves', 'Latest moves']];
+    ['scores', 'Last week’s scores'], ['block', 'Trade block'], ['moves', 'Latest moves'], ['press', 'Press Box: latest articles']];
   // one line or two (one, pinned to the bottom, to start); each line has its own sections, order, speed, direction and place (top under the tabs, or pinned
   // to the bottom of the screen). Line 2 starts with the game-week sections so it doesn't just repeat line 1.
   const TK_DEF = [{ order: [], off: [], speed: 45, dir: 'l', pos: 'bottom' },
-    { order: [], off: ['deadline', 'power', 'heat', 'hot', 'cold'], speed: 45, dir: 'l', pos: 'top' }];
+    { order: [], off: ['deadline', 'power', 'heat', 'hot', 'cold', 'press'], speed: 45, dir: 'l', pos: 'top' }];
   const tkDef = i => JSON.parse(JSON.stringify(TK_DEF[i]));
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0173
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0174
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
@@ -924,6 +927,10 @@
     S.moves = () => !(F && F.moves && F.moves.length) ? [] : [`<a class="tk-h tk-mv" href="#beta/trade">Latest moves</a>`].concat(F.moves.map(m =>
       m.k === 'T' ? `<a class="tk-i" href="#beta/trade"><span class="tk-p">⇄</span><b>${ab(m.f)}</b><span class="tk-p">&amp;</span><b>${ab(m.f2)}</b><span class="tk-v">${esc(m.t)}</span></a>`
         : `<a class="tk-i" href="#now/rosters/${m.f}/${m.id}"><b>${ab(m.f)}</b><span class="tk-v">${esc(m.t)}</span><span class="tk-p">${new Date(m.ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></a>`));
+    // the three newest Press Box columns: headline and writer
+    S.press = () => { const C = state.columns && state.columns.columns; if (!C) { loadColumns(); return []; } if (!C.length) return [];
+      return [`<a class="tk-h tk-pr" href="#press">Press Box</a>`].concat(C.slice(0, 3).map(c =>
+        `<a class="tk-i" href="#now/column/${esc(c.slug)}"><b class="tk-hl">${esc(c.title)}</b><span class="tk-p">${esc((state.columns.columnists[c.author] || { name: c.author }).name)}</span></a>`)); };
     const off = new Set(tkRow(row).off || []);
     return tkOrder(row).filter(k => !off.has(k)).flatMap(k => S[k] ? S[k]() : []);
   }
