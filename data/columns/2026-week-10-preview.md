@@ -5,8 +5,9 @@ author: sal
 season: 2026
 week: 10
 date: 2026-11-12
-image: assets/columns/2026-week-10-gibbs.jpg
-caption: Jahmyr Gibbs, Hauk Tua's lead back and the top-scoring running back in the league
+image: assets/columns/2026-week-10-stbrown-gibbs.jpg
+caption: Amon-Ra St. Brown (14) and Jahmyr Gibbs (0), Lions teammates on opposite sides of Sunday's game of the week
+credit: Photo by Getty Images
 teaser: Hold Timers visit Hauk Tua with a 78-point playoff swing on the line and three starters on bye, Thots try to stop a three-game slide against the team they always beat, and the two teams fighting over the 1.01 play each other.
 ---
 Three teams are 5-4 in the Central. Only one of them is in first, and the other two play each other on Sunday. That's the game. Everything else on this week's card is a sideshow, and one of those sideshows is the West lead.
