@@ -352,10 +352,25 @@
     timer = setTimeout(() => { if (onPage() && !document.hidden) load(); poll(); }, ms);
   }
   // redraw just the scoreboard (keeps scroll position and which games are open)
+  // the scoreboard's status (updated when, how often) sits beside the page title
+  let statusHtml = '';
+  function showStatus() {
+    const a = document.getElementById('lv-asof'); if (a) a.innerHTML = statusHtml;
+    const w = document.querySelector('.lv-weeks [aria-pressed="true"]');   // keep the chosen week in view in the strip
+    if (w && w.parentElement.scrollWidth > w.parentElement.clientWidth) w.parentElement.scrollLeft = w.offsetLeft - w.parentElement.clientWidth / 2 + w.offsetWidth / 2;
+  }
+  // Game of the week (the matchups page picks it): marked on the scoreboard for that week only
+  let MU = null, muAsked = false;
+  const isGotw = (w, x, y) => {
+    if (!muAsked) { muAsked = true; fetch('data/matchups.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { MU = j; if (j) paint(); }).catch(() => {}); }
+    if (!MU || +MU.week !== +w) return false;
+    return (MU.games || []).some(g => g.gotw && ((g.away === x && g.home === y) || (g.away === y && g.home === x)));
+  };
   function paint() {
     if (document.querySelector('.lv-list.lv-dragging')) return setTimeout(paint, 800);   // don't redraw under a drag
     const el = document.getElementById('lv-root');
     if (el) el.innerHTML = body(); else if (X && onPage()) X.rerender();
+    showStatus();
     fitSoon();
     poll();
   }
@@ -527,7 +542,8 @@
         `<tr class="lv-r-${lbl.toLowerCase()}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
       const benchRows = group(bench(a), bench(b), 'BN') + (view ? '' : group(extra(a, 'taxi'), extra(b, 'taxi'), 'TX') + group(extra(a, 'ir'), extra(b, 'ir'), 'IR'));
       const left = f => { const c = counts(f); return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
-      return `<article class="card lv-g${isOpen ? ' open' : ''}" data-lv-key="${key}">
+      const gotw = isGotw(shownW, a.id, b.id);
+      return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw ? ' lv-gotw' : ''}" data-lv-key="${key}">${gotw ? '<span class="lv-gotw-tag">Game of the week</span>' : ''}
         <button type="button" class="lv-sum" data-lv="${key}" aria-expanded="${isOpen}">
           ${side(a, 'a')}<span class="lv-mid"><span class="lv-vs">vs</span>${bar}<small>${mid}</small></span>${side(b, 'b')}
           <span class="lv-metarow"><small>${meta(a.id)}</small><small>${meta(b.id)}</small></span>
@@ -542,10 +558,11 @@
     const any = L.matchup.length;
     const t = stamp ? stamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '';
     const p = pace();
-    const status = view ? `<b>Week ${view} final.</b>` : data.sample ? '<b>Sample data.</b> Live scores start once the relay is set up.'
+    const status = view ? `<b>Week ${view} final</b>` : data.sample ? '<b>Sample data.</b> Live scores start once the relay is set up.'
       : !p ? `<b>Final.</b> Week ${esc(L.week)} is in the books.`
-      : p === SLOW_MS ? `Updated ${t} · checks every 5 minutes until games start` : `Updated ${t} · refreshes every ${POLL_MS / 1000} seconds`;
-    return `${picker}<div class="lv-bar"><span>${status}</span>
+      : p === SLOW_MS ? `Updated ${t} · checks every 5 min until kickoff` : `<b>Live</b> · updated ${t} · every ${POLL_MS / 1000}s`;
+    statusHtml = status;
+    return `<div class="lv-bar lv-topbar">${picker}
         <span class="lv-btns"><button type="button" class="lv-all lv-cmp" data-lv-cmp aria-pressed="${compact}">Compact</button><button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></span></div>
       <div class="lv-list${compact ? ' lv-compact' : ''}">${ordered(L.matchup).map(game).join('')}</div>
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
@@ -638,7 +655,8 @@
     poll();
     setTimeout(fitSoon, 0);
     if (X.mode === 'players') return `<div class="pagehead"><h1>Players</h1><span class="asof">The week’s top scorers at every position, live · pick a week</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
-    return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof">Pick a week · tap a game for both lineups and stats${(X.seeds || []).length ? ' · numbers by a team are playoff seeds if the season ended today' : ''}</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
+    const html = body(); setTimeout(showStatus, 0);
+    return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof" id="lv-asof">${statusHtml}</span></div>${X.nav || ''}<div id="lv-root">${html}</div>`;
   }
 
   document.addEventListener('toggle', e => {

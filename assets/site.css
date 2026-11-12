@@ -2580,3 +2580,18 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .nav-intro-chk{display:flex;align-items:center;gap:8px;margin:14px 0 14px;font-size:.88rem;color:var(--muted)}
 .nav-intro-ok{all:unset;cursor:pointer;display:block;text-align:center;width:100%;box-sizing:border-box;padding:12px;border-radius:10px;background:var(--fg);color:var(--bg);font-weight:700}
 .nav-intro-ok:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* Scoreboard: the week strip and the Compact / Expand buttons share one row; the strip scrolls sideways */
+.lv-topbar{flex-wrap:nowrap;margin:-8px 0 10px}
+.lv-topbar .lv-weeks{flex:1 1 auto;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0;padding:1px 0}
+.lv-topbar .lv-weeks::-webkit-scrollbar{display:none}
+.lv-topbar .lv-weeks button{flex:none;min-width:1.85rem}
+@media (max-width:520px){.lv-topbar .lv-all{padding:4px 8px;font-size:.72rem}}
+/* Game of the week: a gold border with a light that runs around it */
+.lv-g.lv-gotw{border:2px solid transparent;
+  background:linear-gradient(var(--surface),var(--surface)) padding-box,
+    linear-gradient(110deg,#b8860b 0%,#f5d76e 20%,#fff6c8 25%,#f5d76e 30%,#b8860b 50%,#f5d76e 70%,#fff6c8 75%,#f5d76e 80%,#b8860b 100%) border-box;
+  background-size:100% 100%,300% 100%;animation:gotwShine 4s linear infinite;box-shadow:0 0 0 1px rgba(184,134,11,.15),0 4px 18px rgba(245,215,110,.35)}
+@keyframes gotwShine{from{background-position:0 0,0% 0}to{background-position:0 0,150% 0}}
+@media (prefers-reduced-motion:reduce){.lv-g.lv-gotw{animation:none}}
+.lv-gotw-tag{display:block;width:max-content;margin:8px auto -4px;font:700 .62rem var(--body);letter-spacing:.09em;text-transform:uppercase;color:#7a5800;background:linear-gradient(90deg,#f5d76e,#fff3b8,#f5d76e);padding:3px 10px;border-radius:999px}
