@@ -394,11 +394,16 @@
     const [last, first] = nm.split(',').map(s => s.trim());
     return first ? `${first[0]}. ${last}` : nm;
   };
-  // a player's game: not started, in progress, or final
-  const state = p => { const s = +p.gameSecondsRemaining; return s >= 3600 ? 'pre' : s > 0 ? 'live' : 'final'; };
+  // his NFL team has no game this week: ESPN's scoreboard for the week has loaded and his team isn't on it
+  // (MFL reports a bye as 0 seconds left, the same as a finished game). Free agents (no team) aren't on a bye.
+  const onBye = id => { const t = TEAM[info(id).team] || info(id).team, G = EW().games;
+    return !!t && t !== 'FA' && Object.keys(G).length >= 10 && !G[t]; };
+  // a player's game: not started, in progress, final, or no game (bye)
+  const state = p => { if (onBye(p.id)) return 'bye'; const s = +p.gameSecondsRemaining; return s >= 3600 ? 'pre' : s > 0 ? 'live' : 'final'; };
   const kick = iso => { const d = new Date(iso); return d.toLocaleDateString([], { weekday: 'short' }) + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }); };
   const clock = p => {
     const s = +p.gameSecondsRemaining, g = gameOf(p.id);
+    if (onBye(p.id)) return 'Bye';
     if (s >= 3600) return g && g.state === 'pre' ? kick(g.date) : 'Yet to play';
     if (s <= 0) return 'Final';
     const q = Math.min(4, Math.floor((3600 - s) / 900) + 1), left = s - (4 - q) * 900;
@@ -513,7 +518,7 @@
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}${rzc}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
-          : n1(+p.score) + (pj != null && (st !== 'final' || view) ? `<small class="lv-pj" title="MFL projection">${n1(pj)}</small>` : '')}</td>`;
+          : n1(+p.score) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="MFL projection">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
       const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr>${cell(r.p, 'a', r.slot)}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b', o.slot || r.slot)}</tr>`; }).join('');

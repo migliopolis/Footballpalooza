@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0171",
+      "to": "0.0175",
+      "dates": "Nov 11–12, 2026",
+      "items": [
+        "Ticker settings: pick and reorder its sections (trade deadline, MFL Power, Heat Check, hot and cold players, playoff odds, matchups, last week's scores, trade block, latest moves, Press Box). Run one line or two, each with its own speed, direction and spot: under the tabs or pinned to the bottom of the screen. It starts as one line at the bottom.",
+        "League Now > Rosters: new L3 column, each player's average over his last three games (bye week skipped).",
+        "The front page leads with the newest Press Box article and its photo, with the next two as compact links. The Press Box headlines can also run on the ticker.",
+        "Scoreboard: players whose NFL team is off this week now say Bye instead of Final.",
+        "Tighter page headers: the as-of line sits beside the page title and the page buttons move up under it.",
+        "Beta > Navigation Lab: try three ways the page buttons could move up into the top header."
+      ]
+    },
+    {
       "from": "0.0166",
       "to": "0.0170",
       "dates": "Nov 11, 2026",

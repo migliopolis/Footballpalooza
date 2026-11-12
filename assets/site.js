@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0174';
+  const VERSION = '0.0175';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -397,7 +397,7 @@
     const sub = (location.hash.split('/')[1] || '');
     const nav = `<nav class="rf-sub seg now-sub ln-sub">${[['', 'Standings'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['hospital', 'Hospital']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
-        <span class="asof">${esc(d.season.replace(/footballpalooza/i, '').trim() || '')} season · <b>through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${state.meta && state.meta.fetched ? ` · <span id="ln-refresh">${esc(refreshText(true))}</span>` : genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
+        <span class="asof"><b>Through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${state.meta && state.meta.fetched ? ` · <span id="ln-refresh">${esc(refreshText(true))}</span>` : genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
     // the FBP Power Score is in Beta (#beta/power) while projected keepers are being tuned
     if (sub === 'power') return headTxt + `
@@ -848,7 +848,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0174
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0175
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };

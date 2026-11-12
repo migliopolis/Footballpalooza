@@ -51,6 +51,14 @@ main{min-height:100vh;padding-top:18px;padding-bottom:28px;display:flex;flex-dir
 .pagehead h1{margin:0;font:700 1.9rem/1.1 var(--display);text-transform:uppercase;letter-spacing:.01em}
 .asof{color:var(--muted);font-size:.85rem}
 .asof b{color:var(--fg);font-weight:600}
+/* the as-of line sits beside the page title when there's room (about 140px), instead of on its own line below */
+.pagehead{align-items:center}
+.pagehead h1{flex:none}
+.pagehead > .asof{flex:1 1 118px;min-width:0;line-height:1.3}
+@media (max-width:520px){.pagehead{column-gap:12px}}
+@media (max-width:520px){.pagehead > .asof{font-size:.74rem}}
+/* the section buttons tuck up under the title */
+main.wrap > .pagehead + .rf-sub, main.wrap > .rf-head + .rf-sub{margin-top:-12px}
 h2.sec{margin:0 0 10px;font:600 1.15rem var(--display);text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:baseline;gap:10px}
 h2.sec small{font:400 .8rem var(--body);text-transform:none;letter-spacing:0;color:var(--muted)}
 .grid2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px}
@@ -757,7 +765,7 @@ tr.dh-div td{padding:0!important}
 @media (min-width:1001px){.aw-award.k-trade{grid-column:3;grid-row:span 2}}
 @media (max-width:1000px){.aw-award.k-trade{order:1}}
 /* ---------- League Now sub-tabs ---------- */
-.now-sub{margin:-6px 0 14px}
+.now-sub{margin:-12px 0 0}
 .dl{display:inline-block;margin-left:4px;font:700 .68rem var(--mono);color:var(--muted);vertical-align:1px;white-space:nowrap}
 .dl.up{color:var(--ok)}.dl.dn{color:var(--red)}
 .ohead .dl{font-size:.85rem}
@@ -1026,7 +1034,7 @@ details.all summary small{color:var(--muted);font-weight:400;margin-left:6px}
 .col-secby b{display:block;font-size:.95rem}.col-secby small{color:var(--muted);font-size:.78rem}
 
 /* front page: press box headlines */
-.col-heads{margin:4px 0 18px}
+.col-heads{margin:-6px 0 18px}
 .col-heads .col-hk{margin:0 0 6px;font:700 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .col-heads ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .col-heads li{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
@@ -1194,6 +1202,7 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-pts.pre{color:var(--muted);font-weight:400}
 .lv-slot{width:2.6rem;text-align:center;font:700 .6rem var(--body);letter-spacing:.04em;color:var(--muted)}
 .lv-st.live{color:var(--ok);font-weight:700}
+.lv-st.bye{color:var(--muted);font-style:italic}
 .lv-p.live .lv-nmt::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:4px;vertical-align:2px}
 .lv-p.b.live .lv-nmt::before{display:none}
 .lv-p.b.live .lv-nmt::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-left:4px;vertical-align:2px}
@@ -2541,3 +2550,36 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .tk-cfg input{width:16px;height:16px;accent-color:var(--accent)}
 .tk-ar{display:flex;gap:4px}.tk-ar button{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;width:28px;height:26px;cursor:pointer}
 .tk-ar button:disabled{opacity:.35;cursor:default}
+
+/* Beta > Navigation Lab: a pretend header to try three ways of reaching a section's pages */
+.nl-lab h2{margin:0 0 4px}
+.nl-intro,.nl-help{color:var(--muted);font-size:.86rem;margin:4px 0 10px;max-width:560px}
+.nl-help{min-height:2.6em}
+.nl-modes{margin:2px 0 6px}
+.nl-frame{position:relative;max-width:430px;height:600px;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.nl-hd{position:relative;z-index:2;flex:none;background:#c4e0f5;color:#1a1d22;border-bottom:2px solid #1a1d22}
+.nl-brand{display:flex;align-items:baseline;gap:8px;padding:12px 14px 4px}
+.nl-brand b{font:700 1.15rem var(--display);color:#c8372d}.nl-brand small{color:#4a5563;font-size:.72rem}
+.nl-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.nl-tabs::-webkit-scrollbar{display:none}
+.nl-tab{flex:none;display:flex;align-items:center;border-bottom:3px solid transparent}
+.nl-tab.on{border-bottom-color:#c8372d}
+.nl-name{all:unset;cursor:pointer;padding:10px 4px 9px 8px;font:700 .86rem var(--display);text-transform:uppercase;letter-spacing:.02em;color:#4a5563;white-space:nowrap}
+.nl-tab.on .nl-name{color:#1a1d22}
+.nl-tab:not(:has(.nl-caret)) .nl-name{padding-right:8px}
+.nl-caret{all:unset;cursor:pointer;padding:8px 8px 7px 4px;font-size:.8rem;color:#4a5563;transition:transform .15s}
+.nl-tab.open .nl-caret{transform:rotate(180deg);color:#c8372d}
+.nl-menu{position:absolute;left:0;right:0;top:100%;background:var(--surface,#fff);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.18);display:grid;grid-template-columns:1fr 1fr;padding:6px;gap:2px;animation:nlIn .12s ease-out}
+@keyframes nlIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.nl-menu button{all:unset;cursor:pointer;padding:11px 12px;border-radius:8px;font-weight:600;font-size:.9rem;color:var(--fg)}
+.nl-menu button:hover,.nl-menu button:focus-visible{background:var(--line)}
+.nl-menu button[aria-current]{color:#c8372d}
+.nl-row{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:6px 8px;background:var(--surface,#fff);border-top:1px solid rgba(0,0,0,.12)}
+.nl-row::-webkit-scrollbar{display:none}
+.nl-row button{all:unset;cursor:pointer;flex:none;padding:5px 11px;border-radius:999px;font-size:.8rem;font-weight:600;color:var(--muted);border:1px solid var(--line)}
+.nl-row button[aria-current]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.nl-body{flex:1;overflow-y:auto;padding:14px}
+.nl-where{font:700 1.4rem/1.1 var(--display);text-transform:uppercase;margin:0 0 4px}
+.nl-where span{color:var(--muted)}
+.nl-note{color:var(--muted);font-size:.8rem;margin:0 0 12px}
+.nl-blk{background:var(--line);opacity:.55;border-radius:10px;margin-bottom:10px}
