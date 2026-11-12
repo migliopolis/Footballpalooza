@@ -1,5 +1,5 @@
 ---
-title: Detroit decides the Central
+title: A Detroit civil war in the Central
 kicker: Week 10 preview
 author: sal
 season: 2026
