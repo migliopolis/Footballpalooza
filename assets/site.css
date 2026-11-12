@@ -1281,6 +1281,15 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .mv-who .pos{margin-right:5px}
 .mv-who.b .pos{margin:0 0 0 5px}
 .mv-who.none{color:var(--muted)}
+/* tablets and up, where the tiles sit 2-4 across: each side gets the tile's full width (your team's starters left,
+   the opponent's right, one under the other) so names stay on one line instead of breaking letter by letter */
+@media (min-width:600px){
+  .mv-sides{flex-direction:column;align-items:stretch;gap:2px}
+  .mv-sides > .mv-who{flex:none}
+  .mv-sides > .mv-who.none{display:none}
+  .mv-sides > .mv-who.a:not(.none) + .mv-who.b:not(.none){border-top:1px dashed var(--line);padding-top:4px}
+  .mv-who .mv-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal}
+}
 .mv-cnt,.mv-rzn{font-size:.72rem;color:var(--muted);margin:2px 0 0}
 .mv-solos{list-style:none;margin:0;padding:0;font-size:.8rem}
 .mv-solos li{padding:4px 0;border-top:1px solid var(--line)}
@@ -2595,3 +2604,14 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 @keyframes gotwShine{from{background-position:0 0,0% 0}to{background-position:0 0,150% 0}}
 @media (prefers-reduced-motion:reduce){.lv-g.lv-gotw{animation:none}}
 .lv-gotw-tag{display:block;width:max-content;margin:8px auto -4px;font:700 .62rem var(--body);letter-spacing:.09em;text-transform:uppercase;color:#7a5800;background:linear-gradient(90deg,#f5d76e,#fff3b8,#f5d76e);padding:3px 10px;border-radius:999px}
+
+/* Standings: the seed chip sits on the lower right of the team logo */
+.st-lg{position:relative;display:block;width:26px;height:26px}
+.st-lg .st-seed{position:absolute;right:-7px;bottom:-5px;margin:0;padding:0 4px;min-width:15px;text-align:center;font-size:.6rem;line-height:15px;box-shadow:0 0 0 2px var(--surface)}
+.st-tbl td.lg{padding-right:10px}
+/* phone held upright: start scrolled past the team names (see fitStandings in site.js); snap back either way */
+.st-wrap.st-fit{scroll-snap-type:x proximity;scrollbar-width:none}
+.st-wrap.st-fit::-webkit-scrollbar{display:none}
+.st-fit thead th:nth-child(1){scroll-snap-align:start}
+.st-fit thead th:nth-child(3){scroll-snap-align:start;scroll-margin-left:calc(26px + 18px)}
+.st-fit td.t{min-width:11rem;max-width:13rem}

@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0177';
+  const VERSION = '0.0178';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -365,11 +365,11 @@
       const gb = v => v <= 0 ? '—' : (Number.isInteger(v) ? v : v.toFixed(1));
       // points back: total points behind the league's top scorer
       const top = Math.max(...d.standings.map(x => x.pf)), pb = t => t.pf >= top ? '—' : pts(top - t.pf);
-      return `<div class="card"><h3 class="dvh">${esc(dv.name)}</h3><div class="tbl-wrap"><table class="tbl">
+      return `<div class="card"><h3 class="dvh">${esc(dv.name)}</h3><div class="tbl-wrap st-wrap"><table class="tbl st-tbl">
         <thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>GB</th><th class="hide-sm">Pct</th><th class="hide-sm" title="Division record">Div</th>
           <th>PF</th><th class="hide-sm">PA</th><th title="Points back: total points behind the league's top scorer">PB</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th title="Average points over the last three games">L3 Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
           <th title="All-play record: results against every team, every week">All-play</th><th class="hide-sm">Strk</th>${state.budgets ? `<th title="${state.budgets.season} auction budget, after trades">${state.budgets.season} $</th>` : ''}</tr></thead><tbody>
-        ${rows.map(t => `<tr class="st-go" data-go="#now/rosters/${t.id}" tabindex="0" title="${esc(t.name)} roster"><td class="lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}</td><td class="t">${chip(t.id, { noLogo: true, after: (t.seed ? `<span class="pill${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : '') + elimTag(t.id) })}</td>
+        ${rows.map(t => `<tr class="st-go" data-go="#now/rosters/${t.id}" tabindex="0" title="${esc(t.name)} roster"><td class="lg"><span class="st-lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}${t.seed ? `<span class="pill st-seed${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : ''}</span></td><td class="t">${chip(t.id, { noLogo: true, after: elimTag(t.id) })}</td>
           <td>${t.w}-${t.l}-${t.t}</td><td>${gb(t.gb)}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
           <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td>${pb(t)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td>${l3(t.id)}</td><td class="hide-sm">${pts(t.pp)}</td>
           <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount < 0 ? '−' : '+'}$${Math.abs(x.amount)} ${x.note}`).join('\n\n') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
@@ -848,7 +848,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0177
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0178
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
@@ -1178,4 +1178,24 @@
     route();
   }
   init();
+
+  // Standings on a phone held upright: the first view is logo (with the seed chip), W-L-T, GB, Pct, Div and PF, with
+  // PF ending at the right edge. The team names sit to the left, under the logos: swipe right to see them, swipe left
+  // to go back (and further left for PA, PB and the rest). Wider screens and landscape show the names as usual.
+  const portrait = () => window.matchMedia && matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
+  function fitStandings() {
+    document.querySelectorAll('.st-wrap').forEach(w => {
+      const head = w.querySelector('thead tr'); if (!head) return;
+      const th = [...head.children];
+      th.slice(2, 7).forEach(c => { c.style.minWidth = ''; });
+      if (!portrait()) { w.classList.remove('st-fit'); return; }
+      w.classList.add('st-fit');
+      const lg = th[0], first = th[2], pf = th[6];   // W-L-T .. PF
+      const avail = w.clientWidth - lg.offsetWidth, used = pf.offsetLeft + pf.offsetWidth - first.offsetLeft;
+      if (used < avail) { const add = (avail - used) / 5; th.slice(2, 7).forEach(c => { c.style.minWidth = (c.offsetWidth + add) + 'px'; }); }
+      if (!w.dataset.stSet) { w.dataset.stSet = '1'; w.scrollLeft = first.offsetLeft - lg.offsetWidth; }
+    });
+  }
+  new MutationObserver(() => { if (document.querySelector('.st-wrap:not([data-st-set])')) requestAnimationFrame(fitStandings); }).observe(app, { childList: true, subtree: true });
+  let stT = 0; window.addEventListener('resize', () => { clearTimeout(stT); stT = setTimeout(() => { document.querySelectorAll('.st-wrap').forEach(w => delete w.dataset.stSet); fitStandings(); }, 150); });
 })();
