@@ -136,11 +136,15 @@ window.FBPRosters = (function () {
   const medalOf = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : '';
   const injChip = r => { if (!r.espn) return ''; const i = injMap()[r.espn], t = i && INJ[i.status]; if (!t) return '';
     return `<span class="ro-inj" title="${X && X.esc ? X.esc(i.status + (i.note ? ': ' + i.note : '')) : i.status}">${t}</span>`; };
+  // L3: his average over his last three games, skipping his bye week (fewer if he has played fewer)
+  const l3 = r => { const w = Object.entries(r.wsc || {}).filter(([k]) => +k !== +r.bye).sort((a, b) => b[0] - a[0]).slice(0, 3);
+    return w.length ? w.reduce((s, x) => s + x[1], 0) / w.length : null; };
   // sortable columns: key, label, value (text sorts A to Z first; missing values sink)
   const cols = () => [
     ['name', 'Player', r => r.name],
     ['pts', 'Pts', r => r.pts],
     ['ppw', 'Pts/wk', r => r.gp ? r.pts / r.gp : null],
+    ['l3', 'L3', r => l3(r)],
     ['ecr', 'ECR', r => r.ecrPos == null ? null : -r.ecrPos],
     ['rk', 'Rank', r => r.rk == null ? null : -r.rk],
     ['bye', 'Bye', r => r.bye],
@@ -454,7 +458,7 @@ window.FBPRosters = (function () {
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>
         <td class="l ro-nm"><b>${esc(r.name)}</b>${injChip(r)}${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
-        <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
+        <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td>${l3(r) != null ? l3(r).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td class="c">${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
         ${isOpen ? `<tr class="ro-det"><td colspan="${NC}">${box(r, t, ctx)}</td></tr>` : ''}`;
@@ -487,7 +491,7 @@ window.FBPRosters = (function () {
         <div class="tbl-wrap ro-wrap"><table class="ro-t"><thead><tr><th class="ro-ph"></th>${head}</tr></thead>
         <tbody>${POS.map(p => grp(GRP[p], act.filter(r => r.pos === p))).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody>
         <tfoot><tr><td class="ro-ph"></td><td class="l">Total</td><td>${rows.reduce((s, r) => s + r.pts, 0).toFixed(1)}</td><td></td><td></td><td></td><td></td><td></td><td class="gap">${$(pay)}</td><td></td>${[0, 1, 2, 3, 4].map(k => `<td>${yr(k) ? $(yr(k)) : ''}</td>`).join('')}</tr></tfoot></table></div>
-        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Pts/wk is per game, and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
+        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
       <p class="rf-foot">Through week ${R.through}. Face of the Franchise: the current player with the most history on this team, counting starts, seasons, All-FBP teams, MVPs, Rookie of the Year and championships, across every stint.</p>`;
   }
 

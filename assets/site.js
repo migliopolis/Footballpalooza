@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0171';
+  const VERSION = '0.0172';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -170,13 +170,11 @@
         <div class="seg dt-clear"><button type="button" data-defteam="" aria-pressed="${!state.defTeam}">No default team</button></div>`)}
       ${setSec('colors', 'Page colors', `<p>Recolors the header, tabs and highlight numbers. Text stays neutral so everything stays readable.</p>
         <div class="swatches" role="group" aria-label="Page colors">${swatches}</div>`)}
-      ${setSec('ticker', 'Ticker', `<p>The scrolling strip under the tabs. It keeps running as you move between pages.</p>
+      ${setSec('ticker', 'Ticker', `<p>The scrolling strip of league news. It keeps running as you move between pages. Run one line or two, each at the top or pinned to the bottom, with its own speed, direction and sections. Saved on this device.</p>
         <div class="seg" role="group" aria-label="Ticker"><button type="button" data-ticker="on" aria-pressed="${state.ticker}">Show</button><button type="button" data-ticker="off" aria-pressed="${!state.ticker}">Hide</button></div>
-        ${state.ticker ? `<p class="tk-cfg-h">What it shows, in order. Tick the ones you want; drag <b>☰</b> (or use the arrows) to change the order.</p>
-        <ol class="tk-cfg">${tkOrder().map((k, i, a) => { const lab = (TK_SECS.find(x => x[0] === k) || [k, k])[1], on = !(tkCfg.off || []).includes(k);
-          return `<li data-tk-k="${k}" class="${on ? '' : 'off'}"><span class="tk-grip" aria-hidden="true">☰</span><label><input type="checkbox" data-tk-on="${k}"${on ? ' checked' : ''}> ${lab}</label>
-            <span class="tk-ar"><button type="button" data-tk-mv="${k}|-1"${i ? '' : ' disabled'} aria-label="Move ${lab} up">↑</button><button type="button" data-tk-mv="${k}|1"${i < a.length - 1 ? '' : ' disabled'} aria-label="Move ${lab} down">↓</button></span></li>`; }).join('')}</ol>
-        <div class="seg"><button type="button" data-tk-reset="1">Back to the default order</button></div>` : ''}`)}
+        ${state.ticker ? `<p class="tk-cfg-h">Lines</p>
+        <div class="seg" role="group" aria-label="Ticker lines"><button type="button" data-tk-lines="1" aria-pressed="${tkLines() === 1}">One line</button><button type="button" data-tk-lines="2" aria-pressed="${tkLines() === 2}">Two lines</button></div>
+        ${[0, 1].slice(0, tkLines()).map(tkRowCfg).join('')}` : ''}`)}
       ${setSec('mode', 'Light or dark', `<p>Match device follows your phone or computer’s setting.</p>
         <div class="seg" role="group" aria-label="Light or dark">${seg}</div>`)}
       ${changelog()}`;
@@ -823,7 +821,8 @@
   /* ---------- Ticker: a strip under the tabs that scrolls league info like a stock ticker ----------
      It lives in the header, outside the page area, so moving between pages never restarts it; a reload picks up where
      it left off (its position is kept for this browser session). Press or hover to pause; swipe or drag it either way
-     to catch something you missed. Tap a section label or an item to open that page. Settings > Ticker hides it.
+     to catch something you missed. Tap a section label or an item to open that page. Settings > Ticker hides it, or runs
+     a second line; each line can sit under the tabs or be pinned to the bottom, with its own speed and direction.
      Sections: MFL Power (rating, change since last week, a sparkline of the season so far) and Heat Check (each
      team's Heat Score, then the 12 hottest and 12 coldest rostered players). */
   state.ticker = true; try { state.ticker = localStorage.getItem('fbp-ticker') !== '0'; } catch (e) {}
@@ -838,10 +837,38 @@
   const TK_SECS = [['deadline', 'Trade deadline countdown'], ['power', 'MFL Power Rating'], ['heat', 'Heat Check: teams'],
     ['hot', 'Hottest players'], ['cold', 'Coldest players'], ['odds', 'Playoff odds'], ['matchups', 'This week’s matchups'],
     ['scores', 'Last week’s scores'], ['block', 'Trade block'], ['moves', 'Latest moves']];
-  let tkCfg = { order: [], off: [] };
-  try { tkCfg = Object.assign(tkCfg, JSON.parse(localStorage.getItem('fbp-ticker-sections') || '{}')); } catch (e) {}
-  const tkOrder = () => { const ids = TK_SECS.map(x => x[0]), o = (tkCfg.order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
-  const tkSave = () => { try { localStorage.setItem('fbp-ticker-sections', JSON.stringify(tkCfg)); } catch (e) {} };
+  // one line or two (one, pinned to the bottom, to start); each line has its own sections, order, speed, direction and place (top under the tabs, or pinned
+  // to the bottom of the screen). Line 2 starts with the game-week sections so it doesn't just repeat line 1.
+  const TK_DEF = [{ order: [], off: [], speed: 45, dir: 'l', pos: 'bottom' },
+    { order: [], off: ['deadline', 'power', 'heat', 'hot', 'cold'], speed: 45, dir: 'l', pos: 'top' }];
+  const tkDef = i => JSON.parse(JSON.stringify(TK_DEF[i]));
+  let tkCfg = { lines: 1, rows: [] };
+  try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
+    if (sv && Array.isArray(sv.rows)) tkCfg = sv;
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0172
+      if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
+  const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
+  const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
+  const tkSave = () => { try { localStorage.setItem('fbp-ticker-cfg', JSON.stringify(tkCfg)); } catch (e) {} };
+  const tkLines = () => tkCfg.lines === 2 ? 2 : 1;
+  const tkSpeedLabel = v => `${(v / 45).toFixed(1).replace(/\.0$/, '')}×`;
+  // Settings > Ticker, one line's block: place, direction, speed, then its sections (tick to show, drag ☰ or use the arrows)
+  function tkRowCfg(i) {
+    const R = tkRow(i), two = tkLines() === 2, sg = (key, opts, label) => `<div class="seg" role="group" aria-label="${label}">${opts.map(([v, t]) =>
+      `<button type="button" data-tk-set="${i}|${key}|${v}" aria-pressed="${R[key] === v}">${t}</button>`).join('')}</div>`;
+    return `<fieldset class="tk-line">${two ? `<legend>Line ${i + 1}</legend>` : ''}
+      <div class="tk-opts">
+        <div><small>Where</small>${sg('pos', [['top', 'Top, under the tabs'], ['bottom', 'Pinned to the bottom']], 'Where it sits')}</div>
+        <div><small>Direction</small>${sg('dir', [['l', '← Scrolls left'], ['r', 'Scrolls right →']], 'Direction')}</div>
+        <div><small>Speed <output data-tk-spv="${i}">${tkSpeedLabel(R.speed)}</output></small>
+          <input type="range" class="tk-speed" min="15" max="135" step="5" value="${R.speed}" data-tk-speed="${i}" aria-label="Line ${i + 1} speed"></div>
+      </div>
+      <p class="tk-cfg-h">What it shows, in order. Tick the ones you want; drag <b>☰</b> (or use the arrows) to change the order.</p>
+      <ol class="tk-cfg" data-tk-list="${i}">${tkOrder(i).map((k, j, a) => { const lab = (TK_SECS.find(x => x[0] === k) || [k, k])[1], on = !(R.off || []).includes(k);
+        return `<li data-tk-k="${k}" class="${on ? '' : 'off'}"><span class="tk-grip" aria-hidden="true">☰</span><label><input type="checkbox" data-tk-on="${i}|${k}"${on ? ' checked' : ''}> ${lab}</label>
+          <span class="tk-ar"><button type="button" data-tk-mv="${i}|${k}|-1"${j ? '' : ' disabled'} aria-label="Move ${lab} up">↑</button><button type="button" data-tk-mv="${i}|${k}|1"${j < a.length - 1 ? '' : ' disabled'} aria-label="Move ${lab} down">↓</button></span></li>`; }).join('')}</ol>
+      <div class="seg"><button type="button" data-tk-reset="${i}">Back to the default sections and order</button></div></fieldset>`;
+  }
   const spark = vals => {
     const v = vals.filter(x => x != null); if (v.length < 2) return '';
     const lo = Math.min(...v), hi = Math.max(...v), W = 34, H = 12, k = hi - lo || 1;
@@ -850,7 +877,7 @@
     return `<svg class="tk-sp ${up ? 'up' : 'dn'}" viewBox="-1 -1 ${W + 2} ${H + 2}" width="${W + 2}" height="${H + 2}" aria-hidden="true"><polyline points="${pts}"/></svg>`;
   };
   const short = n => { const p = String(n || '').split(' '); return p.length > 1 ? `${p[0][0]}. ${p.slice(1).join(' ').replace(/ (Jr\.|Sr\.|II|III|IV)$/, '')}` : n; };
-  function tickerItems() {
+  function tickerItems(row) {
     const d = state.now; if (!d || !d.standings) return [];
     const P = d.prev && d.prev.teams, A = TKA, F = TKF, O = d.odds && d.odds.teams, ab = f => esc((state.teams[f] || {}).abbr || f);
     const S = {};
@@ -897,64 +924,89 @@
     S.moves = () => !(F && F.moves && F.moves.length) ? [] : [`<a class="tk-h tk-mv" href="#beta/trade">Latest moves</a>`].concat(F.moves.map(m =>
       m.k === 'T' ? `<a class="tk-i" href="#beta/trade"><span class="tk-p">⇄</span><b>${ab(m.f)}</b><span class="tk-p">&amp;</span><b>${ab(m.f2)}</b><span class="tk-v">${esc(m.t)}</span></a>`
         : `<a class="tk-i" href="#now/rosters/${m.f}/${m.id}"><b>${ab(m.f)}</b><span class="tk-v">${esc(m.t)}</span><span class="tk-p">${new Date(m.ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></a>`));
-    const off = new Set(tkCfg.off || []);
-    return tkOrder().filter(k => !off.has(k)).flatMap(k => S[k] ? S[k]() : []);
+    const off = new Set(tkRow(row).off || []);
+    return tkOrder(row).filter(k => !off.has(k)).flatMap(k => S[k] ? S[k]() : []);
   }
-  // the motion: a position that drifts left about 45 pixels a second; dragging moves it, pressing or hovering holds it
-  const TK = { x: 0, w: 0, speed: 45, hold: false, drag: null, resume: 0, last: 0, raf: 0, track: null, moved: false, saved: 0 };
+  // the motion: each line's position drifts about 45 pixels a second (times its speed setting) in its direction;
+  // dragging moves it, pressing or hovering holds it
+  const TKS = [0, 1].map(i => ({ i, x: 0, w: 0, speed: 45, dir: 1, hold: false, drag: null, resume: 0, el: null, track: null, moved: false, fresh: true }));
+  let tkLast = 0, tkRaf = 0, tkSaved = 0;
   const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   function tkFrame(t) {
-    const dt = TK.last ? Math.min(0.1, (t - TK.last) / 1000) : 0; TK.last = t;
-    if (TK.track && TK.w) {
-      if (!TK.hold && !TK.drag && Date.now() > TK.resume && !reduceMotion() && !document.hidden) TK.x -= TK.speed * dt;
-      if (TK.x <= -TK.w) TK.x += TK.w; else if (TK.x > 0) TK.x -= TK.w;
-      TK.track.style.transform = `translate3d(${TK.x.toFixed(1)}px,0,0)`;
-      if (t - TK.saved > 1000) { TK.saved = t; try { sessionStorage.setItem('fbp-ticker-pos', JSON.stringify({ x: TK.x, at: Date.now() })); } catch (e) {} }
-    }
-    TK.raf = requestAnimationFrame(tkFrame);
+    const dt = tkLast ? Math.min(0.1, (t - tkLast) / 1000) : 0; tkLast = t;
+    TKS.forEach(T => {
+      if (!T.track || !T.w) return;
+      if (!T.hold && !T.drag && Date.now() > T.resume && !reduceMotion() && !document.hidden) T.x -= T.dir * T.speed * dt;
+      while (T.x <= -T.w) T.x += T.w; while (T.x > 0) T.x -= T.w;
+      T.track.style.transform = `translate3d(${T.x.toFixed(1)}px,0,0)`;
+    });
+    if (t - tkSaved > 1000) { tkSaved = t; try { sessionStorage.setItem('fbp-ticker-pos', JSON.stringify({ xs: TKS.map(T => T.x), at: Date.now() })); } catch (e) {} }
+    tkRaf = requestAnimationFrame(tkFrame);
+  }
+  function tkWire(T) {
+    const el = T.el;
+    el.addEventListener('mouseenter', () => { T.hold = true; });
+    el.addEventListener('mouseleave', () => { T.hold = false; });
+    el.addEventListener('pointerdown', e => { T.drag = { x0: e.clientX, y0: e.clientY, start: T.x, id: e.pointerId }; T.moved = false; });
+    el.addEventListener('pointermove', e => {
+      const g = T.drag; if (!g || e.pointerId !== g.id) return;
+      const dx = e.clientX - g.x0;
+      if (!T.moved && Math.abs(dx) > 5 && Math.abs(dx) > Math.abs(e.clientY - g.y0)) { T.moved = true; try { el.setPointerCapture(g.id); } catch (x) {} }
+      if (T.moved) T.x = g.start + dx;
+    });
+    const up = () => { if (!T.drag) return; T.drag = null; T.resume = Date.now() + (T.moved ? 1500 : 800); };
+    el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    el.addEventListener('click', e => {
+      if (T.moved) { e.preventDefault(); e.stopPropagation(); T.moved = false; return; }
+      const j = e.target.closest('[data-tk-jump]');
+      if (j) setTimeout(() => { const b = document.querySelector(`[data-an-jump="${j.dataset.tkJump}"]`); if (b) b.click(); }, 350);
+    }, true);
+    el.addEventListener('dragstart', e => e.preventDefault());
   }
   function ticker() {
-    const el = document.getElementById('ticker'); if (!el) return;
+    const top = document.getElementById('ticker'); if (!top) return;
+    let bot = document.getElementById('ticker-bot');
+    if (!bot) { bot = document.createElement('div'); bot.id = 'ticker-bot'; bot.className = 'tk-dock tk-bot'; bot.hidden = true; document.body.appendChild(bot); }
     if (!TKH && !tkLoading && state.ticker) tkLoad();
-    const items = tickerItems();
-    if (!state.ticker || !items.length) { el.hidden = true; el.innerHTML = ''; TK.track = null; window.dispatchEvent(new Event('resize')); return; }
-    const run = items.join('<span class="tk-sep" aria-hidden="true">•</span>') + '<span class="tk-sep" aria-hidden="true">•</span>';
-    const had = !!TK.track;
-    el.hidden = false; el.setAttribute('aria-label', 'League ticker'); el.setAttribute('data-noswipe', '');
-    el.innerHTML = `<div class="tk-track"><div class="tk-run">${run}</div><div class="tk-run" aria-hidden="true">${run}</div></div>`;
-    TK.track = el.querySelector('.tk-track'); TK.w = el.querySelector('.tk-run').scrollWidth;
-    if (!had) {   // first build this page load: carry on from where this session left it
-      try { const sv = JSON.parse(sessionStorage.getItem('fbp-ticker-pos') || 'null');
-        if (sv) TK.x = sv.x - (reduceMotion() ? 0 : TK.speed * Math.min(600, (Date.now() - sv.at) / 1000)); } catch (e) {}
-    }
-    if (!TK.raf) TK.raf = requestAnimationFrame(tkFrame);
-    if (!el.dataset.wired) {
-      el.dataset.wired = '1';
-      el.addEventListener('mouseenter', () => { TK.hold = true; });
-      el.addEventListener('mouseleave', () => { TK.hold = false; });
-      el.addEventListener('pointerdown', e => { TK.drag = { x0: e.clientX, y0: e.clientY, start: TK.x, id: e.pointerId }; TK.moved = false; });
-      el.addEventListener('pointermove', e => {
-        const g = TK.drag; if (!g || e.pointerId !== g.id) return;
-        const dx = e.clientX - g.x0;
-        if (!TK.moved && Math.abs(dx) > 5 && Math.abs(dx) > Math.abs(e.clientY - g.y0)) { TK.moved = true; try { el.setPointerCapture(g.id); } catch (x) {} }
-        if (TK.moved) TK.x = g.start + dx;
-      });
-      const up = () => { if (!TK.drag) return; TK.drag = null; TK.resume = Date.now() + (TK.moved ? 1500 : 800); };
-      el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
-      el.addEventListener('click', e => {
-        if (TK.moved) { e.preventDefault(); e.stopPropagation(); TK.moved = false; return; }
-        const j = e.target.closest('[data-tk-jump]');
-        if (j) setTimeout(() => { const b = document.querySelector(`[data-an-jump="${j.dataset.tkJump}"]`); if (b) b.click(); }, 350);
-      }, true);
-      el.addEventListener('dragstart', e => e.preventDefault());
-    }
-    window.dispatchEvent(new Event('resize'));   // the pinned header got taller
+    const n = state.ticker ? tkLines() : 0;
+    let sv = null; try { sv = JSON.parse(sessionStorage.getItem('fbp-ticker-pos') || 'null'); } catch (e) {}
+    const built = [];
+    TKS.forEach(T => {
+      const items = T.i < n ? tickerItems(T.i) : [];
+      if (!items.length) { if (T.el) { T.el.remove(); T.el = null; T.track = null; } return; }
+      const R = tkRow(T.i), dock = R.pos === 'bottom' ? bot : top;
+      if (!T.el) { T.el = document.createElement('div'); T.el.className = 'ticker'; T.el.setAttribute('data-noswipe', ''); tkWire(T); }
+      T.el.setAttribute('aria-label', n > 1 ? `League ticker, line ${T.i + 1}` : 'League ticker');
+      if (T.i === 0) dock.insertBefore(T.el, dock.firstChild); else dock.appendChild(T.el);
+      T.speed = Math.max(10, Math.min(150, +R.speed || 45)); T.dir = R.dir === 'r' ? -1 : 1;
+      const run = items.join('<span class="tk-sep" aria-hidden="true">•</span>') + '<span class="tk-sep" aria-hidden="true">•</span>';
+      T.el.innerHTML = `<div class="tk-track"><div class="tk-run">${run}</div><div class="tk-run" aria-hidden="true">${run}</div></div>`;
+      T.track = T.el.querySelector('.tk-track'); built.push(T);
+    });
+    top.hidden = !top.children.length; bot.hidden = !bot.children.length;
+    built.forEach(T => {
+      T.w = T.el.querySelector('.tk-run').scrollWidth;
+      if (T.fresh) {   // first build this page load: carry on from where this session left it
+        T.fresh = false;
+        const x = sv && sv.xs ? sv.xs[T.i] : sv && T.i === 0 ? sv.x : null;
+        if (x != null) T.x = x - (reduceMotion() ? 0 : T.dir * T.speed * Math.min(600, (Date.now() - sv.at) / 1000));
+      }
+    });
+    document.documentElement.style.setProperty('--tkb-h', bot.hidden ? '0px' : bot.offsetHeight + 'px');
+    if (!tkRaf) tkRaf = requestAnimationFrame(tkFrame);
+    window.dispatchEvent(new Event('resize'));   // the pinned header changed height
   }
   // Settings > Ticker: tick a section on or off, and drag ☰ to reorder (mouse or finger)
+  // the speed slider moves the ticker as you slide it
+  document.addEventListener('input', e => {
+    const r = e.target.closest && e.target.closest('[data-tk-speed]'); if (!r) return;
+    const i = +r.dataset.tkSpeed; tkRow(i).speed = +r.value; TKS[i].speed = +r.value; tkSave();
+    const o = document.querySelector(`[data-tk-spv="${i}"]`); if (o) o.textContent = tkSpeedLabel(+r.value);
+  });
   document.addEventListener('change', e => {
     const c = e.target.closest && e.target.closest('[data-tk-on]'); if (!c) return;
-    const off = new Set(tkCfg.off || []); c.checked ? off.delete(c.dataset.tkOn) : off.add(c.dataset.tkOn);
-    tkCfg.off = [...off]; tkSave(); ticker(); c.closest('li').classList.toggle('off', !c.checked);
+    const [i, k] = c.dataset.tkOn.split('|'), R = tkRow(+i), off = new Set(R.off || []); c.checked ? off.delete(k) : off.add(k);
+    R.off = [...off]; tkSave(); ticker(); c.closest('li').classList.toggle('off', !c.checked);
   });
   (function dragTickerRows() {
     let drag = null;
@@ -976,7 +1028,7 @@
       if (!drag || (e && e.pointerId !== drag.id)) return;
       const { li, list } = drag; drag = null;
       li.style.transform = ''; li.classList.remove('lift'); list.classList.remove('dragging');
-      tkCfg.order = [...list.children].map(c => c.dataset.tkK); tkSave(); ticker();
+      tkRow(+list.dataset.tkList).order = [...list.children].map(c => c.dataset.tkK); tkSave(); ticker();
       list.querySelectorAll('li').forEach((c, i, a) => { const [u, d] = c.querySelectorAll('[data-tk-mv]'); u.disabled = !i; d.disabled = i === a.length - 1; });
     };
     document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
@@ -1050,13 +1102,17 @@
         const again = document.querySelector(`[data-defteam="${state.defTeam}"]`); if (again) again.focus({ preventScroll: true });
         return;
       }
-      const tmv = e.target.closest('[data-tk-mv],[data-tk-reset]');
+      const tmv = e.target.closest('[data-tk-mv],[data-tk-reset],[data-tk-set],[data-tk-lines]');
       if (tmv) {
-        if (tmv.dataset.tkReset) tkCfg = { order: [], off: [] };
-        else { const [k, dir] = tmv.dataset.tkMv.split('|'), o = tkOrder(), i = o.indexOf(k), j = i + +dir;
-          if (j >= 0 && j < o.length) { [o[i], o[j]] = [o[j], o[i]]; tkCfg.order = o; } }
+        const D = tmv.dataset;
+        if (D.tkReset != null) { const i = +D.tkReset, R = tkRow(i); tkCfg.rows[i] = Object.assign(tkDef(i), { speed: R.speed, dir: R.dir, pos: R.pos }); }
+        else if (D.tkLines) tkCfg.lines = +D.tkLines;
+        else if (D.tkSet) { const [i, key, v] = D.tkSet.split('|'); tkRow(+i)[key] = v; }
+        else { const [r, k, dir] = D.tkMv.split('|'), o = tkOrder(+r), i = o.indexOf(k), j = i + +dir;
+          if (j >= 0 && j < o.length) { [o[i], o[j]] = [o[j], o[i]]; tkRow(+r).order = o; } }
         tkSave(); ticker(); const y = window.scrollY; route(); window.scrollTo(0, y);
-        const again = document.querySelector(tmv.dataset.tkReset ? '[data-tk-reset]' : `[data-tk-mv="${tmv.dataset.tkMv}"]`); if (again && !again.disabled) again.focus({ preventScroll: true });
+        const sel = D.tkReset != null ? `[data-tk-reset="${D.tkReset}"]` : D.tkLines ? `[data-tk-lines="${D.tkLines}"]` : D.tkSet ? `[data-tk-set="${D.tkSet}"]` : `[data-tk-mv="${D.tkMv}"]`;
+        const again = document.querySelector(sel); if (again && !again.disabled) again.focus({ preventScroll: true });
         return;
       }
       const tk = e.target.closest('[data-ticker]');
