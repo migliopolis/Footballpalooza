@@ -137,7 +137,7 @@ window.FBPRef = (() => {
   const firstYear = () => (PRE().length ? Math.min(...PRE().map(x => x.year)) : 2019);
 
   function nav(top) {
-    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/players', 'Players'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']], top, true);
+    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/players', 'Players'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']], top, true, 'pg-nav');
   }
   function head(title, extra = '') {
     const m = D.meta;

@@ -2551,35 +2551,32 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .tk-ar{display:flex;gap:4px}.tk-ar button{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;width:28px;height:26px;cursor:pointer}
 .tk-ar button:disabled{opacity:.35;cursor:default}
 
-/* Beta > Navigation Lab: a pretend header to try three ways of reaching a section's pages */
-.nl-lab h2{margin:0 0 4px}
-.nl-intro,.nl-help{color:var(--muted);font-size:.86rem;margin:4px 0 10px;max-width:560px}
-.nl-help{min-height:2.6em}
-.nl-modes{margin:2px 0 6px}
-.nl-frame{position:relative;max-width:430px;height:600px;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);box-shadow:0 6px 24px rgba(0,0,0,.12)}
-.nl-hd{position:relative;z-index:2;flex:none;background:#c4e0f5;color:#1a1d22;border-bottom:2px solid #1a1d22}
-.nl-brand{display:flex;align-items:baseline;gap:8px;padding:12px 14px 4px}
-.nl-brand b{font:700 1.15rem var(--display);color:#c8372d}.nl-brand small{color:#4a5563;font-size:.72rem}
-.nl-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 8px}
-.nl-tabs::-webkit-scrollbar{display:none}
-.nl-tab{flex:none;display:flex;align-items:center;border-bottom:3px solid transparent}
-.nl-tab.on{border-bottom-color:#c8372d}
-.nl-name{all:unset;cursor:pointer;padding:10px 4px 9px 8px;font:700 .86rem var(--display);text-transform:uppercase;letter-spacing:.02em;color:#4a5563;white-space:nowrap}
-.nl-tab.on .nl-name{color:#1a1d22}
-.nl-tab:not(:has(.nl-caret)) .nl-name{padding-right:8px}
-.nl-caret{all:unset;cursor:pointer;padding:8px 8px 7px 4px;font-size:.8rem;color:#4a5563;transition:transform .15s}
-.nl-tab.open .nl-caret{transform:rotate(180deg);color:#c8372d}
-.nl-menu{position:absolute;left:0;right:0;top:100%;background:var(--surface,#fff);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.18);display:grid;grid-template-columns:1fr 1fr;padding:6px;gap:2px;animation:nlIn .12s ease-out}
-@keyframes nlIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.nl-menu button{all:unset;cursor:pointer;padding:11px 12px;border-radius:8px;font-weight:600;font-size:.9rem;color:var(--fg)}
-.nl-menu button:hover,.nl-menu button:focus-visible{background:var(--line)}
-.nl-menu button[aria-current]{color:#c8372d}
-.nl-row{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:6px 8px;background:var(--surface,#fff);border-top:1px solid rgba(0,0,0,.12)}
-.nl-row::-webkit-scrollbar{display:none}
-.nl-row button{all:unset;cursor:pointer;flex:none;padding:5px 11px;border-radius:999px;font-size:.8rem;font-weight:600;color:var(--muted);border:1px solid var(--line)}
-.nl-row button[aria-current]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.nl-body{flex:1;overflow-y:auto;padding:14px}
-.nl-where{font:700 1.4rem/1.1 var(--display);text-transform:uppercase;margin:0 0 4px}
-.nl-where span{color:var(--muted)}
-.nl-note{color:var(--muted);font-size:.8rem;margin:0 0 12px}
-.nl-blk{background:var(--line);opacity:.55;border-radius:10px;margin-bottom:10px}
+/* section menus in the top tabs (assets/navmenu.js): a ▾ beside tabs with pages, and the menu under the tabs */
+.pg-nav{display:none!important}
+.tabs a.has-menu{padding-right:3px;margin-right:-2px}
+.tab-caret{all:unset;flex:none;cursor:pointer;display:flex;align-items:center;padding:8px 9px 9px 3px;border-bottom:4px solid transparent;color:var(--hdr-fg);opacity:.7;font-size:.8rem}
+.tab-caret span{display:inline-block;transition:transform .15s}
+.tab-caret[aria-expanded="true"] span{transform:rotate(180deg)}
+.tab-caret[aria-expanded="true"]{opacity:1;color:var(--hdr-accent)}
+.tabs a[aria-current="page"] + .tab-caret{border-bottom-color:var(--hdr-accent);opacity:1}
+.tab-caret:focus-visible{outline:2px solid var(--hdr-fg);outline-offset:-2px}
+.tab-menu{position:absolute;left:0;right:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 12px 28px rgba(0,0,0,.22);
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;padding:8px max(10px,env(safe-area-inset-left,0px));animation:tmIn .12s ease-out}
+.tab-menu[hidden]{display:none}
+@media (min-width:700px){.tab-menu{right:auto;grid-template-columns:repeat(2,minmax(150px,auto));border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;padding:8px}}
+@keyframes tmIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.tab-menu a{padding:12px 14px;border-radius:8px;font-weight:600;font-size:.95rem;color:var(--fg);text-decoration:none}
+.tab-menu a:hover,.tab-menu a:focus-visible{background:var(--line)}
+.tab-menu a[aria-current="page"]{color:var(--accent)}
+.pg-crumb{display:block;font:700 .78rem/1.3 var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.pagehead > .pg-crumb{display:inline-block;align-self:center}
+.tab-pulse .tab-caret{animation:tcPulse .8s ease-in-out 3}
+@keyframes tcPulse{50%{color:var(--hdr-accent);opacity:1;transform:translateY(2px)}}
+.nav-intro{position:fixed;inset:0;z-index:100;background:rgba(10,12,16,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.nav-intro-card{background:var(--surface);color:var(--fg);border-radius:16px;max-width:380px;width:100%;padding:20px 20px 18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.nav-intro-card h2{margin:0 0 10px;font:700 1.3rem/1.15 var(--display);text-transform:uppercase}
+.nav-intro-card p{margin:0 0 10px;font-size:.92rem;line-height:1.45}
+.nav-intro-caret{display:inline-block;padding:0 6px;border-radius:5px;background:var(--hdr-bg);color:var(--hdr-fg)}
+.nav-intro-chk{display:flex;align-items:center;gap:8px;margin:14px 0 14px;font-size:.88rem;color:var(--muted)}
+.nav-intro-ok{all:unset;cursor:pointer;display:block;text-align:center;width:100%;box-sizing:border-box;padding:12px;border-radius:10px;background:var(--fg);color:var(--bg);font-weight:700}
+.nav-intro-ok:focus-visible{outline:3px solid var(--accent);outline-offset:2px}

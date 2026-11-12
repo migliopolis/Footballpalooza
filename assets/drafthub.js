@@ -19,7 +19,7 @@ window.FBPDraftHub = (() => {
 
   function nav(cur) {
     const items = [['', 'FBP Home'], ['mock', 'Mock Draft'], ['board', 'Big Board'], ['order', 'Full Order']];
-    return `<nav class="rf-sub seg dh-nav" aria-label="Rookie Draft">${items.map(([k, l]) => `<a href="#draft${k ? '/' + k : ''}"${k === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    return `<nav class="rf-sub seg dh-nav pg-nav" aria-label="Rookie Draft">${items.map(([k, l]) => `<a href="#draft${k ? '/' + k : ''}"${k === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
   }
   function head(cur, sub) {
     const now = X.now;
