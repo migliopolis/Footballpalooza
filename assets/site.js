@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0178';
+  const VERSION = '0.0179';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -837,18 +837,26 @@
       .then(([h, a, f]) => { TKH = h; TKA = a; TKF = f; ticker(); });
   }
   // the sections, in their default order; Settings > Ticker turns each on or off and drags them into any order
-  const TK_SECS = [['deadline', 'Trade deadline countdown'], ['power', 'MFL Power Rating'], ['heat', 'Heat Check: teams'],
+  const TK_SECS = [['deadline', 'Trade deadline countdown'],
+    ['gdfbp', 'Game Day: FBP scores'], ['gdfbpp', 'Game Day: FBP scores with each side’s top two players'], ['gdtop', 'Game Day: top scorers, hot and cold'],
+    ['gdnfl', 'Game Day: NFL scores'], ['gdnext', 'Game Day: NFL games still to come'],
+    ['power', 'MFL Power Rating'], ['heat', 'Heat Check: teams'],
     ['hot', 'Hottest players'], ['cold', 'Coldest players'], ['odds', 'Playoff odds'], ['matchups', 'This week’s matchups'],
     ['scores', 'Last week’s scores'], ['block', 'Trade block'], ['moves', 'Latest moves'], ['press', 'Press Box: latest articles']];
   // one line or two (one, pinned to the bottom, to start); each line has its own sections, order, speed, direction and place (top under the tabs, or pinned
   // to the bottom of the screen). Line 2 starts with the game-week sections so it doesn't just repeat line 1.
   const TK_DEF = [{ order: [], off: [], speed: 45, dir: 'l', pos: 'bottom' },
-    { order: [], off: ['deadline', 'power', 'heat', 'hot', 'cold', 'press'], speed: 45, dir: 'l', pos: 'top' }];
+    { order: [], off: ['deadline', 'power', 'heat', 'hot', 'cold', 'press', 'gdfbp', 'gdtop', 'gdnfl', 'gdnext'], speed: 45, dir: 'l', pos: 'top' }];
+  // sections that start off for everyone (including settings saved before they existed) until someone ticks them on:
+  // the FBP scores with players is the other version of the FBP scores
+  const TK_DEF_OFF = ['gdfbpp'];
+  const tkOff = i => { const R = tkRow(i), off = new Set(R.off || []); TK_DEF_OFF.forEach(k => { if (!(R.on || []).includes(k)) off.add(k); }); return off; };
+  const TK_GD = ['gdfbp', 'gdfbpp', 'gdtop', 'gdnfl', 'gdnext'];
   const tkDef = i => JSON.parse(JSON.stringify(TK_DEF[i]));
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0178
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0179
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
@@ -867,7 +875,7 @@
           <input type="range" class="tk-speed" min="15" max="135" step="5" value="${R.speed}" data-tk-speed="${i}" aria-label="Line ${i + 1} speed"></div>
       </div>
       <p class="tk-cfg-h">What it shows, in order. Tick the ones you want; drag <b>☰</b> (or use the arrows) to change the order.</p>
-      <ol class="tk-cfg" data-tk-list="${i}">${tkOrder(i).map((k, j, a) => { const lab = (TK_SECS.find(x => x[0] === k) || [k, k])[1], on = !(R.off || []).includes(k);
+      <ol class="tk-cfg" data-tk-list="${i}">${tkOrder(i).map((k, j, a) => { const lab = (TK_SECS.find(x => x[0] === k) || [k, k])[1], on = !tkOff(i).has(k);
         return `<li data-tk-k="${k}" class="${on ? '' : 'off'}"><span class="tk-grip" aria-hidden="true">☰</span><label><input type="checkbox" data-tk-on="${i}|${k}"${on ? ' checked' : ''}> ${lab}</label>
           <span class="tk-ar"><button type="button" data-tk-mv="${i}|${k}|-1"${j ? '' : ' disabled'} aria-label="Move ${lab} up">↑</button><button type="button" data-tk-mv="${i}|${k}|1"${j < a.length - 1 ? '' : ' disabled'} aria-label="Move ${lab} down">↓</button></span></li>`; }).join('')}</ol>
       <div class="seg"><button type="button" data-tk-reset="${i}">Back to the default sections and order</button></div></fieldset>`;
@@ -931,7 +939,28 @@
     S.press = () => { const C = state.columns && state.columns.columns; if (!C) { loadColumns(); return []; } if (!C.length) return [];
       return [`<a class="tk-h tk-pr" href="#press">Press Box</a>`].concat(C.slice(0, 3).map(c =>
         `<a class="tk-i" href="#now/column/${esc(c.slug)}"><b class="tk-hl">${esc(c.title)}</b><span class="tk-p">${esc((state.columns.columnists[c.author] || { name: c.author }).name)}</span></a>`)); };
-    const off = new Set(tkRow(row).off || []);
+    // Game Day: live from the scoreboard's feed (assets/live.js), only while these sections are on
+    const LV = window.FBPLive && FBPLive.feed ? FBPLive.feed() : null, fmt = v => (+v || 0).toFixed(1);
+    const HEAT = { nuke: '☢️', hot: '🔥', cold: '🥶', bust: '🧊', blank: '🥶' };
+    const fbpGames = withP => { if (!LV || !LV.games.length) return [];
+      return [`<a class="tk-h tk-gd" href="#scores">${LV.started ? `Week ${LV.week} live` : `Week ${LV.week}`}</a>`].concat(LV.games.map(({ a, b }) => {
+        const tp = x => withP && x.top.length ? `<span class="tk-p">${x.top.map(([n, v]) => `${esc(n)} ${v}`).join(', ')}</span>` : '';
+        const lead = a.score === b.score ? '' : a.score > b.score ? 'a' : 'b';
+        return LV.started
+          ? `<a class="tk-i" href="#scores"><b class="${lead === 'b' ? 'tk-l' : ''}">${ab(a.id)}</b><span class="tk-v ${lead === 'a' ? 'win' : ''}">${fmt(a.score)}</span>${tp(a)}<span class="tk-p">–</span><b class="${lead === 'a' ? 'tk-l' : ''}">${ab(b.id)}</b><span class="tk-v ${lead === 'b' ? 'win' : ''}">${fmt(b.score)}</span>${tp(b)}</a>`
+          : `<a class="tk-i" href="#scores"><b>${ab(a.id)}</b><span class="tk-p">vs</span><b>${ab(b.id)}</b>${a.proj != null && b.proj != null ? `<span class="tk-p">proj ${fmt(a.proj)}–${fmt(b.proj)}</span>` : ''}</a>`; })); };
+    S.gdfbp = () => fbpGames(false);
+    S.gdfbpp = () => fbpGames(true);
+    S.gdtop = () => { if (!LV || !LV.started || !LV.top.length) return [];
+      const it = r => `<a class="tk-i" href="#scores/players">${HEAT[r.t] ? `<span class="tk-ic" title="${esc(r.t)}">${HEAT[r.t]}</span>` : ''}<b>${esc(r.n)}</b><span class="tk-p">${esc(r.pos)} ${ab(r.fid)}</span><span class="tk-v">${fmt(r.pts)}</span></a>`;
+      return [`<a class="tk-h tk-gd" href="#scores/players">Top scorers</a>`].concat(LV.top.map(it), LV.cold.length ? [`<a class="tk-h tk-cold" href="#scores/players">🥶 Cold</a>`].concat(LV.cold.map(it)) : []); };
+    const kick = iso => new Date(iso).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' }).replace(':00', '');
+    S.gdnfl = () => { const G = LV ? LV.nfl.filter(g => g.state !== 'pre') : []; if (!G.length) return [];
+      return [`<a class="tk-h tk-nfl" href="#scores/nfl">NFL</a>`].concat(G.map(g => { const fin = g.state === 'post', aw = +g.as > +g.hs, hw = +g.hs > +g.as;
+        return `<a class="tk-i" href="#scores/nfl"><b class="${fin && !aw ? 'tk-l' : ''}">${esc(g.away)}${g.ball === g.away ? ' 🏈' : ''}</b><span class="tk-v">${esc(g.as)}</span><b class="${fin && !hw ? 'tk-l' : ''}">${esc(g.home)}${g.ball === g.home ? ' 🏈' : ''}</b><span class="tk-v">${esc(g.hs)}</span><span class="tk-p">${esc(fin ? 'Final' : g.detail || '')}</span></a>`; })); };
+    S.gdnext = () => { const G = LV ? LV.nfl.filter(g => g.state === 'pre') : []; if (!G.length) return [];
+      return [`<a class="tk-h tk-nfl" href="#scores/nfl">Coming up</a>`].concat(G.map(g => `<a class="tk-i" href="#scores/nfl"><b>${esc(g.away)}</b><span class="tk-p">@</span><b>${esc(g.home)}</b><span class="tk-p">${esc(kick(g.date))}</span></a>`)); };
+    const off = tkOff(row);
     return tkOrder(row).filter(k => !off.has(k)).flatMap(k => S[k] ? S[k]() : []);
   }
   // the motion: each line's position drifts about 45 pixels a second (times its speed setting) in its direction;
@@ -975,6 +1004,11 @@
     let bot = document.getElementById('ticker-bot');
     if (!bot) { bot = document.createElement('div'); bot.id = 'ticker-bot'; bot.className = 'tk-dock tk-bot'; bot.hidden = true; document.body.appendChild(bot); }
     if (!TKH && !tkLoading && state.ticker) tkLoad();
+    if (window.FBPLive && FBPLive.feed) {
+      const n0 = state.ticker ? tkLines() : 0, want = [0, 1].slice(0, n0).some(i => { const off = tkOff(i); return TK_GD.some(k => !off.has(k)); });
+      const yr = +(String((state.now || {}).season || '').match(/\d{4}/) || [new Date().getFullYear()])[0];
+      FBPLive.feed({ weeksPlayed: (state.now || {}).weeksPlayed || 0, season: yr }, want);
+    }
     const n = state.ticker ? tkLines() : 0;
     let sv = null; try { sv = JSON.parse(sessionStorage.getItem('fbp-ticker-pos') || 'null'); } catch (e) {}
     const built = [];
@@ -1003,6 +1037,8 @@
     if (!tkRaf) tkRaf = requestAnimationFrame(tkFrame);
     window.dispatchEvent(new Event('resize'));   // the pinned header changed height
   }
+  // new live numbers from the scoreboard's feed: redraw the ticker (Game Day sections)
+  window.addEventListener('fbp-live', () => { if (state.ticker) ticker(); });
   // Settings > Ticker: tick a section on or off, and drag ☰ to reorder (mouse or finger)
   // the speed slider moves the ticker as you slide it
   document.addEventListener('input', e => {
@@ -1012,8 +1048,9 @@
   });
   document.addEventListener('change', e => {
     const c = e.target.closest && e.target.closest('[data-tk-on]'); if (!c) return;
-    const [i, k] = c.dataset.tkOn.split('|'), R = tkRow(+i), off = new Set(R.off || []); c.checked ? off.delete(k) : off.add(k);
-    R.off = [...off]; tkSave(); ticker(); c.closest('li').classList.toggle('off', !c.checked);
+    const [i, k] = c.dataset.tkOn.split('|'), R = tkRow(+i), off = new Set(R.off || []), on = new Set(R.on || []);
+    if (c.checked) { off.delete(k); on.add(k); } else { off.add(k); on.delete(k); }
+    R.off = [...off]; R.on = [...on]; tkSave(); ticker(); c.closest('li').classList.toggle('off', !c.checked);
   });
   (function dragTickerRows() {
     let drag = null;

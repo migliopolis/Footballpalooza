@@ -105,7 +105,9 @@
   // the week to show live: the one after the last week the league update has counted. MFL's own current week can lag
   // a day behind (it still said week 9 on Monday night after week 9 was final), so ask for the next week by number.
   let askedW = -1;
-  const nextW = () => X && X.weeksPlayed && X.weeksPlayed < 17 ? X.weeksPlayed + 1 : 0;
+  let tkCtx = null, tkWant = false;   // the ticker's Game Day sections: {weeksPlayed, season} from the site, and whether they're on
+  const CX = () => X || tkCtx;
+  const nextW = () => CX() && CX().weeksPlayed && CX().weeksPlayed < 17 ? CX().weeksPlayed + 1 : 0;
   function load() {
     if (loading) return;
     loading = true;
@@ -127,6 +129,7 @@
       loading = false;
       if (!d || !d.liveScoring) { failed = !data; return; }
       data = d; stamp = new Date();
+      setTimeout(() => window.dispatchEvent(new Event('fbp-live')), 0);   // the ticker's Game Day sections redraw
       if (p && !players) players = p.fields ? Object.fromEntries(Object.entries(p.players).map(([k, v]) => [k, Object.fromEntries(p.fields.map((f, i) => [f, v[i]]))])) : p;
       paint();
     }).catch(() => { loading = false; failed = !data; paint(); });
@@ -144,7 +147,7 @@
     const games = e.games, stats = e.stats;
     const lk = links ? Promise.resolve(links) : fetch('data/player-links.json').then(r => r.ok ? r.json() : null).then(j => (links = (j && j.links) || {}));
     const lw = w || (data ? +data.liveScoring.week : nextW());
-    const url = lw ? `scoreboard?seasontype=2&week=${lw}&dates=${(X && X.season) || new Date().getFullYear()}` : 'scoreboard';
+    const url = lw ? `scoreboard?seasontype=2&week=${lw}&dates=${(CX() && CX().season) || new Date().getFullYear()}` : 'scoreboard';
     return Promise.all([lk, fetch(ESPN + url).then(r => r.ok ? r.json() : null)]).then(([, sb]) => {
       if (!sb) return;
       const g = games;
@@ -335,7 +338,7 @@
     if (view && !hist[view]) { paint(); loadHist(view).then(paint).catch(paint); } else paint();
   }
   // the week is in the books once the weekly league update has counted it
-  const weekDone = () => !!(data && X && +data.liveScoring.week <= (X.weeksPlayed || 0));
+  const weekDone = () => !!(data && CX() && +data.liveScoring.week <= (CX().weeksPlayed || 0));
   // fast while any NFL game is on (or about to start), slow before kickoff, stopped once the week is final
   function pace() {
     if (view || weekDone()) return 0;
@@ -349,7 +352,7 @@
     if (!LIVE_URL) return;
     const ms = data ? pace() : POLL_MS;
     if (!ms) return;
-    timer = setTimeout(() => { if (onPage() && !document.hidden) load(); poll(); }, ms);
+    timer = setTimeout(() => { if ((onPage() || tkWant) && !document.hidden) load(); poll(); }, ms);
   }
   // redraw just the scoreboard (keeps scroll position and which games are open)
   // the scoreboard's status (updated when, how often) sits beside the page title
@@ -684,5 +687,30 @@
     if (btn) { btn.dataset.lvAll = open.size === n ? 'close' : 'open'; btn.textContent = open.size === n ? 'Collapse all' : 'Expand all'; }
   });
 
-  window.FBPLive = { render };
+  // The ticker's Game Day sections read this. The first call starts loading (and polling while they're on); after
+  // that it returns what the scoreboard knows: the week's FBP games with each side's top two starters, the top
+  // scoring starters with their heat, and the NFL games (live or final, and still to come).
+  function feed(ctx, want) {
+    if (want !== undefined) tkWant = !!want;   // feed() with no arguments just reads
+    if (!tkWant) return null;
+    if (ctx) tkCtx = ctx;
+    if (!data && !loading && !failed) { load(); poll(); }
+    if (!data || !players) return null;
+    const L = data.liveScoring, wk = +L.week, n1x = v => n1(+v || 0);
+    const side = f => { const st = (f.players.player || []).filter(p => p.status === 'starter');
+      return { id: f.id, score: +f.score || 0, proj: projTotal(f, wk), top: st.filter(p => +p.score).sort((a, b) => b.score - a.score).slice(0, 2).map(p => [short(p.id), n1x(p.score)]) }; };
+    const games = (L.matchup || []).map(m => { const fs = m.franchise.slice().sort((a, b) => (+a.isHome) - (+b.isHome)); return { a: side(fs[0]), b: side(fs[1]) }; });
+    const all = (L.matchup || []).flatMap(m => m.franchise.flatMap(f => (f.players.player || []).filter(p => p.status === 'starter').map(p => ({ p, fid: f.id }))));
+    const rated = all.map(({ p, fid }) => ({ n: short(p.id), pos: pos(p.id), fid, pts: +p.score || 0, t: (tier(p, wk) || {}).k || '' }));
+    const top = rated.filter(r => r.pts > 0).sort((a, b) => b.pts - a.pts).slice(0, 12);
+    const cold = rated.filter(r => r.t === 'cold' || r.t === 'bust' || r.t === 'blank').sort((a, b) => a.pts - b.pts).slice(0, 6);
+    const G = (E.live || {}).games || {}, seen = new Set(), nfl = [];
+    Object.entries(G).forEach(([ab, g]) => { if (seen.has(g.id) || g.home) return; seen.add(g.id);
+      nfl.push({ id: g.id, state: g.state, date: g.date, detail: g.detail, away: ab, home: g.opp, as: g.pf, hs: g.pa, ball: g.ball ? ab : null }); });
+    // the home side's entry knows who has the ball too
+    nfl.forEach(x => { const h = G[x.home]; if (h && h.ball) x.ball = x.home; });
+    nfl.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    return { week: wk, started: all.some(({ p }) => state(p) !== 'pre'), games, top, cold, nfl };
+  }
+  window.FBPLive = { render, feed };
 })();

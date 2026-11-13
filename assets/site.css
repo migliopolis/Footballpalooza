@@ -2544,7 +2544,8 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .tk-sp{overflow:visible}.tk-sp polyline{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
 .tk-sp.up polyline{stroke:#4cd07d}.tk-sp.dn polyline{stroke:#ff6b62}
 .tk-sep{color:#4a5560;padding:0 10px}
-.tk-dl{background:#ff5c5c;color:#fff}.tk-odds{background:#7be0a4}.tk-mu{background:#c9b6ff}.tk-sc{background:#d7dde4}.tk-bl{background:#ffd36e}.tk-mv{background:#8fe3e3}.tk-pr{background:#f4a3c0}
+.tk-dl{background:#ff5c5c;color:#fff}.tk-odds{background:#7be0a4}.tk-mu{background:#c9b6ff}.tk-sc{background:#d7dde4}.tk-bl{background:#ffd36e}.tk-mv{background:#8fe3e3}.tk-gd{background:#ffd66b}.tk-nfl{background:#b8c7ff}
+.tk-ic{margin-right:4px}.tk-pr{background:#f4a3c0}
 .tk-hl{text-transform:none}
 .tk-v.fav{color:#4cd07d}.tk-v.win{color:#fff}.tk-l{color:#8a96a3}
 /* Settings > Ticker list */
