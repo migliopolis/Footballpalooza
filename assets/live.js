@@ -500,7 +500,9 @@
     // a team's bar color: its primary, or its secondary when the primary is near white
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
     // of the team's two colors, the one closest to a mid tone, so it shows on light and dark backgrounds alike
-    const barColor = id => { const t = tm(id), c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
+    // a team can name its own scoreboard color, and the ink for its MY MATCHUP badge (THOT: black, with gold letters)
+    const SB = { THOT: ['#111111', '#EEC816'] };
+    const barColor = id => { const t = tm(id); if (SB[t.abbr]) return SB[t.abbr][0]; const c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
       return c.length ? c.sort((x, y) => Math.abs(lum(x) - 0.5) - Math.abs(lum(y) - 0.5))[0] : 'var(--muted)'; };
     const logo = id => tm(id).logo ? `<img class="lv-lg" src="${tm(id).logo}" alt="">` : `<span class="lv-lg">${esc(tm(id).abbr || '')}</span>`;
     // the labels over a game, highest first: CHAMPIONSHIP PREVIEW (the 1 and 2 seeds) or GAME OF THE WEEK, MY MATCHUP,
@@ -602,7 +604,7 @@
       const gotw = isGotw(shownW, a.id, b.id), mine = X.myTeam && (a.id === X.myTeam || b.id === X.myTeam);
       const champ = !view && [seedOf(a.id), seedOf(b.id)].sort().join() === '1,2';
       const tags = gameTags(m, a, b, shownW, gotw, mine).slice(0, 2);
-      return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw || champ ? ' lv-gotw' : ''}${mine ? ' lv-mine' : ''}" data-lv-key="${key}"${mine ? ` style="--mine:${barColor(X.myTeam)};--mine-ink:${lum(barColor(X.myTeam)) > .6 ? '#1a1a1a' : '#fff'}"` : ''}>
+      return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw || champ ? ' lv-gotw' : ''}${mine ? ' lv-mine' + (lum(barColor(X.myTeam)) < .15 ? ' lv-mine-dk' : '') : ''}" data-lv-key="${key}"${mine ? ` style="--mine:${barColor(X.myTeam)};--mine-ink:${(SB[tm(X.myTeam).abbr] || [])[1] || (lum(barColor(X.myTeam)) > .6 ? '#1a1a1a' : '#fff')}"` : ''}>
         <button type="button" class="lv-sum" data-lv="${key}" aria-expanded="${isOpen}">
           ${side(a, 'a')}<span class="lv-mid">${tags.length ? `<span class="lv-tags">${tags.map(t => `<span class="lv-ctx ${t[0]}" title="${esc(t[2])}">${t[1]}</span>`).join('')}</span>` : ''}${bar}${line}</span>${side(b, 'b')}
           <span class="lv-metarow"><small>${meta(a.id)}</small><small>${meta(b.id)}</small></span>

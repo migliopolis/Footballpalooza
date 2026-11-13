@@ -1193,6 +1193,11 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 @media (max-width:360px){.lv-tug{width:56px}}
 /* your team's game (Settings): a faint wash and ring in your team's color, MY MATCHUP over VS */
 .lv-g.lv-mine{outline:2px solid color-mix(in srgb,var(--mine) 45%,transparent);outline-offset:-2px}
+.lv-g.lv-mine-dk{outline-color:var(--mine)}
+/* a near-black team color would vanish on the dark background: there the ring takes the badge's letter color */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lv-g.lv-mine-dk{outline-color:color-mix(in srgb,var(--mine-ink) 55%,transparent)}}
+:root[data-theme="dark"] .lv-g.lv-mine-dk{outline-color:color-mix(in srgb,var(--mine-ink) 55%,transparent)}
+.lv-ctx.mine{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mine-ink) 35%,transparent)}
 .lv-g.lv-mine.lv-gotw{outline-offset:1px}
 .lv-g.lv-mine .lv-sum{background:color-mix(in srgb,var(--mine) 8%,transparent)}
 .lv-mine-tag{display:block;width:max-content;font:700 .54rem var(--body);letter-spacing:.09em;text-transform:uppercase;color:#fff;background:var(--mine);padding:2px 8px;border-radius:999px}
