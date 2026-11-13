@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0186",
+      "to": "0.0190",
+      "dates": "Nov 13, 2026",
+      "items": [
+        "Stats: a button for the team picked in the logo bar, a Starters filter that counts only points from starts, and a Starts column.",
+        "Rosters and Stats: the @ or vs and the NFL logo sit centered under the Wk header.",
+        "Scoreboard: your team's game (Settings) leads the list with a ring in your team's color and a My Matchup label.",
+        "Scoreboard: labels over each game, highest first: Championship Preview, Game of the Week, My Matchup, Playoff Preview, Playoff Stakes, Revenge Game, the 1.01 Bowl or Draft Stakes, and Division Rivalry.",
+        "Scoreboard: a win-chance bar from MFL's projections with each side's percentage and players left (5/6) under it; tighter cards fit all six games on a phone."
+      ]
+    },
+    {
       "from": "0.0181",
       "to": "0.0185",
       "dates": "Nov 12, 2026",
