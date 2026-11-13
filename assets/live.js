@@ -506,7 +506,7 @@
     // the labels over a game, highest first: CHAMPIONSHIP PREVIEW (the 1 and 2 seeds) or GAME OF THE WEEK, MY MATCHUP,
     // then this week's context: PLAYOFF PREVIEW (both teams 75%+ to make the playoffs), PLAYOFF STAKES (a win or
     // loss moves either team's odds 15+ points), REVENGE GAME (a starter facing the team that traded or released him in
-    // the past year), DRAFT IMPLICATIONS (two bottom-six teams within two picks) and, when nothing else applies, DIVISION RIVALRY. Two show at most.
+    // the past year), DRAFT STAKES (two bottom-six teams within two picks; the 1.01 BOWL for picks 1 and 2) and, when nothing else applies, DIVISION RIVALRY. Two show at most.
     const gameTags = (m, a, b, wk, gotw, mine) => {
       const out = [], abbr = id => tm(id).abbr || X.nameOf(id);
       const champ = !view && [seedOf(a.id), seedOf(b.id)].sort().join() === '1,2';
@@ -527,7 +527,7 @@
         if (st) { out.push(['rv', 'Revenge game', `${short(p.id)} faces ${abbr(o.id)}, who ${st[6] === 'T' ? 'traded' : 'released'} him`]); break rv; } }
       const D = X.draftOrder || [], pk = id => (D.find(d => d.id === id) || {}).pick;
       if (pk(a.id) && pk(b.id) && pk(a.id) <= 6 && pk(b.id) <= 6 && Math.abs(pk(a.id) - pk(b.id)) <= 2)
-        out.push(['dr', 'Draft implications', `${abbr(a.id)} pick ${pk(a.id)} and ${abbr(b.id)} pick ${pk(b.id)} in the draft order right now`]);
+        out.push(['dr', pk(a.id) + pk(b.id) === 3 ? '1.01 Bowl' : 'Draft stakes', `${abbr(a.id)} pick ${pk(a.id)} and ${abbr(b.id)} pick ${pk(b.id)} in the draft order right now${pk(a.id) + pk(b.id) === 3 ? ': the loser has the inside track to the 1.01' : ''}`]);   // picks 1 and 2: the 1.01 Bowl
       const da = (stand(a.id) || {}).divisionName, db = (stand(b.id) || {}).divisionName;
       if (da && da === db && !out.length) out.push(['dv', 'Division rivalry', `Both in the ${da}`]);   // only when nothing else applies
       return out; };
