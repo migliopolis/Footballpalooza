@@ -6,15 +6,20 @@ rank (data/fantasypros/dynasty-ecr.json, from the daily FantasyPros pull): 9999 
   PV = 9999 * exp(-((rank - 1) / 95) ** 0.8)
 (rank 25 is about 7,000, rank 50 about 5,500, rank 100 about 3,500, rank 200 about 1,600). Unranked: rank 500.
 
-Trade Value (TV, 1-9999): what he's worth to an FBP owner, contract included. PV turns into a going auction price,
-  market $ = 80 * (PV / 9999) ** 1.8   (the top player about $80, rank 50 about $28, rank 100 about $12)
-and TV adds up
-  - the rest of this season: market $ times the share of the season still to play (counting playoffs), and
-  - every year left on his contract (his future salaries in data/rosters.json): what he'd fetch at auction that
-    year, a little less each year past his position's peak age, minus that year's salary, never below zero (an
-    owner can always let an overpaid player go), each later year counting 10% less.
-That dollar total is scaled to 9999 for the best. A cheap young player on a long deal can outrank a better player
-on an expensive or expiring one, which is the point.
+Trade Value (TV, 1-9999): what he's worth in a trade between FBP owners. Talent leads and the contract adjusts it:
+  TV = talent x contract, scaled so the best is 9999
+  talent   = 9999 * (PV / 9999) ** 1.5   stars count for more than the sum of lesser players (you don't trade
+             a great player for two good ones, or for a bad one on a cheap deal)
+  contract = (0.55 + 0.45 * control) * (1 + 0.3 * surplus), between about 0.4 and 1.3
+    control: how much of him you get, the rest of this season plus each year left on his deal (each later year
+             10% less), as a share of three seasons; an expiring contract is mostly this season. A year his salary
+             would run past what he'd fetch at auction is the year he gets let go, so the deal ends there: a
+             three-year contract whose last year is too expensive counts as two
+    surplus: over those same seasons, what he'd fetch at auction (market $ = 80 * (PV / 9999) ** 1.8, a little
+             less each year past his position's peak age) against what he's paid, as a share of what he'd fetch,
+             from -1 (paid far more than he's worth) to +1 (nearly free)
+So a cheap deal lifts a player and a big or short one lowers him, but by at most a third either way: a star on a
+fair contract stays well above a good young player on a cheap one.
 
 Rookie picks: the rookie a pick usually lands (pick 1.01 about the 14th player in dynasty rankings, 1.12 about
 the 100th, then 10 places a pick) on a 3-year rookie deal at the by-law rookie salary for the slot, 20% off for the
@@ -52,6 +57,14 @@ def market(pv):
     return 80 * (pv / 9999) ** 1.8
 
 
+def contract_tv(pv, val, cost, ctl):
+    """Talent times the contract: see the top of the file."""
+    talent = 9999 * (pv / 9999) ** 1.5
+    control = min(1.0, ctl / 3.0)
+    surplus = max(-1.0, min(1.0, (val - cost) / val)) if val > 0 else 0.0
+    return talent * (0.55 + 0.45 * control) * (1 + 0.3 * surplus)
+
+
 def pick_rank(n):   # overall pick number -> the dynasty rank of the rookie it usually lands
     return 14 + 8 * (n - 1) if n <= 12 else 102 + 10 * (n - 12)
 
@@ -87,15 +100,22 @@ def main():
             pv = pv_of(rank)
             m = market(pv)
             age = r.get('age') or 26
-            sur = 0.0
+            # the seasons he's under control: what he'd fetch at auction each year, and what he's paid
+            val, cost, ctl = m * left, 0.0, left
+            # an owner only keeps him while he's worth his salary: the first year his raise outruns what he'd fetch
+            # at auction, he's let go, so that year and the rest of the deal don't count, for or against him
             for k, sal in enumerate(r.get('fut') or []):
                 yrs_past = max(0, age + k + 1 - PEAK.get(pos, 28))
                 worth = m * (1 - DROP.get(pos, .06)) ** yrs_past
-                sur += 0.9 ** k * max(0.0, worth - (sal or 0))
-            tv = m * left + sur
+                if worth < (sal or 0):
+                    break
+                val += 0.9 ** k * worth
+                cost += 0.9 ** k * (sal or 0)
+                ctl += 0.9 ** k
+            tv = contract_tv(pv, val, cost + (r.get('sal') or 0) * left, ctl)
             raw[r['id']] = tv
             rows[r['id']] = {'f': f, 'n': r['name'], 'pos': pos, 'age': r.get('age'), 'st': r.get('st'), 'sal': r.get('sal'),
-                             'rank': rank if rank < 500 else None, 'pv': round(pv), 'mkt': round(m, 1), 'tv$': round(tv, 1)}
+                             'rank': rank if rank < 500 else None, 'pv': round(pv), 'mkt': round(m, 1)}
     # rookie picks
     order = {d['id']: d['pick'] for d in (LN.get('draftOrder') or [])}
     picks = []
@@ -106,16 +126,18 @@ def main():
             pv = pv_of(pick_rank(n))
             m = market(pv)
             s0 = pick_salary(round(n))
-            # 20% off for the chance the pick misses
-            sur = 0.8 * sum(0.9 ** (k + p['y'] - season - 1) * max(0.0, m - (s0 + [0, 3, 6][k])) for k in range(3))
+            # three rookie seasons from the draft after this one, 20% off for the chance the pick misses
+            d0 = p['y'] - season - 1
+            val = sum(0.9 ** (k + d0) * m for k in range(3)); cost = sum(0.9 ** (k + d0) * (s0 + [0, 3, 6][k]) for k in range(3))
+            sur = 0.8 * contract_tv(pv, val, cost, sum(0.9 ** (k + d0) for k in range(3)))
             key = f"P{p['y']}-{p['r']}-{p['from']}"
             raw[key] = sur
             nm = (teams.get(p['from']) or {}).get('abbr', p['from'])
             picks.append({'id': key, 'f': f, 'y': p['y'], 'r': p['r'], 'from': p['from'],
                           'n': f"{p['y']} {ORD.get(p['r'], str(p['r']) + 'th')}{'' if p['from'] == f else ' (' + nm + ')'}",
-                          'slot': None if slot == 6.5 else int(slot), 'pv': round(pv), 'tv$': round(sur, 1)})
+                          'slot': None if slot == 6.5 else int(slot), 'pv': round(pv)})
     top = max(raw.values()) if raw else 1
-    scale = lambda v: max(1, round(9999 * (v / top) ** 0.75)) if v > 0 else 1
+    scale = lambda v: max(1, round(9999 * v / top)) if v > 0 else 1
     for k, r in rows.items():
         r['tv'] = scale(raw[k])
     for p in picks:
