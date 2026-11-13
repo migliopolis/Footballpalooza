@@ -62,7 +62,7 @@ window.FBPRosters = (function () {
   const POS = ['QB', 'RB', 'WR', 'TE', 'DEF'];
   const GRP = { QB: 'Quarterbacks', RB: 'Running backs', WR: 'Wide receivers', TE: 'Tight ends', DEF: 'Defense' };
   const YEARS = k => (R.season || 2026) + 1 + k;
-  const TABS = [['news', 'News'], ['log', 'Game log'], ['sched', 'Schedule'], ['an', 'Analytics'], ['sal', 'Salary'], ['jour', 'Journey']];
+  const TABS = [['news', 'News'], ['log', 'Game log'], ['sched', 'Schedule'], ['an', 'Analytics'], ['sal', 'Salary'], ['jour', 'Journey'], ['card', 'Player Card']];
   const STEP = { 3: [3, 6], 5: [3, 6, 9, 12], 6: [0, 3, 6, 9, 12] };
   const NFL_ESPN = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
   const STAT = { QB: [['passing', ['CMP', 'ATT', 'YDS', 'TD', 'INT']], ['rushing', ['CAR', 'YDS', 'TD']]],
@@ -105,6 +105,12 @@ window.FBPRosters = (function () {
     const c = h.w[i], k = HEATK.find(x => x[0] === c); if (!k) return '';
     return `<span class="hc-chip ${k[2]}" title="${k[1]}">${c === 'W' ? 'WP' : c}</span>`;
   }
+  const heatOf = r => { const A = espn('AN', 'data/analytics.json'); return A && !A.failed ? (A.heatPlayers || {})[r.id] || null : null; };
+  // the Heat Check score as a roster cell, coloured hot to cold
+  const heatCell = r => { const A = espn('AN', 'data/analytics.json'); if (!A || A.failed) return '<td class="c ro-ht">…</td>';
+    const h = heatOf(r); if (!h) return '<td class="c ro-ht"><span class="hc-v z" title="Heat Check: no Nuclear, Hot, Cold, Bust or Witness Protection weeks">0</span></td>';
+    const k = h.s >= 6 ? 'h3' : h.s >= 3 ? 'h2' : h.s > 0 ? 'h1' : h.s === 0 ? 'z' : h.s > -3 ? 'c1' : h.s > -6 ? 'c2' : 'c3';
+    return `<td class="c ro-ht"><span class="hc-v ${k}" title="Heat Check: ${h.s > 0 ? '+' : ''}${h.s} in ${h.g} games">${h.s > 0 ? '+' : ''}${h.s}</span></td>`; };
   function heatStrip(r) {
     const A = espn('AN', 'data/analytics.json');
     if (!A || A.failed) return '';
@@ -145,7 +151,18 @@ window.FBPRosters = (function () {
   // but never turn it around: a player whose last three games are below his average can't be "up" on projection
   // alone. Under 6 a game both on the season and lately is too little to read: no arrow. Needs three games.
   const LOW = 6;
+  // out: on NFL injured reserve, suspended or PUP (ESPN), or no game logged in the last week played (not his bye; a player
+  // who sat out has no line that week). An injured player's last good games aren't a trend, so he gets OUT instead of an
+  // arrow. An FBP injured-reserve slot alone doesn't count: a player can be back on the field before he's moved off it.
+  const outNow = r => {
+    const i = r.espn && injMap()[r.espn];
+    if (i && /^(Injured Reserve|Suspension|Physically Unable to Perform)$/.test(i.status)) return 'NFL ' + i.status.toLowerCase();
+    const last = +R.through === +r.bye ? R.through - 1 : R.through, ws = Object.keys(r.wsc || {}).map(Number);
+    if (ws.length && last && !ws.includes(last)) return `didn’t play in week ${last}` + (r.st === 'INJURED_RESERVE' ? ' (on FBP injured reserve)' : '');
+    return '';
+  };
   const trend = r => {
+    const o = outNow(r); if (o) return { s: null, out: o };
     const w = Object.entries(r.wsc || {}).filter(([k]) => +k !== +r.bye); if (w.length < 3) return null;
     const avg = w.reduce((s, x) => s + x[1], 0) / w.length, l = l3(r);
     const pj = r.proj != null && +r.bye !== +R.projWeek ? +r.proj : null;
@@ -157,6 +174,7 @@ window.FBPRosters = (function () {
   };
   const TREND = [[0.3, '⇈', 'up2', 'Surging'], [0.12, '↗', 'up', 'Trending up'], [-0.12, '→', 'eq', 'Holding steady'], [-0.3, '↘', 'dn', 'Trending down'], [-Infinity, '⇊', 'dn2', 'Sliding']];
   const trendCell = r => { const t = trend(r); if (!t) return '<td class="c ro-tr"><span class="ro-trd">—</span></td>';
+    if (t.out) return `<td class="c ro-tr"><span class="ro-trd out" title="Out: ${X && X.esc ? X.esc(t.out) : t.out}" aria-label="Out">OUT</span></td>`;
     if (t.low) { const tip = `Too few points to read a trend: ${t.avg.toFixed(1)} a game this season, ${t.l.toFixed(1)} over his last 3`;
       return `<td class="c ro-tr"><span class="ro-trd lo" title="${tip}" aria-label="${tip}">·</span></td>`; }
     const [, ic, c, lab] = TREND.find(([min]) => t.s >= min);
@@ -169,6 +187,7 @@ window.FBPRosters = (function () {
     ['pts', 'Pts', r => r.pts],
     ['ppw', 'Pts/wk', r => r.gp ? r.pts / r.gp : null],
     ['l3', 'L3', r => l3(r)],
+    ['heat', 'Heat', r => { const h = heatOf(r); return h ? h.s : null; }],
     ['ecr', 'ECR', r => r.ecrPos == null ? null : -r.ecrPos],
     ['rk', 'Rank', r => r.rk == null ? null : -r.rk],
     ['bye', 'Bye', r => r.bye],
@@ -205,10 +224,33 @@ window.FBPRosters = (function () {
     }
     return out;
   }
+  // Archetypes: what kind of fantasy player he's been. Scoring archetypes come from his weekly points (scripts/rosters.py,
+  // 4+ games; big week QB 25+, RB/WR 20+, TE 15+; dud QB under 10, RB/WR under 5, TE under 3; starter line QB 16,
+  // RB/WR 10, TE 7); role archetypes from his ESPN game log (role() above). Each has an icon and a plain explainer.
+  const ARCH = {
+    'Mr. Reliable': ['🛡️', 'Starter-level scoring every week: never a dud week, and few big swings either way.'],
+    'High Floor': ['🧱', 'Even his worst weeks hold up: his bottom quarter of weeks still clears the starter line for his position.'],
+    'Low Floor': ['🕳️', 'Averages like a starter, but a quarter of his weeks are duds.'],
+    'Boom or Bust': ['🎢', 'At least two big weeks and at least two duds: the highs are high and the lows are low.'],
+    'Ceiling Chaser': ['🚀', 'Finished top 3 at his position in at least two weeks.'],
+    'One-Week Wonder': ['☄️', 'At least 40% of his season’s points came in a single week.'],
+    'Bench Bomb': ['💣', 'At least two big weeks while sitting on an FBP bench.'],
+    'Volume King': ['👑', 'Heavy usage: among the most passes (QB), touches (RB) or targets (WR, TE) a game at his position.'],
+    'Dual Threat': ['⚔️', 'A quarterback who adds 30+ rushing yards a game.'],
+    'TD-Dependent': ['🎯', 'Scores touchdowns at a high rate on modest volume, so his weeks lean on finding the end zone.'],
+    'Pass-Catching Back': ['🧤', 'A running back who catches 3.5+ passes a game.'],
+  };
+  // role archetypes: worked out nightly (scripts/roles.py, r.role), or live from his game log when that hasn't run
+  const archetypes = r => (r.prof || []).map(p => [...p, 's']).concat((r.role || role(r)).map(p => [...p, 'r']))
+    .map(([l, why, k]) => ({ l, why, k, ic: (ARCH[l] || ['•'])[0], ex: (ARCH[l] || ['', ''])[1] }));
+  // the roster row: his archetype icons after his age (tap one for its name and his numbers); only what's already in the
+  // roster data, so the table never waits on ESPN
+  const archIcons = r => { const L = (r.prof || []).concat(r.role || []); if (!L.length) return '';
+    return ` · <span class="ro-arch">${L.map(([l, why]) => `<i title="${(ARCH[l] ? l + ': ' : '') + why}${ARCH[l] ? '. ' + ARCH[l][1] : ''}" aria-label="${l}">${(ARCH[l] || ['•'])[0]}</i>`).join('')}</span>`; };
   function profile(r, href) {
-    const tags = (r.prof || []).map(p => [...p, 's']).concat(role(r).map(p => [...p, 'r']));
+    const tags = archetypes(r);
     if (!tags.length && !href) return '';
-    return `<div class="ro-prof">${tags.map(([l, why, k]) => `<span class="ro-pt ${k}"><b>${l}</b><small>${why}</small></span>`).join('')}${href ? `<a class="ro-pp" href="${href}">Player Page<span aria-hidden="true"> ›</span></a>` : ''}</div>`;
+    return `<div class="ro-prof">${tags.map(a => `<span class="ro-pt ${a.k}"><b><span class="ro-ai" aria-hidden="true">${a.ic}</span>${a.l}</b><small>${a.why}</small></span>`).join('')}${href ? `<a class="ro-pp" href="${href}">Player Page<span aria-hidden="true"> ›</span></a>` : ''}</div>`;
   }
   // one tab's content; the Player Page shows them all at once (full: more news)
   function part(r, t, ctx, tab, full) {
@@ -275,13 +317,16 @@ window.FBPRosters = (function () {
         ${tile(`${bar}+ point weeks`, `${W.filter(x => x.pts >= bar).length} of ${W.length}`, `under ${Math.round(bar / 3)}: ${W.filter(x => x.pts < bar / 3).length}`)}
         ${tile('Rest of season', r.ecrPos ? r.pos + r.ecrPos : '—', `${r.ecr ? 'FantasyPros #' + r.ecr + ' overall · ' : ''}week ${R.projWeek} projection ${fx(r.proj, 1)}`)}
       </div>`;
-      body += heatStrip(r);
     } else if (tab === 'sal') {
       const m = /(\d+)\/(\d+)/.exec(r.cy || ''), n = m ? +m[1] : 0, N = m ? (r.st === 'TAXI_SQUAD' && +m[2] === 5 && n === 1 ? 6 : +m[2]) : 0;
       const yrs = [[R.season, r.sal, n ? `Year ${n} of ${N}` : 'No contract year']].concat((r.fut || []).map((v, k) => [YEARS(k), v, `Year ${n + k + 1} · +$${STEP[N] ? STEP[N][n + k - 1] : ''}`]));
       const owed = yrs.reduce((s, y) => s + y[1], 0);
       body = `<div class="ro-yrs">${yrs.map(y => `<div><small>${y[0]}</small><b>$${y[1]}</b><span>${y[2]}</span></div>`).join('')}${N ? `<div class="fy"><small>${YEARS((r.fut || []).length)}</small><b>FA</b><span>back to the auction</span></div>` : ''}</div>
         <p class="ro-bnote">Acquired: <b>${esc(r.acq || '—')}</b>${r.newDeal ? ' (a new 3-year veteran deal)' : ''}. ${N === 6 ? 'Taxi rookie: a full first season on taxi earns the 6th year with salary frozen in year 2. ' : ''}${N ? `Owed ${$(owed)} through ${R.season + (r.fut || []).length}, escalators included.` : ''}</p>`;
+    }
+    if (tab === 'card') {
+      // the trading card from Beta > Player Cards (assets/beta.js), with his archetypes: icons on the front, explained on the back
+      body = window.FBPBeta && FBPBeta.cardFor ? `<div class="ro-pcard">${FBPBeta.cardFor(r.id, Object.assign({}, ctx, { rerender: redraw }), archetypes(r))}</div>` : '<p class="ro-wait">The player card didn’t load.</p>';
     }
     if (tab === 'jour') {
       // the timeline (assets/journey.js): vertical on phones, a lane on wider screens
@@ -293,7 +338,8 @@ window.FBPRosters = (function () {
   function box(r, t, ctx) {
     const tab = tabOf[r.id] || 'news';
     const head = `<div class="ro-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-ro-tab="${r.id}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
-    return `<div class="ro-box">${profile(r, `#now/rosters/${t.fid}/${r.id}`)}${head}<div class="ro-bb">${part(r, t, ctx, tab)}</div></div>`;
+    // up top: his Heat Check (the archetypes live on his Player Card and Player Page)
+    return `<div class="ro-box"><div class="ro-top">${heatStrip(r)}<a class="ro-pp" href="#now/rosters/${t.fid}/${r.id}">Player Page<span aria-hidden="true"> ›</span></a></div>${head}<div class="ro-bb">${part(r, t, ctx, tab)}</div></div>`;
   }
 
   // the Player Page (#now/rosters/<franchise>/<player>): everything the site has on one player
@@ -482,15 +528,15 @@ window.FBPRosters = (function () {
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>
-        <td class="l ro-nm"><span class="ro-nmw"><span class="ro-nmt"><b>${esc(r.name)}</b>${injChip(r)}${chip}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></span>${aws}</span></td>
-        ${trendCell(r)}<td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td>${l3(r) != null ? l3(r).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
+        <td class="l ro-nm"><span class="ro-nmw"><span class="ro-nmt"><b>${esc(r.name)}</b>${injChip(r)}${chip}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}${archIcons(r)}</small></span>${aws}</span></td>
+        ${trendCell(r)}<td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td>${l3(r) != null ? l3(r).toFixed(1) : '—'}</td>${heatCell(r)}<td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td class="c">${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
         ${isOpen ? `<tr class="ro-det"><td colspan="${NC}">${box(r, t, ctx)}</td></tr>` : ''}`;
     };
     const grp = (label, list) => list.length ? `<tr class="ro-grp"><td colspan="${NC}"><span>${label} · ${list.length} · ${$(list.reduce((s, r) => s + r.sal, 0))}</span></td></tr>` + sorted(list).map(row).join('') : '';
     const head = C.map(([k, l]) => { const on = sort[0] === k;
-      return `<th class="ro-sort${k === 'name' ? ' l' : ''}${k === 'sal' ? ' gap' : ''}${k === 'proj' || k === 'o0' || k === 'o1' || k === 'tr' ? ' c' : ''}" data-ro-sort="${k}" aria-sort="${on ? (sort[1] < 0 ? 'descending' : 'ascending') : 'none'}">${l}${on ? (sort[1] < 0 ? ' ▼' : ' ▲') : ''}</th>`; }).join('');
+      return `<th class="ro-sort${k === 'name' ? ' l' : ''}${k === 'sal' ? ' gap' : ''}${k === 'proj' || k === 'o0' || k === 'o1' || k === 'tr' || k === 'heat' ? ' c' : ''}" data-ro-sort="${k}" aria-sort="${on ? (sort[1] < 0 ? 'descending' : 'ascending') : 'none'}">${l}${on ? (sort[1] < 0 ? ' ▼' : ' ▲') : ''}</th>`; }).join('');
     const top = rows.slice().sort((a, b) => b.sal - a.sal)[0];
     const F = t.face, n = (t.weeks || []).length;
     const faceLine = F ? [`${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''}`, `${F.starts} starts`,
@@ -516,7 +562,7 @@ window.FBPRosters = (function () {
         <div class="tbl-wrap ro-wrap"><table class="ro-t"><thead><tr><th class="ro-ph"></th>${head}</tr></thead>
         <tbody>${POS.map(p => grp(GRP[p], act.filter(r => r.pos === p))).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody>
         <tfoot><tr><td class="ro-ph"></td><td class="l">Total</td><td>${rows.reduce((s, r) => s + r.pts, 0).toFixed(1)}</td><td></td><td></td><td></td><td></td><td></td><td class="gap">${$(pay)}</td><td></td>${[0, 1, 2, 3, 4].map(k => `<td>${yr(k) ? $(yr(k)) : ''}</td>`).join('')}</tr></tfoot></table></div>
-        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Trend weighs his last three games against his season average, along with MFL’s projection for this week (⇈ surging, ↗ up, → steady, ↘ down, ⇊ sliding; a dot means too few points to read, under 6 a game; tap it for the numbers); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
+        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Trend weighs his last three games against his season average, along with MFL’s projection for this week (⇈ surging, ↗ up, → steady, ↘ down, ⇊ sliding; a dot means too few points to read, under 6 a game; OUT means he's injured or hasn't played lately; tap it for the numbers); Heat is his Heat Check score (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3; tap a player for his weeks); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
       <p class="rf-foot">Through week ${R.through}. Face of the Franchise: the current player with the most history on this team, counting starts, seasons, All-FBP teams, MVPs, Rookie of the Year and championships, across every stint.</p>`;
   }
 
@@ -531,6 +577,7 @@ window.FBPRosters = (function () {
     const tb = t.closest('[data-ro-tab]'); if (tb) { const [id, k] = tb.dataset.roTab.split('|'); tabOf[id] = k; return redraw(); }
     if (t.closest('.ro-box')) return;
     const h = t.closest('[data-ro-sort]'); if (h) { const k = h.dataset.roSort; sort = sort[0] === k ? [k, -sort[1]] : [k, k === 'name' ? 1 : -1]; return redraw(); }
+    if (t.closest('.ro-arch i, .ro-trd, .ro-ht .hc-v')) return;   // these show their explanation (site.js tip) instead of opening the player
     const p = t.closest('[data-ro-p]'); if (p) { const id = p.dataset.roP; open.has(id) ? open.delete(id) : open.add(id); return redraw(); }
   });
   return { render };

@@ -2638,4 +2638,25 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .ro-aws .ro-chip{margin-left:0}
 .ro-tr{width:1px}
 .ro-trd{display:inline-block;min-width:1.4em;font-weight:800;font-size:1rem;line-height:1;cursor:help;color:var(--muted)}
-.ro-trd.lo{opacity:.5}.ro-trd.up2{color:#178a3e}.ro-trd.up{color:#2fa85a}.ro-trd.dn{color:#d0603a}.ro-trd.dn2{color:#c0392b}
+.ro-trd.lo{opacity:.5}.ro-trd.out{font:700 .58rem var(--body);letter-spacing:.04em;color:#c0392b}.ro-trd.up2{color:#178a3e}.ro-trd.up{color:#2fa85a}.ro-trd.dn{color:#d0603a}.ro-trd.dn2{color:#c0392b}
+
+/* Rosters: Heat Check up top in the player box; the Heat column; archetype icons; the Player Card tab */
+.ro-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;padding:10px 12px 4px}
+.ro-top .hc-p{flex:1 1 260px;min-width:0;margin:0}
+.ro-top .ro-pp{margin-left:auto;align-self:center}
+.ro-top > .ro-bnote{flex:1 1 260px;margin:0}
+.hc-v{display:inline-block;min-width:2.1em;padding:2px 5px;border-radius:6px;font-weight:700;font-size:.8rem;font-variant-numeric:tabular-nums;cursor:help}
+.hc-v.h3{background:#e2541c;color:#fff}.hc-v.h2{background:#f08a4b;color:#fff}.hc-v.h1{background:#fbd3b5;color:#7a3210}
+.hc-v.z{color:var(--muted)}
+.hc-v.c1{background:#cfe3f7;color:#1d4f7f}.hc-v.c2{background:#6fa8dc;color:#fff}.hc-v.c3{background:#2c6aa6;color:#fff}
+.ro-ai{margin-right:5px}
+.ro-pcard{padding:12px 4px 4px;display:flex;flex-direction:column;align-items:center}
+.ro-pcard .bc-slot{width:100%;max-width:300px}
+.ro-pcard .bc-hint{text-align:center}
+.bc-arch{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.bc-arch i{font-style:normal;text-shadow:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(10,14,20,.6);box-shadow:0 0 0 2px rgba(255,255,255,.75);font-size:16px;line-height:1}
+.bc-types{display:flex;flex-direction:column;gap:6px;margin:2px 0 6px}
+.bc-types > div{display:flex;gap:8px;align-items:flex-start}
+.bc-ti{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.08);font-size:14px}
+.bc-types b{font-size:.72rem}.bc-types small{font-size:.62rem;opacity:.75}.bc-types p{margin:1px 0 0;font-size:.64rem;line-height:1.3;opacity:.85}
+.ro-arch i{font-style:normal;cursor:help;margin-right:2px;font-size:.85rem}

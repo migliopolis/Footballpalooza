@@ -50,7 +50,9 @@ window.FBPBeta = (function () {
     if (!r.length) return '<p class="bc-none">No NFL games yet.</p>';
     return `<table class="bc-tbl"><thead><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${r.map(x => `<tr>${x.map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
   }
-  function card(c) {
+  // arch: his archetypes [{l, why, ic, ex}] (assets/rosters.js): icons on the front, explained on the back
+  function card(c, arch) {
+    arch = arch || [];
     const t = tier(c.o), tm = (T && T[c.tm]) || {}, logo = tm.logo || '', color = tm.color || '#3a4350';
     const parts = c.n.split(' '), first = parts[0], last = parts.slice(1).join(' ');
     const ft = fbpTeam(c), fname = ft ? (X.nameOf ? X.nameOf(ft.id) : c.f) : 'Free agent';
@@ -71,7 +73,7 @@ window.FBPBeta = (function () {
      ${flames}
      <img class="bc-head" src="${head(c.e)}" alt="" loading="lazy">
      <div class="bc-shine"></div>
-     <div class="bc-ovr"><b>${c.o}</b><span>${c.p}</span></div>
+     <div class="bc-ovr"><b>${c.o}</b><span>${c.p}</span>${arch.length ? `<div class="bc-arch">${arch.map(a => `<i title="${esc(a.l)}" aria-label="${esc(a.l)}">${a.ic}</i>`).join('')}</div>` : ''}</div>
      <div class="bc-tr">${c.j ? `<div class="bc-num">${esc(c.j)}</div>` : ''}${ft && ft.logo ? `<img class="bc-fbp" src="${esc(ft.logo)}" alt="${esc(fname)}" title="${esc(fname)}" loading="lazy">` : ''}</div>
      <div class="bc-plate">${ribbon || heat ? `<div class="bc-badges">${ribbon}${heat}</div>` : ''}<div class="bc-nm">${logo ? `<img src="${esc(logo)}" alt="${esc(c.tm)}" loading="lazy">` : ''}<div><span class="bc-first">${esc(first)}</span><span class="bc-last">${esc(last)}</span></div></div>
        <div class="bc-tag"><span>${esc(c.dev || '')}</span><span>${c.p}${c.r || ''} · ${esc(fname)}</span></div>
@@ -81,7 +83,7 @@ window.FBPBeta = (function () {
      <div class="bc-bh">${c.j ? `<span class="bc-bn">${esc(c.j)}</span>` : ''}<div><b>${esc(c.n)}</b><small>${c.p} · ${esc(tm.name || c.tm || '')}</small><small>FBP: ${esc(fname)}${ft && c.sal != null ? ' · $' + Math.round(c.sal) : ''}</small></div>${ft && ft.logo ? `<img class="bc-bfbp" src="${esc(ft.logo)}" alt="" loading="lazy">` : ''}</div>
      <div class="bc-bio"><div>Ht <b>${ht(c.ht)}</b></div><div>Wt <b>${esc(c.wt || '–')}</b></div><div>Age <b>${c.age == null ? '–' : Math.floor(c.age)}</b></div>
        <div>40 <b>${esc(c.fo || '–')}</b></div><div class="bc-span">${dr}${c.col ? ' · ' + esc(String(c.col).split(';')[0]) : ''}</div></div>
-     <div class="bc-body"><div class="bc-sec">Season by season</div>${table(c)}
+     <div class="bc-body">${arch.length ? `<div class="bc-sec">Player type</div><div class="bc-types">${arch.map(a => `<div><span class="bc-ti" aria-hidden="true">${a.ic}</span><div><b>${esc(a.l)}</b> <small>${esc(a.why)}</small><p>${esc(a.ex)}</p></div></div>`).join('')}</div>` : ''}<div class="bc-sec">Season by season</div>${table(c)}
      <div class="bc-sec">Physical</div><div class="bc-bars">${['SPD', 'EXP', 'AGI'].map(k => bar(k, (c.ph || {})[k])).join('')}</div>
      <div class="bc-sec">Skills</div><div class="bc-bars">${sk.map(k => bar(k, c.sk[k])).join('')}</div>
      <div class="bc-sec">Production</div><div class="bc-bars">${['PRD', 'CEI', 'CON', 'DUR'].map(k => bar(k, (c.sub || {})[k])).join('')}</div></div>
@@ -254,6 +256,25 @@ window.FBPBeta = (function () {
     });
   }
 
+  // one player's card for his roster box (Rosters > Player Card). Loads the card data the first time; ctx.rerender redraws.
+  function cardFor(id, ctx, arch) {
+    X = ctx;
+    if (!D) { load(); return failed ? '<p class="ro-wait">The card data didn’t load.</p>' : '<p class="ro-wait">Loading his card…</p>'; }
+    const c = D.cards.find(x => String(x.id) === String(id));
+    return c ? card(c, arch) + '<p class="ro-bnote bc-hint">Tap the card to flip it. Ratings are the Beta prototype.</p>' : '<p class="ro-wait">No card for him yet: cards cover quarterbacks, running backs, receivers and tight ends with NFL games.</p>';
+  }
+  // the roster box's card: tap to flip, tilt with the mouse
+  document.addEventListener('click', e => { const t = e.target.closest && e.target.closest('.ro-pcard .bc-tilt'); if (t) flip(t); });
+  document.addEventListener('keydown', e => { if (e.key !== 'Enter' && e.key !== ' ') return; const t = e.target.closest && e.target.closest('.ro-pcard .bc-tilt'); if (t) { e.preventDefault(); flip(t); } });
+  document.addEventListener('pointermove', e => {
+    const el = e.target.closest && e.target.closest('.ro-pcard .bc-tilt'); if (!el || reduce() || e.pointerType === 'touch') return;
+    const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    el.style.setProperty('--ry', ((x - .5) * 22) + 'deg'); el.style.setProperty('--rx', ((.5 - y) * 18) + 'deg');
+    el.style.setProperty('--gx', (x * 100) + '%'); el.style.setProperty('--gy', (y * 100) + '%'); el.classList.add('moving');
+  });
+  document.addEventListener('pointerout', e => { const el = e.target.closest && e.target.closest('.ro-pcard .bc-tilt');
+    if (el && !el.contains(e.relatedTarget)) { el.style.setProperty('--ry', '0deg'); el.style.setProperty('--rx', '0deg'); el.classList.remove('moving'); } });
+
   function after() {
     if (sub() === 'trade') { if (window.FBPTrade) FBPTrade.after(); return; }
     const page = document.querySelector('.bc-page'); if (!page || !D) return;
@@ -291,5 +312,5 @@ window.FBPBeta = (function () {
     }
   }
 
-  return { render, after };
+  return { render, after, cardFor };
 })();
