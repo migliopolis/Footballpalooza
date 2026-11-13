@@ -1,78 +1,25 @@
 {
- "run": "2026-10-25T03:50:23+00:00",
+ "run": "2026-11-13T20:24:17+00:00",
  "results": {
-  "dynasty-superflex": {
+  "players": {
    "ok": true,
-   "status": 200,
-   "fetched": "2026-10-25T03:50:23+00:00",
-   "players": 10,
-   "sample": [
-    "Josh Allen",
-    "Lamar Jackson",
-    "Drake Maye"
-   ],
-   "request": {
-    "path": "/nfl/2026/consensus-rankings",
-    "position": "OP",
-    "type": "DYNASTY",
-    "scoring": "PPR"
-   }
+   "matched": 4172
   },
-  "dynasty-overall": {
+  "dynasty-ecr": {
    "ok": true,
-   "status": 200,
-   "fetched": "2026-10-25T03:50:23+00:00",
-   "players": 10,
-   "sample": [
-    "Ja'Marr Chase",
-    "Jaxon Smith-Njigba",
-    "Jahmyr Gibbs"
-   ],
-   "request": {
-    "path": "/nfl/2026/consensus-rankings",
-    "position": "ALL",
-    "type": "DYNASTY",
-    "scoring": "PPR"
-   }
+   "players": 482,
+   "matched": 481,
+   "updated": "2026-11-13"
   },
-  "rookies": {
+  "ros-ecr": {
    "ok": true,
-   "status": 200,
-   "fetched": "2026-10-25T03:50:23+00:00",
-   "players": 0,
-   "sample": [],
-   "request": {
-    "path": "/nfl/2027/consensus-rankings",
-    "position": "ALL",
-    "type": "ROOKIES",
-    "scoring": "PPR"
-   }
+   "players": 410,
+   "matched": 410,
+   "updated": "2026-11-13"
   },
-  "rookies-superflex": {
-   "ok": true,
-   "status": 200,
-   "fetched": "2026-10-25T03:50:23+00:00",
-   "players": 0,
-   "sample": [],
-   "request": {
-    "path": "/nfl/2027/consensus-rankings",
-    "position": "OP",
-    "type": "ROOKIES",
-    "scoring": "PPR"
-   }
-  },
-  "ros-superflex": {
-   "ok": true,
-   "status": 200,
-   "fetched": "2026-10-25T03:50:23+00:00",
-   "players": 0,
-   "sample": [],
-   "request": {
-    "path": "/nfl/2026/consensus-rankings",
-    "position": "OP",
-    "type": "ROS",
-    "scoring": "PPR"
-   }
+  "rookies-ecr": {
+   "ok": false,
+   "error": "ValueError: only 0 players came back"
   }
  }
 }
