@@ -2630,3 +2630,12 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .tt-tr{margin:4px 0 2px 2px;font-size:.8rem;color:var(--muted)}
 .tt-pc{display:inline-block;font-size:.68rem;font-weight:700;padding:0 6px;border-radius:999px;background:var(--sky-soft);color:var(--fg)}
 .tt-they{margin:2px 0 2px 2px;font-size:.76rem;color:var(--muted)}.tt-they b{font-weight:600;color:var(--fg)}
+
+/* Rosters: award chips stacked beside the name; the Trend arrow */
+.ro-nmw{display:flex;align-items:center;gap:6px}
+.ro-nmt{min-width:0}
+.ro-aws{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:none}
+.ro-aws .ro-chip{margin-left:0}
+.ro-tr{width:1px}
+.ro-trd{display:inline-block;min-width:1.4em;font-weight:800;font-size:1rem;line-height:1;cursor:help;color:var(--muted)}
+.ro-trd.up2{color:#178a3e}.ro-trd.up{color:#2fa85a}.ro-trd.dn{color:#d0603a}.ro-trd.dn2{color:#c0392b}

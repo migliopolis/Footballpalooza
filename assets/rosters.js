@@ -139,9 +139,25 @@ window.FBPRosters = (function () {
   // L3: his average over his last three games, skipping his bye week (fewer if he has played fewer)
   const l3 = r => { const w = Object.entries(r.wsc || {}).filter(([k]) => +k !== +r.bye).sort((a, b) => b[0] - a[0]).slice(0, 3);
     return w.length ? w.reduce((s, x) => s + x[1], 0) / w.length : null; };
+  // Trend: which way he's heading. His last three games against his season average (60%), and MFL's projection for
+  // this week against that average (40%; left out on his bye or with no projection), as a share of his average
+  // (at least 4 points, so a few points off a tiny average isn't a big swing). Needs three games.
+  const trend = r => {
+    const w = Object.entries(r.wsc || {}).filter(([k]) => +k !== +r.bye); if (w.length < 3) return null;
+    const avg = w.reduce((s, x) => s + x[1], 0) / w.length, l = l3(r);
+    const pj = r.proj != null && +r.bye !== +R.projWeek ? +r.proj : null, base = Math.max(avg, 4);
+    const s = (pj != null ? 0.6 * (l - avg) + 0.4 * (pj - avg) : l - avg) / base;
+    return { s, avg, l, pj };
+  };
+  const TREND = [[0.3, '⇈', 'up2', 'Surging'], [0.12, '↗', 'up', 'Trending up'], [-0.12, '→', 'eq', 'Holding steady'], [-0.3, '↘', 'dn', 'Trending down'], [-Infinity, '⇊', 'dn2', 'Sliding']];
+  const trendCell = r => { const t = trend(r); if (!t) return '<td class="c ro-tr"><span class="ro-trd">—</span></td>';
+    const [, ic, c, lab] = TREND.find(([min]) => t.s >= min);
+    const tip = `${lab}: last 3 games ${t.l.toFixed(1)} a game against a ${t.avg.toFixed(1)} season average${t.pj != null ? `; projected ${t.pj.toFixed(1)} for week ${R.projWeek}` : ''}`;
+    return `<td class="c ro-tr"><span class="ro-trd ${c}" title="${tip}" aria-label="${tip}">${ic}</span></td>`; };
   // sortable columns: key, label, value (text sorts A to Z first; missing values sink)
   const cols = () => [
     ['name', 'Player', r => r.name],
+    ['tr', 'Trend', r => { const t = trend(r); return t ? t.s : null; }],
     ['pts', 'Pts', r => r.pts],
     ['ppw', 'Pts/wk', r => r.gp ? r.pts / r.gp : null],
     ['l3', 'L3', r => l3(r)],
@@ -451,21 +467,22 @@ window.FBPRosters = (function () {
       // the roster already groups him under Injured reserve, so his FBP IR slot gets no chip here; any NFL injury chip stays
       const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : '';
       const aw = (r.hon || []).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
+      const aws = aw ? `<span class="ro-aws">${aw}</span>` : '';   // award chips stack one above the other, beside the name
       // defenses get their NFL team's logo; players their ESPN headshot
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
         : r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png),var(--med,none)"` : '';
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>
-        <td class="l ro-nm"><b>${esc(r.name)}</b>${injChip(r)}${chip}${aw}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></td>
-        <td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td>${l3(r) != null ? l3(r).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
+        <td class="l ro-nm"><span class="ro-nmw"><span class="ro-nmt"><b>${esc(r.name)}</b>${injChip(r)}${chip}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}</small></span>${aws}</span></td>
+        ${trendCell(r)}<td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td>${l3(r) != null ? l3(r).toFixed(1) : '—'}</td><td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td class="c">${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
         ${isOpen ? `<tr class="ro-det"><td colspan="${NC}">${box(r, t, ctx)}</td></tr>` : ''}`;
     };
     const grp = (label, list) => list.length ? `<tr class="ro-grp"><td colspan="${NC}"><span>${label} · ${list.length} · ${$(list.reduce((s, r) => s + r.sal, 0))}</span></td></tr>` + sorted(list).map(row).join('') : '';
     const head = C.map(([k, l]) => { const on = sort[0] === k;
-      return `<th class="ro-sort${k === 'name' ? ' l' : ''}${k === 'sal' ? ' gap' : ''}${k === 'proj' || k === 'o0' || k === 'o1' ? ' c' : ''}" data-ro-sort="${k}" aria-sort="${on ? (sort[1] < 0 ? 'descending' : 'ascending') : 'none'}">${l}${on ? (sort[1] < 0 ? ' ▼' : ' ▲') : ''}</th>`; }).join('');
+      return `<th class="ro-sort${k === 'name' ? ' l' : ''}${k === 'sal' ? ' gap' : ''}${k === 'proj' || k === 'o0' || k === 'o1' || k === 'tr' ? ' c' : ''}" data-ro-sort="${k}" aria-sort="${on ? (sort[1] < 0 ? 'descending' : 'ascending') : 'none'}">${l}${on ? (sort[1] < 0 ? ' ▼' : ' ▲') : ''}</th>`; }).join('');
     const top = rows.slice().sort((a, b) => b.sal - a.sal)[0];
     const F = t.face, n = (t.weeks || []).length;
     const faceLine = F ? [`${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''}`, `${F.starts} starts`,
@@ -491,7 +508,7 @@ window.FBPRosters = (function () {
         <div class="tbl-wrap ro-wrap"><table class="ro-t"><thead><tr><th class="ro-ph"></th>${head}</tr></thead>
         <tbody>${POS.map(p => grp(GRP[p], act.filter(r => r.pos === p))).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody>
         <tfoot><tr><td class="ro-ph"></td><td class="l">Total</td><td>${rows.reduce((s, r) => s + r.pts, 0).toFixed(1)}</td><td></td><td></td><td></td><td></td><td></td><td class="gap">${$(pay)}</td><td></td>${[0, 1, 2, 3, 4].map(k => `<td>${yr(k) ? $(yr(k)) : ''}</td>`).join('')}</tr></tfoot></table></div>
-        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
+        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Trend weighs his last three games against his season average, along with MFL’s projection for this week (⇈ surging, ↗ up, → steady, ↘ down, ⇊ sliding; tap it for the numbers); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
       <p class="rf-foot">Through week ${R.through}. Face of the Franchise: the current player with the most history on this team, counting starts, seasons, All-FBP teams, MVPs, Rookie of the Year and championships, across every stint.</p>`;
   }
 

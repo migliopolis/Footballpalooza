@@ -91,7 +91,7 @@ def honors_now(aw):
         for x in af.get(k, []):
             if x.get('player'):
                 H[x['player']['id']].append([l, c, f'All-FBP {l}'])
-    potw = collections.Counter()
+    potw = collections.defaultdict(list)
     for a in (aw or {}).get('awards', []):
         if a.get('key') in P_AWARDS and a.get('list'):
             H[a['list'][0]['id']].append(P_AWARDS[a['key']] + [f"{a.get('title', '')}: {a.get('why', '')}"])
@@ -103,9 +103,11 @@ def honors_now(aw):
         if a.get('key') == 'week':
             for w, L in (a.get('weeks') or {}).items():
                 if L:
-                    potw[L[0]['id']] += 1
-    for pid, n in potw.items():
-        H[pid].append(['POTW' + (f' ×{n}' if n > 1 else ''), 'good', f'Player of the Week {n} time' + ('s' if n > 1 else '')])
+                    potw[L[0]['id']].append(int(w))
+    # POTW:5 (or POTW:3,7 for more than one), the weeks he won it
+    for pid, ws in potw.items():
+        ws = sorted(ws)
+        H[pid].append(['POTW:' + ','.join(map(str, ws)), 'good', 'Player of the Week, week' + ('s ' if len(ws) > 1 else ' ') + ', '.join(map(str, ws))])
     return H
 
 
