@@ -24,7 +24,7 @@ window.FBPRankings = (function () {
   const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar', LAR: 'lar' };
   const nflLogo = t => t && t !== 'FA' ? `<img class="rk-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${esc(t)}" loading="lazy">` : '';
   const MINJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'IR': 'IR', 'IR-R': 'IR', 'IR-PUP': 'PUP', 'IR-NFI': 'IR', 'Suspended': 'SUS' };
-  const LISTS = [['dyn', 'Dynasty'], ['ros', 'Rest of season'], ['rook', 'Rookies'], ['tv', 'FBP Trade Value']];
+  const LISTS = [['dyn', 'Dynasty'], ['ros', '<span class="lg-o">Rest of season</span><span class="sm-o">ROS</span>'], ['rook', 'Rookies'], ['tv', '<span class="lg-o">FBP </span>Trade Value']];
   const POSL = [['', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['DEF', 'DEF']];
   const heatK = h => h == null ? '' : h >= 6 ? 'h3' : h >= 3 ? 'h2' : h > 0 ? 'h1' : h === 0 ? 'z' : h > -3 ? 'c1' : h > -6 ? 'c2' : 'c3';
   const ovrK = o => o == null ? '' : o >= 90 ? 'holo' : o >= 80 ? 'gold' : o >= 70 ? 'silver' : 'bronze';
