@@ -4,13 +4,13 @@
    The upcoming week's NFL opponent comes from ESPN's scoreboard. Tap a team logo up top to highlight its players. */
 window.FBPStats = (function () {
   let S = null, A = null, failed = false, loading = false, X = null, opp = null, oppWk = 0;
-  const F = { top: 50, pos: '', from: 1, to: 0, who: '', st: false };   // st: Starters, only weeks he was in an FBP starting lineup
+  const F = { top: 50, pos: '', from: 1, to: 0, who: [], st: false };   // who: any of 'fa', 'ro', 'team', each turned on and off on its own; none = everyone   // st: Starters, only weeks he was in an FBP starting lineup
   let hl = '', hlSeed = null;   // hlSeed: the default team last applied, so a new default re-highlights   // the team whose players are highlighted (tap a logo; tap again to clear)
   let sort = ['pts', -1];
   let q = '';   // the player search; not saved, and it looks past the Top limit
   const fold = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, '');
   try { Object.assign(F, JSON.parse(localStorage.getItem('fbp-stats') || '{}')); } catch (e) {}
-  if (!['', 'fa', 'ro', 'team'].includes(F.who)) F.who = '';
+  F.who = (Array.isArray(F.who) ? F.who : F.who ? [F.who] : []).filter(v => ['fa', 'ro', 'team'].includes(v));
   F.st = !!F.st;
   const save = () => { try { localStorage.setItem('fbp-stats', JSON.stringify(F)); } catch (e) {} };
   const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
@@ -48,7 +48,7 @@ window.FBPStats = (function () {
     const HV = { N: 3, H: 1, C: -1, B: -2, W: -3 };
     const team = f => ctx.teams[f] || {};
     let rows = S.rows.filter(r => !F.pos || (F.pos === 'FLEX' ? ['RB', 'WR', 'TE'].includes(r.p) : r.p === F.pos))
-      .filter(r => !F.who || (F.who === 'ro' ? r.f : F.who === 'fa' ? !r.f : F.who === 'team' ? !hl || r.f === hl : r.f === F.who))
+      .filter(r => !F.who.length || F.who.some(w => w === 'ro' ? r.f : w === 'fa' ? !r.f : !hl || r.f === hl))   // shown if it matches any button that's on
       .filter(r => { const t = fold(q).split(' ').filter(Boolean); if (!t.length) return true; const n = fold(r.n); return t.every(x => n.includes(x)); })
       .map(r => { const on = i => (r.s || '')[i] === '1';
         const sc = wi.map(([, i]) => F.st && !on(i) ? null : r.w[i]), gs = wi.filter(([, i]) => on(i)).length;
@@ -71,7 +71,7 @@ window.FBPStats = (function () {
       <label>Weeks ${sel('from', wkOpts, from)} to ${sel('to', wkOpts, to)}</label>
     </div>
     <div class="st-row2"><div class="seg pl-show st-who" role="tablist" aria-label="Which players">${[['', 'All players'], ['fa', 'Free agents'], ['ro', 'Rostered'], ['team', hl ? (team(hl).abbr || hl) : 'Selected team']].map(([v, l]) =>
-      `<button type="button" role="tab" data-st-who="${v}" aria-selected="${F.who === v}"${v === 'team' ? ` title="${hl ? esc(team(hl).name || hl) + '’s players' : 'Pick a team from the logos above'}"` : ''}>${v === 'team' && hl && team(hl).logo ? `<img class="st-wl" src="${team(hl).logo}" alt="">` : ''}${esc(l)}</button>`).join('')}</div>
+      `<button type="button" role="tab" data-st-who="${v}" aria-selected="${v ? F.who.includes(v) : !F.who.length}"${v === 'team' ? ` title="${hl ? esc(team(hl).name || hl) + '’s players' : 'Pick a team from the logos above'}"` : ''}>${v === 'team' && hl && team(hl).logo ? `<img class="st-wl" src="${team(hl).logo}" alt="">` : ''}${esc(l)}</button>`).join('')}</div>
     <button type="button" class="st-stb" data-st-starts aria-pressed="${F.st}" title="Count only the weeks he was in an FBP starting lineup">Starters</button></div>`;
     const me = hl;
     const picker = `<div class="st-pick" role="group" aria-label="Highlight a team’s players">${Object.keys(ctx.teams).sort((a, b) => (team(a).abbr || '').localeCompare(team(b).abbr || '')).map(f =>
@@ -101,7 +101,7 @@ window.FBPStats = (function () {
 
   document.addEventListener('click', e => {
     const wb = e.target.closest && e.target.closest('[data-st-who]');
-    if (wb) { F.who = wb.dataset.stWho; save(); return redraw(); }
+    if (wb) { const v = wb.dataset.stWho; F.who = !v ? [] : F.who.includes(v) ? F.who.filter(x => x !== v) : F.who.concat(v); save(); return redraw(); }
     if (e.target.closest && e.target.closest('[data-st-starts]')) { F.st = !F.st; save(); return redraw(); }
     const b = e.target.closest && e.target.closest('[data-st-hl]');
     if (b) { hl = hl === b.dataset.stHl ? '' : b.dataset.stHl; return redraw(); }

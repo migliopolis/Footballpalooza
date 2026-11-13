@@ -1,4 +1,5 @@
-"""Player Value and Trade Value for every rostered player and rookie pick: data/values.json.
+"""Player Value and Trade Value for every rostered player and rookie pick: data/values.json; and data/rankings.json
+(League Now > Rankings: every ranked or rostered player, see rankings() below).
 
 Player Value (PV, 1-9999): ability, potential and production, nothing about money. From FantasyPros' dynasty consensus
 rank (data/fantasypros/dynasty-ecr.json, from the daily FantasyPros pull): 9999 for the top player, sliding down a curve
@@ -147,8 +148,57 @@ def main():
     with open(D('values.json'), 'w') as fh:
         json.dump(out, fh, separators=(',', ':'), ensure_ascii=False)
         fh.write('\n')
+    rankings(rows, E, season)
     best = sorted(rows.values(), key=lambda r: -r['tv'])[:5]
     print(f"values: {len(rows)} players, {len(picks)} picks; top trade values: " + ', '.join(f"{r['n']} {r['tv']}" for r in best))
+
+
+def rankings(rows, E, season):
+    """data/rankings.json for League Now > Rankings: every player FantasyPros ranks (dynasty or rest of season) plus
+    everyone on an FBP roster, with his FBP team and contract, Player Value (everyone ranked) and Trade Value
+    (rostered players: a free agent has no FBP contract yet), the Player Card OVR, Heat Check score and FBP points."""
+    ROS = (load(D('fantasypros', 'ros-ecr.json'), {}) or {}).get('players') or {}
+    RK = (load(D('fantasypros', 'rookies-ecr.json'), {}) or {}).get('players') or {}
+    MP = load(D('mfl', 'players.json'), {}) or {}
+    mf = {k: dict(zip(MP.get('fields') or [], v)) for k, v in (MP.get('players') or {}).items()}
+    S = {r['id']: r for r in ((load(D('stats.json'), {}) or {}).get('rows') or [])}
+    H = (load(D('analytics.json'), {}) or {}).get('heatPlayers') or {}
+    C = {c['id']: c for c in ((load(D('beta-cards.json'), {}) or {}).get('cards') or [])}
+    now = datetime.now(timezone.utc).timestamp()
+    out = []
+    for pid in set(E) | set(ROS) | set(rows) | set(RK):
+        m = mf.get(pid) or {}
+        if not m and pid not in rows:
+            continue
+        pos = {'Def': 'DEF', 'PK': 'K'}.get(m.get('position'), m.get('position')) or (rows.get(pid) or {}).get('pos')
+        if pos not in ('QB', 'RB', 'WR', 'TE', 'DEF'):
+            continue
+        n = m.get('name') or (rows.get(pid) or {}).get('n') or pid
+        if ', ' in n:
+            last, first = n.split(', ', 1)
+            n = f'{first} {last}' if pos != 'DEF' else f'{last} {first}'
+        try:
+            age = round((now - int(m['birthdate'])) / 31557600, 1) if m.get('birthdate') else None
+        except ValueError:
+            age = None
+        st, r, c, h = S.get(pid) or {}, rows.get(pid), C.get(pid) or {}, H.get(pid)
+        w = [x for x in (st.get('w') or []) if x is not None]
+        d = E.get(pid)
+        out.append({'id': pid, 'n': n, 'pos': pos, 'nfl': m.get('team') or st.get('t') or '', 'age': age,
+                    'dy': int(m['draft_year']) if (m.get('draft_year') or '').isdigit() else None, 'e': m.get('espn_id') or st.get('e') or '',
+                    'f': r['f'] if r else st.get('f') or '', 'st': r['st'] if r else '', 'sal': r['sal'] if r else None, 'cy': st.get('cy') or '',
+                    'd': d, 'r': ROS.get(pid), 'rk': RK.get(pid),
+                    'pv': round(pv_of(d[0])) if d else (r['pv'] if r else None), 'tv': r['tv'] if r else None,
+                    'o': c.get('o'), 'h': h['s'] if h else None, 'gp': len(w), 'pts': round(sum(w), 1), 'ppg': round(sum(w) / len(w), 1) if w else None})
+    out.sort(key=lambda x: ((x['d'] or [9999])[0], (x['r'] or [9999])[0]))
+    with open(D('rankings.json'), 'w') as fh:
+        json.dump({'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': season,
+                   'dynUpdated': (load(D('fantasypros', 'dynasty-ecr.json'), {}) or {}).get('updated'),
+                   'rosUpdated': (load(D('fantasypros', 'ros-ecr.json'), {}) or {}).get('updated'),
+                   'rookUpdated': (load(D('fantasypros', 'rookies-ecr.json'), {}) or {}).get('updated'),
+                   'players': out}, fh, separators=(',', ':'), ensure_ascii=False)
+        fh.write('\n')
+    print(f'rankings: {len(out)} players')
 
 
 if __name__ == '__main__':

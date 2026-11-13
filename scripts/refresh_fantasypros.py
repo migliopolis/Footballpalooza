@@ -7,7 +7,7 @@ Docs: https://api.fantasypros.com/public/v2/docs
 
 FantasyPros' terms don't allow redistributing their raw data, and this repo is public, so the raw responses are
 not saved. What is saved is each list as ranks keyed by MFL player id, which is all the site needs:
-  dynasty-ecr.json  dynasty overall (PPR): {mfl_id: [overall rank, position rank]}   Player Value, Trade Value
+  dynasty-ecr.json  dynasty overall (PPR): {mfl_id: [overall rank, position rank, tier]}   Player Value, Rankings
   ros-ecr.json      rest of season overall (PPR): same shape                          Rosters ECR column, Trend
   rookies-ecr.json  next year's rookie class: same shape                              (rookie pricing, Big Board)
 FantasyPros ids are matched to MFL ids with their own player list (external_ids=mfl). A list that fails or comes
@@ -69,13 +69,13 @@ def main():
                 m = ids.get(str(p.get('player_id')))
                 if m and p.get('rank_ecr'):
                     pr = re.sub(r'\D', '', str(p.get('pos_rank') or ''))
-                    out[m] = [int(p['rank_ecr']), int(pr) if pr else None]
+                    out[m] = [int(p['rank_ecr']), int(pr) if pr else None, p.get('tier')]
             if len(rows) < 50:   # the free key's 10-row lists, or a bad answer: keep what we had
                 raise ValueError(f'only {len(rows)} players came back')
             upd = d.get('last_updated') or ''
             mm, dd = (upd.split('/') + [''])[:2]
             when = f'{SEASON if int(mm or 1) >= 3 else SEASON + 1}-{int(mm):02d}-{int(dd):02d}' if mm and dd else meta['run'][:10]
-            json.dump({'note': f'{note}, matched to MFL ids: [overall rank, position rank]. From the FantasyPros API (data © FantasyPros).',
+            json.dump({'note': f'{note}, matched to MFL ids: [overall rank, position rank, tier]. From the FantasyPros API (data © FantasyPros).',
                        'updated': when, 'experts': d.get('total_experts'), 'players': dict(sorted(out.items(), key=lambda x: x[1][0]))},
                       open(os.path.join(OUT, name + '.json'), 'w'), separators=(',', ':'), ensure_ascii=False)
             meta['results'][name] = {'ok': True, 'players': len(rows), 'matched': len(out), 'updated': when}

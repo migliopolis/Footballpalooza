@@ -2933,3 +2933,54 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .vl-ls a,.vl-ls li > span:nth-child(2){color:var(--fg);text-decoration:none;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vl-pos{font:700 .58rem var(--body);padding:2px 5px;border-radius:3px;background:color-mix(in srgb,var(--pc) 20%,transparent)}
 .vl-ls b{font:700 .84rem var(--mono);color:var(--pc);min-width:3.6em;text-align:right}
+
+/* ---------- League Now > Rankings (assets/rankings.js) ---------- */
+.rk-page{display:flex;flex-direction:column;gap:10px;min-width:0}
+.rk-lists{max-width:640px}
+.rk-ctl{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.rk-pos{max-width:380px}
+.rk-who{display:flex;gap:4px}
+.rk-who button{display:inline-flex;align-items:center;gap:5px}
+.rk-who img{width:16px;height:16px;object-fit:contain}
+.rk-who button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.rk-team{font:600 .8rem var(--body);padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);max-width:180px}
+.rk-q{max-width:220px}
+.rk-sub{margin:0;font-size:.8rem;color:var(--muted)}
+.rk-wrap{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.rk-t{border-collapse:collapse;min-width:100%;font-size:.84rem}
+.rk-t th{font:600 .62rem var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 6px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--surface);z-index:2}
+.rk-t th.rk-s{cursor:pointer}
+.rk-t th.l,.rk-t td.l{text-align:left}
+.rk-t th.c,.rk-t td.c{text-align:center}
+.rk-t td{padding:5px 6px;text-align:right;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent);vertical-align:middle;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rk-t td.rk-n{font:700 .78rem var(--mono);color:var(--muted);width:2.6em}
+.rk-pl{position:sticky;left:0;background:var(--surface);z-index:1;min-width:170px}
+.rk-t td.rk-pl{display:flex;align-items:center;gap:8px}
+.rk-ph span{display:block;width:34px;height:34px;border-radius:50%;background:var(--line) center/cover no-repeat}
+.rk-ph span.rk-def{background-size:80%;background-color:transparent}
+.rk-nm b{font-weight:600}
+.rk-nm b a{color:var(--fg);text-decoration:none}
+.rk-nm small{display:flex;align-items:center;gap:4px;font-size:.68rem;color:var(--muted);margin-top:1px}
+.rk-pr{font:700 .62rem var(--mono)}
+.rk-nfl{width:16px;height:16px;object-fit:contain}
+.rk-rook{display:inline-block;font:800 .54rem/1 var(--body);padding:2px 4px;border-radius:3px;margin-left:5px;vertical-align:1px;background:#2b6cb0;color:#fff}
+.rk-ft{display:inline-flex;align-items:center;gap:4px;font:600 .72rem var(--mono)}
+.rk-ft img{width:20px;height:20px;object-fit:contain}
+.rk-f small,.rk-sal small{display:block;font-size:.62rem;color:var(--muted)}
+.rk-fa{font:700 .62rem var(--body);letter-spacing:.06em;color:var(--ok);border:1px solid currentColor;border-radius:999px;padding:1px 6px}
+.rk-tv b{display:block}
+.rk-bar{display:block;height:4px;width:70px;margin:3px 0 0 auto;border-radius:2px;background:var(--line);overflow:hidden}
+.rk-bar i{display:block;height:100%;background:var(--accent)}
+.rk-mu{color:var(--muted)}
+.rk-pv{color:var(--muted)}
+.rk-ovr{display:inline-block;min-width:2.2em;text-align:center;font:700 .74rem var(--mono);padding:2px 4px;border-radius:4px}
+.rk-ovr.holo{background:linear-gradient(135deg,#f6d365,#a8edea,#fbc2eb);color:#1a1a1a}
+.rk-ovr.gold{background:#f0c94a;color:#1a1a1a}.rk-ovr.silver{background:#cfd4da;color:#1a1a1a}.rk-ovr.bronze{background:#d7a37a;color:#1a1a1a}
+.rk-t tr.rk-tier td{background:color-mix(in srgb,var(--fg) 5%,var(--surface));font:700 .62rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;padding:5px 8px}
+.rk-t tr.rk-me td{background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.rk-t tr.rk-me td.rk-pl{background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.rk-alt{color:var(--muted)}
+.rk-none{text-align:center!important;color:var(--muted);padding:20px!important}
+.rk-more{align-self:flex-start}
+@media (max-width:640px){.rk-t .hide-sm{display:none}.rk-pl{min-width:150px}.rk-ph span{width:28px;height:28px}.rk-q{max-width:none;flex:1 1 100%}}
+@media (max-width:640px){.rk-ft b{display:none}.rk-t td,.rk-t th{padding:5px 4px}.rk-bar{width:48px}}
