@@ -2638,4 +2638,4 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .ro-aws .ro-chip{margin-left:0}
 .ro-tr{width:1px}
 .ro-trd{display:inline-block;min-width:1.4em;font-weight:800;font-size:1rem;line-height:1;cursor:help;color:var(--muted)}
-.ro-trd.up2{color:#178a3e}.ro-trd.up{color:#2fa85a}.ro-trd.dn{color:#d0603a}.ro-trd.dn2{color:#c0392b}
+.ro-trd.lo{opacity:.5}.ro-trd.up2{color:#178a3e}.ro-trd.up{color:#2fa85a}.ro-trd.dn{color:#d0603a}.ro-trd.dn2{color:#c0392b}

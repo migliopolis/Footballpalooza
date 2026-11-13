@@ -141,16 +141,24 @@ window.FBPRosters = (function () {
     return w.length ? w.reduce((s, x) => s + x[1], 0) / w.length : null; };
   // Trend: which way he's heading. His last three games against his season average (60%), and MFL's projection for
   // this week against that average (40%; left out on his bye or with no projection), as a share of his average
-  // (at least 4 points, so a few points off a tiny average isn't a big swing). Needs three games.
+  // (at least 6 points, so a few points off a tiny average isn't a big swing). The projection can soften the arrow
+  // but never turn it around: a player whose last three games are below his average can't be "up" on projection
+  // alone. Under 6 a game both on the season and lately is too little to read: no arrow. Needs three games.
+  const LOW = 6;
   const trend = r => {
     const w = Object.entries(r.wsc || {}).filter(([k]) => +k !== +r.bye); if (w.length < 3) return null;
     const avg = w.reduce((s, x) => s + x[1], 0) / w.length, l = l3(r);
-    const pj = r.proj != null && +r.bye !== +R.projWeek ? +r.proj : null, base = Math.max(avg, 4);
-    const s = (pj != null ? 0.6 * (l - avg) + 0.4 * (pj - avg) : l - avg) / base;
-    return { s, avg, l, pj };
+    const pj = r.proj != null && +r.bye !== +R.projWeek ? +r.proj : null;
+    if (Math.max(avg, l) < LOW) return { s: null, low: true, avg, l, pj };
+    const a = l - avg, b = pj != null ? pj - avg : null;
+    let v = b != null ? 0.6 * a + 0.4 * b : a;
+    if (b != null && a * b < 0 && v * a < 0) v = 0;
+    return { s: v / Math.max(avg, LOW), avg, l, pj };
   };
   const TREND = [[0.3, '⇈', 'up2', 'Surging'], [0.12, '↗', 'up', 'Trending up'], [-0.12, '→', 'eq', 'Holding steady'], [-0.3, '↘', 'dn', 'Trending down'], [-Infinity, '⇊', 'dn2', 'Sliding']];
   const trendCell = r => { const t = trend(r); if (!t) return '<td class="c ro-tr"><span class="ro-trd">—</span></td>';
+    if (t.low) { const tip = `Too few points to read a trend: ${t.avg.toFixed(1)} a game this season, ${t.l.toFixed(1)} over his last 3`;
+      return `<td class="c ro-tr"><span class="ro-trd lo" title="${tip}" aria-label="${tip}">·</span></td>`; }
     const [, ic, c, lab] = TREND.find(([min]) => t.s >= min);
     const tip = `${lab}: last 3 games ${t.l.toFixed(1)} a game against a ${t.avg.toFixed(1)} season average${t.pj != null ? `; projected ${t.pj.toFixed(1)} for week ${R.projWeek}` : ''}`;
     return `<td class="c ro-tr"><span class="ro-trd ${c}" title="${tip}" aria-label="${tip}">${ic}</span></td>`; };
@@ -508,7 +516,7 @@ window.FBPRosters = (function () {
         <div class="tbl-wrap ro-wrap"><table class="ro-t"><thead><tr><th class="ro-ph"></th>${head}</tr></thead>
         <tbody>${POS.map(p => grp(GRP[p], act.filter(r => r.pos === p))).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody>
         <tfoot><tr><td class="ro-ph"></td><td class="l">Total</td><td>${rows.reduce((s, r) => s + r.pts, 0).toFixed(1)}</td><td></td><td></td><td></td><td></td><td></td><td class="gap">${$(pay)}</td><td></td>${[0, 1, 2, 3, 4].map(k => `<td>${yr(k) ? $(yr(k)) : ''}</td>`).join('')}</tr></tfoot></table></div>
-        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Trend weighs his last three games against his season average, along with MFL’s projection for this week (⇈ surging, ↗ up, → steady, ↘ down, ⇊ sliding; tap it for the numbers); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
+        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Trend weighs his last three games against his season average, along with MFL’s projection for this week (⇈ surging, ↗ up, → steady, ↘ down, ⇊ sliding; a dot means too few points to read, under 6 a game; tap it for the numbers); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
       <p class="rf-foot">Through week ${R.through}. Face of the Franchise: the current player with the most history on this team, counting starts, seasons, All-FBP teams, MVPs, Rookie of the Year and championships, across every stint.</p>`;
   }
 
