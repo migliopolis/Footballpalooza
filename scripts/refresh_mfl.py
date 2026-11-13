@@ -341,6 +341,18 @@ def main():
     except Exception as e:
         print(f'  FAIL {e}  (kept the previous file)')
     time.sleep(1.1)
+    # MFL's injury report (the league's own designations: Questionable, Out, IR...). Rosters shows these chips,
+    # with ESPN's report as the fallback. Served only from api.myfantasyleague.com. Retired players dropped.
+    try:
+        inj = fetch('injuries', host='api.myfantasyleague.com')
+        L = [x for x in ((inj.get('injuries') or {}).get('injury') or []) if isinstance(x, dict) and x.get('status') != 'RETIRED']
+        inj['injuries']['injury'] = L
+        inj['fetched'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+        save('injuries', inj)
+        print(f'  ok   injuries ({len(L)})')
+    except Exception as e:
+        print(f'  FAIL {e}  (kept the previous file)')
+    time.sleep(1.1)
     if players_stale():
         # MFL serves the player list only from api.myfantasyleague.com. DETAILS=1 adds the
         # ESPN id (player photos), the SportsData id, NFL draft slot, college and birthdate.

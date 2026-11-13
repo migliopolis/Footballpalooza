@@ -2632,9 +2632,13 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .tt-they{margin:2px 0 2px 2px;font-size:.76rem;color:var(--muted)}.tt-they b{font-weight:600;color:var(--fg)}
 
 /* Rosters: award chips stacked beside the name; the Trend arrow */
-.ro-nmw{display:flex;align-items:center;gap:6px}
-.ro-nmt{min-width:0}
-.ro-aws{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:none}
+/* name, then award chips to its right on the top line; the second line (position, team, age, archetypes) runs under
+   both. Two chips stack, unless the second line is too long to leave room under the first (then side by side: .inl) */
+.ro-nmw{display:grid;grid-template-columns:max-content max-content;column-gap:6px;align-items:center;justify-content:start}
+.ro-n1{grid-column:1;grid-row:1;white-space:nowrap}
+.ro-n2{grid-column:1 / -1;grid-row:2;width:max-content;max-width:100%}
+.ro-aws{grid-column:2;grid-row:1;display:flex;flex-direction:row;gap:3px;align-items:center;flex:none}
+.ro-nmw.two:not(.inl) .ro-aws{grid-row:1 / span 2;flex-direction:column;align-items:flex-start;gap:2px}
 .ro-aws .ro-chip{margin-left:0}
 .ro-tr{width:1px}
 .ro-trd{display:inline-block;min-width:1.4em;font-weight:800;font-size:1rem;line-height:1;cursor:help;color:var(--muted)}

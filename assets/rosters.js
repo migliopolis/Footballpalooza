@@ -140,7 +140,15 @@ window.FBPRosters = (function () {
   }
   // All-FBP 1st or 2nd Team this season: a gold or silver photo
   const medalOf = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : '';
-  const injChip = r => { if (!r.espn) return ''; const i = injMap()[r.espn], t = i && INJ[i.status]; if (!t) return '';
+  // MFL's injury report first (data/mfl/injuries.json, the league's own designations); ESPN's when that isn't there yet
+  const MINJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'IR': 'IR', 'IR-R': 'IR', 'IR-PUP': 'PUP', 'IR-NFI': 'IR', 'Suspended': 'SUS', 'Holdout': 'HO' };
+  const mflInj = () => { const j = espn('MINJ', 'data/mfl/injuries.json'); if (!j || j.failed) return null;
+    if (!j._m) { j._m = {}; (((j.injuries || {}).injury) || []).forEach(x => { j._m[x.id] = x; }); } return j._m; };
+  const injChip = r => { const M = mflInj();
+    if (M) { const x = M[r.id], t = x && MINJ[x.status]; if (!t) return '';
+      const tip = `${x.status}${x.details ? ': ' + x.details : ''}${x.exp_return ? ' · expected back ' + x.exp_return : ''} (MFL)`;
+      return `<span class="ro-inj" title="${X && X.esc ? X.esc(tip) : tip}">${t}</span>`; }
+    if (!r.espn) return ''; const i = injMap()[r.espn], t = i && INJ[i.status]; if (!t) return '';
     return `<span class="ro-inj" title="${X && X.esc ? X.esc(i.status + (i.note ? ': ' + i.note : '')) : i.status}">${t}</span>`; };
   // L3: his average over his last three games, skipping his bye week (fewer if he has played fewer)
   const l3 = r => { const w = Object.entries(r.wsc || {}).filter(([k]) => +k !== +r.bye).sort((a, b) => b[0] - a[0]).slice(0, 3);
@@ -155,7 +163,9 @@ window.FBPRosters = (function () {
   // who sat out has no line that week). An injured player's last good games aren't a trend, so he gets OUT instead of an
   // arrow. An FBP injured-reserve slot alone doesn't count: a player can be back on the field before he's moved off it.
   const outNow = r => {
-    const i = r.espn && injMap()[r.espn];
+    const M = mflInj(), m = M && M[r.id];
+    if (m && /^(IR|IR-R|IR-PUP|IR-NFI|Suspended)$/.test(m.status)) return `${m.status === 'Suspended' ? 'suspended' : 'on NFL injured reserve'}${m.details ? ' (' + m.details.toLowerCase() + ')' : ''}`;
+    const i = !M && r.espn && injMap()[r.espn];
     if (i && /^(Injured Reserve|Suspension|Physically Unable to Perform)$/.test(i.status)) return 'NFL ' + i.status.toLowerCase();
     const last = +R.through === +r.bye ? R.through - 1 : R.through, ws = Object.keys(r.wsc || {}).map(Number);
     if (ws.length && last && !ws.includes(last)) return `didn’t play in week ${last}` + (r.st === 'INJURED_RESERVE' ? ' (on FBP injured reserve)' : '');
@@ -528,7 +538,7 @@ window.FBPRosters = (function () {
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>
-        <td class="l ro-nm"><span class="ro-nmw"><span class="ro-nmt"><b>${esc(r.name)}</b>${injChip(r)}${chip}<small>${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}${archIcons(r)}</small></span>${aws}</span></td>
+        <td class="l ro-nm"><span class="ro-nmw${(r.hon || []).length > 1 ? ' two' : ''}"><span class="ro-n1"><b>${esc(r.name)}</b>${injChip(r)}${chip}</span>${aws}<small class="ro-n2">${r.pos} · ${r.nfl ? `<span class="ro-nflt" title="${esc(r.nfl)}">${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}</span>` : 'FA'}${r.age ? ' · age ' + r.age : ''}${archIcons(r)}</small></span></td>
         ${trendCell(r)}<td>${r.gp ? r.pts.toFixed(1) : '—'}</td><td>${n ? (r.pts / n).toFixed(1) : '—'}</td><td>${l3(r) != null ? l3(r).toFixed(1) : '—'}</td>${heatCell(r)}<td class="ro-m">${r.ecrPos ? r.pos + r.ecrPos : '—'}</td>
         <td class="ro-m">${r.rk ? r.pos + r.rk : ''}</td><td>${r.bye || '—'}</td><td class="c">${fx(r.proj, 1)}</td>${oppCell(r, R.projWeek)}${oppCell(r, R.projWeek + 1)}
         <td class="gap ro-s">${$(r.sal)}</td><td class="ro-m">${r.cy || '—'}</td>${yrs}</tr>
@@ -541,6 +551,9 @@ window.FBPRosters = (function () {
     const F = t.face, n = (t.weeks || []).length;
     const faceLine = F ? [`${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''}`, `${F.starts} starts`,
       ...Object.entries(F.honors || {}).map(([k, v]) => `${v > 1 ? v + '× ' : ''}${k}`), F.titles ? `${F.titles > 1 ? F.titles + '× ' : ''}champion` : ''].filter(Boolean).join(' · ') : '';
+    // two award chips stack beside the name unless his second line runs under where the first chip sits
+    requestAnimationFrame(() => document.querySelectorAll('.ro-nmw.two').forEach(w => { const a = w.querySelector('.ro-n1'), b = w.querySelector('.ro-n2');
+      if (a && b) w.classList.toggle('inl', b.offsetWidth > a.offsetWidth + 4); }));
     requestAnimationFrame(() => document.querySelectorAll('.ro-tabs').forEach(tl => { const on = tl.querySelector('[aria-selected="true"]');
       if (on && (on.offsetLeft + on.offsetWidth > tl.scrollLeft + tl.clientWidth || on.offsetLeft < tl.scrollLeft)) tl.scrollLeft = on.offsetLeft - 8; }));
     requestAnimationFrame(() => { const el = document.querySelector('.ro-pick'); if (!el) return;
