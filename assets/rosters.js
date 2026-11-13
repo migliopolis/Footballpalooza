@@ -577,7 +577,7 @@ window.FBPRosters = (function () {
   function track() {
     const h = location.hash; if (h === lastH) return;
     const old = lastH; lastH = h;
-    const isR = x => /^#now\/rosters(\/(full|grid|contracts))?$/.test(x), isT = x => x.startsWith('#now/team');
+    const isR = x => /^#now\/rosters(\/(full|grid|contracts|value))?$/.test(x), isT = x => x.startsWith('#now/team');
     if (isT(h)) { if (isR(old)) { fromR = old; raY = window.__raY || 0; } else if (!isT(old)) fromR = null; }
     if (isR(h)) { raBack = isT(old) && !!fromR; if (!raBack) fromR = null; }
   }
@@ -672,7 +672,7 @@ window.FBPRosters = (function () {
     if (raBack && R) { raBack = false; const y = raY; requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, y))); }
     if (failed) return '<p class="error">Rosters didn’t load. Refresh the page to try again.</p>';
     if (!R) return '<p class="loading">Loading rosters…</p>';
-    let F0 = fmt; if (!['full', 'grid', 'contracts'].includes(F0)) { try { F0 = localStorage.getItem('fbp-ra-fmt') || 'full'; } catch (e) { F0 = 'full'; } }
+    let F0 = fmt; if (!['full', 'grid', 'contracts', 'value'].includes(F0)) { try { F0 = localStorage.getItem('fbp-ra-fmt') || 'full'; } catch (e) { F0 = 'full'; } }
     try { localStorage.setItem('fbp-ra-fmt', F0); } catch (e) {}
     const esc = ctx.esc, tmx = f => ctx.teams[f] || {}, ST = (ctx.now && ctx.now.standings) || [];
     const divs = [];
@@ -680,9 +680,9 @@ window.FBPRosters = (function () {
       if (!R.teams[x.id]) return; let d = divs.find(d => d.n === x.divisionName); if (!d) divs.push(d = { n: x.divisionName, ids: [] }); d.ids.push(x.id); });
     if (!divs.length) divs.push({ n: '', ids: Object.keys(R.teams) });
     Object.keys(R.teams).forEach(f => { R.teams[f].fid = f; R.teams[f].abbr = tmx(f).abbr || ''; });
-    const nav = `<nav class="bt-sub ra-fmt" aria-label="Roster format">${[['full', 'Full'], ['grid', 'Grid'], ['contracts', 'Contracts']].map(([k, l]) => `<a href="#now/rosters/${k}"${k === F0 ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
-    return `<div class="ro-page ra-page">${nav}${findBox(esc)}${F0 === 'grid' ? raGrid(ctx, divs) : F0 === 'contracts' ? raMoney(ctx, divs) : raFull(ctx, divs)}
-      <p class="rf-foot">Through week ${R.through}. Points are each player’s whole season in FBP scoring, wherever he was; Pts/g is per game played. ${F0 === 'contracts' ? 'Payroll is this season’s salaries, every slot. 2027 under contract adds up next year’s salaries already set by the by-law escalators. Keep 75+ is what keeping every player rated 75+ (the prototype ratings) would cost against the team’s 2027 budget: the $200 cap adjusted for auction cash traded. Expiring: contracts in their last year. Tap a team to open its contracts; tap a column to sort.' : F0 === 'grid' ? 'Teams are ranked by their starters at the position (QB 1, RB 2, WR 2, TE 1, DEF 1), by points a game. Taxi and IR players are faded.' : 'Tap a player for his box; tap a team for its My Team page.'}</p></div>`;
+    const nav = `<nav class="bt-sub ra-fmt" aria-label="Roster format">${[['full', 'Full'], ['grid', 'Grid'], ['contracts', 'Contracts'], ['value', 'Value']].map(([k, l]) => `<a href="#now/rosters/${k}"${k === F0 ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    return `<div class="ro-page ra-page">${nav}${findBox(esc)}${F0 === 'value' ? (window.FBPValues ? FBPValues.league(ctx) : '') : F0 === 'grid' ? raGrid(ctx, divs) : F0 === 'contracts' ? raMoney(ctx, divs) : raFull(ctx, divs)}
+      ${F0 === 'value' ? '' : `<p class="rf-foot">Through week ${R.through}. Points are each player’s whole season in FBP scoring, wherever he was; Pts/g is per game played. ${F0 === 'contracts' ? 'Payroll is this season’s salaries, every slot. 2027 under contract adds up next year’s salaries already set by the by-law escalators. Keep 75+ is what keeping every player rated 75+ (the prototype ratings) would cost against the team’s 2027 budget: the $200 cap adjusted for auction cash traded. Expiring: contracts in their last year. Tap a team to open its contracts; tap a column to sort.' : F0 === 'grid' ? 'Teams are ranked by their starters at the position (QB 1, RB 2, WR 2, TE 1, DEF 1), by points a game. Taxi and IR players are faded.' : 'Tap a player for his box; tap a team for its My Team page.'}</p>`}</div>`;
   }
   function raFull(ctx, divs) {
     const esc = ctx.esc, tmx = f => ctx.teams[f] || {}, ST = (ctx.now && ctx.now.standings) || [];

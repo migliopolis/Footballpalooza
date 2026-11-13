@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0191",
+      "to": "0.0195",
+      "dates": "Nov 13, 2026",
+      "items": [
+        "The Docket: fantasy-relevant players with legal trouble, the charges explained, what’s at stake in court and with the NFL, and a statement from each player’s FBP team. Now under League Now.",
+        "My Team (the old Rosters page): a team frame with its numbers, a bigger Face of the Franchise (career points a start included), the trade-deadline outlook in State of the Team, and this season’s Transactions.",
+        "Rosters, all 12 teams: Full (by division), Grid (position by position), Contracts (payroll, 2027 money and cap room) and Value, with back links from team and player pages.",
+        "Player Value and Trade Value: FantasyPros dynasty rankings on a 1–9,999 scale, with Trade Value counting each FBP contract. A Value Chart on the Trading Floor and team value charts with a two-team compare on Rosters.",
+        "League Now menu reordered, with My Team outlined; the data refresh now starts on time after the morning waivers."
+      ]
+    },
+    {
       "from": "0.0186",
       "to": "0.0190",
       "dates": "Nov 13, 2026",

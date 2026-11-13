@@ -203,7 +203,7 @@ window.FBPTrade = (function () {
   function render(ctx) {
     X = ctx;
     if (!D) { load(); return failed ? '<p class="error">The Trading Floor didn’t load. Refresh the page to try again.</p>' : '<p class="loading">Loading the Trading Floor…</p>'; }
-    const V = { block: ['On the Block', vBlock], targets: ['Targets', vTargets], teams: ['Teams', vTeams], owners: ['Trade Habits', vOwners], history: ['History', vHistory] };
+    const V = { block: ['On the Block', vBlock], targets: ['Targets', vTargets], teams: ['Teams', vTeams], chart: ['Value Chart', () => window.FBPValues ? FBPValues.chart(X) : ''], owners: ['Trade Habits', vOwners], history: ['History', vHistory] };
     return `<section class="tf-page"><h2 class="bc-h">Trading Floor</h2>
      <p class="tf-dl-line" id="tf-clock">${countdown()}</p>
      <nav class="seg tf-tabs">${Object.entries(V).map(([k, [l]]) => `<button type="button" data-tfv="${k}" aria-pressed="${k === view}">${l}</button>`).join('')}</nav>

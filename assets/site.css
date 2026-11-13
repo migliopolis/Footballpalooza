@@ -2885,3 +2885,51 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .ro-backr{align-self:flex-start;margin:0!important}
 .pp-backs{display:flex;gap:4px 14px;flex-wrap:wrap;align-items:center}
 .pp-backs .pp-back{margin-bottom:12px!important}
+
+/* ---------- Player Value / Trade Value (assets/values.js) ---------- */
+.vl-ctl{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin:0 0 8px}
+.vl-mode{max-width:340px}
+.vl-shape-seg{max-width:360px;margin:0 0 10px}
+.vl-ct{border-collapse:collapse;width:100%;font-size:.8rem;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.vl-ct th{position:sticky;top:0;background:var(--surface);font:700 .66rem var(--body);text-transform:uppercase;letter-spacing:.06em;padding:8px 6px;border-bottom:2px solid var(--pc,var(--line));text-align:left;z-index:1}
+.vl-ct td{vertical-align:top;padding:4px;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent);min-width:120px}
+.vl-ct .vl-v{min-width:0;width:3.6em;font:700 .74rem var(--mono);color:var(--muted);text-align:right;padding-right:8px;white-space:nowrap}
+.vl-chip{display:block;border-left:3px solid var(--pc);background:color-mix(in srgb,var(--pc) 10%,var(--surface));border-radius:4px;padding:3px 6px;margin:2px 0;color:var(--fg);text-decoration:none;line-height:1.2}
+.vl-chip b{display:block;font-weight:600;font-size:.78rem}
+.vl-chip small{display:flex;align-items:center;gap:3px;font-size:.62rem;color:var(--muted)}
+.vl-chip img{width:12px;height:12px;object-fit:contain}
+.vl-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:980px){.vl-grid{grid-template-columns:1fr 1fr}}
+.vl-card{padding:10px 12px;min-width:0}
+.vl-ch{display:flex;align-items:center;gap:8px}
+.vl-ch a{display:flex;align-items:center;gap:6px;color:var(--fg);text-decoration:none;flex:1;min-width:0}
+.vl-ch a img{width:26px;height:26px;object-fit:contain}
+.vl-ch a b{font:700 1rem var(--display);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vl-rk{background:var(--fg);color:var(--bg);font:700 .8rem var(--mono);border-radius:4px;padding:3px 7px}
+.vl-tot{font:700 .78rem var(--mono);background:var(--sky-soft);border-radius:4px;padding:3px 6px}
+.vl-pr{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:8px 0 4px}
+.vl-pr span{background:color-mix(in srgb,var(--pc) 18%,var(--surface));border-radius:4px;text-align:center;font-size:.68rem;padding:4px 2px;white-space:nowrap}
+.vl-meta{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);margin-bottom:4px}
+.vl-meta b{color:var(--fg)}.vl-meta .ok{color:var(--ok)}.vl-meta .no{color:var(--red)}
+.vl-dots,.vl-cmpg{width:100%;height:auto;display:block}
+.vl-radar{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
+.vl-g{stroke:var(--line);stroke-dasharray:2 3}
+.vl-axl{stroke:var(--line)}
+.vl-ax{font:500 8px var(--body);fill:var(--muted)}
+.vl-ring{fill:none;stroke:var(--line)}
+.vl-shape{fill:color-mix(in srgb,#3b82c4 45%,transparent);stroke:#3b82c4;stroke-width:1.5}
+.vl-rl{font:600 8px var(--body);fill:var(--muted)}
+.vl-cmp{padding:12px 14px;margin-bottom:10px}
+.vl-cmp h2{font:600 1.1rem var(--display);text-transform:uppercase;margin:0 0 6px}
+.vl-cs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vl-cs > span:not(.vl-vs){border-left:4px solid var(--pc);padding-left:6px}
+.vl-vs{color:var(--muted);font-weight:700;font-size:.8rem}
+.vl-sel{font:600 .85rem var(--body);padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+.vl-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.vl-two{grid-template-columns:1fr}}
+.vl-ls{list-style:none;margin:0;padding:0;border-top:3px solid var(--pc)}
+.vl-ls li{display:flex;align-items:center;gap:8px;padding:5px 2px;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent);font-size:.84rem}
+.vl-ls .vl-n{width:1.6em;text-align:center;font:700 .72rem var(--mono);color:var(--muted)}
+.vl-ls a,.vl-ls li > span:nth-child(2){color:var(--fg);text-decoration:none;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vl-pos{font:700 .58rem var(--body);padding:2px 5px;border-radius:3px;background:color-mix(in srgb,var(--pc) 20%,transparent)}
+.vl-ls b{font:700 .84rem var(--mono);color:var(--pc);min-width:3.6em;text-align:right}

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""Fetch FantasyPros consensus rankings and save them under data/fantasypros/.
+"""Fetch FantasyPros consensus rankings and save what the site uses under data/fantasypros/.
 
-Runs in the weekly GitHub Action after the MFL refresh. Needs the repo secret
-FANTASYPROS_APIKEY (sent as the x-api-key header; never printed or saved).
-Each request is independent: a failure keeps the previous file and is noted in
-data/fantasypros/_meta.json, and the script never fails the workflow.
-Standard library only.
-
+Runs in the daily GitHub Action. Needs the repo secret FANTASYPROS_APIKEY (a FantasyPros HOF key: full lists;
+the free key only returns 10 players). The key is sent as the x-api-key header and is never printed or saved.
 Docs: https://api.fantasypros.com/public/v2/docs
-Superflex rankings use position=OP. Ranking types used: DYNASTY, ROOKIES, ROS.
+
+FantasyPros' terms don't allow redistributing their raw data, and this repo is public, so the raw responses are
+not saved. What is saved is each list as ranks keyed by MFL player id, which is all the site needs:
+  dynasty-ecr.json  dynasty overall (PPR): {mfl_id: [overall rank, position rank]}   Player Value, Trade Value
+  ros-ecr.json      rest of season overall (PPR): same shape                          Rosters ECR column, Trend
+  rookies-ecr.json  next year's rookie class: same shape                              (rookie pricing, Big Board)
+FantasyPros ids are matched to MFL ids with their own player list (external_ids=mfl). A list that fails or comes
+back short keeps the previous file, noted in _meta.json; the script never fails the workflow. Standard library only.
 """
-import json, os, time, urllib.error, urllib.parse, urllib.request
+import json, os, re, time, urllib.error, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
 KEY = os.environ.get('FANTASYPROS_APIKEY', '').strip()
@@ -19,62 +22,67 @@ BASE = 'https://api.fantasypros.com/public/v2/json'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'data', 'fantasypros')
 
-# name -> (path, params)
-REQUESTS = {
-    'dynasty-superflex': (f'/nfl/{SEASON}/consensus-rankings', {'position': 'OP', 'type': 'DYNASTY', 'scoring': 'PPR'}),
-    'dynasty-overall':   (f'/nfl/{SEASON}/consensus-rankings', {'position': 'ALL', 'type': 'DYNASTY', 'scoring': 'PPR'}),
-    'rookies':           (f'/nfl/{SEASON + 1}/consensus-rankings', {'position': 'ALL', 'type': 'ROOKIES', 'scoring': 'PPR'}),
-    'rookies-superflex': (f'/nfl/{SEASON + 1}/consensus-rankings', {'position': 'OP', 'type': 'ROOKIES', 'scoring': 'PPR'}),
-    'ros-superflex':     (f'/nfl/{SEASON}/consensus-rankings', {'position': 'OP', 'type': 'ROS', 'scoring': 'PPR'}),
+# file -> (path, params, note)
+LISTS = {
+    'dynasty-ecr': (f'/nfl/{SEASON}/consensus-rankings', {'position': 'ALL', 'type': 'DYNASTY', 'scoring': 'PPR'},
+                    'FantasyPros dynasty consensus rankings (overall, PPR)'),
+    'ros-ecr': (f'/nfl/{SEASON}/consensus-rankings', {'position': 'ALL', 'type': 'ROS', 'scoring': 'PPR'},
+                'FantasyPros rest-of-season consensus rankings (overall, PPR)'),
+    'rookies-ecr': (f'/nfl/{SEASON + 1}/consensus-rankings', {'position': 'ALL', 'type': 'ROOKIES', 'scoring': 'PPR'},
+                    f'FantasyPros {SEASON + 1} rookie consensus rankings (PPR)'),
 }
 
 
 def fetch(path, params):
-    url = BASE + path + '?' + urllib.parse.urlencode(params)
-    req = urllib.request.Request(url, headers={'x-api-key': KEY, 'Accept': 'application/json',
-                                               'User-Agent': 'FBP-site-refresh/1.0'})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.status, json.loads(r.read().decode('utf-8'))
-
-
-def summarize(data):
-    """Row count and the first few names, so the log shows what came back without dumping it."""
-    rows = data.get('players') if isinstance(data, dict) else None
-    if isinstance(rows, list):
-        return {'players': len(rows), 'sample': [p.get('player_name') or p.get('name') for p in rows[:3]]}
-    return {'keys': sorted(data)[:12] if isinstance(data, dict) else type(data).__name__}
+    url = BASE + path + ('?' + urllib.parse.urlencode(params) if params else '')
+    req = urllib.request.Request(url, headers={'x-api-key': KEY, 'Accept': 'application/json', 'User-Agent': 'FBP-site-refresh/1.0'})
+    with urllib.request.urlopen(req, timeout=90) as r:
+        return json.loads(r.read().decode('utf-8'))
 
 
 def main():
     os.makedirs(OUT, exist_ok=True)
     meta_path = os.path.join(OUT, '_meta.json')
-    try:
-        meta = json.load(open(meta_path))
-    except Exception:
-        meta = {}
-    meta['run'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
-    meta.setdefault('results', {})
+    meta = {'run': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'results': {}}
     if not KEY:
         print('FANTASYPROS_APIKEY not set; skipping')
         meta['note'] = 'API key not set'
-        json.dump(meta, open(meta_path, 'w'), indent=1); return
-    for name, (path, params) in REQUESTS.items():
-        try:
-            status, data = fetch(path, params)
-            with open(os.path.join(OUT, name + '.json'), 'w') as f:
-                json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
-            info = {'ok': True, 'status': status, 'fetched': meta['run'], **summarize(data)}
-            print(f'  ok   {name}: {info}')
-        except urllib.error.HTTPError as e:
-            body = e.read().decode('utf-8', 'replace')[:300]
-            info = {'ok': False, 'status': e.code, 'error': body, 'tried': meta['run']}
-            print(f'  FAIL {name}: HTTP {e.code} {body}')
-        except Exception as e:  # message never includes the key
-            info = {'ok': False, 'error': f'{type(e).__name__}: {str(e)[:200]}', 'tried': meta['run']}
-            print(f'  FAIL {name}: {info["error"]}')
-        info['request'] = {'path': path, **params}
-        meta['results'][name] = info
+        json.dump(meta, open(meta_path, 'w'), indent=1)
+        return
+    try:
+        pl = fetch('/nfl/players', {'external_ids': 'mfl'}).get('players') or []
+        ids = {str(p['player_id']): str(p['mfl_id']) for p in pl if p.get('mfl_id')}
+        meta['results']['players'] = {'ok': True, 'matched': len(ids)}
+        print(f'  ok   players: {len(ids)} with MFL ids')
+    except Exception as e:  # the message never includes the key
+        print(f'  FAIL players: {type(e).__name__}: {str(e)[:200]}')
+        meta['results']['players'] = {'ok': False, 'error': f'{type(e).__name__}: {str(e)[:200]}'}
+        json.dump(meta, open(meta_path, 'w'), indent=1)
+        return
+    for name, (path, params, note) in LISTS.items():
         time.sleep(1.1)
+        try:
+            d = fetch(path, params)
+            rows = d.get('players') or []
+            out = {}
+            for p in rows:
+                m = ids.get(str(p.get('player_id')))
+                if m and p.get('rank_ecr'):
+                    pr = re.sub(r'\D', '', str(p.get('pos_rank') or ''))
+                    out[m] = [int(p['rank_ecr']), int(pr) if pr else None]
+            if len(rows) < 50:   # the free key's 10-row lists, or a bad answer: keep what we had
+                raise ValueError(f'only {len(rows)} players came back')
+            upd = d.get('last_updated') or ''
+            mm, dd = (upd.split('/') + [''])[:2]
+            when = f'{SEASON if int(mm or 1) >= 3 else SEASON + 1}-{int(mm):02d}-{int(dd):02d}' if mm and dd else meta['run'][:10]
+            json.dump({'note': f'{note}, matched to MFL ids: [overall rank, position rank]. From the FantasyPros API (data © FantasyPros).',
+                       'updated': when, 'experts': d.get('total_experts'), 'players': dict(sorted(out.items(), key=lambda x: x[1][0]))},
+                      open(os.path.join(OUT, name + '.json'), 'w'), separators=(',', ':'), ensure_ascii=False)
+            meta['results'][name] = {'ok': True, 'players': len(rows), 'matched': len(out), 'updated': when}
+            print(f'  ok   {name}: {len(rows)} ranked, {len(out)} matched to MFL')
+        except Exception as e:
+            meta['results'][name] = {'ok': False, 'error': f'{type(e).__name__}: {str(e)[:200]}'}
+            print(f'  FAIL {name}: {meta["results"][name]["error"]}')
     json.dump(meta, open(meta_path, 'w'), indent=1)
 
 
