@@ -81,7 +81,7 @@ window.FBPStats = (function () {
       const cells = wi.map(([w, k]) => { const v = r.w[k], bench = F.st && v != null && (r.s || '')[k] !== '1', hk = h && HW.indexOf(w) >= 0 ? HC[h.w[HW.indexOf(w)]] : '';
         return w === r.bye && v == null ? '<td class="st-w st-bye">B</td>' : bench ? '<td class="st-w st-nos" title="Not in a starting lineup"></td>' : `<td class="st-w${hk ? ' ' + hk : ''}">${v == null ? '' : v.toFixed(1)}</td>`; }).join('');
       const o = opp && r.t ? opp[ab(r.t)] : null;
-      const nm = r.f ? `<a href="#now/rosters/${r.f}/${r.id}">${esc(r.n)}</a>` : esc(r.n);
+      const nm = r.f ? `<a href="#now/team/${r.f}/${r.id}">${esc(r.n)}</a>` : esc(r.n);
       return `<tr class="${r.f && r.f === me ? 'st-me' : ''}"><td class="st-n">${i + 1}</td>
         <td class="st-pl"><span class="st-nm">${nm}</span><small>${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="${esc(t.abbr || r.f)}" title="${esc(t.name || r.f)}">` : `<b>${esc(t.abbr || r.f)}</b>`}${r.sl ? `<i>${r.sl}</i>` : ''}` : '<b class="st-fa">FA</b>'}<span class="st-dot">·</span>${r.p}${r.t ? logo(r.t) : ''}${(r.hon || []).map(([l, c]) => `<span class="ro-chip ${c} st-ch" title="${esc(l)}"><span class="lg-only">${esc(l)}</span><span class="sm-only">${esc(SHORT[l] || l)}</span></span>`).join('')}</small></td>
         <td class="n st-pts"><b>${r.pts.toFixed(1)}</b></td><td class="n st-avg">${r.avg.toFixed(2)}</td><td class="n st-gs">${r.gs || ''}</td>

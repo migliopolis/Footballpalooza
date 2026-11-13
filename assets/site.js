@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0192';
+  const VERSION = '0.0193';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -369,7 +369,7 @@
         <thead><tr><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>GB</th><th class="hide-sm">Pct</th><th class="hide-sm" title="Division record">Div</th>
           <th>PF</th><th class="hide-sm">PA</th><th title="Points back: total points behind the league's top scorer">PB</th><th class="hide-sm" title="Points scored per game">PF Avg</th><th class="hide-sm" title="Points allowed per game">PA Avg</th><th title="Average points over the last three games">L3 Avg</th><th class="hide-sm" title="Potential points (best possible lineup)">PP</th>
           <th title="All-play record: results against every team, every week">All-play</th><th class="hide-sm">Strk</th>${state.budgets ? `<th title="${state.budgets.season} auction budget, after trades">${state.budgets.season} $</th>` : ''}</tr></thead><tbody>
-        ${rows.map(t => `<tr class="st-go" data-go="#now/rosters/${t.id}" tabindex="0" title="${esc(t.name)} roster"><td class="lg"><span class="st-lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}${t.seed ? `<span class="pill st-seed${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : ''}</span></td><td class="t">${chip(t.id, { noLogo: true, after: elimTag(t.id) })}</td>
+        ${rows.map(t => `<tr class="st-go" data-go="#now/team/${t.id}" tabindex="0" title="${esc(t.name)} roster"><td class="lg"><span class="st-lg">${(state.teams[t.id] || {}).logo ? `<img src="${state.teams[t.id].logo}" alt="" loading="lazy">` : ''}${t.seed ? `<span class="pill st-seed${t.seed > 3 ? ' wc' : ''}" title="Current playoff seed">${t.seed}</span>` : ''}</span></td><td class="t">${chip(t.id, { noLogo: true, after: elimTag(t.id) })}</td>
           <td>${t.w}-${t.l}-${t.t}</td><td>${gb(t.gb)}</td><td class="hide-sm">${t.pct.toFixed(3).replace(/^0/, '')}</td><td class="hide-sm">${esc(t.divRecord || '')}</td>
           <td>${pts(t.pf)}</td><td class="hide-sm">${pts(t.pa)}</td><td>${pb(t)}</td><td class="hide-sm">${pts(t.avgPf)}</td><td class="hide-sm">${(() => { const g = t.w + t.l + t.t; return g ? pts(t.pa / g) : '—'; })()}</td><td>${l3(t.id)}</td><td class="hide-sm">${pts(t.pp)}</td>
           <td>${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td>${state.budgets ? (() => { const bg = budget(t.id); const tip = bg.adj.length ? bg.adj.map(x => `${x.amount < 0 ? '−' : '+'}$${Math.abs(x.amount)} ${x.note}`).join('\n\n') : 'No adjustments yet'; return `<td class="bud${bg.total < (state.budgets.default || 200) ? ' chg' : bg.total > (state.budgets.default || 200) ? ' up' : ''}" title="${esc(tip)}">$${bg.total}</td>`; })() : ''}</tr>`).join('')}
@@ -395,7 +395,7 @@
       <td><b>${t.pwr ? t.pwr.toFixed(2) : '—'}</b></td><td>${t.w}-${t.l}${t.t ? '-' + t.t : ''}</td><td>${pts(t.pf)}</td><td class="hide-sm">${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('');
 
     const sub = (location.hash.split('/')[1] || '');
-    const nav = `<nav class="rf-sub seg now-sub ln-sub pg-nav">${[['', 'Standings'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['hospital', 'Hospital']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    const nav = `<nav class="rf-sub seg now-sub ln-sub pg-nav">${[['', 'Standings'], ['team', 'My Team'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['hospital', 'Hospital'], ['docket', 'The Docket']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof"><b>Through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${state.meta && state.meta.fetched ? ` · <span id="ln-refresh">${esc(refreshText(true))}</span>` : genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
@@ -423,8 +423,14 @@
 
     if (sub === 'matchups') return headTxt + pageMatchups(fp);
     if (sub === 'stats') return headTxt + (window.FBPStats ? FBPStats.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/stats')) route(); } }) : '');
-    if (sub === 'rosters') return headTxt + (window.FBPRosters ? FBPRosters.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(),
-      rerender: () => { if (location.hash.startsWith('#now/rosters')) route(); } }, location.hash.split('/')[2] || '', location.hash.split('/')[3] || '') : '<p class="error">Rosters didn’t load.</p>');
+    // My Team (#now/team/<franchise>/<player>; the old #now/rosters/<franchise> links land here too) and Rosters, all 12
+    // teams (#now/rosters, /full or /grid)
+    const h2 = location.hash.split('/')[2] || '', h3 = location.hash.split('/')[3] || '';
+    const roCtx = pre => ({ teams: state.teams, esc, nameOf, myTeam: myTeam(), now: state.now, rerender: () => { if (location.hash.startsWith(pre)) route(); } });
+    if (sub === 'rosters' && /^\d{4}$/.test(h2)) { location.replace('#now/team/' + h2 + (h3 ? '/' + h3 : '')); return ''; }
+    if (sub === 'team') return headTxt + (window.FBPRosters ? FBPRosters.render(roCtx('#now/' + sub), h2, h3) : '<p class="error">My Team didn’t load.</p>');
+    if (sub === 'rosters') return headTxt + (window.FBPRosters ? FBPRosters.renderAll(roCtx('#now/rosters'), h2) : '<p class="error">Rosters didn’t load.</p>');
+    if (sub === 'docket') return headTxt + (window.FBPLegal ? FBPLegal.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/docket')) route(); } }) : '<p class="error">The Docket didn’t load.</p>');
     if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
     if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
@@ -856,7 +862,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0192
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0193
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
@@ -911,7 +917,7 @@
     S.heat = () => !(A && A.heatTeams) ? [] : [`<a class="tk-h tk-heat" ${heatGo}>Heat Check</a>`].concat(Object.entries(A.heatTeams).sort((a, b) => b[1].score - a[1].score)
       .map(([f, h]) => `<a class="tk-i" ${heatGo} title="${esc(nameOf(f))}: Heat Score ${h.score}"><b>${ab(f)}</b><span class="tk-v ${h.score > 0 ? 'hot' : h.score < 0 ? 'cold' : ''}">${h.score > 0 ? '+' : ''}${h.score}</span></a>`));
     const pl = () => Object.entries((A && A.heatPlayers) || {}).filter(([, p]) => p.fr).map(([id, p]) => Object.assign({ id }, p));
-    const pi = (p, cls) => `<a class="tk-i" href="#now/rosters/${p.fr}/${p.id}" title="${esc(p.n)} (${esc(p.p)}, ${esc(nameOf(p.fr))}): Heat Score ${p.s}"><b>${esc(short(p.n))}</b><span class="tk-p">${esc(p.p)} ${ab(p.fr)}</span><span class="tk-v ${cls}">${p.s > 0 ? '+' : ''}${p.s}</span></a>`;
+    const pi = (p, cls) => `<a class="tk-i" href="#now/team/${p.fr}/${p.id}" title="${esc(p.n)} (${esc(p.p)}, ${esc(nameOf(p.fr))}): Heat Score ${p.s}"><b>${esc(short(p.n))}</b><span class="tk-p">${esc(p.p)} ${ab(p.fr)}</span><span class="tk-v ${cls}">${p.s > 0 ? '+' : ''}${p.s}</span></a>`;
     S.hot = () => !A ? [] : [`<a class="tk-h tk-hot" ${heatGo}>🔥 Hottest</a>`].concat(pl().sort((a, b) => b.s - a.s).slice(0, 12).map(p => pi(p, 'hot')));
     S.cold = () => !A ? [] : [`<a class="tk-h tk-cold" ${heatGo}>🧊 Coldest</a>`].concat(pl().sort((a, b) => a.s - b.s).slice(0, 12).map(p => pi(p, 'cold')));
     S.odds = () => !O ? [] : [`<a class="tk-h tk-odds" href="#now/playoffs">Playoff odds</a>`].concat(Object.entries(O).sort((a, b) => b[1].playoff - a[1].playoff).map(([f, o]) => {
@@ -934,7 +940,7 @@
       `<a class="tk-i" href="#beta/trade"><b>${ab(b.f)}</b><span class="tk-v">${esc(b.items.map(short).join(', '))}</span></a>`));
     S.moves = () => !(F && F.moves && F.moves.length) ? [] : [`<a class="tk-h tk-mv" href="#beta/trade">Latest moves</a>`].concat(F.moves.map(m =>
       m.k === 'T' ? `<a class="tk-i" href="#beta/trade"><span class="tk-p">⇄</span><b>${ab(m.f)}</b><span class="tk-p">&amp;</span><b>${ab(m.f2)}</b><span class="tk-v">${esc(m.t)}</span></a>`
-        : `<a class="tk-i" href="#now/rosters/${m.f}/${m.id}"><b>${ab(m.f)}</b><span class="tk-v">${esc(m.t)}</span><span class="tk-p">${new Date(m.ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></a>`));
+        : `<a class="tk-i" href="#now/team/${m.f}/${m.id}"><b>${ab(m.f)}</b><span class="tk-v">${esc(m.t)}</span><span class="tk-p">${new Date(m.ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></a>`));
     // the three newest Press Box columns: headline and writer
     S.press = () => { const C = state.columns && state.columns.columns; if (!C) { loadColumns(); return []; } if (!C.length) return [];
       return [`<a class="tk-h tk-pr" href="#press">Press Box</a>`].concat(C.slice(0, 3).map(c =>

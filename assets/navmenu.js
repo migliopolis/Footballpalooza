@@ -7,12 +7,14 @@
 (function () {
   const MENUS = {
     scores: [['#scores', 'Scoreboard'], ['#scores/players', 'Players'], ['#scores/nfl', 'NFL Scores'], ['#scores/ticket', 'Ticket Helper']],
-    now: [['#now', 'Standings'], ['#now/rosters', 'Rosters'], ['#now/stats', 'Stats'], ['#now/matchups', 'Matchups'], ['#now/power', 'Power Rankings'],
-      ['#now/playoffs', 'Playoff Picture'], ['#now/analytics', 'Analytics'], ['#now/hospital', 'Hospital']],
+    // League Now reads down two columns (see COLS): Standings to Analytics on the left, My Team to The Docket on the right
+    now: [['#now', 'Standings'], ['#now/rosters', 'Rosters'], ['#now/stats', 'Stats'], ['#now/power', 'Power Rankings'], ['#now/analytics', 'Analytics'],
+      ['#now/team', 'My Team'], ['#now/matchups', 'Matchups'], ['#now/playoffs', 'Playoff Picture'], ['#now/hospital', 'Hospital'], ['#now/docket', 'The Docket']],
     draft: [['#draft', 'FBP Home'], ['#draft/mock', 'Mock Draft'], ['#draft/board', 'Big Board'], ['#draft/order', 'Full Order']],
     reference: [['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'],
       ['#reference/players', 'Players'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']],
   };
+  const COLS = { now: true };
   const tabs = document.querySelector('.tabs'), top = document.querySelector('.top');
   if (!tabs || !top) return;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -38,7 +40,9 @@
     open = k;
     const a = tabs.querySelector(`a[data-tab="${k}"]`), cur = currentHref(k);
     menu.setAttribute('aria-label', a ? a.textContent.trim() : k);
-    menu.innerHTML = MENUS[k].map(([h, l]) => `<a role="menuitem" href="${h}"${h === cur ? ' aria-current="page"' : ''}>${esc(l)}</a>`).join('');
+    menu.innerHTML = MENUS[k].map(([h, l]) => `<a role="menuitem" href="${h}"${h === cur ? ' aria-current="page"' : ''}${h === '#now/team' ? ' class="tm-mine"' : ''}>${esc(l)}</a>`).join('');
+    // menus listed column by column fill down the left column first
+    menu.classList.toggle('tm-cols', !!COLS[k]); menu.style.gridTemplateRows = COLS[k] ? `repeat(${Math.ceil(MENUS[k].length / 2)},auto)` : '';
     menu.style.top = (tabs.offsetTop + tabs.offsetHeight) + 'px';
     menu.hidden = false;
     // wider screens: a card under its tab instead of a full-width sheet

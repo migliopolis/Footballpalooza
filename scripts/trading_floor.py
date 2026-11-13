@@ -277,6 +277,35 @@ def main():
             moves.append({'ts': t['ts'], 'k': 'T', 'f': t['a'], 'f2': t['b'],
                           't': ' for '.join([' + '.join(x['t'] for x in t['aGave']) or 'nothing', ' + '.join(x['t'] for x in t['bGave']) or 'nothing'])})
     moves.sort(key=lambda m: -m['ts'])
+
+    # ---------- every team's moves this season, for My Team's Transactions: adds and drops, then trades ----------
+    def pl(q):
+        n, pos = pname(q)
+        return {'id': q, 't': n, 'pos': pos}
+    log = {f: [] for f in teams}
+    for x in as_list(tj):
+        ty, f = x.get('type'), x.get('franchise')
+        if ty not in ('BBID_WAIVER', 'FREE_AGENT') or f not in log:
+            continue
+        parts = (x.get('transaction', '') + '||').split('|')
+        bid = ''
+        if ty == 'BBID_WAIVER':
+            try:
+                bid = round(float(parts[1]), 2)
+            except ValueError:
+                bid = ''
+        drops = parts[2] if ty == 'BBID_WAIVER' else parts[1]
+        log[f].append({'ts': int(x.get('timestamp') or 0), 'k': 'W' if ty == 'BBID_WAIVER' else 'F', 'bid': bid,
+                       'add': [pl(q) for q in parts[0].split(',') if q], 'drop': [pl(q) for q in drops.split(',') if q]})
+    season = int((load(D('mfl', '_meta.json'), {}) or {}).get('season') or 2026)
+    for t in trades:
+        if t['season'] != season:
+            continue
+        for f, o, got, gave in ((t['a'], t['b'], t['bGave'], t['aGave']), (t['b'], t['a'], t['aGave'], t['bGave'])):
+            if f in log:
+                log[f].append({'ts': t['ts'], 'k': 'T', 'with': o, 'got': got, 'gave': gave})
+    for L in log.values():
+        L.sort(key=lambda m: -m['ts'])
     feed = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'deadline': DEADLINE, 'moves': moves[:20],
             'block': [{'f': b['f'], 'items': [x.get('n') or x['t'] for x in b['items']]} for b in block]}
     with open(D('ticker.json'), 'w') as fh:
@@ -285,7 +314,7 @@ def main():
 
     out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': int((load(D('mfl', '_meta.json'), {}) or {}).get('season') or 2026), 'deadline': DEADLINE, 'cap': CAP,
            'note': 'Beta. Ratings are the prototype OVR. Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',
-           'teams': teams, 'targets': targets, 'trades': trades, 'habits': habits,
+           'teams': teams, 'targets': targets, 'trades': trades, 'habits': habits, 'moves': log,
            'block': block, 'blockFetched': block_fetched, 'blockOn': tb is not None}
     with open(D('trading-floor.json'), 'w') as fh:
         json.dump(out, fh, separators=(',', ':'), ensure_ascii=False)

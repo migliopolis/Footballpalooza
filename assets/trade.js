@@ -31,7 +31,7 @@ window.FBPTrade = (function () {
     return `${money(p.sal)}${p.cy ? ` (${esc(p.cy)})` : ''} → <b>${money(p.n27)}</b> in 2027`;
   }
   function prow(p, extra) {
-    const href = `#now/rosters/${p.f}/${p.id}`;
+    const href = `#now/team/${p.f}/${p.id}`;
     return `<li class="tf-p"><span class="tf-ovr tf-${tier(p.o)}">${p.o == null ? '–' : p.o}</span>
       <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a> <span class="tf-sub">${p.p}${p.r ? p.r : ''} · ${esc(p.nfl || '')}${p.age ? ' · age ' + p.age : ''}${p.ppg != null ? ' · ' + p.ppg + ' ppg' : ''}</span>
       <div class="tf-sub">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>

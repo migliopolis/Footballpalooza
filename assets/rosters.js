@@ -7,7 +7,7 @@ window.FBPRosters = (function () {
   let R = null, loading = false, failed = false, X = null;
   let sort = ['sal', -1];
   let pickX = null;
-  let wkShut = false, noteShut = false;
+  let wkShut = false, noteShut = false, howOpen = false;   // howOpen: the Roster table's how-to-read notes
   try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; noteShut = localStorage.getItem('fbp-ro-note') === 'shut'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
   const open = new Set(), tabOf = {}, cache = {};
   // player search across all 12 rosters: the results list redraws in place as you type, so the box keeps focus
@@ -28,7 +28,7 @@ window.FBPRosters = (function () {
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
         : r.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${r.espn}.png)"` : '';
       const st = r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : '';
-      return `<a role="option" href="#now/rosters/${f}/${r.id}" data-ro-hit${i === 0 ? ' class="on"' : ''}><span class="ro-ph"><span ${img}></span></span>
+      return `<a role="option" href="#now/team/${f}/${r.id}" data-ro-hit${i === 0 ? ' class="on"' : ''}><span class="ro-ph"><span ${img}></span></span>
         <span class="ro-rn"><b>${esc(r.name)}</b><small>${r.pos}${r.nfl ? ' · ' + esc(r.nfl) : ''} · ${$(r.sal)}${st}</small></span>
         <span class="ro-rt">${tmx(f).logo ? `<img src="${tmx(f).logo}" alt="">` : ''}<b>${esc(tmx(f).abbr || '')}</b></span></a>`; }).join('')}</div>`;
   }
@@ -349,7 +349,7 @@ window.FBPRosters = (function () {
     const tab = tabOf[r.id] || 'news';
     const head = `<div class="ro-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-ro-tab="${r.id}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
     // up top: his Heat Check (the archetypes live on his Player Card and Player Page)
-    return `<div class="ro-box"><div class="ro-top">${heatStrip(r)}<a class="ro-pp" href="#now/rosters/${t.fid}/${r.id}">Player Page<span aria-hidden="true"> ›</span></a></div>${head}<div class="ro-bb">${part(r, t, ctx, tab)}</div></div>`;
+    return `<div class="ro-box"><div class="ro-top">${heatStrip(r)}<a class="ro-pp" href="#now/team/${t.fid}/${r.id}">Player Page<span aria-hidden="true"> ›</span></a></div>${head}<div class="ro-bb">${part(r, t, ctx, tab)}</div></div>`;
   }
 
   // the Player Page (#now/rosters/<franchise>/<player>): everything the site has on one player
@@ -441,7 +441,7 @@ window.FBPRosters = (function () {
     const tile = (l, v, sub) => `<div class="ro-tile"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
     const sec = (title, body, cls) => body ? `<section class="card ro-card pp-sec${cls ? ' ' + cls : ''}"><h2>${title}</h2>${body}</section>` : '';
     return `<div class="pp">
-      <a class="pp-back" href="#now/rosters/${t.fid}"><span aria-hidden="true">←</span> ${esc(t.name)} roster</a>
+      <a class="pp-back" href="#now/team/${t.fid}"><span aria-hidden="true">←</span> ${esc(t.name)} roster</a>
       <div class="pp-hero" style="--tc:${tm.primary || 'var(--line)'}">${photo}
         <div class="pp-id"><h2>${esc(r.name)}${injChip(r)}${chip}${aw}</h2>
           <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
@@ -499,6 +499,77 @@ window.FBPRosters = (function () {
         ${lucky ? `<div><small>Luckiest win</small><b>Week ${lucky.w}: ${sg(pa(lucky))}</b><span>${vs(lucky)}</span></div>` : ''}
         <div><small>Above-average weeks</small><b>${up.length} of ${n}</b><span>record ${rec(up)} in those weeks, ${rec(dn)} in the rest</span></div></div>
     </div></section>`;
+  }
+
+  // the team's frame: logo, name, owner and where they stand now
+  const OUTC = { 'Contending': 'tf-con', 'In the mix': 'tf-mix', 'Building': 'tf-bld' };
+  const tfOf = f => { const D = espn('TF', 'data/trading-floor.json'); return D && !D.failed ? (D.teams || {})[f] || null : null; };
+  const standOf = (ctx, f) => ((ctx.now && ctx.now.standings) || []).find(x => x.id === f) || null;
+  function teamHead(t, f, ctx) {
+    const esc = ctx.esc, tm = ctx.teams[f] || {}, st = standOf(ctx, f), tf = tfOf(f), n = (t.weeks || []).length;
+    const all = (ctx.now && ctx.now.standings) || [], pfRk = st ? all.filter(x => x.pf > st.pf).length + 1 : 0;
+    const stat = (v, l) => `<div class="ro-hs1"><b>${v}</b><small>${l}</small></div>`;
+    return `<div class="ro-th" style="--tc:${tm.primary || 'var(--line)'}">${tm.logo ? `<img class="ro-tl" src="${tm.logo}" alt="">` : ''}
+      <div class="ro-thm"><h2>${esc(t.name)}</h2><p>${esc(t.owner)}${tf && tf.outlook ? ` <span class="tf-out ${OUTC[tf.outlook]}" title="${tf.playoff}% playoff odds">${tf.outlook}</span>` : ''}</p></div>
+      <div class="ro-hstats">${stat(`${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}`, st ? `${ord(st.divisionRank)} ${esc(st.divisionName)}` : 'record')}
+        ${st ? stat(st.seed ? '#' + st.seed : '—', st.seed ? 'playoff seed' : 'out of a seed') : ''}
+        ${stat(t.pf.toFixed(1), pfRk ? `points · ${ord(pfRk)}` : 'points')}
+        ${stat(sg(n ? t.paa / n : 0), `vs avg a week · ${ord(t.paaRank)}`)}
+        ${tf && tf.playoff != null ? stat(Math.round(tf.playoff) + '%', 'playoff odds') : ''}</div></div>`;
+  }
+  // Face of the Franchise: his photo, team, icons and every FBP honor he's won here
+  const HONK = { '1st Team': 'gold', '2nd Team': 'silver', 'MVP': 'gold', 'RoY': 'good', 'ToY': 'good' };
+  function faceCard(t, ctx) {
+    const F = t.face, esc = ctx.esc; if (!F) return '';
+    const r = t.rows.find(x => String(x.id) === String(F.id)) || {};
+    const hons = Object.entries(F.honors || {}).map(([k, v]) => `<span class="ro-chip ${HONK[k] || 'good'}">${v > 1 ? v + '× ' : ''}${esc(k)}</span>`).join('');
+    const now = (r.hon || []).filter(h => !/^(1st|2nd) Team$/.test(h[0])).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
+    const rings = F.titles ? `<span class="ro-ring" title="${F.titles} FBP championship${F.titles > 1 ? 's' : ''} with this team">🏆${F.titles > 1 ? '×' + F.titles : ''}</span>` : '';
+    const img = F.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${F.espn}.png)"` : '';
+    const rec = F.w != null ? `${F.w}-${F.l}${F.t ? '-' + F.t : ''} in his starts` : '';
+    return `<section class="card ro-card ro-face2"><a class="ro-f2ph" href="#now/team/${t.fid}/${F.id}" aria-label="${esc(F.name)} Player Page"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></a>
+      <div class="ro-f2m"><small>Face of the Franchise</small>
+        <h3><a href="#now/team/${t.fid}/${F.id}">${esc(F.name)}</a>${r.id ? injChip(r) : ''}${rings}</h3>
+        <p>${esc(F.pos)}${r.nfl ? ` · ${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}` : ''}${r.age ? ' · age ' + r.age : ''}${r.id ? archIcons(r) : ''}</p>
+        <p class="ro-f2l">${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''} · ${F.starts} starts${rec ? ' · ' + rec : ''}${r.gp ? ` · ${(r.pts / r.gp).toFixed(1)} a game this year` : ''}</p>
+        ${hons || now ? `<div class="ro-f2c">${hons}${now}</div>` : ''}</div></section>`;
+  }
+  // State of the Team: where the trade deadline finds them (data/trading-floor.json)
+  function outlook(f) {
+    const D = espn('TF', 'data/trading-floor.json'), t = D && !D.failed ? (D.teams || {})[f] : null; if (!t || !t.outlook) return '';
+    const esc = X.esc, list = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : a[0];
+    const why = { 'Contending': 'a real shot at the title: buy for this year', 'In the mix': 'on the playoff line: a move or two could swing it', 'Building': 'long playoff odds: next year’s cap room and picks count for more' }[t.outlook] || '';
+    const rd = n => ['', '1st', '2nd', '3rd', '4th', '5th'][n] || n + 'th';
+    const picks = {}; (t.picks || []).forEach(p => (picks[p.y] = picks[p.y] || []).push(rd(p.r) + (p.from !== f ? '*' : '')));
+    const pk = Object.entries(picks).map(([y, a]) => `${y}: ${a.join(', ')}`).join(' · ');
+    const dl = D.deadline ? new Date(D.deadline).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
+    return `<div class="ro-outl"><p><span class="tf-out ${OUTC[t.outlook]}">${esc(t.outlook)}</span> <b>${Math.round(t.playoff)}% playoff odds</b>: ${why}.${dl ? ` Trade deadline ${dl}.` : ''}</p>
+      <ul>${t.deep && t.deep.length ? `<li><b>Deep</b> at ${list(t.deep)}${t.thin && t.thin.length ? `; <b>thin</b> at ${list(t.thin)}` : ''}</li>` : t.thin && t.thin.length ? `<li><b>Thin</b> at ${list(t.thin)}</li>` : ''}
+        ${t.cap27 != null ? `<li><b>2027:</b> keeping its ${t.keepN} players rated 75+ would cost $${Math.round(t.keepCost)} against a $${t.cap27} budget (${t.room27 >= 0 ? '$' + Math.round(t.room27) + ' to spare' : '$' + Math.round(-t.room27) + ' over'})</li>` : ''}
+        ${pk ? `<li><b>Picks</b> ${pk}${(t.picks || []).some(p => p.from !== f) ? ' <small>(* acquired)</small>' : ''}</li>` : ''}</ul>
+      <a class="ro-tfl" href="#beta/trade">Trading Floor ›</a></div>`;
+  }
+
+  // Transactions: this season's waiver claims, free-agent pickups, drops and trades (data/trading-floor.json, from MFL)
+  let mvShut = false, mvAll = false;
+  try { mvShut = localStorage.getItem('fbp-ro-mv') === 'shut'; } catch (e) {}
+  function moves(f, ctx) {
+    const D = espn('TF', 'data/trading-floor.json'); if (!D || D.failed || !D.moves) return '';
+    const L = D.moves[f] || [], esc = ctx.esc, tm = g => ctx.teams[g] || {};
+    const day = ts => new Date(ts * 1000).toLocaleDateString([], { month: 'short', day: 'numeric' });
+    const who = (p, cls) => `<a class="ro-mvp ${cls}" href="#now/team/${f}/${p.id}">${esc(p.t)}<small>${esc(p.pos || '')}</small></a>`;
+    const it = x => x.k === 'p' ? `<span class="ro-mvp">${esc(x.t)}<small>${esc(x.pos || '')}</small></span>` : `<span class="ro-mvp ro-mvx">${esc(x.t)}</span>`;
+    const row = m => {
+      const kind = m.k === 'T' ? `<span class="ro-mvk t">Trade</span>` : m.k === 'W' ? `<span class="ro-mvk w">Waiver${m.bid ? ' $' + Math.round(m.bid) : ''}</span>` : m.add && m.add.length ? `<span class="ro-mvk f">Free agent</span>` : `<span class="ro-mvk d">Drop</span>`;
+      const body = m.k === 'T'
+        ? `<span class="ro-mvw">with ${tm(m.with).logo ? `<img src="${tm(m.with).logo}" alt="">` : ''}<b>${esc(tm(m.with).abbr || m.with)}</b></span><span class="ro-mvl"><i>Got</i>${m.got.map(it).join('') || '—'}</span><span class="ro-mvl"><i>Gave</i>${m.gave.map(it).join('') || '—'}</span>`
+        : `${(m.add || []).map(p => `<span class="ro-mvl"><i class="add">+</i>${who(p, '')}</span>`).join('')}${(m.drop || []).map(p => `<span class="ro-mvl"><i class="drop">−</i><span class="ro-mvp">${esc(p.t)}<small>${esc(p.pos || '')}</small></span></span>`).join('')}`;
+      return `<li><span class="ro-mvd">${day(m.ts)}</span>${kind}<span class="ro-mvb">${body}</span></li>`; };
+    const shown = mvAll ? L : L.slice(0, 8);
+    const n = { W: L.filter(m => m.k === 'W').length, F: L.filter(m => m.k === 'F').length, T: L.filter(m => m.k === 'T').length };
+    return `<section class="card ro-card ro-fold${mvShut ? ' shut' : ''}"><button type="button" class="ro-tog" data-ro-mv aria-expanded="${!mvShut}"><span class="ro-car" aria-hidden="true"></span><h2>Transactions</h2><small class="ro-mvn">${n.W} waiver · ${n.F} free agent · ${n.T} trade${n.T === 1 ? '' : 's'}</small></button>
+      <div class="ro-fb">${L.length ? `<ul class="ro-mv">${shown.map(row).join('')}</ul>${L.length > 8 ? `<button type="button" class="ro-howb" data-ro-mvall>${mvAll ? 'Show fewer' : `Show all ${L.length}`}</button>` : ''}` : '<p class="ro-why">No moves yet this season.</p>'}
+      <p class="ro-why">This season’s moves from MFL: waiver claims (with the winning bid), free-agent pickups and drops, and trades. Taxi and IR moves aren’t listed.</p></div></section>`;
   }
 
   let lastPid = '', rosterY = 0;
@@ -559,30 +630,119 @@ window.FBPRosters = (function () {
     requestAnimationFrame(() => { const el = document.querySelector('.ro-pick'); if (!el) return;
       if (pickX != null) el.scrollLeft = pickX;
       else { const on = el.querySelector('[aria-selected="true"]'); if (on && on.offsetLeft + on.offsetWidth > el.clientWidth) el.scrollLeft = on.offsetLeft - (el.clientWidth - on.offsetWidth) / 2; } });
-    return `<div class="ro-pick" role="tablist" aria-label="Teams">${ids.map(f => `<a href="#now/rosters/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`).join('')}</div>
+    return `<div class="ro-page"><div class="ro-pick" role="tablist" aria-label="Teams">${ids.map(f => `<a href="#now/team/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`).join('')}</div>
       ${findBox(esc)}
-      <div class="ro-th" style="--tc:${tmx(pickd).primary || 'var(--line)'}">${lg(pickd, 'ro-tl')}<div><h2>${esc(t.name)}</h2><p>${esc(t.owner)} · ${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}<br>${t.pf.toFixed(1)} points</p></div></div>
-      <div class="ro-tiles">
-        <div class="ro-tile"><small>${R.season} payroll</small><b>${$(pay)}</b><span>${act.length} active · ${tx.length} taxi · ${ir.length} IR</span></div>
-        <div class="ro-tile"><small>Vs. league average</small><b>${sg(n ? t.paa / n : 0)}</b><span>points a week · ${ord(t.paaRank)} of 12</span></div>
-        <div class="ro-tile ro-face">${F ? `<span class="ro-fph" ${F.espn ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${F.espn}.png)"` : ''}></span><div><small>Face of the Franchise</small><b>${esc(F.name)}</b><span>${esc(F.pos)} · ${esc(faceLine)}</span></div>` : '<div><small>Face of the Franchise</small><b>—</b></div>'}</div>
-        <div class="ro-tile"><small>Top contract</small><b>${top ? $(top.sal) : '—'}</b><span>${top ? esc(top.name) : ''}</span></div>
-      </div>
-      ${t.note && t.note.body ? `<section class="card ro-card ro-note ro-fold${noteShut ? ' shut' : ''}"><button type="button" class="ro-tog" data-ro-fold="note" aria-expanded="${!noteShut}"><span class="ro-car" aria-hidden="true"></span><h2>State of the Team</h2></button>
-        <div class="ro-fb"><p>${esc(t.note.body)}</p>${t.note.last || t.note.news ? `<hr>${t.note.last ? `<p><b>Last week.</b> ${esc(t.note.last.replace(/^Week \d+: /, '').replace(/^./, c => c.toUpperCase()))}</p>` : ''}${t.note.news ? `<p><b>Team news.</b> ${esc(t.note.news)}</p>` : ''}` : ''}${t.note.next ? `<hr><p>${esc(t.note.next)}</p>` : ''}<small>Through week ${R.through} · from the standings, scores and the playoff simulation</small></div></section>` : ''}
+      ${teamHead(t, pickd, ctx)}
+      ${faceCard(t, ctx)}
+      ${(t.note && t.note.body) || outlook(pickd) ? `<section class="card ro-card ro-note ro-fold${noteShut ? ' shut' : ''}"><button type="button" class="ro-tog" data-ro-fold="note" aria-expanded="${!noteShut}"><span class="ro-car" aria-hidden="true"></span><h2>State of the Team</h2></button>
+        <div class="ro-fb">${outlook(pickd)}${t.note && t.note.body ? `<p>${esc(t.note.body)}</p>` : ''}${t.note && (t.note.last || t.note.news) ? `<hr>${t.note.last ? `<p><b>Last week.</b> ${esc(t.note.last.replace(/^Week \d+: /, '').replace(/^./, c => c.toUpperCase()))}</p>` : ''}${t.note.news ? `<p><b>Team news.</b> ${esc(t.note.news)}</p>` : ''}` : ''}${t.note && t.note.next ? `<hr><p>${esc(t.note.next)}</p>` : ''}<small>Through week ${R.through} · from the standings, scores and the playoff simulation</small></div></section>` : ''}
       ${weekly(t, esc, tmx)}
-      <section class="card ro-card"><h2>Roster</h2><p class="ro-why">Tap a column to sort; players stay grouped by position. Tap a player to open his news, game log, schedule, analytics and salary. Slide the table for future salaries.</p>
+      ${moves(pickd, ctx)}
+      <section class="card ro-card"><div class="ro-rh"><h2>Roster</h2><button type="button" class="ro-howb" data-ro-how aria-expanded="${howOpen}">${howOpen ? 'Hide' : 'How to read this'}</button></div>${howOpen ? '<p class="ro-why">Tap a column to sort; players stay grouped by position. Tap a player to open his news, game log, schedule, analytics and salary. Slide the table for future salaries.</p>' : ''}
         <div class="tbl-wrap ro-wrap"><table class="ro-t"><thead><tr><th class="ro-ph"></th>${head}</tr></thead>
         <tbody>${POS.map(p => grp(GRP[p], act.filter(r => r.pos === p))).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody>
         <tfoot><tr><td class="ro-ph"></td><td class="l">Total</td><td>${rows.reduce((s, r) => s + r.pts, 0).toFixed(1)}</td><td></td><td></td><td></td><td></td><td></td><td class="gap">${$(pay)}</td><td></td>${[0, 1, 2, 3, 4].map(k => `<td>${yr(k) ? $(yr(k)) : ''}</td>`).join('')}</tr></tfoot></table></div>
-        <p class="ro-why ro-fn">ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Trend weighs his last three games against his season average, along with MFL’s projection for this week (⇈ surging, ↗ up, → steady, ↘ down, ⇊ sliding; a dot means too few points to read, under 6 a game; OUT means he's injured or hasn't played lately; tap it for the numbers); Heat is his Heat Check score (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3; tap a player for his weeks); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
-      <p class="rf-foot">Through week ${R.through}. Face of the Franchise: the current player with the most history on this team, counting starts, seasons, All-FBP teams, MVPs, Rookie of the Year and championships, across every stint.</p>`;
+        <p class="ro-why ro-fn"${howOpen ? '' : ' hidden'}>ECR is FantasyPros’ rest-of-season consensus rank at the position${R.ecrUpdated ? ` (as of ${new Date(R.ecrUpdated + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })})` : ''}. Week ${R.projWeek} projections are MFL’s. Points are his whole season in league scoring, wherever he was (taxi and free-agent weeks included); Trend weighs his last three games against his season average, along with MFL’s projection for this week (⇈ surging, ↗ up, → steady, ↘ down, ⇊ sliding; a dot means too few points to read, under 6 a game; OUT means he's injured or hasn't played lately; tap it for the numbers); Heat is his Heat Check score (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3; tap a player for his weeks); Pts/wk is per game, L3 is his average over his last three games (his bye week skipped), and Rank is his season points among every player at the position. Future salaries use the by-law escalators; a player picked up off waivers or as a free agent this season is on a new 3-year veteran deal, and a rookie on taxi is shown on the 6-year path.</p></section>
+      <p class="rf-foot">Through week ${R.through}. Face of the Franchise: the current player with the most history on this team, counting starts, seasons, All-FBP teams, MVPs, Rookie of the Year and championships, across every stint. Outlook comes from the playoff odds: Contending 75%+, In the mix 25–75%, Building under 25%.</p></div>`;
+  }
+
+  /* ---------- Rosters (#now/rosters, #now/rosters/full, #now/rosters/grid): all 12 teams at once ----------
+     Full: every roster as a compact card, the four teams of each division together (two across on a computer);
+     tap a player to open his box. Grid: one position at a time, each team's players at it side by side, best
+     first, teams ranked by their starters there (the lineup minimum: QB 1, RB 2, WR 2, TE 1, DEF 1). */
+  let raPos = 'QB';
+  try { raPos = localStorage.getItem('fbp-ra-pos') || 'QB'; } catch (e) {}
+  const NEED = { QB: 1, RB: 2, WR: 2, TE: 1, DEF: 1 };
+  const ppg = r => r.gp ? r.pts / r.gp : null;
+  const shortN = n => { const p = String(n).split(' '); return p.length > 1 && !/^(D\/ST|Defense)$/.test(p[p.length - 1]) ? p[0][0] + '. ' + p.slice(1).join(' ') : n; };
+  function renderAll(ctx, fmt) {
+    X = ctx; load();
+    if (failed) return '<p class="error">Rosters didn’t load. Refresh the page to try again.</p>';
+    if (!R) return '<p class="loading">Loading rosters…</p>';
+    let F0 = fmt; if (!['full', 'grid', 'contracts'].includes(F0)) { try { F0 = localStorage.getItem('fbp-ra-fmt') || 'full'; } catch (e) { F0 = 'full'; } }
+    try { localStorage.setItem('fbp-ra-fmt', F0); } catch (e) {}
+    const esc = ctx.esc, tmx = f => ctx.teams[f] || {}, ST = (ctx.now && ctx.now.standings) || [];
+    const divs = [];
+    ST.slice().sort((a, b) => (a.division || '').localeCompare(b.division || '') || a.divisionRank - b.divisionRank).forEach(x => {
+      if (!R.teams[x.id]) return; let d = divs.find(d => d.n === x.divisionName); if (!d) divs.push(d = { n: x.divisionName, ids: [] }); d.ids.push(x.id); });
+    if (!divs.length) divs.push({ n: '', ids: Object.keys(R.teams) });
+    Object.keys(R.teams).forEach(f => { R.teams[f].fid = f; R.teams[f].abbr = tmx(f).abbr || ''; });
+    const nav = `<nav class="bt-sub ra-fmt" aria-label="Roster format">${[['full', 'Full'], ['grid', 'Grid'], ['contracts', 'Contracts']].map(([k, l]) => `<a href="#now/rosters/${k}"${k === F0 ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    return `<div class="ro-page ra-page">${nav}${findBox(esc)}${F0 === 'grid' ? raGrid(ctx, divs) : F0 === 'contracts' ? raMoney(ctx, divs) : raFull(ctx, divs)}
+      <p class="rf-foot">Through week ${R.through}. Points are each player’s whole season in FBP scoring, wherever he was; Pts/g is per game played. ${F0 === 'contracts' ? 'Payroll is this season’s salaries, every slot. 2027 under contract adds up next year’s salaries already set by the by-law escalators. Keep 75+ is what keeping every player rated 75+ (the prototype ratings) would cost against the team’s 2027 budget: the $200 cap adjusted for auction cash traded. Expiring: contracts in their last year. Tap a team to open its contracts; tap a column to sort.' : F0 === 'grid' ? 'Teams are ranked by their starters at the position (QB 1, RB 2, WR 2, TE 1, DEF 1), by points a game. Taxi and IR players are faded.' : 'Tap a player for his box; tap a team for its My Team page.'}</p></div>`;
+  }
+  function raFull(ctx, divs) {
+    const esc = ctx.esc, tmx = f => ctx.teams[f] || {}, ST = (ctx.now && ctx.now.standings) || [];
+    const card = f => {
+      const t = R.teams[f], st = ST.find(x => x.id === f), tm = tmx(f);
+      const act = t.rows.filter(r => r.st === 'ROSTER').sort((a, b) => POS.indexOf(a.pos) - POS.indexOf(b.pos) || (ppg(b) || 0) - (ppg(a) || 0) || b.sal - a.sal);
+      const row = r => { const on = open.has(r.id), v = ppg(r);
+        return `<tr class="ra-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${on ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${on}">
+          <td class="ra-pos">${r.pos}</td><td class="l ra-n"><b>${esc(r.name)}</b>${injChip(r)}</td><td>${v != null ? v.toFixed(1) : '—'}</td><td class="ra-pts">${r.gp ? r.pts.toFixed(1) : '—'}</td><td class="ra-sal">${$(r.sal)}</td></tr>
+          ${on ? `<tr class="ro-det"><td colspan="5">${box(r, t, ctx)}</td></tr>` : ''}`; };
+      const grp = (l, L) => L.length ? `<tr class="ra-g"><td colspan="5">${l}</td></tr>` + L.map(row).join('') : '';
+      const tx = t.rows.filter(r => r.st === 'TAXI_SQUAD'), ir = t.rows.filter(r => r.st === 'INJURED_RESERVE');
+      return `<section class="card ra-card" style="--tc:${tm.primary && tm.primary.toUpperCase() !== '#FFFFFF' ? tm.primary : tm.secondary || 'var(--line)'}">
+        <a class="ra-h" href="#now/team/${f}">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}<span class="ra-hn"><b>${esc(t.name)}</b><small>${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}${st ? ` · ${ord(st.divisionRank)} ${esc(st.divisionName)}${st.seed ? ` · <span class="ra-seed">#${st.seed} seed</span>` : ''}` : ''} · ${t.pf.toFixed(1)} pts</small></span><span class="ra-go" aria-hidden="true">›</span></a>
+        <table class="ra-t"><thead><tr><th></th><th class="l">Player</th><th>Pts/g</th><th class="ra-pts">Pts</th><th class="ra-sal">$</th></tr></thead>
+        <tbody>${act.map(row).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody></table></section>`;
+    };
+    return divs.map(d => `<section class="ra-div">${d.n ? `<h2 class="sec">${esc(d.n)}</h2>` : ''}<div class="ra-grid">${d.ids.map(card).join('')}</div></section>`).join('');
+  }
+  // Contracts: every team's money side by side; tap a team for its contracts by year
+  let cSort = ['room', 1]; const cOpen = new Set();
+  function raMoney(ctx, divs) {
+    const esc = ctx.esc, tmx = f => ctx.teams[f] || {}, D = espn('TF', 'data/trading-floor.json'), TF = D && !D.failed ? D.teams || {} : {};
+    const rows = divs.flatMap(d => d.ids).map(f => { const t = R.teams[f], tf = TF[f] || {};
+      const pay = t.rows.reduce((s, r) => s + r.sal, 0), n27 = t.rows.filter(r => r.fut && r.fut.length).length;
+      const c27 = t.rows.reduce((s, r) => s + (r.fut && r.fut[0] != null ? r.fut[0] : 0), 0);
+      const exp = t.rows.filter(r => r.cy && r.cy.split('/')[0] === r.cy.split('/')[1]);
+      const top = t.rows.slice().sort((a, b) => b.sal - a.sal)[0];
+      return { f, t, tf, pay, c27, n27, exp, top, room: tf.room27 != null ? tf.room27 : null, picks: (tf.picks || []).filter(p => p.y === (R.season || 2026) + 1).length }; });
+    const K = { team: x => tmx(x.f).abbr || '', pay: x => x.pay, c27: x => x.c27, room: x => x.room == null ? -1e9 : x.room, exp: x => x.exp.length, top: x => x.top ? x.top.sal : 0, picks: x => x.picks };
+    rows.sort((a, b) => { const x = K[cSort[0]](a), y = K[cSort[0]](b); return typeof x === 'string' ? cSort[1] * x.localeCompare(y) : cSort[1] * (y - x); });
+    const capMax = Math.max(200, ...rows.map(x => x.pay));
+    const th = (k, l, cls) => `<th class="ra-ms${cls ? ' ' + cls : ''}" data-ra-csort="${k}" aria-sort="${cSort[0] === k ? (cSort[1] > 0 ? 'descending' : 'ascending') : 'none'}">${l}${cSort[0] === k ? (cSort[1] > 0 ? ' ▼' : ' ▲') : ''}</th>`;
+    const yrs = [0, 1, 2, 3].map(k => (R.season || 2026) + 1 + k);
+    const detail = x => { const L = x.t.rows.slice().sort((a, b) => b.sal - a.sal);
+      return `<tr class="ra-mdet"><td colspan="8"><table class="ra-mt"><thead><tr><th class="l">Player</th><th>Contract</th><th>${R.season || 2026}</th>${yrs.map(y => `<th>${y}</th>`).join('')}</tr></thead><tbody>${L.map(r =>
+        `<tr${r.st !== 'ROSTER' ? ' class="off"' : ''}><td class="l"><a href="#now/team/${x.f}/${r.id}">${esc(r.name)}</a> <small>${r.pos}${r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : ''}</small></td><td>${r.cy || '—'}</td><td><b>${$(r.sal)}</b></td>${[0, 1, 2, 3].map(k => `<td>${r.fut && r.fut[k] != null ? $(r.fut[k]) : r.fut && k === r.fut.length ? '<span class="ro-fa">FA</span>' : ''}</td>`).join('')}</tr>`).join('')}</tbody></table></td></tr>`; };
+    return `<div class="tbl-wrap ra-gw"><table class="ra-money"><thead><tr>${th('team', 'Team', 'l')}${th('pay', `${R.season || 2026} payroll`, 'ra-mpay')}${th('top', 'Top contract', 'l hide-sm')}${th('c27', `${(R.season || 2026) + 1} under contract`)}${th('room', 'Keep 75+ vs budget')}${th('exp', 'Expiring')}${th('picks', `${(R.season || 2026) + 1} picks`, 'hide-sm')}<th></th></tr></thead><tbody>${rows.map(x => { const on = cOpen.has(x.f);
+      return `<tr class="ra-mr${on ? ' on' : ''}" data-ra-copen="${x.f}" aria-expanded="${on}"><td class="l ra-gtm"><span class="ra-mtm">${tmx(x.f).logo ? `<img src="${tmx(x.f).logo}" alt="">` : ''}<b>${esc(tmx(x.f).abbr || '')}</b></span></td>
+        <td class="ra-mpay"><b>${$(x.pay)}</b><span class="ra-bar"><i style="width:${(100 * x.pay / capMax).toFixed(1)}%"></i></span></td>
+        <td class="l hide-sm">${x.top ? `${esc(x.top.name)} <small>${$(x.top.sal)}</small>` : '—'}</td>
+        <td><b>${$(x.c27)}</b><small>${x.n27} player${x.n27 === 1 ? '' : 's'}</small></td>
+        <td>${x.room == null ? '—' : `<b class="${x.room < 0 ? 'ra-neg' : 'ra-pos'}">${x.room < 0 ? '−' : '+'}${$(Math.abs(x.room))}</b><small>${$(x.tf.keepCost)} for ${x.tf.keepN} vs ${$(x.tf.cap27)}</small>`}</td>
+        <td title="${esc(x.exp.map(r => r.name).join(', '))}"><b>${x.exp.length}</b>${x.exp.length ? `<small>${esc(x.exp.slice(0, 2).map(r => shortN(r.name)).join(', '))}${x.exp.length > 2 ? '…' : ''}</small>` : ''}</td>
+        <td class="hide-sm"><b>${x.picks}</b></td><td class="ra-car">${on ? '▴' : '▾'}</td></tr>${on ? detail(x) : ''}`; }).join('')}</tbody></table></div>`;
+  }
+  function raGrid(ctx, divs) {
+    const esc = ctx.esc, tmx = f => ctx.teams[f] || {}, P = POS.includes(raPos) ? raPos : 'QB', need = NEED[P];
+    const T = divs.flatMap(d => d.ids).map(f => { const t = R.teams[f];
+      const L = t.rows.filter(r => r.pos === P), act = L.filter(r => r.st === 'ROSTER').sort((a, b) => (ppg(b) || 0) - (ppg(a) || 0) || b.sal - a.sal);
+      const rest = L.filter(r => r.st !== 'ROSTER').sort((a, b) => (ppg(b) || 0) - (ppg(a) || 0));
+      const top = act.slice(0, need), sc = top.reduce((s, r) => s + (ppg(r) || 0), 0);
+      return { f, t, list: act.concat(rest), sc: top.length === need ? sc : sc }; }).sort((a, b) => b.sc - a.sc);
+    const W = Math.max(...T.map(x => x.list.length), 1);
+    const cell = (x, r, i) => { if (!r) return '<td class="ra-e"></td>'; const v = ppg(r);
+      return `<td class="ra-c${r.st !== 'ROSTER' ? ' off' : ''}${i < need && r.st === 'ROSTER' ? ' st' : ''}"><a href="#now/team/${x.f}/${r.id}"><b>${esc(shortN(r.name))}</b>${injChip(r)}<small>${v != null ? v.toFixed(1) : '—'}/g · ${$(r.sal)}${r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : ''}</small></a></td>`; };
+    const seg = `<div class="seg ra-pos-seg" role="tablist" aria-label="Position">${POS.map(p => `<button type="button" role="tab" data-ra-pos="${p}" aria-selected="${p === P}">${p}</button>`).join('')}</div>`;
+    return `${seg}<div class="tbl-wrap ra-gw"><table class="ra-gt"><thead><tr><th class="ra-gtm">Team</th><th class="ra-gs" title="Starters at ${P}: points a game">Top ${need}</th>${Array.from({ length: W }, (_, i) => `<th>${P}${i + 1}</th>`).join('')}</tr></thead>
+      <tbody>${T.map((x, k) => `<tr><td class="ra-gtm"><a href="#now/team/${x.f}">${tmx(x.f).logo ? `<img src="${tmx(x.f).logo}" alt="">` : ''}<b>${esc(tmx(x.f).abbr || '')}</b></a></td><td class="ra-gs"><b>${x.sc.toFixed(1)}</b><small>${ord(k + 1)}</small></td>${Array.from({ length: W }, (_, i) => cell(x, x.list[i], i)).join('')}</tr>`).join('')}</tbody></table></div>`;
   }
 
   document.addEventListener('click', e => {
-    const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick')) return;
+    const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick, .ra-page')) return;
+    const cs = t.closest('[data-ra-csort]'); if (cs) { const k = cs.dataset.raCsort; cSort = cSort[0] === k ? [k, -cSort[1]] : [k, 1]; return redraw(); }
+    if (t.closest('.ra-mdet a')) return;
+    const co = t.closest('[data-ra-copen]'); if (co) { const f = co.dataset.raCopen; cOpen.has(f) ? cOpen.delete(f) : cOpen.add(f); return redraw(); }
+    const rp = t.closest('[data-ra-pos]'); if (rp) { raPos = rp.dataset.raPos; try { localStorage.setItem('fbp-ra-pos', raPos); } catch (err) {} return redraw(); }
     const pk = t.closest('.ro-pick'); if (pk) { pickX = pk.scrollLeft; return; }
     if (t.closest('[data-ro-hit]')) { findQ = ''; return; }
+    if (t.closest('[data-ro-how]')) { howOpen = !howOpen; return redraw(); }
+    if (t.closest('[data-ro-mvall]')) { mvAll = !mvAll; return redraw(); }
+    const mv = t.closest('[data-ro-mv]'); if (mv) { mvShut = !mvShut; try { localStorage.setItem('fbp-ro-mv', mvShut ? 'shut' : 'open'); } catch (err) {}
+      mv.closest('.ro-fold').classList.toggle('shut', mvShut); mv.setAttribute('aria-expanded', String(!mvShut)); return; }
     const nt = t.closest('[data-ro-fold="note"]'); if (nt) { noteShut = !noteShut; try { localStorage.setItem('fbp-ro-note', noteShut ? 'shut' : 'open'); } catch (err) {}
       nt.closest('.ro-fold').classList.toggle('shut', noteShut); nt.setAttribute('aria-expanded', String(!noteShut)); return; }
     const wt = t.closest('[data-ro-wk]'); if (wt) { wkShut = !wkShut; try { localStorage.setItem('fbp-ro-wk', wkShut ? 'shut' : 'open'); } catch (err) {}
@@ -593,5 +753,5 @@ window.FBPRosters = (function () {
     if (t.closest('.ro-arch i, .ro-trd, .ro-ht .hc-v')) return;   // these show their explanation (site.js tip) instead of opening the player
     const p = t.closest('[data-ro-p]'); if (p) { const id = p.dataset.roP; open.has(id) ? open.delete(id) : open.add(id); return redraw(); }
   });
-  return { render };
+  return { render, renderAll };
 })();
