@@ -1,0 +1,158 @@
+{
+  "updated": "Nov 13, 2026",
+  "note": "Hand-kept. Each case is written from the reporting linked under it; allegations in civil suits and police reports are allegations, not findings. {team} in a statement is filled in with whichever FBP team rosters the player now.",
+  "cases": [
+    {
+      "id": "14073", "espn": "4047365", "name": "Josh Jacobs", "pos": "RB", "nfl": "GBP",
+      "status": "NFL review open", "tone": "open",
+      "headline": "Pleaded no contest to misdemeanor battery after a domestic incident; back on the field, league decision still to come.",
+      "timeline": [
+        ["May 26, 2026", "Arrested after police answered a disturbance call at his home near Green Bay. Police said his girlfriend reported a head injury and that garage camera video backed her account. Released from jail the next day."],
+        ["Aug 27, 2026", "Brown County DA files two misdemeanors: battery and criminal damage to property."],
+        ["Aug 30, 2026", "NFL places him on the Commissioner Exempt List: paid, but no practices or games."],
+        ["Sep 10, 2026", "Pleads no contest. Convicted of battery and fined $1,000; a deferred judgment agreement on the property charge."],
+        ["Oct 19, 2026", "Removed from the Exempt List after missing Green Bay's first six games. Returns to practice Oct 21."]
+      ],
+      "charges": [
+        ["Battery (misdemeanor)", "Intentionally causing bodily harm to another person. In Wisconsin it's a Class A misdemeanor: up to 9 months in jail and a $10,000 fine. A no contest plea isn't an admission, but it ends in a conviction just the same."],
+        ["Criminal damage to property (misdemeanor)", "Intentionally damaging someone else's property. Under a deferred judgment agreement the conviction is held off while he meets the agreement's terms; if he does, the charge can be dismissed."]
+      ],
+      "court": "Mostly settled. The battery conviction stands with a $1,000 fine and no jail term reported. What's left is living up to the deferred agreement on the property charge.",
+      "nfl": "The league's Personal Conduct Policy investigation is still open, so a suspension is possible. Domestic violence carries a six-game baseline under the policy. The six games he sat on the Exempt List count toward any suspension; if the league lands on more than six, he sits the difference.",
+      "statement": "The {team} front office is aware of the outcome of Josh Jacobs' case in Brown County and of the NFL's ongoing review. We take matters like this seriously, and we've made that clear. Josh is back on the field in Green Bay and back in our plans, and we will respect whatever the league decides. We won't comment further while the review is open.",
+      "sources": [
+        ["AP: Jacobs placed on the Commissioner Exempt List (Aug 30)", "https://www.click2houston.com/sports/2026/08/30/packers-josh-jacobs-placed-on-commissioner-exempt-list-while-he-faces-misdemeanor-charges/"],
+        ["ESPN: Jacobs eligible to return amid probe (Oct 16)", "https://www.espn.com/nfl/story/_/id/50197784/packers-josh-jacobs-eligible-return-next-week-amid-probe"],
+        ["WISN: Jacobs returns to practice (Oct 21)", "https://www.wisn.com/article/packers-josh-jacobs-returns-to-practice-after-arrest-and-plea/74210362"]
+      ]
+    },
+    {
+      "id": "11222", "espn": "15818", "name": "Keenan Allen", "pos": "WR", "nfl": "SFO",
+      "status": "Charges pending", "tone": "open",
+      "headline": "Charged with drunk driving in Indianapolis; traded to the 49ers with a possible suspension hanging over him.",
+      "timeline": [
+        ["Aug 30, 2026", "Arrested around 1 a.m. in Indianapolis after police found him in a no-parking zone. A later test read 0.224, nearly three times Indiana's limit."],
+        ["Sep 15, 2026", "Formally charged in Marion County. He waives his initial hearing the next day."],
+        ["Sep 2026", "Plays on for the Colts; the team says it will let the legal process and the NFL handle it."],
+        ["Nov 10, 2026", "Traded from the Colts to the 49ers ahead of the deadline."]
+      ],
+      "charges": [
+        ["Operating with a 0.15+ alcohol concentration (misdemeanor)", "Driving with an alcohol concentration of 0.15 or more. Indiana treats it as a Class A misdemeanor: up to a year in jail and a $5,000 fine."],
+        ["Operating while intoxicated (misdemeanor)", "Driving while impaired, regardless of the exact number. A Class C misdemeanor: up to 60 days in jail and a $500 fine."]
+      ],
+      "court": "The case is open; no plea has been reported. Sentencing, and any license consequences, will be up to the court.",
+      "nfl": "Drunk driving falls under the Personal Conduct Policy. ESPN reported he's likely looking at three games; Kyle Shanahan says a suspension this season is 'still possible' and 'could go either way.' The league often waits for the court case before ruling.",
+      "statement": "The {team} front office is aware of the charges against Keenan Allen in Marion County. Nobody should get behind the wheel after drinking, and we expect better. We welcome his fresh start in San Francisco and are planning for the possibility of a league suspension. We'll have no further comment while the case is pending.",
+      "sources": [
+        ["OutKick: Allen formally charged in Indianapolis (Sep 16)", "https://www.foxnews.com/outkick-sports/nfl-battle-drinking-driving-continues-keenan-allen-formally-charged-indianapolis"],
+        ["Yahoo Sports: Allen facing multiple charges (Sep 18)", "https://sports.yahoo.com/articles/nfl-star-receiver-facing-multiple-182758815.html"],
+        ["Yahoo Sports: Allen trade comes with NFL discipline looming (Nov 11)", "https://sports.yahoo.com/articles/keenan-allen-trade-comes-major-230638676.html"]
+      ]
+    },
+    {
+      "id": "16211", "espn": "4426515", "name": "Puka Nacua", "pos": "WR", "nfl": "LAR",
+      "status": "NFL review open", "tone": "open",
+      "headline": "Sued over an alleged bite at a New Year's Eve gathering; no criminal charges, but the league is still looking.",
+      "timeline": [
+        ["Dec 31, 2025", "A woman, Madison Atiabi, says Nacua bit her on the shoulder and made antisemitic remarks during a group outing on New Year's Eve."],
+        ["2026 offseason", "She files a civil lawsuit in Los Angeles County. The NFL says the matter is under review. Nacua briefly checks into a rehab facility."],
+        ["Aug 2026", "A judge sets a firm trial date: March 27, 2028. Nacua isn't among the players suspended when the league's first wave of decisions comes down."],
+        ["Sep 7, 2026", "Adam Schefter says a league decision might not come during the season."]
+      ],
+      "charges": [
+        ["Civil claims, not criminal charges", "This is a lawsuit for money damages over the alleged bite and remarks. Nacua's attorney calls the contact 'horseplay,' and he denies the antisemitic remarks. No criminal charges have been reported."]
+      ],
+      "court": "No jail on the table; a civil case can only cost him money. The trial is set for March 27, 2028, unless it settles first.",
+      "nfl": "The league can discipline a player without a criminal charge if its own investigation finds a violation. It can also close the case with nothing, as it did with Rashee Rice's civil case in April. Until it decides, he plays.",
+      "statement": "The {team} front office is aware of the civil lawsuit involving Puka Nacua and of the NFL's review. The case is headed for trial, and we'll let that process play out. Puka remains a cornerstone of this roster, and we have nothing further to add.",
+      "sources": [
+        ["OutKick: NFL review of Nacua continues (Sep 2)", "https://www.foxnews.com/outkick-sports/nfl-conduct-policy-review-puka-nacua-continues-drives-fantasy-football-managers-nuts"],
+        ["SI: What the 2028 trial date means for Nacua (Aug 19)", "https://www.si.com/nfl/rams/onsi/rams-puka-nacua-2028-trial-nfl-suspension"],
+        ["Heavy via Yahoo Sports: Nacua breaks his silence (Sep 8)", "https://sports.yahoo.com/articles/rams-puka-nacua-breaks-silence-055242098.html"]
+      ]
+    },
+    {
+      "id": "12801", "espn": "3116406", "name": "Tyreek Hill", "pos": "WR", "nfl": "FA",
+      "status": "NFL review open", "tone": "open",
+      "headline": "A civil jury found him liable on two battery counts; unsigned, rehabbing his knee, and still under league review.",
+      "timeline": [
+        ["2015", "As a college player, pleads guilty to domestic assault and battery by strangulation."],
+        ["Oct 2025", "His estranged wife, Lakeeta Vaccaro, files for divorce, alleging domestic abuse."],
+        ["Oct 13, 2026", "A civil jury finds him liable on 2 of 10 counts and awards her $500,000. No punitive damages."],
+        ["Nov 2026", "Still a free agent past the trade deadline, recovering from the knee injury he suffered in 2025."]
+      ],
+      "charges": [
+        ["Civil battery (liable on 2 counts)", "The jury found two incidents were battery: one on Jan 11, 2024, during a dispute over a postnuptial agreement, and one in April 2025, caught on a nanny cam, when he took his daughter from her crib. It found him not liable on six other battery counts, intentional infliction of emotional distress and continuing domestic violence."]
+      ],
+      "court": "No criminal case has been reported; this verdict is about money. The jury awarded $500,000 in compensatory damages; Vaccaro's lawyer had asked for $8 million.",
+      "nfl": "The league says the allegations remain under Personal Conduct Policy review. With a prior domestic case on his record, any discipline could be heavier, and the Commissioner can put him on the Exempt List when a team signs him. Reports say a signing would likely speed the league's decision.",
+      "statement": "The {team} front office has seen the jury's verdict in the civil case brought by Tyreek Hill's estranged wife, and we take its findings seriously. Tyreek is unsigned and rehabbing his knee. We'll reassess his place on this roster when there's an NFL team, and a league decision, to assess.",
+      "sources": [
+        ["ESPN: Hill found liable on 2 counts in civil trial (Oct 13)", "https://www.espn.com/nfl/story/_/id/50178212/tyreek-hill-found-liable-2-counts-battery-civil-trial-not-liable-remaining-claims"],
+        ["Yahoo Sports: Hill's possible Chiefs return comes with a complication (Oct 6)", "https://sports.yahoo.com/articles/tyreek-hill-potential-chiefs-return-210021568.html"],
+        ["Heavy: Hill's signing prospects take a hit (Nov 1)", "https://heavy.com/sports/nfl/kansas-city-chiefs/tyreek-hill-signing-prospects-trade-deadline-nfl-news/"]
+      ]
+    },
+    {
+      "id": "16194", "espn": "4428331", "name": "Rashee Rice", "pos": "WR", "nfl": "KCC",
+      "status": "On probation", "tone": "watch",
+      "headline": "Five years of felony probation from the 2024 Dallas crash; jailed 30 days this spring for violating it. The league has closed its other case.",
+      "timeline": [
+        ["2024", "A high-speed crash on a Dallas highway that involved several vehicles."],
+        ["2025", "Pleads guilty to two third-degree felonies: 30 days in jail and five years of probation. The NFL suspends him six games."],
+        ["Jan 2026", "A former girlfriend sues, alleging he assaulted her repeatedly over about a year and a half."],
+        ["Apr 2026", "The NFL closes its investigation of the lawsuit: 'insufficient evidence' of a policy violation."],
+        ["May 2026", "Tests positive for THC, violating probation; ordered to serve 30 days in the Dallas County jail. Scheduled release June 16."]
+      ],
+      "charges": [
+        ["Collision involving serious bodily injury (felony)", "Leaving or failing to meet the legal duties after a crash that seriously hurt someone. A third-degree felony in Texas."],
+        ["Racing on a highway causing bodily injury (felony)", "Street racing that hurts someone. Also a third-degree felony: 2 to 10 years in prison is the range."],
+        ["Probation violation", "Breaking a condition of his probation, here a positive THC test. The judge can add jail time, tighten the terms, or in the worst case revoke probation."]
+      ],
+      "court": "He's done the time for this spring's violation, but the probation runs five years. Another violation could bring more jail, and revocation would open up the felony range: 2 to 10 years for a third-degree felony in Texas.",
+      "nfl": "No new discipline expected: Ian Rapoport says he was already disciplined for what he was jailed for, and the lawsuit investigation is closed. A new arrest or violation would reopen everything.",
+      "statement": "The {team} front office notes that the NFL closed its investigation into the civil allegations against Rashee Rice without discipline, and that he has served the time ordered for his probation violation. Rashee remains on probation in Texas, and we expect him to meet every term of it. We're glad to have him on the field.",
+      "sources": [
+        ["NFL.com: Rice will not face NFL discipline after investigation", "https://www.nfl.com/news/chiefs-wr-rashee-rice-will-not-face-nfl-discipline-after-league-investigation"],
+        ["Fantasy Life: Rice probation violation (May 20)", "https://www.fantasylife.com/articles/nfl/fantasy-football-2026-impact-of-rashee-rice-probation-violation"],
+        ["For The Win via Yahoo Sports: Will Rice be suspended in 2026? (Sep 4)", "https://sports.yahoo.com/articles/rashee-rice-suspension-suspended-2026-153434160.html"]
+      ]
+    },
+    {
+      "id": "16186", "espn": "4429205", "name": "Jordan Addison", "pos": "WR", "nfl": "MIN",
+      "status": "Case closed", "tone": "closed",
+      "headline": "Arrested for trespassing at a Florida casino in January; prosecutors dropped it a week later.",
+      "timeline": [
+        ["Jan 12, 2026", "Arrested by Seminole tribal police at the Seminole Hard Rock Hotel and Casino in Florida on a misdemeanor trespassing charge. Posts a $500 bond."],
+        ["Jan 2026", "About a week later, the state attorney withdraws from prosecution. Case over."]
+      ],
+      "charges": [
+        ["Trespassing (misdemeanor, dropped)", "Being somewhere, or staying after being told to leave, without permission. Dropped before it went anywhere."]
+      ],
+      "court": "Nothing left: the case is closed.",
+      "nfl": "A dropped misdemeanor rarely draws discipline on its own, and none has been reported.",
+      "statement": "The {team} front office is pleased the trespassing case against Jordan Addison was dropped. This one's in the rear-view mirror.",
+      "sources": [
+        ["Primetimer: 10 NFL players arrested in 2026 and their charges (Jun 26)", "https://www.primetimer.com/news/from-rasheed-walker-to-terrion-arnold-10-nfl-players-who-got-arrested-in-2026-and-their-charges"]
+      ]
+    },
+    {
+      "id": "17507", "espn": "4870612", "name": "Zachariah Branch", "pos": "WR", "nfl": "ATL",
+      "status": "Case closed", "tone": "closed",
+      "headline": "Arrested in Athens, Georgia, in April for obstruction; prosecutors dismissed it after reviewing the video.",
+      "timeline": [
+        ["Apr 2026", "Arrested in Athens, Georgia; police say he refused to follow an officer's orders. Charged with misdemeanor obstruction."],
+        ["2026", "Georgia prosecutors dismiss the charge after reviewing the evidence, including video."]
+      ],
+      "charges": [
+        ["Obstruction (misdemeanor, dismissed)", "Knowingly hindering an officer doing his job, such as refusing lawful orders. Dismissed."]
+      ],
+      "court": "Nothing left: the charge was dismissed.",
+      "nfl": "With the charge dismissed, no league action has been reported.",
+      "statement": "The {team} front office is glad Georgia prosecutors dismissed the obstruction charge against Zachariah Branch after reviewing the evidence, including the video. We look forward to his first season in Atlanta.",
+      "sources": [
+        ["Primetimer: 10 NFL players arrested in 2026 and their charges (Jun 26)", "https://www.primetimer.com/news/from-rasheed-walker-to-terrion-arnold-10-nfl-players-who-got-arrested-in-2026-and-their-charges"]
+      ]
+    }
+  ]
+}

@@ -2712,3 +2712,36 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .bc-ti{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.08);font-size:14px}
 .bc-types b{font-size:.72rem}.bc-types small{font-size:.62rem;opacity:.75}.bc-types p{margin:1px 0 0;font-size:.64rem;line-height:1.3;opacity:.85}
 .ro-arch i{font-style:normal;cursor:help;margin-right:2px;font-size:.85rem}
+
+/* ---------- Beta > The Docket (assets/legal.js) ---------- */
+.lg-intro{font-size:.9rem;color:var(--muted);max-width:60rem;margin:0 0 12px}
+.lg-seg{margin:0 0 12px}
+.lg-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:12px;align-items:start}
+.lg-card{padding:14px 16px;border-left:4px solid var(--line)}
+.lg-card.open{border-left-color:#c0392b}.lg-card.watch{border-left-color:#d69e2e}.lg-card.closed{border-left-color:#2f855a}
+.lg-top{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.lg-hs{width:56px;height:56px;border-radius:50%;object-fit:cover;background:var(--line)}
+.lg-id h3{margin:0;font:700 1.1rem var(--display)}
+.lg-id h3 a{color:inherit;text-decoration:none}
+.lg-sub{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);margin-top:2px;flex-wrap:wrap}
+.lg-nfl{width:18px;height:18px;object-fit:contain}
+.lg-fa{font-size:.7rem;font-weight:700}
+.lg-own{display:inline-flex;align-items:center;gap:4px;font-weight:700;color:var(--fg)}
+.lg-own img{width:18px;height:18px;object-fit:contain}
+.lg-status{font:700 .6rem var(--body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.lg-status.open{color:#c0392b}.lg-status.watch{color:#b7791f}.lg-status.closed{color:#2f855a}
+.lg-head{margin:10px 0 8px;font-size:.92rem;line-height:1.4}
+.lg-pr{margin:0 0 8px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--fg) 5%,var(--surface));border:1px solid var(--line)}
+.lg-prh{display:block;font:700 .6rem var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.lg-pr p{margin:0;font-size:.86rem;line-height:1.45;font-style:italic}
+.lg-more summary{cursor:pointer;font:600 .82rem var(--body);color:var(--accent);padding:4px 0}
+.lg-tl{list-style:none;margin:8px 0;padding:0 0 0 12px;border-left:2px solid var(--line)}
+.lg-tl li{display:flex;flex-direction:column;gap:1px;margin:0 0 8px;font-size:.84rem;line-height:1.4}
+.lg-tl b{font-size:.72rem;color:var(--muted);letter-spacing:.03em}
+.lg-more h4{margin:12px 0 4px;font:700 .72rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.lg-ch{margin:0}.lg-ch dt{font-weight:700;font-size:.86rem;margin-top:6px}.lg-ch dd{margin:2px 0 0;font-size:.84rem;line-height:1.45}
+.lg-stakes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lg-stakes p{margin:0;font-size:.84rem;line-height:1.45}
+@media (max-width:560px){.lg-stakes{grid-template-columns:1fr}.lg-top{grid-template-columns:auto 1fr}.lg-status{grid-column:1/-1;justify-self:start}}
+.lg-src{font-size:.72rem;color:var(--muted);margin:12px 0 0;line-height:1.5}
+.lg-src a{color:inherit}
