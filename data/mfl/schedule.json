@@ -935,13 +935,13 @@
         "id": "0005",
         "isHome": "0",
         "result": "T",
-        "spread": "13.3"
+        "spread": "7.1"
        },
        {
         "id": "0007",
         "isHome": "1",
         "result": "T",
-        "spread": "-13.3"
+        "spread": "-7.1"
        }
       ]
      },
