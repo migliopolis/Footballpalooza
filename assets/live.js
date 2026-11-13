@@ -504,7 +504,7 @@
       return c.length ? c.sort((x, y) => Math.abs(lum(x) - 0.5) - Math.abs(lum(y) - 0.5))[0] : 'var(--muted)'; };
     const logo = id => tm(id).logo ? `<img class="lv-lg" src="${tm(id).logo}" alt="">` : `<span class="lv-lg">${esc(tm(id).abbr || '')}</span>`;
     // the labels over a game, highest first: CHAMPIONSHIP PREVIEW (the 1 and 2 seeds) or GAME OF THE WEEK, MY MATCHUP,
-    // then this week's context: PLAYOFF PREVIEW (both teams 75%+ to make the playoffs), PLAYOFF IMPLICATIONS (a win or
+    // then this week's context: PLAYOFF PREVIEW (both teams 75%+ to make the playoffs), PLAYOFF STAKES (a win or
     // loss moves either team's odds 15+ points), REVENGE GAME (a starter facing the team that traded or released him in
     // the past year), DRAFT IMPLICATIONS (two bottom-six teams within two picks) and, when nothing else applies, DIVISION RIVALRY. Two show at most.
     const gameTags = (m, a, b, wk, gotw, mine) => {
@@ -519,7 +519,7 @@
       if (g && po(a.id) >= 75 && po(b.id) >= 75) out.push(['pp', 'Playoff preview', `${abbr(a.id)} ${Math.round(po(a.id))}% and ${abbr(b.id)} ${Math.round(po(b.id))}% to make the playoffs`]);
       else if (g) { const sw = id => { const t = g.teams[id]; return t && t.ifWin && t.ifLoss ? [t.ifWin[0] - t.ifLoss[0], t.ifWin[0], t.ifLoss[0]] : [0]; };
         const big = [a.id, b.id].map(id => [id, sw(id)]).sort((x, y) => y[1][0] - x[1][0])[0];
-        if (big[1][0] >= 15) out.push(['po', 'Playoff implications', `${abbr(big[0])} make the playoffs ${Math.round(big[1][1])}% of the time with a win, ${Math.round(big[1][2])}% with a loss`]); }
+        if (big[1][0] >= 15) out.push(['po', 'Playoff stakes', `${abbr(big[0])} make the playoffs ${Math.round(big[1][1])}% of the time with a win, ${Math.round(big[1][2])}% with a loss`]); }
       const JPs = journeys(), yr = Date.now() / 1000 - 365 * 86400;
       rv: if (JPs) for (const [f, o] of [[a, b], [b, a]]) for (const p of (f.players.player || [])) {
         if (p.status !== 'starter' || pos(p.id) === 'DEF') continue;
