@@ -61,6 +61,9 @@ jobs:
       - name: Rosters (League Now > Rosters)
         continue-on-error: true
         run: python scripts/rosters.py
+      - name: Role archetypes from ESPN game logs (Rosters)
+        continue-on-error: true
+        run: python scripts/roles.py
       - name: FBP Power Score (League Now > Power Rankings)
         continue-on-error: true
         run: python scripts/power.py
