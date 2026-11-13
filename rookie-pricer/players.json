@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-12",
+ "asOf": "2026-11-13",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
@@ -16,7 +16,7 @@
    "pos": "RB",
    "school": "Florida",
    "adp": 4.5,
-   "nflPick": 23
+   "nflPick": 21
   },
   {
    "name": "Cam Coleman",
@@ -37,7 +37,7 @@
    "pos": "QB",
    "school": "Texas",
    "adp": 5.7,
-   "nflPick": 7
+   "nflPick": 5
   },
   {
    "name": "Drew Mestemaker",
@@ -51,21 +51,21 @@
    "pos": "QB",
    "school": "Miami",
    "adp": 7.2,
-   "nflPick": 9
+   "nflPick": 6
   },
   {
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
    "adp": 8.1,
-   "nflPick": 9
+   "nflPick": 16
   },
   {
    "name": "KJ Duff",
    "pos": "WR",
    "school": "Rutgers",
    "adp": 11.9,
-   "nflPick": 23
+   "nflPick": 30
   },
   {
    "name": "Ahmad Hardy",
@@ -79,7 +79,7 @@
    "pos": "QB",
    "school": "Notre Dame",
    "adp": 13.1,
-   "nflPick": 10
+   "nflPick": 9
   },
   {
    "name": "Kewan Lacy",
@@ -100,7 +100,7 @@
    "pos": "TE",
    "school": "Oregon",
    "adp": 13.9,
-   "nflPick": 20
+   "nflPick": 26
   },
   {
    "name": "Nick Marsh",
@@ -114,14 +114,14 @@
    "pos": "WR",
    "school": "Alabama",
    "adp": 15.3,
-   "nflPick": 17
+   "nflPick": 32
   },
   {
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
    "adp": 16.5,
-   "nflPick": 15
+   "nflPick": 23
   },
   {
    "name": "Nate Frazier",
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 22.3,
-   "nflPick": 32
+   "nflPick": 24
   },
   {
    "name": "Mark Fletcher Jr.",
@@ -177,7 +177,7 @@
    "pos": "QB",
    "school": "USC",
    "adp": 25.0,
-   "nflPick": 62
+   "nflPick": 32
   },
   {
    "name": "Julian Sayin",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 25.6,
-   "nflPick": 24
+   "nflPick": 28
   },
   {
    "name": "Justice Haynes",
