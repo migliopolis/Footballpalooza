@@ -3,7 +3,7 @@
   "note": "Hand-kept. Each case is written from the reporting linked under it; allegations in civil suits and police reports are allegations, not findings. {team} in a statement is filled in with whichever FBP team rosters the player now.",
   "cases": [
     {
-      "id": "14073", "espn": "4047365", "name": "Josh Jacobs", "pos": "RB", "nfl": "GBP",
+      "id": "14073", "espn": "4047365", "name": "Josh Jacobs", "pos": "RB", "club": "GBP",
       "status": "NFL review open", "tone": "open",
       "headline": "Pleaded no contest to misdemeanor battery after a domestic incident; back on the field, league decision still to come.",
       "timeline": [
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "id": "11222", "espn": "15818", "name": "Keenan Allen", "pos": "WR", "nfl": "SFO",
+      "id": "11222", "espn": "15818", "name": "Keenan Allen", "pos": "WR", "club": "SFO",
       "status": "Charges pending", "tone": "open",
       "headline": "Charged with drunk driving in Indianapolis; traded to the 49ers with a possible suspension hanging over him.",
       "timeline": [
@@ -50,7 +50,7 @@
       ]
     },
     {
-      "id": "16211", "espn": "4426515", "name": "Puka Nacua", "pos": "WR", "nfl": "LAR",
+      "id": "16211", "espn": "4426515", "name": "Puka Nacua", "pos": "WR", "club": "LAR",
       "status": "NFL review open", "tone": "open",
       "headline": "Sued over an alleged bite at a New Year's Eve gathering; no criminal charges, but the league is still looking.",
       "timeline": [
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "id": "12801", "espn": "3116406", "name": "Tyreek Hill", "pos": "WR", "nfl": "FA",
+      "id": "12801", "espn": "3116406", "name": "Tyreek Hill", "pos": "WR", "club": "FA",
       "status": "NFL review open", "tone": "open",
       "headline": "A civil jury found him liable on two battery counts; unsigned, rehabbing his knee, and still under league review.",
       "timeline": [
@@ -94,7 +94,7 @@
       ]
     },
     {
-      "id": "16194", "espn": "4428331", "name": "Rashee Rice", "pos": "WR", "nfl": "KCC",
+      "id": "16194", "espn": "4428331", "name": "Rashee Rice", "pos": "WR", "club": "KCC",
       "status": "On probation", "tone": "watch",
       "headline": "Five years of felony probation from the 2024 Dallas crash; jailed 30 days this spring for violating it. The league has closed its other case.",
       "timeline": [
@@ -119,7 +119,7 @@
       ]
     },
     {
-      "id": "16186", "espn": "4429205", "name": "Jordan Addison", "pos": "WR", "nfl": "MIN",
+      "id": "16186", "espn": "4429205", "name": "Jordan Addison", "pos": "WR", "club": "MIN",
       "status": "Case closed", "tone": "closed",
       "headline": "Arrested for trespassing at a Florida casino in January; prosecutors dropped it a week later.",
       "timeline": [
@@ -137,7 +137,7 @@
       ]
     },
     {
-      "id": "17507", "espn": "4870612", "name": "Zachariah Branch", "pos": "WR", "nfl": "ATL",
+      "id": "17507", "espn": "4870612", "name": "Zachariah Branch", "pos": "WR", "club": "ATL",
       "status": "Case closed", "tone": "closed",
       "headline": "Arrested in Athens, Georgia, in April for obstruction; prosecutors dismissed it after reviewing the video.",
       "timeline": [

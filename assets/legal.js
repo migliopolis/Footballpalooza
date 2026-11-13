@@ -27,7 +27,7 @@ window.FBPLegal = (function () {
       <header class="lg-top">
         <img class="lg-hs" src="${head(c.espn)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
         <div class="lg-id"><h3>${f ? `<a href="#now/rosters/${f}/${c.id}">${esc(c.name)}</a>` : esc(c.name)}</h3>
-          <div class="lg-sub">${esc(c.pos)} ${nflLogo(c.nfl)}${t ? `<span class="lg-own">${t.logo ? `<img src="${t.logo}" alt="">` : ''}${esc(t.abbr || f)}</span>` : '<span class="lg-own">Not on an FBP roster</span>'}</div></div>
+          <div class="lg-sub">${esc(c.pos)} ${nflLogo(c.club)}${t ? `<span class="lg-own">${t.logo ? `<img src="${t.logo}" alt="">` : ''}${esc(t.abbr || f)}</span>` : '<span class="lg-own">Not on an FBP roster</span>'}</div></div>
         <span class="lg-status ${c.tone}">${esc(c.status)}</span>
       </header>
       <p class="lg-head">${esc(c.headline)}</p>
