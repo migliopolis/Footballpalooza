@@ -76,6 +76,9 @@ jobs:
       - name: Player journeys (Player Page, Reference > Players, Trading Floor)
         continue-on-error: true
         run: python scripts/journeys.py
+      - name: Trade trees (Trading Floor > History, How it played out)
+        continue-on-error: true
+        run: python scripts/trade_trees.py
       - name: Build this week's matchups (League Now > Matchups)
         continue-on-error: true
         run: python scripts/matchups.py
