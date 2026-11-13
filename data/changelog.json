@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0176",
+      "to": "0.0180",
+      "dates": "Nov 12, 2026",
+      "items": [
+        "Section menus in the top tabs: Game Day, League Now, Rookie Draft and Reference have a ▾ that opens their pages, replacing the button rows on those pages. A one-time note explains the move.",
+        "Scoreboard: a tighter header (status beside the title, week strip and Compact / Expand on one row) and a gold shimmering border on the Game of the Week.",
+        "Standings on a phone held upright open on logo, record, GB, Pct, Div and PF; swipe right for team names. Seed chips sit on the team logos everywhere.",
+        "Ticket Helper on iPad: player names stay on one line.",
+        "Ticker: Game Day sections with live FBP scores (with or without each side's top two players), top scorers with hot and cold marks, NFL scores and the weekend's games still to come.",
+        "Trading Floor > History: How it played out follows every asset forward through later trades until a player is released or not kept, with what the other team got in each later deal."
+      ]
+    },
+    {
       "from": "0.0171",
       "to": "0.0175",
       "dates": "Nov 11–12, 2026",

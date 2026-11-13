@@ -2616,3 +2616,17 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .st-fit thead th:nth-child(1){scroll-snap-align:start}
 .st-fit thead th:nth-child(3){scroll-snap-align:start;scroll-margin-left:calc(26px + 18px)}
 .st-fit td.t{min-width:11rem;max-width:13rem}
+
+/* Trading Floor > History: trade trees */
+.tt-side{margin:10px 0 4px}
+.tt-side h5{display:flex;align-items:center;gap:6px;margin:0 0 4px;font-size:.9rem}
+.tt{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid var(--line)}
+.tt.tt-top{padding-left:4px;border-left:0}
+.tt-n{margin:6px 0;font-size:.86rem;line-height:1.45}
+.tt-n .tf-pos{margin-right:5px}
+.tt-pts{margin-left:6px;font-variant-numeric:tabular-nums;font-weight:600;cursor:help}
+.tt-live{margin-left:6px;font-size:.74rem;color:var(--ok);font-weight:600}
+.tt-end{margin-left:6px;font-size:.74rem;color:var(--muted)}
+.tt-tr{margin:4px 0 2px 2px;font-size:.8rem;color:var(--muted)}
+.tt-pc{display:inline-block;font-size:.68rem;font-weight:700;padding:0 6px;border-radius:999px;background:var(--sky-soft);color:var(--fg)}
+.tt-they{margin:2px 0 2px 2px;font-size:.76rem;color:var(--muted)}.tt-they b{font-weight:600;color:var(--fg)}

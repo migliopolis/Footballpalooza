@@ -119,8 +119,15 @@ window.FBPTrade = (function () {
   const has = (t, k) => t.aGave.concat(t.bGave).some(x => x.k === k);
   const kindOk = t => !kind ? true : kind === 'picks' ? has(t, 'pick') : kind === 'cash' ? has(t, 'cash')
     : kind === 'players' ? !has(t, 'pick') && !has(t, 'cash') && has(t, 'p') : kind === 'pickswap' ? has(t, 'pick') && !has(t, 'p') : true;
+  // trade trees (data/trade-trees.json, scripts/trade_trees.py): every asset followed through later trades until
+  // the player is released or not kept. Totals there already include playoff points.
+  let TT = null, ttAsked = false;
+  const loadTrees = () => { if (ttAsked) return; ttAsked = true;
+    fetch('data/trade-trees.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { TT = (j && j.trees) || {}; redraw(); }).catch(() => { TT = {}; }); };
+  const tree = (t, s) => TT && TT[`${t.ts}-${t.a}-${t.b}`] ? TT[`${t.ts}-${t.a}-${t.b}`][s] : null;
   const all = o => o ? (o.total || 0) + (o.po || 0) : 0;
-  const swing = t => Math.abs(all(t.outA) - all(t.outB));
+  const tot = (t, s) => { const tr = tree(t, s); return tr ? tr.total : all(s === 'a' ? t.outA : t.outB); };
+  const swing = t => Math.abs(tot(t, 'a') - tot(t, 'b'));
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
   // everyone in the trade, players taken with the picks included: their whole FBP careers (assets/journey.js)
   const jyIds = t => [...new Set(t.aGave.concat(t.bGave).map(x => x.k === 'p' ? x.id : x.became && x.became.id).filter(Boolean))];
@@ -135,6 +142,7 @@ window.FBPTrade = (function () {
   }
   document.addEventListener('toggle', e => { if (e.target.matches && e.target.matches('.tf-later') && e.target.open) fillJourneys(); }, true);
   function vHistory() {
+    loadTrees();
     const seasons = [...new Set(D.trades.map(t => t.season))];
     const qq = fold(q.trim());
     const words = t => [nm(t.a), nm(t.b)].concat(t.aGave.concat(t.bGave).map(x => x.t + (x.became ? ' ' + x.became.n : '')));
@@ -143,8 +151,33 @@ window.FBPTrade = (function () {
     if (hsort === 'swing') L = L.slice().sort((a, b) => swing(b) - swing(a));
     const tag = x => x.k === 'p' && x.pos ? `<span class="tf-pos">${esc(x.pos)}</span>` : x.k === 'pick' ? '<span class="tf-pos">PK</span>' : x.k === 'cash' ? '<span class="tf-pos tf-cash">$</span>' : '';
     const became = (x, f) => x.became ? ` <span class="tf-became">→ ${esc(x.became.n)} <small>${esc(x.became.pos || '')}${x.k === 'pick' && !/pick \d/.test(x.t) ? ` · ${x.became.y} ${x.became.slot}` : ''}${x.became.by && x.became.by !== f ? ` · taken by ${esc(nm(x.became.by))}` : ''}</small></span>` : '';
-    const side = (f, got, out) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got${out ? ` <span class="tf-tot">${n1(out.total)} pts${out.po ? ` + ${n1(out.po)} playoffs` : ''}</span>` : ''}</h4><ul>${got.length ? got.map(x => `<li>${tag(x)}${esc(x.t)}${became(x, f)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
+    const side = (f, got, out, tr) => `<div class="tf-side"><h4>${logo(f)}${esc(nm(f))} got${tr ? ` <span class="tf-tot">${n1(tr.total - tr.po)} pts${tr.po ? ` + ${n1(tr.po)} playoffs` : ''}</span>` : out ? ` <span class="tf-tot">${n1(out.total)} pts${out.po ? ` + ${n1(out.po)} playoffs` : ''}</span>` : ''}</h4><ul>${got.length ? got.map(x => `<li>${tag(x)}${esc(x.t)}${became(x, f)}</li>`).join('') : '<li class="tf-sub">Nothing recorded in MFL</li>'}</ul></div>`;
+    // the tree: what each side got, and where it went from there
+    const sum = o => Object.values(o || {}).reduce((x, v) => x + v, 0);
+    const ending = e => !e ? '' : e.how === 'here' ? '<span class="tt-live">still on the roster</span>' : e.how === 'R' ? `<span class="tt-end">released${e.ts ? ' ' + date(e.ts) : ''}</span>`
+      : e.how === 'N' ? `<span class="tt-end">${esc(e.text || 'not kept')}</span>` : e.how === 'pending' ? '<span class="tt-live">not drafted yet</span>' : '';
+    const tnode = n => {
+      if (n.k === 'cash') return `<li class="tt-n tt-cash"><span class="tf-pos tf-cash">$</span>${esc(n.t)} <small class="tt-end">auction cash, branch ends</small></li>`;
+      const head = n.k === 'p'
+        ? `<span class="tf-pos">${esc(n.pos || '')}</span><b>${esc(n.n)}</b>${n.via ? ` <small class="tf-via">via ${esc(n.via)}</small>` : ''}
+           <span class="tt-pts" title="${esc(Object.entries(n.pts || {}).map(([y, v]) => `${y}: ${n1(v)}${(n.po || {})[y] ? ` + ${n1(n.po[y])} playoffs` : ''}`).join('\n'))}">${n1(sum(n.pts))} pts${sum(n.po) ? ` + ${n1(sum(n.po))} playoffs` : ''}</span>`
+        : `<span class="tf-pos">PK</span><b>${esc(n.t)}</b>${n.became ? ` <small class="tf-via">${esc(n.became.n)} taken by ${esc(nm(n.became.by))}</small>` : ''}`;
+      const tr = n.trade ? `<div class="tt-tr">↳ Traded ${date(n.trade.ts)} to ${esc(nm(n.trade.to))}${n.trade.pieces > 1 ? ` <span class="tt-pc">1 of ${n.trade.pieces} pieces</span>${n.trade.with.length ? ` <small>with ${esc(n.trade.with.join(', '))}</small>` : ''}` : ''}, for:</div>
+        ${n.trade.they && n.trade.they.length ? `<div class="tt-they">${esc(nm(n.trade.to))} got ${n.trade.they.map(([w, v]) => `${esc(w)}${v != null ? ` <b>(${n1(v)})</b>` : ''}`).join(', ')}</div>` : ''}
+        <ul class="tt">${n.trade.kids.map(tnode).join('') || '<li class="tt-n tf-sub">Nothing recorded in MFL</li>'}</ul>` : '';
+      return `<li class="tt-n">${head} ${n.trade ? '' : ending(n.end)}${tr}</li>`;
+    };
+    const treeHtml = t => {
+      const a = tot(t, 'a'), b = tot(t, 'b');
+      const lead = a === b ? 'Even so far.' : `${esc(nm(a > b ? t.a : t.b))} by ${n1(Math.abs(a - b))} so far, playoffs included.`;
+      const sd = (f, s) => { const tr = tree(t, s); return `<div class="tt-side"><h5>${logo(f)}${esc(nm(f))} <span class="tf-tot">${n1(tr.total - tr.po)} pts${tr.po ? ` + ${n1(tr.po)} playoffs` : ''}</span></h5>
+        <ul class="tt tt-top">${tr.nodes.map(tnode).join('') || '<li class="tt-n tf-sub">Nothing recorded in MFL</li>'}</ul></div>`; };
+      return `<details class="tf-later"><summary>How it played out <small>${lead}</small></summary>${sd(t.a, 'a')}${sd(t.b, 'b')}
+        ${jyIds(t).length ? `<div class="tf-jy" data-tf-jy="${jyIds(t).join(',')}"><h5>Their FBP careers</h5></div>` : ''}
+        <p class="tf-sub">Everything each team got, followed forward: a player’s starter points for that team until it let him go, a pick as the player taken with it, and anything traded on as what came back. Released or not kept ends a branch; so does auction cash. A piece that went out with others is labeled (“1 of 4 pieces”) and keeps its full points. Under each later trade is what the other team got in it and has scored with it since, for reference; that counts in that trade’s own tree, not this one. Playoff points count real playoff games only. Tap a point total for each season.</p></details>`;
+    };
     const later = t => {
+      if (tree(t, 'a') && tree(t, 'b')) return treeHtml(t);
       const S = [[t.a, t.outA], [t.b, t.outB]].filter(([, o]) => o && o.rows.length);
       if (!S.length) return '';
       const years = [...new Set(S.flatMap(([, o]) => o.years))].sort();
@@ -164,7 +197,7 @@ window.FBPTrade = (function () {
       <select class="tf-sort" aria-label="Sort"><option value="new"${hsort === 'new' ? ' selected' : ''}>Newest first</option><option value="swing"${hsort === 'swing' ? ' selected' : ''}>Biggest swing</option></select></div>
      ${seg('tfk', kind, KIND)}
      <p class="tf-sub tf-count">${L.length} trade${L.length === 1 ? '' : 's'}. Tap “How it played out” on a trade for each side’s points since. Auction cash is from the commissioner’s trade log; FAAB isn’t recorded.</p>
-     <div class="tf-hist">${L.slice(0, 150).map(t => `<article class="tf-tr"><p class="tf-date">${date(t.ts)}${hsort === 'swing' && (t.outA || t.outB) ? ` · swing ${n1(swing(t))} pts` : ''}</p><div class="tf-sides">${side(t.a, t.bGave, t.outA)}${side(t.b, t.aGave, t.outB)}</div>${later(t)}</article>`).join('') || '<p class="tf-sub">No trades match.</p>'}</div>`;
+     <div class="tf-hist">${L.slice(0, 150).map(t => `<article class="tf-tr"><p class="tf-date">${date(t.ts)}${hsort === 'swing' && (t.outA || t.outB) ? ` · swing ${n1(swing(t))} pts` : ''}</p><div class="tf-sides">${side(t.a, t.bGave, t.outA, tree(t, 'a'))}${side(t.b, t.aGave, t.outB, tree(t, 'b'))}</div>${later(t)}</article>`).join('') || '<p class="tf-sub">No trades match.</p>'}</div>`;
   }
 
   function render(ctx) {
