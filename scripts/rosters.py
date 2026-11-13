@@ -115,8 +115,13 @@ def face_of_franchise(cur, rostered, names, pos, espn):
     """{franchise: {...}}: the current player with the most history with that team (starts, seasons, honors, titles)."""
     pr = load(D('player-records.json'), {}) or {}
     tf = pr.get('team_fields', [])
-    rec = {}
+    rec, car = {}, {}
+    pf = pr.get('fields', [])
     for row in pr.get('players', []):
+        c = dict(zip(pf, row))   # career, every FBP team: points a start, regular season and playoffs together
+        n = sum(c.get(k, 0) or 0 for k in ('w', 'l', 't', 'pw', 'pl', 'pt'))
+        if n:
+            car[row[0]] = round(((c.get('pts') or 0) + (c.get('popts') or 0)) / n, 1)
         for t in row[-1]:
             rec[(row[0], t[0])] = dict(zip(tf, t))
     hon = collections.defaultdict(lambda: collections.Counter())
@@ -156,7 +161,7 @@ def face_of_franchise(cur, rostered, names, pos, espn):
                 best = (score, {'id': pid, 'name': names.get(pid, pid), 'pos': pos.get(pid, ''), 'espn': espn.get(pid, '') or '',
                                 'seasons': seasons, 'first': min(yrs) if yrs else None, 'starts': starts,
                                 'w': r.get('w', 0) + r.get('pw', 0), 'l': r.get('l', 0) + r.get('pl', 0), 't': r.get('t', 0) + r.get('pt', 0),
-                                'honors': {k: v for k, v in h.items()}, 'titles': ti})
+                                'honors': {k: v for k, v in h.items()}, 'titles': ti, 'pps': car.get(pid)})
         if best:
             out[f] = best[1]
     return out

@@ -2879,3 +2879,9 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ro-mvk.w{color:#8ab4f8}}
 :root[data-theme="dark"] .ro-mvk.w{color:#8ab4f8}
 @media (max-width:480px){.ro-tog .ro-mvn{display:none}}
+/* Rosters: compact All-FBP chips; back links to Rosters */
+.ra-aw{display:inline-block;font:800 .54rem/1 var(--body);padding:2px 4px;border-radius:3px;margin-left:5px;vertical-align:1px;color:#1a1a1a}
+.ra-aw.g{background:#f0c94a}.ra-aw.s{background:#cfd4da}
+.ro-backr{align-self:flex-start;margin:0!important}
+.pp-backs{display:flex;gap:4px 14px;flex-wrap:wrap;align-items:center}
+.pp-backs .pp-back{margin-bottom:12px!important}

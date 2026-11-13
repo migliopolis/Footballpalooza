@@ -441,7 +441,7 @@ window.FBPRosters = (function () {
     const tile = (l, v, sub) => `<div class="ro-tile"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
     const sec = (title, body, cls) => body ? `<section class="card ro-card pp-sec${cls ? ' ' + cls : ''}"><h2>${title}</h2>${body}</section>` : '';
     return `<div class="pp">
-      <a class="pp-back" href="#now/team/${t.fid}"><span aria-hidden="true">←</span> ${esc(t.name)} roster</a>
+      <div class="pp-backs">${backR()}<a class="pp-back" href="#now/team/${t.fid}"><span aria-hidden="true">←</span> ${esc(t.name)}</a></div>
       <div class="pp-hero" style="--tc:${tm.primary || 'var(--line)'}">${photo}
         <div class="pp-id"><h2>${esc(r.name)}${injChip(r)}${chip}${aw}</h2>
           <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
@@ -531,7 +531,7 @@ window.FBPRosters = (function () {
       <div class="ro-f2m"><small>Face of the Franchise</small>
         <h3><a href="#now/team/${t.fid}/${F.id}">${esc(F.name)}</a>${r.id ? injChip(r) : ''}${rings}</h3>
         <p>${esc(F.pos)}${r.nfl ? ` · ${nflLogo(NFL_ESPN[r.nfl] || r.nfl)}` : ''}${r.age ? ' · age ' + r.age : ''}${r.id ? archIcons(r) : ''}</p>
-        <p class="ro-f2l">${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''} · ${F.starts} starts${rec ? ' · ' + rec : ''}${r.gp ? ` · ${(r.pts / r.gp).toFixed(1)} a game this year` : ''}</p>
+        <p class="ro-f2l">${F.seasons} season${F.seasons === 1 ? '' : 's'}${F.first ? ' since ' + F.first : ''} · ${F.starts} starts${rec ? ' · ' + rec : ''}${F.pps != null ? ` · <b title="FBP career, every team, regular season and playoffs">${F.pps.toFixed(1)} a start</b> career` : ''}${r.gp ? ` · ${(r.pts / r.gp).toFixed(1)} a game this year` : ''}</p>
         ${hons || now ? `<div class="ro-f2c">${hons}${now}</div>` : ''}</div></section>`;
   }
   // State of the Team: where the trade deadline finds them (data/trading-floor.json)
@@ -572,9 +572,21 @@ window.FBPRosters = (function () {
       <p class="ro-why">This season’s moves from MFL: waiver claims (with the winning bid), free-agent pickups and drops, and trades. Taxi and IR moves aren’t listed.</p></div></section>`;
   }
 
+  // came here from Rosters? then My Team and its Player Pages get a way back to the exact Rosters view (and its scroll)
+  let lastH = location.hash, fromR = null, raY = 0, raBack = false;
+  function track() {
+    const h = location.hash; if (h === lastH) return;
+    const old = lastH; lastH = h;
+    const isR = x => /^#now\/rosters(\/(full|grid|contracts))?$/.test(x), isT = x => x.startsWith('#now/team');
+    if (isT(h)) { if (isR(old)) { fromR = old; raY = window.__raY || 0; } else if (!isT(old)) fromR = null; }
+    if (isR(h)) { raBack = isT(old) && !!fromR; if (!raBack) fromR = null; }
+  }
+  const backR = () => fromR ? `<a class="pp-back ro-backr" href="${fromR}"><span aria-hidden="true">←</span> Rosters</a>` : '';
+  window.addEventListener('scroll', () => { if (/^#now\/rosters/.test(location.hash)) window.__raY = window.scrollY; }, { passive: true });
+
   let lastPid = '', rosterY = 0;
   function render(ctx, sub, pid) {
-    X = ctx; load();
+    X = ctx; load(); track();
     if (R && pid !== lastPid) {   // the Player Page opens at the top; the back arrow returns to where you were on the roster
       if (pid && !lastPid) rosterY = window.scrollY;
       const y = pid ? 0 : rosterY; requestAnimationFrame(() => window.scrollTo(0, y)); lastPid = pid;
@@ -630,7 +642,7 @@ window.FBPRosters = (function () {
     requestAnimationFrame(() => { const el = document.querySelector('.ro-pick'); if (!el) return;
       if (pickX != null) el.scrollLeft = pickX;
       else { const on = el.querySelector('[aria-selected="true"]'); if (on && on.offsetLeft + on.offsetWidth > el.clientWidth) el.scrollLeft = on.offsetLeft - (el.clientWidth - on.offsetWidth) / 2; } });
-    return `<div class="ro-page"><div class="ro-pick" role="tablist" aria-label="Teams">${ids.map(f => `<a href="#now/team/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`).join('')}</div>
+    return `<div class="ro-page">${backR()}<div class="ro-pick" role="tablist" aria-label="Teams">${ids.map(f => `<a href="#now/team/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`).join('')}</div>
       ${findBox(esc)}
       ${teamHead(t, pickd, ctx)}
       ${faceCard(t, ctx)}
@@ -656,7 +668,8 @@ window.FBPRosters = (function () {
   const ppg = r => r.gp ? r.pts / r.gp : null;
   const shortN = n => { const p = String(n).split(' '); return p.length > 1 && !/^(D\/ST|Defense)$/.test(p[p.length - 1]) ? p[0][0] + '. ' + p.slice(1).join(' ') : n; };
   function renderAll(ctx, fmt) {
-    X = ctx; load();
+    X = ctx; load(); track();
+    if (raBack && R) { raBack = false; const y = raY; requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, y))); }
     if (failed) return '<p class="error">Rosters didn’t load. Refresh the page to try again.</p>';
     if (!R) return '<p class="loading">Loading rosters…</p>';
     let F0 = fmt; if (!['full', 'grid', 'contracts'].includes(F0)) { try { F0 = localStorage.getItem('fbp-ra-fmt') || 'full'; } catch (e) { F0 = 'full'; } }
@@ -678,12 +691,12 @@ window.FBPRosters = (function () {
       const act = t.rows.filter(r => r.st === 'ROSTER').sort((a, b) => POS.indexOf(a.pos) - POS.indexOf(b.pos) || (ppg(b) || 0) - (ppg(a) || 0) || b.sal - a.sal);
       const row = r => { const on = open.has(r.id), v = ppg(r);
         return `<tr class="ra-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${on ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${on}">
-          <td class="ra-pos">${r.pos}</td><td class="l ra-n"><b>${esc(r.name)}</b>${injChip(r)}</td><td>${v != null ? v.toFixed(1) : '—'}</td><td class="ra-pts">${r.gp ? r.pts.toFixed(1) : '—'}</td><td class="ra-sal">${$(r.sal)}</td></tr>
+          <td class="ra-pos">${r.pos}</td><td class="l ra-n"><b>${esc(r.name)}</b>${(r.hon || []).filter(h => /^(1st|2nd) Team$/.test(h[0])).map(h => `<span class="ra-aw ${h[0][0] === '1' ? 'g' : 's'}" title="${esc(h[2] || h[0] + ' All-FBP')}">${h[0].slice(0, 3)}</span>`).join('')}${injChip(r)}</td><td>${v != null ? v.toFixed(1) : '—'}</td><td class="ra-pts">${r.gp ? r.pts.toFixed(1) : '—'}</td><td class="ra-sal">${$(r.sal)}</td></tr>
           ${on ? `<tr class="ro-det"><td colspan="5">${box(r, t, ctx)}</td></tr>` : ''}`; };
       const grp = (l, L) => L.length ? `<tr class="ra-g"><td colspan="5">${l}</td></tr>` + L.map(row).join('') : '';
       const tx = t.rows.filter(r => r.st === 'TAXI_SQUAD'), ir = t.rows.filter(r => r.st === 'INJURED_RESERVE');
       return `<section class="card ra-card" style="--tc:${tm.primary && tm.primary.toUpperCase() !== '#FFFFFF' ? tm.primary : tm.secondary || 'var(--line)'}">
-        <a class="ra-h" href="#now/team/${f}">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}<span class="ra-hn"><b>${esc(t.name)}</b><small>${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}${st ? ` · ${ord(st.divisionRank)} ${esc(st.divisionName)}${st.seed ? ` · <span class="ra-seed">#${st.seed} seed</span>` : ''}` : ''} · ${t.pf.toFixed(1)} pts</small></span><span class="ra-go" aria-hidden="true">›</span></a>
+        <a class="ra-h" href="#now/team/${f}">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}<span class="ra-hn"><b>${esc(t.name)}</b><small>${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}${st ? ` · ${ord(st.divisionRank)} ${esc(st.divisionName)}${st.seed ? ` · <span class="ra-seed">#${st.seed} seed</span>` : ''}` : ''} · ${t.pf.toFixed(1)} pts</small></span></a>
         <table class="ra-t"><thead><tr><th></th><th class="l">Player</th><th>Pts/g</th><th class="ra-pts">Pts</th><th class="ra-sal">$</th></tr></thead>
         <tbody>${act.map(row).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody></table></section>`;
     };
