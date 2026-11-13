@@ -211,7 +211,8 @@ def rankings(rows, E, season):
                     'f': r['f'] if r else st.get('f') or '', 'st': r['st'] if r else '', 'sal': r['sal'] if r else None, 'cy': st.get('cy') or '',
                     'd': d, 'r': ROS.get(pid), 'rk': RK.get(pid),
                     'pv': round(pv_of(d[0])) if d else (r['pv'] if r else None), 'tv': r['tv'] if r else None,
-                    'o': c.get('o'), 'h': h['s'] if h else None, 'gp': len(w), 'pts': round(sum(w), 1), 'ppg': round(sum(w) / len(w), 1) if w else None})
+                    'o': c.get('o'), 'h': h['s'] if h else None, 'gp': len(w), 'pts': round(sum(w), 1), 'ppg': round(sum(w) / len(w), 1) if w else None,
+                    'l3': round(sum(w[-3:]) / len(w[-3:]), 1) if w else None})
     out.sort(key=lambda x: ((x['d'] or [9999])[0], (x['r'] or [9999])[0]))
     with open(D('rankings.json'), 'w') as fh:
         json.dump({'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': season,
