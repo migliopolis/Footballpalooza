@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0185';
+  const VERSION = '0.0186';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -685,7 +685,7 @@
         ? (window.FBPNfl ? FBPNfl.render(Object.assign({}, base, { rerender: () => { if (location.hash.startsWith('#scores/nfl')) route(); } })) : '<p class="error">The NFL scoreboard didn’t load.</p>')
         : ticket
         ? (window.FBPMultiview ? FBPMultiview.render(Object.assign({}, base, { abbr: id => (state.teams[id] || {}).abbr || nameOf(id), rerender: () => { if (location.hash.startsWith('#scores/ticket')) route(); } })) : '<p class="error">The Sunday Ticket Helper didn’t load.</p>')
-        : (window.FBPLive ? FBPLive.render(Object.assign({}, base, { mode: parts[1] === 'players' ? 'players' : 'scores', seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], rerender: () => { if (/^#scores(\/players)?\/?$/.test(location.hash)) route(); } })) : '<p class="error">The scoreboard didn’t load.</p>');
+        : (window.FBPLive ? FBPLive.render(Object.assign({}, base, { mode: parts[1] === 'players' ? 'players' : 'scores', myTeam: myTeam(), draftOrder: (state.now || {}).draftOrder || [], seeds: (state.now || {}).seeds || [], standings: (state.now || {}).standings || [], games: (state.now || {}).games || [], rerender: () => { if (/^#scores(\/players)?\/?$/.test(location.hash)) route(); } })) : '<p class="error">The scoreboard didn’t load.</p>');
     }
     else if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
@@ -856,7 +856,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0185
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0186
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };

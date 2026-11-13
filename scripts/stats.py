@@ -3,7 +3,8 @@
 
 One row per player who has scored in any week (data/mfl/weeklyScores.json), with his NFL team, bye week, ESPN id,
 and, if he's on an FBP roster, the franchise, roster slot, salary and contract year (data/rosters.json). The page
-does the filtering, week ranges, sorting and averages.
+does the filtering, week ranges, sorting and averages. 's' marks the weeks he was in an FBP starting lineup
+(data/mfl/weeklyResults.json), one character per week: 1 started, 0 didn't.
 Run after refresh_mfl.py and rosters.py: python scripts/stats.py
 """
 import json, os
@@ -28,6 +29,13 @@ def main():
     for fid, t in (R.get('teams') or {}).items():
         for r in t['rows']:
             on[r['id']] = (fid, r)
+    # who started where each week (any FBP lineup): the page's Starters filter and Starts column
+    wr = (load(D('mfl', 'weeklyResults.json'), {}) or {}).get('weeks', {})
+    started = {}
+    for w, frs in wr.items():
+        for t in frs.values():
+            for pid, _ in t.get('s', []):
+                started.setdefault(pid, set()).add(int(w))
     rows = []
     ids = {pid for w in ws.values() for pid in w} | set(on)
     for pid in ids:
@@ -46,6 +54,7 @@ def main():
             'bye': byes.get(TO_FP.get(team, team)), 'f': fid, 'sl': SLOT.get(r['st'], '') if r else None,
             'sal': r['sal'] if r else None, 'cy': r['cy'] if r else None, 'hon': [h[:2] for h in r.get('hon', [])] if r else [],
             'w': [None if s is None else round(float(s), 1) for s in sc],
+            's': ''.join('1' if w in started.get(pid, ()) else '0' for w in weeks),
         })
     json.dump({'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': R.get('season'),
                'weeks': weeks, 'rows': rows}, open(D('stats.json'), 'w', encoding='utf-8'), separators=(',', ':'))

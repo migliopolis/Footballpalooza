@@ -230,6 +230,9 @@
   const ordered = ms => { if (!sbOrder.length) return ms;
     const rk = f => { const i = sbOrder.indexOf(f); return i < 0 ? 999 : i; };
     return ms.map((m, i) => [m, i]).sort((x, y) => (Math.min(...x[0].franchise.map(f => rk(f.id))) - Math.min(...y[0].franchise.map(f => rk(f.id)))) || x[1] - y[1]).map(x => x[0]); };
+  // your team's game (Settings) leads the list, unless you've dragged your own order
+  const mineFirst = ms => { const me = X && X.myTeam; if (!me || sbOrder.length) return ms;
+    const i = ms.findIndex(m => m.franchise.some(f => f.id === me)); return i > 0 ? [ms[i]].concat(ms.slice(0, i), ms.slice(i + 1)) : ms; };
   (function dragGames() {
     let hold = null, drag = null, sx = 0, sy = 0, swallow = false;
     const pt = e => e.touches ? e.touches[0] : e;
@@ -369,6 +372,17 @@
     if (!MU || +MU.week !== +w) return false;
     return (MU.games || []).some(g => g.gotw && ((g.away === x && g.home === y) || (g.away === y && g.home === x)));
   };
+  // FBP journeys (data/journeys.json): who used to play for the other side, for the REVENGE GAME tag
+  let JP = null, jpAsked = false;
+  const journeys = () => { if (!jpAsked) { jpAsked = true; fetch('data/journeys.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { JP = j && j.players; if (JP) paint(); }).catch(() => {}); } return JP; };
+  // win probability from the live projections: the projected margin against how much is still to play
+  const phi = z => { const t = 1 / (1 + .2316419 * Math.abs(z)), d = .3989423 * Math.exp(-z * z / 2);
+    const p = d * t * (.3193815 + t * (-.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return z > 0 ? 1 - p : p; };
+  const winProb = (sa, sb, pa, pb, done) => {
+    if (done) return sa === sb ? 50 : sa > sb ? 100 : 0;
+    if (pa == null || pb == null) return null;
+    const rem = Math.max(8, Math.max(0, pa - sa) + Math.max(0, pb - sb));   // someone still to play: never a lock
+    return Math.max(1, Math.min(99, Math.round(100 * phi((pa - pb) / (34 * Math.sqrt(rem / 235)))))); };
   function paint() {
     if (document.querySelector('.lv-list.lv-dragging')) return setTimeout(paint, 800);   // don't redraw under a drag
     const el = document.getElementById('lv-root');
@@ -489,6 +503,27 @@
     const barColor = id => { const t = tm(id), c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
       return c.length ? c.sort((x, y) => Math.abs(lum(x) - 0.5) - Math.abs(lum(y) - 0.5))[0] : 'var(--muted)'; };
     const logo = id => tm(id).logo ? `<img class="lv-lg" src="${tm(id).logo}" alt="">` : `<span class="lv-lg">${esc(tm(id).abbr || '')}</span>`;
+    // the one line of context under a game this week, most telling first: playoff odds riding on it, a starter facing
+    // the team that traded or released him in the past year, two bottom-six teams within two picks of each other in
+    // the draft order, or a division game
+    const gameTag = (m, a, b, wk) => {
+      if (view) return null;
+      const abbr = id => tm(id).abbr || X.nameOf(id);
+      const g = MU && +MU.week === +wk && (MU.games || []).find(g => (g.away === a.id && g.home === b.id) || (g.away === b.id && g.home === a.id));
+      if (g) { const sw = id => { const t = g.teams[id]; return t && t.ifWin && t.ifLoss ? [t.ifWin[0] - t.ifLoss[0], t.ifWin[0], t.ifLoss[0]] : [0]; };
+        const big = [a.id, b.id].map(id => [id, sw(id)]).sort((x, y) => y[1][0] - x[1][0])[0];
+        if (big[1][0] >= 15) return ['po', 'Playoff implications', `${abbr(big[0])} make the playoffs ${Math.round(big[1][1])}% of the time with a win, ${Math.round(big[1][2])}% with a loss`]; }
+      const JPs = journeys(), yr = Date.now() / 1000 - 365 * 86400;
+      if (JPs) for (const [f, o] of [[a, b], [b, a]]) for (const p of (f.players.player || [])) {
+        if (p.status !== 'starter' || pos(p.id) === 'DEF') continue;
+        const st = ((JPs[p.id] || {}).st || []).filter(s => s[0] === o.id && (s[6] === 'T' || s[6] === 'R') && s[5] >= yr).pop();
+        if (st) return ['rv', 'Revenge game', `${short(p.id)} faces ${abbr(o.id)}, who ${st[6] === 'T' ? 'traded' : 'released'} him`]; }
+      const D = X.draftOrder || [], pk = id => (D.find(d => d.id === id) || {}).pick;
+      if (pk(a.id) && pk(b.id) && pk(a.id) <= 6 && pk(b.id) <= 6 && Math.abs(pk(a.id) - pk(b.id)) <= 2)
+        return ['dr', 'Draft implications', `${abbr(a.id)} pick ${pk(a.id)} and ${abbr(b.id)} pick ${pk(b.id)} in the draft order right now`];
+      const da = (stand(a.id) || {}).divisionName, db = (stand(b.id) || {}).divisionName;
+      if (da && da === db) return ['dv', 'Division rivalry', `Both in the ${da}`];
+      return null; };
     const game = (m, gi) => {
       const fs = m.franchise.slice().sort((a, b) => (+a.isHome) - (+b.isHome));   // away on the left
       const [a, b] = fs, sa = +a.score, sb = +b.score, ca = counts(a), cb = counts(b);
@@ -500,8 +535,17 @@
       // who's winning: the bar tips toward the leader, by how much he leads (a 50-point lead nearly fills it)
       const diff = sa - sb, share = sa + sb ? Math.max(6, Math.min(94, 50 + diff)) : 50;
       const tip = !sa && !sb ? 'Not started' : diff ? `${esc(X.nameOf(diff > 0 ? a.id : b.id))} ${done ? 'won' : 'leads'} by ${n1(Math.abs(diff))}` : 'Tied';
-      const bar = `<span class="lv-tug" role="img" aria-label="${tip}" title="${tip}"><i class="${diff < 0 ? 'trail' : ''}" style="width:${share}%;background:${barColor(a.id)}"></i><i class="${diff > 0 ? 'trail' : ''}" style="width:${100 - share}%;background:${barColor(b.id)}"></i></span>`;
       const pa = projTotal(a, shownW), pb = projTotal(b, shownW), showProj = pa != null && pb != null && (!done || view);
+      // the bar under VS: each side's chance to win (from the projections), or once it's over, who won; without
+      // projections it falls back to the lead, tipping toward the leader (a 50-point lead nearly fills it)
+      const wp = winProb(sa, sb, pa, pb, done);
+      const wa = wp == null ? share : done ? (sa + sb ? Math.max(6, Math.min(94, 50 + diff)) : 50) : wp;
+      const cap = done ? (diff ? `${esc(tm(diff > 0 ? a.id : b.id).abbr || '')} by ${n1(Math.abs(diff))}` : 'Tie') : wp == null ? (diff ? `Lead ${n1(Math.abs(diff))}` : 'Even') : 'Win chance';
+      const lab = v => done ? '' : wp == null ? '' : `${v}%`;
+      const wtip = done ? tip : wp == null ? tip : `Chance to win from MFL’s projections: ${esc(X.nameOf(a.id))} ${wp}%, ${esc(X.nameOf(b.id))} ${100 - wp}%`;
+      const bar = `<span class="lv-wp${done ? ' done' : ''}" role="img" aria-label="${wtip}" title="${wtip}">
+        <span class="lv-tug"><i class="${wa < 50 ? 'trail' : ''}" style="width:${wa}%;background:${barColor(a.id)}"></i><i class="${wa > 50 ? 'trail' : ''}" style="width:${100 - wa}%;background:${barColor(b.id)}"></i>${done ? '' : '<em></em>'}</span>
+        <span class="lv-wpl"><b class="${wa > 50 ? 'up' : ''}">${lab(wa)}</b><small>${cap}</small><b class="${wa < 50 ? 'up' : ''}">${lab(100 - wa)}</b></span></span>`;
       const projLine = v => showProj ? `<small class="lv-pjt" title="${view ? 'MFL’s projection before the games' : 'MFL’s projection: points so far plus the projection for what’s left'}">${n1(v)}</small>` : '';
       // the seed sits on the logo's inside bottom corner; the projection sits under the score
       const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}"><span class="lv-lgw">${logo(f.id)}${seed(f.id)}${heat(f)}</span><span class="lv-sc"><b>${n1(+f.score)}</b>${projLine(cls === 'a' ? pa : pb)}</span></span>`;
@@ -545,10 +589,11 @@
         `<tr class="lv-r-${lbl.toLowerCase()}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
       const benchRows = group(bench(a), bench(b), 'BN') + (view ? '' : group(extra(a, 'taxi'), extra(b, 'taxi'), 'TX') + group(extra(a, 'ir'), extra(b, 'ir'), 'IR'));
       const left = f => { const c = counts(f); return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
-      const gotw = isGotw(shownW, a.id, b.id);
-      return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw ? ' lv-gotw' : ''}" data-lv-key="${key}">${gotw ? '<span class="lv-gotw-tag">Game of the week</span>' : ''}
+      const gotw = isGotw(shownW, a.id, b.id), mine = X.myTeam && (a.id === X.myTeam || b.id === X.myTeam);
+      const tag = gameTag(m, a, b, shownW);
+      return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw ? ' lv-gotw' : ''}${mine ? ' lv-mine' : ''}" data-lv-key="${key}"${mine ? ` style="--mine:${barColor(X.myTeam)}"` : ''}>${gotw ? '<span class="lv-gotw-tag">Game of the week</span>' : ''}
         <button type="button" class="lv-sum" data-lv="${key}" aria-expanded="${isOpen}">
-          ${side(a, 'a')}<span class="lv-mid"><span class="lv-vs">vs</span>${bar}<small>${mid}</small></span>${side(b, 'b')}
+          ${side(a, 'a')}<span class="lv-mid">${mine ? '<span class="lv-mine-tag">My matchup</span>' : ''}<span class="lv-vs">vs</span>${bar}<small>${mid}</small>${tag ? `<span class="lv-ctx ${tag[0]}" title="${esc(tag[2])}">${tag[1]}</span>` : ''}</span>${side(b, 'b')}
           <span class="lv-metarow"><small>${meta(a.id)}</small><small>${meta(b.id)}</small></span>
         </button>
         <div class="lv-det"${isOpen ? '' : ' hidden'}>
@@ -567,7 +612,7 @@
     statusHtml = status;
     return `<div class="lv-bar lv-topbar">${picker}
         <span class="lv-btns"><button type="button" class="lv-all lv-cmp" data-lv-cmp aria-pressed="${compact}">Compact</button><button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></span></div>
-      <div class="lv-list${compact ? ' lv-compact' : ''}">${ordered(L.matchup).map(game).join('')}</div>
+      <div class="lv-list${compact ? ' lv-compact' : ''}">${mineFirst(ordered(L.matchup)).map(game).join('')}</div>
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
   }
 

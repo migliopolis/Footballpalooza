@@ -4,13 +4,14 @@
    The upcoming week's NFL opponent comes from ESPN's scoreboard. Tap a team logo up top to highlight its players. */
 window.FBPStats = (function () {
   let S = null, A = null, failed = false, loading = false, X = null, opp = null, oppWk = 0;
-  const F = { top: 50, pos: '', from: 1, to: 0, who: '' };
+  const F = { top: 50, pos: '', from: 1, to: 0, who: '', st: false };   // st: Starters, only weeks he was in an FBP starting lineup
   let hl = '', hlSeed = null;   // hlSeed: the default team last applied, so a new default re-highlights   // the team whose players are highlighted (tap a logo; tap again to clear)
   let sort = ['pts', -1];
   let q = '';   // the player search; not saved, and it looks past the Top limit
   const fold = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, '');
   try { Object.assign(F, JSON.parse(localStorage.getItem('fbp-stats') || '{}')); } catch (e) {}
-  if (!['', 'fa', 'ro'].includes(F.who)) F.who = '';
+  if (!['', 'fa', 'ro', 'team'].includes(F.who)) F.who = '';
+  F.st = !!F.st;
   const save = () => { try { localStorage.setItem('fbp-stats', JSON.stringify(F)); } catch (e) {} };
   const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
   const ab = t => NFLE[t] || (t || '').toLowerCase();
@@ -47,15 +48,17 @@ window.FBPStats = (function () {
     const HV = { N: 3, H: 1, C: -1, B: -2, W: -3 };
     const team = f => ctx.teams[f] || {};
     let rows = S.rows.filter(r => !F.pos || (F.pos === 'FLEX' ? ['RB', 'WR', 'TE'].includes(r.p) : r.p === F.pos))
-      .filter(r => !F.who || (F.who === 'ro' ? r.f : F.who === 'fa' ? !r.f : r.f === F.who))
+      .filter(r => !F.who || (F.who === 'ro' ? r.f : F.who === 'fa' ? !r.f : F.who === 'team' ? !hl || r.f === hl : r.f === F.who))
       .filter(r => { const t = fold(q).split(' ').filter(Boolean); if (!t.length) return true; const n = fold(r.n); return t.every(x => n.includes(x)); })
-      .map(r => { const sc = wi.map(([, i]) => r.w[i]);
+      .map(r => { const on = i => (r.s || '')[i] === '1';
+        const sc = wi.map(([, i]) => F.st && !on(i) ? null : r.w[i]), gs = wi.filter(([, i]) => on(i)).length;
         const pts = sc.reduce((a, v) => a + (v || 0), 0), gp = sc.filter(v => v != null).length;   // a traded player can carry his new team's bye over a week he played
         const h = HP[r.id], heat = h ? wi.reduce((a, [w]) => { const c = h.w[HW.indexOf(w)]; return a + (HV[c] || 0); }, 0) : 0;
-        return Object.assign({}, r, { pts, avg: gp ? pts / gp : 0, gp, heat }); });
-    const key = { pts: r => r.pts, avg: r => r.avg, heat: r => r.heat, name: r => r.n, sal: r => r.sal == null ? -1 : r.sal, bye: r => r.bye || 0,
+        return Object.assign({}, r, { pts, avg: gp ? pts / gp : 0, gp, gs, heat }); })
+      .filter(r => !F.st || r.gs);
+    const key = { pts: r => r.pts, gs: r => r.gs, avg: r => r.avg, heat: r => r.heat, name: r => r.n, sal: r => r.sal == null ? -1 : r.sal, bye: r => r.bye || 0,
       own: r => r.f ? (team(r.f).abbr || r.f) : 'zz', nfl: r => r.t || 'zz' };
-    const kf = sort[0].startsWith('w') ? (r => { const k = W.indexOf(+sort[0].slice(1)); return r.w[k] == null ? -99 : r.w[k]; }) : key[sort[0]] || key.pts;
+    const kf = sort[0].startsWith('w') ? (r => { const k = W.indexOf(+sort[0].slice(1)); const v = F.st && (r.s || '')[k] !== '1' ? null : r.w[k]; return v == null ? -99 : v; }) : key[sort[0]] || key.pts;
     rows.sort((a, b) => { const x = kf(a), y = kf(b); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * sort[1] || b.pts - a.pts; });
     const shown = F.top && !q.trim() ? rows.slice(0, F.top) : rows;
     const th = (k, l, cls) => `<th class="${cls || ''}${sort[0] === k ? ' on' : ''}" data-st-sort="${k}">${l}${sort[0] === k ? (sort[1] < 0 ? ' ▾' : ' ▴') : ''}</th>`;
@@ -67,37 +70,39 @@ window.FBPStats = (function () {
       ${sel('pos', [['', 'All positions'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'RB/WR/TE'], ['DEF', 'DEF']])}
       <label>Weeks ${sel('from', wkOpts, from)} to ${sel('to', wkOpts, to)}</label>
     </div>
-    <div class="seg pl-show st-who" role="tablist" aria-label="Which players">${[['', 'All players'], ['fa', 'Free agents'], ['ro', 'Rostered']].map(([v, l]) =>
-      `<button type="button" role="tab" data-st-who="${v}" aria-selected="${F.who === v}">${l}</button>`).join('')}</div>`;
+    <div class="st-row2"><div class="seg pl-show st-who" role="tablist" aria-label="Which players">${[['', 'All players'], ['fa', 'Free agents'], ['ro', 'Rostered'], ['team', hl ? (team(hl).abbr || hl) : 'Selected team']].map(([v, l]) =>
+      `<button type="button" role="tab" data-st-who="${v}" aria-selected="${F.who === v}"${v === 'team' ? ` title="${hl ? esc(team(hl).name || hl) + '’s players' : 'Pick a team from the logos above'}"` : ''}>${v === 'team' && hl && team(hl).logo ? `<img class="st-wl" src="${team(hl).logo}" alt="">` : ''}${esc(l)}</button>`).join('')}</div>
+    <button type="button" class="st-stb" data-st-starts aria-pressed="${F.st}" title="Count only the weeks he was in an FBP starting lineup">Starters</button></div>`;
     const me = hl;
     const picker = `<div class="st-pick" role="group" aria-label="Highlight a team’s players">${Object.keys(ctx.teams).sort((a, b) => (team(a).abbr || '').localeCompare(team(b).abbr || '')).map(f =>
       `<button type="button" data-st-hl="${f}" aria-pressed="${f === hl}" title="${esc(team(f).name || f)}">${team(f).logo ? `<img src="${team(f).logo}" alt="${esc(team(f).abbr || f)}">` : `<span>${esc(team(f).abbr || f)}</span>`}</button>`).join('')}</div>`;
     const body = shown.map((r, i) => {
       const t = r.f ? team(r.f) : null, h = HP[r.id];
-      const cells = wi.map(([w, k]) => { const v = r.w[k], hk = h && HW.indexOf(w) >= 0 ? HC[h.w[HW.indexOf(w)]] : '';
-        return w === r.bye && v == null ? '<td class="st-w st-bye">B</td>' : `<td class="st-w${hk ? ' ' + hk : ''}">${v == null ? '' : v.toFixed(1)}</td>`; }).join('');
+      const cells = wi.map(([w, k]) => { const v = r.w[k], bench = F.st && v != null && (r.s || '')[k] !== '1', hk = h && HW.indexOf(w) >= 0 ? HC[h.w[HW.indexOf(w)]] : '';
+        return w === r.bye && v == null ? '<td class="st-w st-bye">B</td>' : bench ? '<td class="st-w st-nos" title="Not in a starting lineup"></td>' : `<td class="st-w${hk ? ' ' + hk : ''}">${v == null ? '' : v.toFixed(1)}</td>`; }).join('');
       const o = opp && r.t ? opp[ab(r.t)] : null;
       const nm = r.f ? `<a href="#now/rosters/${r.f}/${r.id}">${esc(r.n)}</a>` : esc(r.n);
       return `<tr class="${r.f && r.f === me ? 'st-me' : ''}"><td class="st-n">${i + 1}</td>
         <td class="st-pl"><span class="st-nm">${nm}</span><small>${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="${esc(t.abbr || r.f)}" title="${esc(t.name || r.f)}">` : `<b>${esc(t.abbr || r.f)}</b>`}${r.sl ? `<i>${r.sl}</i>` : ''}` : '<b class="st-fa">FA</b>'}<span class="st-dot">·</span>${r.p}${r.t ? logo(r.t) : ''}${(r.hon || []).map(([l, c]) => `<span class="ro-chip ${c} st-ch" title="${esc(l)}"><span class="lg-only">${esc(l)}</span><span class="sm-only">${esc(SHORT[l] || l)}</span></span>`).join('')}</small></td>
-        <td class="n st-pts"><b>${r.pts.toFixed(1)}</b></td><td class="n st-avg">${r.avg.toFixed(2)}</td>
+        <td class="n st-pts"><b>${r.pts.toFixed(1)}</b></td><td class="n st-avg">${r.avg.toFixed(2)}</td><td class="n st-gs">${r.gs || ''}</td>
         <td class="n st-heat"><b class="${r.heat > 0 ? 'hc-pos' : r.heat < 0 ? 'hc-neg' : ''}">${r.heat > 0 ? '+' : ''}${r.heat}</b></td>${cells}
-        <td class="st-op">${!r.t ? '' : o ? `${o.home ? 'vs' : '@'} ${logo(o.t)}` : opp ? '<span class="st-byew">BYE</span>' : ''}</td>
+        <td class="st-op">${!r.t ? '' : o ? `<span class="st-opu"><span>${o.home ? 'vs' : '@'}</span>${logo(o.t)}</span>` : opp ? '<span class="st-byew">BYE</span>' : ''}</td>
         <td class="n">${r.bye || ''}</td><td class="n">${r.sal != null ? '$' + Math.round(r.sal) : ''}</td><td class="n">${r.cy || ''}</td></tr>`; }).join('');
     return `<section><h2 class="sec">Stats <small>FBP points by week, ${S.season}</small></h2>
       ${picker}${filters}
       <div class="card tbl-wrap st-wrap"><table class="st-t"><thead>
-        <tr><th class="st-n"></th><th class="st-pl"></th><th></th><th></th><th></th><th class="st-grp" colspan="${wi.length}">Weekly points</th><th colspan="4"></th></tr>
-        <tr><th class="st-n">#</th>${th('name', 'Player', 'st-pl')}${th('pts', 'Pts', 'n st-pts')}${th('avg', 'Avg', 'n st-avg')}${th('heat', 'Heat', 'n st-heat')}${wi.map(([w]) => th('w' + w, w, 'n st-w')).join('')}
+        <tr><th class="st-n"></th><th class="st-pl"></th><th></th><th></th><th></th><th></th><th class="st-grp" colspan="${wi.length}">${F.st ? 'Weekly points in starts' : 'Weekly points'}</th><th colspan="4"></th></tr>
+        <tr><th class="st-n">#</th>${th('name', 'Player', 'st-pl')}${th('pts', 'Pts', 'n st-pts')}${th('avg', 'Avg', 'n st-avg')}${th('gs', 'Starts', 'n st-gs')}${th('heat', 'Heat', 'n st-heat')}${wi.map(([w]) => th('w' + w, w, 'n st-w')).join('')}
         ${th('nfl', `Wk ${oppWk}`, 'st-op')}${th('bye', 'Bye', 'n')}${th('sal', 'Salary', 'n')}<th class="n">Contract</th></tr></thead>
-        <tbody>${body || `<tr><td colspan="${wi.length + 9}" class="st-none">No players match.</td></tr>`}</tbody></table></div>
-      <p class="rf-foot st-foot">Showing ${shown.length} of ${rows.length}${q.trim() ? ' matching “' + esc(q.trim()) + '”' : ''}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). B: bye. Heat: the Heat Check score for the weeks shown (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3). Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Tap a team’s logo to highlight its players; tap it again to clear. Searching shows every match, past the Top limit.</p>
+        <tbody>${body || `<tr><td colspan="${wi.length + 10}" class="st-none">No players match.</td></tr>`}</tbody></table></div>
+      <p class="rf-foot st-foot">Showing ${shown.length} of ${rows.length}${q.trim() ? ' matching “' + esc(q.trim()) + '”' : ''}. Through week ${last}; a week joins once MFL closes it. Avg counts games played (byes left out). Starts: weeks in an FBP starting lineup. With Starters on, Pts, Avg and the weekly points count only those starts. A hatched week: he scored but sat on the bench. B: bye. Heat: the Heat Check score for the weeks shown (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3). Tinted weeks are Heat Check labels: <span class="st-k nuke">Nuclear</span> <span class="st-k hot">Hot</span> <span class="st-k cold">Cold</span> <span class="st-k bust">Bust</span> <span class="st-k wp">Witness Protection</span>. T: taxi squad, IR: injured reserve. Tap a team’s logo to highlight its players; tap it again to clear. Searching shows every match, past the Top limit.</p>
     </section>`;
   }
 
   document.addEventListener('click', e => {
     const wb = e.target.closest && e.target.closest('[data-st-who]');
     if (wb) { F.who = wb.dataset.stWho; save(); return redraw(); }
+    if (e.target.closest && e.target.closest('[data-st-starts]')) { F.st = !F.st; save(); return redraw(); }
     const b = e.target.closest && e.target.closest('[data-st-hl]');
     if (b) { hl = hl === b.dataset.stHl ? '' : b.dataset.stHl; return redraw(); }
     const h = e.target.closest && e.target.closest('[data-st-sort]'); if (!h) return;

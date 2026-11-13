@@ -95,7 +95,7 @@ window.FBPRosters = (function () {
     return m[NFL_ESPN[r.nfl] || r.nfl.toLowerCase()] || (r.bye === w ? { bye: true } : null); };
   const oppCell = (r, w) => { const o = oppOf(r, w); if (!r.nfl) return '<td class="ro-wo">—</td>';
     if (!o) return '<td class="ro-wo"></td>'; if (o.bye) return '<td class="ro-wo ro-bye">BYE</td>';
-    return `<td class="ro-wo"><span class="ro-vs">${o.home ? 'vs' : '@'}</span>${nflLogo(o.ab)}</td>`; };
+    return `<td class="ro-wo"><span class="ro-wou"><span class="ro-vs">${o.home ? 'vs' : '@'}</span>${nflLogo(o.ab)}</span></td>`; };
   // Heat Check for one player: his Nuclear / Hot / Cold / Bust / Witness Protection weeks and Heat Score (data/analytics.json)
   const HEATK = [['N', 'Nuclear', 'nuke'], ['H', 'Hot', 'hot'], ['C', 'Cold', 'cold'], ['B', 'Bust', 'bust'], ['W', 'Witness Protection', 'wp']];
   // the label he earned in a week (Nuclear, Hot, Cold, Bust, Witness Protection), as a small chip

@@ -2,6 +2,17 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0181",
+      "to": "0.0185",
+      "dates": "Nov 12, 2026",
+      "items": [
+        "Rosters: a Trend column with arrows for who's heating up or cooling off. Low-volume players are skipped, and players who are out get an OUT mark instead of an arrow.",
+        "Rosters: a Heat column and the Heat Check up top in the player box; role archetype icons on each row; a Player Card tab with the icons on the front and what they mean on the back.",
+        "Award chips stack beside the player's name, and Player of the Week shows its week (POTW:4).",
+        "Injury tags come from MFL's injury report first, with ESPN as the fallback."
+      ]
+    },
+    {
       "from": "0.0176",
       "to": "0.0180",
       "dates": "Nov 12, 2026",
