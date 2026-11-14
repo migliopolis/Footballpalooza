@@ -1,6 +1,6 @@
 /* League Now > Rankings (#now/rankings): FantasyPros' consensus rankings with everything FBP knows about each player.
    Data: data/rankings.json (scripts/trade_values.py): dynasty and rest-of-season ranks (and next year's rookie class
-   once FantasyPros posts it), FBP team and contract, Player Value, Trade Value, Player Card OVR, Heat Check, points.
+   once FantasyPros posts it), FBP team and contract, OVR, Trade Value, Heat Check, points.
    Lists: Dynasty, Rest of Season, Rookies (this year's class from the dynasty list, or next year's rookie rankings),
    FBP Trade Value. Filters: position, Free agents / Rostered / a team (each on or off, any mix), search. Any column
    sorts; dynasty lists are split into FantasyPros' tiers. */
@@ -45,7 +45,7 @@ window.FBPRankings = (function () {
     ['ep', 'ECR Pos', p => p.d ? nn(p.d[1]) : null], ['eo', 'ECR Ovr', p => p.d ? p.d[0] : null],
     ['pts', 'Pts', p => p.gp ? p.pts : null], ['ppg', 'Pts/g', p => p.ppg], ['l3', 'Pts/L3', p => p.l3], ['age', 'Age', p => p.age],
     ['sal', '$', p => p.sal], ['rp', 'ECR ROS', p => p.r ? nn(p.r[1]) : null], ['ro', 'ECR ROS Ovr', p => p.r ? p.r[0] : null],
-    ['o', 'OVR', p => p.o], ['h', 'Heat', p => p.h], ['pv', 'Player Value', p => p.pv], ['tv', 'Trade Value', p => p.tv]];
+    ['o', 'OVR', p => p.o], ['h', 'Heat', p => p.h], ['tv', 'Trade Value', p => p.tv]];
   const ASC = ['n', 'f', 'age', 'ep', 'eo', 'rp', 'ro'];
 
   function render(ctx) {
@@ -70,7 +70,7 @@ window.FBPRankings = (function () {
     let lastT = null;
     const row = p => {
       const t = tm(p.f), inj = D.inj[p.id], ic = inj && MINJ[inj.status];
-      const tier = tiers && p.d && p.d[2] != null && p.d[2] !== lastT ? (lastT = p.d[2], `<tr class="rk-tier"><td colspan="16">Tier ${p.d[2]}</td></tr>`) : '';
+      const tier = tiers && p.d && p.d[2] != null && p.d[2] !== lastT ? (lastT = p.d[2], `<tr class="rk-tier"><td colspan="15">Tier ${p.d[2]}</td></tr>`) : '';
       const img = p.pos === 'DEF' ? `style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[p.nfl] || String(p.nfl).toLowerCase()}.png)" class="rk-def"` : p.e ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${p.e}.png)"` : '';
       const name = esc(p.n), on = OP.has(p.id);
       const tvW = p.tv ? Math.round(p.tv / 100) : 0;
@@ -86,9 +86,8 @@ window.FBPRankings = (function () {
         <td class="rk-e">${p.r && p.r[1] ? p.pos + p.r[1] : '—'}</td><td class="rk-e">${p.r ? p.r[0] : '—'}</td>
         <td class="c">${p.o != null ? `<span class="rk-ovr ${ovrK(p.o)}">${p.o}</span>` : '—'}</td>
         <td class="c">${p.h != null ? `<span class="hc-v ${heatK(p.h)}">${p.h > 0 ? '+' : ''}${p.h}</span>` : '—'}</td>
-        <td class="rk-pv">${p.pv != null ? p.pv.toLocaleString() : '—'}</td>
         <td class="rk-tv">${p.tv != null ? `<b>${p.tv.toLocaleString()}</b><span class="rk-bar"><i style="width:${tvW}%"></i></span>` : '<span class="rk-mu" title="Free agents have no FBP contract yet">—</span>'}</td></tr>
-        ${on ? `<tr class="rk-det"><td colspan="16">${window.FBPRosters ? FBPRosters.boxFor(X, p.id) : ''}</td></tr>` : ''}`; };
+        ${on ? `<tr class="rk-det"><td colspan="15">${window.FBPRosters ? FBPRosters.boxFor(X, p.id) : ''}</td></tr>` : ''}`; };
     const upd = S.list === 'ros' ? D.rosUpdated : S.list === 'rook' && D.rookUpdated ? D.rookUpdated : D.dynUpdated;
     const teams = Object.keys(X.teams || {}).sort((a, b) => (X.nameOf ? X.nameOf(a) : a).localeCompare(X.nameOf ? X.nameOf(b) : b));
     return `<section class="rk-page">
@@ -102,9 +101,9 @@ window.FBPRankings = (function () {
       </div>
       <p class="rk-sub">${S.list === 'tv' ? 'Every rostered player by FBP Trade Value: what he’s worth to an FBP owner, contract included.' : S.list === 'rook' ? (D.rookUpdated ? `FantasyPros’ ${D.season + 1} rookie rankings.` : `This year’s rookies in FantasyPros’ dynasty rankings (the ${D.season + 1} class shows here once FantasyPros posts it).`) : S.list === 'ros' ? 'FantasyPros’ rest-of-season consensus, PPR.' : 'FantasyPros’ dynasty consensus, PPR, split into their tiers.'} ${L.length} players${upd ? ` · rankings as of ${esc(upd)}` : ''}. Tap a column to sort.</p>
       <div class="tbl-wrap rk-wrap"><table class="rk-t"><thead><tr>${th('rk', '#', 'rk-n')}${th('n', 'Player', 'l rk-pl')}${th('f', 'FBP', 'rk-f')}${COLS.slice(3).map(c => th(c[0], c[1], ['ep', 'eo', 'rp', 'ro'].includes(c[0]) ? 'rk-e' : c[0] === 'o' || c[0] === 'h' ? 'c' : '')).join('')}</tr></thead>
-        <tbody>${vis.map(row).join('') || '<tr><td colspan="16" class="rk-none">Nobody matches.</td></tr>'}</tbody></table></div>
+        <tbody>${vis.map(row).join('') || '<tr><td colspan="15" class="rk-none">Nobody matches.</td></tr>'}</tbody></table></div>
       ${L.length > S.shown ? `<button type="button" class="ro-howb rk-more" data-rk-more>Show ${Math.min(100, L.length - S.shown)} more</button>` : ''}
-      <p class="rf-foot">Rankings are FantasyPros’ expert consensus (data © FantasyPros), PPR, refreshed every morning. Player Value puts the dynasty rank on a 1–9,999 curve: ability, potential and production. Trade Value is talent first, with stars weighted up, adjusted for his FBP contract: seasons of control and salary against what he’d fetch at auction (Trading Floor &gt; Value Chart has the details). OVR is the Player Card rating, measured against his position. Heat is his Heat Check score (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3). ECR is FantasyPros’ expert consensus rank: dynasty by position and overall, then rest of season. Pts, Pts/g and Pts/L3 (average over his last three games) are this season in FBP scoring. R marks a rookie. Tap a player to open his box: news, game log, schedule and the rest, with a link to his Player Page.</p>
+      <p class="rf-foot">Rankings are FantasyPros’ expert consensus (data © FantasyPros), PPR, refreshed every morning. Trade Value is talent first, with stars weighted up, adjusted for his FBP contract: seasons of control and salary against what he’d fetch at auction (Trading Floor &gt; Value Chart has the details). OVR is how good he is, 40–99, on one scale for every position: Madden’s ratings weighted for fantasy, blended with the dynasty consensus and nudged by his FBP production; only the very best reach 99 (holo 90+, gold 80s, silver 70s, bronze below). Heat is his Heat Check score (Nuclear +3, Hot +1, Cold −1, Bust −2, Witness Protection −3). ECR is FantasyPros’ expert consensus rank: dynasty by position and overall, then rest of season. Pts, Pts/g and Pts/L3 (average over his last three games) are this season in FBP scoring. R marks a rookie. Tap a player to open his box: news, game log, schedule and the rest, with a link to his Player Page.</p>
     </section>`;
   }
 

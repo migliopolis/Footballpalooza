@@ -433,6 +433,28 @@ window.FBPRosters = (function () {
     return (hof.length ? hof.map(x => `<div class="pp-hof"><b>Hall of Fame · class of ${esc(String(x.class))}</b>${x.stat ? `<small>${esc(x.stat)}</small>` : ''}${x.blurb ? `<p>${esc(x.blurb)}</p>` : ''}</div>`).join('') : '')
       + (list ? `<ol class="pp-hon">${list}</ol>` : hof.length ? '' : '<p class="ro-wait">No FBP awards yet. All-FBP teams go back to 2021.</p>');
   }
+  // the FBP OVR (data/ovr.json, scripts/ovr.py): his rating now and after each week of the season
+  const ovrTier = o => o >= 90 ? 'holo' : o >= 80 ? 'gold' : o >= 70 ? 'silver' : 'bronze';
+  function ovrOf(id) { const O = espn('OV', 'data/ovr.json'); return O && O.players ? O.players[id] || null : null; }
+  function ovrChart(r) {
+    const O = espn('OV', 'data/ovr.json');
+    if (!O) return '<p class="ro-wait">Loading…</p>';
+    const v = (O.players || {})[r.id], W = O.weeks || [];
+    if (!v || !v.h || !v.h.some(x => x != null)) return '';
+    const pts = W.map((w, i) => [w, v.h[i]]).filter(p => p[1] != null);
+    const vals = pts.map(p => p[1]), lo = Math.max(40, Math.min(...vals) - 3), hi = Math.min(100, Math.max(...vals) + 2);
+    const w = 520, h = 150, pl = 30, pr = 14, pt = 14, pb = 24;
+    const x = wk => pl + (w - pl - pr) * (W.length > 1 ? (W.indexOf(wk)) / (W.length - 1) : 0.5), y = o => pt + (h - pt - pb) * (1 - (o - lo) / Math.max(1, hi - lo));
+    const grid = [lo, Math.round((lo + hi) / 2), hi].map(g => `<line x1="${pl}" x2="${w - pr}" y1="${y(g)}" y2="${y(g)}" class="vl-g"/><text x="${pl - 6}" y="${y(g) + 3}" class="vl-ax" text-anchor="end">${Math.round(g)}</text>`).join('');
+    const line = `<polyline points="${pts.map(([wk, o]) => `${x(wk)},${y(o)}`).join(' ')}" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>`;
+    const dots = pts.map(([wk, o], i) => { const ch = i ? o - pts[i - 1][1] : 0;
+      return `<circle cx="${x(wk)}" cy="${y(o)}" r="5" class="pp-od ${ovrTier(o)}"><title>After week ${wk}: ${o}${ch ? ` (${ch > 0 ? '+' : ''}${ch})` : ''}</title></circle>`; }).join('');
+    const labs = W.map(wk => `<text x="${x(wk)}" y="${h - 6}" class="vl-ax" text-anchor="middle">${wk}</text>`).join('');
+    const first = pts[0][1], now = v.o, d = now - first;
+    return `<div class="pp-ovr"><div class="pp-ovrn"><span class="rk-ovr ${ovrTier(now)}">${now}</span><small>${d ? `${d > 0 ? '▲ +' : '▼ '}${d} since week ${pts[0][0]}` : `steady since week ${pts[0][0]}`}</small></div>
+      <svg class="pp-ovrg" viewBox="0 0 ${w} ${h}" role="img" aria-label="OVR by week">${grid}${line}${dots}${labs}</svg></div>
+      <p class="tf-sub">OVR after each week: Madden’s ratings weighted for fantasy, the dynasty consensus and his FBP production so far. Hover a dot for the change.</p>`;
+  }
   function playerPage(r, t, ctx) {
     const esc = ctx.esc, tm = ctx.teams[t.fid] || {}, def = r.pos === 'DEF';
     const code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase();
@@ -453,6 +475,7 @@ window.FBPRosters = (function () {
     return `<div class="pp">
       <div class="pp-backs">${ppBack(t)}</div>
       <div class="pp-hero" style="--tc:${tm.primary || 'var(--line)'}">${photo}
+        ${(() => { const o = ovrOf(r.id); return o && o.o != null ? `<span class="pp-ovrb rk-ovr ${ovrTier(o.o)}" title="FBP OVR">${o.o}<small>OVR</small></span>` : ''; })()}
         <div class="pp-id"><h2>${esc(r.name)}${injChip(r)}${chip}${aw}</h2>
           <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
           <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${t.fid ? esc(t.name) : 'FBP free agent'}${r.st === 'TAXI_SQUAD' ? ' · taxi squad' : r.st === 'INJURED_RESERVE' ? ' · injured reserve' : ''}</p></div></div>
@@ -466,6 +489,7 @@ window.FBPRosters = (function () {
         ${r.fa ? tile('Salary', '—', 'FBP free agent') : tile('Salary', $(r.sal), `${r.cy ? 'contract year ' + r.cy : 'no contract year'}${r.fut && r.fut.length ? ' · ' + $(r.fut[0]) + ' next year' : ''}`)}
       </div>
       ${fsec('wk', `${R.season} FBP points by week`, weekBars(r, t))}
+      ${def ? '' : fsec('ovr', `${R.season} OVR by week`, ovrChart(r))}
       ${def ? '' : fsec('news', 'Latest news', part(r, t, ctx, 'news', true))}
       ${sec('Season analytics', part(r, t, ctx, 'an'))}
       ${def ? '' : sec(`${R.season} game log`, part(r, t, ctx, 'log'))}

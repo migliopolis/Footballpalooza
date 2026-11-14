@@ -18,8 +18,11 @@ window.FBPBeta = (function () {
     loading = true;
     const opt = u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
     Promise.all([fetch('data/beta-cards.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()),
-      opt('data/espn/teams.json'), opt('data/awards.json'), opt('data/stats.json')])
-      .then(([d, t, a, st]) => { D = d; T = t || {}; AW = a; ST = st; index(); loading = false; redraw(); }, () => { failed = true; loading = false; redraw(); });
+      opt('data/espn/teams.json'), opt('data/awards.json'), opt('data/stats.json'), opt('data/ovr.json')])
+      .then(([d, t, a, st, ov]) => { D = d; T = t || {}; AW = a; ST = st;
+        // the card's big number is the FBP OVR (data/ovr.json), the same rating shown everywhere else
+        const O = (ov && ov.players) || {}; (D.cards || []).forEach(c => { if (O[c.id] && O[c.id].o != null) c.o = O[c.id].o; });
+        index(); loading = false; redraw(); }, () => { failed = true; loading = false; redraw(); });
   }
   function index() {
     const af = (AW && AW.allFbp) || {};
@@ -126,7 +129,7 @@ window.FBPBeta = (function () {
     const seg = (attr, cur, opts) => opts.map(([k, l]) => `<button type="button" data-${attr}="${k}" aria-pressed="${k === cur}">${l}</button>`).join('');
     return `<section class="bc-page">
  <h2 class="bc-h">Player Cards</h2>
- <p class="bc-intro">A trading card for every player, built on the prototype player ratings. Tap a card to flip it; move your mouse over it, or tilt your phone, to catch the foil. The big number is <b>OVR</b>, one rating for how good he is as a fantasy player: <b>90+</b> holo, <b>80s</b> gold, <b>70s</b> silver, under 70 bronze. Special fronts: <b>1st</b> and <b>2nd Team All-FBP</b> so far this season get their own backgrounds, and anyone who scored 30+ FBP points last week is <b>on fire</b>.</p>
+ <p class="bc-intro">A trading card for every player. Tap a card to flip it; move your mouse over it, or tilt your phone, to catch the foil. The big number is <b>OVR</b>, one rating for how good he is as a fantasy player (Madden’s ratings weighted for fantasy, the dynasty consensus and his FBP production; only the very best reach 99): <b>90+</b> holo, <b>80s</b> gold, <b>70s</b> silver, under 70 bronze. Special fronts: <b>1st</b> and <b>2nd Team All-FBP</b> so far this season get their own backgrounds, and anyone who scored 30+ FBP points last week is <b>on fire</b>.</p>
  <div class="bc-bar-row seg">${seg('bv', view, [['stack', 'Stack'], ['grid', 'Grid']])}</div>
  <div class="bc-bar-row seg">${seg('bp', pos, [['ALL', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE']])}</div>
  <div class="bc-bar-row seg">${seg('bw', who, [['fbp', 'FBP rosters'], ['fa', 'Free agents'], ['all', 'Everyone']])}

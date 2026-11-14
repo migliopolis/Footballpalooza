@@ -8,7 +8,7 @@
 window.FBPValues = (function () {
   let V = null, failed = false, loading = false, X = null;
   let muSt = false, mode = 'tv', picksOn = true, shape = 'dots', cmpA = '', cmpB = '', cmpAll = false, chartLow = 2000;
-  try { muSt = localStorage.getItem('fbp-mu-st') === '1'; mode = localStorage.getItem('fbp-val-mode') || 'tv'; shape = localStorage.getItem('fbp-val-shape') || 'dots'; } catch (e) {}
+  try { muSt = localStorage.getItem('fbp-mu-st') === '1'; mode = localStorage.getItem('fbp-val-mode') || 'tv'; if (mode !== 'tv') mode = 'o'; shape = localStorage.getItem('fbp-val-shape') || 'dots'; } catch (e) {}
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   function load() {
@@ -22,50 +22,54 @@ window.FBPValues = (function () {
   const COL = { QB: '#e06c75', RB: '#4f9fd8', WR: '#5cb67f', TE: '#a77fd6', PICK: '#d4b04f', DEF: '#9aa3ad' };
   const ord = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
   const tm = f => (X && X.teams && X.teams[f]) || {};
-  const val = x => x[mode];
-  const MODE = { tv: ['Trade Value', 'contract counted: salary and years left'], pv: ['Player Value', 'ability, potential and production only'] };
+  const val = x => x[mode] || (mode === 'o' ? 50 : 0);
+  const MODE = { tv: ['Trade Value', 'contract counted: salary and years left'], o: ['OVR', 'how good he is: Madden ratings weighted for fantasy, dynasty value and production'] };
+  // each value's range on a chart: Trade Value 0-9,999; OVR mostly 50-99
+  const LO = () => mode === 'o' ? 50 : 0, HI = () => mode === 'o' ? 100 : 10000, frac = v => Math.max(0, (v - LO()) / (HI() - LO()));
+  const fmt = v => mode === 'o' ? String(Math.round(v)) : v.toLocaleString();
+  const teamTot = L => mode === 'o' ? (L.length ? (L.reduce((s, r) => s + val(r), 0) / L.length).toFixed(1) : '—') : Math.round(L.reduce((s, r) => s + val(r), 0) / 1000) + 'k';
   const toggles = (withPicks) => `<div class="vl-ctl"><div class="seg vl-mode" role="tablist" aria-label="Value">${Object.entries(MODE).map(([k, [l, why]]) =>
     `<button type="button" role="tab" data-vl-mode="${k}" aria-selected="${mode === k}" title="${why}">${l}</button>`).join('')}</div>
     ${withPicks ? `<label class="tf-chk"><input type="checkbox" data-vl-picks${picksOn ? ' checked' : ''}> Include picks</label>` : ''}</div>`;
   const items = () => Object.entries(V.players).map(([id, r]) => Object.assign({ id }, r)).filter(r => r.pos !== 'DEF')
     .concat(picksOn ? V.picks.map(p => Object.assign({ pos: 'PICK' }, p)) : []);
   const link = r => r.pos === 'PICK' ? null : `#now/team/${r.f}/${r.id}`;
-  const foot = () => `<p class="rf-foot">Player Value is ability, potential and production: FantasyPros’ dynasty consensus rank (data © FantasyPros, as of ${esc(V.ecrUpdated || '')}) on a 1–9,999 curve. Trade Value starts from talent, weighted so stars count for more than a pile of lesser players, then adjusts for the FBP contract: how many seasons you control him (the rest of this one plus each year left on his deal) and what he’d fetch at auction against what he’s paid. A cheap or long deal lifts a player, a big or expiring one lowers him, by at most about a third either way. Picks are the rookie a slot usually lands, on a rookie deal at the by-law salary, 20% off for misses; 2027 picks use today’s draft order.</p>`;
+  const foot = () => `<p class="rf-foot">OVR is how good he is, 40–99: Madden’s ratings weighted for fantasy (hands, routes, speed, arm and accuracy count; blocking doesn’t), blended with FantasyPros’ dynasty consensus (data © FantasyPros, as of ${esc(V.ecrUpdated || '')}) and nudged by his FBP production. Only the very best reach 99. A pick’s OVR is the rookie its slot usually lands. Trade Value starts from talent, weighted so stars count for more than a pile of lesser players, then adjusts for the FBP contract: how many seasons you control him (the rest of this one plus each year left on his deal) and what he’d fetch at auction against what he’s paid. A cheap or long deal lifts a player, a big or expiring one lowers him, by at most about a third either way. Picks are the rookie a slot usually lands, on a rookie deal at the by-law salary, 20% off for misses; 2027 picks use today’s draft order.</p>`;
 
   /* ---------- Trading Floor > Value Chart ---------- */
   function chart(ctx) {
     X = ctx; load();
     if (failed) return '<p class="error">Values didn’t load.</p>';
     if (!V) return '<p class="loading">Loading values…</p>';
-    const L = items(), step = 250, top = Math.ceil(Math.max(...L.map(val)) / step) * step;
+    const L = items(), step = mode === 'o' ? 1 : 250, top = Math.ceil(Math.max(...L.map(val)) / step) * step, low = mode === 'o' ? (chartLow ? 80 : 60) : chartLow;
     const rows = [];
-    for (let hi = top; hi > chartLow; hi -= step) {
+    for (let hi = top; hi > low; hi -= step) {
       const cells = POS.map(p => L.filter(r => r.pos === p && val(r) <= hi && val(r) > hi - step).sort((a, b) => val(b) - val(a)));
       if (cells.some(c => c.length)) rows.push([hi, cells]);
     }
     const chip = r => { const h = link(r), t = tm(r.f);
-      const inner = `<b>${esc(r.n)}</b><small>${t.logo ? `<img src="${t.logo}" alt="">` : ''}${esc(t.abbr || '')} · ${val(r).toLocaleString()}${mode === 'tv' && r.sal != null ? ' · $' + Math.round(r.sal) : ''}</small>`;
+      const inner = `<b>${esc(r.n)}</b><small>${t.logo ? `<img src="${t.logo}" alt="">` : ''}${esc(t.abbr || '')} · ${fmt(val(r))}${mode === 'tv' && r.sal != null ? ' · $' + Math.round(r.sal) : ''}</small>`;
       return h ? `<a class="vl-chip" href="${h}" style="--pc:${COL[r.pos]}">${inner}</a>` : `<span class="vl-chip" style="--pc:${COL[r.pos]}">${inner}</span>`; };
     return `<div class="vl-chart">${toggles(true)}
-      <p class="tf-sub">${MODE[mode][0]}: ${MODE[mode][1]}. Each row is a 250-point band; players in the same row are worth about the same. Tap a player for his page.</p>
-      <div class="tbl-wrap"><table class="vl-ct"><thead><tr><th class="vl-v">Value</th>${POS.map(p => `<th style="--pc:${COL[p]}">${PL[p]}</th>`).join('')}</tr></thead>
-      <tbody>${rows.map(([hi, cells]) => `<tr><td class="vl-v">${hi.toLocaleString()}</td>${cells.map(c => `<td>${c.map(chip).join('')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
-      ${chartLow > 0 ? `<button type="button" class="ro-howb" data-vl-more>Show values under ${chartLow.toLocaleString()}</button>` : ''}
+      <p class="tf-sub">${MODE[mode][0]}: ${MODE[mode][1]}. ${mode === 'o' ? 'Each row is one OVR point.' : 'Each row is a 250-point band; players in the same row are worth about the same.'} Tap a player for his page.</p>
+      <div class="tbl-wrap"><table class="vl-ct"><thead><tr><th class="vl-v">${mode === 'o' ? 'OVR' : 'Value'}</th>${POS.map(p => `<th style="--pc:${COL[p]}">${PL[p]}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(([hi, cells]) => `<tr><td class="vl-v">${fmt(hi)}</td>${cells.map(c => `<td>${c.map(chip).join('')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      ${chartLow > 0 ? `<button type="button" class="ro-howb" data-vl-more>Show ${mode === 'o' ? 'OVRs' : 'values'} under ${fmt(low)}</button>` : ''}
       ${foot()}</div>`;
   }
 
   /* ---------- Rosters > Value ---------- */
   function dots(list) {
-    const w = 420, h = 170, pl = 30, pb = 18, pt = 8, n = Math.max(30, list.length), x = i => pl + (w - pl - 8) * (i + 0.5) / n, y = v => pt + (h - pt - pb) * (1 - v / 10000);
+    const w = 420, h = 170, pl = 30, pb = 18, pt = 8, n = Math.max(30, list.length), x = i => pl + (w - pl - 8) * (i + 0.5) / n, y = v => pt + (h - pt - pb) * (1 - frac(v));
     const ax = [5, 10, 15, 20, 25, 30, 35].filter(k => k <= n).map(k => `<text x="${x(k - 1)}" y="${h - 4}" class="vl-ax" text-anchor="middle">${k}</text>`).join('');
-    const gr = [2500, 5000, 7500].map(v => `<line x1="${pl}" x2="${w - 8}" y1="${y(v)}" y2="${y(v)}" class="vl-g"/><text x="${pl - 4}" y="${y(v) + 3}" class="vl-ax" text-anchor="end">${v / 1000}k</text>`).join('');
+    const gr = (mode === 'o' ? [60, 70, 80, 90] : [2500, 5000, 7500]).map(v => `<line x1="${pl}" x2="${w - 8}" y1="${y(v)}" y2="${y(v)}" class="vl-g"/><text x="${pl - 4}" y="${y(v) + 3}" class="vl-ax" text-anchor="end">${mode === 'o' ? v : v / 1000 + 'k'}</text>`).join('');
     return `<svg class="vl-dots" viewBox="0 0 ${w} ${h}" role="img" aria-label="Players by value">${gr}<line x1="${pl}" x2="${pl}" y1="${pt}" y2="${h - pb}" class="vl-axl"/><line x1="${pl}" x2="${w - 8}" y1="${h - pb}" y2="${h - pb}" class="vl-axl"/>${ax}
-      ${list.map((r, i) => `<circle cx="${x(i)}" cy="${y(val(r))}" r="4.2" fill="${COL[r.pos] || COL.DEF}"><title>${esc(r.n)} (${r.pos === 'PICK' ? 'pick' : r.pos}): ${val(r).toLocaleString()}</title></circle>`).join('')}</svg>`;
+      ${list.map((r, i) => `<circle cx="${x(i)}" cy="${y(val(r))}" r="4.2" fill="${COL[r.pos] || COL.DEF}"><title>${esc(r.n)} (${r.pos === 'PICK' ? 'pick' : r.pos}): ${fmt(val(r))}</title></circle>`).join('')}</svg>`;
   }
   function radar(f) {
     const T = V.teams, s = 150, c = s / 2, R = 58, A = POS.map((p, i) => -Math.PI / 2 + i * 2 * Math.PI / POS.length);
     const mx = p => Math.max(...Object.values(T).map(t => t.pos[p][mode])) || 1;
-    const v = POS.map(p => Math.max(0.04, T[f].pos[p][mode] / mx(p)));
+    const v = POS.map(p => Math.max(0.04, mode === 'o' ? (T[f].pos[p].o - 50) / Math.max(1, mx(p) - 50) : T[f].pos[p][mode] / mx(p)));
     const pt = (r, a) => `${(c + r * Math.cos(a)).toFixed(1)},${(c + r * Math.sin(a)).toFixed(1)}`;
     const rings = [0.25, 0.5, 0.75, 1].map(k => `<polygon points="${A.map(a => pt(R * k, a)).join(' ')}" class="vl-ring"/>`).join('');
     const lab = POS.map((p, i) => { const [lx, ly] = pt(R + 14, A[i]).split(',');
@@ -75,9 +79,8 @@ window.FBPValues = (function () {
   function teamList(f) { return items().filter(r => r.f === f).sort((a, b) => val(b) - val(a)); }
   function card(f, rank) {
     const t = V.teams[f], T = tm(f), list = teamList(f);
-    const total = list.reduce((s, r) => s + val(r), 0);
     return `<section class="card vl-card">
-      <div class="vl-ch"><span class="vl-rk">${rank}</span><a href="#now/team/${f}">${T.logo ? `<img src="${T.logo}" alt="">` : ''}<b>${esc(X.nameOf ? X.nameOf(f) : T.abbr)}</b></a><span class="vl-tot" title="Total ${MODE[mode][0]}">${Math.round(total / 1000)}k</span></div>
+      <div class="vl-ch"><span class="vl-rk">${rank}</span><a href="#now/team/${f}">${T.logo ? `<img src="${T.logo}" alt="">` : ''}<b>${esc(X.nameOf ? X.nameOf(f) : T.abbr)}</b></a><span class="vl-tot" title="${mode === 'o' ? 'Team OVR: its top 2 QBs, 4 RBs, 5 WRs and 2 TEs' : 'Total Trade Value'}">${mode === 'o' ? t.o : teamTot(list)}</span></div>
       <div class="vl-pr">${POS.filter(p => picksOn || p !== 'PICK').map(p => `<span style="--pc:${COL[p]}">${PL[p]}: <b>${ord(t.pos[p][mode + 'R'])}</b></span>`).join('')}</div>
       <div class="vl-meta"><span>Avg. age <b>${t.age || '—'}</b></span><span class="${t.own1 ? 'ok' : 'no'}">${t.own1 ? '✓ Has own 2027 1st' : '✕ Traded own 2027 1st'}</span></div>
       ${shape === 'radar' ? radar(f) : dots(list)}</section>`;
@@ -98,13 +101,13 @@ window.FBPValues = (function () {
   function cmpBody(fa, fb, lists, only) {
     const pick = f => only ? teamList(f).filter(r => only[f].has(r.id)) : teamList(f);
     const A = pick(fa), B = pick(fb), n = Math.max(A.length, B.length, 1), [ca, cb] = colors(fa, fb);
-    const w = 640, h = 230, pl = 10, pb = 70, y = v => 10 + (h - pb - 10) * (1 - v / 10000), x = i => pl + (w - 2 * pl) * (i + 0.5) / n;
-    const line = (L, c) => `<polyline points="${L.map((r, i) => `${x(i)},${y(val(r))}`).join(' ')}" fill="none" stroke="${c}" stroke-opacity=".5" stroke-width="2"/>` + L.map((r, i) => `<circle cx="${x(i)}" cy="${y(val(r))}" r="3.6" fill="${c}"><title>${esc(r.n)}: ${val(r).toLocaleString()}</title></circle>`).join('');
-    const gaps = Array.from({ length: n }, (_, i) => { const a = A[i] ? val(A[i]) : 0, b = B[i] ? val(B[i]) : 0, d = a - b, hh = Math.min(44, Math.abs(d) / 60);
-      return `<rect x="${x(i) - 4}" y="${h - 22 - hh}" width="8" height="${Math.max(1, hh)}" fill="${d >= 0 ? ca : cb}" opacity=".85"><title>#${i + 1}: ${d >= 0 ? '+' : '−'}${Math.abs(d).toLocaleString()} ${esc(tm(d >= 0 ? fa : fb).abbr || '')}</title></rect><text x="${x(i)}" y="${h - pb + 14}" class="vl-ax" text-anchor="middle">${i + 1}</text>`; }).join('');
+    const w = 640, h = 230, pl = 10, pb = 70, y = v => 10 + (h - pb - 10) * (1 - frac(v)), x = i => pl + (w - 2 * pl) * (i + 0.5) / n;
+    const line = (L, c) => `<polyline points="${L.map((r, i) => `${x(i)},${y(val(r))}`).join(' ')}" fill="none" stroke="${c}" stroke-opacity=".5" stroke-width="2"/>` + L.map((r, i) => `<circle cx="${x(i)}" cy="${y(val(r))}" r="3.6" fill="${c}"><title>${esc(r.n)}: ${fmt(val(r))}</title></circle>`).join('');
+    const gaps = Array.from({ length: n }, (_, i) => { const a = A[i] ? val(A[i]) : LO(), b = B[i] ? val(B[i]) : LO(), d = a - b, hh = Math.min(44, Math.abs(d) / (mode === 'o' ? 0.5 : 60));
+      return `<rect x="${x(i) - 4}" y="${h - 22 - hh}" width="8" height="${Math.max(1, hh)}" fill="${d >= 0 ? ca : cb}" opacity=".85"><title>#${i + 1}: ${d >= 0 ? '+' : '−'}${fmt(Math.abs(d))} ${esc(tm(d >= 0 ? fa : fb).abbr || '')}</title></rect><text x="${x(i)}" y="${h - pb + 14}" class="vl-ax" text-anchor="middle">${i + 1}</text>`; }).join('');
     const all = lists === 'twirl' || cmpAll;
-    const lst = (L, c, f) => `<ol class="vl-ls" style="--pc:${c}">${lists === 'twirl' ? `<li class="vl-lh">${tm(f).logo ? `<img src="${tm(f).logo}" alt="">` : ''}<b>${esc(tm(f).abbr || f)}</b><span>${Math.round(L.reduce((s, r) => s + val(r), 0) / 1000)}k</span></li>` : ''}${(all ? L : L.slice(0, 10)).map((r, i) => { const hr = link(r);
-      return `<li><span class="vl-n">${i + 1}</span>${hr ? `<a href="${hr}">${esc(r.n)}</a>` : `<span>${esc(r.n)}</span>`}<span class="vl-pos" style="--pc:${COL[r.pos]}">${r.pos === 'PICK' ? 'PICK' : r.pos}</span><b>${val(r).toLocaleString()}</b></li>`; }).join('')}</ol>`;
+    const lst = (L, c, f) => `<ol class="vl-ls" style="--pc:${c}">${lists === 'twirl' ? `<li class="vl-lh">${tm(f).logo ? `<img src="${tm(f).logo}" alt="">` : ''}<b>${esc(tm(f).abbr || f)}</b><span>${teamTot(L)}</span></li>` : ''}${(all ? L : L.slice(0, 10)).map((r, i) => { const hr = link(r);
+      return `<li><span class="vl-n">${i + 1}</span>${hr ? `<a href="${hr}">${esc(r.n)}</a>` : `<span>${esc(r.n)}</span>`}<span class="vl-pos" style="--pc:${COL[r.pos]}">${r.pos === 'PICK' ? 'PICK' : r.pos}</span><b>${fmt(val(r))}</b></li>`; }).join('')}</ol>`;
     const two = `<div class="vl-two">${lst(A, ca, fa)}${lst(B, cb, fb)}</div>`;
     const svg = `<svg class="vl-cmpg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Both rosters by value, best first">${line(B, cb)}${line(A, ca)}<line x1="${pl}" x2="${w - pl}" y1="${h - pb}" y2="${h - pb}" class="vl-axl"/>${gaps}</svg>`;
     return { ca, cb, svg, two, A, B };
@@ -126,12 +129,12 @@ window.FBPValues = (function () {
     X = ctx; load();
     if (failed || !V) return failed ? '' : '<p class="tf-sub">Loading roster values…</p>';
     if (!V.teams[fa] || !V.teams[fb]) return '';
-    const keep = mode; mode = 'pv';   // Player Value here, whatever the Value page is set to: talent, not contracts
+    const keep = mode; mode = 'o';   // OVR here, whatever the Value page is set to: talent, not contracts
     const set = la && la.length && lb && lb.length, st = muSt && set;
-    const C = cmpBody(fa, fb, 'twirl', st ? { [fa]: new Set(la), [fb]: new Set(lb) } : null), tot = L => L.reduce((s, r) => s + val(r), 0);
+    const C = cmpBody(fa, fb, 'twirl', st ? { [fa]: new Set(la), [fb]: new Set(lb) } : null);
     const seg = `<div class="seg mu-vseg" role="tablist" aria-label="Which players">${[[0, 'Everyone'], [1, 'Projected starters']].map(([k, l]) => `<button type="button" role="tab" data-vl-st="${k}" aria-selected="${!!k === muSt}">${l}</button>`).join('')}</div>`;
-    const key = f => `<span class="vl-key" style="--pc:${f === fa ? C.ca : C.cb}"><i></i>${esc(tm(f).abbr || f)} <b>${Math.round(tot(f === fa ? C.A : C.B) / 1000)}k</b></span>`;
-    const html = `<div class="mu-val"><div class="mu-vh"><h4>Roster value <small>${MODE[mode][0]}, ${st ? 'projected starters' : 'players and picks'}, best first</small></h4>${seg}</div>
+    const key = f => `<span class="vl-key" style="--pc:${f === fa ? C.ca : C.cb}"><i></i>${esc(tm(f).abbr || f)} <b title="Average OVR">${teamTot(f === fa ? C.A : C.B)}</b></span>`;
+    const html = `<div class="mu-val"><div class="mu-vh"><h4>Roster strength <small>${MODE[mode][0]}, ${st ? 'projected starters' : 'players and picks'}, best first</small></h4>${seg}</div>
       <p class="vl-keys">${key(fa)}${key(fb)}</p>${muSt && !set ? '<p class="tf-sub">No projections for this week yet, so this shows everyone.</p>' : ''}${C.svg}
       ${st ? '<p class="tf-sub">Our best guess at each lineup, not the one set in MFL: healthy players ranked by this week’s projection and recent starts, with anyone ruled out replaced by the next best. Defenses aren’t valued.</p>' : ''}
       <details class="all mu-vd"><summary>${st ? 'Projected starters' : 'Players'} on each side</summary>${C.two}</details></div>`;
@@ -142,12 +145,12 @@ window.FBPValues = (function () {
     X = ctx; load();
     if (failed) return '<p class="error">Values didn’t load.</p>';
     if (!V) return '<p class="loading">Loading values…</p>';
-    const tot = f => teamList(f).reduce((s, r) => s + val(r), 0);
+    const tot = f => mode === 'o' ? V.teams[f].o : teamList(f).reduce((s, r) => s + val(r), 0);
     const order = Object.keys(V.teams).sort((a, b) => tot(b) - tot(a));
     return `${toggles(true)}<div class="seg vl-shape-seg" role="tablist" aria-label="Chart">${[['dots', 'Players by value'], ['radar', 'Positional strength']].map(([k, l]) => `<button type="button" role="tab" data-vl-shape="${k}" aria-selected="${shape === k}">${l}</button>`).join('')}</div>
       ${compare()}
       <div class="vl-grid">${order.map((f, i) => card(f, i + 1)).join('')}</div>
-      <p class="rf-foot">Teams are ordered by their total ${MODE[mode][0]}. Position ranks use the top 2 QBs, 4 RBs, 5 WRs, 2 TEs and every pick. Average age is the active roster’s, defenses left out. Dot colors: <span style="color:${COL.QB}">●</span> QB <span style="color:${COL.RB}">●</span> RB <span style="color:${COL.WR}">●</span> WR <span style="color:${COL.TE}">●</span> TE <span style="color:${COL.PICK}">●</span> pick.</p>${foot()}`;
+      <p class="rf-foot">Teams are ordered by ${mode === 'o' ? 'team OVR, the average of their top 2 QBs, 4 RBs, 5 WRs and 2 TEs' : 'their total Trade Value'}. Position ranks use the top 2 QBs, 4 RBs, 5 WRs, 2 TEs and every pick. Average age is the active roster’s, defenses left out. Dot colors: <span style="color:${COL.QB}">●</span> QB <span style="color:${COL.RB}">●</span> RB <span style="color:${COL.WR}">●</span> WR <span style="color:${COL.TE}">●</span> TE <span style="color:${COL.PICK}">●</span> pick.</p>${foot()}`;
   }
 
   document.addEventListener('click', e => {

@@ -136,6 +136,12 @@ def main():
             picks.append({'id': key, 'f': f, 'y': p['y'], 'r': p['r'], 'from': p['from'],
                           'n': f"{p['y']} {ORD.get(p['r'], str(p['r']) + 'th')}{'' if p['from'] == f else ' (' + nm + ')'}",
                           'slot': None if slot == 6.5 else int(slot), 'pv': round(pv)})
+    # the FBP OVR (scripts/ovr.py) for every player, and for a pick the OVR of the rookie its slot usually lands
+    OV = (load(D('ovr.json'), {}) or {}).get('players') or {}
+    for k, r in rows.items():
+        r['o'] = (OV.get(k) or {}).get('o')
+    for p in picks:
+        p['o'] = min(85, round(58 + 41 * (p['pv'] / 9999) ** 0.9 - 2))
     top = max(raw.values()) if raw else 1
     scale = lambda v: max(1, round(9999 * v / top)) if v > 0 else 1
     for k, r in rows.items():
@@ -151,17 +157,21 @@ def main():
         pos = {}
         for P, n in TOP.items():
             L = [r for r in mine if r['pos'] == P]
-            pos[P] = {'pv': sum(sorted((r['pv'] for r in L), reverse=True)[:n]), 'tv': sum(sorted((r['tv'] for r in L), reverse=True)[:n])}
-        pos['PICK'] = {'pv': sum(p['pv'] for p in pk), 'tv': sum(p['tv'] for p in pk)}
+            oo = sorted((r['o'] for r in L if r.get('o')), reverse=True)[:n]
+            pos[P] = {'pv': sum(sorted((r['pv'] for r in L), reverse=True)[:n]), 'tv': sum(sorted((r['tv'] for r in L), reverse=True)[:n]),
+                      'o': round(sum(oo + [50] * (n - len(oo))) / n, 1)}   # an empty spot counts as a 50
+        po = sorted((p['o'] for p in pk), reverse=True)[:3]
+        pos['PICK'] = {'pv': sum(p['pv'] for p in pk), 'tv': sum(p['tv'] for p in pk), 'o': round(sum(po + [50] * (3 - len(po))) / 3, 1)}
         T[f] = {'pos': pos, 'age': round(sum(r['age'] for r in act) / len(act), 1) if act else None,
                 'own1': any(p['y'] == season + 1 and p['r'] == 1 and p['from'] == f for p in pk),
-                'pv': sum(r['pv'] for r in mine) + pos['PICK']['pv'], 'tv': sum(r['tv'] for r in mine) + pos['PICK']['tv']}
+                'pv': sum(r['pv'] for r in mine) + pos['PICK']['pv'], 'tv': sum(r['tv'] for r in mine) + pos['PICK']['tv'],
+                'o': round(sum(pos[P]['o'] * n for P, n in TOP.items()) / sum(TOP.values()), 1)}   # team OVR: its top 2 QBs, 4 RBs, 5 WRs, 2 TEs
     for P in list(TOP) + ['PICK']:
-        for k in ('pv', 'tv'):
+        for k in ('pv', 'tv', 'o'):
             s = sorted(T, key=lambda f: -T[f]['pos'][P][k])
             for i, f in enumerate(s):
                 T[f]['pos'][P][k + 'R'] = i + 1
-    for k in ('pv', 'tv'):
+    for k in ('pv', 'tv', 'o'):
         for i, f in enumerate(sorted(T, key=lambda f: -T[f][k])):
             T[f][k + 'R'] = i + 1
     out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': season, 'through': through,
@@ -178,14 +188,14 @@ def main():
 def rankings(rows, E, season):
     """data/rankings.json for League Now > Rankings: every player FantasyPros ranks (dynasty or rest of season) plus
     everyone on an FBP roster, with his FBP team and contract, Player Value (everyone ranked) and Trade Value
-    (rostered players: a free agent has no FBP contract yet), the Player Card OVR, Heat Check score and FBP points."""
+    (rostered players: a free agent has no FBP contract yet), the FBP OVR (scripts/ovr.py), Heat Check score and FBP points."""
     ROS = (load(D('fantasypros', 'ros-ecr.json'), {}) or {}).get('players') or {}
     RK = (load(D('fantasypros', 'rookies-ecr.json'), {}) or {}).get('players') or {}
     MP = load(D('mfl', 'players.json'), {}) or {}
     mf = {k: dict(zip(MP.get('fields') or [], v)) for k, v in (MP.get('players') or {}).items()}
     S = {r['id']: r for r in ((load(D('stats.json'), {}) or {}).get('rows') or [])}
     H = (load(D('analytics.json'), {}) or {}).get('heatPlayers') or {}
-    C = {c['id']: c for c in ((load(D('beta-cards.json'), {}) or {}).get('cards') or [])}
+    OV = (load(D('ovr.json'), {}) or {}).get('players') or {}
     now = datetime.now(timezone.utc).timestamp()
     out = []
     for pid in set(E) | set(ROS) | set(rows) | set(RK):
@@ -203,7 +213,7 @@ def rankings(rows, E, season):
             age = round((now - int(m['birthdate'])) / 31557600, 1) if m.get('birthdate') else None
         except ValueError:
             age = None
-        st, r, c, h = S.get(pid) or {}, rows.get(pid), C.get(pid) or {}, H.get(pid)
+        st, r, h = S.get(pid) or {}, rows.get(pid), H.get(pid)
         w = [x for x in (st.get('w') or []) if x is not None]
         d = E.get(pid)
         out.append({'id': pid, 'n': n, 'pos': pos, 'nfl': m.get('team') or st.get('t') or '', 'age': age,
@@ -211,7 +221,7 @@ def rankings(rows, E, season):
                     'f': r['f'] if r else st.get('f') or '', 'st': r['st'] if r else '', 'sal': r['sal'] if r else None, 'cy': st.get('cy') or '',
                     'd': d, 'r': ROS.get(pid), 'rk': RK.get(pid),
                     'pv': round(pv_of(d[0])) if d else (r['pv'] if r else None), 'tv': r['tv'] if r else None,
-                    'o': c.get('o'), 'h': h['s'] if h else None, 'gp': len(w), 'pts': round(sum(w), 1), 'ppg': round(sum(w) / len(w), 1) if w else None,
+                    'o': (OV.get(pid) or {}).get('o'), 'h': h['s'] if h else None, 'gp': len(w), 'pts': round(sum(w), 1), 'ppg': round(sum(w) / len(w), 1) if w else None,
                     'l3': round(sum(w[-3:]) / len(w[-3:]), 1) if w else None})
     out.sort(key=lambda x: ((x['d'] or [9999])[0], (x['r'] or [9999])[0]))
     with open(D('rankings.json'), 'w') as fh:
