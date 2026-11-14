@@ -1,6 +1,12 @@
 {
- "fetched": "2026-11-14T01:03:40+00:00",
+ "fetched": "2026-11-14T17:06:29+00:00",
  "transactions": [
+  {
+   "franchise": "0006",
+   "timestamp": "1794675600",
+   "transaction": "0503,|0.00|16175,",
+   "type": "BBID_WAIVER"
+  },
   {
    "franchise": "0006",
    "timestamp": "1794589200",

@@ -1164,15 +1164,6 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
-      "drafted": "Draft 2.01 $4 (2023)",
-      "id": "16175",
-      "salary": "",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
       "drafted": "BB $1",
       "id": "12801",
       "salary": "1",
@@ -1247,6 +1238,15 @@
       "contractYear": "",
       "drafted": "BB $0",
       "id": "17074",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "0503",
       "salary": "",
       "status": "ROSTER"
      },

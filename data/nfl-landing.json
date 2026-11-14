@@ -61,8 +61,8 @@
    "mostMocked": "NYJ"
   },
   "KJ Duff": {
-   "team": "DEN",
-   "pick": 29,
+   "team": "KC",
+   "pick": 24,
    "basis": "consensus",
    "mocks": 7,
    "mostMocked": "KC"
@@ -124,8 +124,8 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "PHI",
-   "pick": 25,
+   "team": "DEN",
+   "pick": 29,
    "basis": "consensus",
    "mocks": 12,
    "mostMocked": "DEN"
@@ -145,9 +145,9 @@
    "mostMocked": "DEN"
   },
   "Ryan Coleman-Williams": {
-   "team": "BUF",
-   "pick": 32,
-   "basis": "consensus",
+   "team": "KC",
+   "pick": null,
+   "basis": "most",
    "mocks": 3,
    "mostMocked": "KC"
   },
@@ -173,8 +173,8 @@
    "mostMocked": "LAR"
   },
   "Reed Harris": {
-   "team": "KC",
-   "pick": 24,
+   "team": "BUF",
+   "pick": 32,
    "basis": "consensus",
    "mocks": 6,
    "mostMocked": "KC"
@@ -245,7 +245,7 @@
   "LaNorris Sellers": {
    "team": "CLE",
    "pick": 18,
-   "basis": "consensus",
+   "basis": "recent",
    "mocks": 8,
    "mostMocked": "CLE"
   },
@@ -258,8 +258,8 @@
   },
   "Jayden Maiava": {
    "team": "MIN",
-   "pick": 28,
-   "basis": "consensus",
+   "pick": null,
+   "basis": "most",
    "mocks": 2,
    "mostMocked": "MIN"
   },
