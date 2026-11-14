@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-13",
+ "asOf": "2026-11-14",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
@@ -16,7 +16,7 @@
    "pos": "RB",
    "school": "Florida",
    "adp": 4.5,
-   "nflPick": 21
+   "nflPick": 22
   },
   {
    "name": "Cam Coleman",
@@ -37,7 +37,7 @@
    "pos": "QB",
    "school": "Texas",
    "adp": 5.7,
-   "nflPick": 5
+   "nflPick": 7
   },
   {
    "name": "Drew Mestemaker",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 25.6,
-   "nflPick": 28
+   "nflPick": 29
   },
   {
    "name": "Justice Haynes",

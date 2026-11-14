@@ -1,7 +1,7 @@
 {
  "source": "NFL Mock Draft Database",
  "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
- "asOf": "2026-11-13",
+ "asOf": "2026-11-14",
  "note": "Projected NFL landing spot per rookie. consensus = the team at his pick in the 1-week consensus mock (round 1); recent = the team holding his median pick in mocks from the last two weeks (Tankathon order); most = the team he is most often mocked to.",
  "players": {
   "Jeremiah Smith": {
@@ -9,13 +9,13 @@
    "pick": 1,
    "basis": "consensus",
    "mocks": 17,
-   "mostMocked": "MIA"
+   "mostMocked": "LAC"
   },
   "Jadan Baugh": {
-   "team": "NE",
-   "pick": 20,
+   "team": "NYG",
+   "pick": 21,
    "basis": "recent",
-   "mocks": 8,
+   "mocks": 7,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
@@ -36,7 +36,7 @@
    "team": "HOU",
    "pick": null,
    "basis": "most",
-   "mocks": 1,
+   "mocks": 0,
    "mostMocked": "HOU"
   },
   "Darian Mensah": {
@@ -50,7 +50,7 @@
    "team": "HOU",
    "pick": null,
    "basis": "most",
-   "mocks": 1,
+   "mocks": 0,
    "mostMocked": "HOU"
   },
   "CJ Carr": {
@@ -64,7 +64,7 @@
    "team": "DEN",
    "pick": 29,
    "basis": "consensus",
-   "mocks": 8,
+   "mocks": 7,
    "mostMocked": "KC"
   },
   "Cam Coleman": {
@@ -92,14 +92,14 @@
    "team": "CLE",
    "pick": 16,
    "basis": "consensus",
-   "mocks": 9,
+   "mocks": 8,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
-   "team": "NYJ",
-   "pick": 6,
+   "team": "ARI",
+   "pick": 8,
    "basis": "recent",
-   "mocks": 9,
+   "mocks": 8,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
@@ -110,11 +110,11 @@
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
-   "team": "KC",
+   "team": "DAL",
    "pick": null,
    "basis": "most",
-   "mocks": 1,
-   "mostMocked": "KC"
+   "mocks": 0,
+   "mostMocked": "DAL"
   },
   "Hollywood Smothers": {
    "team": "MIN",
@@ -148,7 +148,7 @@
    "team": "BUF",
    "pick": 32,
    "basis": "consensus",
-   "mocks": 4,
+   "mocks": 3,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
@@ -222,11 +222,11 @@
    "mostMocked": "TEN"
   },
   "Duce Robinson": {
-   "team": "LAR",
+   "team": "LV",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "LAR"
+   "mostMocked": "LV"
   },
   "Cam Cook": {
    "team": "MIN",

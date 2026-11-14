@@ -1,0 +1,971 @@
+{
+ "fetched": "2026-11-14T01:03:43+00:00",
+ "transactions": [
+  {
+   "activated": "15259,",
+   "deactivated": "",
+   "franchise": "0002",
+   "timestamp": "1794539249",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "13593,14073,",
+   "franchise": "0005",
+   "timestamp": "1794453141",
+   "type": "IR"
+  },
+  {
+   "activated": "14136,",
+   "deactivated": "",
+   "franchise": "0009",
+   "timestamp": "1794432659",
+   "type": "IR"
+  },
+  {
+   "activated": "14071,",
+   "deactivated": "",
+   "franchise": "0001",
+   "timestamp": "1794377539",
+   "type": "IR"
+  },
+  {
+   "activated": "12785,",
+   "deactivated": "16211,",
+   "franchise": "0004",
+   "timestamp": "1794373552",
+   "type": "IR"
+  },
+  {
+   "activated": "15282,",
+   "deactivated": "15694,",
+   "franchise": "0006",
+   "timestamp": "1794369149",
+   "type": "IR"
+  },
+  {
+   "activated": "16195,",
+   "deactivated": "",
+   "franchise": "0008",
+   "timestamp": "1794353776",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15259,",
+   "franchise": "0002",
+   "timestamp": "1794339043",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16206,",
+   "franchise": "0002",
+   "timestamp": "1794310102",
+   "type": "IR"
+  },
+  {
+   "activated": "16080,",
+   "deactivated": "15730,",
+   "franchise": "0007",
+   "timestamp": "1794301703",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16195,",
+   "franchise": "0008",
+   "timestamp": "1794068673",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14136,",
+   "franchise": "0009",
+   "timestamp": "1794012254",
+   "type": "IR"
+  },
+  {
+   "activated": "13289,",
+   "deactivated": "",
+   "franchise": "0002",
+   "timestamp": "1794005478",
+   "type": "IR"
+  },
+  {
+   "activated": "17082,",
+   "deactivated": "",
+   "franchise": "0002",
+   "timestamp": "1794002801",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14071,",
+   "franchise": "0001",
+   "timestamp": "1793985851",
+   "type": "IR"
+  },
+  {
+   "activated": "15708,",
+   "deactivated": "",
+   "franchise": "0009",
+   "timestamp": "1793926884",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "13592,",
+   "franchise": "0004",
+   "timestamp": "1793822313",
+   "type": "IR"
+  },
+  {
+   "activated": "17066,",
+   "deactivated": "",
+   "franchise": "0001",
+   "timestamp": "1793811546",
+   "type": "IR"
+  },
+  {
+   "activated": "17081,",
+   "deactivated": "17472,",
+   "franchise": "0006",
+   "timestamp": "1793742951",
+   "type": "IR"
+  },
+  {
+   "activated": "17078,",
+   "deactivated": "13418,",
+   "franchise": "0010",
+   "timestamp": "1793742539",
+   "type": "IR"
+  },
+  {
+   "activated": "17473,",
+   "deactivated": "",
+   "franchise": "0004",
+   "timestamp": "1793732021",
+   "type": "IR"
+  },
+  {
+   "activated": "16195,",
+   "deactivated": "",
+   "franchise": "0008",
+   "timestamp": "1793731345",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17066,",
+   "franchise": "0001",
+   "timestamp": "1793641745",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15708,",
+   "franchise": "0009",
+   "timestamp": "1793554050",
+   "type": "IR"
+  },
+  {
+   "activated": "14136,",
+   "deactivated": "",
+   "franchise": "0009",
+   "timestamp": "1793553995",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16080,",
+   "franchise": "0007",
+   "timestamp": "1793485623",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17068,",
+   "franchise": "0008",
+   "timestamp": "1793453442",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16195,",
+   "franchise": "0008",
+   "timestamp": "1793453293",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17081,",
+   "franchise": "0006",
+   "timestamp": "1793383365",
+   "type": "IR"
+  },
+  {
+   "activated": "16195,",
+   "deactivated": "",
+   "franchise": "0008",
+   "timestamp": "1793221336",
+   "type": "IR"
+  },
+  {
+   "activated": "17066,17087,",
+   "deactivated": "16747,",
+   "franchise": "0001",
+   "timestamp": "1793166485",
+   "type": "IR"
+  },
+  {
+   "activated": "17047,",
+   "deactivated": "",
+   "franchise": "0007",
+   "timestamp": "1793109690",
+   "type": "IR"
+  },
+  {
+   "activated": "17081,",
+   "deactivated": "",
+   "franchise": "0006",
+   "timestamp": "1793103321",
+   "type": "IR"
+  },
+  {
+   "activated": "15972,16626,",
+   "deactivated": "16195,",
+   "franchise": "0008",
+   "timestamp": "1792900592",
+   "type": "IR"
+  },
+  {
+   "activated": "16204,",
+   "deactivated": "15282,",
+   "franchise": "0006",
+   "timestamp": "1792876678",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17081,",
+   "franchise": "0006",
+   "timestamp": "1792779555",
+   "type": "IR"
+  },
+  {
+   "activated": "17472,",
+   "deactivated": "",
+   "franchise": "0006",
+   "timestamp": "1792714385",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17066,",
+   "franchise": "0001",
+   "timestamp": "1792631681",
+   "type": "IR"
+  },
+  {
+   "activated": "14071,",
+   "deactivated": "",
+   "franchise": "0001",
+   "timestamp": "1792559323",
+   "type": "IR"
+  },
+  {
+   "activated": "13590,",
+   "deactivated": "13633,",
+   "franchise": "0003",
+   "timestamp": "1792555433",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "11675,",
+   "franchise": "0005",
+   "timestamp": "1792538549",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15972,16626,",
+   "franchise": "0008",
+   "timestamp": "1792530080",
+   "type": "IR"
+  },
+  {
+   "activated": "16169,",
+   "deactivated": "17256,",
+   "franchise": "0003",
+   "timestamp": "1792526783",
+   "type": "IR"
+  },
+  {
+   "activated": "15972,",
+   "deactivated": "14109,",
+   "franchise": "0008",
+   "timestamp": "1792504627",
+   "type": "IR"
+  },
+  {
+   "activated": "17056,",
+   "deactivated": "",
+   "franchise": "0011",
+   "timestamp": "1792340689",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17062,",
+   "franchise": "0011",
+   "timestamp": "1792340244",
+   "type": "IR"
+  },
+  {
+   "activated": "16184,",
+   "deactivated": "14783,",
+   "franchise": "0007",
+   "timestamp": "1792267821",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17472,",
+   "franchise": "0006",
+   "timestamp": "1792186560",
+   "type": "IR"
+  },
+  {
+   "activated": "12801,",
+   "deactivated": "",
+   "franchise": "0006",
+   "timestamp": "1792063835",
+   "type": "IR"
+  },
+  {
+   "activated": "16186,",
+   "deactivated": "",
+   "franchise": "0009",
+   "timestamp": "1791944293",
+   "type": "IR"
+  },
+  {
+   "activated": "15708,",
+   "deactivated": "16629,",
+   "franchise": "0008",
+   "timestamp": "1791903857",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14136,",
+   "franchise": "0009",
+   "timestamp": "1791900022",
+   "type": "IR"
+  },
+  {
+   "activated": "14104,",
+   "deactivated": "13289,",
+   "franchise": "0002",
+   "timestamp": "1791888949",
+   "type": "IR"
+  },
+  {
+   "activated": "17066,",
+   "deactivated": "14071,",
+   "franchise": "0001",
+   "timestamp": "1791869291",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16186,",
+   "franchise": "0009",
+   "timestamp": "1791736924",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17078,",
+   "franchise": "0010",
+   "timestamp": "1791731769",
+   "type": "IR"
+  },
+  {
+   "activated": "13674,",
+   "deactivated": "17066,",
+   "franchise": "0001",
+   "timestamp": "1791595665",
+   "type": "IR"
+  },
+  {
+   "activated": "16579,",
+   "deactivated": "17082,",
+   "franchise": "0002",
+   "timestamp": "1791587467",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14842,",
+   "franchise": "0009",
+   "timestamp": "1791486172",
+   "type": "IR"
+  },
+  {
+   "activated": "14823,",
+   "deactivated": "16164,",
+   "franchise": "0002",
+   "timestamp": "1791371970",
+   "type": "IR"
+  },
+  {
+   "activated": "15282,",
+   "deactivated": "12801,",
+   "franchise": "0006",
+   "timestamp": "1791339702",
+   "type": "IR"
+  },
+  {
+   "activated": "12801,",
+   "deactivated": "15282,",
+   "franchise": "0006",
+   "timestamp": "1791125696",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17087,",
+   "franchise": "0001",
+   "timestamp": "1791065699",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17473,",
+   "franchise": "0004",
+   "timestamp": "1790981232",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "12801,",
+   "franchise": "0006",
+   "timestamp": "1790870511",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14823,",
+   "franchise": "0002",
+   "timestamp": "1790817501",
+   "type": "IR"
+  },
+  {
+   "activated": "16581,",
+   "deactivated": "15708,",
+   "franchise": "0008",
+   "timestamp": "1790803598",
+   "type": "IR"
+  },
+  {
+   "activated": "15889,",
+   "deactivated": "",
+   "franchise": "0009",
+   "timestamp": "1790715093",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "13590,",
+   "franchise": "0003",
+   "timestamp": "1790708143",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15253,",
+   "franchise": "0007",
+   "timestamp": "1790691054",
+   "type": "IR"
+  },
+  {
+   "activated": "14823,",
+   "deactivated": "",
+   "franchise": "0002",
+   "timestamp": "1790679352",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17107,",
+   "franchise": "0004",
+   "timestamp": "1790657025",
+   "type": "IR"
+  },
+  {
+   "activated": "17087,",
+   "deactivated": "16167,",
+   "franchise": "0001",
+   "timestamp": "1790656471",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16579,14823,",
+   "franchise": "0002",
+   "timestamp": "1790510857",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15768,",
+   "franchise": "0012",
+   "timestamp": "1790489161",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15889,",
+   "franchise": "0009",
+   "timestamp": "1790446481",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16204,",
+   "franchise": "0006",
+   "timestamp": "1790179631",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16184,",
+   "franchise": "0007",
+   "timestamp": "1790177968",
+   "type": "IR"
+  },
+  {
+   "activated": "13592,15290,",
+   "deactivated": "12785,",
+   "franchise": "0004",
+   "timestamp": "1790120004",
+   "type": "IR"
+  },
+  {
+   "activated": "14842,15889,",
+   "deactivated": "",
+   "franchise": "0009",
+   "timestamp": "1790116684",
+   "type": "IR"
+  },
+  {
+   "activated": "16171,",
+   "deactivated": "",
+   "franchise": "0006",
+   "timestamp": "1790115851",
+   "type": "IR"
+  },
+  {
+   "activated": "14056,",
+   "deactivated": "17032,",
+   "franchise": "0006",
+   "timestamp": "1790105085",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16581,16597,",
+   "franchise": "0008",
+   "timestamp": "1790086704",
+   "type": "IR"
+  },
+  {
+   "activated": "16190,",
+   "deactivated": "13674,",
+   "franchise": "0001",
+   "timestamp": "1790051129",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15290,",
+   "franchise": "0004",
+   "timestamp": "1789921029",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16171,",
+   "franchise": "0006",
+   "timestamp": "1789919990",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16190,",
+   "franchise": "0001",
+   "timestamp": "1789857061",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14842,",
+   "franchise": "0009",
+   "timestamp": "1789841936",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15889,",
+   "franchise": "0009",
+   "timestamp": "1789773556",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14056,",
+   "franchise": "0006",
+   "timestamp": "1789763531",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "13592,",
+   "franchise": "0004",
+   "timestamp": "1789761408",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15972,",
+   "franchise": "0008",
+   "timestamp": "1789599082",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17514,",
+   "franchise": "0003",
+   "timestamp": "1789580612",
+   "type": "IR"
+  },
+  {
+   "activated": "17055,",
+   "deactivated": "",
+   "franchise": "0006",
+   "timestamp": "1789526770",
+   "type": "IR"
+  },
+  {
+   "activated": "17043,",
+   "deactivated": "",
+   "franchise": "0008",
+   "timestamp": "1789487160",
+   "type": "IR"
+  },
+  {
+   "activated": "13132,",
+   "deactivated": "17047,",
+   "franchise": "0007",
+   "timestamp": "1789478067",
+   "type": "IR"
+  },
+  {
+   "activated": "16641,",
+   "deactivated": "",
+   "franchise": "0002",
+   "timestamp": "1789468038",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "14104,",
+   "franchise": "0002",
+   "timestamp": "1789467966",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "13132,",
+   "franchise": "0007",
+   "timestamp": "1789314367",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15749,",
+   "franchise": "0006",
+   "timestamp": "1789280504",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "13146,",
+   "franchise": "0012",
+   "timestamp": "1789273753",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "15738,",
+   "franchise": "0006",
+   "timestamp": "1789215890",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16641,",
+   "franchise": "0002",
+   "timestamp": "1789124436",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17055,",
+   "franchise": "0006",
+   "timestamp": "1789083458",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16204,",
+   "franchise": "0006",
+   "timestamp": "1788970078",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17043,",
+   "franchise": "0008",
+   "timestamp": "1788926710",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17087,",
+   "franchise": "0001",
+   "timestamp": "1788727662",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "16169,",
+   "franchise": "0003",
+   "timestamp": "1788724491",
+   "type": "IR"
+  },
+  {
+   "activated": "",
+   "deactivated": "17056,",
+   "franchise": "0011",
+   "timestamp": "1788720553",
+   "type": "IR"
+  },
+  {
+   "demoted": "",
+   "franchise": "0005",
+   "promoted": "17543,",
+   "timestamp": "1792338804",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "",
+   "franchise": "0006",
+   "promoted": "17472,",
+   "timestamp": "1789871162",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17476,",
+   "franchise": "0005",
+   "promoted": "",
+   "timestamp": "1788817214",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17520,17543,17498,",
+   "franchise": "0005",
+   "promoted": "",
+   "timestamp": "1788817196",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17462,17503,17497,17607,",
+   "franchise": "0008",
+   "promoted": "",
+   "timestamp": "1788742403",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17477,17472,",
+   "franchise": "0006",
+   "promoted": "",
+   "timestamp": "1788733800",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17468,17481,17685,17652,",
+   "franchise": "0003",
+   "promoted": "",
+   "timestamp": "1788723608",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17506,17509,17504,",
+   "franchise": "0009",
+   "promoted": "",
+   "timestamp": "1788721310",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17482,17500,17507,17521,",
+   "franchise": "0004",
+   "promoted": "",
+   "timestamp": "1788720837",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17474,17501,17505,17529,",
+   "franchise": "0010",
+   "promoted": "",
+   "timestamp": "1788720804",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17478,17528,17547,17544,",
+   "franchise": "0001",
+   "promoted": "",
+   "timestamp": "1788720672",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17542,",
+   "franchise": "0011",
+   "promoted": "",
+   "timestamp": "1788720538",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17502,17511,",
+   "franchise": "0007",
+   "promoted": "",
+   "timestamp": "1788720490",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "",
+   "franchise": "0010",
+   "promoted": "17474,17505,17529,",
+   "timestamp": "1788717218",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17474,17505,17529,",
+   "franchise": "0010",
+   "promoted": "",
+   "timestamp": "1788717086",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17463,17548,",
+   "franchise": "0007",
+   "promoted": "",
+   "timestamp": "1788713257",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17518,",
+   "franchise": "0006",
+   "promoted": "",
+   "timestamp": "1788709052",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17599,17517,17499,17512,",
+   "franchise": "0012",
+   "promoted": "",
+   "timestamp": "1788702487",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "",
+   "franchise": "0006",
+   "promoted": "17518,",
+   "timestamp": "1788666095",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17466,17508,",
+   "franchise": "0002",
+   "promoted": "",
+   "timestamp": "1788259153",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17518,17567,",
+   "franchise": "0006",
+   "promoted": "",
+   "timestamp": "1788142562",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17512,",
+   "franchise": "0012",
+   "promoted": "",
+   "timestamp": "1788078692",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17477,17518,17567,",
+   "franchise": "0006",
+   "promoted": "",
+   "timestamp": "1788028778",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17476,17520,17498,17543,",
+   "franchise": "0005",
+   "promoted": "",
+   "timestamp": "1788022447",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17468,17481,17685,17652,",
+   "franchise": "0003",
+   "promoted": "",
+   "timestamp": "1786937471",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17473,17482,17500,17507,",
+   "franchise": "0004",
+   "promoted": "",
+   "timestamp": "1782708077",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17466,17508,",
+   "franchise": "0002",
+   "promoted": "",
+   "timestamp": "1782424973",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17462,17475,17503,17607,",
+   "franchise": "0008",
+   "promoted": "",
+   "timestamp": "1782424736",
+   "type": "TAXI"
+  },
+  {
+   "demoted": "17478,17528,17547,17544,",
+   "franchise": "0001",
+   "promoted": "",
+   "timestamp": "1782414878",
+   "type": "TAXI"
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
  "season": 2027,
- "asOf": "2026-11-13",
+ "asOf": "2026-11-14",
  "mode": "projected",
  "settings": {
   "windowDays": 60,
@@ -331,7 +331,7 @@
  "nflSources": [
   {
    "name": "NFL Mock Draft Database consensus mock (1 week) and recent mocks",
-   "date": "2026-11-13",
+   "date": "2026-11-14",
    "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
    "type": "mock",
    "weight": 3,
@@ -339,14 +339,14 @@
     "Jeremiah Smith": 1,
     "Drew Mestemaker": 3,
     "Darian Mensah": 6,
-    "Arch Manning": 6,
     "Charlie Becker": 7,
     "CJ Carr": 8,
+    "Arch Manning": 8,
     "Cam Coleman": 15,
     "Dante Moore": 16,
     "Nick Marsh": 17,
     "LaNorris Sellers": 18,
-    "Jadan Baugh": 20,
+    "Jadan Baugh": 21,
     "Trey'Dez Green": 23,
     "Reed Harris": 24,
     "Jamari Johnson": 25,
