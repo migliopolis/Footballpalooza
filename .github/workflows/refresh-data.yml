@@ -69,6 +69,9 @@ jobs:
       - name: Stats (League Now > Stats)
         continue-on-error: true
         run: python scripts/stats.py
+      - name: NFL box-score stats for Stats (nflverse)
+        continue-on-error: true
+        run: python scripts/refresh_nflverse.py
       - name: Analytics (League Now > Analytics)
         continue-on-error: true
         run: python scripts/analytics.py
