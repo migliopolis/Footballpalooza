@@ -983,13 +983,13 @@
         "id": "0001",
         "isHome": "0",
         "result": "T",
-        "spread": "-1.5"
+        "spread": "-8.2"
        },
        {
         "id": "0004",
         "isHome": "1",
         "result": "T",
-        "spread": "1.5"
+        "spread": "8.2"
        }
       ]
      },

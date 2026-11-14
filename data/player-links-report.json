@@ -453,7 +453,7 @@
    "mfl": "16810",
    "mflName": "Chris Collier",
    "pos": "RB",
-   "team": "LVR",
+   "team": "FA",
    "fbp": null,
    "espn": "4698191",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -534,7 +534,7 @@
    "mfl": "13148",
    "mflName": "Dare Ogunbowale",
    "pos": "RB",
-   "team": "HOU",
+   "team": "FA",
    "fbp": null,
    "espn": "2983509",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -1395,6 +1395,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17278",
+   "mflName": "Coleman Owen",
+   "pos": "WR",
+   "team": "GBP",
+   "fbp": null,
+   "espn": "4578436",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "16354",
    "mflName": "Colton Dowell",
    "pos": "WR",
@@ -1839,7 +1848,7 @@
    "mfl": "14105",
    "mflName": "Marquise Brown",
    "pos": "WR",
-   "team": "PHI",
+   "team": "FA",
    "fbp": null,
    "espn": "4241372",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -1893,7 +1902,7 @@
    "mfl": "16422",
    "mflName": "Nikko Remigio",
    "pos": "WR",
-   "team": "FA",
+   "team": "HOU",
    "fbp": null,
    "espn": "4372716",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
