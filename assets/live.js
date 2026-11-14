@@ -571,7 +571,8 @@
         // FBP's own IR counts even when ESPN no longer lists the injury
         const st = state(p), ph = photo(p.id), inj = (dnp(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : null) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
-        const img = photoHtml(p, shownW);
+        // his photo opens his Player Page; its back arrow returns here, to this matchup
+        const img = `<a class="lv-pha" href="#now/team/${(cls === 'a' ? a : b).id}/${p.id}" title="Player Page" aria-label="Player Page">${photoHtml(p, shownW)}</a>`;
         // bottom row: position (only when it isn't the slot's, as in FLEX or the bench), his NFL team's logo, the game clock, then the opponent (vs at home, @ away) and the
         // weather, toward the middle of the matchup
         const g = gameOf(p.id), myT = TEAM[info(p.id).team] || info(p.id).team;

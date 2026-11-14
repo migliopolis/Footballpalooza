@@ -152,7 +152,14 @@ window.FBPValues = (function () {
 
   document.addEventListener('click', e => {
     const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.vl-ctl, .mu-val')) return;
-    const sb = t.closest('[data-vl-st]'); if (sb) { muSt = sb.dataset.vlSt === '1'; try { localStorage.setItem('fbp-mu-st', muSt ? '1' : '0'); } catch (err) {} return redraw(); }
+    const sb = t.closest('[data-vl-st]'); if (sb) { muSt = sb.dataset.vlSt === '1'; try { localStorage.setItem('fbp-mu-st', muSt ? '1' : '0'); } catch (err) {}
+      // every game's chart changes height, so keep the pressed button where it was on screen, and keep open lists open
+      const all = () => [...document.querySelectorAll('.mu-val')], i = all().indexOf(sb.closest('.mu-val')), top = sb.getBoundingClientRect().top;
+      const open = all().map(v => !!(v.querySelector('details') || {}).open);
+      if (X && X.rerender) X.rerender();
+      all().forEach((v, k) => { const d = v.querySelector('details'); if (d && open[k]) d.open = true; });
+      const nb = all()[i] && all()[i].querySelector('[data-vl-st]'); if (nb) window.scrollBy(0, nb.getBoundingClientRect().top - top);
+      return; }
     const m = t.closest('[data-vl-mode]'); if (m) { mode = m.dataset.vlMode; try { localStorage.setItem('fbp-val-mode', mode); } catch (err) {} return redraw(); }
     const s = t.closest('[data-vl-shape]'); if (s) { shape = s.dataset.vlShape; try { localStorage.setItem('fbp-val-shape', shape); } catch (err) {} return redraw(); }
     if (t.closest('[data-vl-more]')) { chartLow = 0; return redraw(); }

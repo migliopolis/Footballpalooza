@@ -602,10 +602,10 @@ window.FBPRosters = (function () {
     const old = curH, h = location.hash; curH = h; ys[old] = lastY;
     if (isPP(h)) { if (!isPP(old)) ppFrom = old; return; }
     pPid = '';
-    if (isPP(old) && h === ppFrom && ys[h]) { const y = ys[h]; setTimeout(() => window.scrollTo(0, y), 0); setTimeout(() => window.scrollTo(0, y), 250); }
+    if (isPP(old) && h === ppFrom && ys[h]) { const y = ys[h]; [0, 250, 700, 1500].forEach(t => setTimeout(() => { if (Math.abs(window.scrollY - y) > 40 && document.documentElement.scrollHeight > y + 100) window.scrollTo(0, y); }, t)); }
   });
   const LBL = { '': 'Standings', rosters: 'Rosters', rankings: 'Rankings', stats: 'Stats', matchups: 'Matchups', power: 'Power Rankings', playoffs: 'Playoff Picture', analytics: 'Analytics', hospital: 'Hospital', docket: 'The Docket' };
-  const TOPL = { game: 'Game Day', trade: 'Trading Floor', awards: 'Awards', draft: 'Rookie Draft', reference: 'Reference', offseason: 'Off-Season', press: 'Press Box', beta: 'Beta' };
+  const TOPL = { scores: 'Matchup', game: 'Game Day', trade: 'Trading Floor', awards: 'Awards', draft: 'Rookie Draft', reference: 'Reference', offseason: 'Off-Season', press: 'Press Box', beta: 'Beta' };
   function ppBack(t) {
     const b = (h, l) => `<a class="pp-back" href="${h}"><span aria-hidden="true">←</span> ${X.esc(l)}</a>`;
     let from = '';
