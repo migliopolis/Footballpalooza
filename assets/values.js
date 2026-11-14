@@ -129,12 +129,12 @@ window.FBPValues = (function () {
     const keep = mode; mode = 'pv';   // Player Value here, whatever the Value page is set to: talent, not contracts
     const set = la && la.length && lb && lb.length, st = muSt && set;
     const C = cmpBody(fa, fb, 'twirl', st ? { [fa]: new Set(la), [fb]: new Set(lb) } : null), tot = L => L.reduce((s, r) => s + val(r), 0);
-    const seg = `<div class="seg mu-vseg" role="tablist" aria-label="Which players">${[[0, 'Everyone'], [1, 'Starters']].map(([k, l]) => `<button type="button" role="tab" data-vl-st="${k}" aria-selected="${!!k === muSt}">${l}</button>`).join('')}</div>`;
+    const seg = `<div class="seg mu-vseg" role="tablist" aria-label="Which players">${[[0, 'Everyone'], [1, 'Projected starters']].map(([k, l]) => `<button type="button" role="tab" data-vl-st="${k}" aria-selected="${!!k === muSt}">${l}</button>`).join('')}</div>`;
     const key = f => `<span class="vl-key" style="--pc:${f === fa ? C.ca : C.cb}"><i></i>${esc(tm(f).abbr || f)} <b>${Math.round(tot(f === fa ? C.A : C.B) / 1000)}k</b></span>`;
-    const html = `<div class="mu-val"><div class="mu-vh"><h4>Roster value <small>${MODE[mode][0]}, ${st ? 'this week’s starters' : 'players and picks'}, best first</small></h4>${seg}</div>
-      <p class="vl-keys">${key(fa)}${key(fb)}</p>${muSt && !set ? '<p class="tf-sub">Lineups for this week aren’t set yet, so this shows everyone.</p>' : ''}${C.svg}
-      ${st ? '<p class="tf-sub">Starters as set in MFL at the last refresh; defenses aren’t valued.</p>' : ''}
-      <details class="all mu-vd"><summary>${st ? 'Starters' : 'Players'} on each side</summary>${C.two}</details></div>`;
+    const html = `<div class="mu-val"><div class="mu-vh"><h4>Roster value <small>${MODE[mode][0]}, ${st ? 'projected starters' : 'players and picks'}, best first</small></h4>${seg}</div>
+      <p class="vl-keys">${key(fa)}${key(fb)}</p>${muSt && !set ? '<p class="tf-sub">No projections for this week yet, so this shows everyone.</p>' : ''}${C.svg}
+      ${st ? '<p class="tf-sub">Our best guess at each lineup, not the one set in MFL: healthy players ranked by this week’s projection and recent starts, with anyone ruled out replaced by the next best. Defenses aren’t valued.</p>' : ''}
+      <details class="all mu-vd"><summary>${st ? 'Projected starters' : 'Players'} on each side</summary>${C.two}</details></div>`;
     mode = keep;
     return html;
   }

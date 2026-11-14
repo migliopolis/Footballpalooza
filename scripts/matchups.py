@@ -67,11 +67,57 @@ def main():
     pw_pts = (PJ.get('players') or {}).get(str(week)) or {}
     lineups = (PJ.get('lineups') or {}) if PJ.get('lineupsWeek') == week else {}
 
+    # a player ruled out (Out, IR, suspended, PUP) projects to zero, whatever MFL's projection still says
+    try:
+        inj = (J('mfl/injuries.json') or {}).get('injuries') or {}
+    except Exception:
+        inj = {}
+    inj = inj.get('injury') if isinstance(inj, dict) else inj
+    ruled_out = {str(i.get('id')) for i in (inj if isinstance(inj, list) else [inj] if inj else [])
+                 if str(i.get('status') or '').lower().startswith(('out', 'ir', 'injured reserve', 'susp', 'pup', 'nfi', 'holdout'))}
+
+    # the look-ahead lineup (Matchups only; real lineups always come from MFL): every healthy player on the active
+    # roster, ranked by this week's projection plus a nudge for how often his team started him the last three weeks,
+    # filling QB, 2 RB, 2 WR, TE, defense and the best RB/WR/TE left as the flex. Someone ruled out gives way to the next.
+    try:
+        RO = (J('mfl/rosters.json').get('rosters') or {}).get('franchise') or []
+        POS = {k: (v[1] if isinstance(v, list) else (v or {}).get('position', '')) for k, v in (J('mfl/players.json').get('players') or {}).items()}
+        WR = J('mfl/weeklyResults.json').get('weeks') or {}
+    except Exception:
+        RO, POS, WR = [], {}, {}
+    recent = [str(w) for w in range(week - 3, week) if str(w) in WR]
+
+    def guess(tid):
+        f = next((x for x in RO if x.get('id') == tid), None)
+        if not f or not pw_pts:
+            return None
+        pl = f.get('player') or []
+        pl = pl if isinstance(pl, list) else [pl]
+        starts = {}
+        for w in recent:
+            for pid, _ in (WR[w].get(tid) or {}).get('s') or []:
+                starts[str(pid)] = starts.get(str(pid), 0) + 1
+        pool = [(str(p['id']), (POS.get(str(p['id'])) or '').upper().replace('DEF', 'DEF')) for p in pl if p.get('status') == 'ROSTER' and str(p['id']) not in ruled_out]
+        score = lambda pid: float(pw_pts.get(pid) or 0) + 1.5 * starts.get(pid, 0)
+        pool.sort(key=lambda x: -score(x[0]))
+        out, used = [], set()
+        for pos, n in (('QB', 1), ('RB', 2), ('WR', 2), ('TE', 1), ('DEF', 1)):
+            for pid, ps in pool:
+                if n and ps == pos and pid not in used:
+                    out.append(pid); used.add(pid); n -= 1
+        flex = next((pid for pid, ps in pool if ps in ('RB', 'WR', 'TE') and pid not in used), None)
+        if flex:
+            out.append(flex)
+        return out
+
+    _g = {}
+    gl = lambda tid: _g.setdefault(tid, guess(tid))
+
     def projected(tid):
         st = lineups.get(tid) or []
         if not pw_pts or not st:
             return None, None
-        return round(sum(pw_pts.get(p, 0) for p in st), 1), sum(1 for p in st if not pw_pts.get(p))
+        return round(sum(0 if p in ruled_out else pw_pts.get(p, 0) for p in st), 1), sum(1 for p in st if not pw_pts.get(p))
 
     def tape(tid, opp):
         t, s = by[tid], sorted(mine.get(tid, []))
@@ -86,7 +132,8 @@ def main():
             allPlay=f"{t['allPlayW']}-{t['allPlayL']}" + (f"-{t['allPlayT']}" if t.get('allPlayT') else ''),
             winProb=g['winProb'] if g else None,
             proj=projected(tid)[0], projZero=projected(tid)[1],
-            lineup=lineups.get(tid) or None,   # this week's starters as set in MFL (Matchups > Roster value, Starters)
+            lineup=lineups.get(tid) or None,   # this week's starters as set in MFL
+            guess=gl(tid), guessProj=round(sum(float(pw_pts.get(p) or 0) for p in gl(tid)), 1) if gl(tid) else None,   # the look-ahead lineup
             playoff=o.get('playoff'), bye=o.get('bye'),
             ifWin=g['ifWin'][:2] if g else None, ifLoss=g['ifLoss'][:2] if g else None,
         )

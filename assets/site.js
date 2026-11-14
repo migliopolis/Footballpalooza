@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0204';
+  const VERSION = '0.0205';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -555,7 +555,7 @@
         </div>
         ${a.winProb != null ? `<div class="mu-wp"><span>${a.winProb}%</span><div class="mu-bar"><i style="width:${a.winProb}%"></i></div><span>${b.winProb}%</span></div><p class="mu-cap">Win chance</p>` : ''}
         <div class="mu-tape">
-          ${a.proj != null && b.proj != null ? row('Projected this week', a.proj, b.proj, 'hi') : ''}
+          ${a.guessProj != null && b.guessProj != null ? row('Projected this week', a.guessProj, b.guessProj, 'hi') : a.proj != null && b.proj != null ? row('Projected this week', a.proj, b.proj, 'hi') : ''}
           ${row('Points', a.pf, b.pf, 'hi')}
           ${row('League rank', ord(a.pfRank), ord(b.pfRank))}
           ${row('Per week', a.avg, b.avg, 'hi')}
@@ -565,7 +565,7 @@
           ${row('All-play', a.allPlay, b.allPlay)}
           ${row('Streak', a.streak, b.streak)}
         </div>
-        ${window.FBPValues ? FBPValues.matchup({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/matchups')) route(); } }, g.away, g.home, a.lineup, b.lineup) : ''}
+        ${window.FBPValues ? FBPValues.matchup({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/matchups')) route(); } }, g.away, g.home, a.guess, b.guess) : ''}
         <div class="mu-ser"><h4>Head to head <small>since ${M.since}, playoffs included</small></h4>
           <p class="mu-lead"><b>${lead}</b>${strk ? ` · ${strk}` : ''}</p>
           <p class="mu-avg">Average score in the series: ${esc(short(g.away))} ${pts(s.avg[g.away])}, ${esc(short(g.home))} ${pts(s.avg[g.home])}</p>
@@ -866,7 +866,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0204
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0205
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };

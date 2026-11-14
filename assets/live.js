@@ -25,7 +25,10 @@
   let honors = null;
   // MFL's projected points for each week, scored with FBP's settings (data/mfl/projections.json, saved daily)
   let proj = null;
-  const projOf = (id, wk) => { const w = proj && proj[String(wk)]; return w && w[id] != null ? w[id] : null; };   // null: no projection
+  // a player ruled out (Out, IR, suspended, PUP) projects to zero this week, whatever MFL still says
+  const OUT = { O: 1, IR: 1, SUS: 1, PUP: 1 };
+  const projOf = (id, wk) => { const w = proj && proj[String(wk)]; if (!w || w[id] == null) return null;   // null: no projection
+    const t = injTag(id); return t && OUT[t.t] ? 0 : w[id]; };
   // how a player is doing, shown on his photo. Top down: nuclear (over his position's line), hot (well ahead of his
   // projection), normal, cold (well behind it), bust (a big projection that collapsed), blank (0 points past halftime).
   // Only players whose NFL game has kicked off; byes and players yet to play stay normal.
