@@ -7,8 +7,8 @@
                          position ranks, average age, own 1st, and a two-team comparison. */
 window.FBPValues = (function () {
   let V = null, failed = false, loading = false, X = null;
-  let mode = 'tv', picksOn = true, shape = 'dots', cmpA = '', cmpB = '', cmpAll = false, chartLow = 2000;
-  try { mode = localStorage.getItem('fbp-val-mode') || 'tv'; shape = localStorage.getItem('fbp-val-shape') || 'dots'; } catch (e) {}
+  let muSt = false, mode = 'tv', picksOn = true, shape = 'dots', cmpA = '', cmpB = '', cmpAll = false, chartLow = 2000;
+  try { muSt = localStorage.getItem('fbp-mu-st') === '1'; mode = localStorage.getItem('fbp-val-mode') || 'tv'; shape = localStorage.getItem('fbp-val-shape') || 'dots'; } catch (e) {}
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   function load() {
@@ -95,8 +95,9 @@ window.FBPValues = (function () {
     return [ca, cb];
   }
   // both rosters by value, best first, with gap bars underneath; lists: 'twirl' folds the players away (Matchups)
-  function cmpBody(fa, fb, lists) {
-    const A = teamList(fa), B = teamList(fb), n = Math.max(A.length, B.length, 1), [ca, cb] = colors(fa, fb);
+  function cmpBody(fa, fb, lists, only) {
+    const pick = f => only ? teamList(f).filter(r => only[f].has(r.id)) : teamList(f);
+    const A = pick(fa), B = pick(fb), n = Math.max(A.length, B.length, 1), [ca, cb] = colors(fa, fb);
     const w = 640, h = 230, pl = 10, pb = 70, y = v => 10 + (h - pb - 10) * (1 - v / 10000), x = i => pl + (w - 2 * pl) * (i + 0.5) / n;
     const line = (L, c) => `<polyline points="${L.map((r, i) => `${x(i)},${y(val(r))}`).join(' ')}" fill="none" stroke="${c}" stroke-opacity=".5" stroke-width="2"/>` + L.map((r, i) => `<circle cx="${x(i)}" cy="${y(val(r))}" r="3.6" fill="${c}"><title>${esc(r.n)}: ${val(r).toLocaleString()}</title></circle>`).join('');
     const gaps = Array.from({ length: n }, (_, i) => { const a = A[i] ? val(A[i]) : 0, b = B[i] ? val(B[i]) : 0, d = a - b, hh = Math.min(44, Math.abs(d) / 60);
@@ -121,16 +122,19 @@ window.FBPValues = (function () {
       ${Math.max(C.A.length, C.B.length) > 10 ? `<button type="button" class="ro-howb" data-vl-all>${cmpAll ? 'Show the top 10' : 'Show everyone'}</button>` : ''}</section>`;
   }
   // League Now > Matchups: the two rosters' value chart for one game, players folded underneath
-  function matchup(ctx, fa, fb) {
+  function matchup(ctx, fa, fb, la, lb) {
     X = ctx; load();
     if (failed || !V) return failed ? '' : '<p class="tf-sub">Loading roster values…</p>';
     if (!V.teams[fa] || !V.teams[fb]) return '';
     const keep = mode; mode = 'pv';   // Player Value here, whatever the Value page is set to: talent, not contracts
-    const C = cmpBody(fa, fb, 'twirl'), tot = L => L.reduce((s, r) => s + val(r), 0);
+    const set = la && la.length && lb && lb.length, st = muSt && set;
+    const C = cmpBody(fa, fb, 'twirl', st ? { [fa]: new Set(la), [fb]: new Set(lb) } : null), tot = L => L.reduce((s, r) => s + val(r), 0);
+    const seg = `<div class="seg mu-vseg" role="tablist" aria-label="Which players">${[[0, 'Everyone'], [1, 'Starters']].map(([k, l]) => `<button type="button" role="tab" data-vl-st="${k}" aria-selected="${!!k === muSt}">${l}</button>`).join('')}</div>`;
     const key = f => `<span class="vl-key" style="--pc:${f === fa ? C.ca : C.cb}"><i></i>${esc(tm(f).abbr || f)} <b>${Math.round(tot(f === fa ? C.A : C.B) / 1000)}k</b></span>`;
-    const html = `<div class="mu-val"><h4>Roster value <small>${MODE[mode][0]}, players and picks, best first</small></h4>
-      <p class="vl-keys">${key(fa)}${key(fb)}</p>${C.svg}
-      <details class="all mu-vd"><summary>Players on each side</summary>${C.two}</details></div>`;
+    const html = `<div class="mu-val"><div class="mu-vh"><h4>Roster value <small>${MODE[mode][0]}, ${st ? 'this week’s starters' : 'players and picks'}, best first</small></h4>${seg}</div>
+      <p class="vl-keys">${key(fa)}${key(fb)}</p>${muSt && !set ? '<p class="tf-sub">Lineups for this week aren’t set yet, so this shows everyone.</p>' : ''}${C.svg}
+      ${st ? '<p class="tf-sub">Starters as set in MFL at the last refresh; defenses aren’t valued.</p>' : ''}
+      <details class="all mu-vd"><summary>${st ? 'Starters' : 'Players'} on each side</summary>${C.two}</details></div>`;
     mode = keep;
     return html;
   }
@@ -147,7 +151,8 @@ window.FBPValues = (function () {
   }
 
   document.addEventListener('click', e => {
-    const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.vl-ctl')) return;
+    const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.vl-ctl, .mu-val')) return;
+    const sb = t.closest('[data-vl-st]'); if (sb) { muSt = sb.dataset.vlSt === '1'; try { localStorage.setItem('fbp-mu-st', muSt ? '1' : '0'); } catch (err) {} return redraw(); }
     const m = t.closest('[data-vl-mode]'); if (m) { mode = m.dataset.vlMode; try { localStorage.setItem('fbp-val-mode', mode); } catch (err) {} return redraw(); }
     const s = t.closest('[data-vl-shape]'); if (s) { shape = s.dataset.vlShape; try { localStorage.setItem('fbp-val-shape', shape); } catch (err) {} return redraw(); }
     if (t.closest('[data-vl-more]')) { chartLow = 0; return redraw(); }

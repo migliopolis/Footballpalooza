@@ -86,6 +86,7 @@ def main():
             allPlay=f"{t['allPlayW']}-{t['allPlayL']}" + (f"-{t['allPlayT']}" if t.get('allPlayT') else ''),
             winProb=g['winProb'] if g else None,
             proj=projected(tid)[0], projZero=projected(tid)[1],
+            lineup=lineups.get(tid) or None,   # this week's starters as set in MFL (Matchups > Roster value, Starters)
             playoff=o.get('playoff'), bye=o.get('bye'),
             ifWin=g['ifWin'][:2] if g else None, ifLoss=g['ifLoss'][:2] if g else None,
         )

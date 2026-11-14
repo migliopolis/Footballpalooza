@@ -3040,3 +3040,6 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .vl-ls li.vl-lh img{width:20px;height:20px;object-fit:contain}
 .vl-ls li.vl-lh b{color:var(--fg);font:700 .78rem var(--mono);min-width:0;text-align:left}
 .vl-ls li.vl-lh span{margin-left:auto;font:600 .74rem var(--mono);color:var(--muted)}
+.mu-vh{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.mu-vh h4{margin:0!important}
+.mu-vseg button{padding:4px 10px;font-size:.74rem}
