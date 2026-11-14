@@ -3043,3 +3043,8 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .mu-vh{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .mu-vh h4{margin:0!important}
 .mu-vseg button{padding:4px 10px;font-size:.74rem}
+/* Reference > Franchises: rookie draft / auction history switch and filters */
+.rf-hx{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 10px}
+.rf-hx select{font:inherit;font-size:.85rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 8px}
+.rf-hxpos button{padding:6px 10px}
+.rf-now{display:block;font:600 .64rem var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--green,#15803d);margin-top:2px}

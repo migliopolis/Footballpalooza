@@ -235,8 +235,50 @@ window.FBPRef = (() => {
       ${allFbp(fr)}
       <section><h2 class="sec">Head-to-head <small>every game, playoffs included</small></h2>
       <div class="card rf-h2h">${h2h.map(([o, r]) => { const g = r.w + r.l + r.t, p = g ? (r.w + r.t / 2) / g : 0; return `<a href="#reference/f-${o}" class="rf-h2hrow">${X.chip(o, { name: D.franchises[o] })}<span class="bar"><i style="width:${(p * 100).toFixed(0)}%"></i></span><b>${rec(r.w, r.l, r.t)}</b></a>`; }).join('')}</div></section>
-      <section><h2 class="sec">Rookie draft history</h2>${picksTable(D.franchise_draft_picks[fr] || [], false)}</section>`;
+      ${historyBlock(fr)}`;
   }
+
+  // franchise page: rookie draft or auction history, one at a time, filtered by position and season (headers sort)
+  const HX = { tab: 'draft', pos: '', yr: '' };
+  try { Object.assign(HX, JSON.parse(localStorage.getItem('fbp-rf-hx') || '{}'), { yr: '' }); } catch (e) {}
+  const posOf = p => { const v = String(p.player_pos || '').toUpperCase(); return v === 'DEF' || v === 'DST' ? 'DEF' : v; };
+  function historyBlock(fr) {
+    const draft = HX.tab !== 'auction';
+    const all = draft ? (D.franchise_draft_picks[fr] || []) : ((D.franchise_auction_buys || {})[fr] || []);
+    const yrs = [...new Set(all.map(p => +p.year))].sort((a, b) => b - a);
+    const poss = ['QB', 'RB', 'WR', 'TE', 'DEF'].filter(k => all.some(p => posOf(p) === k));
+    const list = all.filter(p => (!HX.pos || posOf(p) === HX.pos) && (!HX.yr || +p.year === +HX.yr));
+    const btn = (k, v, l, on) => `<button type="button" role="tab" data-rf-hx="${k}:${v}" aria-selected="${on}">${l}</button>`;
+    const ctl = `<div class="rf-hx">
+      <div class="seg" role="tablist" aria-label="Which history">${btn('tab', 'draft', 'Rookie draft', draft)}${btn('tab', 'auction', 'Auction', !draft)}</div>
+      <div class="seg rf-hxpos" role="tablist" aria-label="Position">${btn('pos', '', 'All', !HX.pos)}${poss.map(k => btn('pos', k, k, HX.pos === k)).join('')}</div>
+      <select class="rf-hxyr" aria-label="Season"><option value="">All seasons</option>${yrs.map(y => `<option value="${y}"${+HX.yr === y ? ' selected' : ''}>${y}</option>`).join('')}</select></div>`;
+    const body = all.length && !list.length ? '<p class="rf-note">Nothing matches.</p>' : draft ? picksTable(list, false) : buysTable(list);
+    const n = list.length, spent = list.reduce((a, p) => a + (+(draft ? p.drafted_price : p.price) || 0), 0);
+    return `<section><h2 class="sec">${draft ? 'Rookie draft history' : 'Auction history'} <small>${n} ${draft ? (n === 1 ? 'pick' : 'picks') : (n === 1 ? 'player won' : 'players won')}${!draft && n ? ` · $${spent} spent` : ''} · tap a header to sort</small></h2>${ctl}${body}</section>`;
+  }
+  // auction buys: price, then what each one scored for this team, season by season, until he was gone
+  function buysTable(buys) {
+    if (!buys.length) return '<p class="rf-note">No auction buys on record.</p>';
+    const ys = [...new Set(buys.flatMap(b => (b.team_points_by_season || []).map(x => x.year)))].sort();
+    const cell = (b, y) => { if (y < b.year) return '<td></td>'; const s = (b.team_points_by_season || []).find(x => x.year === y);
+      return s ? `<td data-v="${s.points}" title="${s.starts} start${s.starts === 1 ? '' : 's'}">${n1(s.points)}</td>` : '<td class="rf-gone" data-v="" title="No longer scoring for this team"></td>'; };
+    return `<div class="card tbl-wrap"><table class="tbl rf-t sortable"><thead><tr><th data-sort="num" tabindex="0" data-first="desc">Year</th><th class="t" data-sort="txt" tabindex="0">Player</th><th data-sort="txt" tabindex="0">Pos</th><th data-sort="num" tabindex="0" data-first="desc">$</th>${ys.map(y => `<th data-sort="num" tabindex="0" data-first="desc">${y}</th>`).join('')}<th data-sort="num" tabindex="0" data-first="desc">Starts</th><th data-sort="num" tabindex="0" data-first="desc">Total</th><th data-sort="num" tabindex="0" data-first="desc">Avg</th></tr></thead><tbody>
+      ${buys.map(b => { const ss = b.team_points_by_season || [], avg = ss.length ? b.team_total / ss.length : null;
+        return `<tr><td>${b.year}</td><td class="t" data-v="${esc(person(b.player_name) || '')}">${esc(person(b.player_name) || 'Player #' + b.player_id)}${b.on_team_now ? '<span class="rf-now">On the roster</span>' : ''}</td><td>${esc(posOf(b))}</td><td data-v="${b.price}">$${b.price}</td>${ys.map(y => cell(b, y)).join('')}<td data-v="${b.starts}">${b.starts}</td><td data-v="${b.team_total}">${n1(b.team_total)}</td><td data-v="${avg == null ? '' : avg}">${n1(avg)}</td></tr>`; }).join('')}
+      </tbody></table></div>
+      <p class="rf-foot">What each auction buy gave this team: regular-season points for the team in the season he was bought and every season in a row after it that he still scored for the team, until he was let go or bought again (bench and taxi included from 2021; 2019 and 2020 have starters only). Hover a season for his starts.</p>`;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('[data-rf-hx]'); if (!b) return;
+    const [k, v] = b.dataset.rfHx.split(':'); HX[k] = v; if (k === 'tab') { HX.pos = ''; HX.yr = ''; }
+    try { localStorage.setItem('fbp-rf-hx', JSON.stringify({ tab: HX.tab, pos: HX.pos })); } catch (err) {}
+    const y = window.scrollY; X.rerender(); window.scrollTo(0, y);
+  });
+  document.addEventListener('change', e => {
+    if (!(e.target.matches && e.target.matches('.rf-hxyr'))) return;
+    HX.yr = e.target.value; const y = window.scrollY; X.rerender(); window.scrollTo(0, y);
+  });
 
   // All-FBP players who earned it with this team: most 1st Teams first, then 2nd Teams, then points
   function allFbp(fr) {
