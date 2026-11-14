@@ -82,23 +82,57 @@ window.FBPValues = (function () {
       <div class="vl-meta"><span>Avg. age <b>${t.age || '—'}</b></span><span class="${t.own1 ? 'ok' : 'no'}">${t.own1 ? '✓ Has own 2027 1st' : '✕ Traded own 2027 1st'}</span></div>
       ${shape === 'radar' ? radar(f) : dots(list)}</section>`;
   }
+  // a team's line color: its primary, or its secondary when the primary would vanish (near white, or near black in dark
+  // mode) or match the other team's
+  const hex = c => { const m = /^#?([0-9a-f]{6})$/i.exec(c || ''); if (!m) return null; const n = parseInt(m[1], 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
+  const lum = c => { const v = hex(c); return v ? (0.299 * v[0] + 0.587 * v[1] + 0.114 * v[2]) / 255 : 0.5; };
+  const dist = (p, q) => { const a = hex(p), b = hex(q); return a && b ? Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) : 999; };
+  const darkMode = () => { try { return lum((getComputedStyle(document.body).backgroundColor.match(/\d+/g) || []).slice(0, 3).map(n => (+n).toString(16).padStart(2, '0')).join('')) < 0.4; } catch (e) { return false; } };
+  function colors(fa, fb) {
+    const dk = darkMode(), ok = c => c && lum(c) < 0.86 && (!dk || lum(c) > 0.16);
+    const opts = f => [tm(f).primary, tm(f).secondary].filter(ok).concat([f === fa ? '#3b82c4' : '#c0504d']);
+    const A = opts(fa), B = opts(fb), ca = A[0], cb = B.find(c => dist(c, ca) > 70) || (ca === '#c0504d' ? '#3b82c4' : '#c0504d');
+    return [ca, cb];
+  }
+  // both rosters by value, best first, with gap bars underneath; lists: 'twirl' folds the players away (Matchups)
+  function cmpBody(fa, fb, lists) {
+    const A = teamList(fa), B = teamList(fb), n = Math.max(A.length, B.length, 1), [ca, cb] = colors(fa, fb);
+    const w = 640, h = 230, pl = 10, pb = 70, y = v => 10 + (h - pb - 10) * (1 - v / 10000), x = i => pl + (w - 2 * pl) * (i + 0.5) / n;
+    const line = (L, c) => `<polyline points="${L.map((r, i) => `${x(i)},${y(val(r))}`).join(' ')}" fill="none" stroke="${c}" stroke-opacity=".5" stroke-width="2"/>` + L.map((r, i) => `<circle cx="${x(i)}" cy="${y(val(r))}" r="3.6" fill="${c}"><title>${esc(r.n)}: ${val(r).toLocaleString()}</title></circle>`).join('');
+    const gaps = Array.from({ length: n }, (_, i) => { const a = A[i] ? val(A[i]) : 0, b = B[i] ? val(B[i]) : 0, d = a - b, hh = Math.min(44, Math.abs(d) / 60);
+      return `<rect x="${x(i) - 4}" y="${h - 22 - hh}" width="8" height="${Math.max(1, hh)}" fill="${d >= 0 ? ca : cb}" opacity=".85"><title>#${i + 1}: ${d >= 0 ? '+' : '−'}${Math.abs(d).toLocaleString()} ${esc(tm(d >= 0 ? fa : fb).abbr || '')}</title></rect><text x="${x(i)}" y="${h - pb + 14}" class="vl-ax" text-anchor="middle">${i + 1}</text>`; }).join('');
+    const all = lists === 'twirl' || cmpAll;
+    const lst = (L, c, f) => `<ol class="vl-ls" style="--pc:${c}">${lists === 'twirl' ? `<li class="vl-lh">${tm(f).logo ? `<img src="${tm(f).logo}" alt="">` : ''}<b>${esc(tm(f).abbr || f)}</b><span>${Math.round(L.reduce((s, r) => s + val(r), 0) / 1000)}k</span></li>` : ''}${(all ? L : L.slice(0, 10)).map((r, i) => { const hr = link(r);
+      return `<li><span class="vl-n">${i + 1}</span>${hr ? `<a href="${hr}">${esc(r.n)}</a>` : `<span>${esc(r.n)}</span>`}<span class="vl-pos" style="--pc:${COL[r.pos]}">${r.pos === 'PICK' ? 'PICK' : r.pos}</span><b>${val(r).toLocaleString()}</b></li>`; }).join('')}</ol>`;
+    const two = `<div class="vl-two">${lst(A, ca, fa)}${lst(B, cb, fb)}</div>`;
+    const svg = `<svg class="vl-cmpg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Both rosters by value, best first">${line(B, cb)}${line(A, ca)}<line x1="${pl}" x2="${w - pl}" y1="${h - pb}" y2="${h - pb}" class="vl-axl"/>${gaps}</svg>`;
+    return { ca, cb, svg, two, A, B };
+  }
   function compare() {
     const ids = Object.keys(V.teams), my = X.myTeam && V.teams[X.myTeam] ? X.myTeam : ids[0];
     if (!cmpA || !V.teams[cmpA]) cmpA = my;
     if (!cmpB || !V.teams[cmpB] || cmpB === cmpA) cmpB = ids.filter(f => f !== cmpA).sort((a, b) => V.teams[a][mode + 'R'] - V.teams[b][mode + 'R'])[0];
-    const A = teamList(cmpA), B = teamList(cmpB), n = Math.max(A.length, B.length), ca = '#3b82c4', cb = '#c0504d';
-    const w = 640, h = 230, pl = 10, pb = 70, y = v => 10 + (h - pb - 10) * (1 - v / 10000), x = i => pl + (w - 2 * pl) * (i + 0.5) / n;
-    const line = (L, c) => `<polyline points="${L.map((r, i) => `${x(i)},${y(val(r))}`).join(' ')}" fill="none" stroke="${c}" stroke-opacity=".45" stroke-width="2"/>` + L.map((r, i) => `<circle cx="${x(i)}" cy="${y(val(r))}" r="3.6" fill="${c}"><title>${esc(r.n)}: ${val(r).toLocaleString()}</title></circle>`).join('');
-    const gaps = Array.from({ length: n }, (_, i) => { const a = A[i] ? val(A[i]) : 0, b = B[i] ? val(B[i]) : 0, d = a - b, hh = Math.min(44, Math.abs(d) / 60);
-      return `<rect x="${x(i) - 4}" y="${h - 22 - hh}" width="8" height="${Math.max(1, hh)}" fill="${d >= 0 ? ca : cb}" opacity=".85"><title>#${i + 1}: ${d >= 0 ? '+' : '−'}${Math.abs(d).toLocaleString()} ${esc(tm(d >= 0 ? cmpA : cmpB).abbr || '')}</title></rect><text x="${x(i)}" y="${h - pb + 14}" class="vl-ax" text-anchor="middle">${i + 1}</text>`; }).join('');
+    const C = cmpBody(cmpA, cmpB);
     const sel = (k, cur) => `<select class="vl-sel" data-vl-cmp="${k}">${ids.map(f => `<option value="${f}"${f === cur ? ' selected' : ''}>${esc(X.nameOf ? X.nameOf(f) : f)}</option>`).join('')}</select>`;
-    const lst = (L, c) => `<ol class="vl-ls" style="--pc:${c}">${(cmpAll ? L : L.slice(0, 10)).map((r, i) => { const h = link(r);
-      return `<li><span class="vl-n">${i + 1}</span>${h ? `<a href="${h}">${esc(r.n)}</a>` : `<span>${esc(r.n)}</span>`}<span class="vl-pos" style="--pc:${COL[r.pos]}">${r.pos === 'PICK' ? 'PICK' : r.pos}</span><b>${val(r).toLocaleString()}</b></li>`; }).join('')}</ol>`;
-    return `<section class="card vl-cmp"><h2>Compare</h2><div class="vl-cs"><span style="--pc:${ca}">${sel('a', cmpA)}</span><span class="vl-vs">vs</span><span style="--pc:${cb}">${sel('b', cmpB)}</span></div>
-      <svg class="vl-cmpg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Both rosters by value, best first">${line(B, cb)}${line(A, ca)}<line x1="${pl}" x2="${w - pl}" y1="${h - pb}" y2="${h - pb}" class="vl-axl"/>${gaps}</svg>
+    return `<section class="card vl-cmp"><h2>Compare</h2><div class="vl-cs"><span style="--pc:${C.ca}">${sel('a', cmpA)}</span><span class="vl-vs">vs</span><span style="--pc:${C.cb}">${sel('b', cmpB)}</span></div>
+      ${C.svg}
       <p class="tf-sub">Each team’s players and picks, best first. The bars underneath show who has the edge at each spot on the list, and by how much.</p>
-      <div class="vl-two">${lst(A, ca)}${lst(B, cb)}</div>
-      ${Math.max(A.length, B.length) > 10 ? `<button type="button" class="ro-howb" data-vl-all>${cmpAll ? 'Show the top 10' : 'Show everyone'}</button>` : ''}</section>`;
+      ${C.two}
+      ${Math.max(C.A.length, C.B.length) > 10 ? `<button type="button" class="ro-howb" data-vl-all>${cmpAll ? 'Show the top 10' : 'Show everyone'}</button>` : ''}</section>`;
+  }
+  // League Now > Matchups: the two rosters' value chart for one game, players folded underneath
+  function matchup(ctx, fa, fb) {
+    X = ctx; load();
+    if (failed || !V) return failed ? '' : '<p class="tf-sub">Loading roster values…</p>';
+    if (!V.teams[fa] || !V.teams[fb]) return '';
+    const keep = mode; mode = 'pv';   // Player Value here, whatever the Value page is set to: talent, not contracts
+    const C = cmpBody(fa, fb, 'twirl'), tot = L => L.reduce((s, r) => s + val(r), 0);
+    const key = f => `<span class="vl-key" style="--pc:${f === fa ? C.ca : C.cb}"><i></i>${esc(tm(f).abbr || f)} <b>${Math.round(tot(f === fa ? C.A : C.B) / 1000)}k</b></span>`;
+    const html = `<div class="mu-val"><h4>Roster value <small>${MODE[mode][0]}, players and picks, best first</small></h4>
+      <p class="vl-keys">${key(fa)}${key(fb)}</p>${C.svg}
+      <details class="all mu-vd"><summary>Players on each side</summary>${C.two}</details></div>`;
+    mode = keep;
+    return html;
   }
   function league(ctx) {
     X = ctx; load();
@@ -124,5 +158,5 @@ window.FBPValues = (function () {
     if (t.matches('[data-vl-picks]')) { picksOn = t.checked; redraw(); }
     if (t.matches('[data-vl-cmp]')) { if (t.dataset.vlCmp === 'a') cmpA = t.value; else cmpB = t.value; redraw(); }
   });
-  return { chart, league };
+  return { chart, league, matchup };
 })();

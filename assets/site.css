@@ -2932,7 +2932,7 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 .vl-ls .vl-n{width:1.6em;text-align:center;font:700 .72rem var(--mono);color:var(--muted)}
 .vl-ls a,.vl-ls li > span:nth-child(2){color:var(--fg);text-decoration:none;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vl-pos{font:700 .58rem var(--body);padding:2px 5px;border-radius:3px;background:color-mix(in srgb,var(--pc) 20%,transparent)}
-.vl-ls b{font:700 .84rem var(--mono);color:var(--pc);min-width:3.6em;text-align:right}
+.vl-ls b{font:700 .84rem var(--mono);color:var(--fg);min-width:3.6em;text-align:right}
 
 /* ---------- League Now > Rankings (assets/rankings.js) ---------- */
 .rk-page{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -3028,3 +3028,15 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 @media (max-width:640px){.tx-r{grid-template-columns:auto auto 1fr;grid-template-areas:"tm k t" "b b b"}.tx-tm{grid-area:tm}.tx-k{grid-area:k}.tx-t{grid-area:t;justify-self:end}.tx-b{grid-area:b}.tx-ctl label{flex:1 1 45%}.tx-ctl select{flex:1;max-width:none;min-width:0}}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tx-k.w,:root:not([data-theme="light"]) .tx-k.f,:root:not([data-theme="light"]) .tx-k.t,:root:not([data-theme="light"]) .tx-k.i,:root:not([data-theme="light"]) .tx-k.x,:root:not([data-theme="light"]) .tx-k.a{background:color-mix(in srgb,var(--fg) 12%,transparent);color:var(--fg)}:root:not([data-theme="light"]) .tx-v.add{color:#4ade80}:root:not([data-theme="light"]) .tx-v.drop{color:#f87171}}
 :root[data-theme="dark"] .tx-k{background:color-mix(in srgb,var(--fg) 12%,transparent)!important;color:var(--fg)!important}:root[data-theme="dark"] .tx-v.add{color:#4ade80}:root[data-theme="dark"] .tx-v.drop{color:#f87171}
+/* Matchups: roster value chart */
+.mu-val{margin:12px 0 4px}
+.mu-val h4 small{font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted)}
+.vl-keys{display:flex;gap:14px;margin:4px 0 0;font-size:.78rem;color:var(--muted)}
+.vl-key{display:inline-flex;align-items:center;gap:5px}
+.vl-key i{width:12px;height:12px;border-radius:50%;background:var(--pc)}
+.vl-key b{color:var(--fg);font-family:var(--mono)}
+.mu-vd .vl-two{margin-top:6px}
+.vl-ls li.vl-lh{gap:6px;font-weight:700}
+.vl-ls li.vl-lh img{width:20px;height:20px;object-fit:contain}
+.vl-ls li.vl-lh b{color:var(--fg);font:700 .78rem var(--mono);min-width:0;text-align:left}
+.vl-ls li.vl-lh span{margin-left:auto;font:600 .74rem var(--mono);color:var(--muted)}
