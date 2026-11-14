@@ -51,6 +51,7 @@ def routes():
         'now/rosters': ('Rosters', 'All 12 FBP rosters side by side, by division or position by position.'),
         'now/team': ('My Team', 'One FBP team up close: its roster and contracts, Face of the Franchise, State of the Team and points by week.'),
         'now/rankings': ('Rankings', 'Dynasty, rest-of-season and rookie rankings with FBP teams, salaries, Trade Value, Player Card ratings and Heat Check.'),
+        'now/transactions': ('Transactions', 'Every FBP move of the season: waiver claims with winning bids, free-agent pickups, trades, IR and taxi moves and auctions, by team.'),
         'now/docket': ('The Docket', 'Fantasy-relevant NFL players with legal trouble: the charges, what’s at stake, and a word from their FBP teams.'),
         'now/analytics': ('Analytics', 'The numbers behind the standings: lineups, luck, projections, lineup cost, salary value and playoff odds.'),
         'reference/players': ('Player Records', 'How often each player’s team wins when he starts, and every FBP team he’s started for.'),

@@ -235,6 +235,20 @@ def fetch_transactions():
     time.sleep(1.1)
 
 
+def fetch_roster_moves():
+    """This season's IR and taxi squad moves (League Now > Transactions), kept apart from the trades and pickups."""
+    try:
+        tx = []
+        for t in ('IR', 'TAXI'):
+            raw = fetch('transactions', {'TRANS_TYPE': t}).get('transactions', {})
+            tx += [x for x in as_list(raw.get('transaction')) if x.get('type') == t]
+            time.sleep(1.1)
+        save('transactions-moves', {'fetched': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'transactions': tx})
+        print(f'  ok   IR and taxi moves ({len(tx)})')
+    except Exception as e:
+        print(f'  FAIL {e}  (kept the previous file)')
+
+
 def compact_auction_bids(init, bids, won):
     """Turn MFL's auction log into one line per auction for data/auction-bids.json:
     "player:nominator:winner:price:number of bids:last six bids (team-amount, oldest first)".
@@ -374,6 +388,7 @@ def main():
     fetch_player_scores()
     fetch_weekly_scores()
     fetch_transactions()
+    fetch_roster_moves()
     fetch_auction_bids()
     fetch_projections()
     # who started this refresh: the daily/Monday-night schedule, the commissioner's "Run workflow" button, or a local run

@@ -139,14 +139,11 @@ def face_of_franchise(cur, rostered, names, pos, espn):
                 p = a['list'][0]
                 if p.get('team'):
                     hon[(p['id'], p['team'])][{'mvp': 'MVP', 'rookie': 'RoY'}[a['key']]] += 1
-    # titles: started the championship game for the champion
-    ref = load(D('reference.json'), {}) or {}
-    L = lineups(cur)
+    # titles: on the champion's roster at the end of the season (data/player-records.json, titles)
     titles = collections.Counter()
-    for y, c in (ref.get('championships') or {}).items():
-        wk = (L.get(int(y)) or {}).get(int(c.get('week') or 0)) or {}
-        for pid, _ in wk.get(c['champion'], []):
-            titles[(pid, c['champion'])] += 1
+    for pid, ts in ((load(D('player-records.json'), {}) or {}).get('titles') or {}).items():
+        for y, f in ts:
+            titles[(pid, f)] += 1
     out = {}
     for f, pids in rostered.items():
         best = None

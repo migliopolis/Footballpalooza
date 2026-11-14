@@ -2991,3 +2991,40 @@ body{padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tkb-h,0px))}
 @media (min-width:700px){.rk-lists{max-width:480px}.rk-pos{width:auto}.rk-who{width:auto}.rk-pos button,.rk-who button{flex:0 0 auto;padding:8px 14px}}
 @media (max-width:699px){.rk-lists .lg-o{display:none}.rk-lists .sm-o{display:inline}.rk-lists button,.rk-pos button,.rk-who button{font-size:.8rem}.rk-team{flex:1 1 auto;max-width:none}}
 .rk-lists button[aria-selected="true"],.rk-pos button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+.rk-t tr.rk-p{cursor:pointer}
+.rk-t tr.rk-p.on td{background:color-mix(in srgb,var(--fg) 5%,var(--surface))}
+.rk-t tr.rk-det > td{padding:6px 6px 10px;background:var(--bg);text-align:left;white-space:normal}
+.pp-col{min-width:0}
+.pp-heat .hc-top > b{display:none}
+.pp-heat .hc-p{margin:6px 0 0}
+/* League Now > Transactions */
+.tx-ctl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:4px 0 8px}
+.tx-ctl label{display:flex;align-items:center;gap:6px;font-size:.88rem;color:var(--muted)}
+.tx-ctl select{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 8px;max-width:58vw}
+.tx-ctl .tx-q{flex:1 1 200px;max-width:320px}
+.tx-list{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tx-day{font:700 .66rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:color-mix(in srgb,var(--fg) 5%,var(--surface));padding:6px 12px;border-top:1px solid var(--line)}
+.tx-day:first-child{border-top:0}
+.tx-r{display:grid;grid-template-columns:minmax(92px,auto) 78px minmax(0,1fr) auto;gap:4px 10px;align-items:start;padding:8px 12px;border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent);font-size:.88rem}
+.tx-day + .tx-r{border-top:0}
+.tx-tm{display:flex;align-items:center;gap:4px;white-space:nowrap}
+.tx-tm img,.tx-v img{width:20px;height:20px;object-fit:contain}
+.tx-tm b{font:700 .74rem var(--mono)}
+.tx-tm i{font-style:normal;color:var(--muted);margin:0 2px}
+.tx-k{justify-self:start;font:700 .62rem var(--body);text-transform:uppercase;letter-spacing:.05em;padding:3px 6px;border-radius:5px;background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--fg);white-space:nowrap}
+.tx-k.w{background:#dbeafe;color:#1e3a8a}.tx-k.f{background:#dcfce7;color:#14532d}.tx-k.t{background:#fef3c7;color:#78350f}
+.tx-k.i{background:#fee2e2;color:#7f1d1d}.tx-k.x{background:#ede9fe;color:#4c1d95}.tx-k.a{background:#e0f2fe;color:#0c4a6e}
+.tx-b{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tx-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px}
+.tx-v{font:600 .7rem var(--body);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);display:inline-flex;align-items:center;gap:4px;min-width:64px}
+.tx-v.add{color:#15803d}.tx-v.drop{color:#b91c1c}
+.tx-pl a{color:inherit;font-weight:600}
+.tx-pl:not(:has(a)){font-weight:600}
+.tx-pos{font:600 .64rem var(--mono);color:var(--muted)}
+.tx-pk{font-weight:500;color:var(--fg)}
+.tx-bid{font:700 .78rem var(--mono);color:var(--fg);background:color-mix(in srgb,var(--fg) 7%,transparent);border-radius:4px;padding:1px 5px}
+.tx-mu{color:var(--muted)}
+.tx-t{font-size:.72rem;color:var(--muted);white-space:nowrap}
+@media (max-width:640px){.tx-r{grid-template-columns:auto auto 1fr;grid-template-areas:"tm k t" "b b b"}.tx-tm{grid-area:tm}.tx-k{grid-area:k}.tx-t{grid-area:t;justify-self:end}.tx-b{grid-area:b}.tx-ctl label{flex:1 1 45%}.tx-ctl select{flex:1;max-width:none;min-width:0}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tx-k.w,:root:not([data-theme="light"]) .tx-k.f,:root:not([data-theme="light"]) .tx-k.t,:root:not([data-theme="light"]) .tx-k.i,:root:not([data-theme="light"]) .tx-k.x,:root:not([data-theme="light"]) .tx-k.a{background:color-mix(in srgb,var(--fg) 12%,transparent);color:var(--fg)}:root:not([data-theme="light"]) .tx-v.add{color:#4ade80}:root:not([data-theme="light"]) .tx-v.drop{color:#f87171}}
+:root[data-theme="dark"] .tx-k{background:color-mix(in srgb,var(--fg) 12%,transparent)!important;color:var(--fg)!important}:root[data-theme="dark"] .tx-v.add{color:#4ade80}:root[data-theme="dark"] .tx-v.drop{color:#f87171}

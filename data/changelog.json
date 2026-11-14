@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0196",
+      "to": "0.0200",
+      "dates": "Nov 13, 2026",
+      "items": [
+        "League Now > Transactions: every move of the season, filtered by kind (waivers, free agents, trades, IR, taxi, auctions) and by team, back to 2019.",
+        "League Now > Rankings: FantasyPros dynasty, rest-of-season and rookie rankings with everything FBP knows about each player: team, salary, points, Pts/L3, ECR ranks, OVR, Heat Check, Player Value and Trade Value. Filter by position, free agents, rostered or a team; sort any column.",
+        "Tap any player in Rankings to open the same box as on Rosters (news, game log, schedule, analytics, salary, journey, player card).",
+        "Player Pages for everyone, free agents included, with a Heat Check strip, folding sections, and a back arrow that returns to the page you came from. Everyone on a champion’s end-of-season roster now counts as an FBP champion.",
+        "Trade Value reworked: talent first, with stars weighted up, then adjusted for the contract. A future year too expensive to keep ends the deal there.",
+        "Stats: the Free agents, Rostered and Team buttons each turn on and off on their own."
+      ]
+    },
+    {
       "from": "0.0191",
       "to": "0.0195",
       "dates": "Nov 13, 2026",

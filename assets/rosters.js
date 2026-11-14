@@ -10,6 +10,7 @@ window.FBPRosters = (function () {
   let wkShut = false, noteShut = false, howOpen = false;   // howOpen: the Roster table's how-to-read notes
   try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; noteShut = localStorage.getItem('fbp-ro-note') === 'shut'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
   const open = new Set(), tabOf = {}, cache = {};
+  let ppShut = {}; try { ppShut = JSON.parse(localStorage.getItem('fbp-pp-fold') || '{}') || {}; } catch (e) {}
   // player search across all 12 rosters: the results list redraws in place as you type, so the box keeps focus
   let findQ = '';
   const fold = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, '');
@@ -313,7 +314,7 @@ window.FBPRosters = (function () {
         body = `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Wk</th><th class="l">Opp</th><th class="l">Result or kickoff</th><th>FBP pts</th></tr></thead><tbody>${out.join('')}</tbody></table></div>`;
       }
     } else if (tab === 'an') {
-      const W = Object.entries(r.wks).map(([w, v]) => ({ w: +w, pts: v[0], s: v[1], team: v[2] }));
+      const W = r.fa ? Object.entries(r.wsc || {}).map(([w, v]) => ({ w: +w, pts: v, s: 0, team: '' })) : Object.entries(r.wks).map(([w, v]) => ({ w: +w, pts: v[0], s: v[1], team: v[2] }));
       const mine = W.filter(x => x.team === t.abbr), S = mine.filter(x => x.s), sp = S.reduce((s, x) => s + x.pts, 0);
       const best = W.slice().sort((a, b) => b.pts - a.pts)[0];
       const bar = { QB: 20, RB: 15, WR: 15, TE: 10, DEF: 10 }[r.pos] || 15;
@@ -321,12 +322,14 @@ window.FBPRosters = (function () {
       const tile = (l, v, sub) => `<div><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
       body = `<div class="ro-g">
         ${tile('Season', r.pts.toFixed(1), `${r.rk ? r.pos + r.rk + ' at his position' : '—'} · ${r.gp ? (r.pts / r.gp).toFixed(1) : '0.0'} a game`)}
-        ${tile('Started for ' + esc(t.abbr), `${S.length} of ${mine.length}`, `${sp.toFixed(1)} pts started · ${t.pf ? (100 * sp / t.pf).toFixed(1) : 0}% of the team’s points`)}
-        ${tile('Left on the bench', benched.toFixed(1), `points scored while not in ${esc(t.abbr)}’s lineup`)}
+        ${r.fa ? tile('FBP lineups', `${Object.keys(r.wks || {}).length} start${Object.keys(r.wks || {}).length === 1 ? '' : 's'}`, 'weeks he started for an FBP team this season') : `${tile('Started for ' + esc(t.abbr), `${S.length} of ${mine.length}`, `${sp.toFixed(1)} pts started · ${t.pf ? (100 * sp / t.pf).toFixed(1) : 0}% of the team’s points`)}
+        ${tile('Left on the bench', benched.toFixed(1), `points scored while not in ${esc(t.abbr)}’s lineup`)}`}
         ${tile('Best week', best ? best.pts.toFixed(1) : '—', best ? `week ${best.w}` : 'no games yet')}
         ${tile(`${bar}+ point weeks`, `${W.filter(x => x.pts >= bar).length} of ${W.length}`, `under ${Math.round(bar / 3)}: ${W.filter(x => x.pts < bar / 3).length}`)}
         ${tile('Rest of season', r.ecrPos ? r.pos + r.ecrPos : '—', `${r.ecr ? 'FantasyPros #' + r.ecr + ' overall · ' : ''}week ${R.projWeek} projection ${fx(r.proj, 1)}`)}
       </div>`;
+    } else if (tab === 'sal' && r.fa) {
+      body = '<p class="ro-wait">He’s an FBP free agent: no contract. Whoever adds him sets his salary.</p>';
     } else if (tab === 'sal') {
       const m = /(\d+)\/(\d+)/.exec(r.cy || ''), n = m ? +m[1] : 0, N = m ? (r.st === 'TAXI_SQUAD' && +m[2] === 5 && n === 1 ? 6 : +m[2]) : 0;
       const yrs = [[R.season, r.sal, n ? `Year ${n} of ${N}` : 'No contract year']].concat((r.fut || []).map((v, k) => [YEARS(k), v, `Year ${n + k + 1} · +$${STEP[N] ? STEP[N][n + k - 1] : ''}`]));
@@ -349,7 +352,7 @@ window.FBPRosters = (function () {
     const tab = tabOf[r.id] || 'news';
     const head = `<div class="ro-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-ro-tab="${r.id}|${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>`;
     // up top: his Heat Check (the archetypes live on his Player Card and Player Page)
-    return `<div class="ro-box"><div class="ro-top">${heatStrip(r)}<a class="ro-pp" href="#now/team/${t.fid}/${r.id}">Player Page<span aria-hidden="true"> ›</span></a></div>${head}<div class="ro-bb">${part(r, t, ctx, tab)}</div></div>`;
+    return `<div class="ro-box"><div class="ro-top">${heatStrip(r)}<a class="ro-pp" href="${t.fid ? `#now/team/${t.fid}/${r.id}` : `#now/player/${r.id}`}">Player Page<span aria-hidden="true"> ›</span></a></div>${head}<div class="ro-bb">${part(r, t, ctx, tab)}</div></div>`;
   }
 
   // the Player Page (#now/rosters/<franchise>/<player>): everything the site has on one player
@@ -404,6 +407,7 @@ window.FBPRosters = (function () {
         <div><small>Record as a starter</small><b>${rec(P.w, P.l, P.t)}</b><span>${n ? ((P.w + P.t / 2) / n).toFixed(3).replace(/^0/, '') : '—'} win pct</span></div>
         <div><small>Points as a starter</small><b>${P.pts.toFixed(1)}</b><span>${n ? (P.pts / n).toFixed(1) : '—'} a start</span></div>
         <div><small>Playoffs</small><b>${pn ? rec(P.pw, P.pl, P.pt) : '—'}</b><span>${pn ? P.popts.toFixed(1) + ' playoff points' : 'no playoff starts'}</span></div>
+        ${(j.titles || {})[r.id] ? `<div><small>FBP titles</small><b>${j.titles[r.id].length}</b><span>${j.titles[r.id].map(([y, f]) => `${y} ${esc((ctx.teams[f] || {}).abbr || f)}`).join(' · ')}</span></div>` : ''}
       </div>
       <div class="tbl-wrap"><table class="ro-bt pp-ct"><thead><tr><th class="l">FBP team</th><th class="l">Seasons</th><th>Starts</th><th>Record</th><th>Playoffs</th></tr></thead><tbody>
         ${T.sort((x, z) => (z.w + z.l + z.t) - (x.w + x.l + x.t)).map(o => { const tt = ctx.teams[o.franchise] || {};
@@ -412,14 +416,18 @@ window.FBPRosters = (function () {
   }
   function honors(r, ctx) {
     const esc = ctx.esc, af = espn('AF', 'data/awards/all-fbp.json'), hf = espn('HOF', 'data/reference/hall-of-fame.json');
-    if (!af || !hf) return '<p class="ro-wait">Loading…</p>';
+    if (!af || !hf || !espn('PR', 'data/player-records.json')) return '<p class="ro-wait">Loading…</p>';
     const items = [];
     (r.hon || []).forEach(h => items.push([R.season, `<span class="ro-chip ${h[1]}">${esc(h[0])}</span>`, esc(h[2]) + ' (so far this season)']));
     Object.entries((af && af.franchises) || {}).forEach(([f, list]) => (list || []).filter(p => p.id === r.id).forEach(p => (p.years || []).forEach(yy => {
       const tt = ctx.teams[f] || {}, team = esc(tt.abbr || f);
       items.push([+yy.year, `<span class="ro-chip ${yy.tier === 1 ? 'gold' : 'silver'}">${yy.tier === 1 ? '1st Team' : '2nd Team'}</span>`, `All-FBP ${yy.tier === 1 ? 'first' : 'second'} team with ${team} · ${(+yy.pts).toFixed(1)} pts in ${yy.starts} starts`]);
       if (yy.mvp) items.push([+yy.year, '<span class="ro-chip gold">MVP</span>', `FBP Most Valuable Player with ${team}`]);
-      if (yy.champ) items.push([+yy.year, '<span class="ro-chip good">Champ</span>', `Won the FBP title with ${team}`]); })));
+      })));
+    // titles: everyone on the champion's roster at the end of the season (data/player-records.json, titles)
+    const pr = espn('PR', 'data/player-records.json');
+    ((pr && pr.titles && pr.titles[r.id]) || []).forEach(([y, f]) => { const tt = ctx.teams[f] || {};
+      items.push([+y, '<span class="ro-chip good">Champ</span>', `FBP champion with ${esc(tt.abbr || f)}`]); });
     const hof = ((hf && hf.inductees) || []).filter(x => x.player_id === r.id);
     const list = items.sort((a, b) => b[0] - a[0]).map(([y, chip, what]) => `<li><span class="ro-jd">${y}</span>${chip}<span>${what}</span></li>`).join('');
     return (hof.length ? hof.map(x => `<div class="pp-hof"><b>Hall of Fame · class of ${esc(String(x.class))}</b>${x.stat ? `<small>${esc(x.stat)}</small>` : ''}${x.blurb ? `<p>${esc(x.blurb)}</p>` : ''}</div>`).join('') : '')
@@ -440,12 +448,14 @@ window.FBPRosters = (function () {
     const n = r.gp || 0;
     const tile = (l, v, sub) => `<div class="ro-tile"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
     const sec = (title, body, cls) => body ? `<section class="card ro-card pp-sec${cls ? ' ' + cls : ''}"><h2>${title}</h2>${body}</section>` : '';
+    // sections that fold away (remembered across players)
+    const fsec = (k, title, body) => body ? `<section class="card ro-card pp-sec ro-fold${ppShut[k] ? ' shut' : ''}"><button type="button" class="ro-tog" data-pp-fold="${k}" aria-expanded="${!ppShut[k]}"><span class="ro-car" aria-hidden="true"></span><h2>${title}</h2></button><div class="ro-fb">${body}</div></section>` : '';
     return `<div class="pp">
-      <div class="pp-backs">${backR()}<a class="pp-back" href="#now/team/${t.fid}"><span aria-hidden="true">←</span> ${esc(t.name)}</a></div>
+      <div class="pp-backs">${ppBack(t)}</div>
       <div class="pp-hero" style="--tc:${tm.primary || 'var(--line)'}">${photo}
         <div class="pp-id"><h2>${esc(r.name)}${injChip(r)}${chip}${aw}</h2>
           <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
-          <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${esc(t.name)}${r.st === 'TAXI_SQUAD' ? ' · taxi squad' : r.st === 'INJURED_RESERVE' ? ' · injured reserve' : ''}</p></div></div>
+          <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${t.fid ? esc(t.name) : 'FBP free agent'}${r.st === 'TAXI_SQUAD' ? ' · taxi squad' : r.st === 'INJURED_RESERVE' ? ' · injured reserve' : ''}</p></div></div>
       ${bio.length ? `<dl class="pp-bio">${bio.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join('')}</dl>` : ''}
       ${profile(r)}
       <div class="ro-tiles pp-tiles">
@@ -453,13 +463,13 @@ window.FBPRosters = (function () {
         ${tile('Per game', n ? (r.pts / n).toFixed(1) : '—', `${n} game${n === 1 ? '' : 's'}`)}
         ${tile('Rest of season', r.ecrPos ? r.pos + r.ecrPos : '—', r.ecr ? `FantasyPros #${r.ecr} overall` : 'FantasyPros consensus')}
         ${tile(`Week ${R.projWeek}`, fx(r.proj, 1), `MFL projection${r.bye ? ' · bye week ' + r.bye : ''}`)}
-        ${tile('Salary', $(r.sal), `${r.cy ? 'contract year ' + r.cy : 'no contract year'}${r.fut && r.fut.length ? ' · ' + $(r.fut[0]) + ' next year' : ''}`)}
+        ${r.fa ? tile('Salary', '—', 'FBP free agent') : tile('Salary', $(r.sal), `${r.cy ? 'contract year ' + r.cy : 'no contract year'}${r.fut && r.fut.length ? ' · ' + $(r.fut[0]) + ' next year' : ''}`)}
       </div>
-      ${sec(`${R.season} FBP points by week`, weekBars(r, t))}
-      ${def ? '' : sec('Latest news', part(r, t, ctx, 'news', true))}
+      ${fsec('wk', `${R.season} FBP points by week`, weekBars(r, t))}
+      ${def ? '' : fsec('news', 'Latest news', part(r, t, ctx, 'news', true))}
       ${sec('Season analytics', part(r, t, ctx, 'an'))}
       ${def ? '' : sec(`${R.season} game log`, part(r, t, ctx, 'log'))}
-      <div class="pp-two">${sec('Schedule', part(r, t, ctx, 'sched'))}${sec('Contract', part(r, t, ctx, 'sal'))}</div>
+      <div class="pp-two">${sec('Schedule', part(r, t, ctx, 'sched'))}<div class="pp-col">${sec('Contract', part(r, t, ctx, 'sal'))}${sec('Heat Check', heatStrip(r) || '<p class="ro-wait">Loading…</p>', 'pp-heat')}</div></div>
       ${sec('FBP career', fbpCareer(r, ctx))}
       ${sec('Awards and honors', honors(r, ctx))}
       ${def || !r.espn || !CAREER[r.pos] ? '' : sec('NFL career stats', careerStats(r, esc))}
@@ -583,6 +593,65 @@ window.FBPRosters = (function () {
   }
   const backR = () => fromR ? `<a class="pp-back ro-backr" href="${fromR}"><span aria-hidden="true">←</span> Rosters</a>` : '';
   window.addEventListener('scroll', () => { if (/^#now\/rosters/.test(location.hash)) window.__raY = window.scrollY; }, { passive: true });
+
+  // the Player Page's back arrow goes to the page you came from, and that page comes back where you were scrolled
+  const isPP = h => /^#now\/(team\/\d{4}|player)\/[^/]+$/.test(h);
+  let curH = location.hash, ppFrom = null, lastY = 0; const ys = {};
+  window.addEventListener('scroll', () => { lastY = window.scrollY; }, { passive: true });
+  window.addEventListener('hashchange', () => {   // runs before site.js redraws the page
+    const old = curH, h = location.hash; curH = h; ys[old] = lastY;
+    if (isPP(h)) { if (!isPP(old)) ppFrom = old; return; }
+    pPid = '';
+    if (isPP(old) && h === ppFrom && ys[h]) { const y = ys[h]; setTimeout(() => window.scrollTo(0, y), 0); setTimeout(() => window.scrollTo(0, y), 250); }
+  });
+  const LBL = { '': 'Standings', rosters: 'Rosters', rankings: 'Rankings', stats: 'Stats', matchups: 'Matchups', power: 'Power Rankings', playoffs: 'Playoff Picture', analytics: 'Analytics', hospital: 'Hospital', docket: 'The Docket' };
+  const TOPL = { game: 'Game Day', trade: 'Trading Floor', awards: 'Awards', draft: 'Rookie Draft', reference: 'Reference', offseason: 'Off-Season', press: 'Press Box', beta: 'Beta' };
+  function ppBack(t) {
+    const b = (h, l) => `<a class="pp-back" href="${h}"><span aria-hidden="true">←</span> ${X.esc(l)}</a>`;
+    let from = '';
+    if (ppFrom) { const p = ppFrom.slice(1).split('/');
+      if (p[0] === 'now' && p[1] === 'team') { const f = p[2] || X.myTeam; if (f !== t.fid) from = b(ppFrom, R.teams[f] ? R.teams[f].name : 'My Team'); else return b(ppFrom, t.name); }
+      else from = b(ppFrom, p[0] === 'now' || !p[0] ? LBL[p[1] || ''] || 'Back' : TOPL[p[0]] || 'Back'); }
+    return from + (t.fid ? b(`#now/team/${t.fid}`, t.name) : '');
+  }
+  // any player, rostered or not: his roster row, or for an FBP free agent one built from the Stats and Rankings data
+  const FA = {}, FAT = { fid: '', name: 'Free agent', abbr: '', rows: [], pf: 0 };
+  function findRow(pid) {
+    for (const f of Object.keys(R.teams)) { const t = R.teams[f], r = t.rows.find(x => x.id === pid);
+      if (r) { t.fid = f; t.abbr = (X.teams[f] || {}).abbr || ''; return [r, t]; } }
+    if (FA[pid]) return [FA[pid], FAT];
+    const S = espn('ST', 'data/stats.json'), K = espn('RK', 'data/rankings.json');
+    if (!S || !K) return null;
+    const s = (S.rows || []).find(x => x.id === pid), k = (K.players || []).find(x => x.id === pid);
+    if (!s && !k) return false;
+    const wsc = {}, wks = {}, tot = x => (x.w || []).reduce((a, v) => a + (v || 0), 0);
+    ((s && s.w) || []).forEach((v, i) => { if (v == null) return; wsc[i + 1] = v; if (s.s && s.s[i] === '1') wks[i + 1] = [v, 1, 'an FBP team']; });
+    const vals = Object.values(wsc), pos = k ? k.pos : s.p, pts = vals.reduce((a, v) => a + v, 0);
+    const rk = s && vals.length ? 1 + (S.rows || []).filter(x => x.p === pos && tot(x) > pts).length : null;
+    FA[pid] = { id: pid, name: k ? k.n : s.n, pos, nfl: (k && k.nfl) || (s && s.t) || '', age: k && k.age != null ? Math.floor(k.age) : null,
+      espn: (s && s.e) || (k && k.e) || '', st: '', sal: null, cy: '', fut: [], acq: '', pts, gp: vals.length, wsc, wks, rk,
+      ecr: k && k.r ? k.r[0] : null, ecrPos: k && k.r ? k.r[1] : null, bye: s ? s.bye : null, proj: null, hon: (s && s.hon) || [], fa: true };
+    return [FA[pid], FAT];
+  }
+  let pPid = '';
+  function player(ctx, pid) {   // #now/player/<id>: the Player Page for anyone
+    X = ctx; load();
+    if (pid !== pPid) { pPid = pid; requestAnimationFrame(() => window.scrollTo(0, 0)); }
+    if (failed) return '<p class="error">Rosters didn’t load. Refresh the page to try again.</p>';
+    if (!R) return '<p class="loading">Loading…</p>';
+    const f = findRow(pid);
+    if (f === null) return '<p class="loading">Loading…</p>';
+    if (!f) return '<p class="error">No player with that id.</p>';
+    return playerPage(f[0], f[1], ctx);
+  }
+  function boxFor(ctx, pid) {   // his box, for pages outside Rosters (League Now > Rankings)
+    X = ctx; load();
+    if (failed) return '<p class="ro-wait">Rosters didn’t load.</p>';
+    const f = R ? findRow(pid) : null;
+    if (f === null) return '<p class="ro-wait">Loading…</p>';
+    if (!f) return '<p class="ro-wait">No data on this player yet.</p>';
+    return box(f[0], f[1], ctx);
+  }
 
   let lastPid = '', rosterY = 0;
   function render(ctx, sub, pid) {
@@ -745,7 +814,9 @@ window.FBPRosters = (function () {
   }
 
   document.addEventListener('click', e => {
-    const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick, .ra-page')) return;
+    const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick, .ra-page, .rk-page, .pp')) return;
+    const pf = t.closest('[data-pp-fold]'); if (pf) { const k = pf.dataset.ppFold; ppShut[k] = !ppShut[k]; try { localStorage.setItem('fbp-pp-fold', JSON.stringify(ppShut)); } catch (err) {}
+      pf.closest('.ro-fold').classList.toggle('shut', !!ppShut[k]); pf.setAttribute('aria-expanded', String(!ppShut[k])); return; }
     const cs = t.closest('[data-ra-csort]'); if (cs) { const k = cs.dataset.raCsort; cSort = cSort[0] === k ? [k, -cSort[1]] : [k, 1]; return redraw(); }
     if (t.closest('.ra-mdet a')) return;
     const co = t.closest('[data-ra-copen]'); if (co) { const f = co.dataset.raCopen; cOpen.has(f) ? cOpen.delete(f) : cOpen.add(f); return redraw(); }
@@ -766,5 +837,5 @@ window.FBPRosters = (function () {
     if (t.closest('.ro-arch i, .ro-trd, .ro-ht .hc-v')) return;   // these show their explanation (site.js tip) instead of opening the player
     const p = t.closest('[data-ro-p]'); if (p) { const id = p.dataset.roP; open.has(id) ? open.delete(id) : open.add(id); return redraw(); }
   });
-  return { render, renderAll };
+  return { render, renderAll, player, boxFor };
 })();

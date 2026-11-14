@@ -92,11 +92,18 @@ def main():
         rows.append([pid, names.get(pid, pid), pos.get(pid, ''), espn.get(pid, '') or '', *p['reg'], round(p['pts'], 1), *p['po'], round(p['popts'], 1),
                      [[fr, sorted(t['years']), *t['reg'], *t['po']] for fr, t in teams]])
     rows.sort(key=lambda r: (-(r[4] + r[5] + r[6]), r[1]))
+    # titles: everyone on the champion's roster at the end of the season (starters, bench, taxi and IR)
+    titles = defaultdict(list)
+    for y, c in sorted((ref.get('championships') or {}).items()):
+        fr = next((x for x in ((load(D('history', str(y), 'rosters.json'), {}) or {}).get('rosters') or {}).get('franchise', []) if x.get('id') == c.get('champion')), None)
+        pl = (fr or {}).get('player') or []
+        for x in (pl if isinstance(pl, list) else [pl]):
+            titles[x['id']].append([int(y), c['champion']])
     yrs = sorted(lineups(cur))
     out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'first': yrs[0], 'last': yrs[-1],
            'fields': ['id', 'name', 'pos', 'espn', 'w', 'l', 't', 'pts', 'pw', 'pl', 'pt', 'popts', 'teams'],
            'team_fields': ['franchise', 'years', 'w', 'l', 't', 'pw', 'pl', 'pt'],
-           'players': rows}
+           'players': rows, 'titles': dict(titles)}
     with open(D('player-records.json'), 'w', encoding='utf-8') as f:
         json.dump(out, f, separators=(',', ':'), ensure_ascii=False)
         f.write('\n')
