@@ -78,6 +78,9 @@ jobs:
       - name: Player Value and Trade Value (Trading Floor > Value Chart, Rosters > Value)
         continue-on-error: true
         run: python scripts/trade_values.py
+      - name: Transactions (League Now > Transactions)
+        continue-on-error: true
+        run: python scripts/transactions_log.py
       - name: Player journeys (Player Page, Reference > Players, Trading Floor)
         continue-on-error: true
         run: python scripts/journeys.py
