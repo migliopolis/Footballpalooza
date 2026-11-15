@@ -5,6 +5,7 @@
 "draft/board": "draft_board",
 "draft/mock": "draft_mock",
 "draft/order": "draft_order",
+"draft/round1": "draft_round1",
 "now": "now",
 "now/analytics": "now_analytics",
 "now/column/2026-week-08-preview": "now_column_2026-week-08-preview",

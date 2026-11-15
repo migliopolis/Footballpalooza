@@ -470,7 +470,7 @@ window.FBPRosters = (function () {
     const nflIR = r.espn && (injMap()[r.espn] || {}).status === 'Injured Reserve';
     const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' && !nflIR ? '<span class="ro-chip i" title="In an FBP IR slot">IR</span>' : '';
     const aw = honOf(r).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
-    const bio = [['Age', r.age || at.age], ['Size', [at.displayHeight, at.displayWeight].filter(Boolean).join(', ')], ['College', (at.college || {}).name],
+    const bio = [['Age', r.age || at.age], ['Size', [at.displayHeight, at.displayWeight].filter(Boolean).join(', ')], ['College', (at.college || {}).name, (at.college || {}).id ? `<img class="dh-sch" src="https://a.espncdn.com/i/teamlogos/ncaa/500/${encodeURIComponent(at.college.id)}.png" alt="" loading="lazy" onerror="this.remove()">` : ''],
       ['Drafted', at.displayDraft], ['Experience', at.displayExperience], ['From', at.displayBirthPlace]].filter(x => x[1]);
     const n = r.gp || 0;
     const tile = (l, v, sub) => `<div class="ro-tile"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
@@ -484,7 +484,7 @@ window.FBPRosters = (function () {
         <div class="pp-id"><h2>${esc(r.name)}${injChip(r)}${chip}${aw}</h2>
           <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
           <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${t.fid ? esc(t.name) : 'FBP free agent'}${r.st === 'TAXI_SQUAD' ? ' · taxi squad' : r.st === 'INJURED_RESERVE' ? ' · injured reserve' : ''}</p></div></div>
-      ${bio.length ? `<dl class="pp-bio">${bio.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join('')}</dl>` : ''}
+      ${bio.length ? `<dl class="pp-bio">${bio.map(([k, v, pre]) => `<div><dt>${k}</dt><dd>${pre || ''}${esc(String(v))}</dd></div>`).join('')}</dl>` : ''}
       ${profile(r)}
       <div class="ro-tiles pp-tiles">
         ${tile(`${R.season} points`, r.gp ? r.pts.toFixed(1) : '—', r.rk ? `${r.pos}${r.rk} at his position` : 'no games yet')}

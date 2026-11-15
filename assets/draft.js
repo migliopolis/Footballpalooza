@@ -299,7 +299,7 @@
         <button type="button" class="dr-row" data-dr-open="${esc(p.name)}" aria-expanded="${open}">
           <span class="dr-adp" title="Big-board rank">${p.rank || '—'}</span>
           <span class="dr-nm"><b>${esc(p.name)}</b>
-            <small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + esc(p.school) : ''}${p.custom ? ' · added by you' : ''}</small>
+            <small><span class="pos ${p.pos}">${p.pos}</span>${p.school ? ' ' + (window.FBPDraftHub ? FBPDraftHub.schoolLogo(p.name, p.school, ctx.rerender) : '') + esc(p.school) : ''}${p.custom ? ' · added by you' : ''}</small>
             <small class="dr-nfl">${p.nflPick ? `NFL ${nflLabel(p.nflPick)}${landHtml(p)}` : (p.custom ? '' : 'No NFL projection')}</small></span>
           ${by ? tag : ($ != null ? `<span class="dr-price" title="Salary if taken at ${slotLabel(slot)}">$${$}</span>` : '')}
         </button>

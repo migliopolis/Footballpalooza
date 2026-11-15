@@ -57,10 +57,11 @@ def routes():
         'reference/players': ('Player Records', 'How often each player’s team wins when he starts, and every FBP team he’s started for.'),
         'reference/payroll': ('Payroll', 'Footballpalooza salaries and cap.'),
         'offseason': ('Off-Season', 'The Footballpalooza off-season workbook.'),
-        'draft': ('Rookie Draft', f'The {int(season) + 1 if season else ""} Footballpalooza rookie draft.'.replace('  ', ' ')),
+        'draft': ('Rookie Draft', f'The {int(season) + 1 if season else ""} rookie class: who the top prospects are and what kind of draft it is.'.replace('  ', ' ')),
         'draft/mock': ('Mock Draft', 'Run a Footballpalooza rookie mock draft.'),
         'draft/board': ('Big Board', 'The rookie big board, with prices.'),
-        'draft/order': ('Draft Order', 'The full rookie draft order, as the standings stand today.'),
+        'draft/round1': ('Draft Order', 'The first-round rookie draft order, as the standings stand today, with what each pick would cost.'),
+        'draft/order': ('All Rounds', 'All four rounds of the rookie draft, traded picks included.'),
         'bylaws': ('By-Laws', 'The Footballpalooza by-laws.'),
     }
     for fid, f in (ref.get('franchises') or {}).items():

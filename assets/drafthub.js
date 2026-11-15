@@ -1,9 +1,10 @@
 /* Rookie Draft tab, laid out like Tankathon's NFL pages: four sub-tabs.
-     #draft        FBP Home: round-1 order (worst first) with movement, record, win%, GB, SOS, streak
+     #draft        Draft Home: a primer on the incoming rookie class (data/draft-home.json)
+     #draft/round1 Draft Order: round-1 order (worst first) with movement, record, win%, GB, SOS, streak
                    and what the projected rookie at each pick would cost
      #draft/mock   Mock Draft (assets/draft.js)
      #draft/board  Big Board: the incoming rookie class in depth
-     #draft/order  Full Order: all four rounds with traded picks
+     #draft/order  All Rounds: all four rounds with traded picks
    Order, records, SOS and movement come from data/league-now.json (scripts/league_now.py); rookies,
    NFL landing spots and prices come from the Rookie Pricer files through FBPDraft.lib. */
 window.FBPDraftHub = (() => {
@@ -18,7 +19,7 @@ window.FBPDraftHub = (() => {
   const posPill = p => p ? `<span class="pos ${p}">${p}</span>` : '';
 
   function nav(cur) {
-    const items = [['', 'FBP Home'], ['mock', 'Mock Draft'], ['board', 'Big Board'], ['order', 'Full Order']];
+    const items = [['', 'Draft Home'], ['round1', 'Draft Order'], ['mock', 'Mock Draft'], ['board', 'Big Board'], ['order', 'All Rounds']];
     return `<nav class="rf-sub seg dh-nav pg-nav" aria-label="Rookie Draft">${items.map(([k, l]) => `<a href="#draft${k ? '/' + k : ''}"${k === cur ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
   }
   function head(cur, sub) {
@@ -29,7 +30,7 @@ window.FBPDraftHub = (() => {
   function loadEspn(rerender) {
     if (H.espn) return;
     H.espn = {};
-    fetch('data/rookies-espn.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { H.espn = j.players || {}; rerender(); }).catch(() => {});
+    fetch('data/rookies-espn.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { H.espn = j.players || {}; H.schools = j.schools || {}; rerender(); }).catch(() => {});
   }
   const EA = 'https://site.web.api.espn.com/apis/common/v3/sports/football/college-football/athletes/';
   function cf(key, url) {
@@ -39,7 +40,10 @@ window.FBPDraftHub = (() => {
     return null;
   }
   const headshot = id => id ? `https://a.espncdn.com/i/headshots/college-football/players/full/${id}.png` : '';
-  const school = t => t ? `<img class="dh-sch" src="https://a.espncdn.com/i/teamlogos/ncaa/500/${t}.png" alt="" loading="lazy">` : '';
+  const school = t => t ? `<img class="dh-sch" src="https://a.espncdn.com/i/teamlogos/ncaa/500/${t}.png" alt="" loading="lazy" onerror="this.remove()">` : '';
+  // a prospect's school logo: his own ESPN team id, else the school's (data/rookies-espn.json "schools")
+  const schoolOf = (name, sch) => school(((H.espn || {})[name] || {}).team || (H.schools || {})[sch]);
+  function schoolLogo(name, sch, rerender) { loadEspn(rerender); return schoolOf(name, sch); }
   // the prospect box: Profile, College stats, News, FBP outlook
   function prospect(p, ctx2) {
     const e = (H.espn || {})[p.name] || {}, tab = H.tab[p.name] || 'out';
@@ -69,7 +73,7 @@ window.FBPDraftHub = (() => {
       if (!j) body = wait; else if (j.failed) body = fail;
       else { const a = j.athlete || j, t = a.team || {};
         const f = (k, v) => v ? `<div><small>${k}</small><b>${esc(String(v))}</b></div>` : '';
-        body = `<div class="ro-yrs">${f('School', t.displayName || p.school)}${f('Position', (a.position || {}).displayName || p.pos)}${f('Class', (a.displayExperience || (a.experience || {}).displayValue || ''))}${f('Height', a.displayHeight)}${f('Weight', a.displayWeight)}${f('Jersey', a.displayJersey)}${f('Hometown', a.displayBirthPlace)}</div>`; }
+        body = `<div class="ro-yrs">${t.displayName || p.school ? `<div><small>School</small><b>${schoolOf(p.name, p.school)}${esc(t.displayName || p.school)}</b></div>` : ''}${f('Position', (a.position || {}).displayName || p.pos)}${f('Class', (a.displayExperience || (a.experience || {}).displayValue || ''))}${f('Height', a.displayHeight)}${f('Weight', a.displayWeight)}${f('Jersey', a.displayJersey)}${f('Hometown', a.displayBirthPlace)}</div>`; }
     } else if (tab === 'news') {
       const j = cf('o' + e.id, EA + e.id + '/overview');
       if (!j) body = wait; else if (j.failed) body = fail;
@@ -93,6 +97,7 @@ window.FBPDraftHub = (() => {
 
   /* ---------- FBP Home ---------- */
   function pageHome() {
+    loadEspn(X.rerender);
     const now = X.now, lib = L();
     const st = {}; now.standings.forEach(s => { st[s.id] = s; });
     const prev = now.prevDraftOrder, was = {};
@@ -127,7 +132,7 @@ window.FBPDraftHub = (() => {
     // points back: how far each non-playoff team's potential points sit above the team picking first
     const pp1 = non.length ? Number((st[non[0].id] || {}).pp || 0) : 0;
     var pbTxt = d => { const v = Number((st[d.id] || {}).pp || 0) - pp1; return d === non[0] ? '—' : v.toFixed(1); };
-    return head('', prev ? `movement since week ${prev.week}` : '') +
+    return head('round1', prev ? `movement since week ${prev.week}` : '') +
       `<section><h2 class="sec">${now.draftYear || ''} rookie draft order <small>round 1; rounds 2–4 repeat it</small></h2>
       <div class="card tbl-wrap"><table class="tbl dh-tbl dh-home"><tbody>
       ${div('Non-playoff teams', 'lowest potential points picks first')}${cols(false)}${non.map(d => row(d, false)).join('')}
@@ -143,7 +148,7 @@ window.FBPDraftHub = (() => {
         <li>Rounds 2–4 use the same order. Traded picks stay where the original team’s finish puts them.</li>
       </ol><p class="rf-foot">Full rules on the <a href="#bylaws">By-Laws</a> tab.</p></div></section>
       <section><h2 class="sec">Top of the board <small><a href="#draft/board">Big Board</a></small></h2><div class="card dh-top">
-        ${players.slice(0, 6).map(p => `<div class="dh-toprow"><span class="n">${p.rank}</span><span><b>${esc(p.name)}</b> ${posPill(p.pos)}<small>${esc(p.school || '')}</small></span>${landing(p)}</div>`).join('')}
+        ${players.slice(0, 6).map(p => `<div class="dh-toprow"><span class="n">${p.rank}</span><span><b>${esc(p.name)}</b> ${posPill(p.pos)}<small>${schoolOf(p.name, p.school)}${esc(p.school || '')}</small></span>${landing(p)}</div>`).join('')}
       </div></section></div>`;
   }
 
@@ -197,6 +202,31 @@ window.FBPDraftHub = (() => {
       </tbody></table></div><p class="rf-foot">Pick owners come from MFL’s future draft picks, refreshed weekly. Picks 7–12 in each round are projected by playoff seed until the playoffs are played.</p></section>`;
   }
 
+  /* ---------- Draft Home: the rookie class primer ---------- */
+  let DH = null, dhLoading = false;
+  function pageClass() {
+    if (!DH && !dhLoading) { dhLoading = true; fetch('data/draft-home.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { DH = j || {}; X.rerender(); }).catch(() => { DH = {}; X.rerender(); }); }
+    loadEspn(X.rerender);
+    if (!DH) return head('') + '<p class="loading">Loading the class preview…</p>';
+    const players = board(), byName = {}; players.forEach(p => { byName[p.name] = p; });
+    const posRank = p => { const same = players.filter(q => q.pos === p.pos && q.rank <= p.rank); return p.pos + same.length; };
+    // the position mix at the top of the board
+    const top = players.slice(0, 24), cnt = {}; top.forEach(p => { cnt[p.pos] = (cnt[p.pos] || 0) + 1; });
+    const mix = ['WR', 'RB', 'QB', 'TE'].filter(k => cnt[k]).map(k => `<span class="dc-mx ${k}" style="flex:${cnt[k]}"><b>${cnt[k]}</b> ${k}</span>`).join('');
+    const h = DH.hero || {};
+    const card = (pr, i) => { const p = byName[pr.name] || {}, e = (H.espn || {})[pr.name] || {};
+      return `<article class="card dc-p"><div class="dc-ph">${e.id ? `<img src="${headshot(e.id)}" alt="" loading="lazy" onerror="this.remove()">` : ''}${school(e.team)}<span class="dc-rk">${p.rank || i + 1}</span></div>
+        <div class="dc-pb"><h3>${esc(pr.name)}</h3><p class="dc-meta">${posPill(p.pos)} ${p.school ? schoolOf(pr.name, p.school) + esc(p.school) : ''}${p.pos ? ` · ${posRank(p)}` : ''}</p>
+        <p class="dc-tag">${esc(pr.tag || '')}</p><p>${esc(pr.text || '')}</p></div></article>`; };
+    return head('') + `<section class="dc">
+      ${h.src ? `<figure class="dc-hero"><img src="${esc(h.src)}" alt="${esc(h.alt || '')}"><figcaption><span class="dc-kick">The ${DH.class || (X.now.draftYear || '')} rookie class</span><b>${esc(DH.headline || '')}</b><small>${esc(h.caption || '')}</small></figcaption></figure>` : ''}
+      <div class="card dc-sum"><h2>What to know</h2>${(DH.summary || []).map(t => `<p>${esc(t)}</p>`).join('')}
+        <div class="dc-mix" title="Positions in the top 24 of the big board">${mix}</div><p class="dc-mixl">The top 24 on the big board, by position</p></div>
+      <h2 class="sec">Top prospects <small><a href="#draft/board">Full big board ›</a></small></h2>
+      <div class="dc-grid">${(DH.profiles || []).map(card).join('')}</div>
+      <p class="rf-foot">Ranks are from the big board the site uses (${esc((L().data().board || {}).name || 'rookie big board')}), a superflex board, matching FBP's switch to superflex for 2027. Profiles as of ${esc(DH.updated || '')}. Sources: ${(DH.sources || []).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join(', ')}.</p></section>`;
+  }
+
   function render(ctx, sub) {
     X = ctx;
     if (!ctx.now) return '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
@@ -205,7 +235,8 @@ window.FBPDraftHub = (() => {
     if (!L().ready()) { L().load(ctx.rerender); return head(sub || '') + '<p class="loading">Loading the rookie class…</p>'; }
     if (sub === 'board') { loadAdp(ctx.rerender); return pageBoard(); }
     if (sub === 'order') return pageOrder();
-    return pageHome();
+    if (sub === 'round1') return pageHome();
+    return pageClass();
   }
   function click(e) {
     const tb = e.target.closest('[data-dh-tab]');
@@ -231,6 +262,6 @@ window.FBPDraftHub = (() => {
     const room = Math.floor(wrap.clientWidth - w('.dh-pk') - w('.dh-key'));
     if (room > 60) cells.forEach(c => { c.style.minWidth = room + 'px'; c.style.width = room + 'px'; });
   }
-  window.addEventListener('resize', () => { if (location.hash === '#draft' || location.hash === '#draft/') fit(); });
-  return { render, nav, click, fit };
+  window.addEventListener('resize', () => { if (location.hash === '#draft/round1') fit(); });
+  return { render, nav, click, fit, schoolLogo };
 })();

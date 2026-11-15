@@ -10,7 +10,7 @@
     // League Now reads down two columns (see COLS): Standings to Analytics on the left (six), My Team to The Docket on the right (five)
     now: [['#now', 'Standings'], ['#now/rosters', 'Rosters'], ['#now/rankings', 'Rankings'], ['#now/stats', 'Stats'], ['#now/power', 'Power Rankings'], ['#now/analytics', 'Analytics'],
       ['#now/team', 'My Team'], ['#now/transactions', 'Transactions'], ['#now/matchups', 'Matchups'], ['#now/playoffs', 'Playoff Picture'], ['#now/hospital', 'Hospital'], ['#now/docket', 'The Docket']],
-    draft: [['#draft', 'FBP Home'], ['#draft/mock', 'Mock Draft'], ['#draft/board', 'Big Board'], ['#draft/order', 'Full Order']],
+    draft: [['#draft', 'Draft Home'], ['#draft/round1', 'Draft Order'], ['#draft/mock', 'Mock Draft'], ['#draft/board', 'Big Board'], ['#draft/order', 'All Rounds']],
     reference: [['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'],
       ['#reference/players', 'Players'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']],
   };
