@@ -460,6 +460,13 @@ window.FBPRosters = (function () {
       <svg class="pp-ovrg" viewBox="0 0 ${w} ${h}" role="img" aria-label="OVR by week">${grid}${line}${dots}${labs}</svg></div>
       <p class="tf-sub">OVR after each week: Madden’s ratings weighted for fantasy, the dynasty consensus and his FBP production so far. Hover a dot for the change.</p>`;
   }
+  // where FBP's rookie draft took him (data/journeys.json), whoever has him now: "2025 · 1.10 by MAIL"
+  function fbpDraft(r) {
+    const J = espn('JR', 'data/journeys.json'), p = J && J.players && J.players[r.id];
+    const d = p && (p.st || []).find(x => x[2] === 'D'); if (!d) return '';
+    const m = /(\d+\.\d+)(?: in the (\d{4}))?/.exec(d[3] || ''), yr = (m && m[2]) || new Date(d[1] * 1000).getFullYear();
+    return `${yr} · ${m ? m[1] : 'rookie draft'} by ${(X.teams[d[0]] || {}).abbr || d[0]}`;
+  }
   function playerPage(r, t, ctx) {
     const esc = ctx.esc, tm = ctx.teams[t.fid] || {}, def = r.pos === 'DEF';
     const code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase();
@@ -471,7 +478,7 @@ window.FBPRosters = (function () {
     const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' && !nflIR ? '<span class="ro-chip i" title="In an FBP IR slot">IR</span>' : '';
     const aw = honOf(r).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
     const bio = [['Age', r.age || at.age], ['Size', [at.displayHeight, at.displayWeight].filter(Boolean).join(', ')], ['College', (at.college || {}).name, (at.college || {}).id ? `<img class="dh-sch" src="https://a.espncdn.com/i/teamlogos/ncaa/500/${encodeURIComponent(at.college.id)}.png" alt="" loading="lazy" onerror="this.remove()">` : ''],
-      ['Drafted', at.displayDraft], ['Experience', at.displayExperience], ['From', at.displayBirthPlace]].filter(x => x[1]);
+      ['Drafted', at.displayDraft], ['FBP draft', fbpDraft(r)], ['Experience', at.displayExperience], ['From', at.displayBirthPlace]].filter(x => x[1]);
     const n = r.gp || 0;
     const tile = (l, v, sub) => `<div class="ro-tile"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
     const sec = (title, body, cls) => body ? `<section class="card ro-card pp-sec${cls ? ' ' + cls : ''}"><h2>${title}</h2>${body}</section>` : '';
@@ -483,7 +490,7 @@ window.FBPRosters = (function () {
         ${(() => { const o = ovrOf(r.id); return o && o.o != null ? `<span class="pp-ovrb rk-ovr ${ovrTier(o.o)}" title="FBP OVR">${o.o}<small>OVR</small></span>` : ''; })()}
         <div class="pp-id"><h2>${esc(r.name)}${injChip(r)}${chip}${aw}</h2>
           <p>${r.pos}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ' · NFL free agent'}${at.jersey ? ' · #' + esc(at.jersey) : ''}</p>
-          <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}${t.fid ? esc(t.name) : 'FBP free agent'}${r.st === 'TAXI_SQUAD' ? ' · taxi squad' : r.st === 'INJURED_RESERVE' ? ' · injured reserve' : ''}</p></div></div>
+          <p class="pp-fbp">${tm.logo ? `<img src="${tm.logo}" alt="${esc(t.name || '')}" title="${esc(t.name || '')}">` : ''}${t.fid ? (tm.logo ? '' : esc(t.name)) : 'FBP free agent'}${r.st === 'TAXI_SQUAD' ? `${t.fid && tm.logo ? '' : ' · '}taxi squad` : r.st === 'INJURED_RESERVE' ? `${t.fid && tm.logo ? '' : ' · '}injured reserve` : ''}</p></div></div>
       ${bio.length ? `<dl class="pp-bio">${bio.map(([k, v, pre]) => `<div><dt>${k}</dt><dd>${pre || ''}${esc(String(v))}</dd></div>`).join('')}</dl>` : ''}
       ${profile(r)}
       <div class="ro-tiles pp-tiles">
