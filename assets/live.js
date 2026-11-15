@@ -189,12 +189,18 @@
       });
       // box scores only for games that have started; finished ones only once
       // game-day rosters, once a game has kicked off (inactives are set before kickoff): who was ruled out
-      const ros = [...new Map(Object.values(g).filter(x => x.state !== 'pre' && !stats['ro' + x.id]).map(x => [x.id, x])).values()];
+      // game-day rosters: re-read on every refresh while a game is on (ESPN fills in actives and who has played as the game
+      // goes), once more when it's over
+      const ros = [...new Map(Object.values(g).filter(x => x.state === 'in' || (x.state === 'post' && !stats['ro' + x.id])).map(x => [x.id, x])).values()];
       const core = 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/';
-      const rosters = Promise.all(ros.map(x => Promise.all((x.tids || []).map(t => fetch(`${core}${x.id}/competitions/${x.id}/competitors/${t}/roster?limit=200`)
+      const rosters = Promise.all(ros.map(x => Promise.all((x.tids || []).map(t => fetch(`${core}${x.id}/competitions/${x.id}/competitors/${t}/roster?limit=200`, { cache: 'no-cache' })
         .then(r => r.ok ? r.json() : Promise.reject()))).then(rs => {
-          rs.forEach(r => (r.entries || []).forEach(a => { if (a.valid === false || a.didNotPlay) stats['out:' + a.playerId] = 1; }));
-          stats['ro' + x.id] = 1;
+          // inactive: off the active list (valid false), or, once the game is over, never got in. Mid-game "didn't play"
+          // only means no snaps yet, so it doesn't count until the final
+          (stats['outs' + x.id] || []).forEach(id => { delete stats['out:' + id]; });
+          const outs = [];
+          rs.forEach(r => (r.entries || []).forEach(a => { if (a.valid === false || (x.state === 'post' && a.didNotPlay)) { stats['out:' + a.playerId] = 1; outs.push(a.playerId); } }));
+          stats['outs' + x.id] = outs; stats['ro' + x.id] = 1;
         }).catch(() => null)));
       const want = [...new Set(Object.values(g).filter(x => x.state === 'in' || (x.state === 'post' && !stats['ev' + x.id])).map(x => x.id))];
       return Promise.all(want.map(id => fetch(ESPN + 'summary?event=' + id).then(r => r.ok ? r.json() : null).then(j => {
