@@ -3,7 +3,7 @@
    Week cells carry the Heat Check label (Nuclear, Hot, Cold, Bust, Witness Protection) as a tint when he earned one.
    The upcoming week's NFL opponent comes from ESPN's scoreboard. Tap a team logo up top to highlight its players. */
 window.FBPStats = (function () {
-  let S = null, A = null, DT = null, RK = {}, failed = false, loading = false, X = null, opp = null, oppWk = 0;
+  let S = null, A = null, DT = null, RK = {}, INJ = {}, failed = false, loading = false, X = null, opp = null, oppWk = 0;
   const F = { top: 50, pos: '', from: 1, to: 0, who: [], st: false, stat: '' };   // who: any of 'fa', 'ro', 'team', each turned on and off on its own; none = everyone   // st: Starters, only weeks he was in an FBP starting lineup
   let hl = '', hlSeed = null;   // hlSeed: the default team last applied, so a new default re-highlights   // the team whose players are highlighted (tap a logo; tap again to clear)
   let sort = ['pts', -1];
@@ -36,8 +36,9 @@ window.FBPStats = (function () {
     Promise.all([FBPU.json('data/stats.json').then(j => j == null ? Promise.reject() : j),
       FBPU.json('data/analytics.json').catch(() => null),
       FBPU.json('data/stats-detail.json').catch(() => null),
-      FBPU.json('data/rankings.json').catch(() => null)])
-      .then(([s, a, d, k]) => { S = s; A = a; DT = d; ((k && k.players) || []).forEach(p => { RK[p.id] = p; }); loading = false; loadOpp(); redraw(); }, () => { failed = true; loading = false; redraw(); });
+      FBPU.json('data/rankings.json').catch(() => null),
+      FBPU.json('data/mfl/injuries.json').catch(() => null)])
+      .then(([s, a, d, k, inj]) => { S = s; A = a; DT = d; INJ = FBPU.injMap(inj); ((k && k.players) || []).forEach(p => { RK[p.id] = p; }); loading = false; loadOpp(); redraw(); }, () => { failed = true; loading = false; redraw(); });
   }
   // the next week's NFL opponents
   function loadOpp() {
@@ -103,7 +104,7 @@ window.FBPStats = (function () {
       const o = opp && r.t ? opp[ab(r.t)] : null;
       const nm = `<a href="${r.f ? `#now/team/${r.f}/${r.id}` : `#now/player/${r.id}`}">${esc(r.n)}</a>`;
       return `<tr class="${r.f && r.f === me ? 'st-me' : ''}"><td class="st-n">${i + 1}</td>
-        <td class="st-pl"><span class="st-nm">${nm}</span><small>${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="${esc(t.abbr || r.f)}" title="${esc(t.name || r.f)}">` : `<b>${esc(t.abbr || r.f)}</b>`}${r.sl ? `<i>${r.sl}</i>` : ''}` : '<b class="st-fa">FA</b>'}<span class="st-dot">·</span>${r.p}${r.t ? logo(r.t) : ''}${(r.hon || []).map(([l, c]) => `<span class="ro-chip ${c} st-ch" title="${esc(l)}"><span class="lg-only">${esc(l)}</span><span class="sm-only">${esc(SHORT[l] || l)}</span></span>`).join('')}</small></td>
+        <td class="st-pl"><span class="st-nm">${nm}${FBPU.injChip(INJ[r.id], esc)}</span><small>${t ? `${t.logo ? `<img class="st-fl" src="${t.logo}" alt="${esc(t.abbr || r.f)}" title="${esc(t.name || r.f)}">` : `<b>${esc(t.abbr || r.f)}</b>`}${r.sl ? `<i>${r.sl}</i>` : ''}` : '<b class="st-fa">FA</b>'}<span class="st-dot">·</span>${r.p}${r.t ? logo(r.t) : ''}${(r.hon || []).map(([l, c]) => `<span class="ro-chip ${c} st-ch" title="${esc(l)}"><span class="lg-only">${esc(l)}</span><span class="sm-only">${esc(SHORT[l] || l)}</span></span>`).join('')}</small></td>
         <td class="n st-pts"><b>${sk ? fmtV(pct ? r.pts : Math.round(r.pts * 10) / 10, sk) : r.pts.toFixed(1)}</b></td><td class="n st-avg">${sk ? (pct ? '' : r.avg.toFixed(1)) : r.avg.toFixed(2)}</td><td class="n st-gs">${r.gs || ''}</td>
         <td class="n st-heat"><b class="${r.heat > 0 ? 'hc-pos' : r.heat < 0 ? 'hc-neg' : ''}">${r.heat > 0 ? '+' : ''}${r.heat}</b></td>
         <td class="n st-v">${r.ovr != null ? `<span class="rk-ovr ${r.ovr >= 90 ? 'holo' : r.ovr >= 80 ? 'gold' : r.ovr >= 70 ? 'silver' : 'bronze'}">${r.ovr}</span>` : ''}</td><td class="n st-v">${r.tv != null ? r.tv.toLocaleString() : ''}</td>${cells}

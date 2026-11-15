@@ -14,5 +14,11 @@ window.FBPU = (function () {
   const cache = {};
   const json = url => (cache[url] = cache[url] || fetch(url, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null)
     .catch(e => { delete cache[url]; throw e; }));
-  return { ESPN, nflAbbr, nflLogo, headshot, ord, json };
+  // MFL injury designations (data/mfl/injuries.json) as the short tags the site shows beside a name
+  const INJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'IR': 'IR', 'IR-R': 'IR', 'IR-PUP': 'PUP', 'IR-NFI': 'IR', 'Suspended': 'SUS' };
+  const injMap = j => { const m = {}; (((j || {}).injuries || {}).injury || []).forEach(x => { m[x.id] = x; }); return m; };
+  const injChip = (x, esc) => { const t = x && INJ[x.status]; if (!t) return '';
+    const e = esc || (s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])));
+    return `<span class="ro-inj" title="${e(x.status + (x.details ? ': ' + x.details : ''))}">${t}</span>`; };
+  return { ESPN, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip };
 })();

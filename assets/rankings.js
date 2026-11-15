@@ -25,7 +25,7 @@ window.FBPRankings = (function () {
   }
   const tm = f => (X && X.teams && X.teams[f]) || {};
   const nflLogo = t => t && t !== 'FA' ? `<img class="rk-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${esc(t)}" loading="lazy">` : '';
-  const MINJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'IR': 'IR', 'IR-R': 'IR', 'IR-PUP': 'PUP', 'IR-NFI': 'IR', 'Suspended': 'SUS' };
+  const MINJ = FBPU.INJ;
   const LISTS = [['dyn', 'Dynasty'], ['ros', '<span class="lg-o">Rest of season</span><span class="sm-o">ROS</span>'], ['rook', 'Rookies']];
   const POSL = [['', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['DEF', 'DEF']];
   const heatK = h => h == null ? '' : h >= 6 ? 'h3' : h >= 3 ? 'h2' : h > 0 ? 'h1' : h === 0 ? 'z' : h > -3 ? 'c1' : h > -6 ? 'c2' : 'c3';
