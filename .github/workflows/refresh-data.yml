@@ -75,15 +75,15 @@ jobs:
       - name: Analytics (League Now > Analytics)
         continue-on-error: true
         run: python scripts/analytics.py
-      - name: Trading Floor (Beta > Trading Floor)
-        continue-on-error: true
-        run: python scripts/trading_floor.py
       - name: Madden fantasy scores (EA SPORTS Madden NFL ratings, derived)
         continue-on-error: true
         run: python scripts/madden.py
       - name: FBP OVR (Madden fantasy score, dynasty value, production)
         continue-on-error: true
         run: python scripts/ovr.py
+      - name: Trading Floor (Beta > Trading Floor; after OVR, which rates its players)
+        continue-on-error: true
+        run: python scripts/trading_floor.py
       - name: Trade Value (Trading Floor > Value Chart, Rosters > Value)
         continue-on-error: true
         run: python scripts/trade_values.py
