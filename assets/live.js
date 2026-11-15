@@ -53,8 +53,10 @@
   // hurt and ruled out during his game: ESPN's live injury report has him Out, posted after kickoff (or the note says he
   // won't return). His day is done: his projection becomes what he has, and he's judged as if his game were over.
   const ruledOut = p => { if (view || pos(p.id) === 'DEF') return false; const g = gameOf(p.id); if (!g || g.state !== 'in') return false;
-    const i = injuries && injuries[espnId(p.id)]; if (!i) return false;
-    if (/ruled out|(won'?t|will not|not expected to|unlikely to) return/i.test(i.note || '')) return true;
+    const i = injuries && injuries[espnId(p.id)]; if (!i || !i.status || i.status === 'Active') return false;
+    // the note has to be about him and about today: posted after kickoff (a note can mention a teammate who was ruled out)
+    const fresh = !!i.date && !!g.date && Date.parse(i.date) >= Date.parse(g.date);
+    if (fresh && /ruled out|(won'?t|will not|not expected to|unlikely to) return/i.test(i.note || '')) return true;
     return /^(Out|Injured Reserve)$/.test(i.status) && !!i.date && !!g.date && Date.parse(i.date) >= Date.parse(g.date); };
   // the projection to show and count: what he has once he's ruled out
   const projNow = (p, wk) => { if (ruledOut(p)) return +p.score || 0; const g = gameOf(p.id);
@@ -75,8 +77,10 @@
       return { k: 'hot', title: `Hot: ${n1(sc)} points against a ${n1(pj)} projection` };
     // zero points: his photo sinks down out of its circle as the game runs; scoreless at the final, he's gone
     // (witness protection). Any point brings him back.
-    if (sc === 0 && pos(p.id) !== 'DEF' && done > 0) return { k: fin ? 'wp' : 'sink', drop: Math.round(done * 85),
-      title: fin ? 'Witness protection: no points this week' : `No points yet, ${Math.round(done * 100)}% of the game gone` };
+    // He sinks through the first three quarters; still scoreless in the fourth, he's in witness protection.
+    if (sc === 0 && pos(p.id) !== 'DEF' && done > 0) { const q4 = fin || (g && +g.period >= 4) || done >= 0.75;
+      return { k: q4 ? 'wp' : 'sink', drop: Math.round(Math.min(1, done / 0.75) * 85),
+        title: fin ? 'Witness protection: no points this week' : q4 ? 'Witness protection: no points into the fourth quarter' : `No points yet, ${Math.round(done * 100)}% of the game gone` }; }
     // Bust: a big projection (12+) that collapsed to a quarter or less: at the final, or already with a quarter left
     if ((fin || done >= 0.75) && (sc < 0 || (pj >= 12 && sc <= pj * 0.25))) return { k: 'bust', title: `Bust: ${n1(sc)} points${pj ? ` against a ${n1(pj)} projection` : ''}` };
     // Cold: on pace for barely half his projection, from the end of the first quarter on
