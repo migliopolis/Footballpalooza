@@ -3,7 +3,7 @@
 Reads what the refresh already saved and writes data/trading-floor.json:
   teams   outlook from the playoff odds, 2026 payroll, the cost of keeping everyone worth keeping in 2027,
           depth by position, QB count against the 2-QB keeper limit, rookie picks owned
-  targets every player on teams out of a playoff spot (by Trade Value), a few on playoff teams who could still be had (outside the box),
+  targets sell candidates on teams out of a playoff spot (expiring, costly to keep, at peak age), by Trade Value, a few on playoff teams who could still be had (outside the box),
           expiring contracts, big 2027 raises, keeper crunches
   trades  every MFL trade since 2019: players and picks from MFL, plus auction cash, which MFL doesn't record
           (data/trade-cash.json from the commissioner's trade log for 2022-26; data/budgets.json for new 2027 cash)
@@ -25,6 +25,8 @@ CAP, ROSTER = 200, 20                       # keepers + $1 per open active-roste
 GOOD, KEEP = 80, 75                         # OVR: a weekly starter; worth keeping (lineup and keeper math)
 NEED = {'QB': 1, 'RB': 2, 'WR': 2, 'TE': 1} # 2026 lineup (Flex aside)
 NEED27 = {'QB': 2, 'RB': 2, 'WR': 2, 'TE': 1}   # 2027 adds the SuperFlex, so a second QB becomes a starter for most teams
+SELL_TV = 750                               # Trade Value worth getting something back for
+PEAK = {'QB': 31, 'RB': 26, 'WR': 28, 'TE': 29}   # peak ages, as in trade_values.py
 ORD = {1: '1st', 2: '2nd', 3: '3rd', 4: '4th'}
 
 
@@ -44,7 +46,9 @@ def main():
     LN = load(D('league-now.json'), {})
     cards = {c['id']: c for c in (load(D('beta-cards.json'), {}) or {}).get('cards', [])}
     ovr = {k: v.get('o') for k, v in ((load(D('ovr.json'), {}) or {}).get('players') or {}).items()}
-    tvs = {k: v.get('tv') for k, v in ((load(D('values.json'), {}) or {}).get('players') or {}).items()}   # Trade Value (trade_values.py)
+    VP = (load(D('values.json'), {}) or {}).get('players') or {}
+    tvs = {k: v.get('tv') for k, v in VP.items()}   # Trade Value (trade_values.py)
+    mkt = {k: v.get('mkt') for k, v in VP.items()}   # what he'd go for at auction (trade_values.py)
     odds = ((LN.get('odds') or {}).get('teams')) or {}
     seeds = {s['id']: s.get('seed') for s in (LN.get('seeds') or [])}   # teams in a playoff spot right now
     T = R['teams']
@@ -123,7 +127,24 @@ def main():
     rated = [p for p in P.values() if p['o'] is not None]
     seeded = lambda f: bool(teams[f].get('seed'))
     TVK = lambda p: -(p['tv'] or 0)   # trade lists lead with Trade Value
-    good_bad = sorted([p for p in P.values() if not seeded(p['f'])], key=TVK)   # everyone on a team out of a playoff spot
+    # Sell candidates: players on teams out of a playoff spot that a rebuilding owner has a reason to move now
+    #   exp   contract ends after this season, so he's gone anyway
+    #   cost  2027 salary at least $3 over what he'd go for at auction, so keeping him costs more than replacing him
+    #   peak  at or past his position's peak age with real Trade Value now, which a rebuild would outlast
+    sell = []
+    for p in P.values():
+        if seeded(p['f']) or ((p['tv'] or 0) < SELL_TV and (p['o'] or 0) < 75):
+            continue
+        why, m = [], mkt.get(p['id'])
+        if p['exp']:
+            why.append({'k': 'exp'})
+        if p['n27'] is not None and m is not None and p['n27'] - m >= 3:
+            why.append({'k': 'cost', 'mkt': round(m)})
+        if p['age'] and p['age'] >= PEAK.get(p['p'], 99) and (p['tv'] or 0) >= SELL_TV:
+            why.append({'k': 'peak', 'peak': PEAK[p['p']]})
+        if why:
+            sell.append(row(p, why))
+    good_bad = sorted(sell, key=lambda p: -(p['tv'] or 0))
     # Outside the box: players on playoff teams with a reason the team might still move them
     #   depth  more good players at his spot than the team starts (2027 lineup, with the SuperFlex)
     #   qb     a third QB worth keeping, with only 2 veteran QB keeper spots
@@ -170,7 +191,7 @@ def main():
             crunch.append({'f': f, 'kind': 'qb', 'n': len(t['qb27']), 'ids': t['qb27']})
     for c in crunch:
         c['list'] = [{'id': i, 'n': P[i]['n'], 'p': P[i]['p'], 'n27': P[i]['n27'], 'o': P[i]['o'], 'tv': P[i]['tv']} for i in c.pop('ids')]
-    targets = {'goodOnNonContenders': [row(p) for p in good_bad], 'outsideBox': box, 'expiring': [row(p) for p in expiring],
+    targets = {'goodOnNonContenders': good_bad, 'outsideBox': box, 'expiring': [row(p) for p in expiring],
                'raises': [row(p) for p in raises], 'crunch': crunch}
 
     # ---------- trade history (MFL, 2021 on) ----------
@@ -366,7 +387,7 @@ def main():
     with open(D('trading-floor.json'), 'w') as fh:
         json.dump(out, fh, separators=(',', ':'), ensure_ascii=False)
         fh.write('\n')
-    print('trading floor:', len(trades), 'trades,', len(good_bad), 'players on non-playoff teams,', len(expiring), 'expiring,',
+    print('trading floor:', len(trades), 'trades,', len(good_bad), 'sell candidates on non-playoff teams,', len(expiring), 'expiring,',
           len(raises), 'raises,', len(crunch), 'crunches,', len(block), 'block entries')
 
 
