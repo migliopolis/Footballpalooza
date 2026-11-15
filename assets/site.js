@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0228';
+  const VERSION = '0.0229';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -874,7 +874,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0228
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0229
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
@@ -1240,6 +1240,7 @@
   const portrait = () => window.matchMedia && matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
   function fitStandings() {
     document.querySelectorAll('.st-wrap').forEach(w => {
+      if (!w.querySelector('table.st-tbl')) return;   // standings tables only (League Now > Stats shares the .st-wrap class)
       const head = w.querySelector('thead tr'); if (!head) return;
       const th = [...head.children];
       th.slice(2, 7).forEach(c => { c.style.minWidth = ''; });
@@ -1251,6 +1252,6 @@
       if (!w.dataset.stSet) { w.dataset.stSet = '1'; w.scrollLeft = first.offsetLeft - lg.offsetWidth; }
     });
   }
-  new MutationObserver(() => { if (document.querySelector('.st-wrap:not([data-st-set])')) requestAnimationFrame(fitStandings); }).observe(app, { childList: true, subtree: true });
+  new MutationObserver(() => { if ([...document.querySelectorAll('.st-wrap:not([data-st-set])')].some(w => w.querySelector('table.st-tbl'))) requestAnimationFrame(fitStandings); }).observe(app, { childList: true, subtree: true });
   let stT = 0; window.addEventListener('resize', () => { clearTimeout(stT); stT = setTimeout(() => { document.querySelectorAll('.st-wrap').forEach(w => delete w.dataset.stSet); fitStandings(); }, 150); });
 })();

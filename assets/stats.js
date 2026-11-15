@@ -29,7 +29,9 @@ window.FBPStats = (function () {
   const statDef = k => { for (const [, L] of SG) { const x = L.find(o => o[0] === k); if (x) return x; } return null; };
   const groups = () => GFOR[F.pos] ? GFOR[F.pos].map(g => SG.find(x => x[0] === g)) : SG;
   const fmtV = (v, k) => v == null ? '' : !k ? v.toFixed(1) : PCT[k] ? v.toFixed(1) + '%' : Number.isInteger(v) ? String(v) : v.toFixed(1);
-  const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
+  // redraw in place: keep the page's scroll and the table's sideways scroll, so sorting or filtering never moves you
+  const redraw = () => { const y = window.scrollY, w = document.querySelector('.st-wrap'), x = w ? w.scrollLeft : 0;
+    if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); const n = document.querySelector('.st-wrap'); if (n) n.scrollLeft = x; requestAnimationFrame(() => { const m = document.querySelector('.st-wrap'); if (m) { m.scrollLeft = x; m.dispatchEvent(new Event('scroll')); } }); } };
   function load() {
     if (S || loading || failed) return;
     loading = true;
