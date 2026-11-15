@@ -1,6 +1,6 @@
 /* Beta > Trading Floor: a resource for owners thinking about a trade.
    Data: data/trading-floor.json, built by scripts/trading_floor.py on each refresh (MFL rosters, contracts, picks,
-   trades since 2019 and Trade Bait; playoff odds from League Now; ratings from the prototype player cards).
+   trades since 2019 and Trade Bait; playoff odds from League Now; ratings from the FBP OVR).
    Facts only: nothing here grades a player, a contract or an owner.
    Exposes window.FBPTrade.render(ctx) and .after(); beta.js routes #beta/trade here. */
 window.FBPTrade = (function () {
@@ -38,10 +38,10 @@ window.FBPTrade = (function () {
       <div class="tf-c">${contract(p)}${extra ? ' · ' + extra : ''}</div></div></li>`;
   }
   const posOk = p => pos === 'ALL' || p.p === pos;
-  const contOk = p => withCont || (D.teams[p.f] || {}).outlook !== 'Contending';
+  const contOk = p => withCont || !(D.teams[p.f] || {}).seed;   // teams in a playoff spot are left out unless asked for
   const seg = (attr, cur, opts) => `<div class="seg tf-seg">${opts.map(([k, l]) => `<button type="button" data-${attr}="${k}" aria-pressed="${k === cur}">${l}</button>`).join('')}</div>`;
   const posSeg = () => seg('tfp', pos, [['ALL', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE']]);
-  const contToggle = () => `<label class="tf-chk"><input type="checkbox" data-tfc="1"${withCont ? ' checked' : ''}> Include contending teams</label>`;
+  const contToggle = () => `<label class="tf-chk"><input type="checkbox" data-tfc="1"${withCont ? ' checked' : ''}> Include playoff teams</label>`;
 
   /* ---------- deadline ---------- */
   function countdown() {
@@ -64,6 +64,12 @@ window.FBPTrade = (function () {
   function vTargets() {
     const T = D.targets;
     const good = T.goodOnNonContenders.filter(posOk);
+    const box = (T.outsideBox || []).filter(posOk);
+    const ord = n => n + ([, 'st', 'nd', 'rd'][n % 100 > 10 && n % 100 < 14 ? 0 : n % 10] || 'th');
+    const whyTxt = (p, w) => w.k === 'depth' ? `<span class="tf-why-c">Depth</span> his team’s ${ord(w.rank)}-best ${p.p}`
+      : w.k === 'qb' ? `<span class="tf-why-c">QB limit</span> one of ${w.n} QBs for 2 keeper spots`
+      : `<span class="tf-why-c">Cap</span> doesn’t fit the 2027 budget, ${money(w.over)} over`;
+    const boxRow = p => prow(p).replace('</div></div></li>', `</div><div class="tf-whys">${(p.why || []).map(w => `<div>${whyTxt(p, w)}</div>`).join('')}</div></div></li>`);
     const exp = T.expiring.filter(posOk).filter(contOk);
     const rai = T.raises.filter(posOk).filter(contOk);
     const list = (a, extra) => a.length ? `<ul class="tf-list">${a.map(p => prow(p, extra && extra(p))).join('')}</ul>` : '<p class="tf-sub">Nobody right now.</p>';
@@ -76,7 +82,8 @@ window.FBPTrade = (function () {
         <p class="tf-sub">${c.kind === 'cap' ? 'Biggest 2027 salaries' : 'The QBs'}: ${c.list.map(p => `${esc(p.n)} <span class="tf-sub">${p.p}, OVR ${p.o}</span> ${money(p.n27)}`).join(' · ')}</p></li>`;
     }).join('');
     return `${posSeg()}
-     <section class="tf-sec"><h3>Good players outside the race</h3><p class="tf-why">Rated 80+ on teams that are in the mix or building. Contending teams rarely sell, so they’re left out.</p>${list(good)}</section>
+     <section class="tf-sec"><h3>Good players outside the race</h3><p class="tf-why">Rated 80+ on teams out of a playoff spot right now. Teams in a playoff spot rarely sell, so they’re left out here.</p>${list(good)}</section>
+     <section class="tf-sec"><h3>Thinking outside the box</h3><p class="tf-why">Players on playoff teams with a reason their team might still move them: more good players at his spot than the team starts in 2027, a third keeper-worthy QB, or a 2027 keeper bill over budget where he’s one who doesn’t fit.</p>${box.length ? `<ul class="tf-list">${box.map(boxRow).join('')}</ul>` : '<p class="tf-sub">Nobody right now.</p>'}</section>
      <section class="tf-sec"><h3>Expiring deals</h3><p class="tf-why">Contracts that end after this season. A team that won’t keep him may rather get something for him now.</p>${contToggle()}${list(exp)}</section>
      <section class="tf-sec"><h3>Big 2027 raises</h3><p class="tf-why">2027 salary of $20 or more, up $5 or more from this year.</p>${contToggle()}${list(rai, p => `+${money(p.n27 - p.sal)}`)}</section>
      <section class="tf-sec"><h3>Keeper crunches</h3><p class="tf-why">Teams that can’t keep everyone worth keeping, by the $${D.cap} cap (keepers plus $1 per open roster spot, adjusted for auction cash traded) or the 2-QB keeper limit.</p>${crunch ? `<ul class="tf-crl">${crunch}</ul>` : '<p class="tf-sub">Nobody right now.</p>'}</section>`;

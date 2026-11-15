@@ -3114,3 +3114,6 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .dc-comp small{font:700 .62rem/1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .dc-comp b{font-size:.92rem}
 .dc-comp span{font-size:.75rem;color:var(--muted)}
+/* Trading Floor > Targets > Thinking outside the box: why each player could be had */
+.tf-whys{display:flex;flex-direction:column;gap:2px;margin-top:4px;font-size:.8rem;color:var(--muted)}
+.tf-why-c{display:inline-block;min-width:62px;margin-right:6px;padding:1px 6px;border-radius:4px;font:700 .62rem/1.5 var(--body);letter-spacing:.05em;text-transform:uppercase;text-align:center;background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--fg)}

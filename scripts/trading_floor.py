@@ -3,13 +3,14 @@
 Reads what the refresh already saved and writes data/trading-floor.json:
   teams   outlook from the playoff odds, 2026 payroll, the cost of keeping everyone worth keeping in 2027,
           depth by position, QB count against the 2-QB keeper limit, rookie picks owned
-  targets good players on teams outside the playoff race, expiring contracts, big 2027 raises, keeper crunches
+  targets good players on teams out of a playoff spot, a few on playoff teams who could still be had (outside the box),
+          expiring contracts, big 2027 raises, keeper crunches
   trades  every MFL trade since 2019: players and picks from MFL, plus auction cash, which MFL doesn't record
           (data/trade-cash.json from the commissioner's trade log for 2022-26; data/budgets.json for new 2027 cash)
   habits  per team, plain counts from that history: trades a season, partners, timing, picks in and out
   block   MFL Trade Bait (owners add players from their team page in MFL), when the refresh has fetched it
 
-Player ratings come from data/beta-cards.json (the prototype ratings). Nothing here grades a player or an owner.
+Player ratings are the FBP OVR (data/ovr.json, scripts/ovr.py), with the card tier from data/beta-cards.json. Nothing here grades a player or an owner.
 """
 import json, os, re, sys, collections
 from datetime import datetime, timezone
@@ -41,7 +42,9 @@ def main():
     R = load(D('rosters.json'))
     LN = load(D('league-now.json'), {})
     cards = {c['id']: c for c in (load(D('beta-cards.json'), {}) or {}).get('cards', [])}
+    ovr = {k: v.get('o') for k, v in ((load(D('ovr.json'), {}) or {}).get('players') or {}).items()}
     odds = ((LN.get('odds') or {}).get('teams')) or {}
+    seeds = {s['id']: s.get('seed') for s in (LN.get('seeds') or [])}   # teams in a playoff spot right now
     T = R['teams']
     name = {f: t['name'] for f, t in T.items()}
     # 2027 cap per team: the $200 default plus auction cash moved in trades and any adjustments (data/budgets.json)
@@ -62,7 +65,7 @@ def main():
             fut = r.get('fut') or []
             P[r['id']] = {'id': r['id'], 'n': r['name'], 'p': r['pos'], 'nfl': r.get('nfl'), 'age': r.get('age'), 'e': r.get('espn'),
                           'f': f, 'st': r['st'], 'sal': r.get('sal'), 'cy': r.get('cy') or '', 'n27': fut[0] if fut else None,
-                          'exp': not fut, 'o': c.get('o'), 'r': c.get('r'), 'dev': c.get('dev'), 'ppg': round(r['pts'] / r['gp'], 1) if r.get('gp') else None}
+                          'exp': not fut, 'o': ovr.get(r['id'], c.get('o')), 'r': c.get('r'), 'dev': c.get('dev'), 'ppg': round(r['pts'] / r['gp'], 1) if r.get('gp') else None}
 
     # ---------- teams ----------
     teams = {}
@@ -80,7 +83,7 @@ def main():
             g = sorted([p for p in mine if p['p'] == pos], key=lambda p: -(p['o'] or 0))
             depth[pos] = {'good': sum(1 for p in g if (p['o'] or 0) >= GOOD), 'top': [p['id'] for p in g[:4]]}
         qbs = [p for p in mine if p['p'] == 'QB' and not p['exp'] and (p['o'] or 0) >= 70]
-        teams[f] = {'name': t['name'], 'owner': t.get('owner'), 'rec': t.get('rec'), 'pf': t.get('pf'), 'playoff': po, 'outlook': out,
+        teams[f] = {'name': t['name'], 'owner': t.get('owner'), 'rec': t.get('rec'), 'pf': t.get('pf'), 'playoff': po, 'outlook': out, 'seed': seeds.get(f),
                     'pay26': pay26, 'cap27': cap[f], 'keepCost': keep_cost, 'keepN': len(keep), 'room27': round(cap[f] - keep_cost, 1),
                     'depth': depth, 'qb27': [p['id'] for p in sorted(qbs, key=lambda p: -(p['o'] or 0))]}
 
@@ -110,7 +113,42 @@ def main():
             x['why'] = why
         return x
     rated = [p for p in P.values() if p['o'] is not None]
-    good_bad = sorted([p for p in rated if p['o'] >= GOOD and oc(p['f']) in ('In the mix', 'Building')], key=lambda p: -p['o'])
+    seeded = lambda f: bool(teams[f].get('seed'))
+    good_bad = sorted([p for p in rated if p['o'] >= GOOD and not seeded(p['f'])], key=lambda p: -p['o'])
+    # Outside the box: players on playoff teams with a reason the team might still move them
+    #   depth  more good players at his spot than the team starts (2027 lineup, with the SuperFlex)
+    #   qb     a third QB worth keeping, with only 2 veteran QB keeper spots
+    #   cap    over the 2027 budget: keeping the best first, he's one who doesn't fit
+    odd = {}
+    for f, t in teams.items():
+        if not seeded(f) or t['keepCost'] <= t['cap27']:
+            continue
+        keep = sorted([p for p in P.values() if p['f'] == f and not p['exp'] and (p['o'] or 0) >= KEEP], key=lambda p: (-p['o'], p['n27'] or 0))
+        cost, n = 0, 0
+        for p in keep:
+            act = p['st'] != 'TAXI_SQUAD'
+            c2 = cost + (p['n27'] or 0)
+            if c2 + max(0, ROSTER - n - act) <= t['cap27']:
+                cost, n = c2, n + act
+            else:
+                odd[p['id']] = round(t['keepCost'] - t['cap27'], 1)
+    box = []
+    for p in rated:
+        f = p['f']
+        if not seeded(f) or p['o'] < KEEP or p['st'] == 'TAXI_SQUAD':
+            continue
+        t, why = teams[f], []
+        same = sorted([q for q in P.values() if q['f'] == f and q['p'] == p['p']], key=lambda q: -(q['o'] or 0))
+        rank = same.index(p) + 1
+        if p['p'] in t['deep'] and rank > NEED27[p['p']]:
+            why.append({'k': 'depth', 'rank': rank})
+        if p['p'] == 'QB' and p['id'] in t['qb27'][2:]:
+            why.append({'k': 'qb', 'n': len(t['qb27'])})
+        if p['id'] in odd:
+            why.append({'k': 'cap', 'over': odd[p['id']]})
+        if why:
+            box.append(row(p, why))
+    box.sort(key=lambda p: (-len(p['why']), -p['o']))
     expiring = sorted([p for p in rated if p['exp'] and p['st'] != 'TAXI_SQUAD' and p['o'] >= 65], key=lambda p: -p['o'])
     raises = sorted([p for p in rated if p['n27'] is not None and p['sal'] is not None and p['n27'] >= 20 and p['n27'] - p['sal'] >= 5],
                     key=lambda p: -p['n27'])
@@ -123,7 +161,7 @@ def main():
             crunch.append({'f': f, 'kind': 'qb', 'n': len(t['qb27']), 'ids': t['qb27']})
     for c in crunch:
         c['list'] = [{'id': i, 'n': P[i]['n'], 'p': P[i]['p'], 'n27': P[i]['n27'], 'o': P[i]['o']} for i in c.pop('ids')]
-    targets = {'goodOnNonContenders': [row(p) for p in good_bad], 'expiring': [row(p) for p in expiring],
+    targets = {'goodOnNonContenders': [row(p) for p in good_bad], 'outsideBox': box, 'expiring': [row(p) for p in expiring],
                'raises': [row(p) for p in raises], 'crunch': crunch}
 
     # ---------- trade history (MFL, 2021 on) ----------
@@ -313,7 +351,7 @@ def main():
         fh.write('\n')
 
     out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': int((load(D('mfl', '_meta.json'), {}) or {}).get('season') or 2026), 'deadline': DEADLINE, 'cap': CAP,
-           'note': 'Beta. Ratings are the prototype OVR. Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',
+           'note': 'Beta. Ratings are the FBP OVR. seed: a playoff spot right now (Targets leave those teams out, but for Outside the box). Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',
            'teams': teams, 'targets': targets, 'trades': trades, 'habits': habits, 'moves': log,
            'block': block, 'blockFetched': block_fetched, 'blockOn': tb is not None}
     with open(D('trading-floor.json'), 'w') as fh:
