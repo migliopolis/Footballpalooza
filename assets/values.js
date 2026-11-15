@@ -147,8 +147,11 @@ window.FBPValues = (function () {
     if (!V) return '<p class="loading">Loading values…</p>';
     const tot = f => mode === 'o' ? V.teams[f].o : teamList(f).reduce((s, r) => s + val(r), 0);
     const order = Object.keys(V.teams).sort((a, b) => tot(b) - tot(a));
-    return `${toggles(true)}<div class="seg vl-shape-seg" role="tablist" aria-label="Chart">${[['dots', 'Players by value'], ['radar', 'Positional strength']].map(([k, l]) => `<button type="button" role="tab" data-vl-shape="${k}" aria-selected="${shape === k}">${l}</button>`).join('')}</div>
+    return `${toggles(true)}
       ${compare()}
+      <h2 class="sec vl-tbt">Team by team</h2>
+      <div class="vl-shape-row"><div class="seg vl-shape-seg" role="tablist" aria-label="Chart on each team">${[['dots', 'Every player'], ['radar', 'By position']].map(([k, l]) => `<button type="button" role="tab" data-vl-shape="${k}" aria-selected="${shape === k}">${l}</button>`).join('')}</div>
+        <p class="tf-sub">${shape === 'radar' ? 'Each team’s strength at QB, RB, WR, TE and picks against the rest of the league: the farther out, the stronger.' : 'Each team’s players as dots, best first, colored by position.'}</p></div>
       <div class="vl-grid">${order.map((f, i) => card(f, i + 1)).join('')}</div>
       <p class="rf-foot">Teams are ordered by ${mode === 'o' ? 'team OVR, the average of their top 2 QBs, 4 RBs, 5 WRs and 2 TEs' : 'their total Trade Value'}. Position ranks use the top 2 QBs, 4 RBs, 5 WRs, 2 TEs and every pick. Average age is the active roster’s, defenses left out. Dot colors: <span style="color:${COL.QB}">●</span> QB <span style="color:${COL.RB}">●</span> RB <span style="color:${COL.WR}">●</span> WR <span style="color:${COL.TE}">●</span> TE <span style="color:${COL.PICK}">●</span> pick.</p>${foot()}`;
   }

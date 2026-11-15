@@ -3148,3 +3148,6 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 :root[data-theme="dark"] .pw-prof.both{background:#1d3a26;color:#8fd6a3} :root[data-theme="dark"] .pw-prof.now{background:#3d2f12;color:#f0c46a} :root[data-theme="dark"] .pw-prof.future{background:#1a2c45;color:#9cc2f2}
 .pw-prof.sm{display:none;margin-top:3px;font-size:.55rem;padding:1px 6px}
 @media (max-width:600px){.pw-tbl .pw-pc{display:none}.pw-prof.sm{display:inline-block}}
+.vl-tbt{margin-top:18px}.vl-shape-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-bottom:10px}.vl-shape-row .tf-sub{margin:0}
+.ra-t th.ra-hs{cursor:pointer;user-select:none;white-space:nowrap}.ra-t th.ra-hs:hover,.ra-t th.ra-hs.cur{color:var(--fg)}
+.ra-go{font-size:.6rem;padding:0 4px;margin-left:4px;vertical-align:1px}

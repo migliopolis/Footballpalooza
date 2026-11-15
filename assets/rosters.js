@@ -783,20 +783,30 @@ window.FBPRosters = (function () {
     return `<div class="ro-page ra-page">${nav}${findBox(esc)}${F0 === 'value' ? (window.FBPValues ? FBPValues.league(ctx) : '') : F0 === 'grid' ? raGrid(ctx, divs) : F0 === 'contracts' ? raMoney(ctx, divs) : raFull(ctx, divs)}
       ${F0 === 'value' ? '' : `<p class="rf-foot">Through week ${R.through}. Points are each player’s whole season in FBP scoring, wherever he was; Pts/g is per game played. ${F0 === 'contracts' ? 'Payroll is this season’s salaries, every slot. 2027 under contract adds up next year’s salaries already set by the by-law escalators. Keep 75+ is what keeping every player rated 75+ (the prototype ratings) would cost against the team’s 2027 budget: the $200 cap adjusted for auction cash traded. Expiring: contracts in their last year. Tap a team to open its contracts; tap a column to sort.' : F0 === 'grid' ? 'Teams are ranked by their starters at the position (QB 1, RB 2, WR 2, TE 1, DEF 1), by points a game. Taxi and IR players are faded.' : 'Tap a player for his box; tap a team for its My Team page.'}</p>`}</div>`;
   }
+  // Full: tap a column header to sort every team by it; Pos goes back to position order
+  let raSort = ['pos', 1];
   function raFull(ctx, divs) {
+    const ovrN = r => { const o = ovrOf(r.id); return o && o.o != null ? o.o : -1; };
+    const lastN = n => { const w = String(n).replace(/\s+(Jr\.?|Sr\.?|II|III|IV|V)$/, '').split(' '); return (w.length > 1 ? w.slice(1).join(' ') + ' ' : '') + w[0]; };
+    const SK = { name: r => lastN(r.name), ovr: ovrN, ppg: r => ppg(r) == null ? -1 : ppg(r), pts: r => r.gp ? r.pts : -1, sal: r => r.sal };
+    const posOrder = (a, b) => POS.indexOf(a.pos) - POS.indexOf(b.pos) || (ppg(b) || 0) - (ppg(a) || 0) || b.sal - a.sal;
+    const sorter = (a, b) => { if (raSort[0] === 'pos' || !SK[raSort[0]]) return posOrder(a, b);
+      const x = SK[raSort[0]](a), y = SK[raSort[0]](b);
+      return (typeof x === 'string' ? raSort[1] * x.localeCompare(y) : raSort[1] * (y - x)) || posOrder(a, b); };
+    const hd = (k, l, cls) => `<th class="ra-hs${cls ? ' ' + cls : ''}${raSort[0] === k ? ' cur' : ''}" data-ra-sort="${k}" aria-sort="${raSort[0] === k && k !== 'pos' ? (raSort[1] > 0 ? 'descending' : 'ascending') : 'none'}" title="${k === 'pos' ? 'Back to position order' : 'Sort by ' + l}">${l}${raSort[0] === k && k !== 'pos' ? (raSort[1] > 0 ? ' ▼' : ' ▲') : ''}</th>`;
     const esc = ctx.esc, tmx = f => ctx.teams[f] || {}, ST = (ctx.now && ctx.now.standings) || [];
     const card = f => {
       const t = R.teams[f], st = ST.find(x => x.id === f), tm = tmx(f);
-      const act = t.rows.filter(r => r.st === 'ROSTER').sort((a, b) => POS.indexOf(a.pos) - POS.indexOf(b.pos) || (ppg(b) || 0) - (ppg(a) || 0) || b.sal - a.sal);
+      const act = t.rows.filter(r => r.st === 'ROSTER').sort(sorter);
       const row = r => { const on = open.has(r.id), v = ppg(r);
         return `<tr class="ra-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${on ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${on}">
           <td class="ra-pos">${r.pos}</td><td class="l ra-n"><b>${esc(r.name)}</b>${(r.hon || []).filter(h => /^(1st|2nd) Team$/.test(h[0])).map(h => `<span class="ra-aw ${h[0][0] === '1' ? 'g' : 's'}" title="${esc(h[2] || h[0] + ' All-FBP')}">${h[0].slice(0, 3)}</span>`).join('')}${injChip(r)}</td>${ovrCell(r)}<td>${v != null ? v.toFixed(1) : '—'}</td><td class="ra-pts">${r.gp ? r.pts.toFixed(1) : '—'}</td><td class="ra-sal">${$(r.sal)}</td></tr>
           ${on ? `<tr class="ro-det"><td colspan="6">${box(r, t, ctx)}</td></tr>` : ''}`; };
       const grp = (l, L) => L.length ? `<tr class="ra-g"><td colspan="6">${l}</td></tr>` + L.map(row).join('') : '';
-      const tx = t.rows.filter(r => r.st === 'TAXI_SQUAD'), ir = t.rows.filter(r => r.st === 'INJURED_RESERVE');
+      const tx = t.rows.filter(r => r.st === 'TAXI_SQUAD').sort(sorter), ir = t.rows.filter(r => r.st === 'INJURED_RESERVE').sort(sorter);
       return `<section class="card ra-card" style="--tc:${tm.primary && tm.primary.toUpperCase() !== '#FFFFFF' ? tm.primary : tm.secondary || 'var(--line)'}">
         <a class="ra-h" href="#now/team/${f}">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}<span class="ra-hn"><b>${esc(t.name)}${window.FBP && FBP.champChip ? FBP.champChip(f) : ''}</b><small>${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}${st ? ` · ${ord(st.divisionRank)} ${esc(st.divisionName)}${st.seed ? ` · <span class="ra-seed">#${st.seed} seed</span>` : ''}` : ''} · ${t.pf.toFixed(1)} pts</small></span></a>
-        <table class="ra-t"><thead><tr><th></th><th class="l">Player</th><th class="c">OVR</th><th>Pts/g</th><th class="ra-pts">Pts</th><th class="ra-sal">$</th></tr></thead>
+        <table class="ra-t"><thead><tr>${hd('pos', 'Pos', 'l')}${hd('name', 'Player', 'l')}${hd('ovr', 'OVR', 'c')}${hd('ppg', 'Pts/g')}${hd('pts', 'Pts', 'ra-pts')}${hd('sal', '$', 'ra-sal')}</tr></thead>
         <tbody>${act.map(row).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody></table></section>`;
     };
     return divs.map(d => `<section class="ra-div">${d.n ? `<h2 class="sec">${esc(d.n)}</h2>` : ''}<div class="ra-grid">${d.ids.map(card).join('')}</div></section>`).join('');
@@ -837,7 +847,7 @@ window.FBPRosters = (function () {
       return { f, t, list: act.concat(rest), sc: top.length === need ? sc : sc }; }).sort((a, b) => b.sc - a.sc);
     const W = Math.max(...T.map(x => x.list.length), 1);
     const cell = (x, r, i) => { if (!r) return '<td class="ra-e"></td>'; const v = ppg(r);
-      return `<td class="ra-c${r.st !== 'ROSTER' ? ' off' : ''}${i < need && r.st === 'ROSTER' ? ' st' : ''}"><a href="#now/team/${x.f}/${r.id}"><b>${esc(shortN(r.name))}</b>${injChip(r)}<small>${v != null ? v.toFixed(1) : '—'}/g · ${$(r.sal)}${r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : ''}</small></a></td>`; };
+      return `<td class="ra-c${r.st !== 'ROSTER' ? ' off' : ''}${i < need && r.st === 'ROSTER' ? ' st' : ''}"><a href="#now/team/${x.f}/${r.id}"><b>${esc(shortN(r.name))}</b>${(o => o && o.o != null ? `<span class="rk-ovr ra-go ${ovrTier(o.o)}" title="FBP OVR">${o.o}</span>` : '')(ovrOf(r.id))}${injChip(r)}<small>${v != null ? v.toFixed(1) : '—'}/g · ${$(r.sal)}${r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : ''}</small></a></td>`; };
     const seg = `<div class="seg ra-pos-seg" role="tablist" aria-label="Position">${POS.map(p => `<button type="button" role="tab" data-ra-pos="${p}" aria-selected="${p === P}">${p}</button>`).join('')}</div>`;
     return `${seg}<div class="tbl-wrap ra-gw"><table class="ra-gt"><thead><tr><th class="ra-gtm">Team</th><th class="ra-gs" title="Starters at ${P}: points a game">Top ${need}</th>${Array.from({ length: W }, (_, i) => `<th>${P}${i + 1}</th>`).join('')}</tr></thead>
       <tbody>${T.map((x, k) => `<tr><td class="ra-gtm"><a href="#now/team/${x.f}">${tmx(x.f).logo ? `<img src="${tmx(x.f).logo}" alt="">` : ''}<b>${esc(tmx(x.f).abbr || '')}</b></a></td><td class="ra-gs"><b>${x.sc.toFixed(1)}</b><small>${ord(k + 1)}</small></td>${Array.from({ length: W }, (_, i) => cell(x, x.list[i], i)).join('')}</tr>`).join('')}</tbody></table></div>`;
@@ -847,6 +857,7 @@ window.FBPRosters = (function () {
     const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick, .ra-page, .rk-page, .pp')) return;
     const pf = t.closest('[data-pp-fold]'); if (pf) { const k = pf.dataset.ppFold; ppShut[k] = !ppShut[k]; try { localStorage.setItem('fbp-pp-fold', JSON.stringify(ppShut)); } catch (err) {}
       pf.closest('.ro-fold').classList.toggle('shut', !!ppShut[k]); pf.setAttribute('aria-expanded', String(!ppShut[k])); return; }
+    const rs = t.closest('[data-ra-sort]'); if (rs) { const k = rs.dataset.raSort; raSort = k === 'pos' ? ['pos', 1] : raSort[0] === k ? [k, -raSort[1]] : [k, 1]; return redraw(); }
     const cs = t.closest('[data-ra-csort]'); if (cs) { const k = cs.dataset.raCsort; cSort = cSort[0] === k ? [k, -cSort[1]] : [k, 1]; return redraw(); }
     if (t.closest('.ra-mdet a')) return;
     const co = t.closest('[data-ra-copen]'); if (co) { const f = co.dataset.raCopen; cOpen.has(f) ? cOpen.delete(f) : cOpen.add(f); return redraw(); }
