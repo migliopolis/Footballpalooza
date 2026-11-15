@@ -30,7 +30,7 @@
   const projOf = (id, wk) => { const w = proj && proj[String(wk)]; if (!w || w[id] == null) return null;   // null: no projection
     const t = injTag(id); return t && OUT[t.t] ? 0 : w[id]; };
   // how a player is doing, shown on his photo. Top down: nuclear (over his position's line), hot (well ahead of his
-  // projection), normal, cold (well behind it), bust (a big projection that collapsed), blank (0 points past halftime).
+  // projection), normal, cold (well behind it), bust (a big projection that collapsed), sink (0 points, the photo slides out as the game runs) and wp (0 at the final: gone).
   // Only players whose NFL game has kicked off; byes and players yet to play stay normal.
   const NUKE = { QB: 35, RB: 30, WR: 30, TE: 25, DEF: 25 };
   // a player's photo with his tier on it (used by the Scoreboard and Players)
@@ -40,7 +40,7 @@
     const tr = tier(p, wk), ph = photo(p.id), out = dnp(p);
     // inactive: the photo goes grey with a red DNP rubber stamp across it
     const extra = out ? '<i class="dnp-st">DNP</i>' : tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
-    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}"${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph && !(tr && tr.k === 'blank') ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}"${tr && tr.drop != null ? ` style="--drop:${tr.drop}%"` : ''}${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
   // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
   // A player who suited up and scored 0 still counts as having played.
@@ -59,7 +59,10 @@
     // position's Nuclear line (QB 21, RB/WR 18, TE/DEF 15)
     if (pj > 0 && (fin ? sc >= pj + 5 && sc >= (line || 25) * 0.6 : sc >= 10 && ((done >= 0.25 && pace >= pj * 1.5) || sc >= pj)))
       return { k: 'hot', title: `Hot: ${n1(sc)} points against a ${n1(pj)} projection` };
-    if (sc === 0 && pastHalf) return { k: 'blank', title: fin ? 'No points this week' : 'No points through halftime' };
+    // zero points: his photo sinks down out of its circle as the game runs; scoreless at the final, he's gone
+    // (witness protection). Any point brings him back.
+    if (sc === 0 && pos(p.id) !== 'DEF' && done > 0) return { k: fin ? 'wp' : 'sink', drop: Math.round(done * 85),
+      title: fin ? 'Witness protection: no points this week' : `No points yet, ${Math.round(done * 100)}% of the game gone` };
     if (fin && (sc < 0 || (pj >= 12 && sc <= pj * 0.25))) return { k: 'bust', title: `Bust: ${n1(sc)} points${pj ? ` against a ${n1(pj)} projection` : ''}` };
     if (pj >= 8 && pastHalf && (fin ? sc <= pj * 0.5 : pace <= pj * 0.5)) return { k: 'cold', title: `Cold: ${n1(sc)} points against a ${n1(pj)} projection` };
     return null;
@@ -767,7 +770,7 @@
     const all = (L.matchup || []).flatMap(m => m.franchise.flatMap(f => (f.players.player || []).filter(p => p.status === 'starter').map(p => ({ p, fid: f.id }))));
     const rated = all.map(({ p, fid }) => ({ n: short(p.id), pos: pos(p.id), fid, pts: +p.score || 0, t: (tier(p, wk) || {}).k || '' }));
     const top = rated.filter(r => r.pts > 0).sort((a, b) => b.pts - a.pts).slice(0, 12);
-    const cold = rated.filter(r => r.t === 'cold' || r.t === 'bust' || r.t === 'blank').sort((a, b) => a.pts - b.pts).slice(0, 6);
+    const cold = rated.filter(r => r.t === 'cold' || r.t === 'bust' || r.t === 'sink' || r.t === 'wp').sort((a, b) => a.pts - b.pts).slice(0, 6);
     const G = (E.live || {}).games || {}, seen = new Set(), nfl = [];
     Object.entries(G).forEach(([ab, g]) => { if (seen.has(g.id) || g.home) return; seen.add(g.id);
       nfl.push({ id: g.id, state: g.state, date: g.date, detail: g.detail, away: ab, home: g.opp, as: g.pf, hs: g.pa, ball: g.ball ? ab : null }); });

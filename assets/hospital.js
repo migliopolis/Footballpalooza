@@ -138,8 +138,8 @@ window.FBPHospital = (function () {
     // census: every FBP team's injured players, points a game and salary on the shelf
     const keepWho = who, keepTeam = team; who = 'ro'; team = '';
     const ro = rows(now); who = keepWho; team = keepTeam;
-    const cen = Object.keys(ctx.teams).map(f => { const L = ro.filter(x => x.r.f === f && x.r.sl !== 'T');
-      return { f, n: L.length, pts: L.reduce((a, x) => a + (x.played >= 3 ? x.avg : 0), 0), sal: L.reduce((a, x) => a + (x.r.sal || 0), 0) }; })
+    const cen = Object.keys(ctx.teams).map(f => { const A = ro.filter(x => x.r.f === f), L = A.filter(x => x.r.sl !== 'T');
+      return { f, n: A.length, pts: L.reduce((a, x) => a + (x.played >= 3 ? x.avg : 0), 0), sal: L.reduce((a, x) => a + (x.r.sal || 0), 0) }; })
       .sort((a, b) => b.pts - a.pts);
     const census = `<div class="hs-cen">${cen.map(c => { const t = ctx.teams[c.f] || {};
       return `<button type="button" class="hs-cb${team === c.f ? ' on' : ''}" data-hs-team="${c.f}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || c.f)}</b><span>${c.n} in</span><small>${c.pts.toFixed(0)} pts/gm · $${c.sal}</small></button>`; }).join('')}</div>`;

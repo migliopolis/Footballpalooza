@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0230';
+  const VERSION = '0.0231';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -874,7 +874,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0230
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0231
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
@@ -959,7 +959,7 @@
         `<a class="tk-i" href="#now/column/${esc(c.slug)}"><b class="tk-hl">${esc(c.title)}</b><span class="tk-p">${esc((state.columns.columnists[c.author] || { name: c.author }).name)}</span></a>`)); };
     // Game Day: live from the scoreboard's feed (assets/live.js), only while these sections are on
     const LV = window.FBPLive && FBPLive.feed ? FBPLive.feed() : null, fmt = v => (+v || 0).toFixed(1);
-    const HEAT = { nuke: '☢️', hot: '🔥', cold: '🥶', bust: '🧊', blank: '🥶' };
+    const HEAT = { nuke: '☢️', hot: '🔥', cold: '🥶', bust: '🧊', sink: '🥶', wp: '🕶️' };
     const fbpGames = withP => { if (!LV || !LV.games.length) return [];
       return [`<a class="tk-h tk-gd" href="#scores">${LV.started ? `Week ${LV.week} live` : `Week ${LV.week}`}</a>`].concat(LV.games.map(({ a, b }) => {
         const tp = x => withP && x.top.length ? `<span class="tk-p">${x.top.map(([n, v]) => `${esc(n)} ${v}`).join(', ')}</span>` : '';
