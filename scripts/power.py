@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build data/power.json for League Now > Power Rankings: the FBP Power Score.
+"""Build data/power.json for Beta > Power Rankings: Now and Future, side by side.
 
-Four parts, each scored against the league (the page does the scoring so keep/drop flips recalculate):
+Parts, each scored against the league on the page (so keep/drop flips recalculate). Now is the first; Future is the rest:
   Strength now (35%)  this season's points per week and all-play record, plus the best legal lineup on the roster for
                       the rest of the season (each player's projected points a game).
   Keepers (30%)       what the players a team would keep for next season are worth at auction.
@@ -274,7 +274,7 @@ def main():
                     'budget': budget.get(fid, 200), 'players': sorted(players, key=lambda p: -p['val']), 'picks': sorted(picks.get(fid, []), key=lambda p: (p['y'], p['r'], p['s'] or 99))}
     json.dump({'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': season, 'through': R.get('through'),
                'next': season + 1, 'roster': ROSTER, 'dpp': {p: round(v, 3) for p, v in dpp_sf.items()}, 'share': {p: round(v, 3) for p, v in share_sf.items()}, 'repl': {p: round(v, 1) for p, v in repl_sf.items()}, 'superflex': True,
-               'weights': {'now': 35, 'keep': 30, 'cash': 20, 'picks': 15}, 'teams': out},
+               'teams': out},
               open(D('power.json'), 'w', encoding='utf-8'), separators=(',', ':'))
     print('power.json:', len(out), 'teams', {p: round(v, 2) for p, v in dpp_sf.items()}, repl_sf)
 

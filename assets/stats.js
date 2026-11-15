@@ -85,7 +85,7 @@ window.FBPStats = (function () {
     const filters = `<div class="st-f">
       <input class="pr-q st-q" type="search" placeholder="Find a player" aria-label="Find a player" autocomplete="off" value="${esc(q)}">
       <label>Top ${sel('top', [[25, 25], [50, 50], [100, 100], [0, 'All']])}</label>
-      ${sel('pos', [['', 'All positions'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'RB/WR/TE'], ['DEF', 'DEF']])}
+      <div class="seg st-pos" role="tablist" aria-label="Position">${[['', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'FLEX'], ['DEF', 'DEF']].map(([v, l]) => `<button type="button" role="tab" data-st-pos="${v}" aria-selected="${F.pos === v}"${v === 'FLEX' ? ' title="RB, WR and TE"' : ''}>${l}</button>`).join('')}</div>
       ${DT && groups().length ? `<label>Show <select data-st-f="stat" aria-label="Which stat"><option value=""${!sk ? ' selected' : ''}>FBP points</option>${groups().map(([g, L]) => `<optgroup label="${g}">${L.map(([v, l]) => `<option value="${v}"${v === sk ? ' selected' : ''}>${l}</option>`).join('')}</optgroup>`).join('')}</select></label>` : ''}
       <label>Weeks ${sel('from', wkOpts, from)} to ${sel('to', wkOpts, to)}</label>
     </div>
@@ -122,6 +122,8 @@ window.FBPStats = (function () {
   }
 
   document.addEventListener('click', e => {
+    const pb = e.target.closest && e.target.closest('[data-st-pos]');
+    if (pb) { F.pos = pb.dataset.stPos; save(); return redraw(); }   // position buttons, like Rankings and Rosters
     const wb = e.target.closest && e.target.closest('[data-st-who]');
     if (wb) { const v = wb.dataset.stWho; F.who = !v ? [] : F.who.includes(v) ? F.who.filter(x => x !== v) : F.who.concat(v); save(); return redraw(); }
     if (e.target.closest && e.target.closest('[data-st-starts]')) { F.st = !F.st; save(); return redraw(); }

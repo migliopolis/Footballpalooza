@@ -1,5 +1,5 @@
-/* Beta > Player Cards: trading-card versions of the prototype player ratings, for testing.
-   Data: data/beta-cards.json (ratings prototype; season lines and combine data from nflverse, CC BY 4.0).
+/* Beta > Player Cards: trading-card versions of every player, built on the FBP OVR (data/ovr.json).
+   Data: data/beta-cards.json (card details; the big number is the FBP OVR; season lines and combine data from nflverse, CC BY 4.0).
    NFL team colours and logos: data/espn/teams.json. FBP team logos: data/teams.json (via ctx.teams).
    Special fronts: 1st and 2nd Team All-FBP to date (data/awards.json) get their own backgrounds, and anyone who scored
    30+ FBP points in the latest week played (data/stats.json) is on fire.
@@ -104,7 +104,7 @@ window.FBPBeta = (function () {
   }
   /* ---------- Beta landing: a button per experiment ---------- */
   const sub = () => location.hash.slice(1).split('/')[1] || '';
-  const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the prototype ratings.'],
+  const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the FBP OVR.'],
     ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2019.'],
     ['power', 'Power Rankings', 'Now and Future side by side: who’s built to win this season, and who’s set up for next, with projected keepers.']];
   function betaHead(cur) {
@@ -139,7 +139,7 @@ window.FBPBeta = (function () {
  ${view === 'stack' ? (L.length ? `<div class="bc-stackwrap"><div class="bc-deck" data-noswipe></div>
   <div class="bc-deckbar"><button type="button" class="bc-undo" data-bundo="1">↶ Back</button><span class="bc-pos" aria-live="polite"></span></div></div>` : '<p class="bc-none">Nobody here.</p>') : `<div class="bc-grid">${vis.map(card).join('') || '<p class="bc-none">Nobody here.</p>'}</div>`}
  ${view === 'grid' && L.length > shown ? `<button type="button" class="bc-more" data-bmore="1">Show ${Math.min(PAGE, L.length - shown)} more</button>` : ''}
- <p class="bc-foot">Ratings are a prototype and will change. Season lines and combine data: <a href="https://github.com/nflverse" target="_blank" rel="noopener">nflverse</a> (CC BY 4.0); 2026 points are FBP’s own scoring. Headshots: ESPN.</p>
+ <p class="bc-foot">The big number is the FBP OVR. Season lines and combine data: <a href="https://github.com/nflverse" target="_blank" rel="noopener">nflverse</a> (CC BY 4.0); 2026 points are FBP’s own scoring. Headshots: ESPN.</p>
 </section>`;
   }
 
@@ -265,7 +265,7 @@ window.FBPBeta = (function () {
     X = ctx;
     if (!D) { load(); return failed ? '<p class="ro-wait">The card data didn’t load.</p>' : '<p class="ro-wait">Loading his card…</p>'; }
     const c = D.cards.find(x => String(x.id) === String(id));
-    return c ? card(c, arch) + '<p class="ro-bnote bc-hint">Tap the card to flip it. Ratings are the Beta prototype.</p>' : '<p class="ro-wait">No card for him yet: cards cover quarterbacks, running backs, receivers and tight ends with NFL games.</p>';
+    return c ? card(c, arch) + '<p class="ro-bnote bc-hint">Tap the card to flip it.</p>' : '<p class="ro-wait">No card for him yet: cards cover quarterbacks, running backs, receivers and tight ends with NFL games.</p>';
   }
   // the roster box's card: tap to flip, tilt with the mouse
   document.addEventListener('click', e => { const t = e.target.closest && e.target.closest('.ro-pcard .bc-tilt'); if (t) flip(t); });

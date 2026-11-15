@@ -1,4 +1,4 @@
-/* Player Value and Trade Value (data/values.json, scripts/trade_values.py).
+/* Trade Value and OVR charts (data/values.json, scripts/trade_values.py). Player Value (pv) is an input to Trade Value only.
    Player Value: ability, potential and production, from FantasyPros' dynasty consensus rank. Trade Value: the same
    player with his FBP contract counted: salary and years left. Both run 1-9999.
    FBPValues.chart(ctx)  Trading Floor > Value Chart: one column of value levels, and a column per position, each

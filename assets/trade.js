@@ -233,7 +233,7 @@ window.FBPTrade = (function () {
      <p class="tf-dl-line" id="tf-clock">${countdown()}</p>
      <nav class="seg tf-tabs">${Object.entries(V).map(([k, [l]]) => `<button type="button" data-tfv="${k}" aria-pressed="${k === view}">${l}</button>`).join('')}</nav>
      <div class="tf-view">${V[view][1]()}</div>
-     <p class="bc-foot">Beta. Ratings are the prototype OVR from Player Cards. Outlook comes from the playoff odds: Contending 75%+, In the mix 25–75%, Building under 25%. Contracts, picks, trades and the block are from MFL; auction cash in trades is from the commissioner’s trade log.</p></section>`;
+     <p class="bc-foot">Beta. Players lead with Trade Value, with the FBP OVR beside the name. Outlook comes from the playoff odds: Contending 75%+, In the mix 25–75%, Building under 25%. Contracts, picks, trades and the block are from MFL; auction cash in trades is from the commissioner’s trade log.</p></section>`;
   }
 
   let wired = false;

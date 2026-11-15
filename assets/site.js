@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0224';
+  const VERSION = '0.0225';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -397,7 +397,7 @@
         <span class="sx">${o ? `<b>${fp(o.seeds[5])}</b>${dlt(t.id, 'seed6', o.seeds[5])}<small>chance at 6</small>` : ''}</span></div>`;
     }).join('');
 
-    // Power Rankings: the FBP Power Score (assets/power.js), then MFL's power rating for comparison
+    // Power Rankings: MFL's rating here; our Now and Future rankings (assets/power.js) are in Beta. Below: MFL's power rating for comparison
     const pr = d.standings.slice().sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99));
     const hasPwr = pr.some(t => t.pwr);
     const powerRows = pr.map((t, i) => `<tr><td class="pr-n">${t.pwrRank || i + 1}</td><td class="pr-mv">${rankMove(t.id, 'pwrRank', t.pwrRank)}</td>
@@ -409,9 +409,9 @@
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof"><b>Through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${state.meta && state.meta.fetched ? ` · <span id="ln-refresh">${esc(refreshText(true))}</span>` : genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
-    // the FBP Power Score is in Beta (#beta/power) while projected keepers are being tuned
+    // our Now and Future Power Rankings live in Beta (#beta/power)
     if (sub === 'power') return headTxt + `
-      <section><h2 class="sec">MFL Power Rating <small>MFL’s own formula · our FBP Power Score is being tuned in <a href="#beta/power">Beta</a></small></h2>
+      <section><h2 class="sec">MFL Power Rating <small>MFL’s own formula · our own Now and Future rankings are in <a href="#beta/power">Beta</a></small></h2>
       ${hasPwr ? `<div class="card tbl-wrap"><table class="tbl pr-tbl"><thead><tr><th>#</th><th><span class="sr">Change</span></th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th title="MFL power rating">Rating</th><th>Record</th><th>PF</th><th class="hide-sm">All-play</th><th class="hide-sm">Strk</th></tr></thead><tbody>${powerRows}</tbody></table></div>`
         : '<div class="card soon"><p>Power rankings fill in after the next weekly refresh.</p></div>'}
       ${P ? '' : '<p class="rf-foot">Movement arrows start with the second weekly refresh that has rankings saved.</p>'}</section>`;
@@ -876,7 +876,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0224
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0225
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
