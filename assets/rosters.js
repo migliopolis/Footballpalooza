@@ -786,6 +786,16 @@ window.FBPRosters = (function () {
   // Full: tap a column header to sort every team by it; Pos goes back to position order
   let raSort = ['pos', 1];
   function raFull(ctx, divs) {
+    // with a default team set: its division first (West: West, Central, East; East: East, Central, West;
+    // Central: Central, West, East) and the team itself first in it
+    const me = ctx.myTeam, md = me && divs.find(d => d.ids.includes(me));
+    if (md) {
+      const ORDER = { West: ['West', 'Central', 'East'], East: ['East', 'Central', 'West'], Central: ['Central', 'West', 'East'] }[md.n];
+      divs = divs.slice();
+      if (ORDER) divs.sort((a, b) => (ORDER.indexOf(a.n) + 1 || 9) - (ORDER.indexOf(b.n) + 1 || 9));
+      else divs = [md].concat(divs.filter(d => d !== md));
+      divs = divs.map(d => d === md ? { n: d.n, ids: [me].concat(d.ids.filter(f => f !== me)) } : d);
+    }
     const ovrN = r => { const o = ovrOf(r.id); return o && o.o != null ? o.o : -1; };
     const lastN = n => { const w = String(n).replace(/\s+(Jr\.?|Sr\.?|II|III|IV|V)$/, '').split(' '); return (w.length > 1 ? w.slice(1).join(' ') + ' ' : '') + w[0]; };
     const SK = { name: r => lastN(r.name), ovr: ovrN, ppg: r => ppg(r) == null ? -1 : ppg(r), pts: r => r.gp ? r.pts : -1, sal: r => r.sal };
