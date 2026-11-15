@@ -30,10 +30,14 @@ window.FBPTrade = (function () {
     if (p.exp) return `${money(p.sal)} · <b>expires after 2026</b>`;
     return `${money(p.sal)}${p.cy ? ` (${esc(p.cy)})` : ''} → <b>${money(p.n27)}</b> in 2027`;
   }
+  // NFL team logo (MFL codes to ESPN's)
+  const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
+  const nflLg = t => t && t !== 'FA' ? `<img class="tf-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${esc(t)}" title="${esc(t)}" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(t)} · '))">` : '';
   function prow(p, extra) {
     const href = `#now/team/${p.f}/${p.id}`;
     return `<li class="tf-p"><span class="tf-tv" title="Trade Value">${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>TV</small></span>
-      <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''} · ${esc(p.nfl || '')}${p.age ? ' · age ' + p.age : ''}${p.ppg != null ? ' · ' + p.ppg + ' ppg' : ''}</span>
+      <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''}</span>
+      <div class="tf-sub tf-bio">${nflLg(p.nfl)}${[p.age ? 'age ' + p.age : '', p.ppg != null ? p.ppg + ' ppg' : ''].filter(Boolean).join(' · ')}</div>
       <div class="tf-sub tf-tm">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>
       <div class="tf-c">${contract(p)}${extra ? ' · ' + extra : ''}</div></div></li>`;
   }

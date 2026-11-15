@@ -3123,3 +3123,4 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .tf-o{display:inline-block;min-width:22px;padding:0 4px;border-radius:4px;font:700 .72rem/1.45 var(--display);text-align:center;vertical-align:1px;color:#fff}
 .tf-d small{display:block;margin-top:2px;font-size:.6rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .tf-card .tf-tm{display:none}   /* On the Block: the card already names the team */
+.tf-bio{display:flex;align-items:center;gap:5px;margin-top:1px}.tf-nfl{width:18px;height:18px;object-fit:contain;flex:none}
