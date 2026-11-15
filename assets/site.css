@@ -3122,3 +3122,4 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .tf-tv small{font:700 .52rem/1 var(--body);letter-spacing:.08em;color:var(--muted);margin-top:3px}
 .tf-o{display:inline-block;min-width:22px;padding:0 4px;border-radius:4px;font:700 .72rem/1.45 var(--display);text-align:center;vertical-align:1px;color:#fff}
 .tf-d small{display:block;margin-top:2px;font-size:.6rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tf-more{display:block;margin:8px auto 0;padding:7px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);font:600 .85rem var(--body);cursor:pointer}

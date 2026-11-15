@@ -3,7 +3,7 @@
 Reads what the refresh already saved and writes data/trading-floor.json:
   teams   outlook from the playoff odds, 2026 payroll, the cost of keeping everyone worth keeping in 2027,
           depth by position, QB count against the 2-QB keeper limit, rookie picks owned
-  targets good players on teams out of a playoff spot, a few on playoff teams who could still be had (outside the box),
+  targets every player on teams out of a playoff spot (by Trade Value), a few on playoff teams who could still be had (outside the box),
           expiring contracts, big 2027 raises, keeper crunches
   trades  every MFL trade since 2019: players and picks from MFL, plus auction cash, which MFL doesn't record
           (data/trade-cash.json from the commissioner's trade log for 2022-26; data/budgets.json for new 2027 cash)
@@ -23,7 +23,6 @@ load = lambda p, d=None: json.load(open(p)) if os.path.exists(p) else d
 DEADLINE = '2026-12-03T17:00:00Z'          # Dec 3, 12 PM EST: in-season trading ends before Week 13
 CAP, ROSTER = 200, 20                       # keepers + $1 per open active-roster spot must stay under the $200 cap
 GOOD, KEEP = 80, 75                         # OVR: a weekly starter; worth keeping (lineup and keeper math)
-GOOD_TV = 2000                              # Trade Value: worth chasing in a trade (about the top 100)
 NEED = {'QB': 1, 'RB': 2, 'WR': 2, 'TE': 1} # 2026 lineup (Flex aside)
 NEED27 = {'QB': 2, 'RB': 2, 'WR': 2, 'TE': 1}   # 2027 adds the SuperFlex, so a second QB becomes a starter for most teams
 ORD = {1: '1st', 2: '2nd', 3: '3rd', 4: '4th'}
@@ -124,7 +123,7 @@ def main():
     rated = [p for p in P.values() if p['o'] is not None]
     seeded = lambda f: bool(teams[f].get('seed'))
     TVK = lambda p: -(p['tv'] or 0)   # trade lists lead with Trade Value
-    good_bad = sorted([p for p in rated if (p['tv'] or 0) >= GOOD_TV and not seeded(p['f'])], key=TVK)
+    good_bad = sorted([p for p in P.values() if not seeded(p['f'])], key=TVK)   # everyone on a team out of a playoff spot
     # Outside the box: players on playoff teams with a reason the team might still move them
     #   depth  more good players at his spot than the team starts (2027 lineup, with the SuperFlex)
     #   qb     a third QB worth keeping, with only 2 veteran QB keeper spots
@@ -367,7 +366,7 @@ def main():
     with open(D('trading-floor.json'), 'w') as fh:
         json.dump(out, fh, separators=(',', ':'), ensure_ascii=False)
         fh.write('\n')
-    print('trading floor:', len(trades), 'trades,', len(good_bad), 'good players outside the race,', len(expiring), 'expiring,',
+    print('trading floor:', len(trades), 'trades,', len(good_bad), 'players on non-playoff teams,', len(expiring), 'expiring,',
           len(raises), 'raises,', len(crunch), 'crunches,', len(block), 'block entries')
 
 

@@ -5,7 +5,7 @@
    Exposes window.FBPTrade.render(ctx) and .after(); beta.js routes #beta/trade here. */
 window.FBPTrade = (function () {
   let D = null, failed = false, loading = false, X = null;
-  let view = 'block', kind = '', hsort = 'new', pos = 'ALL', withCont = false, q = '', season = '', teamSel = '', tick = null;
+  let view = 'block', kind = '', hsort = 'new', pos = 'ALL', withCont = false, allT = false, q = '', season = '', teamSel = '', tick = null;
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   const nm = f => (X && X.nameOf ? X.nameOf(f) : (D && D.teams[f] ? D.teams[f].name : f));
@@ -83,7 +83,7 @@ window.FBPTrade = (function () {
         <p class="tf-sub">${c.kind === 'cap' ? 'Biggest 2027 salaries' : 'The QBs'}: ${c.list.map(p => `${esc(p.n)} <span class="tf-sub">${p.p}, TV ${p.tv == null ? '–' : Number(p.tv).toLocaleString()}</span> ${money(p.n27)}`).join(' · ')}</p></li>`;
     }).join('');
     return `${posSeg()}
-     <section class="tf-sec"><h3>Good players outside the race</h3><p class="tf-why">Trade Value 2,000 or more (about the top 100), on teams out of a playoff spot right now. Teams in a playoff spot rarely sell, so they’re left out here.</p>${list(good)}</section>
+     <section class="tf-sec"><h3>Players on non-playoff teams</h3><p class="tf-why">Everyone on the ${new Set(T.goodOnNonContenders.map(p => p.f)).size} teams out of a playoff spot right now, by Trade Value. Teams in a playoff spot rarely sell, so they’re left out here.</p>${list(allT ? good : good.slice(0, 30))}${!allT && good.length > 30 ? `<button type="button" class="tf-more" data-tfall="1">Show all ${good.length}</button>` : ''}</section>
      <section class="tf-sec"><h3>Thinking outside the box</h3><p class="tf-why">Players on playoff teams with a reason their team might still move them: more good players at his spot than the team starts in 2027, a third keeper-worthy QB, or a 2027 keeper bill over budget where he’s one who doesn’t fit.</p>${box.length ? `<ul class="tf-list">${box.map(boxRow).join('')}</ul>` : '<p class="tf-sub">Nobody right now.</p>'}</section>
      <section class="tf-sec"><h3>Expiring deals</h3><p class="tf-why">Contracts that end after this season. A team that won’t keep him may rather get something for him now.</p>${contToggle()}${list(exp)}</section>
      <section class="tf-sec"><h3>Big 2027 raises</h3><p class="tf-why">2027 salary of $20 or more, up $5 or more from this year.</p>${contToggle()}${list(rai, p => `+${money(p.n27 - p.sal)}`)}</section>
@@ -231,6 +231,7 @@ window.FBPTrade = (function () {
     if (wired) return; wired = true;
     document.addEventListener('click', e => {
       if (!document.querySelector('.tf-page')) return;
+      if (e.target.closest('[data-tfall]')) { allT = true; redraw(); return; }
       const b = e.target.closest('[data-tfv],[data-tfp],[data-tfk]');
       if (!b) return;
       if (b.dataset.tfv) view = b.dataset.tfv; else if (b.dataset.tfk !== undefined) kind = b.dataset.tfk; else pos = b.dataset.tfp;
