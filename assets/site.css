@@ -3124,3 +3124,9 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .tf-d small{display:block;margin-top:2px;font-size:.6rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .tf-card .tf-tm{display:none}   /* On the Block: the card already names the team */
 .tf-bio{display:flex;align-items:center;gap:5px;margin-top:1px}.tf-nfl{width:18px;height:18px;object-fit:contain;flex:none}
+/* Trading Floor rows: photo over the Trade Value tile */
+.tf-lead{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px;width:60px}
+.tf-ph{width:52px;height:52px;border-radius:50%;background:var(--line) center 20%/cover no-repeat;box-shadow:inset 0 0 0 1px var(--line)}
+.tf-lead .tf-tv{width:60px;min-width:0;height:auto;padding:4px 2px}
+.tf-tv small:first-child{margin:0 0 2px}
+.tf-tv small{text-transform:uppercase}
