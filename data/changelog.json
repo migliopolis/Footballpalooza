@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0226",
+      "to": "0.0230",
+      "dates": "Nov 14–15, 2026",
+      "items": [
+        "Rankings: position buttons stack (pick RB and WR together), ECR ROS Ovr is gone, and a green or red arrow shows when a player’s OVR moved since last week.",
+        "Stats: injury tags beside player names, position buttons like the rest of the site, and sorting keeps your place.",
+        "Player Page: the FBP team shows as its logo, and a new FBP draft line shows where FBP’s rookie draft took him, whoever has him now.",
+        "Scoreboard: the football and RZ ride on the player’s photo, and RZ replaces the football in the red zone.",
+        "Behind the scenes: shared helpers and one data loader, so pages load less and always agree."
+      ]
+    },
+    {
       "from": "0.0216",
       "to": "0.0220",
       "dates": "Nov 14, 2026",
