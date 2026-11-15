@@ -12,7 +12,9 @@ Trade Value (TV, 1-9999): what he's worth in a trade between FBP owners. Talent 
              a great player for two good ones, or for a bad one on a cheap deal), averaged over the seasons he's
              under control: this season on his value right now (now_values: half FBP points per game, half the
              FantasyPros rest-of-season rank), counted double because the playoff run is what a contender buys;
-             next season half now, half dynasty; later seasons dynasty alone. So a player producing now on a deal
+             next season half now, half dynasty; later seasons dynasty alone, except a player under his position's
+             peak age: two thirds now for every later year when he's producing above his rank (a breakout), and his
+             dynasty value when he isn't yet. So a player producing now on a deal
              that runs past this season is worth a lot; an expiring one is worth what he does the rest of this year
   contract = (0.55 + 0.45 * control) * (1 + 0.3 * surplus), between about 0.4 and 1.3
     control: how much of him you get, the rest of this season plus each year left on his deal (each later year
@@ -152,7 +154,11 @@ def main():
             # this season runs on what he's doing now (production and the rest-of-season consensus); next season is
             # half now, half dynasty; after that, dynasty alone
             nv = NOW.get(str(r['id']), pv)
-            pvs = lambda k: nv if k < 0 else (nv + pv) / 2 if k == 0 else pv
+            # a young player producing above his dynasty rank is breaking out: every later year of his deal leans two
+            # thirds on what he's doing now (never below his dynasty value), since the long-term consensus is slow to
+            # catch up, and a young player not producing yet keeps his dynasty value for those years
+            young = age < PEAK.get(pos, 28)
+            pvs = lambda k: nv if k < 0 else max(pv, (2 * nv + pv) / 3) if young else (nv + pv) / 2 if k == 0 else pv
             w0 = left * NOW_W
             val, cost, ctl = market(nv) * left, 0.0, left
             tw, tsum = w0, w0 * talent_of(nv)
