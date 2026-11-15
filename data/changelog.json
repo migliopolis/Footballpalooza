@@ -2,6 +2,20 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0236",
+      "to": "0.0240",
+      "dates": "Nov 15, 2026",
+      "items": [
+        "Scoreboard: a player ruled out mid-game is judged against his real projection, so a dud like Maye’s shows as a Bust.",
+        "Scoreboard: a red HURT chip appears when ESPN’s play-by-play has a player injured on a play, and clears when he returns.",
+        "Scoreboard: inactive (DNP) stamps are rechecked through the game, so active players like Garrett Wilson no longer get marked by mistake.",
+        "Scoreboard: a scoreless player sinks out of his photo through the first three quarters and goes into witness protection in the fourth. Any point brings him back.",
+        "Scoreboard: in Compact view, tap a player-vs-player row to open it in full; tap again to close.",
+        "Players: Cold and Bust tags join Hot and Nuclear.",
+        "Sharing Draft Home now shows its photo in the link preview."
+      ]
+    },
+    {
       "from": "0.0231",
       "to": "0.0235",
       "dates": "Nov 15, 2026",

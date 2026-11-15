@@ -57,7 +57,9 @@ def routes():
         'reference/players': ('Player Records', 'How often each player’s team wins when he starts, and every FBP team he’s started for.'),
         'reference/payroll': ('Payroll', 'Footballpalooza salaries and cap.'),
         'offseason': ('Off-Season', 'The Footballpalooza off-season workbook.'),
-        'draft': ('Rookie Draft', f'The {int(season) + 1 if season else ""} rookie class: who the top prospects are and what kind of draft it is.'.replace('  ', ' ')),
+        # Draft Home previews with its hero photo (data/draft-home.json hero.src), like a column does
+        'draft': ('Rookie Draft', f'The {int(season) + 1 if season else ""} rookie class: who the top prospects are and what kind of draft it is.'.replace('  ', ' '),
+                  (load('data', 'draft-home.json').get('hero') or {}).get('src') or ''),
         'draft/mock': ('Mock Draft', 'Run a Footballpalooza rookie mock draft.'),
         'draft/board': ('Big Board', 'The rookie big board, with prices.'),
         'draft/round1': ('Draft Order', 'The first-round rookie draft order, as the standings stand today, with what each pick would cost.'),
