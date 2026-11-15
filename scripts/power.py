@@ -18,8 +18,13 @@ Next season is SuperFlex (by-laws Article XVII), so 2027 values use a deeper QB 
 QBs a team) and give QBs 25% of the money, taking the rest from the other positions in proportion. Young players on
 rookie deals get a floor from their NFL draft slot while they develop; QBs keep it longest.
 
-Suggested keep: a player under contract for next season whose auction value beats his next-year salary, with at most
-two veteran QBs (by-law). It's only a suggestion; the page lets anyone flip it on their own device.
+Projected keepers: the FBP keeper model (data/keeper-model.json), trained on real keeper decisions before the 2022,
+2024, 2025 and 2026 deadlines, gives each player under contract for next season a chance he's kept, from his production
+this season, his next salary and contract, age, position and FantasyPros dynasty rank. Kept: 50% or better, then the
+by-laws: at most two veteran QBs, and keepers plus $1 per open roster spot within the team's budget (the least likely
+keepers go first). Anyone can flip a keeper on their own device.
+
+The page shows two rankings, not one blend: Now (this season) and Future (next season: keepers, cash and picks).
 Run after rosters.py and league_now.py: python scripts/power.py
 """
 import json, os, statistics as st
@@ -56,6 +61,45 @@ def age_factor(pos, age):
     if pos == 'QB':
         return 1.0 if age <= 34 else .9 if age <= 37 else .8
     return 1.0
+
+
+KM = load(D('keeper-model.json'), {}) or {}
+DYN = (load(D('fantasypros', 'dynasty-ecr.json'), {}) or {}).get('players') or {}
+_ST = {r['id']: r for r in ((load(D('stats.json'), {}) or {}).get('rows') or [])}
+_MP = load(D('mfl', 'players.json'), {}) or {}
+_DY = {}
+if 'draft_year' in (_MP.get('fields') or []):
+    _i = _MP['fields'].index('draft_year')
+    _DY = {k: int(v[_i]) for k, v in (_MP.get('players') or {}).items() if str(v[_i]).isdigit()}
+_RANK = {}
+for _pos in ('QB', 'RB', 'WR', 'TE'):   # this season's points-per-game rank at each position, among rostered players
+    _rost = [r for r in _ST.values() if r.get('p') == _pos and r.get('f')]
+    _pp = {r['id']: [x for x in (r.get('w') or []) if x] for r in _rost}
+    for _k, (_pid, _) in enumerate(sorted(((pid, sum(w) / len(w)) for pid, w in _pp.items() if w), key=lambda t: -t[1])):
+        _RANK[_pid] = _k + 1
+
+
+def rookie_qb(r, season):
+    return r['pos'] == 'QB' and _DY.get(str(r['id'])) == season   # by-law: the 2-QB keeper limit is for veterans
+
+
+def keep_chance(r, season):
+    """The keeper model's chance this player is kept for next season (0-1)."""
+    if not KM or r['pos'] not in ('QB', 'RB', 'WR', 'TE'):
+        return 0.0
+    import math
+    st_ = _ST.get(str(r['id'])) or {}
+    w = [x for x in (st_.get('w') or []) if x]
+    nxt = float((r.get('fut') or [0])[0] or 0)
+    d = (DYN.get(str(r['id'])) or [400])[0] or 400
+    pv = 9999 * math.exp(-((d - 1) / 95) ** 0.8); mk = 80 * (pv / 9999) ** 1.8
+    dy = _DY.get(str(r['id']))
+    f = [math.log(min(_RANK.get(str(r['id']), 999), 150)), sum(w) / len(w) if w else 0, (st_.get('s') or '').count('1'),
+         nxt, math.log1p(nxt), nxt <= 5, (r.get('acq') or '').startswith('Draft'), len(r.get('fut') or []),
+         (r.get('age') or 26) - KM['peak'][r['pos']], bool(dy and season - dy + 1 <= 2), r.get('st') == 'TAXI_SQUAD',
+         r['pos'] == 'QB', r['pos'] == 'RB', r['pos'] == 'WR', r['pos'] == 'TE', math.log(d), mk, mk - nxt, (mk - nxt) / max(nxt, 1)]
+    z = KM['intercept'] + sum(c * (float(x) - m) / s for c, x, m, s in zip(KM['coef'], f, KM['mean'], KM['sd']))
+    return 1 / (1 + math.exp(-z))
 
 
 def main():
@@ -211,11 +255,19 @@ def main():
             if why:
                 pl['why'] = why
             players.append(pl)
-        # suggested keeps: value beats salary, two veteran QBs at most
-        keep = [p for p in players if p['next'] is not None and p['val'] > p['next']]
-        qbs = sorted((p for p in keep if p['pos'] == 'QB'), key=lambda p: p['next'] - p['val'])[2:]
+        # projected keepers: the keeper model's odds, then the by-laws (two veteran QBs, the budget)
+        rowby = {r['id']: r for r in t['rows']}
         for p in players:
-            p['keep'] = p in keep and p not in qbs
+            p['kp'] = round(keep_chance(rowby[p['id']], season), 2) if p['next'] is not None else 0
+        keep = sorted([p for p in players if p['next'] is not None and p['kp'] >= .5], key=lambda p: -p['kp'])
+        vqb = [p for p in keep if p['pos'] == 'QB' and not rookie_qb(rowby[p['id']], season)]
+        for p in vqb[2:]:
+            keep.remove(p)
+        while keep and sum(p['next'] for p in keep) + max(0, ROSTER - sum(1 for p in keep if p['st'] != 'TAXI_SQUAD')) > budget.get(fid, 200):
+            keep.remove(min(keep, key=lambda p: p['kp']))
+        ks = {p['id'] for p in keep}
+        for p in players:
+            p['keep'] = p['id'] in ks
         out[fid] = {'pf': round(s.get('pf', 0) / games, 2) if games else 0, 'ap': round(s.get('allPlayW', 0) / apg, 3) if apg else 0,
                     'rec': [s.get('w', 0), s.get('l', 0), s.get('t', 0)], 'mfl': s.get('pwrRank'),
                     'ros': round(sum(proj(r) for r in lineup), 1), 'lineup': [r['id'] for r in lineup],

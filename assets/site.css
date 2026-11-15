@@ -3130,3 +3130,21 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .tf-lead .tf-tv{width:60px;min-width:0;height:auto;padding:4px 2px}
 .tf-tv small:first-child{margin:0 0 2px}
 .tf-tv small{text-transform:uppercase}
+/* Power Rankings: Now and Future side by side */
+.pw-top{display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+.pw-cc{padding:8px;max-width:520px}
+.pw-chart{width:100%;height:auto;display:block}
+.pw-chart .pw-bg{fill:var(--sky-soft)}
+.pw-chart .pw-mid{stroke:var(--line);stroke-width:1.5;stroke-dasharray:4 4}
+.pw-chart .pw-q{font:700 9px var(--display);fill:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.pw-chart .pw-ax{font:600 9px var(--body);fill:var(--muted)}
+.pw-chart .pw-dot circle{fill:var(--accent)}
+.pw-chart .pw-dot.me image{filter:drop-shadow(0 0 3px var(--accent))}
+.pw-seg{align-self:flex-start}
+.pw-p.cur b{color:var(--accent)}
+.pw-prof{display:inline-block;padding:2px 8px;border-radius:999px;font:700 .62rem var(--body);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.pw-prof.both{background:#e3f2e6;color:#1f6b35}.pw-prof.now{background:#fdecc8;color:#8a5a00}.pw-prof.future{background:#e0ecfb;color:#1d4f91}.pw-prof.mid{background:var(--sky-soft);color:var(--muted)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pw-prof.both{background:#1d3a26;color:#8fd6a3} :root:not([data-theme="light"]) .pw-prof.now{background:#3d2f12;color:#f0c46a} :root:not([data-theme="light"]) .pw-prof.future{background:#1a2c45;color:#9cc2f2}}
+:root[data-theme="dark"] .pw-prof.both{background:#1d3a26;color:#8fd6a3} :root[data-theme="dark"] .pw-prof.now{background:#3d2f12;color:#f0c46a} :root[data-theme="dark"] .pw-prof.future{background:#1a2c45;color:#9cc2f2}
+.pw-prof.sm{display:none;margin-top:3px;font-size:.55rem;padding:1px 6px}
+@media (max-width:600px){.pw-tbl .pw-pc{display:none}.pw-prof.sm{display:inline-block}}
