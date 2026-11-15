@@ -27,7 +27,7 @@ window.FBPRosters = (function () {
     if (!hits.length) return '<div class="ro-res" role="listbox"><p class="ro-none">No rostered player matches. Free agents are on the Stats page.</p></div>';
     return `<div class="ro-res" role="listbox">${hits.map(({ r, f }, i) => {
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
-        : r.espn ? `style="background-image:url(${FBPU.headshot(r.espn)})"` : '';
+        : r.espn ? `class="tcr" style="background-image:url(${FBPU.headshot(r.espn)});${FBPU.tc(f)}"` : '';
       const st = r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : '';
       return `<a role="option" href="#now/team/${f}/${r.id}" data-ro-hit${i === 0 ? ' class="on"' : ''}><span class="ro-ph"><span ${img}></span></span>
         <span class="ro-rn"><b>${esc(r.name)}</b><small>${r.pos}${r.nfl ? ' · ' + esc(r.nfl) : ''} · ${$(r.sal)}${st}</small></span>
@@ -472,7 +472,7 @@ window.FBPRosters = (function () {
     const code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase();
     const a = r.espn && !def ? espn('a' + r.espn, EAPI + r.espn) : null, at = (a && a.athlete) || {};
     const photo = def && code ? `<span class="pp-ph pp-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${code}.png)"></span>`
-      : `<span class="pp-ph"${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}${r.espn ? ` style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,none)"` : ''}></span>`;
+      : `<span class="pp-ph${!medalOf(r) && r.espn && FBPU.tc(t.fid) ? ' tcr' : ''}"${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}${r.espn ? ` style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,none);${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : ''}></span>`;
     // FBP IR slot chip, unless his NFL injury chip already says IR
     const nflIR = r.espn && (injMap()[r.espn] || {}).status === 'Injured Reserve';
     const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' && !nflIR ? '<span class="ro-chip i" title="In an FBP IR slot">IR</span>' : '';
@@ -572,7 +572,7 @@ window.FBPRosters = (function () {
     const hons = Object.entries(F.honors || {}).map(([k, v]) => `<span class="ro-chip ${HONK[k] || 'good'}">${v > 1 ? v + '× ' : ''}${esc(k)}</span>`).join('');
     const now = honOf(r).filter(h => !/^(1st|2nd) Team$/.test(h[0])).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
     const rings = F.titles ? `<span class="ro-ring" title="${F.titles} FBP championship${F.titles > 1 ? 's' : ''} with this team">🏆${F.titles > 1 ? '×' + F.titles : ''}</span>` : '';
-    const img = F.espn ? `style="background-image:url(${FBPU.headshot(F.espn)})"` : '';
+    const img = F.espn ? `${medalOf(r) ? '' : 'class="tcr" '}style="background-image:url(${FBPU.headshot(F.espn)});${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : '';
     const rec = F.w != null ? `${F.w}-${F.l}${F.t ? '-' + F.t : ''} in his starts` : '';
     return `<section class="card ro-card ro-face2"><a class="ro-f2ph" href="#now/team/${t.fid}/${F.id}" aria-label="${esc(F.name)} Player Page"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></a>
       <div class="ro-f2m"><small>Face of the Franchise</small>
@@ -723,7 +723,7 @@ window.FBPRosters = (function () {
       const aws = aw ? `<span class="ro-aws">${aw}</span>` : '';   // award chips stack one above the other, beside the name
       // defenses get their NFL team's logo; players their ESPN headshot
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
-        : r.espn ? `style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,none)"` : '';
+        : r.espn ? `${medalOf(r) ? '' : 'class="tcr" '}style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,none);${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : '';
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>

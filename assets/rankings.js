@@ -72,7 +72,7 @@ window.FBPRankings = (function () {
     const row = p => {
       const t = tm(p.f), inj = D.inj[p.id], ic = inj && MINJ[inj.status];
       const tier = tiers && p.d && p.d[2] != null && p.d[2] !== lastT ? (lastT = p.d[2], `<tr class="rk-tier"><td colspan="14">Tier ${p.d[2]}</td></tr>`) : '';
-      const img = p.pos === 'DEF' ? `style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${String(FBPU.nflAbbr(p.nfl)).toLowerCase()}.png)" class="rk-def"` : p.e ? `style="background-image:url(${FBPU.headshot(p.e)})"` : '';
+      const img = p.pos === 'DEF' ? `style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${String(FBPU.nflAbbr(p.nfl)).toLowerCase()}.png)" class="rk-def"` : p.e ? `class="tcr" style="background-image:url(${FBPU.headshot(p.e)});${FBPU.tc(p.f)}"` : '';
       const name = esc(p.n), on = OP.has(p.id);
       const tvW = p.tv ? Math.round(p.tv / 100) : 0;
       return `${tier}<tr class="rk-p${p.f === hl && hl ? ' rk-me' : ''}${on ? ' on' : ''}" data-rk-p="${p.id}" aria-expanded="${on}">

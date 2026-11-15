@@ -3126,3 +3126,5 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .lv-compact .lv-phw .lv-phx .lv-flags,.lv-compact .lv-p.b .lv-phw .lv-phx .lv-flags{flex-direction:column;flex-wrap:nowrap}
 .lv-phx .lv-ball{font-size:.85rem;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 @media (max-width:560px){.lv-phx .lv-flags{flex-direction:column;flex-wrap:nowrap;max-width:none}.lv-phx .lv-ball{font-size:.8rem}}
+/* a plain player photo (no honor, heat or DNP treatment) wears a thin ring in his NFL team's color (--tc, set inline) */
+.tcr{outline:1.5px solid var(--tc);outline-offset:0}

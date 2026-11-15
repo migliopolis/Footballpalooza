@@ -36,11 +36,13 @@
   // a player's photo with his tier on it (used by the Scoreboard and Players)
   // All-FBP 1st or 2nd Team this season: a gold or silver photo (FBP.medal styles, site.css)
   const medal = id => { const L = (honors && honors.p[id]) || []; return L.some(c => c.l === '1st Team') ? ' m-gold' : L.some(c => c.l === '2nd Team') ? ' m-silver' : ''; };
-  function photoHtml(p, wk) {
+  function photoHtml(p, wk, fid) {
     const tr = tier(p, wk), ph = photo(p.id), out = dnp(p);
     // inactive: the photo goes grey with a red DNP rubber stamp across it
     const extra = out ? '<i class="dnp-st">DNP</i>' : tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
-    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}"${tr && tr.drop != null ? ` style="--drop:${tr.drop}%"` : ''}${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+    // a plain photo (no honor, heat or DNP treatment) gets a thin ring in his NFL team's color
+    const plain = ph && !tr && !out && !medal(p.id) && pos(p.id) !== 'DEF', ring = plain ? FBPU.tc(fid || p.fid) : '';
+    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}${ring ? ' tcr' : ''}"${tr && tr.drop != null ? ` style="--drop:${tr.drop}%"` : ring ? ` style="${ring.trim()}"` : ''}${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
   // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
   // A player who suited up and scored 0 still counts as having played.
@@ -577,7 +579,7 @@
         const st = state(p), ph = photo(p.id), inj = (dnp(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : null) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         // his photo opens his Player Page; its back arrow returns here, to this matchup
-        const img = `<a class="lv-pha" href="#now/team/${(cls === 'a' ? a : b).id}/${p.id}" title="Player Page" aria-label="Player Page">${photoHtml(p, shownW)}</a>`;
+        const img = `<a class="lv-pha" href="#now/team/${(cls === 'a' ? a : b).id}/${p.id}" title="Player Page" aria-label="Player Page">${photoHtml(p, shownW, (cls === 'a' ? a : b).id)}</a>`;
         // bottom row: position (only when it isn't the slot's, as in FLEX or the bench), his NFL team's logo, the game clock, then the opponent (vs at home, @ away) and the
         // weather, toward the middle of the matchup
         const g = gameOf(p.id), myT = TEAM[info(p.id).team] || info(p.id).team;

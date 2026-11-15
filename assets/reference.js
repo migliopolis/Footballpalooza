@@ -292,7 +292,8 @@ window.FBPRef = (() => {
     const ph = r => {
       const src = r.pos === 'DEF' ? (m ? m.nflLogo(r.nfl) : '') : (r.espn && m ? m.headshot(r.espn) : '');
       const fb = (X.teams[fr] || {}).logo || '';
-      return `<span class="aw-ph sm${r.pos === 'DEF' ? ' def' : ''}">${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${r.champs ? `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the title with this team in an All-FBP season">🏆</span>` : ''}</span>`;
+      const ring = r.pos !== 'DEF' && src ? FBPU.tc(fr) : '';
+      return `<span class="aw-ph sm${r.pos === 'DEF' ? ' def' : ''}${ring ? ' tcr' : ''}"${ring ? ` style="${ring.trim()}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${r.champs ? `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the title with this team in an All-FBP season">🏆</span>` : ''}</span>`;
     };
     const yr = y => `<span class="rf-afy t${y.tier}"${y.champ || y.mvp ? ` title="${[y.mvp ? 'FBP MVP' : '', y.champ ? 'won the title' : ''].filter(Boolean).join(', ')} that season"` : ''}>${y.year} · ${y.tier === 1 ? '1st' : '2nd'}${y.mvp ? ' · MVP' : ''}${y.champ ? ' 🏆' : ''}</span>`;
     const tally = r => [r.mvps ? `${r.mvps}× MVP` : '', r.first ? `${r.first}× 1st Team` : '', r.second ? `${r.second}× 2nd Team` : ''].filter(Boolean).map(t => `<span>${t}</span>`).join('');

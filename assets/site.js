@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0232';
+  const VERSION = '0.0233';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -58,7 +58,7 @@
     document.querySelectorAll('img').forEach(im => { if (im.getAttribute('src') === t.logo && !im.classList.contains('fbp-champ')) { im.classList.add('fbp-champ'); if (!im.title) im.title = `${c.year} FBP champion`; } });
   }
   new MutationObserver(() => { clearTimeout(champT); champT = setTimeout(champMark, 60); }).observe(document.documentElement, { childList: true, subtree: true });
-  window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), champ: () => champOf() });
+  window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), champ: () => champOf(), teams: () => state.teams });
   function chip(id, opts = {}) {
     const tm = state.teams[id] || {}, row = (state.now && state.now.standings.find(s => s.id === id)) || {};
     const name = opts.name || row.name || id;
@@ -874,7 +874,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0232
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0233
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
