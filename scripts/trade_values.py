@@ -13,8 +13,8 @@ Trade Value (TV, 1-9999): what he's worth in a trade between FBP owners. Talent 
              under control: this season on his value right now (now_values: half FBP points per game, half the
              FantasyPros rest-of-season rank), counted double because the playoff run is what a contender buys;
              next season half now, half dynasty; later seasons dynasty alone, except a player under his position's
-             peak age: two thirds now for every later year when he's producing above his rank (a breakout), and his
-             dynasty value when he isn't yet. So a player producing now on a deal
+             peak age: two thirds now for every later year when he's producing above his rank (a breakout); when
+             he isn't, his dynasty value as a rookie and half now, half dynasty after that. So a player producing now on a deal
              that runs past this season is worth a lot; an expiring one is worth what he does the rest of this year
   contract = (0.55 + 0.45 * control) * (1 + 0.3 * surplus), between about 0.4 and 1.3
     control: how much of him you get, the rest of this season plus each year left on his deal (each later year
@@ -143,6 +143,9 @@ def main():
     through = int(R.get('through') or 0)
     left = max(0, (14 - through + 2) / 17)   # rest of the regular season plus about two playoff weeks
     NOW = now_values(R)
+    MP = load(D('mfl', 'players.json'), {}) or {}
+    fi = (MP.get('fields') or []).index('draft_year') if 'draft_year' in (MP.get('fields') or []) else None
+    DY = {k: int(v[fi]) for k, v in (MP.get('players') or {}).items() if fi is not None and str(v[fi]).isdigit()}   # NFL draft year
     rows, raw = {}, {}
     for f, t in (R.get('teams') or {}).items():
         for r in t.get('rows', []):
@@ -155,10 +158,20 @@ def main():
             # half now, half dynasty; after that, dynasty alone
             nv = NOW.get(str(r['id']), pv)
             # a young player producing above his dynasty rank is breaking out: every later year of his deal leans two
-            # thirds on what he's doing now (never below his dynasty value), since the long-term consensus is slow to
-            # catch up, and a young player not producing yet keeps his dynasty value for those years
+            # thirds on what he's doing now, since the long-term consensus is slow to catch up. A rookie not producing
+            # yet keeps his dynasty value for those years; after his rookie year, falling short counts half
             young = age < PEAK.get(pos, 28)
-            pvs = lambda k: nv if k < 0 else max(pv, (2 * nv + pv) / 3) if young else (nv + pv) / 2 if k == 0 else pv
+            rookie = DY.get(str(r['id'])) == season
+            def pvs(k):
+                if k < 0:
+                    return nv
+                if young and nv >= pv:
+                    return (2 * nv + pv) / 3      # breaking out
+                if young and rookie:
+                    return pv                     # a rookie not producing yet keeps his dynasty value
+                if young:
+                    return (nv + pv) / 2          # past his rookie year, falling short counts against the years ahead
+                return (nv + pv) / 2 if k == 0 else pv
             w0 = left * NOW_W
             val, cost, ctl = market(nv) * left, 0.0, left
             tw, tsum = w0, w0 * talent_of(nv)
