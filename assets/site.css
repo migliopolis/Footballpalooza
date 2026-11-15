@@ -1453,6 +1453,8 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .pl-tag{font:700 .58rem/1 var(--body);padding:2px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
 .pl-tag.nuke{background:linear-gradient(90deg,#e8390b,#ff9a1f);color:#fff}
 .pl-tag.hot{background:#ffe1b8;color:#8a3a00}
+.pl-tag.cold{background:#d6ecff;color:#0b4f8a}
+.pl-tag.bust{background:linear-gradient(90deg,#3d8fd6,#8fcaf5);color:#fff}
 .pl-r.t-nuke .pl-pts b{color:#e04a0c}
 .pl-more{margin:6px 0 2px;font:inherit;font-size:.8rem;background:none;border:0;color:var(--accent,#2a7fbf);cursor:pointer;padding:4px 0}
 @media (max-width:520px){.pl-grid{grid-template-columns:1fr}.pl-r{gap:8px}}

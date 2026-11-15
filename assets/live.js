@@ -29,6 +29,8 @@
   const OUT = { O: 1, IR: 1, SUS: 1, PUP: 1 };
   const projOf = (id, wk) => { const w = proj && proj[String(wk)]; if (!w || w[id] == null) return null;   // null: no projection
     const t = injTag(id); return t && OUT[t.t] ? 0 : w[id]; };
+  // MFL's projection as it stood, even if he's since been ruled out: what his day is judged against
+  const projRaw = (id, wk) => { const w = proj && proj[String(wk)]; return w && w[id] != null ? w[id] : null; };
   // how a player is doing, shown on his photo. Top down: nuclear (over his position's line), hot (well ahead of his
   // projection), normal, cold (well behind it), bust (a big projection that collapsed), sink (0 points, the photo slides out as the game runs) and wp (0 at the final: gone).
   // Only players whose NFL game has kicked off; byes and players yet to play stay normal.
@@ -55,12 +57,14 @@
     if (/ruled out|(won'?t|will not|not expected to|unlikely to) return/i.test(i.note || '')) return true;
     return /^(Out|Injured Reserve)$/.test(i.status) && !!i.date && !!g.date && Date.parse(i.date) >= Date.parse(g.date); };
   // the projection to show and count: what he has once he's ruled out
-  const projNow = (p, wk) => ruledOut(p) ? +p.score || 0 : projOf(p.id, wk);
+  const projNow = (p, wk) => { if (ruledOut(p)) return +p.score || 0; const g = gameOf(p.id);
+    return g && g.state === 'post' && !dnp(p) ? projRaw(p.id, wk) : projOf(p.id, wk); };
+  const PL_TAG = { nuke: 'Nuclear', hot: 'Hot', cold: 'Cold', bust: 'Bust' };
   function tier(p, wk) {
     const g = gameOf(p.id), st = state(p);
     if (dnp(p)) return null;
     if (!(g ? g.state !== 'pre' : st === 'live') || p.score == null || p.score === '') return null;
-    const sc = +p.score || 0, pj = projOf(p.id, wk) || 0, fin = (g ? g.state === 'post' : st === 'final') || ruledOut(p);
+    const sc = +p.score || 0, pj = projRaw(p.id, wk) || 0, fin = (g ? g.state === 'post' : st === 'final') || ruledOut(p);
     const secs = +p.gameSecondsRemaining || 0, done = fin ? 1 : Math.max(0, Math.min(1, 1 - secs / 3600));
     const pace = done > 0 ? sc / done : 0;
     const line = NUKE[pos(p.id)];
@@ -196,6 +200,13 @@
       return Promise.all(want.map(id => fetch(ESPN + 'summary?event=' + id).then(r => r.ok ? r.json() : null).then(j => {
         if (!j || !j.boxscore) return;
         stats['ev' + id] = 1;
+        // hurt on a play: ESPN's play-by-play says "NE-A.Brown was injured during the play", then later "Injury Update:
+        // NE-A.Brown has returned to the game" if he comes back. Whoever is still hurt gets a HURT chip.
+        const hurt = {}, dr = j.drives || {};
+        (dr.previous || []).concat(dr.current ? [dr.current] : []).forEach(d => (d.plays || []).forEach(pl => { const t = pl.text || '';
+          t.replace(/\b([A-Z]{2,3})-([A-Z])\.\s?([A-Za-z.' -]+?) was injured during the play/g, (m, tm, f, l) => { hurt[hurtKey(tm, f, l)] = 1; return m; });
+          t.replace(/Injury Update:\s*([A-Z]{2,3})-([A-Z])\.\s?([A-Za-z.' -]+?) has returned/g, (m, tm, f, l) => { delete hurt[hurtKey(tm, f, l)]; return m; }); }));
+        stats['hurt' + id] = hurt;
         // a defense's day comes from the other team's numbers: sacks taken, interceptions thrown, fumbles lost
         const T = (j.boxscore.teams || []).map(t => ({ ab: t.team.abbreviation, v: Object.fromEntries((t.statistics || []).reverse().map(x => [x.name, x.displayValue])) }));
         T.forEach((t, i) => { const o = T[1 - i]; if (!o) return;
@@ -229,6 +240,12 @@
   }
   const injTag = id => { if (view) return null; const i = injuries && injuries[espnId(id)]; const t = i && INJ[i.status]; return t ? { t, title: `${i.status}${i.note ? ': ' + i.note : ''}` } : null; };
   const espnId = id => ((links && links[id]) || [])[0];
+  // play-by-play names are "A.St. Brown": team, first initial, last name; match on letters only, suffixes dropped
+  const hurtKey = (tm, f, l) => `${tm}-${f}-${String(l).toLowerCase().replace(/\b(jr|sr|ii|iii|iv|v)\b\.?/g, '').replace(/[^a-z]/g, '')}`;
+  const hurtTag = p => { if (view || pos(p.id) === 'DEF') return null; const g = gameOf(p.id); if (!g || g.state !== 'in') return null;
+    const H = EW().stats['hurt' + g.id]; if (!H) return null;
+    const [last, first] = (info(p.id).name || '').split(',').map(s => s.trim()); if (!last || !first) return null;
+    return H[hurtKey(TEAM[info(p.id).team] || info(p.id).team, first[0].toUpperCase(), last)] ? { t: 'HURT', title: 'Hurt on a play and not back yet (ESPN play-by-play)' } : null; };
   const photo = id => {
     if (pos(id) === 'DEF') { const t = TEAM[info(id).team] || info(id).team || ''; return t ? `https://a.espncdn.com/i/teamlogos/nfl/500/${t.toLowerCase()}.png` : ''; }
     return espnId(id) ? FBPU.headshot(espnId(id)) : '';
@@ -586,7 +603,7 @@
       const cell = (p, cls, slot) => {
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         // FBP's own IR counts even when ESPN no longer lists the injury
-        const st = state(p), ph = photo(p.id), inj = (dnp(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : null) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
+        const st = state(p), ph = photo(p.id), inj = (dnp(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : null) || (ruledOut(p) ? null : hurtTag(p)) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         // his photo opens his Player Page; its back arrow returns here, to this matchup
         const img = `<a class="lv-pha" href="#now/team/${(cls === 'a' ? a : b).id}/${p.id}" title="Player Page" aria-label="Player Page">${photoHtml(p, shownW, (cls === 'a' ? a : b).id)}</a>`;
@@ -715,7 +732,7 @@
       return `<section class="card pl-sec"><h2 class="pl-h">${title}</h2><ol class="pl-list">${show.map((p, i) => {
         const tr = tier(p, wk), pj = projNow(p, wk), st = state(p);
         return `<li class="pl-r${tr ? ' t-' + tr.k : ''}${st === 'final' ? ' fin' : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
-          <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && (tr.k === 'nuke' || tr.k === 'hot') ? `<span class="pl-tag ${tr.k}">${tr.k === 'nuke' ? 'Nuclear' : 'Hot'}</span>` : ''}</span>
+          <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && PL_TAG[tr.k] ? `<span class="pl-tag ${tr.k}">${PL_TAG[tr.k]}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
             <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${slot(p.status)}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
           <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${p.est ? '<small class="pl-est" title="Estimated from ESPN’s box score; MFL posts official points once his game is final">est.</small>' : ''}${pj != null ? `<small>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
