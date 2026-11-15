@@ -63,12 +63,12 @@ jobs:
       - name: Role archetypes from ESPN game logs (Rosters)
         continue-on-error: true
         run: python scripts/roles.py
-      - name: FBP Power Score (League Now > Power Rankings)
-        continue-on-error: true
-        run: python scripts/power.py
       - name: Stats (League Now > Stats)
         continue-on-error: true
         run: python scripts/stats.py
+      - name: Power Rankings, Now and Future, with projected keepers (Beta > Power Rankings; after Stats, which the keeper model reads)
+        continue-on-error: true
+        run: python scripts/power.py
       - name: NFL box-score stats for Stats (nflverse)
         continue-on-error: true
         run: python scripts/refresh_nflverse.py
