@@ -26,7 +26,7 @@ GOOD, KEEP = 80, 75                         # OVR: a weekly starter; worth keepi
 NEED = {'QB': 1, 'RB': 2, 'WR': 2, 'TE': 1} # 2026 lineup (Flex aside)
 NEED27 = {'QB': 2, 'RB': 2, 'WR': 2, 'TE': 1}   # 2027 adds the SuperFlex, so a second QB becomes a starter for most teams
 SELL_TV = 750                               # Trade Value worth getting something back for
-PEAK = {'QB': 31, 'RB': 26, 'WR': 28, 'TE': 29}   # peak ages, as in trade_values.py
+from fbp_common import PEAK   # peak ages, shared with Trade Value
 ORD = {1: '1st', 2: '2nd', 3: '3rd', 4: '4th'}
 
 

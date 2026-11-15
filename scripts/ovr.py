@@ -22,8 +22,7 @@ load = lambda p, d=None: json.load(open(p, encoding='utf-8')) if os.path.exists(
 TOP = {'QB': 24, 'RB': 36, 'WR': 48, 'TE': 18}
 
 
-def pv_of(rank):
-    return 9999 * math.exp(-((max(rank, 1) - 1) / 95) ** 0.8)
+from fbp_common import pv_of, dynasty_scale, ESPN_TEAM
 
 
 def finish(o):
@@ -45,7 +44,7 @@ def main():
     prev = load(D('ovr.json'), {}) or {}
     dyn_hist = prev.get('dyn') or {}
 
-    F_now = {pid: round(58 + 41 * (pv_of(v[0]) / 9999) ** 0.9, 1) for pid, v in dyn_ecr.items() if v and v[0]}
+    F_now = {pid: round(dynasty_scale(pv_of(v[0])), 1) for pid, v in dyn_ecr.items() if v and v[0]}
     ids = {pid for pid in set(F_now) | {p for w in md.values() for p in w} | {r for r in rows if rows[r].get('p') in TOP}
            if pos_of(pid) in TOP}
 
@@ -105,7 +104,7 @@ def main():
         if ', ' in n:
             last, first = n.split(', ', 1); n = f'{first} {last}'
         r = rows.get(pid) or {}
-        nfl = {'GBP': 'GB', 'KCC': 'KC', 'NEP': 'NE', 'NOS': 'NO', 'SFO': 'SF', 'TBB': 'TB', 'LVR': 'LV', 'JAC': 'JAX'}.get(r.get('t') or '', r.get('t') or '')
+        nfl = ESPN_TEAM.get(r.get('t') or '', r.get('t') or '')
         return {'id': pid, 'name': n, 'pos': pos_of(pid), 'nfl': nfl, 'espn': r.get('e') or '', 'team': fbp.get(pid, '')}
     mv = []
     for pid, v in out.items():

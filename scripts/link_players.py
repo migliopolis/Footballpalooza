@@ -71,7 +71,7 @@ def mfl_display(name):
     return name
 
 
-ESPN_TEAM = {'GBP': 'GB', 'JAC': 'JAX', 'KCC': 'KC', 'LVR': 'LV', 'NEP': 'NE', 'NOS': 'NO', 'SFO': 'SF', 'TBB': 'TB', 'WAS': 'WSH'}
+from fbp_common import ESPN_TEAM
 POS_OK = {'QB': {'QB'}, 'RB': {'RB', 'FB'}, 'WR': {'WR'}, 'TE': {'TE'}}
 
 

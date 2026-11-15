@@ -92,7 +92,8 @@ def keep_chance(r, season):
     w = [x for x in (st_.get('w') or []) if x]
     nxt = float((r.get('fut') or [0])[0] or 0)
     d = (DYN.get(str(r['id'])) or [400])[0] or 400
-    pv = 9999 * math.exp(-((d - 1) / 95) ** 0.8); mk = 80 * (pv / 9999) ** 1.8
+    from fbp_common import pv_of, market
+    mk = market(pv_of(d))
     dy = _DY.get(str(r['id']))
     f = [math.log(min(_RANK.get(str(r['id']), 999), 150)), sum(w) / len(w) if w else 0, (st_.get('s') or '').count('1'),
          nxt, math.log1p(nxt), nxt <= 5, (r.get('acq') or '').startswith('Draft'), len(r.get('fut') or []),

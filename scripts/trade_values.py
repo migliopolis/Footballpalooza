@@ -49,18 +49,11 @@ def load(p, d=None):
         return d
 
 
-PEAK = {'QB': 31, 'RB': 26, 'WR': 28, 'TE': 29, 'DEF': 99}
+from fbp_common import PEAK as _PEAK, pv_of, market, dynasty_scale
+PEAK = dict(_PEAK, DEF=99)
 DROP = {'QB': .05, 'RB': .08, 'WR': .06, 'TE': .06, 'DEF': 0}
 TOP = {'QB': 2, 'RB': 4, 'WR': 5, 'TE': 2}
 ORD = {1: '1st', 2: '2nd', 3: '3rd', 4: '4th'}
-
-
-def pv_of(rank):
-    return 9999 * math.exp(-((max(rank, 1) - 1) / 95) ** 0.8)
-
-
-def market(pv):
-    return 80 * (pv / 9999) ** 1.8
 
 
 def contract_tv(pv, val, cost, ctl, talent=None):
@@ -217,7 +210,7 @@ def main():
     for k, r in rows.items():
         r['o'] = (OV.get(k) or {}).get('o')
     for p in picks:
-        p['o'] = min(85, round(58 + 41 * (p['pv'] / 9999) ** 0.9 - 2))
+        p['o'] = min(85, round(dynasty_scale(p['pv']) - 2))
     top = max(raw.values()) if raw else 1
     scale = lambda v: max(1, round(9999 * v / top)) if v > 0 else 1
     for k, r in rows.items():
