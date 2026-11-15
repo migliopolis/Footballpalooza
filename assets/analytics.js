@@ -14,7 +14,7 @@ window.FBPAnalytics = (function () {
   function load() {
     if (A || loading) return;
     loading = true;
-    fetch('data/analytics.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
+    FBPU.json('data/analytics.json').then(j => j == null ? Promise.reject() : j)
       .then(j => { A = j; loading = false; if (X && X.rerender) X.rerender(); })
       .catch(() => { failed = true; loading = false; if (X && X.rerender) X.rerender(); });
   }
@@ -91,9 +91,7 @@ window.FBPAnalytics = (function () {
     const oNow = f => T[f].odds[T[f].odds.length - 1];
     const oChg = f => (oNow(f) || 0) - (T[f].odds[0] || 0);
     const cl = f => T[f].close, clPct = f => { const c = cl(f), n = c[0] + c[1] + c[2]; return n ? (c[0] + c[2] / 2) / n : null; };
-
-    const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
-    const nflLg = t => t && t !== 'FA' ? `<img class="an-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${esc(t)}" title="${esc(t)}" loading="lazy">` : '<span class="an-pos">FA</span>';
+    const nflLg = t => t && t !== 'FA' ? `<img class="an-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${esc(t)}" title="${esc(t)}" loading="lazy">` : '<span class="an-pos">FA</span>';
     const HT = A.heatTeams || {}, HP = A.heatPts || {}, HW = A.heatWeeks || [];
     const HK = [['nuke', 'Nuc'], ['hot', 'Hot'], ['cold', 'Cold'], ['bust', 'Bust'], ['wp', 'WP']];
     const hwTxt = HW.length ? `${HW[0]}–${HW[HW.length - 1]}` : '';

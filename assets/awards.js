@@ -9,15 +9,15 @@ window.FBPAwards = (() => {
   const past = {}, pastLoading = {}, pastFailed = {};  // past seasons load on demand from data/awards/<year>.json
   const loadPast = (y, rerender) => {
     if (past[y] || pastLoading[y]) return; pastLoading[y] = true;
-    fetch(`data/awards/${y}.json`, { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+    FBPU.json(`data/awards/${y}.json`).then(j => { if (j == null) throw 0; return j; })
       .then(d => { past[y] = d; pastLoading[y] = false; rerender(); }).catch(() => { pastFailed[y] = true; pastLoading[y] = false; rerender(); });
   };
   const esc = s => X.esc(s == null ? '' : s);
   const load = rerender => {
     if (A || loading) return; loading = true;
-    fetch('data/awards.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+    FBPU.json('data/awards.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => { A = d; rerender(); }).catch(() => { failed = true; rerender(); });
-    fetch('data/ovr.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(d => { MV = d && d.movers; if (A) rerender(); }).catch(() => {});
+    FBPU.json('data/ovr.json').then(d => { MV = d && d.movers; if (A) rerender(); }).catch(() => {});
   };
   const tlogo = (id, cls = '') => { const t = X.teams[id]; return t && t.logo ? `<img class="${cls}" src="${t.logo}" alt="" loading="lazy">` : ''; };
   const tname = id => X.nameOf(id);
@@ -66,7 +66,7 @@ window.FBPAwards = (() => {
   }
   // one award: the winner big, the next two below
   // MFL pick codes: FP_<team>_<year>_<round> is a future pick; DP_<round>_<pick> (zero-based) is this year's rookie draft
-  const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || 'th');
+  const ord = FBPU.ord;
   function pickName(k) {
     let m = /^FP_(\d+)_(\d+)_(\d+)$/.exec(k);
     if (m) return `${m[2]} ${ord(+m[3])}-round pick (${(X.teams[m[1]] || {}).abbr || m[1]})`;

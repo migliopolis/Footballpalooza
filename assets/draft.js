@@ -117,7 +117,7 @@
   // projected landing spot: the NFL team holding the overall pick a rookie is projected to go at
   // (Tankathon's projected 2027 order with traded picks; logos from ESPN). Optional extras.
   function loadLanding(rerender) {
-    Promise.all(['data/nfl-draft-order.json', 'data/espn/teams.json', 'data/nfl-landing.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)))
+    Promise.all(['data/nfl-draft-order.json', 'data/espn/teams.json', 'data/nfl-landing.json'].map(u => FBPU.json(u).catch(() => null)))
       .then(([o, t, l]) => { S.nflOrder = o; S.nflTeams = t || {}; S.nflLand = l; if (o || l) rerender(); });
   }
   // Landing spot: NFL Mock Draft Database first (analysts' mocks, so team needs count: a team that just drafted a

@@ -30,7 +30,7 @@ window.FBPDraftHub = (() => {
   function loadEspn(rerender) {
     if (H.espn) return;
     H.espn = {};
-    fetch('data/rookies-espn.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { H.espn = j.players || {}; H.schools = j.schools || {}; rerender(); }).catch(() => {});
+    FBPU.json('data/rookies-espn.json').then(j => j == null ? {} : j).then(j => { H.espn = j.players || {}; H.schools = j.schools || {}; rerender(); }).catch(() => {});
   }
   const EA = 'https://site.web.api.espn.com/apis/common/v3/sports/football/college-football/athletes/';
   function cf(key, url) {
@@ -87,7 +87,7 @@ window.FBPDraftHub = (() => {
   function loadAdp(rerender) {
     if (H.adp) return;
     H.adp = {};
-    fetch('rookie-pricer/players.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null)
+    FBPU.json('rookie-pricer/players.json')
       .then(d => { (d && d.players || []).forEach(p => { H.adp[p.name] = p.adp; }); rerender(); }).catch(() => {});
   }
   const landing = p => {
@@ -205,7 +205,7 @@ window.FBPDraftHub = (() => {
   /* ---------- Draft Home: the rookie class primer ---------- */
   let DH = null, dhLoading = false;
   function pageClass() {
-    if (!DH && !dhLoading) { dhLoading = true; fetch('data/draft-home.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { DH = j || {}; X.rerender(); }).catch(() => { DH = {}; X.rerender(); }); }
+    if (!DH && !dhLoading) { dhLoading = true; FBPU.json('data/draft-home.json').then(j => { DH = j || {}; X.rerender(); }).catch(() => { DH = {}; X.rerender(); }); }
     loadEspn(X.rerender);
     if (!DH) return head('') + '<p class="loading">Loading the class preview…</p>';
     const players = board(), byName = {}; players.forEach(p => { byName[p.name] = p; });

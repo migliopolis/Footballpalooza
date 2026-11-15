@@ -16,8 +16,8 @@ window.FBPBeta = (function () {
   function load() {
     if (D || loading || failed) return;
     loading = true;
-    const opt = u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
-    Promise.all([fetch('data/beta-cards.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()),
+    const opt = u => FBPU.json(u).catch(() => null);
+    Promise.all([FBPU.json('data/beta-cards.json').then(j => j == null ? Promise.reject() : j),
       opt('data/espn/teams.json'), opt('data/awards.json'), opt('data/stats.json'), opt('data/ovr.json')])
       .then(([d, t, a, st, ov]) => { D = d; T = t || {}; AW = a; ST = st;
         // the card's big number is the FBP OVR (data/ovr.json), the same rating shown everywhere else
@@ -38,7 +38,7 @@ window.FBPBeta = (function () {
   const tier = o => o >= 90 ? 'holo' : o >= 80 ? 'gold' : o >= 70 ? 'silver' : 'bronze';
   const KEY = { RB: ['SPD', 'ELU', 'REC', 'USG'], WR: ['SPD', 'SEP', 'HND', 'BIG'], TE: ['SPD', 'SEP', 'YAC', 'HND'], QB: ['ACC', 'ARM', 'RUN', 'TD'] };
   const val = (c, k) => k in (c.ph || {}) ? c.ph[k] : (c.sk || {})[k];
-  const head = e => `https://a.espncdn.com/i/headshots/nfl/players/full/${e}.png`;
+  const head = FBPU.headshot;
   const ht = h => { const i = +h; return i ? `${Math.floor(i / 12)}'${i % 12}"` : '–'; };
   const n = v => v == null ? '–' : Math.round(v);
   const fbpTeam = c => { const id = fid[c.id]; return id && X && X.teams ? Object.assign({ id }, X.teams[id] || {}) : null; };

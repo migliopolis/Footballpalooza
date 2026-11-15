@@ -14,7 +14,7 @@ window.FBPTrade = (function () {
   function load() {
     if (D || loading || failed) return;
     loading = true;
-    fetch('data/trading-floor.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
+    FBPU.json('data/trading-floor.json').then(j => j == null ? Promise.reject() : j)
       .then(d => { D = d; loading = false; redraw(); }, () => { failed = true; loading = false; redraw(); });
   }
 
@@ -31,17 +31,16 @@ window.FBPTrade = (function () {
     return `${money(p.sal)}${p.cy ? ` (${esc(p.cy)})` : ''} → <b>${money(p.n27)}</b> in 2027`;
   }
   // NFL team logo (MFL codes to ESPN's)
-  const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
-  const nflLg = t => t && t !== 'FA' ? `<img class="tf-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${esc(t)}" title="${esc(t)}" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(t)} · '))">` : '';
+  const nflLg = t => t && t !== 'FA' ? `<img class="tf-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${esc(t)}" title="${esc(t)}" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(t)} · '))">` : '';
   function prow(p, extra) {
     const href = `#now/team/${p.f}/${p.id}`;
-    return `<li class="tf-p"><span class="tf-lead">${p.e ? `<span class="tf-ph" style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(p.e)}.png)"></span>` : ''}<span class="tf-tv" title="Trade Value"><small>Trade</small>${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>Value</small></span></span>
+    return `<li class="tf-p"><span class="tf-lead">${p.e ? `<span class="tf-ph" style="background-image:url(${FBPU.headshot(p.e)})"></span>` : ''}<span class="tf-tv" title="Trade Value"><small>Trade</small>${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>Value</small></span></span>
       <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''}</span>
       <div class="tf-sub tf-bio">${nflLg(p.nfl)}${[p.age ? 'age ' + p.age : '', p.ppg != null ? p.ppg + ' ppg' : ''].filter(Boolean).join(' · ')}</div>
       <div class="tf-sub tf-tm">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>
       <div class="tf-c">${contract(p)}${extra ? ' · ' + extra : ''}</div></div></li>`;
   }
-  const ordN = n => n == null ? '' : n + ([, 'st', 'nd', 'rd'][n % 100 > 10 && n % 100 < 14 ? 0 : n % 10] || 'th');
+  const ordN = FBPU.ord;
   const posOk = p => pos === 'ALL' || p.p === pos;
   const contOk = p => withCont || !(D.teams[p.f] || {}).seed;   // teams in a playoff spot are left out unless asked for
   const seg = (attr, cur, opts) => `<div class="seg tf-seg">${opts.map(([k, l]) => `<button type="button" data-${attr}="${k}" aria-pressed="${k === cur}">${l}</button>`).join('')}</div>`;
@@ -70,7 +69,7 @@ window.FBPTrade = (function () {
     const T = D.targets;
     const good = T.goodOnNonContenders.filter(posOk);
     const box = (T.outsideBox || []).filter(posOk);
-    const ord = n => n + ([, 'st', 'nd', 'rd'][n % 100 > 10 && n % 100 < 14 ? 0 : n % 10] || 'th');
+    const ord = FBPU.ord;
     const whyTxt = (p, w) => w.k === 'depth' ? `<span class="tf-why-c">Depth</span> his team’s ${ord(w.rank)}-best ${p.p}`
       : w.k === 'qb' ? `<span class="tf-why-c">QB limit</span> one of ${w.n} QBs for 2 keeper spots`
       : `<span class="tf-why-c">Cap</span> doesn’t fit the 2027 budget, ${money(w.over)} over`;
@@ -148,7 +147,7 @@ window.FBPTrade = (function () {
   // the player is released or not kept. Totals there already include playoff points.
   let TT = null, ttAsked = false;
   const loadTrees = () => { if (ttAsked) return; ttAsked = true;
-    fetch('data/trade-trees.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { TT = (j && j.trees) || {}; redraw(); }).catch(() => { TT = {}; }); };
+    FBPU.json('data/trade-trees.json').then(j => { TT = (j && j.trees) || {}; redraw(); }).catch(() => { TT = {}; }); };
   const tree = (t, s) => TT && TT[`${t.ts}-${t.a}-${t.b}`] ? TT[`${t.ts}-${t.a}-${t.b}`][s] : null;
   const all = o => o ? (o.total || 0) + (o.po || 0) : 0;
   const tot = (t, s) => { const tr = tree(t, s); return tr ? tr.total : all(s === 'a' ? t.outA : t.outB); };

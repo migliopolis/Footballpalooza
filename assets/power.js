@@ -12,7 +12,7 @@ window.FBPPower = (function () {
   function load() {
     if (P || loading) return;
     loading = true;
-    fetch('data/power.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
+    FBPU.json('data/power.json').then(j => j == null ? Promise.reject() : j)
       .then(j => { P = j; loading = false; redraw(); }).catch(() => { failed = true; loading = false; redraw(); });
   }
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
@@ -98,7 +98,7 @@ window.FBPPower = (function () {
     return `<section><h2 class="sec">Power Rankings <small>now and next season, side by side</small></h2>
       <p class="pw-beta"><b>Beta</b> Two rankings, not one score: <b>Now</b> is who’s built to win this season, <b>Future</b> is who’s set up for ${P.next}. A contender spending its future and a rebuilder losing now are both doing their job, so neither is marked down for it.</p>
       <div class="pw-top"><div class="card pw-cc">${chart(T, ctx)}</div>
-        <div class="pw-seg seg" role="tablist">${[['now', 'Rank by Now'], ['fut', 'Rank by Future']].map(([k, l]) => `<button type="button" role="tab" aria-selected="${sortBy === k}" data-pw-sort="${k}">${l}</button>`).join('')}</div></div>
+        <div class="pw-seg seg" role="group">${[['now', 'Rank by Now'], ['fut', 'Rank by Future']].map(([k, l]) => `<button type="button" aria-pressed="${sortBy === k}" data-pw-sort="${k}">${l}</button>`).join('')}</div></div>
       <div class="card tbl-wrap"><table class="tbl pw-tbl"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th>
         <th title="This season">Now</th><th title="Next season: keepers, cash, picks">Future</th><th class="pw-pc">Profile</th></tr></thead>
         <tbody>${rows}</tbody></table></div>

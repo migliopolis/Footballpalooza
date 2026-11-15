@@ -11,7 +11,7 @@
 (function () {
   const LIVE_URL = 'https://fbp-live.pmiglio-gchat.workers.dev/';
   const ESPN = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/';
-  const TEAM = { GBP: 'GB', KCC: 'KC', NEP: 'NE', NOS: 'NO', SFO: 'SF', TBB: 'TB', LVR: 'LV', JAC: 'JAX', WAS: 'WSH', LA: 'LAR' };
+  const TEAM = FBPU.ESPN;   // MFL team codes that differ from ESPN's (assets/common.js)
   const SCREENS = 3;
   let X = null, plan = null, failed = false, loading = false, players = null, links = null;
   let pick = '';   // matchup shown: '' = all, else "a-b"

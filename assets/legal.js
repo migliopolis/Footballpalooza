@@ -5,15 +5,14 @@
 window.FBPLegal = (function () {
   let L = null, R = null, failed = false, loading = false, X = null, show = 'open';
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
-  const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar', LAR: 'lar' };
-  const nflLogo = t => t && t !== 'FA' ? `<img class="lg-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${esc(t)}" loading="lazy">` : '<span class="lg-fa">Free agent</span>';
-  const head = e => `https://a.espncdn.com/i/headshots/nfl/players/full/${e}.png`;
+  const nflLogo = t => t && t !== 'FA' ? `<img class="lg-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${esc(t)}" loading="lazy">` : '<span class="lg-fa">Free agent</span>';
+  const head = FBPU.headshot;
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   function load() {
     if (L || loading || failed) return;
     loading = true;
-    Promise.all([fetch('data/legal.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()),
-      fetch('data/rosters.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)])
+    Promise.all([FBPU.json('data/legal.json').then(j => j == null ? Promise.reject() : j),
+      FBPU.json('data/rosters.json').catch(() => null)])
       .then(([l, r]) => { L = l; R = r; loading = false; redraw(); }, () => { failed = true; loading = false; redraw(); });
   }
   // which FBP team has him now
@@ -51,8 +50,8 @@ window.FBPLegal = (function () {
     return `<section class="lg-page">
       <h2 class="sec">The Docket <small>Updated ${esc(L.updated)}</small></h2>
       <p class="lg-intro">Fantasy-relevant players with legal trouble: where each case stands, what the charges mean, and what’s at stake in court and with the NFL. Each one carries a statement from the FBP team that rosters him, for the Press Box. Allegations in lawsuits and police reports are just that until a court says otherwise.</p>
-      <div class="seg lg-seg" role="tablist">${[['open', `Active (${open.length})`], ['closed', `Closed (${closed.length})`]].map(([k, l]) =>
-        `<button type="button" role="tab" data-lg="${k}" aria-selected="${show === k}">${l}</button>`).join('')}</div>
+      <div class="seg lg-seg" role="group">${[['open', `Active (${open.length})`], ['closed', `Closed (${closed.length})`]].map(([k, l]) =>
+        `<button type="button" data-lg="${k}" aria-pressed="${show === k}">${l}</button>`).join('')}</div>
       <div class="lg-list">${list.map(card).join('') || '<p class="lg-none">Nothing here.</p>'}</div>
       <p class="rf-foot">Written from the news reports linked on each case; sentences and penalties describe what the law allows, not predictions. Team statements are FBP front-office statements for the Press Box, not from the NFL clubs. Headshots: ESPN.</p>
     </section>`;

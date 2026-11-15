@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0225';
+  const VERSION = '0.0226';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -75,16 +75,14 @@
        FBP.media.name('15253').then(n => ...)             // MFL player id -> ESPN-style display name
        FBP.media.nflLogo('KCC')                           // MFL team code -> logo URL
        FBP.data('espn/injuries').then(list => ...)        // any saved file under data/            */
-  const MFL_TO_ESPN = { GBP: 'GB', JAC: 'JAX', KCC: 'KC', LVR: 'LV', NEP: 'NE', NOS: 'NO', SFO: 'SF', TBB: 'TB', WAS: 'WSH' };
-  const dataCache = {};
-  const loadData = name => (dataCache[name] = dataCache[name] ||
-    fetch(`data/${name}.json`, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error(name); return r.json(); }));
+  // shared helpers live in assets/common.js (FBPU); FBP.media and FBP.data stay as the documented names
+  const loadData = name => FBPU.json(`data/${name}.json`).then(j => { if (j == null) throw new Error(name); return j; });
   let playersById = null;
   const displayName = n => { n = (n || '').trim(); const i = n.indexOf(','); return i > 0 ? `${n.slice(i + 1).trim()} ${n.slice(0, i).trim()}` : n; };
   const media = {
-    headshot: espnId => espnId ? `https://a.espncdn.com/i/headshots/nfl/players/full/${espnId}.png` : '',
-    nflAbbr: team => MFL_TO_ESPN[team] || team,
-    nflLogo: (team, dark) => team ? `https://a.espncdn.com/i/teamlogos/nfl/500${dark ? '-dark' : ''}/${media.nflAbbr(team).toLowerCase()}.png` : '',
+    headshot: FBPU.headshot,
+    nflAbbr: FBPU.nflAbbr,
+    nflLogo: FBPU.nflLogo,
     async player(mflId) {   // MFL player id -> {name, position, team, espn_id, draft_year, ...}
       if (!playersById) {
         const d = await loadData('mfl/players');
@@ -193,7 +191,7 @@
   let CL = null, clLoading = false;
   function changelog() {
     if (!CL) {
-      if (!clLoading) { clLoading = true; fetch('data/changelog.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : { entries: [] })
+      if (!clLoading) { clLoading = true; FBPU.json('data/changelog.json').then(j => j == null ? { entries: [] } : j)
         .then(j => { CL = j; if (location.hash === '#settings') route(); }).catch(() => { CL = { entries: [] }; }); }
       return '';
     }
@@ -247,7 +245,7 @@
       return was > cur ? `<span class="dl up" title="Up from ${was} in week ${pw}">▲${was - cur}</span>` : `<span class="dl dn" title="Down from ${was} in week ${pw}">▼${cur - was}</span>`;
     };
     const oddsKey = { 'Make playoffs': 'playoff', 'First-round bye': 'bye', '1 seed': 'seed1' };
-    const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
+    const ord = FBPU.ord;
     function oddsPanel(id, seed) {
       const o = O && O[id];
       if (!o) return `<div class="odds"><p class="onote">Playoff odds appear once the season has games left to play.</p></div>`;
@@ -456,7 +454,7 @@
   function loadColumns() {
     if (state.columns || state.columnsLoading) return;
     state.columnsLoading = true;
-    fetch('data/columns.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)
+    FBPU.json('data/columns.json').catch(() => null)
       .then(j => { state.columns = j || { columns: [], columnists: {} }; if (location.hash === '' || location.hash.startsWith('#now') || location.hash.startsWith('#press')) route(); ticker(); });
   }
   const colDate = d => { const t = new Date(d + 'T12:00:00'); return isNaN(t) ? d : t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
@@ -529,7 +527,7 @@
   function loadMatchups() {
     if (state.mu || state.muLoading) return;
     state.muLoading = true;
-    fetch('data/matchups.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)
+    FBPU.json('data/matchups.json').catch(() => null)
       .then(j => { state.mu = j || { games: [] }; if (location.hash.startsWith('#now/matchups')) route(); });
   }
   function pageMatchups(fp) {
@@ -586,7 +584,7 @@
         ${meet ? `<details class="all"><summary>All ${s.recent.length} meetings <small>newest first</small></summary><ul class="mu-meet">${meet}</ul></details>` : ''}
       </article>`;
     };
-    const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
+    const ord = FBPU.ord;
     return `<section><h2 class="sec">Week ${M.week} matchups <small>biggest playoff stakes first · win chances from the playoff simulation</small></h2>
       <div class="mu-grid">${M.games.map(card).join('')}</div></section>`;
   }
@@ -852,7 +850,7 @@
   let TKH = null, TKA = null, TKF = null, tkLoading = false;
   function tkLoad() {
     if (tkLoading) return; tkLoading = true;
-    const get = u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
+    const get = u => FBPU.json(u).catch(() => null);
     Promise.all([get('data/league-now-history.json'), get('data/analytics.json'), get('data/ticker.json')])
       .then(([h, a, f]) => { TKH = h; TKA = a; TKF = f; ticker(); });
   }
@@ -876,7 +874,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0225
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0226
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
@@ -1100,12 +1098,12 @@
   async function init() {
     try {
       const [now, teams] = await Promise.all([
-        fetch('data/league-now.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); }),
-        fetch('data/teams.json').then(r => r.ok ? r.json() : { teams: {} }),
+        FBPU.json('data/league-now.json').then(j => { if (j == null) throw 0; return j; }),
+        FBPU.json('data/teams.json').then(j => j == null ? { teams: {} } : j),
       ]);
       state.now = now; state.teams = teams.teams || {};
-      try { state.budgets = await fetch('data/budgets.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null); } catch (e) { state.budgets = null; }
-      fetch('data/mfl/_meta.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(m => { state.meta = m; showRefresh(); }).catch(() => {});
+      try { state.budgets = await FBPU.json('data/budgets.json'); } catch (e) { state.budgets = null; }
+      FBPU.json('data/mfl/_meta.json').then(m => { state.meta = m; showRefresh(); }).catch(() => {});
       const yr = (now.season.match(/\d{4}/) || [''])[0];
       // season on one line, the version under it
       ticker();

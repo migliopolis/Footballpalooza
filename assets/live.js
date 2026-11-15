@@ -118,16 +118,16 @@
     const src = LIVE_URL ? LIVE_URL + (nw ? `?w=${nw}` : '') : 'data/live-sample.json';
     Promise.all([
       fetch(src, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null),
-      players ? Promise.resolve(players) : fetch('data/mfl/players.json').then(r => r.ok ? r.json() : null),
+      players ? Promise.resolve(players) : FBPU.json('data/mfl/players.json'),
       loadEspn(),
-      rosters ? Promise.resolve() : fetch('data/mfl/rosters.json').then(r => r.ok ? r.json() : null).then(j => {
+      rosters ? Promise.resolve() : FBPU.json('data/mfl/rosters.json').then(j => {
         rosters = {};
         (((j || {}).rosters || {}).franchise || []).forEach(f => { rosters[f.id] = { taxi: [], ir: [] };
           (f.player || []).forEach(pl => { if (pl.status === 'TAXI_SQUAD') rosters[f.id].taxi.push(pl.id); else if (pl.status === 'INJURED_RESERVE') rosters[f.id].ir.push(pl.id); }); });
       }).catch(() => { rosters = {}; }),
       loadInjuries(),
-      proj ? Promise.resolve() : fetch('data/mfl/projections.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { proj = (j && j.players) || {}; }).catch(() => { proj = {}; }),
-      honors ? Promise.resolve() : fetch('data/awards.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(readHonors).catch(() => { honors = { p: {}, t: {}, potw: {} }; }),
+      proj ? Promise.resolve() : FBPU.json('data/mfl/projections.json').then(j => j == null ? {} : j).then(j => { proj = (j && j.players) || {}; }).catch(() => { proj = {}; }),
+      honors ? Promise.resolve() : FBPU.json('data/awards.json').then(readHonors).catch(() => { honors = { p: {}, t: {}, potw: {} }; }),
     ]).then(([d, p]) => {
       loading = false;
       if (!d || !d.liveScoring) { failed = !data; return; }
@@ -139,7 +139,7 @@
   }
   // ESPN: kickoff times and clocks by NFL team, stat lines by ESPN athlete id
   const ESPN = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/';
-  const TEAM = { GBP: 'GB', KCC: 'KC', NEP: 'NE', NOS: 'NO', SFO: 'SF', TBB: 'TB', LVR: 'LV', JAC: 'JAX', WAS: 'WSH', LA: 'LAR' };
+  const TEAM = FBPU.ESPN;   // MFL team codes that differ from ESPN's (assets/common.js)
   // per week: 'live' for the current week, else the week number
   const E = {}, EW = () => E[view || 'live'] || { games: {}, stats: {} };
   let links = null;
@@ -148,7 +148,7 @@
     if (w ? e.at : Date.now() - e.at < POLL_MS - 1000) return Promise.resolve();   // an earlier week loads once
     e.at = Date.now();
     const games = e.games, stats = e.stats;
-    const lk = links ? Promise.resolve(links) : fetch('data/player-links.json').then(r => r.ok ? r.json() : null).then(j => (links = (j && j.links) || {}));
+    const lk = links ? Promise.resolve(links) : FBPU.json('data/player-links.json').then(j => (links = (j && j.links) || {}));
     const lw = w || (data ? +data.liveScoring.week : nextW());
     const url = lw ? `scoreboard?seasontype=2&week=${lw}&dates=${(CX() && CX().season) || new Date().getFullYear()}` : 'scoreboard';
     return Promise.all([lk, fetch(ESPN + url).then(r => r.ok ? r.json() : null)]).then(([, sb]) => {
@@ -207,8 +207,8 @@
       }));
       injuries = out;
       // fill in long-term injuries ESPN's live report leaves out, from the daily snapshot
-      return fetch('data/espn/injuries.json').then(r => r.ok ? r.json() : {}).then(s => { Object.entries(s || {}).forEach(([k, v]) => { if (v && v.status && !out[k]) out[k] = { status: v.status, note: v.short || '' }; }); }).catch(() => {});
-    }).catch(() => fetch('data/espn/injuries.json').then(r => r.ok ? r.json() : {}).then(j => {
+      return FBPU.json('data/espn/injuries.json').then(j => j == null ? {} : j).then(s => { Object.entries(s || {}).forEach(([k, v]) => { if (v && v.status && !out[k]) out[k] = { status: v.status, note: v.short || '' }; }); }).catch(() => {});
+    }).catch(() => FBPU.json('data/espn/injuries.json').then(j => j == null ? {} : j).then(j => {
       injuries = Object.fromEntries(Object.entries(j || {}).map(([k, v]) => [k, { status: v.status, note: v.short || '' }]));
     })).catch(() => { injuries = injuries || {}; });
   }
@@ -216,7 +216,7 @@
   const espnId = id => ((links && links[id]) || [])[0];
   const photo = id => {
     if (pos(id) === 'DEF') { const t = TEAM[info(id).team] || info(id).team || ''; return t ? `https://a.espncdn.com/i/teamlogos/nfl/500/${t.toLowerCase()}.png` : ''; }
-    return espnId(id) ? `https://a.espncdn.com/i/headshots/nfl/players/full/${espnId(id)}.png` : '';
+    return espnId(id) ? FBPU.headshot(espnId(id)) : '';
   };
   // NFL logos (ESPN), and a weather icon for a game
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
@@ -326,8 +326,8 @@
   // an earlier week, shaped like MFL's live scoring: final lineups and points from the weekly results file
   function loadHist(w) {
     const need = [];
-    if (!weekly) need.push(fetch('data/mfl/weeklyResults.json').then(r => r.ok ? r.json() : {}).then(j => { weekly = j.weeks || {}; }));
-    if (!sched) need.push(fetch('data/mfl/schedule.json').then(r => r.ok ? r.json() : {}).then(j => { sched = ((j.schedule || {}).weeklySchedule) || []; }));
+    if (!weekly) need.push(FBPU.json('data/mfl/weeklyResults.json').then(j => j == null ? {} : j).then(j => { weekly = j.weeks || {}; }));
+    if (!sched) need.push(FBPU.json('data/mfl/schedule.json').then(j => j == null ? {} : j).then(j => { sched = ((j.schedule || {}).weeklySchedule) || []; }));
     return Promise.all([...need, loadEspn(w)]).then(() => {
       const wr = weekly[String(w)] || {}, wk = sched.find(x => +x.week === +w);
       const fr = f => { const t = wr[f.id] || {}, s = t.s || [], n = t.n || [];
@@ -371,13 +371,13 @@
   // Game of the week (the matchups page picks it): marked on the scoreboard for that week only
   let MU = null, muAsked = false;
   const isGotw = (w, x, y) => {
-    if (!muAsked) { muAsked = true; fetch('data/matchups.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { MU = j; if (j) paint(); }).catch(() => {}); }
+    if (!muAsked) { muAsked = true; FBPU.json('data/matchups.json').then(j => { MU = j; if (j) paint(); }).catch(() => {}); }
     if (!MU || +MU.week !== +w) return false;
     return (MU.games || []).some(g => g.gotw && ((g.away === x && g.home === y) || (g.away === y && g.home === x)));
   };
   // FBP journeys (data/journeys.json): who used to play for the other side, for the REVENGE GAME tag
   let JP = null, jpAsked = false;
-  const journeys = () => { if (!jpAsked) { jpAsked = true; fetch('data/journeys.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { JP = j && j.players; if (JP) paint(); }).catch(() => {}); } return JP; };
+  const journeys = () => { if (!jpAsked) { jpAsked = true; FBPU.json('data/journeys.json').then(j => { JP = j && j.players; if (JP) paint(); }).catch(() => {}); } return JP; };
   // win probability from the live projections: the projected margin against how much is still to play
   const phi = z => { const t = 1 / (1 + .2316419 * Math.abs(z)), d = .3989423 * Math.exp(-z * z / 2);
     const p = d * t * (.3193815 + t * (-.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return z > 0 ? 1 - p : p; };
@@ -483,7 +483,7 @@
     const seedOf = id => ((X.seeds || []).find(x => x.id === id) || {}).seed;
     const seed = id => !view && seedOf(id) ? `<span class="lv-seed${seedOf(id) > 3 ? ' wc' : ''}" title="${seedOf(id)} seed if the season ended today">${seedOf(id)}</span>` : '';
     // record, place in the division and last-3 average (from the weekly league update)
-    const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
+    const ord = FBPU.ord;
     const stand = id => (X.standings || []).find(t => t.id === id);
     const upTo = g => !view || g[0] <= view;   // an earlier week shows the record and L3 as of that week
     const l3 = id => { const sc = (X.games || []).filter(g => upTo(g) && (g[1] === id || g[3] === id)).sort((x, y) => x[0] - y[0]).slice(-3).map(g => g[1] === id ? g[2] : g[4]);
@@ -693,7 +693,7 @@
     }
     const keep = p => plShow === 'fa' ? !p.fid : plShow === 'ro' ? !!p.fid : plShow === 'st' ? p.status === 'starter' : true;
     const shown = all.filter(keep);
-    const seg = `<div class="seg pl-show" role="tablist">${PL_SHOW.filter(([k]) => !(faMissing && k === 'fa')).map(([k, l]) => `<button type="button" role="tab" data-pl-show="${k}" aria-selected="${k === plShow}">${l}</button>`).join('')}</div>`;
+    const seg = `<div class="seg pl-show" role="group">${PL_SHOW.filter(([k]) => !(faMissing && k === 'fa')).map(([k, l]) => `<button type="button" data-pl-show="${k}" aria-pressed="${k === plShow}">${l}</button>`).join('')}</div>`;
     if (!all.length) return '<p class="loading">No one has played yet this week. The leaderboard fills in once games kick off.</p>';
     const sec = ([ps, title, n]) => {
       const list = shown.filter(p => pos(p.id) === ps).sort((a, b) => (+b.score || 0) - (+a.score || 0));

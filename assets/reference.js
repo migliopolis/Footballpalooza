@@ -7,7 +7,7 @@ window.FBPRef = (() => {
   let D = null, loading = null, failed = false;
   const load = rerender => {
     if (D || loading) return;
-    loading = fetch('data/reference.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+    loading = FBPU.json('data/reference.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => { D = d; rerender(); }).catch(() => { failed = true; rerender(); });
   };
 
@@ -15,7 +15,7 @@ window.FBPRef = (() => {
   let AF = null, afLoading = false;
   const loadAF = rerender => {
     if (AF || afLoading) return; afLoading = true;
-    fetch('data/awards/all-fbp.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+    FBPU.json('data/awards/all-fbp.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => { AF = d; rerender(); }).catch(() => { AF = { franchises: {}, failed: true }; rerender(); });
   };
 
@@ -24,7 +24,7 @@ window.FBPRef = (() => {
   let AB = null, abLoading = false;
   const loadAB = rerender => {
     if (AB || abLoading) return; abLoading = true;
-    fetch('data/auction-bids.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+    FBPU.json('data/auction-bids.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => { AB = d; rerender(); }).catch(() => { AB = {}; rerender(); });
   };
   const fr4 = n => String(n).padStart(4, '0');
@@ -92,7 +92,7 @@ window.FBPRef = (() => {
   const nameCell = (fr, y, label) => `<td class="t"><a class="rf-nm" href="#reference/f-${fr}">${esc(label || nm(fr, y))}</a></td>`;
   const champOf = y => D.championships[y] || D.championships[String(y)];
   const badge = (fr, y) => { const c = champOf(y); return c && c.champion === fr ? '<span class="rf-badge gold" title="Champion">🏆</span>' : c && c.runnerup === fr ? '<span class="rf-badge">2nd</span>' : ''; };
-  const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || 'th');
+  const ord = FBPU.ord;
   const isChamp = (fr, y) => { const c = champOf(y); return !!c && c.champion === fr; };
   // how a season ended in the playoffs, from the bracket
   function playoffOut(fr, y) {
@@ -248,10 +248,10 @@ window.FBPRef = (() => {
     const yrs = [...new Set(all.map(p => +p.year))].sort((a, b) => b - a);
     const poss = ['QB', 'RB', 'WR', 'TE', 'DEF'].filter(k => all.some(p => posOf(p) === k));
     const list = all.filter(p => (!HX.pos || posOf(p) === HX.pos) && (!HX.yr || +p.year === +HX.yr));
-    const btn = (k, v, l, on) => `<button type="button" role="tab" data-rf-hx="${k}:${v}" aria-selected="${on}">${l}</button>`;
+    const btn = (k, v, l, on) => `<button type="button" data-rf-hx="${k}:${v}" aria-pressed="${on}">${l}</button>`;
     const ctl = `<div class="rf-hx">
-      <div class="seg" role="tablist" aria-label="Which history">${btn('tab', 'draft', 'Rookie draft', draft)}${btn('tab', 'auction', 'Auction', !draft)}</div>
-      <div class="seg rf-hxpos" role="tablist" aria-label="Position">${btn('pos', '', 'All', !HX.pos)}${poss.map(k => btn('pos', k, k, HX.pos === k)).join('')}</div>
+      <div class="seg" role="group" aria-label="Which history">${btn('tab', 'draft', 'Rookie draft', draft)}${btn('tab', 'auction', 'Auction', !draft)}</div>
+      <div class="seg rf-hxpos" role="group" aria-label="Position">${btn('pos', '', 'All', !HX.pos)}${poss.map(k => btn('pos', k, k, HX.pos === k)).join('')}</div>
       <select class="rf-hxyr" aria-label="Season"><option value="">All seasons</option>${yrs.map(y => `<option value="${y}"${+HX.yr === y ? ' selected' : ''}>${y}</option>`).join('')}</select></div>`;
     const body = all.length && !list.length ? '<p class="rf-note">Nothing matches.</p>' : draft ? picksTable(list, false) : buysTable(list);
     const n = list.length, spent = list.reduce((a, p) => a + (+(draft ? p.drafted_price : p.price) || 0), 0);
@@ -555,7 +555,7 @@ window.FBPRef = (() => {
   let PAY = null, payLoading = false;
   const loadPay = rerender => {
     if (PAY || payLoading) return; payLoading = true;
-    fetch('data/payroll.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+    FBPU.json('data/payroll.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => { PAY = d; rerender(); }).catch(() => { PAY = { failed: true }; rerender(); });
   };
   function pagePayroll(yr) {
@@ -602,7 +602,7 @@ window.FBPRef = (() => {
   let PR = null, prLoading = false;
   const loadPR = rerender => {
     if (PR || prLoading) return; prLoading = true;
-    fetch('data/player-records.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
+    FBPU.json('data/player-records.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => {
         const F = d.fields, TF = d.team_fields;
         d.list = d.players.map(a => { const p = {}; F.forEach((k, i) => p[k] = a[i]);

@@ -12,7 +12,7 @@ window.FBPTransactions = (function () {
   function load() {
     if (D || loading || failed) return;
     loading = true;
-    fetch('data/transactions.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
+    FBPU.json('data/transactions.json').then(j => j == null ? Promise.reject() : j)
       .then(j => { D = j; loading = false; redraw(); }, () => { failed = true; loading = false; redraw(); });
   }
   const KIND = { W: ['Waiver', 'w'], F: ['Free agent', 'f'], T: ['Trade', 't'], I: ['IR', 'i'], X: ['Taxi', 'x'], A: ['Auction', 'a'] };

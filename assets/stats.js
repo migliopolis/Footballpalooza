@@ -13,8 +13,7 @@ window.FBPStats = (function () {
   F.who = (Array.isArray(F.who) ? F.who : F.who ? [F.who] : []).filter(v => ['fa', 'ro', 'team'].includes(v));
   F.st = !!F.st;
   const save = () => { try { localStorage.setItem('fbp-stats', JSON.stringify(F)); } catch (e) {} };
-  const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
-  const ab = t => NFLE[t] || (t || '').toLowerCase();
+  const ab = t => String(FBPU.nflAbbr(t || '')).toLowerCase();
   const logo = t => t ? `<img class="st-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${ab(t)}.png" alt="" loading="lazy">` : '';
   const HC = { N: 'nuke', H: 'hot', C: 'cold', B: 'bust', W: 'wp' };
   const SHORT = { '1st Team': '1st', '2nd Team': '2nd', 'Top Waiver': 'Waiver', 'High Game': 'High', 'Worst Contract': 'Worst $', 'Best Value': 'Value', 'Bench Points': 'Bench' };
@@ -34,10 +33,10 @@ window.FBPStats = (function () {
   function load() {
     if (S || loading || failed) return;
     loading = true;
-    Promise.all([fetch('data/stats.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()),
-      fetch('data/analytics.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch('data/stats-detail.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch('data/rankings.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)])
+    Promise.all([FBPU.json('data/stats.json').then(j => j == null ? Promise.reject() : j),
+      FBPU.json('data/analytics.json').catch(() => null),
+      FBPU.json('data/stats-detail.json').catch(() => null),
+      FBPU.json('data/rankings.json').catch(() => null)])
       .then(([s, a, d, k]) => { S = s; A = a; DT = d; ((k && k.players) || []).forEach(p => { RK[p.id] = p; }); loading = false; loadOpp(); redraw(); }, () => { failed = true; loading = false; redraw(); });
   }
   // the next week's NFL opponents
@@ -85,12 +84,12 @@ window.FBPStats = (function () {
     const filters = `<div class="st-f">
       <input class="pr-q st-q" type="search" placeholder="Find a player" aria-label="Find a player" autocomplete="off" value="${esc(q)}">
       <label>Top ${sel('top', [[25, 25], [50, 50], [100, 100], [0, 'All']])}</label>
-      <div class="seg st-pos" role="tablist" aria-label="Position">${[['', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'FLEX'], ['DEF', 'DEF']].map(([v, l]) => `<button type="button" role="tab" data-st-pos="${v}" aria-selected="${F.pos === v}"${v === 'FLEX' ? ' title="RB, WR and TE"' : ''}>${l}</button>`).join('')}</div>
+      <div class="seg st-pos" role="group" aria-label="Position">${[['', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['FLEX', 'FLEX'], ['DEF', 'DEF']].map(([v, l]) => `<button type="button" data-st-pos="${v}" aria-pressed="${F.pos === v}"${v === 'FLEX' ? ' title="RB, WR and TE"' : ''}>${l}</button>`).join('')}</div>
       ${DT && groups().length ? `<label>Show <select data-st-f="stat" aria-label="Which stat"><option value=""${!sk ? ' selected' : ''}>FBP points</option>${groups().map(([g, L]) => `<optgroup label="${g}">${L.map(([v, l]) => `<option value="${v}"${v === sk ? ' selected' : ''}>${l}</option>`).join('')}</optgroup>`).join('')}</select></label>` : ''}
       <label>Weeks ${sel('from', wkOpts, from)} to ${sel('to', wkOpts, to)}</label>
     </div>
-    <div class="st-row2"><div class="seg pl-show st-who" role="tablist" aria-label="Which players">${[['', 'All players'], ['fa', 'Free agents'], ['ro', 'Rostered'], ['team', hl ? (team(hl).abbr || hl) : 'Selected team']].map(([v, l]) =>
-      `<button type="button" role="tab" data-st-who="${v}" aria-selected="${v ? F.who.includes(v) : !F.who.length}"${v === 'team' ? ` title="${hl ? esc(team(hl).name || hl) + '’s players' : 'Pick a team from the logos above'}"` : ''}>${v === 'team' && hl && team(hl).logo ? `<img class="st-wl" src="${team(hl).logo}" alt="">` : ''}${esc(l)}</button>`).join('')}</div>
+    <div class="st-row2"><div class="seg pl-show st-who" role="group" aria-label="Which players">${[['', 'All players'], ['fa', 'Free agents'], ['ro', 'Rostered'], ['team', hl ? (team(hl).abbr || hl) : 'Selected team']].map(([v, l]) =>
+      `<button type="button" data-st-who="${v}" aria-pressed="${v ? F.who.includes(v) : !F.who.length}"${v === 'team' ? ` title="${hl ? esc(team(hl).name || hl) + '’s players' : 'Pick a team from the logos above'}"` : ''}>${v === 'team' && hl && team(hl).logo ? `<img class="st-wl" src="${team(hl).logo}" alt="">` : ''}${esc(l)}</button>`).join('')}</div>
     <button type="button" class="st-stb" data-st-starts aria-pressed="${F.st}" title="Count only the weeks he was in an FBP starting lineup">Starters</button></div>`;
     const me = hl;
     const picker = `<div class="st-pick" role="group" aria-label="Highlight a team’s players">${Object.keys(ctx.teams).sort((a, b) => (team(a).abbr || '').localeCompare(team(b).abbr || '')).map(f =>

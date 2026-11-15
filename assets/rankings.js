@@ -17,14 +17,13 @@ window.FBPRankings = (function () {
   function load() {
     if (D || loading || failed) return;
     loading = true;
-    Promise.all([fetch('data/rankings.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()),
-      fetch('data/mfl/injuries.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)])
+    Promise.all([FBPU.json('data/rankings.json').then(j => j == null ? Promise.reject() : j),
+      FBPU.json('data/mfl/injuries.json').catch(() => null)])
       .then(([d, inj]) => { D = d; D.inj = {}; (((inj || {}).injuries || {}).injury || []).forEach(x => { D.inj[x.id] = x; }); loading = false; redraw(); },
         () => { failed = true; loading = false; redraw(); });
   }
   const tm = f => (X && X.teams && X.teams[f]) || {};
-  const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar', LAR: 'lar' };
-  const nflLogo = t => t && t !== 'FA' ? `<img class="rk-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${esc(t)}" loading="lazy">` : '';
+  const nflLogo = t => t && t !== 'FA' ? `<img class="rk-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${esc(t)}" loading="lazy">` : '';
   const MINJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'IR': 'IR', 'IR-R': 'IR', 'IR-PUP': 'PUP', 'IR-NFI': 'IR', 'Suspended': 'SUS' };
   const LISTS = [['dyn', 'Dynasty'], ['ros', '<span class="lg-o">Rest of season</span><span class="sm-o">ROS</span>'], ['rook', 'Rookies']];
   const POSL = [['', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['DEF', 'DEF']];
@@ -71,7 +70,7 @@ window.FBPRankings = (function () {
     const row = p => {
       const t = tm(p.f), inj = D.inj[p.id], ic = inj && MINJ[inj.status];
       const tier = tiers && p.d && p.d[2] != null && p.d[2] !== lastT ? (lastT = p.d[2], `<tr class="rk-tier"><td colspan="15">Tier ${p.d[2]}</td></tr>`) : '';
-      const img = p.pos === 'DEF' ? `style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[p.nfl] || String(p.nfl).toLowerCase()}.png)" class="rk-def"` : p.e ? `style="background-image:url(https://a.espncdn.com/i/headshots/nfl/players/full/${p.e}.png)"` : '';
+      const img = p.pos === 'DEF' ? `style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${String(FBPU.nflAbbr(p.nfl)).toLowerCase()}.png)" class="rk-def"` : p.e ? `style="background-image:url(${FBPU.headshot(p.e)})"` : '';
       const name = esc(p.n), on = OP.has(p.id);
       const tvW = p.tv ? Math.round(p.tv / 100) : 0;
       return `${tier}<tr class="rk-p${p.f === hl && hl ? ' rk-me' : ''}${on ? ' on' : ''}" data-rk-p="${p.id}" aria-expanded="${on}">
@@ -91,9 +90,9 @@ window.FBPRankings = (function () {
     const upd = S.list === 'ros' ? D.rosUpdated : S.list === 'rook' && D.rookUpdated ? D.rookUpdated : D.dynUpdated;
     const teams = Object.keys(X.teams || {}).sort((a, b) => (X.nameOf ? X.nameOf(a) : a).localeCompare(X.nameOf ? X.nameOf(b) : b));
     return `<section class="rk-page">
-      <div class="seg rk-lists" role="tablist" aria-label="Rankings">${LISTS.map(([k, l]) => `<button type="button" role="tab" data-rk-list="${k}" aria-selected="${S.list === k}">${l}</button>`).join('')}</div>
+      <div class="seg rk-lists" role="group" aria-label="Rankings">${LISTS.map(([k, l]) => `<button type="button" data-rk-list="${k}" aria-pressed="${S.list === k}">${l}</button>`).join('')}</div>
       <div class="rk-ctl">
-        <div class="seg rk-pos" role="tablist" aria-label="Position">${POSL.map(([k, l]) => `<button type="button" role="tab" data-rk-pos="${k}" aria-selected="${S.pos === k}">${l}</button>`).join('')}</div>
+        <div class="seg rk-pos" role="group" aria-label="Position">${POSL.map(([k, l]) => `<button type="button" data-rk-pos="${k}" aria-pressed="${S.pos === k}">${l}</button>`).join('')}</div>
         <div class="seg rk-who" aria-label="Which players">${[['fa', 'Free agents'], ['ro', 'Rostered'], ['team', hl ? (tm(hl).abbr || 'Team') : 'Team']].map(([k, l]) =>
           `<button type="button" data-rk-who="${k}" aria-pressed="${S.who.includes(k)}">${k === 'team' && tm(hl).logo ? `<img src="${tm(hl).logo}" alt="">` : ''}${esc(l)}</button>`).join('')}</div>
         <select class="rk-team" aria-label="Team for the team button">${teams.map(f => `<option value="${f}"${f === hl ? ' selected' : ''}>${esc(X.nameOf ? X.nameOf(f) : f)}</option>`).join('')}</select>

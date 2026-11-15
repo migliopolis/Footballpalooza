@@ -6,16 +6,15 @@ window.FBPHospital = (function () {
   let S = null, SNAP = null, LIVE = null, failed = false, loading = false, X = null;
   let who = 'ro', team = '';
   const open = new Set(), exp = new Set();   // open: injury notes shown; exp: card expanded (cards start collapsed)
-  const NFLE = { GBP: 'gb', KCC: 'kc', NEP: 'ne', NOS: 'no', SFO: 'sf', TBB: 'tb', LVR: 'lv', JAC: 'jax', WAS: 'wsh', LA: 'lar' };
-  const nflLogo = t => t ? `<img class="hs-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${NFLE[t] || t.toLowerCase()}.png" alt="${t}" loading="lazy">` : '';
-  const head = e => `https://a.espncdn.com/i/headshots/nfl/players/full/${e}.png`;
+  const nflLogo = t => t ? `<img class="hs-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${t}" loading="lazy">` : '';
+  const head = FBPU.headshot;
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
 
   function load() {
     if (S || loading || failed) return;
     loading = true;
-    Promise.all([fetch('data/stats.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()),
-      fetch('data/espn/injuries.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}))])
+    Promise.all([FBPU.json('data/stats.json').then(j => j == null ? Promise.reject() : j),
+      FBPU.json('data/espn/injuries.json').then(j => j == null ? {} : j).catch(() => ({}))])
       .then(([s, i]) => { S = s; SNAP = i; loading = false; redraw(); }, () => { failed = true; loading = false; redraw(); });
     fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries').then(r => r.ok ? r.json() : null).then(j => {
       if (!j) return; LIVE = {};

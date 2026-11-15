@@ -13,7 +13,7 @@ window.FBPJourney = (function () {
     if (rerender) waiting.add(rerender);
     if (J || loading || failed) return;
     loading = true;
-    fetch('data/journeys.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
+    FBPU.json('data/journeys.json').then(j => j == null ? Promise.reject() : j)
       .then(d => { J = d; loading = false; const w = [...waiting]; waiting.clear(); w.forEach(f => f()); },
         () => { failed = true; loading = false; const w = [...waiting]; waiting.clear(); w.forEach(f => f()); });
   }

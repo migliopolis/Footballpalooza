@@ -8,7 +8,7 @@
   let X = null, current = null, view = null, failed = false, timer = null;
   const weeks = {};   // week -> {games, byes, at}
   const LIVE_URL = 'https://fbp-live.pmiglio-gchat.workers.dev/';   // relay: every player's FBP points for a week (?t=all)
-  const TEAM = { GBP: 'GB', KCC: 'KC', NEP: 'NE', NOS: 'NO', SFO: 'SF', TBB: 'TB', LVR: 'LV', JAC: 'JAX', WAS: 'WSH', LA: 'LAR' };
+  const TEAM = FBPU.ESPN;   // MFL team codes that differ from ESPN's (assets/common.js)
   const open = new Set(), sum = {}, fbp = {};   // open game ids; ESPN game summaries by id; FBP points by week
   let mfl = null, owners = null;
 
@@ -85,8 +85,8 @@
     if (F && (F.busy || Date.now() - F.at < 60000)) return;
     fbp[w] = Object.assign(F || {}, { busy: true, at: Date.now() });
     Promise.all([
-      mfl ? null : fetch('data/mfl/players.json').then(r => r.ok ? r.json() : null).then(p => { mfl = p ? Object.fromEntries(Object.entries(p.players).map(([k, v]) => [k, { name: v[0], pos: v[1], team: TEAM[v[2]] || v[2] }])) : {}; }),
-      owners ? null : fetch('data/mfl/rosters.json').then(r => r.ok ? r.json() : null).then(j => { owners = {};
+      mfl ? null : FBPU.json('data/mfl/players.json').then(p => { mfl = p ? Object.fromEntries(Object.entries(p.players).map(([k, v]) => [k, { name: v[0], pos: v[1], team: TEAM[v[2]] || v[2] }])) : {}; }),
+      owners ? null : FBPU.json('data/mfl/rosters.json').then(j => { owners = {};
         (((j || {}).rosters || {}).franchise || []).forEach(f => (f.player || []).forEach(p => { owners[p.id] = f.id; })); }),
       fetch(`${LIVE_URL}?t=all&w=${w}`, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { fbp[w].scores = j && j.playerScores ? [].concat(j.playerScores.playerScore || []) : null; }),
     ]).catch(() => {}).then(() => { fbp[w].busy = false; if (open.size) paint(); });
