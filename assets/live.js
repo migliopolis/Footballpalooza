@@ -20,6 +20,8 @@
   const hist = {};                  // earlier weeks, built from the weekly results file
   let weekly = null, sched = null;
   const open = new Set(), openBench = new Set();
+  // compact view: player-vs-player rows opened up to the full detail (tap the row; tap again to close), kept across refreshes
+  const openRows = new Set();
   // this season's award holders, as chips by a name (data/awards.json, built by scripts/awards.py):
   // p: player id -> chips, t: franchise id -> chips, potw: week -> player of the week
   let honors = null;
@@ -641,10 +643,11 @@
           : n1(+p.score) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="MFL projection">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
-      const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr>${cell(r.p, 'a', r.slot)}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b', o.slot || r.slot)}</tr>`; }).join('');
+      const rx = k => ` data-lvr="${a.id}-${b.id}-${k}"${openRows.has(`${a.id}-${b.id}-${k}`) ? ' class="lv-rx"' : ''}`;
+      const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr${rx('s' + i)}>${cell(r.p, 'a', r.slot)}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b', o.slot || r.slot)}</tr>`; }).join('');
       // bench, then taxi squad, then IR, each side listed in its own column
       const group = (xa, xb, lbl) => Array.from({ length: Math.max(xa.length, xb.length) }, (_, i) =>
-        `<tr class="lv-r-${lbl.toLowerCase()}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
+        `<tr class="lv-r-${lbl.toLowerCase()}${openRows.has(`${a.id}-${b.id}-${lbl}${i}`) ? ' lv-rx' : ''}" data-lvr="${a.id}-${b.id}-${lbl}${i}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
       const benchRows = group(bench(a), bench(b), 'BN') + (view ? '' : group(extra(a, 'taxi'), extra(b, 'taxi'), 'TX') + group(extra(a, 'ir'), extra(b, 'ir'), 'IR'));
       const left = f => { const c = counts(f); return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
       const gotw = isGotw(shownW, a.id, b.id), mine = X.myTeam && (a.id === X.myTeam || b.id === X.myTeam);
@@ -782,6 +785,9 @@
       if (all.dataset.lvAll === 'open') cur().liveScoring.matchup.forEach(m => { const fs = m.franchise.slice().sort((a, b) => (+a.isHome) - (+b.isHome)); open.add(`${fs[0].id}-${fs[1].id}`); });
       paint(); return;
     }
+    // compact view: tap a player-vs-player row (anywhere but a photo) to see that row in full; tap again to close it
+    const tr = compact && !e.target.closest('a') && e.target.closest('.lv-compact tr[data-lvr]');
+    if (tr) { const k = tr.dataset.lvr, on = !openRows.has(k); on ? openRows.add(k) : openRows.delete(k); tr.classList.toggle('lv-rx', on); return; }
     const b = e.target.closest('[data-lv]'); if (!b) return;
     const key = b.dataset.lv, g = b.closest('.lv-g'), on = !open.has(key);
     on ? open.add(key) : open.delete(key);

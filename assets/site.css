@@ -2024,23 +2024,25 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 /* Scoreboard compact view (basic): each starter is just his photo, his name underneath, and his points toward the
    middle, mirrored on the other side; no stat, matchup or chip lines, and no team-name section */
 .lv-compact .lv-names{display:none}
-.lv-compact .lv-ext,.lv-compact .lv-nm .lv-af{display:none}
+.lv-compact tr:not(.lv-rx) .lv-ext,.lv-compact tr:not(.lv-rx) .lv-nm .lv-af{display:none}
 .lv-compact .lv-det{padding-top:4px}
-.lv-compact .lv-t td{padding-top:5px;padding-bottom:5px;vertical-align:middle}
-.lv-compact .lv-pc{display:block}
-.lv-compact .lv-ph{display:block;width:30px;height:30px;margin:0 0 2px}
-.lv-compact .lv-p.b .lv-ph{margin-left:auto}
-.lv-compact .lv-nm{font-size:.8rem;line-height:1.15}
+.lv-compact .lv-t tr:not(.lv-rx) td{padding-top:5px;padding-bottom:5px;vertical-align:middle}
+.lv-compact tr:not(.lv-rx) .lv-pc{display:block}
+.lv-compact tr:not(.lv-rx) .lv-ph{display:block;width:30px;height:30px;margin:0 0 2px}
+.lv-compact tr:not(.lv-rx) .lv-p.b .lv-ph{margin-left:auto}
+.lv-compact tr:not(.lv-rx) .lv-nm{font-size:.8rem;line-height:1.15}
 /* compact: the 1st/2nd team chip, ball and RZ sit in a row beside the photo, toward the middle:
    left side photo · chip · ball · RZ; right side RZ · ball · chip · photo */
 .lv-pchip{display:none}
-.lv-compact .lv-pchip{display:inline-block;flex:none;font-size:.52rem;padding:1px 3px}
-.lv-compact .lv-phw{display:flex;align-items:center;gap:4px;margin-bottom:2px}
-.lv-compact .lv-ph{margin:0}
-.lv-compact .lv-p.b .lv-ph{margin-left:0}
-.lv-compact .lv-p.b .lv-phw{flex-direction:row-reverse;justify-content:flex-start}
-.lv-compact .lv-phw .lv-flags{flex-direction:row;flex-wrap:nowrap;max-width:none}
-.lv-compact .lv-p.b .lv-phw .lv-flags{flex-direction:row-reverse}
+.lv-compact .lv-t tr[data-lvr]{cursor:pointer}
+.lv-compact .lv-t tr.lv-rx{box-shadow:inset 0 0 0 2px var(--line,#cfd6de)}
+.lv-compact tr:not(.lv-rx) .lv-pchip{display:inline-block;flex:none;font-size:.52rem;padding:1px 3px}
+.lv-compact tr:not(.lv-rx) .lv-phw{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.lv-compact tr:not(.lv-rx) .lv-ph{margin:0}
+.lv-compact tr:not(.lv-rx) .lv-p.b .lv-ph{margin-left:0}
+.lv-compact tr:not(.lv-rx) .lv-p.b .lv-phw{flex-direction:row-reverse;justify-content:flex-start}
+.lv-compact tr:not(.lv-rx) .lv-phw .lv-flags{flex-direction:row;flex-wrap:nowrap;max-width:none}
+.lv-compact tr:not(.lv-rx) .lv-p.b .lv-phw .lv-flags{flex-direction:row-reverse}
 /* inactive (DNP): grey, faded photo with a red rubber stamp slanted across it */
 .lv-ph.t-dnp{position:relative;overflow:visible}
 .lv-ph.t-dnp img{filter:grayscale(1) contrast(.9);opacity:.45;border-radius:50%}
@@ -2061,7 +2063,7 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 /* Rosters: current NFL injury designation (Q, D, O, IR…) next to the name */
 .ro-inj{display:inline-block;font:700 .56rem/1 var(--body);padding:2px 4px;border-radius:3px;background:var(--red);color:#fff;margin-left:5px;vertical-align:2px;cursor:help}
 .pp-id h2 .ro-inj{font-size:.62rem;padding:3px 5px;vertical-align:4px}
-.lv-compact .lv-phw .lv-def{display:inline-block}
+.lv-compact tr:not(.lv-rx) .lv-phw .lv-def{display:inline-block}
 .col-hero{margin:0 0 16px}
 .col-hero img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;object-position:50% 25%;border-radius:4px;background:var(--line,#ddd)}
 .col-hero figcaption{font-size:.78rem;color:var(--muted);margin-top:6px;line-height:1.35}
@@ -3130,9 +3132,9 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .lv-phx .lv-flags{position:absolute;top:50%;bottom:auto;left:calc(100% + 4px);right:auto;transform:translateY(-50%);flex-direction:column;align-items:center;gap:2px;max-width:none;margin:0;z-index:2}
 .lv-p.b .lv-phx .lv-flags{left:auto;right:calc(100% + 4px)}
 /* compact: the 1st/2nd chip shifts inward to make room for the ball/RZ; the photo never moves */
-.lv-compact .lv-p.a .lv-phx:has(.lv-flags){margin-right:26px}.lv-compact .lv-p.b .lv-phx:has(.lv-flags){margin-left:26px}
+.lv-compact tr:not(.lv-rx) .lv-p.a .lv-phx:has(.lv-flags){margin-right:26px}.lv-compact .lv-p.b .lv-phx:has(.lv-flags){margin-left:26px}
 /* the ball/RZ floats beside the photo on the inner side, so photos stay put */
-.lv-compact .lv-phw .lv-phx .lv-flags,.lv-compact .lv-p.b .lv-phw .lv-phx .lv-flags{flex-direction:column;flex-wrap:nowrap}
+.lv-compact tr:not(.lv-rx) .lv-phw .lv-phx .lv-flags,.lv-compact tr:not(.lv-rx) .lv-p.b .lv-phw .lv-phx .lv-flags{flex-direction:column;flex-wrap:nowrap}
 .lv-phx .lv-ball{font-size:.85rem;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 @media (max-width:560px){.lv-phx .lv-flags{flex-direction:column;flex-wrap:nowrap;max-width:none}.lv-phx .lv-ball{font-size:.8rem}}
 /* a plain player photo (no honor, heat or DNP treatment) wears a thin ring in his NFL team's color (--tc, set inline) */
