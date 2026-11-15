@@ -84,7 +84,7 @@ window.FBPRankings = (function () {
         <td>${p.age != null ? p.age.toFixed(1) : '—'}</td>
         <td class="rk-sal">${p.sal != null ? `$${Math.round(p.sal)}${p.cy ? `<small>${esc(p.cy)}</small>` : ''}` : '—'}</td>
         <td class="rk-e">${p.r && p.r[1] ? p.pos + p.r[1] : '—'}</td><td class="rk-e">${p.r ? p.r[0] : '—'}</td>
-        <td class="c">${p.o != null ? `<span class="rk-ovr ${ovrK(p.o)}">${p.o}</span>` : '—'}</td>
+        <td class="c rk-oc">${p.o != null ? `<span class="rk-ovr ${ovrK(p.o)}">${p.o}</span>${p.od ? `<i class="rk-od ${p.od > 0 ? 'up' : 'dn'}" title="${p.od > 0 ? 'Up' : 'Down'} ${Math.abs(p.od)} from last week">${p.od > 0 ? '▲' : '▼'}</i>` : '<i class="rk-od" aria-hidden="true"></i>'}` : '—'}</td>
         <td class="c">${p.h != null ? `<span class="hc-v ${heatK(p.h)}">${p.h > 0 ? '+' : ''}${p.h}</span>` : '—'}</td>
         <td class="rk-tv">${p.tv != null ? `<b>${p.tv.toLocaleString()}</b><span class="rk-bar"><i style="width:${tvW}%"></i></span>` : '<span class="rk-mu" title="Free agents have no FBP contract yet">—</span>'}</td></tr>
         ${on ? `<tr class="rk-det"><td colspan="15">${window.FBPRosters ? FBPRosters.boxFor(X, p.id) : ''}</td></tr>` : ''}`; };

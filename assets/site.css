@@ -3151,3 +3151,5 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .vl-tbt{margin-top:18px}.vl-shape-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-bottom:10px}.vl-shape-row .tf-sub{margin:0}
 .ra-t th.ra-hs{cursor:pointer;user-select:none;white-space:nowrap}.ra-t th.ra-hs:hover,.ra-t th.ra-hs.cur{color:var(--fg)}
 .ra-go{font-size:.6rem;padding:0 4px;margin-left:4px;vertical-align:1px}
+.rk-oc{white-space:nowrap}.rk-od{font-style:normal;font-size:.6rem;margin-left:2px;vertical-align:1px}.rk-od.up{color:var(--ok)}.rk-od.dn{color:#c0392b}
+.rk-od{display:inline-block;width:.75em;text-align:center}

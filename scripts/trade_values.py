@@ -261,6 +261,14 @@ def main():
     print(f"values: {len(rows)} players, {len(picks)} picks; top trade values: " + ', '.join(f"{r['n']} {r['tv']}" for r in best))
 
 
+def ovr_move(v):
+    """OVR now against the week before (ovr.json h), for the Rankings arrow; 0 when he didn't move or there's no prior week."""
+    if not v or v.get('o') is None:
+        return 0
+    h = [x for x in (v.get('h') or [])[:-1] if x is not None]
+    return v['o'] - h[-1] if h else 0
+
+
 def rankings(rows, E, season):
     """data/rankings.json for League Now > Rankings: every player FantasyPros ranks (dynasty or rest of season) plus
     everyone on an FBP roster, with his FBP team and contract, Player Value (everyone ranked) and Trade Value
@@ -297,7 +305,7 @@ def rankings(rows, E, season):
                     'f': r['f'] if r else st.get('f') or '', 'st': r['st'] if r else '', 'sal': r['sal'] if r else None, 'cy': st.get('cy') or '',
                     'd': d, 'r': ROS.get(pid), 'rk': RK.get(pid),
                     'pv': round(pv_of(d[0])) if d else (r['pv'] if r else None), 'tv': r['tv'] if r else None,
-                    'o': (OV.get(pid) or {}).get('o'), 'h': h['s'] if h else None, 'gp': len(w), 'pts': round(sum(w), 1), 'ppg': round(sum(w) / len(w), 1) if w else None,
+                    'o': (OV.get(pid) or {}).get('o'), 'od': ovr_move(OV.get(pid)), 'h': h['s'] if h else None, 'gp': len(w), 'pts': round(sum(w), 1), 'ppg': round(sum(w) / len(w), 1) if w else None,
                     'l3': round(sum(w[-3:]) / len(w[-3:]), 1) if w else None})
     out.sort(key=lambda x: ((x['d'] or [9999])[0], (x['r'] or [9999])[0]))
     with open(D('rankings.json'), 'w') as fh:
