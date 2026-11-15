@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0206",
+      "to": "0.0210",
+      "dates": "Nov 14, 2026",
+      "items": [
+        "OVR: one Madden-style rating, 40–99, for every QB, RB, WR and TE. It blends Madden’s ratings weighted for fantasy with the dynasty consensus and FBP production, and only the very best reach 99. It replaces Player Value everywhere, team rosters included.",
+        "Player Pages show an OVR badge and a season chart of how the rating moved week to week. Awards adds Biggest Riser and Biggest Faller, with chips for the winners.",
+        "Stats: a Show menu for NFL stats by position (targets, carries, air yards and more), bench weeks in italics, and OVR and Trade Value columns.",
+        "Matchups guess each lineup for Projected starters, ruled-out players project to zero, and scoreboard photos open the Player Page.",
+        "Reference > Franchises switches between Rookie draft and Auction history, with filters. Last season’s champion gets a gold logo, a Defending Champ chip and a banner on their team page."
+      ]
+    },
+    {
       "from": "0.0196",
       "to": "0.0200",
       "dates": "Nov 13, 2026",

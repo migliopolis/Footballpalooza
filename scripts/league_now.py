@@ -418,6 +418,17 @@ def snapshot(data):
     return out
 
 
+def defending_champ(out):
+    """Last finished season's champion (data/reference.json), for the gold logo, the Defending Champ chip and the
+    team-page banner. It moves to the new winner on its own once a season's title game is in the reference data."""
+    try:
+        ref = json.load(open(os.path.join(os.path.dirname(out), 'reference.json')))
+        y = max(ref.get('championships') or {}, key=int)
+        return {'f': ref['championships'][y]['champion'], 'year': int(y)}
+    except Exception:
+        return None
+
+
 def main():
     folder = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'data', 'mfl')
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(ROOT, 'data', 'league-now.json')
@@ -444,6 +455,7 @@ def main():
     meta_path = os.path.join(folder, '_meta.json')
     if os.path.exists(meta_path):
         data['fetched'] = json.load(open(meta_path)).get('fetched')
+    data['champ'] = defending_champ(out)
     with open(out, 'w') as f:
         json.dump(data, f, indent=1, ensure_ascii=False)
         f.write('\n')

@@ -548,8 +548,9 @@ window.FBPRosters = (function () {
     const esc = ctx.esc, tm = ctx.teams[f] || {}, st = standOf(ctx, f), tf = tfOf(f), n = (t.weeks || []).length;
     const all = (ctx.now && ctx.now.standings) || [], pfRk = st ? all.filter(x => x.pf > st.pf).length + 1 : 0;
     const stat = (v, l) => `<div class="ro-hs1"><b>${v}</b><small>${l}</small></div>`;
-    return `<div class="ro-th" style="--tc:${tm.primary || 'var(--line)'}">${tm.logo ? `<img class="ro-tl" src="${tm.logo}" alt="">` : ''}
-      <div class="ro-thm"><h2>${esc(t.name)}</h2><p>${esc(t.owner)}${tf && tf.outlook ? ` <span class="tf-out ${OUTC[tf.outlook]}" title="${tf.playoff}% playoff odds">${tf.outlook}</span>` : ''}</p></div>
+    const ch = window.FBP && FBP.champ && FBP.champ(), isCh = ch && ch.f === f;   // last season's champion: a banner and the chip
+    return `${isCh ? `<div class="ro-banner" role="note">🏆 <b>${ch.year} FBP Champions</b><span>Defending the title in ${ch.year + 1}</span></div>` : ''}<div class="ro-th${isCh ? ' champ' : ''}" style="--tc:${tm.primary || 'var(--line)'}">${tm.logo ? `<img class="ro-tl" src="${tm.logo}" alt="">` : ''}
+      <div class="ro-thm"><h2>${esc(t.name)}${window.FBP && FBP.champChip ? FBP.champChip(f) : ''}</h2><p>${esc(t.owner)}${tf && tf.outlook ? ` <span class="tf-out ${OUTC[tf.outlook]}" title="${tf.playoff}% playoff odds">${tf.outlook}</span>` : ''}</p></div>
       <div class="ro-hstats">${stat(`${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}`, st ? `${ord(st.divisionRank)} ${esc(st.divisionName)}` : 'record')}
         ${st ? stat(st.seed ? '#' + st.seed : '—', st.seed ? 'playoff seed' : 'out of a seed') : ''}
         ${stat(t.pf.toFixed(1), pfRk ? `points · ${ord(pfRk)}` : 'points')}
@@ -794,7 +795,7 @@ window.FBPRosters = (function () {
       const grp = (l, L) => L.length ? `<tr class="ra-g"><td colspan="6">${l}</td></tr>` + L.map(row).join('') : '';
       const tx = t.rows.filter(r => r.st === 'TAXI_SQUAD'), ir = t.rows.filter(r => r.st === 'INJURED_RESERVE');
       return `<section class="card ra-card" style="--tc:${tm.primary && tm.primary.toUpperCase() !== '#FFFFFF' ? tm.primary : tm.secondary || 'var(--line)'}">
-        <a class="ra-h" href="#now/team/${f}">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}<span class="ra-hn"><b>${esc(t.name)}</b><small>${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}${st ? ` · ${ord(st.divisionRank)} ${esc(st.divisionName)}${st.seed ? ` · <span class="ra-seed">#${st.seed} seed</span>` : ''}` : ''} · ${t.pf.toFixed(1)} pts</small></span></a>
+        <a class="ra-h" href="#now/team/${f}">${tm.logo ? `<img src="${tm.logo}" alt="">` : ''}<span class="ra-hn"><b>${esc(t.name)}${window.FBP && FBP.champChip ? FBP.champChip(f) : ''}</b><small>${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}${st ? ` · ${ord(st.divisionRank)} ${esc(st.divisionName)}${st.seed ? ` · <span class="ra-seed">#${st.seed} seed</span>` : ''}` : ''} · ${t.pf.toFixed(1)} pts</small></span></a>
         <table class="ra-t"><thead><tr><th></th><th class="l">Player</th><th class="c">OVR</th><th>Pts/g</th><th class="ra-pts">Pts</th><th class="ra-sal">$</th></tr></thead>
         <tbody>${act.map(row).join('')}${grp('Taxi squad', tx)}${grp('Injured reserve', ir)}</tbody></table></section>`;
     };
