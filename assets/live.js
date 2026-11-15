@@ -587,14 +587,14 @@
         const them = vs ? nflImg(g.opp) + (on ? `<span class="lv-gs">${esc(String(g.pa))}</span>` : '') : '';
         const mu = !myT ? '' : `<span class="lv-opp">${!vs ? me : cls === 'a' ? me + vs + them + wx : wx + me + vs + them}</span>`;
         const bottom = [slot === pos(p.id) ? '' : pos(p.id), mu, `<span class="lv-st ${st}">${clock(p)}</span>`].filter(Boolean);
-        // the ball: a football beside his photo when his NFL team has it, RZ in the red zone; a defense on the field
+        // the ball: a football on his photo when his NFL team has it, swapped for RZ in the red zone; a defense on the field
         // gets ON D, and RZ when the other team is in the red zone
         const isD = pos(p.id) === 'DEF', live = g && g.state === 'in';
         const flags = !live ? '' : isD ? (g.ball ? '' : `${g.defRz ? '<span class="lv-rz">RZ</span>' : ''}<span class="lv-def" title="Defending">ON D</span>`)
-          : g.ball ? `<span class="lv-ball" title="His team has the ball">🏈</span>${g.rz ? '<span class="lv-rz" title="In the red zone">RZ</span>' : ''}` : '';
+          : g.ball ? (g.rz ? '<span class="lv-rz" title="His team has the ball in the red zone">RZ</span>' : '<span class="lv-ball" title="His team has the ball">🏈</span>') : '';   // the ball, or RZ in its place
         // in the red zone (his offense there, or his defense defending it): a red tint across his half of the row
         const rzOn = live && (isD ? !g.ball && g.defRz : g.ball && g.rz), rzc = rzOn ? ' lv-inrz' : '';
-        const nm = `<td class="lv-p ${cls} ${st}${rzc}"><div class="lv-pc"><span class="lv-phw">${img}${teamChip(p.id, (cls === 'a' ? a : b).id)}${flags ? `<span class="lv-flags">${flags}</span>` : ''}</span><span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><span class="lv-ext"><small class="lv-bot">${bottom.join('')}</small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></span></div></td>`;
+        const nm = `<td class="lv-p ${cls} ${st}${rzc}"><div class="lv-pc"><span class="lv-phw"><span class="lv-phx">${img}${flags ? `<span class="lv-flags">${flags}</span>` : ''}</span>${teamChip(p.id, (cls === 'a' ? a : b).id)}</span><span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><span class="lv-ext"><small class="lv-bot">${bottom.join('')}</small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></span></div></td>`;
         const pj = projOf(p.id, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}${rzc}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')

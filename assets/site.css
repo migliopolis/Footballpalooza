@@ -3101,3 +3101,11 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .rk-od{display:inline-block;width:.75em;text-align:center}
 .st-pos{max-width:100%;overflow-x:auto;scrollbar-width:none}.st-pos button{flex:none}
 @media (max-width:600px){.st-pos button{padding-left:9px;padding-right:9px;min-width:0}}
+/* Scoreboard: the ball / RZ / ON D flags ride on the photo's inner corner, so they never push into the points */
+.lv-phx{position:relative;display:inline-flex;flex:none}
+.lv-phx .lv-flags{position:absolute;top:-4px;right:-10px;flex-direction:column;align-items:center;gap:2px;max-width:none;margin:0;z-index:2}
+.lv-p.b .lv-phx .lv-flags{right:auto;left:-10px}
+.lv-phx .lv-ball{font-size:.85rem;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+@media (max-width:560px){.lv-phx .lv-flags{flex-direction:column;flex-wrap:nowrap;max-width:none}.lv-phx .lv-ball{font-size:.8rem}}
+.lv-compact .lv-phx .lv-flags{position:static;flex-direction:row}
+@media (min-width:561px){.lv-phx .lv-flags{top:-7px;right:-2px}.lv-p.b .lv-phx .lv-flags{left:-2px}}
