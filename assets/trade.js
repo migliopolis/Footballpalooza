@@ -1,6 +1,6 @@
 /* Beta > Trading Floor: a resource for owners thinking about a trade.
    Data: data/trading-floor.json, built by scripts/trading_floor.py on each refresh (MFL rosters, contracts, picks,
-   trades since 2019 and Trade Bait; playoff odds from League Now; ratings from the FBP OVR).
+   trades since 2019 and Trade Bait; playoff odds from League Now; Trade Value leads, with the FBP OVR alongside).
    Facts only: nothing here grades a player, a contract or an owner.
    Exposes window.FBPTrade.render(ctx) and .after(); beta.js routes #beta/trade here. */
 window.FBPTrade = (function () {
@@ -32,11 +32,12 @@ window.FBPTrade = (function () {
   }
   function prow(p, extra) {
     const href = `#now/team/${p.f}/${p.id}`;
-    return `<li class="tf-p"><span class="tf-ovr tf-${tier(p.o)}">${p.o == null ? '–' : p.o}</span>
-      <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a> <span class="tf-sub">${p.p}${p.r ? p.r : ''} · ${esc(p.nfl || '')}${p.age ? ' · age ' + p.age : ''}${p.ppg != null ? ' · ' + p.ppg + ' ppg' : ''}</span>
+    return `<li class="tf-p"><span class="tf-tv" title="Trade Value">${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>TV</small></span>
+      <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''} · ${esc(p.nfl || '')}${p.age ? ' · age ' + p.age : ''}${p.ppg != null ? ' · ' + p.ppg + ' ppg' : ''}</span>
       <div class="tf-sub">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>
       <div class="tf-c">${contract(p)}${extra ? ' · ' + extra : ''}</div></div></li>`;
   }
+  const ordN = n => n == null ? '' : n + ([, 'st', 'nd', 'rd'][n % 100 > 10 && n % 100 < 14 ? 0 : n % 10] || 'th');
   const posOk = p => pos === 'ALL' || p.p === pos;
   const contOk = p => withCont || !(D.teams[p.f] || {}).seed;   // teams in a playoff spot are left out unless asked for
   const seg = (attr, cur, opts) => `<div class="seg tf-seg">${opts.map(([k, l]) => `<button type="button" data-${attr}="${k}" aria-pressed="${k === cur}">${l}</button>`).join('')}</div>`;
@@ -79,10 +80,10 @@ window.FBPTrade = (function () {
         ? `Keeping all ${t.keepN} of its players rated 75+ would cost <b>${money(t.keepCost)}</b> in 2027 against a <b>${money(t.cap27)}</b> budget, <b>${money(c.over)} over</b>. Some of them will have to go.`
         : `<b>${c.n} QBs</b> rated 70+ under contract for 2027, and only 2 veteran QBs can be kept. One of them has to go.`;
       return `<li class="tf-cr"><h4>${logo(c.f)}${esc(nm(c.f))} ${outChip(c.f)} <span class="tf-tag">${c.kind === 'cap' ? 'Cap' : 'QB limit'}</span></h4><p>${head}</p>
-        <p class="tf-sub">${c.kind === 'cap' ? 'Biggest 2027 salaries' : 'The QBs'}: ${c.list.map(p => `${esc(p.n)} <span class="tf-sub">${p.p}, OVR ${p.o}</span> ${money(p.n27)}`).join(' · ')}</p></li>`;
+        <p class="tf-sub">${c.kind === 'cap' ? 'Biggest 2027 salaries' : 'The QBs'}: ${c.list.map(p => `${esc(p.n)} <span class="tf-sub">${p.p}, TV ${p.tv == null ? '–' : Number(p.tv).toLocaleString()}</span> ${money(p.n27)}`).join(' · ')}</p></li>`;
     }).join('');
     return `${posSeg()}
-     <section class="tf-sec"><h3>Good players outside the race</h3><p class="tf-why">Rated 80+ on teams out of a playoff spot right now. Teams in a playoff spot rarely sell, so they’re left out here.</p>${list(good)}</section>
+     <section class="tf-sec"><h3>Good players outside the race</h3><p class="tf-why">Trade Value 2,000 or more (about the top 100), on teams out of a playoff spot right now. Teams in a playoff spot rarely sell, so they’re left out here.</p>${list(good)}</section>
      <section class="tf-sec"><h3>Thinking outside the box</h3><p class="tf-why">Players on playoff teams with a reason their team might still move them: more good players at his spot than the team starts in 2027, a third keeper-worthy QB, or a 2027 keeper bill over budget where he’s one who doesn’t fit.</p>${box.length ? `<ul class="tf-list">${box.map(boxRow).join('')}</ul>` : '<p class="tf-sub">Nobody right now.</p>'}</section>
      <section class="tf-sec"><h3>Expiring deals</h3><p class="tf-why">Contracts that end after this season. A team that won’t keep him may rather get something for him now.</p>${contToggle()}${list(exp)}</section>
      <section class="tf-sec"><h3>Big 2027 raises</h3><p class="tf-why">2027 salary of $20 or more, up $5 or more from this year.</p>${contToggle()}${list(rai, p => `+${money(p.n27 - p.sal)}`)}</section>
@@ -91,15 +92,15 @@ window.FBPTrade = (function () {
 
   function vTeams() {
     const ids = Object.keys(D.teams).sort((a, b) => (D.teams[b].playoff || 0) - (D.teams[a].playoff || 0));
-    return `<p class="tf-why">Sorted by playoff odds. <b>Good</b> counts players rated 80+; a team is deep with one more than its lineup needs and thin with fewer. 2027 shows what keeping every player rated 75+ would cost against the team’s budget (the $200 cap, adjusted for auction cash traded).</p>
+    return `<p class="tf-why">Sorted by playoff odds. Trade Value is the team’s total and league rank, and each position shows its Trade Value rank. <b>Good</b> counts players rated 80+ OVR; a team is deep with one more than its lineup needs and thin with fewer. 2027 shows what keeping every player rated 75+ would cost against the team’s budget (the $200 cap, adjusted for auction cash traded).</p>
      <div class="tf-teams">${ids.map(f => {
       const t = D.teams[f], h = D.habits[f] || {};
       const need = t.thin.map(p => { const who = ids.filter(g => g !== f && D.teams[g].deep.includes(p)); return `<li><b>Could use help at ${p}.</b> ${who.length ? 'Deep there: ' + who.map(g => esc(nm(g))).join(', ') : 'Nobody is deep there.'}</li>`; }).join('');
       const picks = (t.picks || []).filter(p => p.y <= 2028);
       const pyear = y => { const a = picks.filter(p => p.y === y); return a.length ? `<span><b>${y}</b> ${a.map(p => `${['', '1st', '2nd', '3rd', '4th'][p.r]}${p.from !== f ? `<small> (${esc(nm(p.from))})</small>` : ''}`).join(', ')}</span>` : `<span><b>${y}</b> none</span>`; };
       return `<section class="tf-card${f === (X && X.myTeam) ? ' tf-mine' : ''}"><h3>${logo(f)}${esc(nm(f))} ${outChip(f)}</h3>
-       <p class="tf-sub">${(t.rec || []).slice(0, 2).join('–')} · ${t.playoff == null ? '' : t.playoff + '% playoff odds · '}${h.this || 0} trade${h.this === 1 ? '' : 's'} this season</p>
-       <div class="tf-depth">${['QB', 'RB', 'WR', 'TE'].map(p => { const g = t.depth[p].good; const c = t.deep.includes(p) ? 'deep' : t.thin.includes(p) ? 'thin' : ''; return `<div class="tf-d ${c}"><span>${p}</span><b>${g}</b><em>${c === 'deep' ? 'deep' : c === 'thin' ? 'thin' : 'good'}</em></div>`; }).join('')}</div>
+       <p class="tf-sub">${(t.rec || []).slice(0, 2).join('–')} · ${t.playoff == null ? '' : t.playoff + '% playoff odds · '}${t.tv ? `Trade Value ${Number(t.tv).toLocaleString()} (${ordN(t.tvR)}) · ` : ''}${h.this || 0} trade${h.this === 1 ? '' : 's'} this season</p>
+       <div class="tf-depth">${['QB', 'RB', 'WR', 'TE'].map(p => { const g = t.depth[p].good; const c = t.deep.includes(p) ? 'deep' : t.thin.includes(p) ? 'thin' : ''; return `<div class="tf-d ${c}"><span>${p}</span><b>${g}</b><em>${c === 'deep' ? 'deep' : c === 'thin' ? 'thin' : 'good'}</em>${(t.tvPos || {})[p] ? `<small title="Trade Value rank at ${p}">TV ${ordN(t.tvPos[p])}</small>` : ''}</div>`; }).join('')}</div>
        ${need ? `<ul class="tf-need">${need}</ul>` : ''}
        <div class="tf-money"><div><span>2026 payroll</span><b>${money(t.pay26)}</b></div><div><span>2027 keep cost</span><b>${money(t.keepCost)}</b></div><div><span>2027 budget</span><b>${money(t.cap27)}</b></div>
          <div class="${t.room27 < 0 ? 'neg' : 'pos'}"><span>${t.room27 < 0 ? 'Over by' : 'Room'}</span><b>${money(Math.abs(t.room27))}</b></div></div>

@@ -10,7 +10,8 @@ Reads what the refresh already saved and writes data/trading-floor.json:
   habits  per team, plain counts from that history: trades a season, partners, timing, picks in and out
   block   MFL Trade Bait (owners add players from their team page in MFL), when the refresh has fetched it
 
-Player ratings are the FBP OVR (data/ovr.json, scripts/ovr.py), with the card tier from data/beta-cards.json. Nothing here grades a player or an owner.
+Trade lists lead with Trade Value (data/values.json, scripts/trade_values.py) and sort by it; the FBP OVR
+(data/ovr.json) is shown alongside and still drives the lineup and keeper math (depth, keepers, QB limit). Nothing here grades a player or an owner.
 """
 import json, os, re, sys, collections
 from datetime import datetime, timezone
@@ -21,7 +22,8 @@ load = lambda p, d=None: json.load(open(p)) if os.path.exists(p) else d
 
 DEADLINE = '2026-12-03T17:00:00Z'          # Dec 3, 12 PM EST: in-season trading ends before Week 13
 CAP, ROSTER = 200, 20                       # keepers + $1 per open active-roster spot must stay under the $200 cap
-GOOD, KEEP = 80, 75                         # OVR: a weekly starter; worth keeping
+GOOD, KEEP = 80, 75                         # OVR: a weekly starter; worth keeping (lineup and keeper math)
+GOOD_TV = 2000                              # Trade Value: worth chasing in a trade (about the top 100)
 NEED = {'QB': 1, 'RB': 2, 'WR': 2, 'TE': 1} # 2026 lineup (Flex aside)
 NEED27 = {'QB': 2, 'RB': 2, 'WR': 2, 'TE': 1}   # 2027 adds the SuperFlex, so a second QB becomes a starter for most teams
 ORD = {1: '1st', 2: '2nd', 3: '3rd', 4: '4th'}
@@ -43,6 +45,7 @@ def main():
     LN = load(D('league-now.json'), {})
     cards = {c['id']: c for c in (load(D('beta-cards.json'), {}) or {}).get('cards', [])}
     ovr = {k: v.get('o') for k, v in ((load(D('ovr.json'), {}) or {}).get('players') or {}).items()}
+    tvs = {k: v.get('tv') for k, v in ((load(D('values.json'), {}) or {}).get('players') or {}).items()}   # Trade Value (trade_values.py)
     odds = ((LN.get('odds') or {}).get('teams')) or {}
     seeds = {s['id']: s.get('seed') for s in (LN.get('seeds') or [])}   # teams in a playoff spot right now
     T = R['teams']
@@ -65,7 +68,7 @@ def main():
             fut = r.get('fut') or []
             P[r['id']] = {'id': r['id'], 'n': r['name'], 'p': r['pos'], 'nfl': r.get('nfl'), 'age': r.get('age'), 'e': r.get('espn'),
                           'f': f, 'st': r['st'], 'sal': r.get('sal'), 'cy': r.get('cy') or '', 'n27': fut[0] if fut else None,
-                          'exp': not fut, 'o': ovr.get(r['id'], c.get('o')), 'r': c.get('r'), 'dev': c.get('dev'), 'ppg': round(r['pts'] / r['gp'], 1) if r.get('gp') else None}
+                          'exp': not fut, 'o': ovr.get(r['id'], c.get('o')), 'tv': tvs.get(r['id']), 'r': c.get('r'), 'dev': c.get('dev'), 'ppg': round(r['pts'] / r['gp'], 1) if r.get('gp') else None}
 
     # ---------- teams ----------
     teams = {}
@@ -86,6 +89,12 @@ def main():
         teams[f] = {'name': t['name'], 'owner': t.get('owner'), 'rec': t.get('rec'), 'pf': t.get('pf'), 'playoff': po, 'outlook': out, 'seed': seeds.get(f),
                     'pay26': pay26, 'cap27': cap[f], 'keepCost': keep_cost, 'keepN': len(keep), 'room27': round(cap[f] - keep_cost, 1),
                     'depth': depth, 'qb27': [p['id'] for p in sorted(qbs, key=lambda p: -(p['o'] or 0))]}
+
+    VT = (load(D('values.json'), {}) or {}).get('teams') or {}
+    for f in teams:   # Trade Value by team and position (trade_values.py), with ranks
+        v = VT.get(f) or {}
+        teams[f]['tv'], teams[f]['tvR'] = v.get('tv'), v.get('tvR')
+        teams[f]['tvPos'] = {pos: (v.get('pos') or {}).get(pos, {}).get('tvR') for pos in list(NEED) + ['PICK']}
 
     def deep(f, pos):
         g = teams[f]['depth'][pos]['good']
@@ -108,13 +117,14 @@ def main():
     # ---------- targets ----------
     oc = lambda f: teams[f]['outlook']
     def row(p, why=None):
-        x = {k: p[k] for k in ('id', 'n', 'p', 'nfl', 'age', 'e', 'f', 'st', 'sal', 'cy', 'n27', 'exp', 'o', 'r', 'dev', 'ppg')}
+        x = {k: p[k] for k in ('id', 'n', 'p', 'nfl', 'age', 'e', 'f', 'st', 'sal', 'cy', 'n27', 'exp', 'o', 'tv', 'r', 'dev', 'ppg')}
         if why:
             x['why'] = why
         return x
     rated = [p for p in P.values() if p['o'] is not None]
     seeded = lambda f: bool(teams[f].get('seed'))
-    good_bad = sorted([p for p in rated if p['o'] >= GOOD and not seeded(p['f'])], key=lambda p: -p['o'])
+    TVK = lambda p: -(p['tv'] or 0)   # trade lists lead with Trade Value
+    good_bad = sorted([p for p in rated if (p['tv'] or 0) >= GOOD_TV and not seeded(p['f'])], key=TVK)
     # Outside the box: players on playoff teams with a reason the team might still move them
     #   depth  more good players at his spot than the team starts (2027 lineup, with the SuperFlex)
     #   qb     a third QB worth keeping, with only 2 veteran QB keeper spots
@@ -148,8 +158,8 @@ def main():
             why.append({'k': 'cap', 'over': odd[p['id']]})
         if why:
             box.append(row(p, why))
-    box.sort(key=lambda p: (-len(p['why']), -p['o']))
-    expiring = sorted([p for p in rated if p['exp'] and p['st'] != 'TAXI_SQUAD' and p['o'] >= 65], key=lambda p: -p['o'])
+    box.sort(key=lambda p: -(p['tv'] or 0))
+    expiring = sorted([p for p in rated if p['exp'] and p['st'] != 'TAXI_SQUAD' and p['o'] >= 65], key=TVK)
     raises = sorted([p for p in rated if p['n27'] is not None and p['sal'] is not None and p['n27'] >= 20 and p['n27'] - p['sal'] >= 5],
                     key=lambda p: -p['n27'])
     crunch = []
@@ -160,7 +170,7 @@ def main():
         if len(t['qb27']) > 2:
             crunch.append({'f': f, 'kind': 'qb', 'n': len(t['qb27']), 'ids': t['qb27']})
     for c in crunch:
-        c['list'] = [{'id': i, 'n': P[i]['n'], 'p': P[i]['p'], 'n27': P[i]['n27'], 'o': P[i]['o']} for i in c.pop('ids')]
+        c['list'] = [{'id': i, 'n': P[i]['n'], 'p': P[i]['p'], 'n27': P[i]['n27'], 'o': P[i]['o'], 'tv': P[i]['tv']} for i in c.pop('ids')]
     targets = {'goodOnNonContenders': [row(p) for p in good_bad], 'outsideBox': box, 'expiring': [row(p) for p in expiring],
                'raises': [row(p) for p in raises], 'crunch': crunch}
 

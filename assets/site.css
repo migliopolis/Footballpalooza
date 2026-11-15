@@ -3117,3 +3117,8 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 /* Trading Floor > Targets > Thinking outside the box: why each player could be had */
 .tf-whys{display:flex;flex-direction:column;gap:2px;margin-top:4px;font-size:.8rem;color:var(--muted)}
 .tf-why-c{display:inline-block;min-width:62px;margin-right:6px;padding:1px 6px;border-radius:4px;font:700 .62rem/1.5 var(--body);letter-spacing:.05em;text-transform:uppercase;text-align:center;background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--fg)}
+/* Trading Floor rows lead with Trade Value; OVR rides beside the name */
+.tf-tv{flex:none;min-width:52px;height:40px;padding:0 6px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 .98rem/1 var(--display);font-variant-numeric:tabular-nums;background:color-mix(in srgb,var(--fg) 7%,transparent);border:1px solid var(--line);color:var(--fg)}
+.tf-tv small{font:700 .52rem/1 var(--body);letter-spacing:.08em;color:var(--muted);margin-top:3px}
+.tf-o{display:inline-block;min-width:22px;padding:0 4px;border-radius:4px;font:700 .72rem/1.45 var(--display);text-align:center;vertical-align:1px;color:#fff}
+.tf-d small{display:block;margin-top:2px;font-size:.6rem;color:var(--muted);font-variant-numeric:tabular-nums}
