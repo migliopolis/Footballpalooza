@@ -2,6 +2,19 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0231",
+      "to": "0.0235",
+      "dates": "Nov 15, 2026",
+      "items": [
+        "Scoreboard: each player’s half of the row is tinted by his game: blue while it’s on, green while his team has the ball, red in the red zone, grey once it’s over. Defenses go green while the other team has the ball. The football, RZ chip and green dot are gone.",
+        "Scoreboard: a player stuck on zero slowly sinks out of his photo circle as his game runs. Finish scoreless and he’s in witness protection.",
+        "Scoreboard: Cold shows up from the end of the first quarter, Bust can show with a quarter left, and both look the part: frost creeping in from the edge for Cold, frozen solid for Bust.",
+        "Scoreboard: a player ruled out during his game has his projection set to what he scored, and the team projection counts it that way.",
+        "Player photos across the site wear a thin ring in their FBP team’s color, unless a 1st or 2nd Team ring is already there.",
+        "Hospital: team counts now include injured taxi-squad players, so they match the wards below."
+      ]
+    },
+    {
       "from": "0.0226",
       "to": "0.0230",
       "dates": "Nov 14–15, 2026",
