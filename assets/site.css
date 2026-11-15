@@ -1204,9 +1204,6 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-slot{width:2.6rem;text-align:center;font:700 .6rem var(--body);letter-spacing:.04em;color:var(--muted)}
 .lv-st.live{color:var(--ok);font-weight:700}
 .lv-st.bye{color:var(--muted);font-style:italic}
-.lv-p.live .lv-nmt::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:4px;vertical-align:2px}
-.lv-p.b.live .lv-nmt::before{display:none}
-.lv-p.b.live .lv-nmt::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-left:4px;vertical-align:2px}
 .lv-p.empty{color:var(--muted)}
 .lv-stat{white-space:normal!important;color:var(--fg)!important;opacity:.75;margin-top:1px;line-height:1.25}
 .lv-seed{display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;padding:0 4px;border-radius:999px;background:var(--red-soft);color:var(--red);font:700 .6rem/1 var(--body);letter-spacing:0;margin:0 4px;vertical-align:1px}
@@ -1846,6 +1843,19 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .lv-t td.lv-p.b.final{background:linear-gradient(to left,rgba(120,130,140,.18),rgba(120,130,140,.07))}
 .lv-t td.lv-pts.b.final{background:linear-gradient(to left,rgba(120,130,140,.07),rgba(120,130,140,0))}
 .lv-bench .lv-t td.lv-p.final,.lv-bench .lv-t td.lv-pts.final{background:rgba(120,130,140,.12)}
+/* game on: blue; his team has the ball: green; red zone: red (same fade from the outside edge as grey) */
+.lv-t td.lv-p.a.live{background:linear-gradient(to right,rgba(60,130,210,.18),rgba(60,130,210,.07))}
+.lv-t td.lv-pts.a.live{background:linear-gradient(to right,rgba(60,130,210,.07),rgba(60,130,210,0))}
+.lv-t td.lv-p.b.live{background:linear-gradient(to left,rgba(60,130,210,.18),rgba(60,130,210,.07))}
+.lv-t td.lv-pts.b.live{background:linear-gradient(to left,rgba(60,130,210,.07),rgba(60,130,210,0))}
+.lv-t td.lv-p.a.lv-inpos{background:linear-gradient(to right,rgba(46,160,90,.22),rgba(46,160,90,.09))}
+.lv-t td.lv-pts.a.lv-inpos{background:linear-gradient(to right,rgba(46,160,90,.09),rgba(46,160,90,0))}
+.lv-t td.lv-p.b.lv-inpos{background:linear-gradient(to left,rgba(46,160,90,.22),rgba(46,160,90,.09))}
+.lv-t td.lv-pts.b.lv-inpos{background:linear-gradient(to left,rgba(46,160,90,.09),rgba(46,160,90,0))}
+.lv-t td.lv-p.a.lv-inrz{background:linear-gradient(to right,rgba(214,69,69,.24),rgba(214,69,69,.1))}
+.lv-t td.lv-pts.a.lv-inrz{background:linear-gradient(to right,rgba(214,69,69,.1),rgba(214,69,69,0))}
+.lv-t td.lv-p.b.lv-inrz{background:linear-gradient(to left,rgba(214,69,69,.24),rgba(214,69,69,.1))}
+.lv-t td.lv-pts.b.lv-inrz{background:linear-gradient(to left,rgba(214,69,69,.1),rgba(214,69,69,0))}
 .lv-bench .lv-t tr.lv-r-tx td.lv-p,.lv-bench .lv-t tr.lv-r-tx td.lv-pts{background:rgba(240,200,40,.14)}
 .lv-bench .lv-t tr.lv-r-ir td.lv-p,.lv-bench .lv-t tr.lv-r-ir td.lv-pts{background:rgba(220,50,50,.09)}
 /* phones: the chips beside the photo wrap onto a second line rather than run into the points (RZ over Defending) */
