@@ -2,6 +2,17 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0216",
+      "to": "0.0220",
+      "dates": "Nov 14, 2026",
+      "items": [
+        "Trade Value now weighs what a player is doing right now: this season runs on production and the rest-of-season consensus, counted double for the playoff run. Young breakouts carry their form forward, and past his rookie year, a young player falling short of his dynasty rank is marked down.",
+        "Trading Floor leans on Trade Value: every list leads with it and sorts by it, with the player’s photo and his OVR beside his name. Team cards show Trade Value totals and position ranks.",
+        "Targets: Sell candidates on teams out of a playoff spot (expiring deals, 2027 salaries over auction price, veterans at their peak or on a hot stretch), plus Thinking outside the box for players on playoff teams who could still be had.",
+        "Teams pairs two playoff teams only when each is deep where the other is thin. Trading Floor rows fit narrow phones and show NFL team logos."
+      ]
+    },
+    {
       "from": "0.0211",
       "to": "0.0215",
       "dates": "Nov 14, 2026",
