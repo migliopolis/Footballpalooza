@@ -507,6 +507,8 @@
     const SB = { THOT: ['#111111', '#EEC816'] };
     const barColor = id => { const t = tm(id); if (SB[t.abbr]) return SB[t.abbr][0]; const c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
       return c.length ? c.sort((x, y) => Math.abs(lum(x) - 0.5) - Math.abs(lum(y) - 0.5))[0] : 'var(--muted)'; };
+    // last season's champion: a trophy on the logo's outer bottom corner (opposite the seed)
+    const champ = id => { const c = window.FBP && FBP.champ && FBP.champ(); return c && c.f === id ? `<span class="lv-champ" title="${c.year} FBP champion">🏆</span>` : ''; };
     const logo = id => tm(id).logo ? `<img class="lv-lg" src="${tm(id).logo}" alt="">` : `<span class="lv-lg">${esc(tm(id).abbr || '')}</span>`;
     // the labels over a game, highest first: CHAMPIONSHIP PREVIEW (the 1 and 2 seeds) or GAME OF THE WEEK, MY MATCHUP,
     // then this week's context: PLAYOFF PREVIEW (both teams 75%+ to make the playoffs), PLAYOFF STAKES (a win or
@@ -563,7 +565,7 @@
       const line = `<small class="lv-cap">${cap}</small>`;
       const projLine = v => showProj ? `<small class="lv-pjt" title="${view ? 'MFL’s projection before the games' : 'MFL’s projection: points so far plus the projection for what’s left'}">${n1(v)}</small>` : '';
       // the seed sits on the logo's inside bottom corner; the projection sits under the score
-      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}"><span class="lv-lgw">${logo(f.id)}${seed(f.id)}${heat(f)}</span><span class="lv-sc"><b>${n1(+f.score)}</b>${projLine(cls === 'a' ? pa : pb)}</span></span>`;
+      const side = (f, cls) => `<span class="lv-side ${cls}${lead === cls ? ' lead' : ''}"><span class="lv-lgw">${logo(f.id)}${seed(f.id)}${heat(f)}${champ(f.id)}</span><span class="lv-sc"><b>${n1(+f.score)}</b>${projLine(cls === 'a' ? pa : pb)}</span></span>`;
       const la = lineup(a), lb = lineup(b);
       // one player's two cells, mirrored on the right side: name | points  slot  points | name
       const cell = (p, cls, slot) => {

@@ -3077,3 +3077,6 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .ro-banner{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px;padding:8px 12px;border-radius:10px;font-size:.9rem;color:#3a2a00;background:linear-gradient(100deg,#f9e08b,#e9bf4a 40%,#f7d774 60%,#d9a923);box-shadow:inset 0 0 0 1px rgba(120,85,0,.3)}
 .ro-banner span{font-size:.78rem;opacity:.85}
 .ro-th.champ{box-shadow:0 0 0 2px #e2b33a}
+.lv-lgw .lv-champ{position:absolute;bottom:-5px;font-size:.78rem;line-height:1;filter:drop-shadow(0 0 1px var(--surface)) drop-shadow(0 0 1px var(--surface))}
+.lv-side.a .lv-lgw .lv-champ{left:-6px}
+.lv-side.b .lv-lgw .lv-champ{right:-6px}
