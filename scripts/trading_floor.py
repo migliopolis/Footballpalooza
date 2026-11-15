@@ -132,7 +132,8 @@ def main():
     #   exp   contract ends after this season, so he's gone anyway
     #   cost  2027 salary at least $3 over what he'd go for at auction, so keeping him costs more than replacing him
     #   peak  at or past his position's peak age with real Trade Value now, which a rebuild would outlast,
-    #         or producing well above his long-term value (a hot stretch to cash in)
+    #         or producing well above his long-term value (a hot stretch to cash in), unless he's young and
+    #         under contract past this season, or on the taxi squad: a rebuild keeps those
     sell = []
     for p in P.values():
         if seeded(p['f']) or ((p['tv'] or 0) < SELL_TV and (p['o'] or 0) < 75):
@@ -143,7 +144,10 @@ def main():
         if p['n27'] is not None and m is not None and p['n27'] - m >= 3:
             why.append({'k': 'cost', 'mkt': round(m)})
         nv, lv = nowv.get(p['id'], (None, None))
-        if nv and lv and nv >= 5000 and nv >= 1.25 * lv:
+        # a hot stretch is only worth cashing in on a player the rebuild won't be built around: an expiring deal, or a
+        # veteran near or past his peak. A young player on a cheap deal who's just started producing is one to keep
+        young_keeper = p['age'] and p['age'] < PEAK.get(p['p'], 99) - 1 and not p['exp']
+        if nv and lv and nv >= 5000 and nv >= 1.25 * lv and not young_keeper and p['st'] != 'TAXI_SQUAD':
             why.append({'k': 'hot'})
         elif p['age'] and p['age'] >= PEAK.get(p['p'], 99) and (p['tv'] or 0) >= SELL_TV:
             why.append({'k': 'peak', 'peak': PEAK[p['p']]})
