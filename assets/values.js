@@ -7,8 +7,8 @@
                          position ranks, average age, own 1st, and a two-team comparison. */
 window.FBPValues = (function () {
   let V = null, failed = false, loading = false, X = null;
-  let muSt = false, mode = 'tv', picksOn = true, shape = 'dots', cmpA = '', cmpB = '', cmpAll = false, chartLow = 2000;
-  try { muSt = localStorage.getItem('fbp-mu-st') === '1'; mode = localStorage.getItem('fbp-val-mode') || 'tv'; if (mode !== 'tv') mode = 'o'; shape = localStorage.getItem('fbp-val-shape') || 'dots'; } catch (e) {}
+  let muSt = false, stOn = false, ST = null, stWeek = null, mode = 'tv', picksOn = true, shape = 'dots', cmpA = '', cmpB = '', cmpAll = false, chartLow = 2000;
+  try { muSt = localStorage.getItem('fbp-mu-st') === '1'; mode = localStorage.getItem('fbp-val-mode') || 'tv'; if (mode === 'st') { mode = 'o'; stOn = true; } else if (mode !== 'tv') mode = 'o'; shape = localStorage.getItem('fbp-val-shape') || 'dots'; } catch (e) {}
   const esc = s => (X && X.esc ? X.esc(s) : String(s == null ? '' : s));
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   function load() {
@@ -16,6 +16,12 @@ window.FBPValues = (function () {
     loading = true;
     fetch('data/values.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
       .then(j => { V = j; loading = false; redraw(); }, () => { failed = true; loading = false; redraw(); });
+    // Starters: each team's most likely lineup this week (scripts/matchups.py: healthy players by this week's projection
+    // and recent starts; anyone ruled out or on a bye drops for the next best)
+    fetch('data/matchups.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => {
+      ST = new Set(); stWeek = j && j.week;
+      ((j && j.games) || []).forEach(g => Object.values(g.teams || {}).forEach(t => (t.guess || []).forEach(id => ST.add(String(id)))));
+      if (stOn) redraw(); }).catch(() => { ST = new Set(); });
   }
   const POS = ['QB', 'RB', 'WR', 'TE', 'PICK'];
   const PL = { QB: 'QB', RB: 'RB', WR: 'WR', TE: 'TE', PICK: 'Picks' };
@@ -28,10 +34,12 @@ window.FBPValues = (function () {
   const LO = () => mode === 'o' ? 50 : 0, HI = () => mode === 'o' ? 100 : 10000, frac = v => Math.max(0, (v - LO()) / (HI() - LO()));
   const fmt = v => mode === 'o' ? String(Math.round(v)) : v.toLocaleString();
   const teamTot = L => mode === 'o' ? (L.length ? (L.reduce((s, r) => s + val(r), 0) / L.length).toFixed(1) : '—') : Math.round(L.reduce((s, r) => s + val(r), 0) / 1000) + 'k';
-  const toggles = (withPicks) => `<div class="vl-ctl"><div class="seg vl-mode" role="tablist" aria-label="Value">${Object.entries(MODE).map(([k, [l, why]]) =>
-    `<button type="button" role="tab" data-vl-mode="${k}" aria-selected="${mode === k}" title="${why}">${l}</button>`).join('')}</div>
-    ${withPicks ? `<label class="tf-chk"><input type="checkbox" data-vl-picks${picksOn ? ' checked' : ''}> Include picks</label>` : ''}</div>`;
-  const items = () => Object.entries(V.players).map(([id, r]) => Object.assign({ id }, r)).filter(r => r.pos !== 'DEF')
+  const toggles = (withPicks, withSt) => `<div class="vl-ctl"><div class="seg vl-mode" role="tablist" aria-label="Value">${Object.entries(MODE).map(([k, [l, why]]) =>
+    `<button type="button" role="tab" data-vl-mode="${k}" aria-selected="${mode === k && !(withSt && stOn)}" title="${why}">${l}</button>`).join('')}${withSt ? `<button type="button" role="tab" data-vl-mode="st" aria-selected="${stOn}" title="Each team’s most likely starting lineup this week, by OVR: injuries and byes accounted for">Starters</button>` : ''}</div>
+    ${withPicks && !(withSt && stOn) ? `<label class="tf-chk"><input type="checkbox" data-vl-picks${picksOn ? ' checked' : ''}> Include picks</label>` : ''}</div>`;
+  let lg = false;   // true while drawing the Value page itself (Starters applies only there)
+  const items = () => lg && stOn && ST ? Object.entries(V.players).map(([id, r]) => Object.assign({ id }, r)).filter(r => r.pos !== 'DEF' && ST.has(r.id))
+    : Object.entries(V.players).map(([id, r]) => Object.assign({ id }, r)).filter(r => r.pos !== 'DEF')
     .concat(picksOn ? V.picks.map(p => Object.assign({ pos: 'PICK' }, p)) : []);
   const link = r => r.pos === 'PICK' ? null : `#now/team/${r.f}/${r.id}`;
   const foot = () => `<p class="rf-foot">OVR is how good he is, 40–99: Madden’s ratings weighted for fantasy (hands, routes, speed, arm and accuracy count; blocking doesn’t), blended with FantasyPros’ dynasty consensus (data © FantasyPros, as of ${esc(V.ecrUpdated || '')}) and nudged by his FBP production. Only the very best reach 99. A pick’s OVR is the rookie its slot usually lands. Trade Value starts from talent, weighted so stars count for more than a pile of lesser players, then adjusts for the FBP contract: how many seasons you control him (the rest of this one plus each year left on his deal) and what he’d fetch at auction against what he’s paid. A cheap or long deal lifts a player, a big or expiring one lowers him, by at most about a third either way. Picks are the rookie a slot usually lands, on a rookie deal at the by-law salary, 20% off for misses; 2027 picks use today’s draft order.</p>`;
@@ -80,7 +88,7 @@ window.FBPValues = (function () {
   function card(f, rank) {
     const t = V.teams[f], T = tm(f), list = teamList(f);
     return `<section class="card vl-card">
-      <div class="vl-ch"><span class="vl-rk">${rank}</span><a href="#now/team/${f}">${T.logo ? `<img src="${T.logo}" alt="">` : ''}<b>${esc(X.nameOf ? X.nameOf(f) : T.abbr)}</b></a><span class="vl-tot" title="${mode === 'o' ? 'Team OVR: its top 2 QBs, 4 RBs, 5 WRs and 2 TEs' : 'Total Trade Value'}">${mode === 'o' ? t.o : teamTot(list)}</span></div>
+      <div class="vl-ch"><span class="vl-rk">${rank}</span><a href="#now/team/${f}">${T.logo ? `<img src="${T.logo}" alt="">` : ''}<b>${esc(X.nameOf ? X.nameOf(f) : T.abbr)}</b></a><span class="vl-tot" title="${lg && stOn ? 'Average OVR of this week’s likely starters' : mode === 'o' ? 'Team OVR: its top 2 QBs, 4 RBs, 5 WRs and 2 TEs' : 'Total Trade Value'}">${lg && stOn ? teamTot(list) : mode === 'o' ? t.o : teamTot(list)}</span></div>
       <div class="vl-pr">${POS.filter(p => picksOn || p !== 'PICK').map(p => `<span style="--pc:${COL[p]}">${PL[p]}: <b>${ord(t.pos[p][mode + 'R'])}</b></span>`).join('')}</div>
       <div class="vl-meta"><span>Avg. age <b>${t.age || '—'}</b></span><span class="${t.own1 ? 'ok' : 'no'}">${t.own1 ? '✓ Has own 2027 1st' : '✕ Traded own 2027 1st'}</span></div>
       ${shape === 'radar' ? radar(f) : dots(list)}</section>`;
@@ -120,7 +128,7 @@ window.FBPValues = (function () {
     const sel = (k, cur) => `<select class="vl-sel" data-vl-cmp="${k}">${ids.map(f => `<option value="${f}"${f === cur ? ' selected' : ''}>${esc(X.nameOf ? X.nameOf(f) : f)}</option>`).join('')}</select>`;
     return `<section class="card vl-cmp"><h2>Compare</h2><div class="vl-cs"><span style="--pc:${C.ca}">${sel('a', cmpA)}</span><span class="vl-vs">vs</span><span style="--pc:${C.cb}">${sel('b', cmpB)}</span></div>
       ${C.svg}
-      <p class="tf-sub">Each team’s players and picks, best first. The bars underneath show who has the edge at each spot on the list, and by how much.</p>
+      <p class="tf-sub">Each team’s ${lg && stOn ? 'likely starters' : 'players and picks'}, best first. The bars underneath show who has the edge at each spot on the list, and by how much.</p>
       ${C.two}
       ${Math.max(C.A.length, C.B.length) > 10 ? `<button type="button" class="ro-howb" data-vl-all>${cmpAll ? 'Show the top 10' : 'Show everyone'}</button>` : ''}</section>`;
   }
@@ -145,15 +153,19 @@ window.FBPValues = (function () {
     X = ctx; load();
     if (failed) return '<p class="error">Values didn’t load.</p>';
     if (!V) return '<p class="loading">Loading values…</p>';
-    const tot = f => mode === 'o' ? V.teams[f].o : teamList(f).reduce((s, r) => s + val(r), 0);
+    lg = true;
+    const avg = L => L.length ? L.reduce((s, r) => s + val(r), 0) / L.length : 0;
+    const tot = f => stOn ? avg(teamList(f)) : mode === 'o' ? V.teams[f].o : teamList(f).reduce((s, r) => s + val(r), 0);
     const order = Object.keys(V.teams).sort((a, b) => tot(b) - tot(a));
-    return `${toggles(true)}
+    const html = `${toggles(true, true)}${stOn ? `<p class="tf-sub vl-stn">${ST ? `Each team’s most likely starting lineup${stWeek ? ` for week ${stWeek}` : ''}, by OVR: healthy players ranked by this week’s projection and recent starts, with anyone ruled out or on a bye replaced by the next best. Not the lineup set in MFL. Defenses aren’t rated.` : 'Loading this week’s lineups…'}</p>` : ''}
       ${compare()}
       <h2 class="sec vl-tbt">Team by team</h2>
       <div class="vl-shape-row"><div class="seg vl-shape-seg" role="tablist" aria-label="Chart on each team">${[['dots', 'Every player'], ['radar', 'By position']].map(([k, l]) => `<button type="button" role="tab" data-vl-shape="${k}" aria-selected="${shape === k}">${l}</button>`).join('')}</div>
         <p class="tf-sub">${shape === 'radar' ? 'Each team’s strength at QB, RB, WR, TE and picks against the rest of the league: the farther out, the stronger.' : 'Each team’s players as dots, best first, colored by position.'}</p></div>
       <div class="vl-grid">${order.map((f, i) => card(f, i + 1)).join('')}</div>
-      <p class="rf-foot">Teams are ordered by ${mode === 'o' ? 'team OVR, the average of their top 2 QBs, 4 RBs, 5 WRs and 2 TEs' : 'their total Trade Value'}. Position ranks use the top 2 QBs, 4 RBs, 5 WRs, 2 TEs and every pick. Average age is the active roster’s, defenses left out. Dot colors: <span style="color:${COL.QB}">●</span> QB <span style="color:${COL.RB}">●</span> RB <span style="color:${COL.WR}">●</span> WR <span style="color:${COL.TE}">●</span> TE <span style="color:${COL.PICK}">●</span> pick.</p>${foot()}`;
+      <p class="rf-foot">Teams are ordered by ${stOn ? 'the average OVR of their likely starters' : mode === 'o' ? 'team OVR, the average of their top 2 QBs, 4 RBs, 5 WRs and 2 TEs' : 'their total Trade Value'}. Position ranks use the top 2 QBs, 4 RBs, 5 WRs, 2 TEs and every pick. Average age is the active roster’s, defenses left out. Dot colors: <span style="color:${COL.QB}">●</span> QB <span style="color:${COL.RB}">●</span> RB <span style="color:${COL.WR}">●</span> WR <span style="color:${COL.TE}">●</span> TE <span style="color:${COL.PICK}">●</span> pick.</p>${foot()}`;
+    lg = false;
+    return html;
   }
 
   document.addEventListener('click', e => {
@@ -166,7 +178,7 @@ window.FBPValues = (function () {
       all().forEach((v, k) => { const d = v.querySelector('details'); if (d && open[k]) d.open = true; });
       const nb = all()[i] && all()[i].querySelector('[data-vl-st]'); if (nb) window.scrollBy(0, nb.getBoundingClientRect().top - top);
       return; }
-    const m = t.closest('[data-vl-mode]'); if (m) { mode = m.dataset.vlMode; try { localStorage.setItem('fbp-val-mode', mode); } catch (err) {} return redraw(); }
+    const m = t.closest('[data-vl-mode]'); if (m) { const k = m.dataset.vlMode; stOn = k === 'st'; mode = k === 'tv' ? 'tv' : 'o'; try { localStorage.setItem('fbp-val-mode', k); } catch (err) {} return redraw(); }
     const s = t.closest('[data-vl-shape]'); if (s) { shape = s.dataset.vlShape; try { localStorage.setItem('fbp-val-shape', shape); } catch (err) {} return redraw(); }
     if (t.closest('[data-vl-more]')) { chartLow = 0; return redraw(); }
     if (t.closest('[data-vl-all]')) { cmpAll = !cmpAll; return redraw(); }
