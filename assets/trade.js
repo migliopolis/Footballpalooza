@@ -76,6 +76,7 @@ window.FBPTrade = (function () {
       : `<span class="tf-why-c">Cap</span> doesn’t fit the 2027 budget, ${money(w.over)} over`;
     const sellTxt = (p, w) => w.k === 'exp' ? `<span class="tf-why-c">Expiring</span> contract ends after this season`
       : w.k === 'cost' ? `<span class="tf-why-c">Cost</span> ${money(p.n27)} in 2027; he’d go for about ${money(w.mkt)} at auction`
+      : w.k === 'hot' ? `<span class="tf-why-c">Sell high</span> producing well above his long-term value${p.ppg != null ? ` (${p.ppg} ppg)` : ''}`
       : `<span class="tf-why-c">Sell high</span> age ${p.age}; ${p.p}s peak around ${w.peak}`;
     const sellRow = p => prow(p).replace('</div></div></li>', `</div><div class="tf-whys">${(p.why || []).map(w => `<div>${sellTxt(p, w)}</div>`).join('')}</div></div></li>`);
     const boxRow = p => prow(p).replace('</div></div></li>', `</div><div class="tf-whys">${(p.why || []).map(w => `<div>${whyTxt(p, w)}</div>`).join('')}</div></div></li>`);
@@ -91,7 +92,7 @@ window.FBPTrade = (function () {
         <p class="tf-sub">${c.kind === 'cap' ? 'Biggest 2027 salaries' : 'The QBs'}: ${c.list.map(p => `${esc(p.n)} <span class="tf-sub">${p.p}, TV ${p.tv == null ? '–' : Number(p.tv).toLocaleString()}</span> ${money(p.n27)}`).join(' · ')}</p></li>`;
     }).join('');
     return `${posSeg()}
-     <section class="tf-sec"><h3>Sell candidates</h3><p class="tf-why">Players on the teams out of a playoff spot that a rebuilding owner has a reason to move now instead of carrying into next season: an expiring contract, a 2027 salary over what he’d go for at auction, or an age at or past his position’s peak while his Trade Value is still high. By Trade Value.</p>${good.length ? `<ul class="tf-list">${good.map(sellRow).join('')}</ul>` : '<p class="tf-sub">Nobody right now.</p>'}</section>
+     <section class="tf-sec"><h3>Sell candidates</h3><p class="tf-why">Players on the teams out of a playoff spot that a rebuilding owner has a reason to move now instead of carrying into next season: an expiring contract, a 2027 salary over what he’d go for at auction, production well above his long-term value, or an age at or past his position’s peak while his Trade Value is still high. By Trade Value, which weighs what a player is doing now for the playoff run.</p>${good.length ? `<ul class="tf-list">${good.map(sellRow).join('')}</ul>` : '<p class="tf-sub">Nobody right now.</p>'}</section>
      <section class="tf-sec"><h3>Thinking outside the box</h3><p class="tf-why">Players on playoff teams with a reason their team might still move them: more good players at his spot than the team starts in 2027, a third keeper-worthy QB, or a 2027 keeper bill over budget where he’s one who doesn’t fit.</p>${box.length ? `<ul class="tf-list">${box.map(boxRow).join('')}</ul>` : '<p class="tf-sub">Nobody right now.</p>'}</section>
      <section class="tf-sec"><h3>Expiring deals</h3><p class="tf-why">Contracts that end after this season. A team that won’t keep him may rather get something for him now.</p>${contToggle()}${list(exp)}</section>
      <section class="tf-sec"><h3>Big 2027 raises</h3><p class="tf-why">2027 salary of $20 or more, up $5 or more from this year.</p>${contToggle()}${list(rai, p => `+${money(p.n27 - p.sal)}`)}</section>

@@ -8,8 +8,12 @@ rank (data/fantasypros/dynasty-ecr.json, from the daily FantasyPros pull): 9999 
 
 Trade Value (TV, 1-9999): what he's worth in a trade between FBP owners. Talent leads and the contract adjusts it:
   TV = talent x contract, scaled so the best is 9999
-  talent   = 9999 * (PV / 9999) ** 1.5   stars count for more than the sum of lesser players (you don't trade
-             a great player for two good ones, or for a bad one on a cheap deal)
+  talent   = 9999 * (value / 9999) ** 1.5   stars count for more than the sum of lesser players (you don't trade
+             a great player for two good ones, or for a bad one on a cheap deal), averaged over the seasons he's
+             under control: this season on his value right now (now_values: half FBP points per game, half the
+             FantasyPros rest-of-season rank), counted double because the playoff run is what a contender buys;
+             next season half now, half dynasty; later seasons dynasty alone. So a player producing now on a deal
+             that runs past this season is worth a lot; an expiring one is worth what he does the rest of this year
   contract = (0.55 + 0.45 * control) * (1 + 0.3 * surplus), between about 0.4 and 1.3
     control: how much of him you get, the rest of this season plus each year left on his deal (each later year
              10% less), as a share of three seasons; an expiring contract is mostly this season. A year his salary
@@ -57,12 +61,56 @@ def market(pv):
     return 80 * (pv / 9999) ** 1.8
 
 
-def contract_tv(pv, val, cost, ctl):
+def contract_tv(pv, val, cost, ctl, talent=None):
     """Talent times the contract: see the top of the file."""
-    talent = 9999 * (pv / 9999) ** 1.5
+    talent = 9999 * (pv / 9999) ** 1.5 if talent is None else talent
     control = min(1.0, ctl / 3.0)
     surplus = max(-1.0, min(1.0, (val - cost) / val)) if val > 0 else 0.0
     return talent * (0.55 + 0.45 * control) * (1 + 0.3 * surplus)
+
+
+NOW_W = 2.0   # a week of this season counts double a week of a later one: the playoff run is what a contender is buying
+
+
+def talent_of(pv):
+    return 9999 * (pv / 9999) ** 1.5
+
+
+def now_values(R):
+    """Player Value for right now, by MFL id: half the FantasyPros rest-of-season rank, half FBP points per game
+    (4+ games), each turned into an overall rank and then a 1-9999 value on the same curve as Player Value. A points
+    per game rank at a position becomes the overall rank of the rest-of-season consensus player at that spot, so
+    the 8th-best RB by points counts like the consensus RB8."""
+    ROS = (load(D('fantasypros', 'ros-ecr.json'), {}) or {}).get('players') or {}
+    ST = (load(D('stats.json'), {}) or {}).get('rows') or []
+    by_pos = {}
+    # the consensus overall rank of each position rank (RB8 -> its overall rank)
+    pos_of = {r['id']: r['p'] for r in ST}
+    for pid, v in ROS.items():
+        if v and v[0] and v[1] and pos_of.get(pid):
+            by_pos.setdefault(pos_of[pid], {})[v[1]] = v[0]
+    def overall(pos, n):
+        t = by_pos.get(pos) or {}
+        if n in t:
+            return t[n]
+        ks = sorted(t)
+        return (t[ks[-1]] + 6 * (n - ks[-1])) if ks and n > ks[-1] else 500
+    ppg = {}
+    for r in ST:
+        w = [x for x in (r.get('w') or []) if x is not None]
+        if len(w) >= 4 and r.get("p") in ("QB", "RB", "WR", "TE"):
+            ppg[r['id']] = (r['p'], sum(w) / len(w))
+    prod = {}
+    for pos in ('QB', 'RB', 'WR', 'TE'):
+        L = sorted((v[1], k) for k, v in ppg.items() if v[0] == pos)[::-1]
+        for i, (_, k) in enumerate(L):
+            prod[k] = overall(pos, i + 1)
+    out = {}
+    for pid in set(prod) | {k for k, v in ROS.items() if v and v[0]}:
+        a = pv_of(ROS[pid][0]) if ROS.get(pid) and ROS[pid][0] else None
+        b = pv_of(prod[pid]) if pid in prod else None
+        out[pid] = (a + b) / 2 if a is not None and b is not None else (a if a is not None else b)
+    return out
 
 
 def pick_rank(n):   # overall pick number -> the dynasty rank of the rookie it usually lands
@@ -92,6 +140,7 @@ def main():
     season = int(R.get('season') or 2026)
     through = int(R.get('through') or 0)
     left = max(0, (14 - through + 2) / 17)   # rest of the regular season plus about two playoff weeks
+    NOW = now_values(R)
     rows, raw = {}, {}
     for f, t in (R.get('teams') or {}).items():
         for r in t.get('rows', []):
@@ -100,22 +149,30 @@ def main():
             pv = pv_of(rank)
             m = market(pv)
             age = r.get('age') or 26
-            # the seasons he's under control: what he'd fetch at auction each year, and what he's paid
-            val, cost, ctl = m * left, 0.0, left
+            # this season runs on what he's doing now (production and the rest-of-season consensus); next season is
+            # half now, half dynasty; after that, dynasty alone
+            nv = NOW.get(str(r['id']), pv)
+            pvs = lambda k: nv if k < 0 else (nv + pv) / 2 if k == 0 else pv
+            w0 = left * NOW_W
+            val, cost, ctl = market(nv) * left, 0.0, left
+            tw, tsum = w0, w0 * talent_of(nv)
             # an owner only keeps him while he's worth his salary: the first year his raise outruns what he'd fetch
             # at auction, he's let go, so that year and the rest of the deal don't count, for or against him
             for k, sal in enumerate(r.get('fut') or []):
                 yrs_past = max(0, age + k + 1 - PEAK.get(pos, 28))
-                worth = m * (1 - DROP.get(pos, .06)) ** yrs_past
+                # his auction price that year: the better of the long view and the blend with what he's doing now
+                worth = market(max(pv, pvs(k))) * (1 - DROP.get(pos, .06)) ** yrs_past
                 if worth < (sal or 0):
                     break
                 val += 0.9 ** k * worth
                 cost += 0.9 ** k * (sal or 0)
                 ctl += 0.9 ** k
-            tv = contract_tv(pv, val, cost + (r.get('sal') or 0) * left, ctl)
+                tw += 0.9 ** k; tsum += 0.9 ** k * talent_of(pvs(k))
+            tv = contract_tv(pv, val, cost + (r.get('sal') or 0) * left, ctl, talent=tsum / tw if tw else None)
             raw[r['id']] = tv
             rows[r['id']] = {'f': f, 'n': r['name'], 'pos': pos, 'age': r.get('age'), 'st': r.get('st'), 'sal': r.get('sal'),
-                             'rank': rank if rank < 500 else None, 'pv': round(pv), 'mkt': round(m, 1)}
+                             'rank': rank if rank < 500 else None, 'pv': round(pv), 'mkt': round(m, 1),
+                             'nv': round(nv), 'mkt27': round(market((nv + pv) / 2), 1)}
     # rookie picks
     order = {d['id']: d['pick'] for d in (LN.get('draftOrder') or [])}
     picks = []
