@@ -201,11 +201,11 @@
       const core = 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/';
       const rosters = Promise.all(ros.map(x => Promise.all((x.tids || []).map(t => fetch(`${core}${x.id}/competitions/${x.id}/competitors/${t}/roster?limit=200`, { cache: 'no-cache' })
         .then(r => r.ok ? r.json() : Promise.reject()))).then(rs => {
-          // inactive: off the active list (valid false), or, once the game is over, never got in. Mid-game "didn't play"
-          // only means no snaps yet, so it doesn't count until the final
+          // inactive: ESPN's didNotPlay, which is the team's inactive list (about 7 a side) from kickoff on. Their "valid"
+          // flag only means he hasn't been in the game yet (half the roster early on), so it doesn't count
           (stats['outs' + x.id] || []).forEach(id => { delete stats['out:' + id]; });
           const outs = [];
-          rs.forEach(r => (r.entries || []).forEach(a => { if (a.valid === false || (x.state === 'post' && a.didNotPlay)) { stats['out:' + a.playerId] = 1; outs.push(a.playerId); } }));
+          rs.forEach(r => (r.entries || []).forEach(a => { if (a.didNotPlay) { stats['out:' + a.playerId] = 1; outs.push(a.playerId); } }));
           stats['outs' + x.id] = outs; stats['ro' + x.id] = 1;
         }).catch(() => null)));
       const want = [...new Set(Object.values(g).filter(x => x.state === 'in' || (x.state === 'post' && !stats['ev' + x.id])).map(x => x.id))];
