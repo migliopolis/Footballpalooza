@@ -217,7 +217,7 @@ window.FBPDraftHub = (() => {
     const card = (pr, i) => { const p = byName[pr.name] || {}, e = (H.espn || {})[pr.name] || {};
       return `<article class="card dc-p"><div class="dc-ph">${e.id ? `<img src="${headshot(e.id)}" alt="" loading="lazy" onerror="this.remove()">` : ''}${school(e.team)}<span class="dc-rk">${p.rank || i + 1}</span></div>
         <div class="dc-pb"><h3>${esc(pr.name)}</h3><p class="dc-meta">${posPill(p.pos)} ${p.school ? schoolOf(pr.name, p.school) + esc(p.school) : ''}${p.pos ? ` · ${posRank(p)}` : ''}</p>
-        <p class="dc-tag">${esc(pr.tag || '')}</p><p>${esc(pr.text || '')}</p></div></article>`; };
+        <p class="dc-tag">${esc(pr.tag || '')}</p><p>${esc(pr.text || '')}</p>${pr.comp ? `<p class="dc-comp"><small>NFL comp</small><b>${esc(pr.comp)}</b>${pr.compBy ? `<span>per ${esc(pr.compBy)}</span>` : ''}</p>` : ''}</div></article>`; };
     return head('') + `<section class="dc">
       ${h.src ? `<figure class="dc-hero"><img src="${esc(h.src)}" alt="${esc(h.alt || '')}"><figcaption><span class="dc-kick">The ${DH.class || (X.now.draftYear || '')} rookie class</span><b>${esc(DH.headline || '')}</b><small>${esc(h.caption || '')}</small></figcaption></figure>` : ''}
       <div class="card dc-sum"><h2>What to know</h2>${(DH.summary || []).map(t => `<p>${esc(t)}</p>`).join('')}

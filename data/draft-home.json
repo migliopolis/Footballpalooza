@@ -1,5 +1,5 @@
 {
-  "note": "Rookie Draft > Draft Home: the class primer. Edit the summary and the profiles here; ranks, positions, photos and schools come from the big board (rookie-pricer/mock-board.json) and data/rookies-espn.json.",
+  "note": "Rookie Draft > Draft Home: the class primer. Edit the summary and the profiles (comp: the NFL player comparison, compBy: who made it) here; ranks, positions, photos and schools come from the big board (rookie-pricer/mock-board.json) and data/rookies-espn.json.",
   "class": 2027,
   "updated": "2026-11-14",
   "hero": {
@@ -7,68 +7,94 @@
     "alt": "Jeremiah Smith in Ohio State's scarlet uniform, arms crossed in the end zone after a touchdown",
     "caption": "Jeremiah Smith, Ohio State. The no-doubt 1.01."
   },
-  "headline": "A receiver class with a franchise player at the top",
+  "headline": "A franchise receiver at the top, and a QB class right on time for superflex",
   "summary": [
-    "This is a wide receiver draft. Nine of the top 24 rookies on the board are receivers, led by Ohio State's Jeremiah Smith, the clearest 1.01 in years, with Indiana's Charlie Becker, Rutgers' KJ Duff and Texas's Cam Coleman behind him. If you need a receiver, this is the year to have an early pick.",
-    "Running back is the next strongest spot. Florida's Jadan Baugh is the best of the backs, and Missouri's Ahmad Hardy, Ole Miss's Kewan Lacy and Georgia's Nate Frazier give the class real depth, though Hardy and Lacy carry injury questions into the spring.",
-    "Quarterback is the story that matters most for us. FBP goes superflex in 2027, so a starting QB can fill two lineup spots, and this class has real ones: Drew Mestemaker, Darian Mensah and CJ Carr have all climbed this fall, with Dante Moore and Arch Manning close behind. Expect them to go early, maybe ahead of a receiver or back you'd have taken in a one-QB year. Tight end is thin. Trey'Dez Green and Jamari Johnson are the only early-round names."
+    "It starts with Ohio State's Jeremiah Smith, the clearest 1.01 in years. A 6-4 receiver who has produced since the day he got to campus, he's the one rookie in this class you'd take over any of them, in any format.",
+    "Then come the quarterbacks, and for us that's the headline. FBP goes superflex in 2027, so a starting QB can fill two lineup spots, and this class arrives at exactly the right time. Five quarterbacks sit in the top 14 of the board: Oklahoma State's Drew Mestemaker, Miami's Darian Mensah, Notre Dame's CJ Carr, Oregon's Dante Moore and Texas's Arch Manning, with Ole Miss's Trinidad Chambliss right behind. Several of them could go in the NFL's first round. Scouts have cooled a little on the group since the summer, when it was billed as historic, but the depth is real. Expect them to go early in our draft, maybe ahead of a back or receiver you'd have taken in a one-QB year.",
+    "Running back is solid at the top. Florida's Jadan Baugh is the best of the backs, and Missouri's Ahmad Hardy, Ole Miss's Kewan Lacy and Georgia's Nate Frazier give it depth, though Hardy and Lacy carry injury questions into the spring.",
+    "Behind Smith, the receivers are the deepest group in the class. Indiana's Charlie Becker leads the next tier, with Rutgers' KJ Duff, Texas's Cam Coleman and Indiana's Nick Marsh close behind, and useful names well into the second round.",
+    "Tight end is thin. LSU's Trey'Dez Green and Oregon's Jamari Johnson are the only early-round names."
   ],
   "profiles": [
     {
       "name": "Jeremiah Smith",
       "tag": "The no-doubt 1.01",
-      "text": "A 6-4, 223-pound receiver who has done everything since the day he arrived: 76 catches for 1,315 yards and 15 touchdowns as a freshman on a national title team, then 87 for 1,243 and 12 and a unanimous All-American nod in 2025. Two-time Big Ten Receiver of the Year, now Ohio State's career leader. Hands, size, speed and route craft are all elite."
+      "text": "A 6-4, 223-pound receiver who has done everything since the day he arrived: 76 catches for 1,315 yards and 15 touchdowns as a freshman on a national title team, then 87 for 1,243 and 12 and a unanimous All-American nod in 2025. Two-time Big Ten Receiver of the Year, now Ohio State's career leader. Hands, size, speed and route craft are all elite.",
+      "comp": "Calvin Johnson",
+      "compBy": "Todd McShay"
     },
     {
       "name": "Jadan Baugh",
       "tag": "RB1 of the class",
-      "text": "The best back in the class opened 2026 with 600 yards and 11 touchdowns in four games, over seven yards a carry and 100 yards every week. Patient behind the line, and the receiving role is growing. Boards compare his style to Le'Veon Bell's."
+      "text": "The best back in the class opened 2026 with 600 yards and 11 touchdowns in four games, over seven yards a carry and 100 yards every week. Patient behind the line, and the receiving role is growing. Boards compare his style to Le'Veon Bell's.",
+      "comp": "Le'Veon Bell",
+      "compBy": "A to Z Sports"
     },
     {
       "name": "Charlie Becker",
       "tag": "Big-play WR2",
-      "text": "Indiana's clear No. 1 receiver and one of PFF's top 15 wideouts nationally. A former state-champion hurdler, and it shows in his body control on the ball in the air. The best bet to be the second receiver off the board."
+      "text": "Indiana's clear No. 1 receiver and one of PFF's top 15 wideouts nationally. A former state-champion hurdler, and it shows in his body control on the ball in the air. The best bet to be the second receiver off the board.",
+      "comp": "Alec Pierce",
+      "compBy": "WalterFootball"
     },
     {
       "name": "Drew Mestemaker",
       "tag": "Walk-on to QB1 contender",
-      "text": "Led the nation in passing yards at North Texas in 2025, then transferred to Oklahoma State and beat No. 6 Oregon with 317 yards passing and 109 rushing. The legs are what make him interesting for fantasy, and in superflex he's a top-five rookie pick; the Air Raid numbers need a grain of salt."
+      "text": "Led the nation in passing yards at North Texas in 2025, then transferred to Oklahoma State and beat No. 6 Oregon with 317 yards passing and 109 rushing. The legs are what make him interesting for fantasy, and in superflex he's a top-five rookie pick; the Air Raid numbers need a grain of salt.",
+      "comp": "Ryan Tannehill",
+      "compBy": "A to Z Sports"
     },
     {
       "name": "Ahmad Hardy",
       "tag": "All-American back, back on the field",
-      "text": "An All-American in 2025, he missed the first two months of 2026 recovering from an offseason leg injury and made his season debut on Nov. 1 against Arkansas. How he looks over the final stretch will decide whether he stays a first-round rookie pick."
+      "text": "An All-American in 2025, he missed the first two months of 2026 recovering from an offseason leg injury and made his season debut on Nov. 1 against Arkansas. How he looks over the final stretch will decide whether he stays a first-round rookie pick.",
+      "comp": "Nick Chubb",
+      "compBy": "A to Z Sports"
     },
     {
       "name": "Darian Mensah",
       "tag": "The fall's biggest riser",
-      "text": "Climbed from outside the top 35 in September into the top tier, tied for the national lead with 25 touchdown passes against one interception at Miami. The question scouts ask: how much of it is a short, quick-throw offense."
+      "text": "Climbed from outside the top 35 in September into the top tier, tied for the national lead with 25 touchdown passes against one interception at Miami. The question scouts ask: how much of it is a short, quick-throw offense.",
+      "comp": "Teddy Bridgewater",
+      "compBy": "A to Z Sports"
     },
     {
       "name": "Kewan Lacy",
       "tag": "Touchdown machine, if healthy",
-      "text": "Scored 24 touchdowns at Ole Miss in 2025. This year has been a fight with his body: a lower-leg injury, shoulder trouble and a dislocation against Texas that cost him a game. At 205 pounds, durability is the knock."
+      "text": "Scored 24 touchdowns at Ole Miss in 2025. This year has been a fight with his body: a lower-leg injury, shoulder trouble and a dislocation against Texas that cost him a game. At 205 pounds, durability is the knock.",
+      "comp": "Lamar Miller, if he ran tougher",
+      "compBy": "A to Z Sports"
     },
     {
       "name": "CJ Carr",
       "tag": "Notre Dame's passer",
-      "text": "Notre Dame's starter beat Mensah and then-No. 1 Miami head to head this fall, and NFL scouts have taken notice. A pocket passer more than a runner, so his fantasy ceiling rides on where he lands, but in a superflex league a starting job alone makes him a first-round rookie pick."
+      "text": "Notre Dame's starter beat Mensah and then-No. 1 Miami head to head this fall, and NFL scouts have taken notice. A pocket passer more than a runner, so his fantasy ceiling rides on where he lands, but in a superflex league a starting job alone makes him a first-round rookie pick.",
+      "comp": "Brock Purdy",
+      "compBy": "Mel Kiper Jr."
     },
     {
       "name": "KJ Duff",
       "tag": "6-6 red-zone weapon",
-      "text": "A 6-6, 225-pound receiver who moves like a smaller one. He accounts for nearly half of Rutgers' receiving yards and more than half of its receiving touchdowns. Built to win in the end zone."
+      "text": "A 6-6, 225-pound receiver who moves like a smaller one. He accounts for nearly half of Rutgers' receiving yards and more than half of its receiving touchdowns. Built to win in the end zone.",
+      "comp": "Mike Evans",
+      "compBy": "Sports Illustrated"
     },
     {
       "name": "Cam Coleman",
       "tag": "First-round traits, low volume",
-      "text": "The talent is obvious: a deep threat with first-round tools. The production hasn't matched it at Texas (23 catches, 409 yards and 7 touchdowns through eight games), which is why he slid from third on some boards in September."
+      "text": "The talent is obvious: a deep threat with first-round tools. The production hasn't matched it at Texas (23 catches, 409 yards and 7 touchdowns through eight games), which is why he slid from third on some boards in September.",
+      "comp": "Julio Jones",
+      "compBy": "Steve Sarkisian"
     }
   ],
   "sources": [
     {
       "name": "Dynasty Nerds, 2027 Rookie Big Board 6.0 (Nov. 3, 2026)",
       "url": "https://www.dynastynerds.com/nfl-prospect/2027-rookie-big-board-6-0/"
+    },
+    {
+      "name": "ESPN, NFL scouts favor Drew Mestemaker as first QB taken (Oct. 31, 2026)",
+      "url": "https://abc7chicago.com/post/nfl-scouts-favor-drew-mestemaker-first-qb-taken-draft/20003269/"
     },
     {
       "name": "Jeremiah Smith, Wikipedia",

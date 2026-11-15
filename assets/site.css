@@ -3106,3 +3106,11 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .dc-meta{margin:2px 0 4px;font-size:.78rem;color:var(--muted)}
 .dc-tag{margin:0 0 4px;font:700 .72rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--red)}
 .dc-pb p:last-child{margin:0;font-size:.86rem;line-height:1.5}
+/* Standings and Power Rankings: team names stay on one line; tags drop below when there's no room */
+.st-tbl .team,.pr-tbl .team{flex-wrap:wrap;row-gap:3px}
+.st-tbl .team .nm,.pr-tbl .team .nm{white-space:nowrap;overflow-wrap:normal}
+.st-tbl .team .champ-chip,.pr-tbl .team .champ-chip{margin-left:0}
+.dc-comp{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin:10px 0 0;padding-top:8px;border-top:1px solid var(--line)}
+.dc-comp small{font:700 .62rem/1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dc-comp b{font-size:.92rem}
+.dc-comp span{font-size:.75rem;color:var(--muted)}

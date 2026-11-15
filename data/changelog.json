@@ -2,6 +2,17 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0211",
+      "to": "0.0215",
+      "dates": "Nov 14, 2026",
+      "items": [
+        "Rookie Draft has a new Draft Home: a primer on the 2027 class for superflex, with a class summary, the position mix and profiles of the top 10 prospects, each with an NFL comp.",
+        "Rookie Draft tabs renamed: FBP Home is now Draft Order, and Full Order is now All Rounds.",
+        "School logos sit beside college players across the draft pages and on Player Page bios.",
+        "The Scoreboard puts a trophy on last season’s champion’s logo. On Standings, the champion’s chip reads Champion and team names stay on one line."
+      ]
+    },
+    {
       "from": "0.0206",
       "to": "0.0210",
       "dates": "Nov 14, 2026",
