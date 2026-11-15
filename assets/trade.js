@@ -34,7 +34,7 @@ window.FBPTrade = (function () {
     const href = `#now/team/${p.f}/${p.id}`;
     return `<li class="tf-p"><span class="tf-tv" title="Trade Value">${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>TV</small></span>
       <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''} · ${esc(p.nfl || '')}${p.age ? ' · age ' + p.age : ''}${p.ppg != null ? ' · ' + p.ppg + ' ppg' : ''}</span>
-      <div class="tf-sub">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>
+      <div class="tf-sub tf-tm">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>
       <div class="tf-c">${contract(p)}${extra ? ' · ' + extra : ''}</div></div></li>`;
   }
   const ordN = n => n == null ? '' : n + ([, 'st', 'nd', 'rd'][n % 100 > 10 && n % 100 < 14 ? 0 : n % 10] || 'th');

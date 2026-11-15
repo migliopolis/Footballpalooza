@@ -2428,7 +2428,7 @@ tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tf-sec{margin:0 0 22px}
 .tf-sec h3,.tf-card h3{font:700 1.05rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.02em;margin:0 0 4px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .tf-sub{color:var(--muted);font-size:.8rem}
-.tf-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+.tf-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:8px}
 .tf-p{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
 .tf-pm{min-width:0;flex:1}
 .tf-pm a{color:var(--fg);text-decoration:none}.tf-pm a:hover b{text-decoration:underline}
@@ -3122,3 +3122,4 @@ h2 .champ-chip{font-size:.62rem;vertical-align:4px}
 .tf-tv small{font:700 .52rem/1 var(--body);letter-spacing:.08em;color:var(--muted);margin-top:3px}
 .tf-o{display:inline-block;min-width:22px;padding:0 4px;border-radius:4px;font:700 .72rem/1.45 var(--display);text-align:center;vertical-align:1px;color:#fff}
 .tf-d small{display:block;margin-top:2px;font-size:.6rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tf-card .tf-tm{display:none}   /* On the Block: the card already names the team */
