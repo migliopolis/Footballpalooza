@@ -404,6 +404,16 @@
     if (!ms) return;
     timer = setTimeout(() => { if ((onPage() || tkWant) && !document.hidden) load(); poll(); }, ms);
   }
+  // back from another app or a locked phone: phones pause the timer in the background, so refresh right away
+  // instead of showing the last scores until the next tick
+  let hiddenAt = 0;
+  const wake = () => {
+    if (document.hidden) { hiddenAt = Date.now(); return; }
+    if (!LIVE_URL || !(onPage() || tkWant) || Date.now() - hiddenAt < 3000) return;
+    load(); poll();
+  };
+  document.addEventListener('visibilitychange', wake);
+  window.addEventListener('pageshow', e => { if (e.persisted) { hiddenAt = 0; wake(); } });
   // redraw just the scoreboard (keeps scroll position and which games are open)
   // the scoreboard's status (updated when, how often) sits beside the page title
   let statusHtml = '';
