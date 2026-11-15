@@ -101,10 +101,18 @@ window.FBPTrade = (function () {
 
   function vTeams() {
     const ids = Object.keys(D.teams).sort((a, b) => (D.teams[b].playoff || 0) - (D.teams[a].playoff || 0));
-    return `<p class="tf-why">Sorted by playoff odds. Trade Value is the team’s total and league rank, and each position shows its Trade Value rank. <b>Good</b> counts players rated 80+ OVR; a team is deep with one more than its lineup needs and thin with fewer. 2027 shows what keeping every player rated 75+ would cost against the team’s budget (the $200 cap, adjusted for auction cash traded).</p>
+    return `<p class="tf-why">Sorted by playoff odds. Trade Value is the team’s total and league rank, and each position shows its Trade Value rank. <b>Good</b> counts players rated 80+ OVR; a team is deep with one more than its lineup needs and thin with fewer. Help for a need comes from teams deep there; two playoff teams are only matched when each is deep where the other is thin. 2027 shows what keeping every player rated 75+ would cost against the team’s budget (the $200 cap, adjusted for auction cash traded).</p>
      <div class="tf-teams">${ids.map(f => {
       const t = D.teams[f], h = D.habits[f] || {};
-      const need = t.thin.map(p => { const who = ids.filter(g => g !== f && D.teams[g].deep.includes(p)); return `<li><b>Could use help at ${p}.</b> ${who.length ? 'Deep there: ' + who.map(g => esc(nm(g))).join(', ') : 'Nobody is deep there.'}</li>`; }).join('');
+      // partners for a need: a team deep there. Two playoff teams only match when each is deep where the other is thin
+      const po = g => !!D.teams[g].seed;
+      const need = t.thin.map(p => {
+        const who = ids.filter(g => g !== f && D.teams[g].deep.includes(p)).map(g => {
+          if (!(po(f) && po(g))) return esc(nm(g));
+          const back = D.teams[g].thin.filter(q => t.deep.includes(q));
+          return back.length ? `${esc(nm(g))} <span class="tf-sub">(needs your ${back.join(', ')})</span>` : '';
+        }).filter(Boolean);
+        return `<li><b>Could use help at ${p}.</b> ${who.length ? 'Deep there: ' + who.join(', ') : 'No good match right now.'}</li>`; }).join('');
       const picks = (t.picks || []).filter(p => p.y <= 2028);
       const pyear = y => { const a = picks.filter(p => p.y === y); return a.length ? `<span><b>${y}</b> ${a.map(p => `${['', '1st', '2nd', '3rd', '4th'][p.r]}${p.from !== f ? `<small> (${esc(nm(p.from))})</small>` : ''}`).join(', ')}</span>` : `<span><b>${y}</b> none</span>`; };
       return `<section class="tf-card${f === (X && X.myTeam) ? ' tf-mine' : ''}"><h3>${logo(f)}${esc(nm(f))} ${outChip(f)}</h3>
