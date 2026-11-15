@@ -1371,12 +1371,17 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-side.b .lv-lgw .lv-heat{left:-6px}
 .lv-sc{min-width:0}
 .lv-sc b{white-space:nowrap}
+/* the score fills the room between the logo and the middle and shrinks to fit it (a 3-digit score beside a wide
+   chip in the middle used to run into the logo or the win bar) */
+.lv-side .lv-sc{flex:1 1 0;container-type:inline-size}
+.lv-side .lv-sc b{font-size:min(1.45rem,40cqw)}
+@media (min-width:700px){.lv-side .lv-sc b{font-size:min(1.7rem,40cqw)}}
 @media (max-width:520px){
   .lv-sum{gap:3px 6px;padding:6px 8px 5px}
   .lv-list{gap:6px}
   .lv-side{gap:7px}
   .lv-lg{width:34px;height:34px}
-  .lv-sc b{font-size:min(1.45rem,6.4vw)}
+  .lv-side .lv-sc b{font-size:min(1.45rem,6.4vw,40cqw)}
   .lv-sc .lv-pjt{font-size:min(.72rem,3vw)}
 }
 
