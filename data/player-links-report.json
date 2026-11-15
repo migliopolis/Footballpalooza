@@ -531,15 +531,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "13148",
-   "mflName": "Dare Ogunbowale",
-   "pos": "RB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "2983509",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "16380",
    "mflName": "Deneric Prince",
    "pos": "RB",
@@ -600,15 +591,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4430825",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16385",
-   "mflName": "Emari Demercado",
-   "pos": "RB",
-   "team": "HOU",
-   "fbp": null,
-   "espn": "4362478",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -816,6 +798,15 @@
    "team": "MIA",
    "fbp": null,
    "espn": "4685470",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "15258",
+   "mflName": "Michael Carter",
+   "pos": "RB",
+   "team": "TEN",
+   "fbp": null,
+   "espn": "4240657",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
