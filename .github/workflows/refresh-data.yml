@@ -81,12 +81,12 @@ jobs:
       - name: FBP OVR (Madden fantasy score, dynasty value, production)
         continue-on-error: true
         run: python scripts/ovr.py
-      - name: Trading Floor (Beta > Trading Floor; after OVR, which rates its players)
-        continue-on-error: true
-        run: python scripts/trading_floor.py
       - name: Trade Value (Trading Floor > Value Chart, Rosters > Value)
         continue-on-error: true
         run: python scripts/trade_values.py
+      - name: Trading Floor (Beta > Trading Floor; after OVR and Trade Value, which it leans on)
+        continue-on-error: true
+        run: python scripts/trading_floor.py
       - name: Transactions (League Now > Transactions)
         continue-on-error: true
         run: python scripts/transactions_log.py
