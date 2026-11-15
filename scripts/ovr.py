@@ -96,7 +96,25 @@ def main():
     out = {pid: v for pid, v in out.items() if v['o'] is not None}
     if weeks:   # keep this week's dynasty values so later rebuilds of this week use them
         dyn_hist[str(last)] = {pid: F_now[pid] for pid in out if pid in F_now}
-    res = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'weeks': weeks,
+    # Awards > Biggest Riser / Biggest Faller: OVR now against his first rated week, for anyone 70+ at either end
+    ro = ((load(D('mfl', 'rosters.json'), {}) or {}).get('rosters') or {}).get('franchise') or []
+    fbp = {str(p['id']): f['id'] for f in ro for p in (f.get('player') if isinstance(f.get('player'), list) else [f.get('player')] if f.get('player') else [])}
+    def who(pid):
+        m = P.get(pid) or {}
+        n = (m[0] if isinstance(m, list) else m.get('name', '')) or (rows.get(pid) or {}).get('n', pid)
+        if ', ' in n:
+            last, first = n.split(', ', 1); n = f'{first} {last}'
+        r = rows.get(pid) or {}
+        nfl = {'GBP': 'GB', 'KCC': 'KC', 'NEP': 'NE', 'NOS': 'NO', 'SFO': 'SF', 'TBB': 'TB', 'LVR': 'LV', 'JAC': 'JAX'}.get(r.get('t') or '', r.get('t') or '')
+        return {'id': pid, 'name': n, 'pos': pos_of(pid), 'nfl': nfl, 'espn': r.get('e') or '', 'team': fbp.get(pid, '')}
+    mv = []
+    for pid, v in out.items():
+        h = [(weeks[i], x) for i, x in enumerate(v['h']) if x is not None]
+        if len(h) >= 2 and max(h[0][1], v['o']) >= 70:
+            mv.append(dict(who(pid), **{'from': h[0][1], 'to': v['o'], 'since': h[0][0], 'd': v['o'] - h[0][1]}))
+    movers = {'up': sorted([m for m in mv if m['d'] > 0], key=lambda m: (-m['d'], -m['to']))[:5],
+              'down': sorted([m for m in mv if m['d'] < 0], key=lambda m: (m['d'], -m['from']))[:5]}
+    res = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'weeks': weeks, 'movers': movers,
            'note': 'FBP OVR: 55% Madden fantasy score (from EA SPORTS Madden NFL ratings), 45% dynasty value (FantasyPros dynasty consensus), '
                    'plus up to 2.5 for FBP production. h: OVR after each week. dyn: dynasty value saved each week.',
            'players': out, 'dyn': dyn_hist}

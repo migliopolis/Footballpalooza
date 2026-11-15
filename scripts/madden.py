@@ -21,7 +21,7 @@ BASE = 'https://www.ea.com/games/madden-nfl/ratings/positions-ratings/{}?page={}
 PATHS = [('quarterback/QB', 'QB'), ('halfback/HB', 'RB'), ('wide-receiver/WR', 'WR'), ('tight-end/TE', 'TE')]
 IDS = 'https://raw.githubusercontent.com/dynastyprocess/data/master/files/db_playerids.csv'
 NICK = {'kenny': 'kenneth', 'nick': 'nicholas', 'matt': 'matthew', 'mike': 'michael', 'chris': 'christopher', 'josh': 'joshua',
-        'zach': 'zachary', 'gabe': 'gabriel', 'tony': 'anthony', 'bam': 'kendall', 'hollywood': 'marquise', 'dj': 'd j', 'cj': 'c j',
+        'zach': 'zachary', 'chig': 'chigoziem', 'gabe': 'gabriel', 'tony': 'anthony', 'bam': 'kendall', 'hollywood': 'marquise', 'dj': 'd j', 'cj': 'c j',
         'aj': 'a j', 'tj': 't j', 'jk': 'j k', 'jj': 'j j', 'pj': 'p j', 'kc': 'k c'}
 
 

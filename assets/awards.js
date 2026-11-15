@@ -1,7 +1,7 @@
 /* Awards tab: All-FBP teams and season awards, from data/awards.json (scripts/awards.py).
    Points are starter points only (scored in an FBP starting lineup), rostered players only. */
 window.FBPAwards = (() => {
-  let A = null, loading = false, failed = false, X, potw = null;   // potw: week picked for Player of the Week
+  let A = null, MV = null, loading = false, failed = false, X, potw = null;   // MV: OVR movers (data/ovr.json)   // potw: week picked for Player of the Week
   let year = null;                                     // null = this season; else a past season's year
   // season awards start collapsed to a one-line preview; the ones you open stay open on this device
   const awOpen = new Set((() => { try { return JSON.parse(localStorage.getItem('fbp-aw-open') || '[]'); } catch (e) { return []; } })());
@@ -17,6 +17,7 @@ window.FBPAwards = (() => {
     if (A || loading) return; loading = true;
     fetch('data/awards.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); })
       .then(d => { A = d; rerender(); }).catch(() => { failed = true; rerender(); });
+    fetch('data/ovr.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(d => { MV = d && d.movers; if (A) rerender(); }).catch(() => {});
   };
   const tlogo = (id, cls = '') => { const t = X.teams[id]; return t && t.logo ? `<img class="${cls}" src="${t.logo}" alt="" loading="lazy">` : ''; };
   const tname = id => X.nameOf(id);
@@ -81,7 +82,12 @@ window.FBPAwards = (() => {
       a = Object.assign({}, a, { list: a.weeks[w], title: `Player of Week ${w}` });
       picker = `<div class="aw-weeks" role="group" aria-label="Week">${ws.map(n => `<button type="button" data-aw-week="${n}" aria-pressed="${n === w}">${n}</button>`).join('')}</div>`;
     }
-    if (a.list) {
+    if (a.movers) {   // Biggest Riser / Faller: OVR now against week 1
+      const [w, ...rest] = a.movers, ch = m => `${m.d > 0 ? '+' : '−'}${Math.abs(m.d)}`, tn = m => m.team ? `${tlogo(m.team, 'mini')}${esc(tname(m.team))}` : 'Free agent';
+      body = `<div class="aw-win">${photo(w, 'md')}<div><b>${esc(w.name)}</b><span class="aw-sub">${pos(w)} ${esc(w.nfl || '')} · ${tn(w)}</span>
+        <span class="aw-big aw-mv ${a.key}">${ch(w)} <small>OVR · ${w.from} → ${w.to}</small></span><span class="aw-sub">since week ${w.since}</span></div></div>
+        ${rest.length ? `<ol class="aw-rest" start="2">${rest.map(p => `<li>${p.team ? tlogo(p.team, 'mini') : '<span class="mini"></span>'}<span>${esc(p.name)} <small>${p.pos}</small></span><b>${ch(p)}</b><small>${p.from} → ${p.to}</small></li>`).join('')}</ol>` : ''}`;
+    } else if (a.list) {
       const [w, ...rest] = a.list;
       const wks = (n, what) => `${n} week${n === 1 ? '' : 's'} ${what}`;
       const st = p => p.starts != null ? wks(p.starts, 'started') : '';
@@ -151,6 +157,8 @@ window.FBPAwards = (() => {
       const ws = Object.keys(a.weeks).map(Number); const w = ws.includes(potw) ? potw : a.week; const p = (a.weeks[w] || [])[0];
       return p ? `${tlogo(p.team, 'mini')}<b>${esc(p.name)}</b><span>${n1(p.pts)} · wk ${w}</span>` : '';
     }
+    if (a.movers && a.movers[0]) { const p = a.movers[0];
+      return `${p.team ? tlogo(p.team, 'mini') : ''}<b>${esc(p.name)}</b><span>${p.d > 0 ? '+' : '−'}${Math.abs(p.d)} OVR</span>`; }
     if (a.list && a.list[0]) { const p = a.list[0];
       return `${tlogo(p.team, 'mini')}<b>${esc(p.name)}</b><span>${p.perDollar != null ? n1(p.perDollar) + ' pts/$' : n1(p.pts)}</span>`; }
     if (a.teams && a.teams[0]) { const t = a.teams[0]; return `${tlogo(t.team, 'mini')}<b>${esc(tname(t.team))}</b><span>${esc(t.stat)}</span>`; }
@@ -160,7 +168,7 @@ window.FBPAwards = (() => {
 
   let S = null;   // the season on screen
   // order of the Season awards on the page (any award not listed goes last)
-  const ORDER = ['mvp', 'rookie', 'manager', 'week', 'bench', 'value', 'contract', 'waiver', 'high', 'trade', 'lucky', 'unlucky'];
+  const ORDER = ['mvp', 'rookie', 'manager', 'week', 'riser', 'faller', 'bench', 'value', 'contract', 'waiver', 'high', 'trade', 'lucky', 'unlucky'];
   const rank = a => { const i = ORDER.indexOf(a.key); return i < 0 ? 99 : i; };
   function render(ctx) {
     X = ctx;
@@ -191,7 +199,10 @@ window.FBPAwards = (() => {
     return head(sub) + fluid +
       fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first) + recNote()) +
       fold('allfbp2', '2nd Team All-FBP', S.allFbp.second, team(S.allFbp.second, true)) +
-      `<section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.slice().sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
+      `<section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.concat(S === A && MV ? [
+        MV.up && MV.up.length ? { key: 'riser', title: 'Biggest Riser', why: 'The biggest climb in OVR since week 1: Madden’s ratings, the dynasty consensus and his FBP production all count. Anyone rated 70 or better at either end.', movers: MV.up } : null,
+        MV.down && MV.down.length ? { key: 'faller', title: 'Biggest Faller', why: 'The biggest drop in OVR since week 1. Anyone rated 70 or better at either end.', movers: MV.down } : null].filter(Boolean) : [])
+        .sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
       <p class="rf-foot">${foot}</p></section>`;
   }
   // returns the selector of the button pressed, so the page can keep focus on it
