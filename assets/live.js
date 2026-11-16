@@ -47,7 +47,7 @@
     // a thin ring in his FBP team's color, with or without a heat/DNP treatment; not when a 1st/2nd Team ring is already there
     const plain = ph && !medal(p.id) && pos(p.id) !== 'DEF', ring = plain ? FBPU.tc(fid || p.fid) : '';
     // a plain photo (no heat, DNP or 1st/2nd Team look) takes the color of his OVR chip
-    const ov = plain && !tr && !out ? FBPU.ovc(p.id) : '';
+    const ov = plain && (!tr || tr.k === 'hot') && !out ? FBPU.ovc(p.id) : '';   // hot keeps his OVR color inside the fire ring
     return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}${ring ? ' tcr' : ''}${ov}"${(tr && tr.drop != null) || ring ? ` style="${tr && tr.drop != null ? `--drop:${tr.drop}%;` : ''}${ring.trim()}"` : ''}${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
   // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
