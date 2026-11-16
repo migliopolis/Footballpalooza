@@ -856,52 +856,63 @@
     nfl.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     return { week: wk, started: all.some(({ p }) => state(p) !== 'pre'), games, top, cold, nfl };
   }
-  // Beta: the lineups pull down like a window shade, softly: the shade eases down past its mark and settles back with
-  // a gentle spring, while the lineups inside unfold from the header (narrow and squashed toward it, then full size),
-  // a little like the old Mac genie. Closing folds them back up into the header. Instant with Reduce Motion on.
-  function shade(det, on) {
-    (det._anims || []).forEach(a => a.cancel()); det._anims = null;
-    const still = matchMedia('(prefers-reduced-motion: reduce)').matches || !det.animate;
-    if (on) det.hidden = false;
-    if (still) { det.hidden = !on; return; }
-    const h = det.scrollHeight, over = Math.min(18, Math.max(8, h * 0.025)), kids = [...det.children];
-    det.style.overflow = 'hidden';
-    const ease = 'cubic-bezier(.33,.0,.2,1)', soft = 'cubic-bezier(.45,0,.55,1)';
-    const open = () => [
-      det.animate([{ height: '0px', easing: ease }, { height: (h + over) + 'px', offset: 0.6, easing: soft },
-        { height: (h - over * 0.35) + 'px', offset: 0.82, easing: soft }, { height: h + 'px' }], { duration: 820 }),
-      ...kids.map(k => k.animate([{ transform: 'scale(.62,.25)', opacity: 0, easing: ease },
-        { transform: 'scale(1.015,1.03)', opacity: 1, offset: 0.6, easing: soft },
-        { transform: 'scale(.997,.99)', offset: 0.82, easing: soft }, { transform: 'none', opacity: 1 }],
-        { duration: 820, transformOrigin: '50% 0' }))];
-    const close = () => [
-      det.animate([{ height: h + 'px' }, { height: (h + over * 0.4) + 'px', offset: 0.18 }, { height: '0px' }],
-        { duration: 480, easing: 'cubic-bezier(.5,0,.75,.2)' }),
-      ...kids.map(k => k.animate([{ transform: 'none', opacity: 1 }, { transform: 'scale(1.01,1.02)', offset: 0.18 },
-        { transform: 'scale(.6,.2)', opacity: 0 }], { duration: 480, easing: 'cubic-bezier(.5,0,.75,.2)' }))];
-    const A = det._anims = on ? open() : close();
-    kids.forEach(k => { k.style.transformOrigin = '50% 0'; });
-    A[0].onfinish = () => { det.style.overflow = ''; kids.forEach(k => { k.style.transformOrigin = ''; }); det._anims = null; if (!on) det.hidden = true; };
+  // Beta: the lineups open like an iOS sheet. Everything moves on the graphics chip (no page layout mid-animation):
+  // the card's lower edge is revealed by a clip that follows a real spring, the cards below ride down on that same
+  // spring, and the lineup rows drop in one after another. Closing runs it back without the bounce. Instant with
+  // Reduce Motion on.
+  const springs = {};
+  // a spring (stiffness k, damping c, mass 1) as a CSS linear() easing plus how long it takes to settle; browsers
+  // without linear() get a near-match cubic-bezier
+  function spring(k, c) {
+    const key = k + '/' + c; if (springs[key]) return springs[key];
+    let x = 0, v = 0, t = 0; const dt = 1 / 240, pts = [];
+    while (t < 2) { const a = -k * (x - 1) - c * v; v += a * dt; x += v * dt; t += dt;
+      if (Math.round(t * 240) % 4 === 0) pts.push(x); if (t > 0.2 && Math.abs(1 - x) < 0.002 && Math.abs(v) < 0.02) break; }
+    const ms = Math.round(t * 1000), ok = window.CSS && CSS.supports && CSS.supports('animation-timing-function', 'linear(0, 1)');
+    const n = Math.max(1, Math.ceil(pts.length / 48)), sel = pts.filter((_, i) => i % n === 0);
+    return (springs[key] = { ms, easing: ok ? `linear(0, ${sel.map(v2 => v2.toFixed(4)).join(', ')}, 1)` : 'cubic-bezier(.2,.9,.3,1.08)' });
   }
+  const below = card => { const L = card && card.parentElement; return L ? [...L.children].filter(c => c !== card && (c.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_PRECEDING)) : []; };
+  function shade(det, on) {
+    const card = det.closest('.lv-g');
+    (det._anims || []).forEach(a => a.finish()); det._anims = null;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches || !det.animate || !card;
+    if (still) { det.hidden = !on; return; }
+    const B = below(card), r = getComputedStyle(card).borderRadius || '0px';
+    // the card's height closed and open; the lineups stay shown while closing until the animation ends
+    det.hidden = true; const hClosed = card.getBoundingClientRect().height;
+    det.hidden = false; const dh = card.getBoundingClientRect().height - hClosed;
+    const sp = on ? spring(190, 21) : spring(260, 34), opt = { duration: sp.ms, easing: sp.easing };
+    const A = [];
+    // the card's bottom edge, revealed (or tucked away) by a clip
+    A.push(card.animate(on ? [{ clipPath: `inset(0 0 ${dh}px 0 round ${r})` }, { clipPath: `inset(0 0 0px 0 round ${r})` }]
+      : [{ clipPath: `inset(0 0 0px 0 round ${r})` }, { clipPath: `inset(0 0 ${dh}px 0 round ${r})` }], opt));
+    // everything below rides along
+    B.forEach(el => A.push(el.animate(on ? [{ transform: `translateY(${-dh}px)` }, { transform: 'none' }]
+      : [{ transform: 'none' }, { transform: `translateY(${-dh}px)` }], opt)));
+    // the rows drop in one after another (opening only)
+    if (on) [...det.querySelectorAll('.lv-names, .lv-t > tbody > tr, .lv-bench > summary')].slice(0, 24).forEach((row, i) =>
+      A.push(row.animate([{ opacity: 0, transform: 'translateY(-10px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 380, delay: 40 + i * 26, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' })));
+    det._anims = A;
+    A[0].onfinish = () => { det._anims = null; if (!on) det.hidden = true; };
+  }
+
   // Beta: a compact row opening up the same way: everything below it slides down with the same gentle spring (and
   // back up on close), while the row's own detail unfolds from the top
   function rowShade(tr, on) {
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches || !tr.animate;
     if (still) { tr.classList.toggle('lv-rx', on); return; }
     const card = tr.closest('.lv-g'), list = card && card.parentElement;
-    const below = [...tr.parentElement.children].filter(r => r !== tr && (r.compareDocumentPosition(tr) & Node.DOCUMENT_POSITION_PRECEDING))
+    const belowEls = [...tr.parentElement.children].filter(r => r !== tr && (r.compareDocumentPosition(tr) & Node.DOCUMENT_POSITION_PRECEDING))
       .concat([...(tr.closest('.lv-det') || card).querySelectorAll('.lv-bench')], list ? [...list.children].filter(c => c !== card && (c.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_PRECEDING)) : []);
-    const y0 = below.map(el => el.getBoundingClientRect().top);
+    const y0 = belowEls.map(el => el.getBoundingClientRect().top);
     tr.classList.toggle('lv-rx', on);
-    const ease = 'cubic-bezier(.33,0,.2,1)', soft = 'cubic-bezier(.45,0,.55,1)';
-    below.forEach((el, i) => { const dy = y0[i] - el.getBoundingClientRect().top; if (!dy) return;
-      const o = dy < 0 ? Math.min(10, -dy * 0.08) : 0;   // opening: a small overshoot past the new spot, then back
-      el.animate(on ? [{ transform: `translateY(${dy}px)`, easing: ease }, { transform: `translateY(${o}px)`, offset: 0.6, easing: soft },
-        { transform: `translateY(${-o * 0.35}px)`, offset: 0.82, easing: soft }, { transform: 'none' }]
-        : [{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: on ? 720 : 420, easing: on ? 'linear' : 'cubic-bezier(.4,0,.2,1)' }); });
-    if (on) [...tr.children].forEach(td => [...td.children].forEach(k => k.animate(
-      [{ transform: 'scale(.94,.7)', opacity: 0.2, easing: ease }, { transform: 'scale(1.01,1.03)', opacity: 1, offset: 0.6, easing: soft }, { transform: 'none', opacity: 1 }],
-      { duration: 720, transformOrigin: '50% 0' })));
+    const sp = on ? spring(210, 22) : spring(280, 36);
+    belowEls.forEach((el, i) => { const dy = y0[i] - el.getBoundingClientRect().top; if (!dy) return;
+      el.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: sp.ms, easing: sp.easing }); });
+    if (on) [...tr.querySelectorAll('.lv-ext, .lv-bot, .lv-pj, .lv-gs')].forEach((k, i) =>
+      k.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 340, delay: 30 + i * 22, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
   }
   // Beta: a made-up game state so every combination of fire and ice shows at once. Each matchup gets a hot side, a
   // cold side or both; each starter gets a random heat (hot, nuclear, cold, bust, scoreless, witness protection or
