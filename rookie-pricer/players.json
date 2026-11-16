@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-15",
+ "asOf": "2026-11-16",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
@@ -16,14 +16,14 @@
    "pos": "RB",
    "school": "Florida",
    "adp": 4.5,
-   "nflPick": 25
+   "nflPick": 26
   },
   {
    "name": "Cam Coleman",
    "pos": "WR",
    "school": "Texas",
    "adp": 4.9,
-   "nflPick": 11
+   "nflPick": 13
   },
   {
    "name": "Charlie Becker",
@@ -51,21 +51,21 @@
    "pos": "QB",
    "school": "Miami",
    "adp": 7.2,
-   "nflPick": 9
+   "nflPick": 6
   },
   {
    "name": "Dante Moore",
    "pos": "QB",
    "school": "Oregon",
    "adp": 8.1,
-   "nflPick": 16
+   "nflPick": 17
   },
   {
    "name": "KJ Duff",
    "pos": "WR",
    "school": "Rutgers",
    "adp": 11.9,
-   "nflPick": 27
+   "nflPick": 25
   },
   {
    "name": "Ahmad Hardy",
@@ -93,21 +93,21 @@
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 13.5,
-   "nflPick": 24
+   "nflPick": 9
   },
   {
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
    "adp": 13.9,
-   "nflPick": 27
+   "nflPick": 25
   },
   {
    "name": "Nick Marsh",
    "pos": "WR",
    "school": "Indiana",
    "adp": 14.1,
-   "nflPick": 21
+   "nflPick": 19
   },
   {
    "name": "Ryan Coleman-Williams",
@@ -121,7 +121,7 @@
    "pos": "TE",
    "school": "LSU",
    "adp": 16.5,
-   "nflPick": 23
+   "nflPick": 22
   },
   {
    "name": "Nate Frazier",
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 22.3,
-   "nflPick": 32
+   "nflPick": 30
   },
   {
    "name": "Mark Fletcher Jr.",
