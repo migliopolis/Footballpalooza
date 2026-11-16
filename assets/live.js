@@ -40,13 +40,20 @@
   // a player's photo with his tier on it (used by the Scoreboard and Players)
   // All-FBP 1st or 2nd Team this season: a gold or silver photo (FBP.medal styles, site.css)
   const medal = id => { const L = (honors && honors.p[id]) || []; return L.some(c => c.l === '1st Team') ? ' m-gold' : L.some(c => c.l === '2nd Team') ? ' m-silver' : ''; };
+  // FBP OVR by MFL id (data/ovr.json), for the Beta page's photo backgrounds; loads the first time it's asked for
+  let OVR = null, ovrAsked = false;
+  const ovrTier = id => { if (!OVR) { if (!ovrAsked) { ovrAsked = true; FBPU.json('data/ovr.json').then(d => { OVR = (d && d.players) || {}; if (X && X.rerender) X.rerender(); }).catch(() => {}); } return ''; }
+    const o = OVR[id] && OVR[id].o; return o == null ? '' : o >= 90 ? 'holo' : o >= 80 ? 'gold' : o >= 70 ? 'silver' : 'bronze'; };
   function photoHtml(p, wk, fid) {
     const tr = tier(p, wk), ph = photo(p.id), out = dnp(p);
     // inactive: the photo goes grey with a red DNP rubber stamp across it
     const extra = out ? '<i class="dnp-st">DNP</i>' : tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
     // a thin ring in his FBP team's color, with or without a heat/DNP treatment; not when a 1st/2nd Team ring is already there
     const plain = ph && !medal(p.id) && pos(p.id) !== 'DEF', ring = plain ? FBPU.tc(fid || p.fid) : '';
-    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}${ring ? ' tcr' : ''}"${(tr && tr.drop != null) || ring ? ` style="${tr && tr.drop != null ? `--drop:${tr.drop}%;` : ''}${ring.trim()}"` : ''}${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+    // Beta: a plain photo (no heat, DNP or 1st/2nd Team look) takes the color of his OVR chip: 90s holo, 80s gold,
+    // 70s silver, below that bronze
+    const ov = X && X.shade && plain && !tr && !out ? ovrTier(p.id) : '';
+    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}${ring ? ' tcr' : ''}${ov ? ' ov-' + ov : ''}"${(tr && tr.drop != null) || ring ? ` style="${tr && tr.drop != null ? `--drop:${tr.drop}%;` : ''}${ring.trim()}"` : ''}${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
   // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
   // A player who suited up and scored 0 still counts as having played.

@@ -3221,3 +3221,8 @@ tr.fxa-water td.lv-p.a::before,tr.fxb-water td.lv-p.b::after{width:34px;backgrou
 .hof-pbtn::after{content:'';position:absolute;left:23px;top:11px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #fff}
 .hof-play:hover .hof-pbtn{background:#e3242b}
 .hof-yt{display:inline-block;margin-top:6px;font-size:.78rem;color:var(--muted)}
+/* Beta, Scoreboard Shade: a plain photo's background is his OVR chip's color */
+.lv-ph.ov-holo{background:linear-gradient(135deg,#f6d365,#a8edea,#fbc2eb)}
+.lv-ph.ov-gold{background:#f0c94a}
+.lv-ph.ov-silver{background:#cfd4da}
+.lv-ph.ov-bronze{background:#d7a37a}
