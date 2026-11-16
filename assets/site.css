@@ -1217,8 +1217,8 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-who{min-width:0;flex:1}
 .lv-ph{flex:none;width:30px;height:30px;border-radius:50%;overflow:hidden;background:var(--ovg,var(--ov0));margin-top:1px}
 .lv-ph img{width:100%;height:100%;object-fit:cover;object-position:top}
-.lv-ph.def{background:var(--dc,#e3e8ee);display:grid;place-items:center}
-.lv-ph.def img{width:76%;height:76%;object-fit:contain;object-position:center}
+.lv-ph.def{background:var(--dc,#e3e8ee);display:grid;place-items:center;position:relative}
+.lv-ph.def img{position:absolute;inset:0;margin:auto;width:76%;height:76%;object-fit:contain;object-position:center}
 .lv-inj{display:inline-block;font:700 .55rem/1 var(--body);padding:2px 3px;border-radius:3px;background:var(--red);color:#fff;margin:0 4px;vertical-align:2px}
 .lv-bench{margin-top:8px}
 .lv-bench summary{cursor:pointer;font-size:.78rem;font-weight:600;color:var(--muted);padding:4px 0}
@@ -3258,3 +3258,5 @@ img.ovbg{background:var(--ovg)}
 .rf-afy.t3{background:#2f9e5e;border-color:#2f9e5e;color:#fff}
 .rf-moy{margin:4px 0 0;font-weight:700}.rf-moy small{font-weight:500;opacity:.8}
 .aw-pick{display:block;font:600 .72rem var(--mono);color:var(--muted);margin-top:2px}
+/* defense logos: always dead center in their circle (Safari mis-sizes percentage images in a grid) */
+.lv-ph.def img,.lv-ph.def[class*=" t-"] img{position:absolute;inset:0;margin:auto;width:76%;height:76%;object-fit:contain;object-position:center}
