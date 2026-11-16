@@ -469,7 +469,7 @@
     const ls = (root || document).querySelector('.lv-list.lv-compact'); if (!ls) return;
     const top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr-h')) || 50;
     ls.querySelectorAll('.lv-g.open').forEach(g => {
-      const t = g.querySelector('.lv-det > .lv-t'); if (!t) return;
+      const t = g.querySelector('.lv-det .lv-fxw > .lv-t'); if (!t) return;
       t.style.removeProperty('--rowh');
       const sum = g.querySelector('.lv-sum'), bn = g.querySelector('.lv-bench > summary');
       const avail = window.innerHeight - top - sum.offsetHeight - (bn ? bn.offsetHeight + 8 : 0) - 12;
@@ -561,6 +561,8 @@
     const played = L.matchup.flatMap(m => m.franchise.filter(kicked).map(f => +f.score)), lo = played.length ? Math.min(...played) : -1;
     // (the frozen-man photo for the week's coldest starter is retired for now; assets/players/coldest.jpg is kept)
     const heat = f => +f.score === hi && hi > 0 ? '<span class="lv-heat" title="Highest score this week">🔥</span>' : +f.score === lo && hi > lo && kicked(f) ? '<span class="lv-heat" title="Lowest score this week">🥶</span>' : '';
+    // Beta (the Scoreboard Shade page): the week's hottest lineup burns along its outside edge, the coldest one ices over
+    const fx = f => !X.shade ? '' : +f.score === hi && hi > 0 ? 'fire' : +f.score === lo && hi > lo && kicked(f) ? 'ice' : '';
     // a team's bar color: its primary, or its secondary when the primary is near white
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
     // of the team's two colors, the one closest to a mid tone, so it shows on light and dark backgrounds alike
@@ -678,7 +680,7 @@
         <div class="lv-det"${isOpen ? '' : ' hidden'}>
           <div class="lv-names"><b>${seed(a.id)}${esc(X.nameOf(a.id))}${honors ? chips(honors.t[a.id]) : ''}</b><b>${honors ? chips(honors.t[b.id]) : ''}${esc(X.nameOf(b.id))}${seed(b.id)}</b></div>
           <div class="lv-names lv-left"><small>${left(a)}</small><small>${left(b)}</small></div>
-          <table class="lv-t"><tbody>${rows}</tbody></table>
+          <div class="lv-fxw${fx(a) ? ' fx-a-' + fx(a) : ''}${fx(b) ? ' fx-b-' + fx(b) : ''}"><table class="lv-t"><tbody>${rows}</tbody></table></div>
           ${benchRows ? `<details class="lv-bench"${openBench.has(key) ? ' open' : ''} data-lv-bench="${key}"><summary>${view ? 'Bench' : 'Bench, taxi squad and IR'}</summary><table class="lv-t"><tbody>${benchRows}</tbody></table></details>` : ''}
         </div></article>`;
     };
@@ -808,7 +810,9 @@
     const b = e.target.closest('[data-lv]'); if (!b) return;
     const key = b.dataset.lv, g = b.closest('.lv-g'), on = !open.has(key);
     on ? open.add(key) : open.delete(key);
-    g.classList.toggle('open', on); b.setAttribute('aria-expanded', on); g.querySelector('.lv-det').hidden = !on;
+    g.classList.toggle('open', on); b.setAttribute('aria-expanded', on);
+    const det = g.querySelector('.lv-det');
+    if (X && X.shade) shade(det, on); else det.hidden = !on;
     if (on) { fitNames(g); fitCompact(g.parentElement.parentElement); }
     const btn = document.querySelector('[data-lv-all]'), n = cur().liveScoring.matchup.length;
     if (btn) { btn.dataset.lvAll = open.size === n ? 'close' : 'open'; btn.textContent = open.size === n ? 'Collapse all' : 'Expand all'; }
@@ -838,6 +842,20 @@
     nfl.forEach(x => { const h = G[x.home]; if (h && h.ball) x.ball = x.home; });
     nfl.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     return { week: wk, started: all.some(({ p }) => state(p) !== 'pre'), games, top, cold, nfl };
+  }
+  // Beta: the lineups pull down like a window shade (eases out, overshoots a few pixels and settles back) and roll back
+  // up on close. Instant for anyone with Reduce Motion on.
+  function shade(det, on) {
+    if (det._anim) { det._anim.cancel(); det._anim = null; }
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches || !det.animate;
+    if (on) det.hidden = false;
+    if (still) { det.hidden = !on; return; }
+    const h = det.scrollHeight, over = Math.min(14, Math.max(6, h * 0.02));
+    det.style.overflow = 'hidden';
+    const a = det._anim = det.animate(on
+      ? [{ height: '0px', easing: 'cubic-bezier(.2,.75,.25,1)' }, { height: (h + over) + 'px', offset: 0.72, easing: 'cubic-bezier(.4,0,.4,1)' }, { height: h + 'px' }]
+      : [{ height: h + 'px' }, { height: '0px' }], { duration: on ? 460 : 260, easing: on ? 'linear' : 'cubic-bezier(.4,0,.8,.4)' });
+    a.onfinish = () => { det.style.overflow = ''; det._anim = null; if (!on) det.hidden = true; };
   }
   window.FBPLive = { render, feed };
 })();
