@@ -3191,3 +3191,6 @@ tr.fxa-water td.lv-p.a::before,tr.fxb-water td.lv-p.b::after{width:34px;backgrou
 
 /* Players page: the 1st/2nd Team chip beside his name */
 .pl-nm .lv-pchip{display:inline-block;margin:0 0 0 6px;vertical-align:2px}
+/* taxi squad and IR rows keep their yellow and red once their games are over (no grey) */
+.lv-t2 .lv-bench .lv-t tr.lv-r-tx td.lv-p.final,.lv-t2 .lv-bench .lv-t tr.lv-r-tx td.lv-pts.final{background:rgba(240,200,40,.14)}
+.lv-t2 .lv-bench .lv-t tr.lv-r-ir td.lv-p.final,.lv-t2 .lv-bench .lv-t tr.lv-r-ir td.lv-pts.final{background:rgba(220,50,50,.09)}
