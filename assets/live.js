@@ -45,7 +45,7 @@
     // inactive: the photo goes grey with a red DNP rubber stamp across it
     const extra = out ? '<i class="dnp-st">DNP</i>' : tr && tr.k === 'bust' ? '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>' : '';
     // a thin ring in his FBP team's color, with or without a heat/DNP treatment; not when a 1st/2nd Team ring is already there
-    const plain = ph && !medal(p.id) && pos(p.id) !== 'DEF', ring = plain ? FBPU.tc(fid || p.fid) : '';
+    const plain = ph && !medal(p.id) && pos(p.id) !== 'DEF', ring = plain || (ph && pos(p.id) === 'DEF') ? FBPU.tc(fid || p.fid) : '';
     // every player starts on his OVR color (heat, DNP and 1st/2nd Team looks paint over it in the CSS)
     const ov = ph && pos(p.id) !== 'DEF' ? FBPU.ovc(p.id) : '';
     // a defense: its NFL logo in a circle of one of that team's colors the logo reads well on
