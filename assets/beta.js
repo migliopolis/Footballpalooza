@@ -106,7 +106,7 @@ window.FBPBeta = (function () {
   const sub = () => location.hash.slice(1).split('/')[1] || '';
   const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the FBP OVR.'],
     ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2019.'],
-    ['shade', 'Scoreboard Shade', 'The Scoreboard with matchups that pull open like a window shade, with a little bounce.'],
+    ['shade', 'Scoreboard Shade', 'The Scoreboard with matchups and player rows that pull open like a window shade.'],
     ['power', 'Power Rankings', 'Now and Future side by side: who’s built to win this season, and who’s set up for next, with projected keepers.']];
   function betaHead(cur) {
     return `<div class="pagehead"><h1>Beta</h1><span class="asof">Testing ground for things that aren’t finished</span></div>
@@ -117,7 +117,7 @@ window.FBPBeta = (function () {
     const s0 = sub();
     if (s0 === 'trade') return betaHead('trade') + (window.FBPTrade ? FBPTrade.render(ctx) : '<p class="error">The Trading Floor didn’t load.</p>');
     if (s0 === 'docket') { location.replace('#now/docket'); return ''; }   // The Docket moved to League Now
-    if (s0 === 'shade') return betaHead('shade') + `<p class="bt-demo"><button type="button" class="seg-btn" data-bt-demo>Shuffle a demo</button> <small>Made-up scores and game states so every kind of fire and ice shows. Open any matchup.</small></p>` + (window.FBPLive ? FBPLive.render(Object.assign({}, ctx, { shade: true })) : '<p class="error">The Scoreboard didn’t load.</p>');
+    if (s0 === 'shade') return betaHead('shade') + `<p class="bt-demo"><button type="button" class="seg-btn" data-bt-demo>Shuffle a demo</button> <small>Made-up scores and game states to try the openings with. Open any matchup.</small></p>` + (window.FBPLive ? FBPLive.render(Object.assign({}, ctx, { shade: true })) : '<p class="error">The Scoreboard didn’t load.</p>');
     if (s0 === 'power') return betaHead('power') + (window.FBPPower ? FBPPower.render(ctx) : '<p class="error">The Power Rankings didn’t load.</p>');
     if (s0 !== 'cards') return betaHead('') + `<div class="bt-grid">${BETA.map(([k, l, d]) => `<a class="bt-btn" href="#beta/${k}"><b>${l}</b><span>${d}</span></a>`).join('')}</div>`;
     return betaHead('cards') + renderCards(ctx);

@@ -568,7 +568,9 @@
     const fxv = (p, team) => { const k = (p && tier(p, shownW) || {}).k;
       if (team === 'fire') return k === 'nuke' || k === 'hot' ? 'flare' : k === 'cold' || k === 'sink' ? 'embers' : k === 'bust' || k === 'wp' ? 'ash' : 'fire';
       return k === 'nuke' ? 'water' : k === 'hot' ? 'melt' : k === 'bust' || k === 'wp' ? 'deep' : 'ice'; };
-    const fx = f => !X.shade ? '' : +f.score === hi && hi > 0 ? 'fire' : +f.score === lo && hi > lo && kicked(f) ? 'ice' : '';
+    // (off for now: Paul wanted to see the Shade without fire and ice; set FX_ON to bring it back)
+    const FX_ON = false;
+    const fx = f => !X.shade || !FX_ON ? '' : +f.score === hi && hi > 0 ? 'fire' : +f.score === lo && hi > lo && kicked(f) ? 'ice' : '';
     // a team's bar color: its primary, or its secondary when the primary is near white
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
     // of the team's two colors, the one closest to a mid tone, so it shows on light and dark backgrounds alike
@@ -905,6 +907,7 @@
   // cold side or both; each starter gets a random heat (hot, nuclear, cold, bust, scoreless, witness protection or
   // nothing yet), points to match, a row color (game on, has the ball, red zone, over, not started), and now and then
   // a DNP or HURT. Only the page changes; nothing is saved. Shuffle again for a new mix.
+  const FX_ON_DEMO = false;   // fire and ice off for now, as on the page
   function demo() {
     const rnd = n => Math.floor(Math.random() * n), pick = a => a[rnd(a.length)];
     const FIRE = { flare: ['hot', 'nuke'], embers: ['cold', 'sink'], ash: ['bust', 'wp'], fire: [''] };
@@ -922,7 +925,7 @@
           const td = tr.querySelector(`td.lv-p.${sd}`), pt = tr.querySelector(`td.lv-pts.${sd}`); if (!td || td.classList.contains('empty')) return;
           const team = sd === 'a' ? ta : tb, V = team === 'fire' ? FIRE : team === 'ice' ? ICE : null, vs = V ? Object.keys(V) : null;
           const v = vs ? vs[(ri + (sd === 'b' ? 2 : 0) + gi) % vs.length] : '', k = V ? pick(V[v]) : pick(['', '', 'hot', 'cold', 'nuke', 'bust', 'sink', 'wp']);
-          if (v) tr.classList.add(`fx${sd}-${v}`);
+          if (v && FX_ON_DEMO) tr.classList.add(`fx${sd}-${v}`);
           const proj = 6 + rnd(18), sc = k === 'nuke' ? 30 + rnd(15) : k === 'hot' ? proj + 6 + rnd(8) : k === 'cold' ? Math.max(1, Math.round(proj * 0.3)) :
             k === 'bust' ? Math.round(proj * 0.15 * 10) / 10 : k === 'sink' || k === 'wp' ? 0 : Math.round(proj * (0.4 + Math.random() * 0.5) * 10) / 10;
           const ph = td.querySelector('.lv-ph'); if (!ph || ph.classList.contains('def')) return;
