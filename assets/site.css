@@ -3237,3 +3237,5 @@ img.ovbg{background:var(--ovg)}
 .ra-gt th[aria-sort="descending"],.ra-gt th[aria-sort="ascending"]{color:var(--fg)}
 /* a hot defense keeps its team-color circle inside the fire ring */
 .lv-ph.def.t-hot::after{background:var(--dc,#e3e8ee)}
+/* the starting lineup's block gets softly rounded top (QB) and bottom (DEF) corners */
+.lv-fxw{border-radius:12px;overflow:hidden}
