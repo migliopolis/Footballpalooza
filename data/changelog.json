@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0251",
+      "to": "0.0255",
+      "dates": "Nov 15, 2026",
+      "items": [
+        "Scoreboard: new row colors. Orange while a player’s game is on, green when his team has the ball, red in the red zone, darker gray when it’s over, each fading to white at his score. Taxi and IR rows keep their yellow and red.",
+        "Players: 1st and 2nd Team chips beside player names.",
+        "Hall of Fame: a softer, slowly moving cut-diamond look in purple and blue, with a HOF badge on each Hall of Fame season’s photo.",
+        "Awards: a Hall of Fame season shows in diamond with its HOF badge on that year’s 1st Team All-FBP.",
+        "Hall of Fame: the 2020 Sour Grapes are inducted for their record playoff run, with a playable clip on their card."
+      ]
+    },
+    {
       "from": "0.0241",
       "to": "0.0250",
       "dates": "Nov 15, 2026",

@@ -721,10 +721,16 @@ window.FBPRef = (() => {
     const H = D.hall_of_fame || { inductees: [] }, all = H.inductees || [];
     const classes = [...new Set(all.map(x => x.class))].sort((a, b) => b - a);
     const frs = x => x.franchises || (x.franchise ? [x.franchise] : []);
+    // a YouTube clip on the card: a thumbnail with a play button; the player (privacy-enhanced, no cookies until it
+    // plays) only loads when tapped. A video whose owner blocks embedding still has the YouTube link.
+    const vid = x => { const v = x.video && String(x.video.youtube || '').replace(/[^\w-]/g, ''); if (!v) return '';
+      const st = +x.video.start || 0;
+      return `<div class="hof-vid" data-yt="${v}" data-start="${st}"><button type="button" class="hof-play" aria-label="Play the clip"><img src="https://i.ytimg.com/vi/${v}/hqdefault.jpg" alt="" loading="lazy"><span class="hof-pbtn" aria-hidden="true"></span></button>
+        <a class="hof-yt" href="https://youtu.be/${v}${st ? '?t=' + st : ''}" target="_blank" rel="noopener">Watch on YouTube</a></div>`; };
     const card = x => `<article class="card hof-card">${frs(x).length ? `<span class="hof-lg${frs(x).length > 1 ? ' two' : ''}">${frs(x).map(f => logo(f)).join('')}</span>` : ''}<div>
         <span class="hof-k">Class of ${esc(x.class)}</span>
         <b class="hof-t">${esc(x.title)}</b>${x.subtitle ? `<small class="hof-s">${x.franchise ? `<a href="#reference/f-${x.franchise}">${esc(x.subtitle)}</a>` : x.category === 'game' && x.year && x.week ? `<a href="#reference/s-${x.year}">${esc(x.subtitle)}</a>` : esc(x.subtitle)}</small>` : ''}
-        ${x.stat ? `<span class="hof-stat">${esc(x.stat)}</span>` : ''}${x.blurb ? `<p class="hof-b">${esc(x.blurb)}</p>` : ''}</div></article>`;
+        ${x.stat ? `<span class="hof-stat">${esc(x.stat)}</span>` : ''}${x.blurb ? `<p class="hof-b">${esc(x.blurb)}</p>` : ''}${vid(x)}</div></article>`;
     const sections = HOF_CATS.map(([k, label, sub]) => {
       const xs = all.filter(x => (x.category || 'other') === k).sort((a, b) => b.class - a.class || (a.year || 0) - (b.year || 0));
       return `<section class="hof-sec"><h2 class="sec">${label} <small>${sub}</small></h2>${xs.length ? `<div class="hof-grid">${xs.map(card).join('')}</div>` : '<p class="rf-note hof-empty">No inductees yet.</p>'}</section>`;
@@ -782,5 +788,11 @@ window.FBPRef = (() => {
   }
   // which page a path is, so moving between sub-tabs keeps your place but a new page starts at the top
   const pageKey = path => path[0] || '';
+  // Hall of Fame clips: tap the thumbnail to swap in the YouTube player
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.hof-play'); if (!b) return;
+    const w = b.closest('.hof-vid'), v = w.dataset.yt, st = +w.dataset.start || 0;
+    b.outerHTML = `<iframe class="hof-frame" src="https://www.youtube-nocookie.com/embed/${v}?autoplay=1&playsinline=1&rel=0${st ? '&start=' + st : ''}" title="Hall of Fame clip" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  });
   return { render, pageKey };
 })();
