@@ -408,6 +408,169 @@
      }
     }
    }
+  ],
+  "rookie": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "16581",
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "nfl": "WAS",
+     "espn": "4426348",
+     "team": "0008",
+     "pts": 99.9,
+     "starts": 5,
+     "ppg": 20.0,
+     "salary": 6.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 261.7,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 99.9,
+     "teamStarts": 5
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "16598",
+     "name": "Bucky Irving",
+     "pos": "RB",
+     "nfl": "TBB",
+     "espn": "4596448",
+     "team": "0012",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 5.0,
+     "contract": "1/3",
+     "rookie": true,
+     "allPts": 182.4,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 0,
+     "teamStarts": 0
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "16747",
+     "name": "Tyrone Tracy Jr.",
+     "pos": "RB",
+     "nfl": "NYG",
+     "espn": "4360516",
+     "team": "0006",
+     "pts": 57.8,
+     "starts": 5,
+     "ppg": 11.6,
+     "salary": 2.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 146.1,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 57.8,
+     "teamStarts": 5
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "16615",
+     "name": "Malik Nabers",
+     "pos": "WR",
+     "nfl": "NYG",
+     "espn": "4595348",
+     "team": "0004",
+     "pts": 151.9,
+     "starts": 9,
+     "ppg": 16.9,
+     "salary": 12.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 182.1,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 151.9,
+     "teamStarts": 9
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "16618",
+     "name": "Brian Thomas Jr.",
+     "pos": "WR",
+     "nfl": "JAC",
+     "espn": "4432773",
+     "team": "0001",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 6.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 182.1,
+     "status": "TAXI_SQUAD",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 0,
+     "teamStarts": 0
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "16641",
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "nfl": "LVR",
+     "espn": "4432665",
+     "team": "0002",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 6.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 205.7,
+     "status": "TAXI_SQUAD",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 0,
+     "teamStarts": 0
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "16627",
+     "name": "Ladd McConkey",
+     "pos": "WR",
+     "nfl": "LAC",
+     "espn": "4612826",
+     "team": "0005",
+     "pts": 110.7,
+     "starts": 7,
+     "ppg": 15.8,
+     "salary": 5.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 164.9,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 110.7,
+     "teamStarts": 7
+    }
+   }
   ]
  },
  "ready": true,
@@ -594,53 +757,56 @@
   {
    "key": "rookie",
    "title": "Rookie of the Year",
-   "why": "Top 2024 rookie by starter points",
+   "why": "Top 2024 rookie by every point scored: starting lineup, bench or taxi squad",
    "list": [
     {
-     "id": "16615",
-     "name": "Malik Nabers",
-     "pos": "WR",
-     "nfl": "NYG",
-     "espn": "4595348",
-     "team": "0004",
-     "pts": 151.9,
-     "starts": 9,
-     "ppg": 16.9,
-     "salary": 12.0,
-     "contract": "1/5",
-     "rookie": true,
-     "champ": false,
-     "champTeam": null
-    },
-    {
-     "id": "16614",
-     "name": "Marvin Harrison Jr.",
-     "pos": "WR",
-     "nfl": "ARI",
-     "espn": "4432708",
+     "id": "16581",
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "nfl": "WAS",
+     "espn": "4426348",
      "team": "0008",
-     "pts": 142.0,
-     "starts": 11,
-     "ppg": 12.9,
-     "salary": 15.0,
+     "pts": 261.7,
+     "starts": 5,
+     "ppg": 20.0,
+     "salary": 6.0,
      "contract": "1/5",
      "rookie": true,
+     "starterPts": 99.9,
      "champ": false,
      "champTeam": null
     },
     {
-     "id": "16627",
-     "name": "Ladd McConkey",
-     "pos": "WR",
-     "nfl": "LAC",
-     "espn": "4612826",
-     "team": "0005",
-     "pts": 110.7,
-     "starts": 7,
-     "ppg": 15.8,
-     "salary": 5.0,
+     "id": "16582",
+     "name": "Bo Nix",
+     "pos": "QB",
+     "nfl": "DEN",
+     "espn": "4426338",
+     "team": "0010",
+     "pts": 227.2,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 3.0,
      "contract": "1/5",
      "rookie": true,
+     "starterPts": 0.0,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "16641",
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "nfl": "LVR",
+     "espn": "4432665",
+     "team": "0002",
+     "pts": 205.7,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 6.0,
+     "contract": "1/5",
+     "rookie": true,
+     "starterPts": 0.0,
      "champ": false,
      "champTeam": null
     }
@@ -1196,22 +1362,22 @@
   {
    "key": "manager",
    "title": "Manager of the Year",
-   "why": "Best lineup calls: actual points over the most the roster could have scored",
+   "why": "Beat expectations, win, stay active and set full lineups. .500 or better to qualify.",
    "teams": [
     {
-     "team": "0006",
-     "stat": "89.3%",
-     "sub": "1664.7 of 1863.8 possible"
-    },
-    {
-     "team": "0003",
-     "stat": "88.9%",
-     "sub": "1678.6 of 1889.0 possible"
-    },
-    {
      "team": "0007",
-     "stat": "88.7%",
-     "sub": "1873.0 of 2111.9 possible"
+     "stat": "13-1",
+     "sub": "Expected .628 · 34 moves"
+    },
+    {
+     "team": "0006",
+     "stat": "8-6",
+     "sub": "Expected .412 · 48 moves"
+    },
+    {
+     "team": "0001",
+     "stat": "11-3",
+     "sub": "Expected .625 · 25 moves"
     }
    ]
   },

@@ -411,6 +411,169 @@
      }
     }
    }
+  ],
+  "rookie": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "17032",
+     "name": "Jaxson Dart",
+     "pos": "QB",
+     "nfl": "NYG",
+     "espn": "4689114",
+     "team": "0006",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 3.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 173.9,
+     "status": "TAXI_SQUAD",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 0,
+     "teamStarts": 0
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "17042",
+     "name": "Ashton Jeanty",
+     "pos": "RB",
+     "nfl": "LVR",
+     "espn": "4890973",
+     "team": "0005",
+     "pts": 183.4,
+     "starts": 13,
+     "ppg": 14.1,
+     "salary": 35.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 183.4,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 183.4,
+     "teamStarts": 13
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "17068",
+     "name": "RJ Harvey",
+     "pos": "RB",
+     "nfl": "DEN",
+     "espn": "4568490",
+     "team": "0009",
+     "pts": 155.2,
+     "starts": 11,
+     "ppg": 14.1,
+     "salary": 5.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 168.9,
+     "status": "ROSTER",
+     "champ": true,
+     "champTeam": "0009",
+     "teamPts": 155.2,
+     "teamStarts": 11
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "17171",
+     "name": "Chimere Dike",
+     "pos": "WR",
+     "nfl": "TEN",
+     "espn": "4431268",
+     "team": "0009",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 0.0,
+     "contract": "",
+     "rookie": true,
+     "allPts": 176.7,
+     "status": "ROSTER",
+     "champ": true,
+     "champTeam": "0009",
+     "teamPts": 0,
+     "teamStarts": 0
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "17071",
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "nfl": "CAR",
+     "espn": "4685472",
+     "team": "0001",
+     "pts": 167.0,
+     "starts": 12,
+     "ppg": 13.9,
+     "salary": 15.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 175.6,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 167.0,
+     "teamStarts": 12
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "17102",
+     "name": "Tyler Warren",
+     "pos": "TE",
+     "nfl": "IND",
+     "espn": "4431459",
+     "team": "0005",
+     "pts": 111.2,
+     "starts": 9,
+     "ppg": 12.4,
+     "salary": 3.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 160.7,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 111.2,
+     "teamStarts": 9
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "17081",
+     "name": "Emeka Egbuka",
+     "pos": "WR",
+     "nfl": "TBB",
+     "espn": "4567750",
+     "team": "0006",
+     "pts": 67.6,
+     "starts": 7,
+     "ppg": 9.7,
+     "salary": 10.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 173.5,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 67.6,
+     "teamStarts": 7
+    }
+   }
   ]
  },
  "ready": true,
@@ -597,7 +760,7 @@
   {
    "key": "rookie",
    "title": "Rookie of the Year",
-   "why": "Top 2025 rookie by starter points",
+   "why": "Top 2025 rookie by every point scored: starting lineup, bench or taxi squad",
    "list": [
     {
      "id": "17042",
@@ -612,8 +775,26 @@
      "salary": 35.0,
      "contract": "1/5",
      "rookie": true,
+     "starterPts": 183.4,
      "champ": false,
      "champTeam": null
+    },
+    {
+     "id": "17171",
+     "name": "Chimere Dike",
+     "pos": "WR",
+     "nfl": "TEN",
+     "espn": "4431268",
+     "team": "0009",
+     "pts": 176.7,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 0.0,
+     "contract": "",
+     "rookie": true,
+     "starterPts": 0.0,
+     "champ": true,
+     "champTeam": "0009"
     },
     {
      "id": "17071",
@@ -622,30 +803,15 @@
      "nfl": "CAR",
      "espn": "4685472",
      "team": "0001",
-     "pts": 167.0,
+     "pts": 175.6,
      "starts": 12,
      "ppg": 13.9,
      "salary": 15.0,
      "contract": "1/5",
      "rookie": true,
+     "starterPts": 167.0,
      "champ": false,
      "champTeam": null
-    },
-    {
-     "id": "17068",
-     "name": "RJ Harvey",
-     "pos": "RB",
-     "nfl": "DEN",
-     "espn": "4568490",
-     "team": "0009",
-     "pts": 155.2,
-     "starts": 11,
-     "ppg": 14.1,
-     "salary": 5.0,
-     "contract": "1/5",
-     "rookie": true,
-     "champ": true,
-     "champTeam": "0009"
     }
    ]
   },
@@ -1308,22 +1474,22 @@
   {
    "key": "manager",
    "title": "Manager of the Year",
-   "why": "Best lineup calls: actual points over the most the roster could have scored",
+   "why": "Beat expectations, win, stay active and set full lineups. .500 or better to qualify.",
    "teams": [
     {
-     "team": "0001",
-     "stat": "87.8%",
-     "sub": "1737.2 of 1978.8 possible"
-    },
-    {
      "team": "0009",
-     "stat": "87.5%",
-     "sub": "1711.3 of 1956.5 possible"
+     "stat": "11-3",
+     "sub": "Expected .529 · 28 moves"
     },
     {
      "team": "0011",
-     "stat": "86.1%",
-     "sub": "1525.7 of 1771.8 possible"
+     "stat": "11-3",
+     "sub": "Expected .367 · 10 moves · 1 empty lineup spot"
+    },
+    {
+     "team": "0007",
+     "stat": "8-5-1",
+     "sub": "Expected .596 · 37 moves"
     }
    ]
   },

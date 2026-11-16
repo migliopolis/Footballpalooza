@@ -59,7 +59,7 @@ def lineup_slots(league):
 status = {}
 
 
-def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, slots, flex_ok, rostered_only, rookie_pts=None):
+def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, slots, flex_ok, rostered_only, rookie_pts=None, moy=None):
     """Every award for one season. weeks: {week: {franchise: {'s': [[id, pts]], 'n': [...]}}}, regular season only."""
     out = {'season': season}
     tot, starts, by_team, games = defaultdict(float), defaultdict(int), defaultdict(float), []
@@ -126,7 +126,7 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
             pick = next((p for p in rk_pool if p not in rused and pos_of(p) in ok), None)
             if pick:
                 rused.add(pick)
-                pl = player(pick)
+                pl = player(pick, team=owner.get(pick))
                 pl['allPts'] = round(rookie_pts[pick], 1)
                 pl['status'] = status.get(pick, '') if status else ''
                 rteam.append({'slot': slot, 'player': pl})
@@ -156,8 +156,7 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
                      and pos_of(p) and rookie_pts[p] > 0), key=lambda p: -rookie_pts[p])
         if rk:
             A.append({'key': 'rookie', 'title': 'Rookie of the Year', 'why': f'Top {season} rookie by every point scored: starting lineup, bench or taxi squad',
-                      'note': 'New this season: all points count, not just starter points.',
-                      'list': [dict(player(p, pts=rookie_pts[p]), starterPts=round(tot[p], 1)) for p in rk[:3]]})
+                      'list': [dict(player(p, pts=rookie_pts[p], team=owner.get(p)), starterPts=round(tot[p], 1)) for p in rk[:3]]})
     else:
         rk = [p for p in eligible if str(pinfo.get(p, {}).get('draft_year')) == season]
         if rk:
@@ -225,10 +224,9 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
                   'more': [t for t in trades[1:5] if t['margin'] > 0]})
 
     # team awards from the standings
-    eff = sorted((s for s in standings if s.get('pp')), key=lambda s: -s['pf'] / s['pp'])
-    if eff:
-        A.append({'key': 'manager', 'title': 'Manager of the Year', 'why': 'Best lineup calls: actual points over the most the roster could have scored',
-                  'teams': [{'team': s['id'], 'stat': f"{100 * s['pf'] / s['pp']:.1f}%", 'sub': f"{s['pf']:.1f} of {s['pp']:.1f} possible"} for s in eff[:3]]})
+    m = manager_award(standings, tx, weeks, wk_nums, slots, pinfo, by_team, moy)
+    if m:
+        A.append(m)
 
     def ap(s):
         g = s['allPlayW'] + s['allPlayL'] + s['allPlayT']
@@ -292,6 +290,108 @@ def player_info(path):
     return {pid: dict(zip(fields, row)) for pid, row in (P.get('players') or {}).items()}
 
 
+def manager_award(standings, tx, weeks, wk_nums, slots, pinfo, by_team, moy):
+    # Manager of the Year: beating expectations (last season's record and the preseason roster), winning, real strength
+    # (all-play), lineup calls and staying active, less small penalties for empty lineup spots, bye-week starters and
+    # going quiet on the wire. Only teams at .500 or better qualify.
+    moy = moy or {}
+    n_sl = len(slots)
+    adds, acq_pts, last_move = defaultdict(int), defaultdict(float), defaultdict(int)
+    for t in tx:
+        ty, ts = t.get('type'), int(t.get('timestamp') or 0)
+        if ty in ('BBID_WAIVER', 'WAIVER', 'FREE_AGENT'):
+            got = [x for x in (t.get('transaction') or '').split('|')[0].split(',') if x.strip()]
+            fr = t.get('franchise')
+            if got and fr:
+                adds[fr] += 1; last_move[fr] = max(last_move[fr], ts)
+                for pid in got: acq_pts[fr] += by_team[(pid, fr)]
+        elif ty == 'TRADE':
+            for fr, got in ((t.get('franchise'), t.get('franchise2_gave_up')), (t.get('franchise2'), t.get('franchise1_gave_up'))):
+                got = [x for x in (got or '').split(',') if x.strip()]
+                if fr and got:
+                    adds[fr] += 1; last_move[fr] = max(last_move[fr], ts)
+                    for pid in got:
+                        if pid.isdigit(): acq_pts[fr] += by_team[(pid, fr)]
+    newest = max((int(t.get('timestamp') or 0) for t in tx), default=0)
+    empty, byes_in = defaultdict(int), defaultdict(int)
+    bye = moy.get('byes') or {}
+    for w in wk_nums:
+        for fr, t in weeks[str(w)].items():
+            empty[fr] += max(0, n_sl - len(t.get('s', [])))
+            for pid, pts in t.get('s', []):
+                tm = pinfo.get(pid, {}).get('team', '')
+                if bye and not pts and bye.get(moy['nfl'](tm)) == w:
+                    byes_in[fr] += 1
+    rows = []
+    last, pre = moy.get('last') or {}, moy.get('pre') or {}
+    ids = [x['id'] for x in standings]
+    prank = {f: i for i, f in enumerate(sorted((f for f in ids if f in pre), key=lambda f: -pre[f]))}
+    for x in standings:
+        g = x['w'] + x['l'] + x['t']
+        if not g:
+            continue
+        pct = (x['w'] + x['t'] / 2) / g
+        parts = [0.5 + 0.5 * (last[x['id']] - 0.5)] if x['id'] in last else []
+        if x['id'] in prank and len(prank) > 1:
+            parts.append(0.75 - 0.5 * prank[x['id']] / (len(prank) - 1))
+        exp = sum(parts) / len(parts) if parts else 0.5
+        apg = x['allPlayW'] + x['allPlayL'] + x['allPlayT']
+        quiet = bool(newest) and last_move[x['id']] < newest - 28 * 86400
+        rows.append({'id': x['id'], 'rec': f"{x['w']}-{x['l']}{'-' + str(x['t']) if x['t'] else ''}", 'pct': pct, 'exp': exp, 'over': pct - exp,
+                     'ap': (x['allPlayW'] + x['allPlayT'] / 2) / apg if apg else 0, 'eff': x['pf'] / x['pp'] if x.get('pp') else 0,
+                     'acq': acq_pts[x['id']], 'moves': math.log1p(adds[x['id']]), 'n': adds[x['id']],
+                     'empty': empty[x['id']], 'bye': byes_in[x['id']], 'quiet': quiet})
+    if rows:
+        def z(k):
+            xs = [r[k] for r in rows]; m = sum(xs) / len(xs); sd = (sum((v - m) ** 2 for v in xs) / len(xs)) ** .5 or 1
+            for r in rows: r['z' + k] = (r[k] - m) / sd
+        for k in ('over', 'pct', 'ap', 'eff', 'acq', 'moves'): z(k)
+        for r in rows:
+            r['score'] = (.40 * r['zover'] + .25 * r['zpct'] + .10 * r['zap'] + .10 * r['zeff'] + .15 * (.6 * r['zacq'] + .4 * r['zmoves'])
+                          - .20 * r['empty'] - .15 * r['bye'] - (.25 if r['quiet'] else 0))
+        top = sorted((r for r in rows if r['pct'] >= .5), key=lambda r: -r['score'])[:3]
+        def sub(r):
+            bits = [f"{r['n']} move{'' if r['n'] == 1 else 's'}"]
+            if r['empty']: bits.append(f"{r['empty']} empty lineup spot{'' if r['empty'] == 1 else 's'}")
+            if r['bye']: bits.append(f"{r['bye']} bye-week starter{'' if r['bye'] == 1 else 's'}")
+            return ' · '.join(bits)
+        if top:
+            return ({'key': 'manager', 'title': 'Manager of the Year',
+                      'why': 'Beat expectations, win, stay active and set full lineups. .500 or better to qualify.',
+                      'teams': [{'team': r['id'], 'stat': r['rec'], 'sub': f"Expected {r['exp']:.3f}".replace('0.', '.', 1) + f" · {sub(r)}"} for r in top]})
+
+    return None
+
+
+NFL_BYE = {'GBP': 'GB', 'KCC': 'KC', 'NEP': 'NE', 'NOS': 'NO', 'SFO': 'SF', 'TBB': 'TB', 'LVR': 'LV', 'JAX': 'JAC', 'WSH': 'WAS', 'LA': 'LAR'}
+
+
+def moy_context(season, weeks, pinfo, ref=None):
+    """Manager of the Year inputs: last season's win %, the preseason roster's strength (best week-1 lineup by OVR,
+    current season only) and this season's NFL bye weeks (when saved)."""
+    ref = ref or load(D('reference.json'), {}) or {}
+    last = {}
+    for r in (ref.get('standings_by_year') or {}).get(str(int(season) - 1)) or []:
+        try: last[r['franchise']] = float(r['h2hpct'])
+        except (KeyError, ValueError): pass
+    pre = {}
+    ovr = (load(D('ovr.json'), {}) or {}).get('players') or {}
+    wk1 = weeks.get('1') or {}
+    if ovr and wk1 and str((load(D('ovr.json'), {}) or {}).get('season', season)) == str(season):
+        pos = lambda p: (pinfo.get(p) or {}).get('position', '')
+        for fr, t in wk1.items():
+            v = sorted((((ovr.get(p) or {}).get('h') or [(ovr.get(p) or {}).get('o') or 0])[0] or 0, p) for p in [x for l in ('s', 'n') for x, _ in t.get(l, [])] if p in ovr)[::-1]
+            used, tot = set(), 0
+            for want, n in (('QB', 1), ('RB', 2), ('WR', 2), ('TE', 1), ('FLEX', 1)):
+                for val, p in v:
+                    if n and p not in used and (pos(p) == want or (want == 'FLEX' and pos(p) in ('RB', 'WR', 'TE'))):
+                        used.add(p); tot += val; n -= 1
+            pre[fr] = tot
+    by = load(D('reference', f'byes-{season}.json'), {}) or {}
+    return {'last': last, 'pre': pre, 'byes': by.get('byes') or {}, 'nfl': lambda t: NFL_BYE.get(t, t)}
+
+
+
 def current(links):
     meta = load(D('mfl', '_meta.json'), {})
     season = str(meta.get('season') or '2026')
@@ -318,7 +418,11 @@ def current(links):
     for f in as_list((load(D('mfl', 'rosters.json'), {}) or {}).get('rosters', {}).get('franchise')):
         for pl in as_list(f.get('player')):
             status[pl['id']] = pl.get('status', '')
-    out = build(season, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=True, rookie_pts=rookie_pts)
+    out = build(season, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=True, rookie_pts=rookie_pts,
+                moy=moy_context(season, weeks, pinfo))
+    for a in out.get('awards', []):
+        if a['key'] == 'rookie' and 'every point' in a.get('why', ''):
+            a['note'] = 'New this season: all points count, not just starter points.'
     out['generated'] = stamp
     return out
 
@@ -328,13 +432,66 @@ def standings_from_reference(rows):
     for r in rows or []:
         try:
             w, l, t = (int(x) for x in r['h2hwlt'].split('-'))
-            aw, al, at = (int(x) for x in r['all_play_wlt'].split('-'))
+            aw, al, at = (int(x) for x in r['all_play_wlt'].split('-')) if r.get('all_play_wlt') else (0, 0, 0)
             g = w + l + t
             out.append({'id': r['franchise'], 'w': w, 'l': l, 't': t, 'pct': (w + t / 2) / g if g else 0,
-                        'pf': float(r['pf']), 'pp': float(r.get('pp') or 0), 'allPlayW': aw, 'allPlayL': al, 'allPlayT': at})
+                        'pf': float(r['pf'] or 0), 'pp': float(r.get('pp') or 0), 'allPlayW': aw, 'allPlayL': al, 'allPlayT': at})
         except Exception:
             continue
     return out
+
+
+def past_rookie_points(year):
+    """Saved regular-season points for a past season's rookies (every lineup spot), from data/reference/rookie-points.json."""
+    return {k: float(v) for k, v in ((load(D('reference', 'rookie-points.json'), {}) or {}).get('seasons', {}).get(str(year)) or {}).items()}
+
+
+def partial_season(year, links, ref, fallback_info):
+    """A season without saved weekly results (2019, 2020): the All-FBP Rookie Team, Rookie of the Year and Manager of
+    the Year from the final standings, rosters and saved rookie points. The other awards need weekly lineups."""
+    H = lambda n: D('history', year, n + '.json')
+    rpts = past_rookie_points(year)
+    st = standings_from_reference((ref.get('standings_by_year') or {}).get(year))
+    if not rpts or not st:
+        return None
+    pinfo = dict(fallback_info)
+    pinfo.update(player_info(H('players')))
+    owner, salary, contract = roster_maps(load(H('rosters'), {}))
+    for f in as_list((load(H('rosters'), {}) or {}).get('rosters', {}).get('franchise')):
+        for pl in as_list(f.get('player')):
+            status[pl['id']] = pl.get('status', '')
+    league = (load(H('league'), {}) or {}).get('league', {})
+    slots, flex_ok = lineup_slots(league)
+    pos_of = lambda pid: ('DEF' if pinfo.get(pid, {}).get('position') == 'Def' else pinfo.get(pid, {}).get('position', ''))
+
+    def player(pid):
+        i = pinfo.get(pid, {}); l = links.get(pid) or []
+        return {'id': pid, 'name': (l[2] if len(l) > 2 and l[2] else '') or display(i.get('name', pid)), 'pos': pos_of(pid),
+                'nfl': i.get('team', ''), 'espn': (l[0] if l else '') or i.get('espn_id', ''), 'team': owner.get(pid),
+                'pts': round(rpts.get(pid, 0), 1), 'allPts': round(rpts.get(pid, 0), 1), 'starts': None, 'ppg': 0,
+                'salary': salary.get(pid), 'contract': contract.get(pid, ''), 'rookie': True, 'status': status.get(pid, '')}
+    pool = sorted((p for p in rpts if p in owner and str(pinfo.get(p, {}).get('draft_year')) == str(year) and pos_of(p) in ('QB', 'RB', 'WR', 'TE')),
+                  key=lambda p: -rpts[p])
+    used, team = set(), []
+    for slot in slots:
+        if slot == 'DEF':
+            continue
+        ok = flex_ok if slot == 'FLEX' else {slot}
+        pick = next((p for p in pool if p not in used and pos_of(p) in ok), None)
+        if pick:
+            used.add(pick); team.append({'slot': slot, 'player': player(pick)})
+    A = []
+    if pool:
+        A.append({'key': 'rookie', 'title': 'Rookie of the Year', 'why': f'Top {year} rookie by every point scored: starting lineup, bench or taxi squad',
+                  'list': [player(p) for p in pool[:3]]})
+    ctx = moy_context(year, {}, pinfo, ref)
+    m = manager_award(st, [], {}, [], slots, pinfo, defaultdict(float), ctx) if ctx['last'] else None   # needs last season's record
+    if m:
+        m['why'] = 'Beat expectations and win. .500 or better to qualify. (Moves and lineups aren\'t saved for this season.)'
+        for t in m['teams']:
+            t['sub'] = t['sub'].split(' · ')[0]
+        A.append(m)
+    return {'season': year, 'ready': True, 'final': True, 'partial': True, 'allFbp': {'first': [], 'second': [], 'rookie': team}, 'awards': A}
 
 
 def past(year, links, ref, fallback_info):
@@ -362,7 +519,12 @@ def past(year, links, ref, fallback_info):
         if not s['pp'] and opt.get(s['id']):
             s['pp'] = round(opt[s['id']], 1)
     slots, flex_ok = lineup_slots(league)
-    out = build(year, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=False)
+    rpts = past_rookie_points(year)
+    for f in as_list((load(H('rosters'), {}) or {}).get('rosters', {}).get('franchise')):
+        for pl in as_list(f.get('player')):
+            status[pl['id']] = pl.get('status', '')
+    out = build(year, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=False, rookie_pts=rpts,
+                moy=moy_context(year, weeks, pinfo, ref))
     out['final'] = True
     # title: an All-FBP player on the champion's roster (starting or bench) in the championship game
     c = (ref.get('championships') or {}).get(year) or {}
@@ -722,7 +884,7 @@ def main():
     built = []
     if os.path.isdir(D('history')):
         for y in sorted(y for y in os.listdir(D('history')) if re.fullmatch(r'\d{4}', y)):
-            a = past(y, links, ref, fallback)
+            a = past(y, links, ref, fallback) or partial_season(y, links, ref, fallback)
             if a and a.get('ready') and y != cur.get('season'):
                 built.append((y, a))
     add_honors(built + [(cur.get('season', '9999'), cur)])

@@ -727,7 +727,6 @@
    "key": "rookie",
    "title": "Rookie of the Year",
    "why": "Top 2026 rookie by every point scored: starting lineup, bench or taxi squad",
-   "note": "New this season: all points count, not just starter points.",
    "list": [
     {
      "id": "17500",
@@ -774,7 +773,8 @@
      "rookie": true,
      "starterPts": 0.0
     }
-   ]
+   ],
+   "note": "New this season: all points count, not just starter points."
   },
   {
    "key": "waiver",
@@ -1292,22 +1292,22 @@
   {
    "key": "manager",
    "title": "Manager of the Year",
-   "why": "Best lineup calls: actual points over the most the roster could have scored",
+   "why": "Beat expectations, win, stay active and set full lineups. .500 or better to qualify.",
    "teams": [
     {
-     "team": "0005",
-     "stat": "91.0%",
-     "sub": "996.7 of 1095.5 possible"
+     "team": "0002",
+     "stat": "7-2",
+     "sub": "Expected .443 · 11 moves"
     },
     {
      "team": "0004",
-     "stat": "89.8%",
-     "sub": "1158.8 of 1290.2 possible"
+     "stat": "6-3",
+     "sub": "Expected .589 · 23 moves"
     },
     {
      "team": "0010",
-     "stat": "89.4%",
-     "sub": "1043.1 of 1166.5 possible"
+     "stat": "5-4",
+     "sub": "Expected .453 · 9 moves"
     }
    ]
   },
@@ -1941,7 +1941,7 @@
    ]
   }
  ],
- "generated": "2026-11-16T20:04:10+00:00",
+ "generated": "2026-11-16T20:46:14+00:00",
  "basis": {
   "throughWeek": 8,
   "teams": [
@@ -2073,7 +2073,9 @@
   "2024",
   "2023",
   "2022",
-  "2021"
+  "2021",
+  "2020",
+  "2019"
  ],
- "honorsFrom": "2021"
+ "honorsFrom": "2019"
 }

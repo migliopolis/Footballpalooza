@@ -1,0 +1,202 @@
+{
+ "season": "2019",
+ "ready": true,
+ "final": true,
+ "partial": true,
+ "allFbp": {
+  "first": [],
+  "second": [],
+  "rookie": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "14056",
+     "name": "Kyler Murray",
+     "pos": "QB",
+     "nfl": "ARI",
+     "espn": "3917315",
+     "team": "0009",
+     "pts": 233.2,
+     "allPts": 233.2,
+     "starts": null,
+     "ppg": 0,
+     "salary": 2.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "14073",
+     "name": "Josh Jacobs",
+     "pos": "RB",
+     "nfl": "OAK",
+     "espn": "4047365",
+     "team": "0003",
+     "pts": 178.7,
+     "allPts": 178.7,
+     "starts": null,
+     "ppg": 0,
+     "salary": 55.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "14079",
+     "name": "Miles Sanders",
+     "pos": "RB",
+     "nfl": "PHI",
+     "espn": "4045163",
+     "team": "0008",
+     "pts": 137.9,
+     "allPts": 137.9,
+     "starts": null,
+     "ppg": 0,
+     "salary": 24.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "14102",
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "nfl": "SEA",
+     "espn": "4047650",
+     "team": "0001",
+     "pts": 141.6,
+     "allPts": 141.6,
+     "starts": null,
+     "ppg": 0,
+     "salary": 3.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "14109",
+     "name": "Terry McLaurin",
+     "pos": "WR",
+     "nfl": "WAS",
+     "espn": "3121422",
+     "team": "0006",
+     "pts": 136.6,
+     "allPts": 136.6,
+     "starts": null,
+     "ppg": 0,
+     "salary": 18.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "14138",
+     "name": "T.J. Hockenson",
+     "pos": "TE",
+     "nfl": "DET",
+     "espn": "4036133",
+     "team": "0001",
+     "pts": 80.7,
+     "allPts": 80.7,
+     "starts": null,
+     "ppg": 0,
+     "salary": 2.0,
+     "contract": "",
+     "rookie": true,
+     "status": "INJURED_RESERVE"
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "14071",
+     "name": "David Montgomery",
+     "pos": "RB",
+     "nfl": "CHI",
+     "espn": "4035538",
+     "team": "0012",
+     "pts": 133.7,
+     "allPts": 133.7,
+     "starts": null,
+     "ppg": 0,
+     "salary": 50.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   }
+  ]
+ },
+ "awards": [
+  {
+   "key": "rookie",
+   "title": "Rookie of the Year",
+   "why": "Top 2019 rookie by every point scored: starting lineup, bench or taxi squad",
+   "list": [
+    {
+     "id": "14056",
+     "name": "Kyler Murray",
+     "pos": "QB",
+     "nfl": "ARI",
+     "espn": "3917315",
+     "team": "0009",
+     "pts": 233.2,
+     "allPts": 233.2,
+     "starts": null,
+     "ppg": 0,
+     "salary": 2.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    },
+    {
+     "id": "14073",
+     "name": "Josh Jacobs",
+     "pos": "RB",
+     "nfl": "OAK",
+     "espn": "4047365",
+     "team": "0003",
+     "pts": 178.7,
+     "allPts": 178.7,
+     "starts": null,
+     "ppg": 0,
+     "salary": 55.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    },
+    {
+     "id": "14059",
+     "name": "Daniel Jones",
+     "pos": "QB",
+     "nfl": "NYG",
+     "espn": "3917792",
+     "team": "0009",
+     "pts": 165.0,
+     "allPts": 165.0,
+     "starts": null,
+     "ppg": 0,
+     "salary": 0.0,
+     "contract": "",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   ]
+  }
+ ]
+}

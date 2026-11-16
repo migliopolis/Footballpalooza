@@ -1,0 +1,224 @@
+{
+ "season": "2020",
+ "ready": true,
+ "final": true,
+ "partial": true,
+ "allFbp": {
+  "first": [],
+  "second": [],
+  "rookie": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "14779",
+     "name": "Justin Herbert",
+     "pos": "QB",
+     "nfl": "LAC",
+     "espn": "4038941",
+     "team": "0011",
+     "pts": 239.4,
+     "allPts": 239.4,
+     "starts": null,
+     "ppg": 0,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "14813",
+     "name": "James Robinson",
+     "pos": "RB",
+     "nfl": "JAC",
+     "espn": "4052042",
+     "team": "0001",
+     "pts": 223.8,
+     "allPts": 223.8,
+     "starts": null,
+     "ppg": 0,
+     "salary": 5.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "INJURED_RESERVE"
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "14852",
+     "name": "Antonio Gibson",
+     "pos": "RB",
+     "nfl": "WAS",
+     "espn": "4360294",
+     "team": "0004",
+     "pts": 183.2,
+     "allPts": 183.2,
+     "starts": null,
+     "ppg": 0,
+     "salary": 26.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "14836",
+     "name": "Justin Jefferson",
+     "pos": "WR",
+     "nfl": "MIN",
+     "espn": "4262921",
+     "team": "0005",
+     "pts": 209.1,
+     "allPts": 209.1,
+     "starts": null,
+     "ppg": 0,
+     "salary": 5.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "14841",
+     "name": "Chase Claypool",
+     "pos": "WR",
+     "nfl": "PIT",
+     "espn": "4046692",
+     "team": "0007",
+     "pts": 172.1,
+     "allPts": 172.1,
+     "starts": null,
+     "ppg": 0,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "14867",
+     "name": "Cole Kmet",
+     "pos": "TE",
+     "nfl": "CHI",
+     "espn": "4258595",
+     "team": "0007",
+     "pts": 38.1,
+     "allPts": 38.1,
+     "starts": null,
+     "ppg": 0,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "14832",
+     "name": "CeeDee Lamb",
+     "pos": "WR",
+     "nfl": "DAL",
+     "espn": "4241389",
+     "team": "0012",
+     "pts": 157.1,
+     "allPts": 157.1,
+     "starts": null,
+     "ppg": 0,
+     "salary": 18.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   }
+  ]
+ },
+ "awards": [
+  {
+   "key": "rookie",
+   "title": "Rookie of the Year",
+   "why": "Top 2020 rookie by every point scored: starting lineup, bench or taxi squad",
+   "list": [
+    {
+     "id": "14779",
+     "name": "Justin Herbert",
+     "pos": "QB",
+     "nfl": "LAC",
+     "espn": "4038941",
+     "team": "0011",
+     "pts": 239.4,
+     "allPts": 239.4,
+     "starts": null,
+     "ppg": 0,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    },
+    {
+     "id": "14813",
+     "name": "James Robinson",
+     "pos": "RB",
+     "nfl": "JAC",
+     "espn": "4052042",
+     "team": "0001",
+     "pts": 223.8,
+     "allPts": 223.8,
+     "starts": null,
+     "ppg": 0,
+     "salary": 5.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "INJURED_RESERVE"
+    },
+    {
+     "id": "14836",
+     "name": "Justin Jefferson",
+     "pos": "WR",
+     "nfl": "MIN",
+     "espn": "4262921",
+     "team": "0005",
+     "pts": 209.1,
+     "allPts": 209.1,
+     "starts": null,
+     "ppg": 0,
+     "salary": 5.0,
+     "contract": "1",
+     "rookie": true,
+     "status": "ROSTER"
+    }
+   ]
+  },
+  {
+   "key": "manager",
+   "title": "Manager of the Year",
+   "why": "Beat expectations and win. .500 or better to qualify. (Moves and lineups aren't saved for this season.)",
+   "teams": [
+    {
+     "team": "0003",
+     "stat": "11-2",
+     "sub": "Expected .635"
+    },
+    {
+     "team": "0011",
+     "stat": "8-5",
+     "sub": "Expected .443"
+    },
+    {
+     "team": "0001",
+     "stat": "8-5",
+     "sub": "Expected .519"
+    }
+   ]
+  }
+ ]
+}

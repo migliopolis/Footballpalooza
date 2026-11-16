@@ -70,10 +70,10 @@ window.FBPAwards = (() => {
   const RK_ST = { TAXI_SQUAD: 'Taxi squad', INJURED_RESERVE: 'IR', ROSTER: 'Active roster' };
   function rcard(slot, p) {
     return `<div class="card aw-card second rook"><span class="aw-slot">${slot}</span>${photo(p, 'md', true)}
-      <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}</span>${p.status && RK_ST[p.status] ? `<span class="aw-sub aw-rst"><i>${RK_ST[p.status]}</i></span>` : ''}
+      <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}</span>${!S.final && p.status && RK_ST[p.status] ? `<span class="aw-sub aw-rst"><i>${RK_ST[p.status]}</i></span>` : ''}
       <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>
-      <span class="aw-stats"><span><b>${n1(p.allPts)}</b>total pts</span><span><b>${n1(p.pts)}</b>as a starter</span><span><b>${sal(p)}</b>salary</span></span>
-      <span class="aw-started">${p.starts ? `${p.starts} week${p.starts === 1 ? '' : 's'} started` : 'Hasn’t started yet'}</span></div>`;
+      <span class="aw-stats"><span><b>${n1(p.allPts)}</b>total pts</span>${S.partial ? '' : `<span><b>${n1(p.pts)}</b>as a starter</span>`}${p.salary ? `<span><b>${sal(p)}</b>salary</span>` : ''}</span>
+      ${S.partial ? '' : `<span class="aw-started">${p.starts ? `${p.starts} week${p.starts === 1 ? '' : 's'} started` : S.final ? 'Never started' : 'Hasn’t started yet'}</span>`}</div>`;
   }
   function card(slot, p, second) {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg', true)}
@@ -209,20 +209,20 @@ window.FBPAwards = (() => {
       const any = S.allFbp.first.some(e => e.player.pace && e.player.pace.record);
       return `<p class="rf-foot aw-recs">${any ? '🔥 Record pace: projected regular-season total (points so far plus points per start for the weeks left) beats the best season ever at his position. ' : ''}Best seasons since 2019: ${pos.map(k => `${k} ${esc(R[k].name)} ${n1(R[k].pts)} (${R[k].year})`).join(' · ')}.</p>`;
     };
-    const sub = S.final ? `${S.season} regular season, final · starter points only` : `${S.season} season through week ${S.throughWeek} · starter points only, rostered players`;
+    const sub = S.partial ? `${S.season} regular season, final` : S.final ? `${S.season} regular season, final · starter points only` : `${S.season} season through week ${S.throughWeek} · starter points only, rostered players`;
     const foot = S.final
       ? `Only points scored in an FBP starting lineup during the ${S.season} regular season count. FLEX is the best remaining flex-eligible player. Salaries are from the end of that season. All-FBP counts start with ${esc(A.honorsFrom || S.season)}. Trades count only what each side scored for its new team that season; a pick used in that season’s draft counts as the player taken with it. Team names are today’s.`
       : `Only points scored in an FBP starting lineup count. FLEX is the best remaining RB, WR or TE. Salaries are this season’s. All-FBP counts start with ${esc(A.honorsFrom || S.season)} and include this season’s spot so far. Updated every Monday night.`;
-    const fluid = S.final ? '' : `<p class="rf-note aw-fluid"><b>Awards in progress.</b> These are the leaders through week ${S.throughWeek} of the ${S.season} season. Nothing is final until the regular season ends, so the All-FBP teams and every award can change from week to week.</p>`;
+    const fluid = S.partial ? `<p class="rf-note aw-fluid">MFL didn’t save weekly lineups for ${S.season}, so this season has only the All-FBP Rookie Team, Rookie of the Year and Manager of the Year.</p>` : S.final ? '' : `<p class="rf-note aw-fluid"><b>Awards in progress.</b> These are the leaders through week ${S.throughWeek} of the ${S.season} season. Nothing is final until the regular season ends, so the All-FBP teams and every award can change from week to week.</p>`;
     return head(sub) + fluid +
-      fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first) + recNote()) +
-      fold('allfbp2', '2nd Team All-FBP', S.allFbp.second, team(S.allFbp.second, true)) +
+      (S.allFbp.first.length ? fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first) + recNote()) : '') +
+      (S.allFbp.second.length ? fold('allfbp2', '2nd Team All-FBP', S.allFbp.second, team(S.allFbp.second, true)) : '') +
       ((S.allFbp.rookie || []).length ? fold('allfbpR', 'All-FBP Rookie Team', S.allFbp.rookie, `<div class="aw-team">${S.allFbp.rookie.map(e => rcard(e.slot, e.player)).join('')}</div><p class="rf-foot">This season’s rookies on an FBP roster, by every point they’ve scored: starting lineup, bench or taxi squad. No defenses. A rookie on the 1st or 2nd Team keeps his gold or silver.</p>`) : '') +
       `<section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.concat(S === A && MV ? [
         MV.up && MV.up.length ? { key: 'riser', title: 'Biggest Riser', why: 'The biggest climb in OVR since week 1: Madden’s ratings, the dynasty consensus and his FBP production all count. Anyone rated 70 or better at either end.', movers: MV.up } : null,
         MV.down && MV.down.length ? { key: 'faller', title: 'Biggest Faller', why: 'The biggest drop in OVR since week 1. Anyone rated 70 or better at either end.', movers: MV.down } : null].filter(Boolean) : [])
         .sort((a, b) => rank(a) - rank(b)).map(award).join('')}</div>
-      <p class="rf-foot">${foot}</p></section>`;
+      ${S.partial ? "" : `<p class="rf-foot">${foot}</p>`}</section>`;
   }
   // returns the selector of the button pressed, so the page can keep focus on it
   function click(e) {

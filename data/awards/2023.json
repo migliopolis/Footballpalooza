@@ -411,6 +411,169 @@
      }
     }
    }
+  ],
+  "rookie": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "16150",
+     "name": "C.J. Stroud",
+     "pos": "QB",
+     "nfl": "HOU",
+     "espn": "4432577",
+     "team": "0004",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 2.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 242.6,
+     "status": "TAXI_SQUAD",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 0,
+     "teamStarts": 0
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "16161",
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "nfl": "ATL",
+     "espn": "4430807",
+     "team": "0009",
+     "pts": 189.0,
+     "starts": 13,
+     "ppg": 14.5,
+     "salary": 45.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 189.0,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 189.0,
+     "teamStarts": 13
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "16162",
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "nfl": "DET",
+     "espn": "4429795",
+     "team": "0003",
+     "pts": 171.0,
+     "starts": 10,
+     "ppg": 17.1,
+     "salary": 37.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 179.0,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 171.0,
+     "teamStarts": 10
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "16211",
+     "name": "Puka Nacua",
+     "pos": "WR",
+     "nfl": "LAR",
+     "espn": "4426515",
+     "team": "0004",
+     "pts": 140.3,
+     "starts": 9,
+     "ppg": 15.6,
+     "salary": 1.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 222.4,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 140.3,
+     "teamStarts": 9
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "16186",
+     "name": "Jordan Addison",
+     "pos": "WR",
+     "nfl": "MIN",
+     "espn": "4429205",
+     "team": "0003",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 6.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 169.5,
+     "status": "TAXI_SQUAD",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 0,
+     "teamStarts": 0
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "16214",
+     "name": "Sam LaPorta",
+     "pos": "TE",
+     "nfl": "DET",
+     "espn": "4430027",
+     "team": "0008",
+     "pts": 156.4,
+     "starts": 11,
+     "ppg": 14.2,
+     "salary": 4.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 176.6,
+     "status": "ROSTER",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 156.4,
+     "teamStarts": 11
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "16204",
+     "name": "Tank Dell",
+     "pos": "WR",
+     "nfl": "HOU",
+     "espn": "4366031",
+     "team": "0002",
+     "pts": 65.0,
+     "starts": 4,
+     "ppg": 16.2,
+     "salary": 2.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 165.0,
+     "status": "INJURED_RESERVE",
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 65.0,
+     "teamStarts": 4
+    }
+   }
   ]
  },
  "ready": true,
@@ -597,8 +760,42 @@
   {
    "key": "rookie",
    "title": "Rookie of the Year",
-   "why": "Top 2023 rookie by starter points",
+   "why": "Top 2023 rookie by every point scored: starting lineup, bench or taxi squad",
    "list": [
+    {
+     "id": "16150",
+     "name": "C.J. Stroud",
+     "pos": "QB",
+     "nfl": "HOU",
+     "espn": "4432577",
+     "team": "0004",
+     "pts": 242.6,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 2.0,
+     "contract": "1/5",
+     "rookie": true,
+     "starterPts": 0.0,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "16211",
+     "name": "Puka Nacua",
+     "pos": "WR",
+     "nfl": "LAR",
+     "espn": "4426515",
+     "team": "0004",
+     "pts": 222.4,
+     "starts": 9,
+     "ppg": 15.6,
+     "salary": 1.0,
+     "contract": "1/5",
+     "rookie": true,
+     "starterPts": 140.3,
+     "champ": false,
+     "champTeam": null
+    },
     {
      "id": "16161",
      "name": "Bijan Robinson",
@@ -612,38 +809,7 @@
      "salary": 45.0,
      "contract": "1/5",
      "rookie": true,
-     "champ": false,
-     "champTeam": null
-    },
-    {
-     "id": "16162",
-     "name": "Jahmyr Gibbs",
-     "pos": "RB",
-     "nfl": "DET",
-     "espn": "4429795",
-     "team": "0003",
-     "pts": 171.0,
-     "starts": 10,
-     "ppg": 17.1,
-     "salary": 37.0,
-     "contract": "1/5",
-     "rookie": true,
-     "champ": false,
-     "champTeam": null
-    },
-    {
-     "id": "16214",
-     "name": "Sam LaPorta",
-     "pos": "TE",
-     "nfl": "DET",
-     "espn": "4430027",
-     "team": "0008",
-     "pts": 156.4,
-     "starts": 11,
-     "ppg": 14.2,
-     "salary": 4.0,
-     "contract": "1/5",
-     "rookie": true,
+     "starterPts": 189.0,
      "champ": false,
      "champTeam": null
     }
@@ -1386,22 +1552,22 @@
   {
    "key": "manager",
    "title": "Manager of the Year",
-   "why": "Best lineup calls: actual points over the most the roster could have scored",
+   "why": "Beat expectations, win, stay active and set full lineups. .500 or better to qualify.",
    "teams": [
     {
-     "team": "0009",
-     "stat": "90.7%",
-     "sub": "1525.9 of 1682.4 possible"
-    },
-    {
-     "team": "0012",
-     "stat": "89.9%",
-     "sub": "1561.6 of 1736.5 possible"
-    },
-    {
      "team": "0011",
-     "stat": "89.5%",
-     "sub": "1775.0 of 1982.4 possible"
+     "stat": "11-3",
+     "sub": "Expected .557 · 4 moves"
+    },
+    {
+     "team": "0007",
+     "stat": "11-3",
+     "sub": "Expected .669 · 28 moves"
+    },
+    {
+     "team": "0009",
+     "stat": "8-6",
+     "sub": "Expected .463 · 25 moves"
     }
    ]
   },
