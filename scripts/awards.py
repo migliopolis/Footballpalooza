@@ -129,6 +129,7 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
                 pl = player(pick, team=owner.get(pick))
                 pl['allPts'] = round(rookie_pts[pick], 1)
                 pl['status'] = status.get(pick, '') if status else ''
+                pl['pick'] = rookie_pick(season, pick)
                 rteam.append({'slot': slot, 'player': pl})
         if rteam:
             out['allFbp']['rookie'] = rteam
@@ -441,6 +442,20 @@ def standings_from_reference(rows):
     return out
 
 
+_PICKS = {}
+
+
+def rookie_pick(year, pid):
+    """The FBP rookie-draft pick a player was taken with that year ('1.03'), 'Undrafted' when the draft is on file and
+    he isn't in it, or None when that draft isn't saved (2019 and 2020 were drafted off MFL)."""
+    if not _PICKS:
+        ref = load(D('reference.json'), {}) or {}
+        for y, rows in (ref.get('draft_classes') or {}).items():
+            _PICKS[str(y)] = {str(r['player_id']): f"{int(r['round'])}.{str(int(r['pick'])).zfill(2)}" for r in rows if r.get('player_id')}
+    d = _PICKS.get(str(year))
+    return None if d is None else d.get(str(pid), 'Undrafted')
+
+
 def past_rookie_points(year):
     """Saved regular-season points for a past season's rookies (every lineup spot), from data/reference/rookie-points.json."""
     return {k: float(v) for k, v in ((load(D('reference', 'rookie-points.json'), {}) or {}).get('seasons', {}).get(str(year)) or {}).items()}
@@ -469,7 +484,7 @@ def partial_season(year, links, ref, fallback_info):
         return {'id': pid, 'name': (l[2] if len(l) > 2 and l[2] else '') or display(i.get('name', pid)), 'pos': pos_of(pid),
                 'nfl': i.get('team', ''), 'espn': (l[0] if l else '') or i.get('espn_id', ''), 'team': owner.get(pid),
                 'pts': round(rpts.get(pid, 0), 1), 'allPts': round(rpts.get(pid, 0), 1), 'starts': None, 'ppg': 0,
-                'salary': salary.get(pid), 'contract': contract.get(pid, ''), 'rookie': True, 'status': status.get(pid, '')}
+                'salary': salary.get(pid), 'contract': contract.get(pid, ''), 'rookie': True, 'status': status.get(pid, ''), 'pick': rookie_pick(year, pid)}
     pool = sorted((p for p in rpts if p in owner and str(pinfo.get(p, {}).get('draft_year')) == str(year) and pos_of(p) in ('QB', 'RB', 'WR', 'TE')),
                   key=lambda p: -rpts[p])
     used, team = set(), []
@@ -556,11 +571,11 @@ def add_honors(seasons):
     """Honors to date on every player shown: All-FBP selections and MVPs, each season counting itself
     and the ones before it. MVPs count only finished seasons (this season's leader isn't MVP yet).
     seasons: [(year, awards dict)], any order. Only seasons with saved data count (2021 on for now)."""
-    tally, mvps = defaultdict(lambda: [0, 0]), defaultdict(list)
+    tally, mvps = defaultdict(lambda: [0, 0, 0]), defaultdict(list)
     for y, a in sorted(seasons, key=lambda x: x[0]):
         if not a.get('ready'):
             continue
-        for i, team in enumerate((a['allFbp']['first'], a['allFbp']['second'])):
+        for i, team in enumerate((a['allFbp']['first'], a['allFbp']['second'], a['allFbp'].get('rookie') or [])):
             for e in team:
                 tally[e['player']['id']][i] += 1
         mvp = next((x for x in a['awards'] if x['key'] == 'mvp'), None)
@@ -570,10 +585,10 @@ def add_honors(seasons):
         for p in players_in(a):
             if p['id'] in mvps:
                 p['mvps'] = list(mvps[p['id']])
-        for team in (a['allFbp']['first'], a['allFbp']['second']):
+        for team in (a['allFbp']['first'], a['allFbp']['second'], a['allFbp'].get('rookie') or []):
             for e in team:
-                f, s2 = tally[e['player']['id']]
-                e['player']['honors'] = {'first': f, 'second': s2}
+                f, s2, rk = tally[e['player']['id']]
+                e['player']['honors'] = {'first': f, 'second': s2, 'rookie': rk}
                 if 'mvp' in mvp_flags(a, e['player']['id']):
                     e['player']['mvp'] = True
     return seasons
@@ -588,12 +603,14 @@ def franchise_all_fbp(seasons):
     """data/awards/all-fbp.json: each franchise's All-FBP players (completed seasons), most accomplished first."""
     by = defaultdict(dict)
     for y, a in sorted(seasons):
-        for tier, team in ((1, a['allFbp']['first']), (2, a['allFbp']['second'])):
+        for tier, team in ((1, a['allFbp']['first']), (2, a['allFbp']['second']), (3, a['allFbp'].get('rookie') or [])):
             for e in team:
                 p = e['player']
+                if not p.get('team'):
+                    continue
                 r = by[p['team']].setdefault(p['id'], {k: p[k] for k in ('id', 'name', 'pos', 'nfl', 'espn')} | {'years': []})
                 r['name'], r['nfl'] = p['name'], p['nfl'] or r['nfl']   # latest spelling and team
-                r['years'].append({'year': y, 'tier': tier, 'pts': p.get('teamPts', p['pts']), 'starts': p.get('teamStarts', p['starts']), 'champ': p.get('champTeam') == p['team'], 'mvp': bool(p.get('mvp'))})   # title with this franchise; MVP that season
+                r['years'].append({'year': y, 'tier': tier, 'pts': p.get('allPts', 0) if tier == 3 else p.get('teamPts', p['pts']), 'starts': 0 if tier == 3 else (p.get('teamStarts', p['starts']) or 0), 'champ': p.get('champTeam') == p['team'], 'mvp': bool(p.get('mvp'))} | ({'pick': p['pick']} if tier == 3 and p.get('pick') else {}))   # title with this franchise; MVP that season
     out = {}
     for fr, players in by.items():
         rows = []
@@ -601,15 +618,22 @@ def franchise_all_fbp(seasons):
             ys = r['years']
             r['first'] = sum(1 for x in ys if x['tier'] == 1)
             r['second'] = sum(1 for x in ys if x['tier'] == 2)
+            r['rookie'] = sum(1 for x in ys if x['tier'] == 3)
             r['champs'] = sum(1 for x in ys if x['champ'])
             r['mvps'] = sum(1 for x in ys if x['mvp'])
-            r['pts'] = round(sum(x['pts'] for x in ys), 1)
-            r['starts'] = sum(x['starts'] for x in ys)
+            r['pts'] = round(sum(x['pts'] for x in ys if x['tier'] < 3), 1)   # starter points in 1st/2nd Team seasons
+            r['starts'] = sum(x['starts'] for x in ys if x['tier'] < 3)
             r['ppg'] = round(r['pts'] / r['starts'], 1) if r['starts'] else 0
             rows.append(r)
-        rows.sort(key=lambda r: (-r['first'], -r['mvps'], -r['second'], -r['pts']))
+        rows.sort(key=lambda r: (-r['first'], -r['mvps'], -r['second'], -r['pts'], -r['rookie']))
         out[fr] = rows
-    return {'seasons': [y for y, _ in sorted(seasons)], 'franchises': out}
+    # Manager of the Year winners, finished seasons only
+    moy = defaultdict(list)
+    for y, a in sorted(seasons):
+        m = next((x for x in a.get('awards', []) if x['key'] == 'manager' and x.get('teams')), None)
+        if m:
+            moy[m['teams'][0]['team']].append({'year': y, 'rec': m['teams'][0]['stat']})
+    return {'seasons': [y for y, _ in sorted(seasons)], 'franchises': out, 'managers': moy}
 
 
 def snapshot(a):

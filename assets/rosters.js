@@ -425,7 +425,8 @@ window.FBPRosters = (function () {
     honOf(r).forEach(h => items.push([R.season, `<span class="ro-chip ${h[1]}">${esc(h[0])}</span>`, esc(h[2]) + ' (so far this season)']));
     Object.entries((af && af.franchises) || {}).forEach(([f, list]) => (list || []).filter(p => p.id === r.id).forEach(p => (p.years || []).forEach(yy => {
       const tt = ctx.teams[f] || {}, team = esc(tt.abbr || f);
-      items.push([+yy.year, `<span class="ro-chip ${yy.tier === 1 ? 'gold' : 'silver'}">${yy.tier === 1 ? '1st Team' : '2nd Team'}</span>`, `All-FBP ${yy.tier === 1 ? 'first' : 'second'} team with ${team} · ${(+yy.pts).toFixed(1)} pts in ${yy.starts} starts`]);
+      items.push(yy.tier === 3 ? [+yy.year, '<span class="ro-chip rook">Rookie Team</span>', `All-FBP Rookie Team with ${team} · ${(+yy.pts).toFixed(1)} pts${yy.pick ? ' · ' + (yy.pick === 'Undrafted' ? 'undrafted' : 'drafted ' + yy.pick) : ''}`]
+        : [+yy.year, `<span class="ro-chip ${yy.tier === 1 ? 'gold' : 'silver'}">${yy.tier === 1 ? '1st Team' : '2nd Team'}</span>`, `All-FBP ${yy.tier === 1 ? 'first' : 'second'} team with ${team} · ${(+yy.pts).toFixed(1)} pts in ${yy.starts} starts`]);
       if (yy.mvp) items.push([+yy.year, '<span class="ro-chip gold">MVP</span>', `FBP Most Valuable Player with ${team}`]);
       })));
     // titles: everyone on the champion's roster at the end of the season (data/player-records.json, titles)
@@ -435,7 +436,7 @@ window.FBPRosters = (function () {
     const hof = ((hf && hf.inductees) || []).filter(x => x.player_id === r.id);
     const list = items.sort((a, b) => b[0] - a[0]).map(([y, chip, what]) => `<li><span class="ro-jd">${y}</span>${chip}<span>${what}</span></li>`).join('');
     return (hof.length ? hof.map(x => `<div class="pp-hof"><b>Hall of Fame · class of ${esc(String(x.class))}</b>${x.stat ? `<small>${esc(x.stat)}</small>` : ''}${x.blurb ? `<p>${esc(x.blurb)}</p>` : ''}</div>`).join('') : '')
-      + (list ? `<ol class="pp-hon">${list}</ol>` : hof.length ? '' : '<p class="ro-wait">No FBP awards yet. All-FBP teams go back to 2021.</p>');
+      + (list ? `<ol class="pp-hon">${list}</ol>` : hof.length ? '' : '<p class="ro-wait">No FBP awards yet. All-FBP teams go back to 2021, Rookie Teams to 2019.</p>');
   }
   // the FBP OVR (data/ovr.json, scripts/ovr.py): his rating now and after each week of the season
   const ovrTier = o => o >= 90 ? 'holo' : o >= 80 ? 'gold' : o >= 70 ? 'silver' : 'bronze';

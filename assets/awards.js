@@ -51,8 +51,8 @@ window.FBPAwards = (() => {
   // All-FBP selections to date (that season and the ones before it, from the first season with data)
   function honors(p) {
     const h = p.honors; if (!h) return '';
-    const n = h.first + h.second;
-    const txt = n === 1 ? 'First All-FBP selection' : [h.first ? `<span>${h.first}× 1st Team</span>` : '', h.second ? `<span>${h.second}× 2nd Team</span>` : ''].filter(Boolean).join('');
+    const n = h.first + h.second + (h.rookie || 0);
+    const txt = n === 1 ? 'First All-FBP selection' : [h.first ? `<span>${h.first}× 1st Team</span>` : '', h.second ? `<span>${h.second}× 2nd Team</span>` : '', h.rookie ? '<span>Rookie Team</span>' : ''].filter(Boolean).join('');
     return `${mvpTag(p, true)}<span class="aw-hon${n === 1 ? ' new' : ''}" title="All-FBP selections since ${esc(A.honorsFrom || '')}">${txt}</span>`;
   }
   // FBP MVPs to date (finished seasons only)
@@ -71,7 +71,7 @@ window.FBPAwards = (() => {
   function rcard(slot, p) {
     return `<div class="card aw-card second rook"><span class="aw-slot">${slot}</span>${photo(p, 'md', true)}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}</span>${!S.final && p.status && RK_ST[p.status] ? `<span class="aw-sub aw-rst"><i>${RK_ST[p.status]}</i></span>` : ''}
-      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>
+      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${p.pick ? `<span class="aw-pick">${p.pick === 'Undrafted' ? 'Undrafted' : `Drafted ${esc(p.pick)}`}</span>` : ''}
       <span class="aw-stats"><span><b>${n1(p.allPts)}</b>total pts</span>${S.partial ? '' : `<span><b>${n1(p.pts)}</b>as a starter</span>`}${p.salary ? `<span><b>${sal(p)}</b>salary</span>` : ''}</span>
       ${S.partial ? '' : `<span class="aw-started">${p.starts ? `${p.starts} week${p.starts === 1 ? '' : 's'} started` : S.final ? 'Never started' : 'Hasn’t started yet'}</span>`}</div>`;
   }

@@ -23,7 +23,8 @@
      "teamStarts": 13,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      }
     }
    },
@@ -48,7 +49,8 @@
      "teamStarts": 13,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      }
     }
    },
@@ -73,7 +75,8 @@
      "teamStarts": 11,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      }
     }
    },
@@ -101,7 +104,8 @@
      ],
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      },
      "mvp": true
     }
@@ -127,7 +131,8 @@
      "teamStarts": 13,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 1
      }
     }
    },
@@ -152,7 +157,8 @@
      "teamStarts": 11,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      }
     }
    },
@@ -177,7 +183,8 @@
      "teamStarts": 13,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      }
     }
    },
@@ -202,7 +209,8 @@
      "teamStarts": 11,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      }
     }
    }
@@ -229,7 +237,8 @@
      "teamStarts": 7,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      }
     }
    },
@@ -254,7 +263,8 @@
      "teamStarts": 13,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 1
      }
     }
    },
@@ -279,7 +289,8 @@
      "teamStarts": 12,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      }
     }
    },
@@ -304,7 +315,8 @@
      "teamStarts": 11,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      }
     }
    },
@@ -329,7 +341,8 @@
      "teamStarts": 11,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      }
     }
    },
@@ -354,7 +367,8 @@
      "teamStarts": 8,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      }
     }
    },
@@ -379,7 +393,8 @@
      "teamStarts": 13,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      }
     }
    },
@@ -404,7 +419,8 @@
      "teamStarts": 12,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      }
     }
    }
@@ -427,10 +443,16 @@
      "rookie": true,
      "allPts": 169.6,
      "status": "TAXI_SQUAD",
+     "pick": "3.11",
      "champ": false,
      "champTeam": null,
      "teamPts": 0,
-     "teamStarts": 0
+     "teamStarts": 0,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -450,10 +472,16 @@
      "rookie": true,
      "allPts": 241.0,
      "status": "ROSTER",
+     "pick": "1.01",
      "champ": false,
      "champTeam": null,
      "teamPts": 241.0,
-     "teamStarts": 13
+     "teamStarts": 13,
+     "honors": {
+      "first": 0,
+      "second": 1,
+      "rookie": 1
+     }
     }
    },
    {
@@ -473,10 +501,16 @@
      "rookie": true,
      "allPts": 170.2,
      "status": "ROSTER",
+     "pick": "1.02",
      "champ": false,
      "champTeam": null,
      "teamPts": 104.4,
-     "teamStarts": 7
+     "teamStarts": 7,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -496,10 +530,16 @@
      "rookie": true,
      "allPts": 223.6,
      "status": "ROSTER",
+     "pick": "1.05",
      "champ": false,
      "champTeam": null,
      "teamPts": 164.0,
-     "teamStarts": 10
+     "teamStarts": 10,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -519,10 +559,16 @@
      "rookie": true,
      "allPts": 199.2,
      "status": "ROSTER",
+     "pick": "1.09",
      "champ": false,
      "champTeam": null,
      "teamPts": 115.9,
-     "teamStarts": 7
+     "teamStarts": 7,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -542,10 +588,16 @@
      "rookie": true,
      "allPts": 137.0,
      "status": "ROSTER",
+     "pick": "1.06",
      "champ": false,
      "champTeam": null,
      "teamPts": 19.9,
-     "teamStarts": 2
+     "teamStarts": 2,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -565,10 +617,16 @@
      "rookie": true,
      "allPts": 144.1,
      "status": "ROSTER",
+     "pick": "1.08",
      "champ": false,
      "champTeam": null,
      "teamPts": 36.9,
-     "teamStarts": 3
+     "teamStarts": 3,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    }
   ]

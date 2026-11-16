@@ -23,7 +23,13 @@
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -42,7 +48,13 @@
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
-     "status": "INJURED_RESERVE"
+     "status": "INJURED_RESERVE",
+     "pick": null,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -61,7 +73,13 @@
      "salary": 26.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -80,7 +98,13 @@
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -99,7 +123,13 @@
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -118,7 +148,13 @@
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -137,7 +173,13 @@
      "salary": 18.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null,
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    }
   ]
@@ -162,7 +204,8 @@
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null
     },
     {
      "id": "14813",
@@ -178,7 +221,8 @@
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
-     "status": "INJURED_RESERVE"
+     "status": "INJURED_RESERVE",
+     "pick": null
     },
     {
      "id": "14836",
@@ -194,7 +238,8 @@
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": null
     }
    ]
   },

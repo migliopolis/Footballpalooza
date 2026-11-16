@@ -19,7 +19,8 @@
      "rookie": false,
      "honors": {
       "first": 4,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      },
      "pace": {
       "proj": 326.3,
@@ -44,7 +45,8 @@
      "rookie": false,
      "honors": {
       "first": 2,
-      "second": 1
+      "second": 1,
+      "rookie": 1
      },
      "pace": {
       "proj": 340.2,
@@ -69,7 +71,8 @@
      "rookie": false,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 1
      },
      "pace": {
       "proj": 318.9,
@@ -94,7 +97,8 @@
      "rookie": false,
      "honors": {
       "first": 2,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      },
      "pace": {
       "proj": 335.3,
@@ -119,7 +123,8 @@
      "rookie": false,
      "honors": {
       "first": 2,
-      "second": 1
+      "second": 1,
+      "rookie": 1
      },
      "pace": {
       "proj": 291.4,
@@ -144,7 +149,8 @@
      "rookie": false,
      "honors": {
       "first": 3,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      },
      "pace": {
       "proj": 235.2,
@@ -169,7 +175,8 @@
      "rookie": false,
      "honors": {
       "first": 2,
-      "second": 1
+      "second": 1,
+      "rookie": 1
      },
      "pace": {
       "proj": 260.0,
@@ -194,7 +201,8 @@
      "rookie": false,
      "honors": {
       "first": 1,
-      "second": 0
+      "second": 0,
+      "rookie": 0
      },
      "pace": {
       "proj": 158.8,
@@ -221,7 +229,8 @@
      "rookie": false,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      },
      "pace": {
       "proj": 241.8,
@@ -254,7 +263,8 @@
      ],
      "honors": {
       "first": 2,
-      "second": 2
+      "second": 2,
+      "rookie": 0
      },
      "pace": {
       "proj": 270.7,
@@ -284,7 +294,8 @@
      },
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 1
      },
      "pace": {
       "proj": 230.4,
@@ -309,7 +320,8 @@
      "rookie": false,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 1
      },
      "pace": {
       "proj": 255.7,
@@ -339,7 +351,8 @@
      },
      "honors": {
       "first": 1,
-      "second": 1
+      "second": 1,
+      "rookie": 1
      },
      "pace": {
       "proj": 297.6,
@@ -364,7 +377,8 @@
      "rookie": false,
      "honors": {
       "first": 0,
-      "second": 2
+      "second": 2,
+      "rookie": 1
      },
      "pace": {
       "proj": 250.5,
@@ -394,7 +408,8 @@
      },
      "honors": {
       "first": 1,
-      "second": 2
+      "second": 2,
+      "rookie": 1
      },
      "pace": {
       "proj": 259.7,
@@ -419,7 +434,8 @@
      "rookie": false,
      "honors": {
       "first": 0,
-      "second": 1
+      "second": 1,
+      "rookie": 0
      },
      "pace": {
       "proj": 170.5,
@@ -445,7 +461,13 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 2.2,
-     "status": "TAXI_SQUAD"
+     "status": "TAXI_SQUAD",
+     "pick": "1.08",
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -464,7 +486,13 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 76.9,
-     "status": "TAXI_SQUAD"
+     "status": "TAXI_SQUAD",
+     "pick": "2.06",
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -483,7 +511,13 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 66.2,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": "4.03",
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -502,7 +536,13 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 103.4,
-     "status": "TAXI_SQUAD"
+     "status": "TAXI_SQUAD",
+     "pick": "1.11",
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -521,7 +561,13 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 91.3,
-     "status": "TAXI_SQUAD"
+     "status": "TAXI_SQUAD",
+     "pick": "1.06",
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -540,7 +586,13 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 54.8,
-     "status": "ROSTER"
+     "status": "ROSTER",
+     "pick": "1.07",
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    },
    {
@@ -559,7 +611,13 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 77.3,
-     "status": "TAXI_SQUAD"
+     "status": "TAXI_SQUAD",
+     "pick": "1.03",
+     "honors": {
+      "first": 0,
+      "second": 0,
+      "rookie": 1
+     }
     }
    }
   ]
@@ -1941,7 +1999,7 @@
    ]
   }
  ],
- "generated": "2026-11-16T21:26:45+00:00",
+ "generated": "2026-11-16T21:32:35+00:00",
  "basis": {
   "throughWeek": 8,
   "teams": [

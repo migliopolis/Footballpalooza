@@ -2,6 +2,21 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0256",
+      "to": "0.0270",
+      "dates": "Nov 15–16, 2026",
+      "items": [
+        "Player photos sit on their OVR color everywhere (holo, gold, silver, bronze), hot players included; defenses’ logos sit in a team-colored circle with the FBP team ring.",
+        "Reference: historical logos get the gold champion outline only for the season that team won.",
+        "Rosters: the Grid sorts by any lineup spot’s OVR.",
+        "Scoreboard: rounded top and bottom corners on each starting lineup.",
+        "Awards: new All-FBP Rookie Team, every point counts (starting lineup, bench or taxi squad), with emerald photos, Rookie chips and the pick each rookie was drafted with. Rookie Teams go back to 2019.",
+        "Awards: Rookie of the Year now counts every point a rookie scores, back to 2019.",
+        "Awards: a new Manager of the Year built around beating expectations and winning (.500 or better to qualify), rebuilt for past seasons.",
+        "Player Pages list All-FBP Rookie Team seasons with their accomplishments; franchise pages show Manager of the Year seasons."
+      ]
+    },
+    {
       "from": "0.0251",
       "to": "0.0255",
       "dates": "Nov 15, 2026",

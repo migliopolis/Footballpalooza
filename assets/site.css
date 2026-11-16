@@ -3255,3 +3255,6 @@ img.ovbg{background:var(--ovg)}
 .aw-card.rook .aw-slot{color:#2f9e5e}
 .aw-note{font-size:.78rem;color:var(--muted);border-left:3px solid #2f9e5e;padding:4px 0 4px 10px;margin:-4px 0 10px}
 .aw-sub.aw-rst{margin-top:-2px}
+.rf-afy.t3{background:#2f9e5e;border-color:#2f9e5e;color:#fff}
+.rf-moy{margin:4px 0 0;font-weight:700}.rf-moy small{font-weight:500;opacity:.8}
+.aw-pick{display:block;font:600 .72rem var(--mono);color:var(--muted);margin-top:2px}
