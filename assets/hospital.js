@@ -115,7 +115,7 @@ window.FBPHospital = (function () {
     const slot = r.sl === 'IR' ? '<i class="hs-slot">FBP IR</i>' : r.sl === 'T' ? '<i class="hs-slot">Taxi</i>' : '';
     return `<article class="hs-card card${ex ? ' hs-open' : ''}">
       <div class="hs-top" data-hs-ex="${r.id}" role="button" tabindex="0" aria-expanded="${ex}">
-        <span class="hs-ph${med(r) ? '' : FBPU.tc(r.f) ? ' tcr' : ''}${med(r) ? '' : FBPU.ovc(r.id)}"${med(r) ? ` data-med="${med(r)}"` : ''} style="background-image:url(${head(r.e)}),var(--med,var(--ovg,none));${med(r) ? '' : FBPU.tc(r.f)}">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
+        <span class="hs-ph${med(r) ? '' : FBPU.tc(r.f) ? ' tcr' : ''}${med(r) ? '' : FBPU.ovc(r.id)}"${med(r) ? ` data-med="${med(r)}"` : ''} style="background-image:url(${head(r.e)}),var(--med,var(--ovg,var(--ov0)));${med(r) ? '' : FBPU.tc(r.f)}">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
         <span class="hs-id"><b>${esc(r.n)}</b><small>${r.p} ${nflLogo(r.t) || 'FA'}${r.f ? '' : ' · Free agent'}${r.sal != null ? ` · $${r.sal}` : ''} ${slot}<span class="hs-what">· ${esc(i.type || 'Undisclosed')}</span></small></span>
         <span class="hs-st hs-${st[1]}">${st[0]}</span><span class="hs-car" aria-hidden="true">${ex ? '▴' : '▾'}</span>
       </div>

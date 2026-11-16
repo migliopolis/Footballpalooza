@@ -600,7 +600,7 @@ tr.dh-div td small{text-transform:none;letter-spacing:0;font-weight:400;color:va
 @media (max-width:900px){.aw-team{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .aw-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px 10px 12px;gap:3px;min-width:0}
 .aw-slot{position:absolute;top:8px;left:10px;font:700 .95rem var(--display);color:var(--accent);letter-spacing:.03em}
-.aw-ph{position:relative;display:block;border-radius:50%;background:var(--sky-soft);overflow:visible;flex:none}
+.aw-ph{position:relative;display:block;border-radius:50%;background:var(--ovg,var(--ov0));overflow:visible;flex:none}
 .aw-ph.lg{width:92px;height:92px}.aw-ph.md{width:64px;height:64px}
 .aw-ph > img:first-child{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:50%}
 .aw-ph.def > img:first-child,.aw-ph.fb > img:first-child,.aw-ph .fbimg{object-fit:contain;padding:10%;background:var(--surface)}
@@ -1215,10 +1215,10 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-pc{display:flex;align-items:flex-start;gap:6px;min-width:0}
 .lv-p.b .lv-pc{flex-direction:row-reverse}
 .lv-who{min-width:0;flex:1}
-.lv-ph{flex:none;width:30px;height:30px;border-radius:50%;overflow:hidden;background:var(--sky-soft);margin-top:1px}
+.lv-ph{flex:none;width:30px;height:30px;border-radius:50%;overflow:hidden;background:var(--ovg,var(--ov0));margin-top:1px}
 .lv-ph img{width:100%;height:100%;object-fit:cover;object-position:top}
-.lv-ph.def{background:none}
-.lv-ph.def img{object-fit:contain}
+.lv-ph.def{background:var(--dc,#e3e8ee);display:grid;place-items:center}
+.lv-ph.def img{width:76%;height:76%;object-fit:contain;object-position:center}
 .lv-inj{display:inline-block;font:700 .55rem/1 var(--body);padding:2px 3px;border-radius:3px;background:var(--red);color:#fff;margin:0 4px;vertical-align:2px}
 .lv-bench{margin-top:8px}
 .lv-bench summary{cursor:pointer;font-size:.78rem;font-weight:600;color:var(--muted);padding:4px 0}
@@ -1402,7 +1402,7 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 /* hot: a flickering orange ring */
 .lv-ph.t-hot{animation:lvHotGlow 1.4s ease-in-out infinite alternate}
 .lv-ph.t-hot::before{content:'';position:absolute;inset:-3px;border-radius:50%;z-index:1;background:conic-gradient(from 0deg,#ffd23f,#ff6a00,#e8290b,#ff6a00,#ffd23f,#ff9a1f,#ffd23f);filter:blur(2px);animation:lvSpin 3s linear infinite}
-.lv-ph.t-hot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--sky-soft);z-index:2}
+.lv-ph.t-hot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--ovg,var(--ov0));z-index:2}
 @keyframes lvHotGlow{0%{box-shadow:0 0 0 2px #ff9a1f,0 0 6px 1px rgba(255,120,0,.55)}50%{box-shadow:0 0 0 2px #ffc93c,0 0 12px 4px rgba(255,90,0,.8)}100%{box-shadow:0 0 0 2px #ff7a1a,0 0 8px 2px rgba(255,140,0,.65)}}
 @keyframes lvSpin{to{transform:rotate(360deg)}}
 /* nuclear: the whole circle is rolling fire */
@@ -3221,14 +3221,16 @@ tr.fxa-water td.lv-p.a::before,tr.fxb-water td.lv-p.b::after{width:34px;backgrou
 .hof-pbtn::after{content:'';position:absolute;left:23px;top:11px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #fff}
 .hof-play:hover .hof-pbtn{background:#e3242b}
 .hof-yt{display:inline-block;margin-top:6px;font-size:.78rem;color:var(--muted)}
-/* a plain player photo (no heat, DNP, 1st/2nd Team or Hall of Fame look) wears his OVR chip's color behind him:
-   90+ holo, 80s gold, 70s silver, under 70 bronze (FBPU.ovc adds ovbg ov-<tier>). Photos drawn as a background image
-   carry var(--ovg) as their second layer. */
+/* every player photo starts on his OVR chip's color: 90+ holo, 80s gold, 70s silver, under 70 bronze (FBPU.ovc adds
+   ovbg ov-<tier>, which only sets --ovg); a player with no OVR gets a neutral light gray (--ov0) in either theme.
+   Looks that change the photo (heat, 1st/2nd Team, Hall of Fame, DNP) set their own background over it. Photos drawn
+   as a background image carry var(--ovg, var(--ov0)) as their second layer. */
+:root{--ov0:linear-gradient(#e3e8ee,#e3e8ee)}
 .ov-holo{--ovg:linear-gradient(135deg,#f6d365,#a8edea,#fbc2eb)}
 .ov-gold{--ovg:linear-gradient(#f0c94a,#f0c94a)}
 .ov-silver{--ovg:linear-gradient(#cfd4da,#cfd4da)}
 .ov-bronze{--ovg:linear-gradient(#d7a37a,#d7a37a)}
-.lv-ph.ovbg,.aw-ph.ovbg,img.ovbg{background:var(--ovg)}
+img.ovbg{background:var(--ovg)}
 [style*="background-image"].ovbg{background-size:cover,cover;background-position:center top,center;background-repeat:no-repeat}
 .ra-gt th[data-ra-gsort]{cursor:pointer;white-space:nowrap}
 .ra-gt th[data-ra-gsort]:hover{color:var(--fg)}

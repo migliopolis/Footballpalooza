@@ -34,7 +34,7 @@ window.FBPTrade = (function () {
   const nflLg = t => t && t !== 'FA' ? `<img class="tf-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${esc(t)}" title="${esc(t)}" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(t)} · '))">` : '';
   function prow(p, extra) {
     const href = `#now/team/${p.f}/${p.id}`;
-    return `<li class="tf-p"><span class="tf-lead">${p.e ? `<span class="tf-ph tcr${FBPU.ovc(p.id)}" style="background-image:url(${FBPU.headshot(p.e)}),var(--ovg,none);${FBPU.tc(p.f)}"></span>` : ''}<span class="tf-tv" title="Trade Value"><small>Trade</small>${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>Value</small></span></span>
+    return `<li class="tf-p"><span class="tf-lead">${p.e ? `<span class="tf-ph tcr${FBPU.ovc(p.id)}" style="background-image:url(${FBPU.headshot(p.e)}),var(--ovg,var(--ov0));${FBPU.tc(p.f)}"></span>` : ''}<span class="tf-tv" title="Trade Value"><small>Trade</small>${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>Value</small></span></span>
       <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''}</span>
       <div class="tf-sub tf-bio">${nflLg(p.nfl)}${[p.age ? 'age ' + p.age : '', p.ppg != null ? p.ppg + ' ppg' : ''].filter(Boolean).join(' · ')}</div>
       <div class="tf-sub tf-tm">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>

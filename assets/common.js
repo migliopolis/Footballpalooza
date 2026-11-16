@@ -13,6 +13,12 @@ window.FBPU = (function () {
     DAL: '#003594', DEN: '#FB4F14', DET: '#0076B6', GB: '#203731', HOU: '#03202F', IND: '#002C5F', JAX: '#006778', KC: '#E31837',
     LV: '#A5ACAF', LAC: '#0080C6', LAR: '#003594', MIA: '#008E97', MIN: '#4F2683', NE: '#002244', NO: '#D3BC8D', NYG: '#0B2265',
     NYJ: '#125740', PHI: '#004C54', PIT: '#FFB612', SF: '#AA0000', SEA: '#69BE28', TB: '#D50A0A', TEN: '#4B92DB', WSH: '#5A1414' };
+  // the circle behind a defense's logo: one of the team's own colors that its logo sits well on
+  const DEFBG = { ARI: '#000000', ATL: '#A71930', BAL: '#9E7C0C', BUF: '#FFFFFF', CAR: '#101820', CHI: '#0B162A', CIN: '#FFFFFF', CLE: '#311D00',
+    DAL: '#041E42', DEN: '#002244', DET: '#B0B7BC', GB: '#203731', HOU: '#FFFFFF', IND: '#FFFFFF', JAX: '#101820', KC: '#FFFFFF',
+    LV: '#000000', LAC: '#002A5E', LAR: '#FFFFFF', MIA: '#FFFFFF', MIN: '#FFC62F', NE: '#FFFFFF', NO: '#101820', NYG: '#FFFFFF',
+    NYJ: '#FFFFFF', PHI: '#A5ACAF', PIT: '#FFFFFF', SF: '#B3995D', SEA: '#A5ACAF', TB: '#34302B', TEN: '#FFFFFF', WSH: '#FFB612' };
+  const defBg = t => t ? DEFBG[nflAbbr(t)] || '' : '';
   const nflColor = t => t ? COL[nflAbbr(t)] || '' : '';
   // ' --tc:#xxxxxx;' for a style attribute: his FBP team's color (its primary, or its second color when the primary is
   // near-white); empty for a free agent. The CSS draws a thin ring around a plain photo in it.
@@ -38,5 +44,5 @@ window.FBPU = (function () {
   const injChip = (x, esc) => { const t = x && INJ[x.status]; if (!t) return '';
     const e = esc || (s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])));
     return `<span class="ro-inj" title="${e(x.status + (x.details ? ': ' + x.details : ''))}">${t}</span>`; };
-  return { ESPN, COL, nflColor, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip };
+  return { ESPN, COL, nflColor, defBg, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip };
 })();
