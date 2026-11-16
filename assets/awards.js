@@ -39,7 +39,8 @@ window.FBPAwards = (() => {
     const hof = mc === ' m-gold' && HOF && HOF.has(p.id + ':' + (S || A).season);
     if (hof) mc = ' m-diamond';
     const ring = !mc && p.pos !== 'DEF' && src ? FBPU.tc(p.team) : '';
-    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}${mc}${ring ? ' tcr' : ''}"${(tint && teamBg(p.team)) || ring ? ` style="${tint && teamBg(p.team) ? teamBg(p.team) + ';' : ''}${ring.trim()}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}${hof ? '<span class="hof-badge" title="Hall of Fame season">HOF</span>' : ''}</span>`;
+    const ovb = !mc && !tint && p.pos !== 'DEF' && src ? FBPU.ovc(p.id) : '';
+    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}${mc}${ring ? ' tcr' : ''}${ovb}"${(tint && teamBg(p.team)) || ring ? ` style="${tint && teamBg(p.team) ? teamBg(p.team) + ';' : ''}${ring.trim()}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}${hof ? '<span class="hof-badge" title="Hall of Fame season">HOF</span>' : ''}</span>`;
   }
   // won the title that season: trophy opposite the team badge
   const trophy = p => `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the ${esc((S || A).season)} title${p.champTeam && p.champTeam !== p.team ? ' with ' + esc(tname(p.champTeam)) : ''}">🏆</span>`;

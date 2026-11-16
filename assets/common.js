@@ -20,6 +20,12 @@ window.FBPU = (function () {
     return (0.299 * (n >> 16) + 0.587 * (n >> 8 & 255) + 0.114 * (n & 255)) / 255; };
   const tc = fid => { const T = window.FBP && FBP.teams ? FBP.teams() : {}, t = (fid && T[fid]) || null; if (!t) return '';
     let c = t.primary; if (c && lum(c) > 0.85 && t.secondary) c = t.secondary; return c ? ` --tc:${c};` : ''; };
+  // FBP OVR (data/ovr.json) for photo backgrounds: a plain photo takes his OVR chip's color (90+ holo, 80s gold, 70s
+  // silver, under 70 bronze). site.js loads it at startup and redraws the page once it's in; until then, no color.
+  let OVR = null;
+  const ovLoad = () => json('data/ovr.json').then(d => (OVR = (d && d.players) || {}), () => (OVR = {}));
+  const ovTier = id => { const o = OVR && id != null && OVR[id] && OVR[id].o; return o == null || o === false ? '' : o >= 90 ? 'holo' : o >= 80 ? 'gold' : o >= 70 ? 'silver' : 'bronze'; };
+  const ovc = id => { const t = ovTier(id); return t ? ' ovbg ov-' + t : ''; };
   const ord = n => n == null || n === '' ? '' : n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || 'th');
   // site data loads once per visit and every page shares it; a file that isn't there resolves null, a network
   // failure rejects (and is forgotten, so the next page can try again)
@@ -32,5 +38,5 @@ window.FBPU = (function () {
   const injChip = (x, esc) => { const t = x && INJ[x.status]; if (!t) return '';
     const e = esc || (s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])));
     return `<span class="ro-inj" title="${e(x.status + (x.details ? ': ' + x.details : ''))}">${t}</span>`; };
-  return { ESPN, COL, nflColor, tc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip };
+  return { ESPN, COL, nflColor, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip };
 })();

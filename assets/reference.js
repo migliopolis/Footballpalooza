@@ -295,7 +295,7 @@ window.FBPRef = (() => {
       const src = r.pos === 'DEF' ? (m ? m.nflLogo(r.nfl) : '') : (r.espn && m ? m.headshot(r.espn) : '');
       const fb = (X.teams[fr] || {}).logo || '';
       const ring = r.pos !== 'DEF' && src ? FBPU.tc(fr) : '';
-      return `<span class="aw-ph sm${r.pos === 'DEF' ? ' def' : ''}${ring ? ' tcr' : ''}"${ring ? ` style="${ring.trim()}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${r.champs ? `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the title with this team in an All-FBP season">🏆</span>` : ''}</span>`;
+      return `<span class="aw-ph sm${r.pos === 'DEF' ? ' def' : ''}${ring ? ' tcr' : ''}${r.pos !== 'DEF' && src ? FBPU.ovc(r.id) : ''}"${ring ? ` style="${ring.trim()}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${r.champs ? `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the title with this team in an All-FBP season">🏆</span>` : ''}</span>`;
     };
     const yr = y => `<span class="rf-afy t${y.tier}"${y.champ || y.mvp ? ` title="${[y.mvp ? 'FBP MVP' : '', y.champ ? 'won the title' : ''].filter(Boolean).join(', ')} that season"` : ''}>${y.year} · ${y.tier === 1 ? '1st' : '2nd'}${y.mvp ? ' · MVP' : ''}${y.champ ? ' 🏆' : ''}</span>`;
     const tally = r => [r.mvps ? `${r.mvps}× MVP` : '', r.first ? `${r.first}× 1st Team` : '', r.second ? `${r.second}× 2nd Team` : ''].filter(Boolean).map(t => `<span>${t}</span>`).join('');
@@ -566,7 +566,7 @@ window.FBPRef = (() => {
     if (!PAY) { loadPay(X.rerender); return top + '<p class="loading">Loading payroll…</p>'; }
     if (PAY.failed) return top + '<p class="error">Payroll didn’t load.</p>';
     const m = window.FBP && FBP.media;
-    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
+    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
     const who = p => `<span class="py-who">${face(p)}<span><b>${esc(p.name)}</b><small>${esc(p.pos)}</small></span></span>`;
     const lg = fr => logo(fr) ? `<span class="py-lg" title="${esc(D.franchises[fr] || '')}">${logo(fr)}</span>` : '';
     const T = PAY.totals, S = PAY.seasons, cur = S[S.length - 1], first = S[0];
@@ -682,7 +682,7 @@ window.FBPRef = (() => {
     if (!PR) { loadPR(X.rerender); return top + '<p class="loading">Loading player records…</p>'; }
     if (PR.failed) return top + '<p class="error">Player records didn’t load.</p>';
     const m = window.FBP && FBP.media;
-    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
+    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
     const L = PR.list, span = `${PR.first}–${PR.last}`;
     // tiles: best and worst win rate with 40+ starts, most starts, most FBP teams
     const q40 = L.filter(p => p.n >= 40), byPct = q40.slice().sort((a, b) => b.pct - a.pct || b.n - a.n);

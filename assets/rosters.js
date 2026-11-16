@@ -27,7 +27,7 @@ window.FBPRosters = (function () {
     if (!hits.length) return '<div class="ro-res" role="listbox"><p class="ro-none">No rostered player matches. Free agents are on the Stats page.</p></div>';
     return `<div class="ro-res" role="listbox">${hits.map(({ r, f }, i) => {
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
-        : r.espn ? `class="tcr" style="background-image:url(${FBPU.headshot(r.espn)});${FBPU.tc(f)}"` : '';
+        : r.espn ? `class="tcr${FBPU.ovc(r.id)}" style="background-image:url(${FBPU.headshot(r.espn)}),var(--ovg,none);${FBPU.tc(f)}"` : '';
       const st = r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : '';
       return `<a role="option" href="#now/team/${f}/${r.id}" data-ro-hit${i === 0 ? ' class="on"' : ''}><span class="ro-ph"><span ${img}></span></span>
         <span class="ro-rn"><b>${esc(r.name)}</b><small>${r.pos}${r.nfl ? ' · ' + esc(r.nfl) : ''} · ${$(r.sal)}${st}</small></span>
@@ -472,7 +472,7 @@ window.FBPRosters = (function () {
     const code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase();
     const a = r.espn && !def ? espn('a' + r.espn, EAPI + r.espn) : null, at = (a && a.athlete) || {};
     const photo = def && code ? `<span class="pp-ph pp-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${code}.png)"></span>`
-      : `<span class="pp-ph${!medalOf(r) && r.espn && FBPU.tc(t.fid) ? ' tcr' : ''}"${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}${r.espn ? ` style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,none);${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : ''}></span>`;
+      : `<span class="pp-ph${!medalOf(r) && r.espn && FBPU.tc(t.fid) ? ' tcr' : ''}${!medalOf(r) && r.espn ? FBPU.ovc(r.id) : ''}"${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}${r.espn ? ` style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,var(--ovg,none));${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : ''}></span>`;
     // FBP IR slot chip, unless his NFL injury chip already says IR
     const nflIR = r.espn && (injMap()[r.espn] || {}).status === 'Injured Reserve';
     const chip = r.st === 'TAXI_SQUAD' ? '<span class="ro-chip t">TAXI</span>' : r.st === 'INJURED_RESERVE' && !nflIR ? '<span class="ro-chip i" title="In an FBP IR slot">IR</span>' : '';
@@ -572,7 +572,7 @@ window.FBPRosters = (function () {
     const hons = Object.entries(F.honors || {}).map(([k, v]) => `<span class="ro-chip ${HONK[k] || 'good'}">${v > 1 ? v + '× ' : ''}${esc(k)}</span>`).join('');
     const now = honOf(r).filter(h => !/^(1st|2nd) Team$/.test(h[0])).map(h => `<span class="ro-chip ${h[1]}" title="${esc(h[2])}">${esc(h[0])}</span>`).join('');
     const rings = F.titles ? `<span class="ro-ring" title="${F.titles} FBP championship${F.titles > 1 ? 's' : ''} with this team">🏆${F.titles > 1 ? '×' + F.titles : ''}</span>` : '';
-    const img = F.espn ? `${medalOf(r) ? '' : 'class="tcr" '}style="background-image:url(${FBPU.headshot(F.espn)});${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : '';
+    const img = F.espn ? `${medalOf(r) ? '' : `class="tcr${FBPU.ovc(r.id)}" `}style="background-image:url(${FBPU.headshot(F.espn)}),var(--ovg,none);${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : '';
     const rec = F.w != null ? `${F.w}-${F.l}${F.t ? '-' + F.t : ''} in his starts` : '';
     return `<section class="card ro-card ro-face2"><a class="ro-f2ph" href="#now/team/${t.fid}/${F.id}" aria-label="${esc(F.name)} Player Page"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></a>
       <div class="ro-f2m"><small>Face of the Franchise</small>
@@ -723,7 +723,7 @@ window.FBPRosters = (function () {
       const aws = aw ? `<span class="ro-aws">${aw}</span>` : '';   // award chips stack one above the other, beside the name
       // defenses get their NFL team's logo; players their ESPN headshot
       const img = r.pos === 'DEF' && r.nfl ? `class="ro-def" style="background-image:url(https://a.espncdn.com/i/teamlogos/nfl/500/${NFL_ESPN[r.nfl] || r.nfl.toLowerCase()}.png)"`
-        : r.espn ? `${medalOf(r) ? '' : 'class="tcr" '}style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,none);${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : '';
+        : r.espn ? `${medalOf(r) ? '' : `class="tcr${FBPU.ovc(r.id)}" `}style="background-image:url(${FBPU.headshot(r.espn)}),var(--med,var(--ovg,none));${medalOf(r) ? '' : FBPU.tc(t.fid)}"` : '';
       const n = r.gp || 0, isOpen = open.has(r.id);
       return `<tr class="ro-p${r.st === 'TAXI_SQUAD' ? ' tx' : r.st === 'INJURED_RESERVE' ? ' ir' : ''}${isOpen ? ' on' : ''}" data-ro-p="${r.id}" aria-expanded="${isOpen}">
         <td class="ro-ph"><span ${img}${medalOf(r) ? ` data-med="${medalOf(r)}"` : ''}></span></td>
@@ -768,7 +768,7 @@ window.FBPRosters = (function () {
      Full: every roster as a compact card, the four teams of each division together (two across on a computer);
      tap a player to open his box. Grid: one position at a time, each team's players at it side by side, best
      first, teams ranked by their starters there (the lineup minimum: QB 1, RB 2, WR 2, TE 1, DEF 1). */
-  let raPos = 'QB';
+  let raPos = 'QB', gSort = ['top', 1];   // Grid: sort by Top N points, or by a slot's OVR (index), and which way
   try { raPos = localStorage.getItem('fbp-ra-pos') || 'QB'; } catch (e) {}
   const NEED = { QB: 1, RB: 2, WR: 2, TE: 1, DEF: 1 };
   const ppg = r => r.gp ? r.pts / r.gp : null;
@@ -862,12 +862,18 @@ window.FBPRosters = (function () {
       const rest = L.filter(r => r.st !== 'ROSTER').sort((a, b) => (ppg(b) || 0) - (ppg(a) || 0));
       const top = act.slice(0, need), sc = top.reduce((s, r) => s + (ppg(r) || 0), 0);
       return { f, t, list: act.concat(rest), sc: top.length === need ? sc : sc }; }).sort((a, b) => b.sc - a.sc);
+    // tap a column header to sort the teams by that slot's OVR (who has the best RB2, WR3...); tap Top N for points
+    const ovO = r => { const o = r && ovrOf(r.id); return o && o.o != null ? o.o : -1; };
+    T.forEach((x, k) => { x.rk = k; });
+    if (gSort[0] !== 'top') { const i = +gSort[0]; T.sort((a, b) => gSort[1] * (ovO(b.list[i]) - ovO(a.list[i])) || a.rk - b.rk); }
+    else if (gSort[1] < 0) T.reverse();
+    const gh = (k, label, cls, title) => `<th${cls ? ` class="${cls}"` : ''} data-ra-gsort="${k}" tabindex="0" role="button"${title ? ` title="${title}"` : ''} aria-sort="${String(gSort[0]) === String(k) ? (gSort[1] > 0 ? 'descending' : 'ascending') : 'none'}">${label}${String(gSort[0]) === String(k) ? (gSort[1] > 0 ? ' ▾' : ' ▴') : ''}</th>`;
     const W = Math.max(...T.map(x => x.list.length), 1);
     const cell = (x, r, i) => { if (!r) return '<td class="ra-e"></td>'; const v = ppg(r);
       return `<td class="ra-c${r.st !== 'ROSTER' ? ' off' : ''}${i < need && r.st === 'ROSTER' ? ' st' : ''}"><a href="#now/team/${x.f}/${r.id}"><b>${esc(shortN(r.name))}</b>${(o => o && o.o != null ? `<span class="rk-ovr ra-go ${ovrTier(o.o)}" title="FBP OVR">${o.o}</span>` : '')(ovrOf(r.id))}${injChip(r)}<small>${v != null ? v.toFixed(1) : '—'}/g · ${$(r.sal)}${r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : ''}</small></a></td>`; };
     const seg = `<div class="seg ra-pos-seg" role="group" aria-label="Position">${POS.map(p => `<button type="button" data-ra-pos="${p}" aria-pressed="${p === P}">${p}</button>`).join('')}</div>`;
-    return `${seg}<div class="tbl-wrap ra-gw"><table class="ra-gt"><thead><tr><th class="ra-gtm">Team</th><th class="ra-gs" title="Starters at ${P}: points a game">Top ${need}</th>${Array.from({ length: W }, (_, i) => `<th>${P}${i + 1}</th>`).join('')}</tr></thead>
-      <tbody>${T.map((x, k) => `<tr><td class="ra-gtm"><a href="#now/team/${x.f}">${tmx(x.f).logo ? `<img src="${tmx(x.f).logo}" alt="">` : ''}<b>${esc(tmx(x.f).abbr || '')}</b></a></td><td class="ra-gs"><b>${x.sc.toFixed(1)}</b><small>${ord(k + 1)}</small></td>${Array.from({ length: W }, (_, i) => cell(x, x.list[i], i)).join('')}</tr>`).join('')}</tbody></table></div>`;
+    return `${seg}<div class="tbl-wrap ra-gw"><table class="ra-gt"><thead><tr><th class="ra-gtm">Team</th>${gh('top', 'Top ' + need, 'ra-gs', 'Starters at ' + P + ': points a game')}${Array.from({ length: W }, (_, i) => gh(i, P + (i + 1), '', 'Sort by the OVR of each team’s ' + P + (i + 1))).join('')}</tr></thead>
+      <tbody>${T.map((x, k) => `<tr><td class="ra-gtm"><a href="#now/team/${x.f}">${tmx(x.f).logo ? `<img src="${tmx(x.f).logo}" alt="">` : ''}<b>${esc(tmx(x.f).abbr || '')}</b></a></td><td class="ra-gs"><b>${x.sc.toFixed(1)}</b><small>${ord(x.rk + 1)}</small></td>${Array.from({ length: W }, (_, i) => cell(x, x.list[i], i)).join('')}</tr>`).join('')}</tbody></table></div>`;
   }
 
   document.addEventListener('click', e => {
@@ -878,7 +884,8 @@ window.FBPRosters = (function () {
     const cs = t.closest('[data-ra-csort]'); if (cs) { const k = cs.dataset.raCsort; cSort = cSort[0] === k ? [k, -cSort[1]] : [k, 1]; return redraw(); }
     if (t.closest('.ra-mdet a')) return;
     const co = t.closest('[data-ra-copen]'); if (co) { const f = co.dataset.raCopen; cOpen.has(f) ? cOpen.delete(f) : cOpen.add(f); return redraw(); }
-    const rp = t.closest('[data-ra-pos]'); if (rp) { raPos = rp.dataset.raPos; try { localStorage.setItem('fbp-ra-pos', raPos); } catch (err) {} return redraw(); }
+    const gs = t.closest('[data-ra-gsort]'); if (gs) { const k = gs.dataset.raGsort; gSort = String(gSort[0]) === k ? [gSort[0], -gSort[1]] : [k, 1]; return redraw(); }
+    const rp = t.closest('[data-ra-pos]'); if (rp) { gSort = ['top', 1]; raPos = rp.dataset.raPos; try { localStorage.setItem('fbp-ra-pos', raPos); } catch (err) {} return redraw(); }
     const pk = t.closest('.ro-pick'); if (pk) { pickX = pk.scrollLeft; return; }
     if (t.closest('[data-ro-hit]')) { findQ = ''; return; }
     if (t.closest('[data-ro-how]')) { howOpen = !howOpen; return redraw(); }

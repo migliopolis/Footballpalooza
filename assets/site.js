@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0258';
+  const VERSION = '0.0259';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -707,6 +707,8 @@
   const TABS = ['scores', 'multiview', 'now', 'awards', 'reference', 'offseason', 'press', 'draft', 'bylaws', 'settings', 'beta'];
   const refCtx = () => ({ teams: state.teams, chip, esc, nameOf, ppr: state.ppr, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#reference')) route(); } });
   let lastPage = '';
+  // OVR colors for player photo backgrounds (FBPU.ovc): redraw the page once they're loaded
+  FBPU.ovLoad().then(() => { if (typeof route === 'function' && document.getElementById('app')) { const y = window.scrollY; route(); window.scrollTo(0, y); } });
   function route() {
     const parts = location.hash.slice(1).split('/');
     const tab = TABS.includes(parts[0]) ? parts[0] : 'now';
@@ -892,7 +894,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0258
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0259
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
