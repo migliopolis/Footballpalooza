@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0241",
+      "to": "0.0250",
+      "dates": "Nov 15, 2026",
+      "items": [
+        "Scoreboard: DNP stamps come only from the NFL’s inactive list, so players who just haven’t touched the ball yet aren’t marked.",
+        "Scoreboard: refreshes the moment you come back to it from another app or a locked phone.",
+        "Scoreboard: big scores shrink to fit, so they no longer run into the logo or the win bar.",
+        "Scoreboard: during a game, the number under a player’s points is his projected finish; before and after, it’s the pre-game projection. Hot and cold still go by the pre-game number.",
+        "Beta, Scoreboard Shade: a test bed for new looks. Right now it tries new row colors (orange for a game on, green for the ball, red for the red zone, gray when it’s over), with a Shuffle button to see them all."
+      ]
+    },
+    {
       "from": "0.0236",
       "to": "0.0240",
       "dates": "Nov 15, 2026",

@@ -705,7 +705,7 @@
     statusHtml = status;
     return `<div class="lv-bar lv-topbar">${picker}
         <span class="lv-btns"><button type="button" class="lv-all lv-cmp" data-lv-cmp aria-pressed="${compact}">Compact</button><button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></span></div>
-      <div class="lv-list${compact ? ' lv-compact' : ''}">${mineFirst(ordered(L.matchup)).map(game).join('')}</div>
+      <div class="lv-list${compact ? ' lv-compact' : ''}${X.shade ? ' lv-t2' : ''}">${mineFirst(ordered(L.matchup)).map(game).join('')}</div>
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
   }
 
@@ -819,13 +819,13 @@
     // compact view: tap a player-vs-player row (anywhere but a photo) to see that row in full; tap again to close it
     const tr = compact && !e.target.closest('a') && e.target.closest('.lv-compact tr[data-lvr]');
     if (tr) { const k = tr.dataset.lvr, on = !openRows.has(k); on ? openRows.add(k) : openRows.delete(k);
-      if (X && X.shade) rowShade(tr, on); else tr.classList.toggle('lv-rx', on); return; }
+      if (X && X.shade && SHADE_ANIM) rowShade(tr, on); else tr.classList.toggle('lv-rx', on); return; }
     const b = e.target.closest('[data-lv]'); if (!b) return;
     const key = b.dataset.lv, g = b.closest('.lv-g'), on = !open.has(key);
     on ? open.add(key) : open.delete(key);
     g.classList.toggle('open', on); b.setAttribute('aria-expanded', on);
     const det = g.querySelector('.lv-det');
-    if (X && X.shade) shade(det, on); else det.hidden = !on;
+    if (X && X.shade && SHADE_ANIM) shade(det, on); else det.hidden = !on;
     if (on) { fitNames(g); fitCompact(g.parentElement.parentElement); }
     const btn = document.querySelector('[data-lv-all]'), n = cur().liveScoring.matchup.length;
     if (btn) { btn.dataset.lvAll = open.size === n ? 'close' : 'open'; btn.textContent = open.size === n ? 'Collapse all' : 'Expand all'; }
@@ -860,6 +860,7 @@
   // the card's lower edge is revealed by a clip that follows a real spring, the cards below ride down on that same
   // spring, and the lineup rows drop in one after another. Closing runs it back without the bounce. Instant with
   // Reduce Motion on.
+  const SHADE_ANIM = false;   // the Beta page's opening animations, off for now (Paul is trying the new row colors there)
   const springs = {};
   // a spring (stiffness k, damping c, mass 1) as a CSS linear() easing plus how long it takes to settle; browsers
   // without linear() get a near-match cubic-bezier
