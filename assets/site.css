@@ -3178,7 +3178,7 @@ tr.fxa-water td.lv-p.a::before,tr.fxb-water td.lv-p.b::after{width:34px;backgrou
 .bt-demo button{font:700 .85rem var(--body);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--fg);color:var(--bg,#fff);cursor:pointer}
 .bt-demo small{color:var(--muted)}
 
-/* Beta (Scoreboard Shade page): trying new row colors. Game on: a yellowish orange; his team has the ball: green; red
+/* Scoreboard row colors (tried first on Beta's Scoreboard Shade). Game on: a yellowish orange; his team has the ball: green; red
    zone: red; over: a darker grey. Each starts stronger at the outside edge and fades to nothing at about his score. */
 .lv-t2 .lv-t td.live{--tc2:236,150,30}
 .lv-t2 .lv-t td.lv-inpos{--tc2:40,160,85}

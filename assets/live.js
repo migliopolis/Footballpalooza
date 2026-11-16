@@ -658,7 +658,7 @@
         const them = vs ? nflImg(g.opp) + (on ? `<span class="lv-gs">${esc(String(g.pa))}</span>` : '') : '';
         const mu = !myT ? '' : `<span class="lv-opp">${!vs ? me : cls === 'a' ? me + vs + them + wx : wx + me + vs + them}</span>`;
         const bottom = [slot === pos(p.id) ? '' : pos(p.id), mu, `<span class="lv-st ${st}">${clock(p)}</span>`].filter(Boolean);
-        // his half of the row is tinted: blue while his game is on, green while his team has the ball (a defense: while
+        // his half of the row is tinted: orange while his game is on, green while his team has the ball (a defense: while
         // the other team has it), red in the red zone (his offense there, or his defense defending it), grey once it's over
         const isD = pos(p.id) === 'DEF', live = g && g.state === 'in';
         const rzOn = live && (isD ? !g.ball && g.defRz : g.ball && g.rz), posOn = live && !rzOn && (isD ? !g.ball && g.oppBall : g.ball);
@@ -705,7 +705,7 @@
     statusHtml = status;
     return `<div class="lv-bar lv-topbar">${picker}
         <span class="lv-btns"><button type="button" class="lv-all lv-cmp" data-lv-cmp aria-pressed="${compact}">Compact</button><button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></span></div>
-      <div class="lv-list${compact ? ' lv-compact' : ''}${X.shade ? ' lv-t2' : ''}">${mineFirst(ordered(L.matchup)).map(game).join('')}</div>
+      <div class="lv-list lv-t2${compact ? ' lv-compact' : ''}">${mineFirst(ordered(L.matchup)).map(game).join('')}</div>
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
   }
 
