@@ -3188,3 +3188,6 @@ tr.fxa-water td.lv-p.a::before,tr.fxb-water td.lv-p.b::after{width:34px;backgrou
 .lv-t2 .lv-t td.lv-p.b.live,.lv-t2 .lv-t td.lv-p.b.final,.lv-t2 .lv-bench .lv-t td.lv-p.b.final{background:linear-gradient(to left,rgba(var(--tc2),.36),rgba(var(--tc2),.15))}
 .lv-t2 .lv-t td.lv-pts.a.live,.lv-t2 .lv-t td.lv-pts.a.final,.lv-t2 .lv-bench .lv-t td.lv-pts.a.final{background:linear-gradient(to right,rgba(var(--tc2),.15),rgba(var(--tc2),0) 75%)}
 .lv-t2 .lv-t td.lv-pts.b.live,.lv-t2 .lv-t td.lv-pts.b.final,.lv-t2 .lv-bench .lv-t td.lv-pts.b.final{background:linear-gradient(to left,rgba(var(--tc2),.15),rgba(var(--tc2),0) 75%)}
+
+/* Players page: the 1st/2nd Team chip beside his name */
+.pl-nm .lv-pchip{display:inline-block;margin:0 0 0 6px;vertical-align:2px}

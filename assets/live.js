@@ -776,7 +776,7 @@
       return `<section class="card pl-sec"><h2 class="pl-h">${title}</h2><ol class="pl-list">${show.map((p, i) => {
         const tr = tier(p, wk), pj = projNow(p, wk), st = state(p);
         return `<li class="pl-r${tr ? ' t-' + tr.k : ''}${st === 'final' ? ' fin' : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
-          <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && PL_TAG[tr.k] ? `<span class="pl-tag ${tr.k}">${PL_TAG[tr.k]}</span>` : ''}</span>
+          <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${teamChip(p.id, p.fid)}${tr && PL_TAG[tr.k] ? `<span class="pl-tag ${tr.k}">${PL_TAG[tr.k]}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
             <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${slot(p.status)}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
           <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${p.est ? '<small class="pl-est" title="Estimated from ESPN’s box score; MFL posts official points once his game is final">est.</small>' : ''}${pj != null ? `<small${st === 'live' ? ' title="Projected finish: his points plus his MFL projection for the time left"' : ''}>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
