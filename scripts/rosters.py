@@ -87,7 +87,7 @@ def honors_now(aw):
     """this season's chips: {player: [[label, color, title]]}"""
     H = collections.defaultdict(list)
     af = (aw or {}).get('allFbp') or {}
-    for k, l, c in (('first', '1st Team', 'gold'), ('second', '2nd Team', 'silver')):
+    for k, l, c in (('first', '1st Team', 'gold'), ('second', '2nd Team', 'silver'), ('rookie', 'Rookie Team', 'rook')):
         for x in af.get(k, []):
             if x.get('player'):
                 H[x['player']['id']].append([l, c, f'All-FBP {l}'])

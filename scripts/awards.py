@@ -56,7 +56,10 @@ def lineup_slots(league):
     return slots, flex_ok or {'RB', 'WR', 'TE'}
 
 
-def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, slots, flex_ok, rostered_only):
+status = {}
+
+
+def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, slots, flex_ok, rostered_only, rookie_pts=None):
     """Every award for one season. weeks: {week: {franchise: {'s': [[id, pts]], 'n': [...]}}}, regular season only."""
     out = {'season': season}
     tot, starts, by_team, games = defaultdict(float), defaultdict(int), defaultdict(float), []
@@ -110,6 +113,26 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
         teams.append(team)
     out['allFbp'] = {'first': teams[0], 'second': teams[1]}
 
+    # All-FBP Rookie Team: this season's rookies on an FBP roster, by every point they scored (started, benched or on the
+    # taxi squad). rookie_pts: {player: season points}, from MFL's weekly player scores; current season only for now.
+    if rookie_pts:
+        rk_pool = sorted((p for p in rookie_pts if p in owner and str(pinfo.get(p, {}).get('draft_year')) == season
+                          and pos_of(p) in ('QB', 'RB', 'WR', 'TE') and rookie_pts[p] > 0), key=lambda p: -rookie_pts[p])
+        rused, rteam = set(), []
+        for slot in slots:
+            if slot == 'DEF':
+                continue
+            ok = flex_ok if slot == 'FLEX' else {slot}
+            pick = next((p for p in rk_pool if p not in rused and pos_of(p) in ok), None)
+            if pick:
+                rused.add(pick)
+                pl = player(pick)
+                pl['allPts'] = round(rookie_pts[pick], 1)
+                pl['status'] = status.get(pick, '') if status else ''
+                rteam.append({'slot': slot, 'player': pl})
+        if rteam:
+            out['allFbp']['rookie'] = rteam
+
     A = []
     half = max(2, math.ceil(len(wk_nums) / 2))
     if eligible:
@@ -126,10 +149,20 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
     if bl:
         A.append({'key': 'bench', 'title': 'Left on the Bench', 'why': 'Most points scored while sitting on an FBP bench',
                   'list': [dict(player(pid, pts=v, team=fr), benchWeeks=bench_wks[(pid, fr)], started=starts[pid]) for (pid, fr), v in bl]})
-    rk = [p for p in eligible if str(pinfo.get(p, {}).get('draft_year')) == season]
-    if rk:
-        A.append({'key': 'rookie', 'title': 'Rookie of the Year', 'why': f'Top {season} rookie by starter points',
-                  'list': [player(p) for p in rk[:3]]})
+    # Rookie of the Year: every point a rookie scores counts (starting lineup, bench or taxi squad) when the weekly
+    # player scores are there (this season); past seasons' saved results only have starters and bench
+    if rookie_pts:
+        rk = sorted((p for p in rookie_pts if p in owner and str(pinfo.get(p, {}).get('draft_year')) == season
+                     and pos_of(p) and rookie_pts[p] > 0), key=lambda p: -rookie_pts[p])
+        if rk:
+            A.append({'key': 'rookie', 'title': 'Rookie of the Year', 'why': f'Top {season} rookie by every point scored: starting lineup, bench or taxi squad',
+                      'note': 'New this season: all points count, not just starter points.',
+                      'list': [dict(player(p, pts=rookie_pts[p]), starterPts=round(tot[p], 1)) for p in rk[:3]]})
+    else:
+        rk = [p for p in eligible if str(pinfo.get(p, {}).get('draft_year')) == season]
+        if rk:
+            A.append({'key': 'rookie', 'title': 'Rookie of the Year', 'why': f'Top {season} rookie by starter points',
+                      'list': [player(p) for p in rk[:3]]})
 
     # pickups
     claims = {}
@@ -275,7 +308,17 @@ def current(links):
     tx = (load(D('mfl', 'transactions.json'), {}) or {}).get('transactions', [])
     st = (load(D('league-now.json'), {}) or {}).get('standings') or []
     slots, flex_ok = lineup_slots(league)
-    out = build(season, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=True)
+    # every point each rostered rookie scored, any lineup spot (weeklyScores.json has every player, taxi squad included)
+    ps = (load(D('mfl', 'weeklyScores.json'), {}) or {}).get('weeks') or {}
+    rookie_pts = defaultdict(float)
+    for w, sc in ps.items():
+        if int(w) <= reg and w in weeks:
+            for pid, v in sc.items():
+                rookie_pts[pid] += float(v or 0)
+    for f in as_list((load(D('mfl', 'rosters.json'), {}) or {}).get('rosters', {}).get('franchise')):
+        for pl in as_list(f.get('player')):
+            status[pl['id']] = pl.get('status', '')
+    out = build(season, weeks, pinfo, links, owner, salary, contract, tx, st, slots, flex_ok, rostered_only=True, rookie_pts=rookie_pts)
     out['generated'] = stamp
     return out
 
@@ -658,7 +701,7 @@ def add_record_paces(cur):
     now = load(D('league-now.json'), {}) or {}
     reg = int(now.get('lastRegularSeasonWeek') or 14)
     wk = int(cur.get('throughWeek') or now.get('weeksPlayed') or 0)
-    for team in (cur.get('allFbp') or {}).values():
+    for team in [(cur.get('allFbp') or {}).get(k) or [] for k in ('first', 'second')]:
         for e in team:
             p = e['player']; r = rec.get(p.get('pos'))
             if not r or not p.get('starts'):

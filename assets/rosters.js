@@ -143,7 +143,7 @@ window.FBPRosters = (function () {
   // his honors, plus the season's Biggest OVR Riser / Faller chip (Awards; data/ovr.json movers)
   const honOf = r => { const O = espn('OV', 'data/ovr.json'), M = (O && O.movers) || {}, u = (M.up || [])[0], d = (M.down || [])[0];
     return (r.hon || []).concat(u && u.id === r.id ? [['▲ Riser', 'up', `Biggest OVR riser this season (${u.from} → ${u.to})`]] : [], d && d.id === r.id ? [['▼ Faller', 'down', `Biggest OVR faller this season (${d.from} → ${d.to})`]] : []); };
-  const medalOf = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : '';
+  const medalOf = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : (r.hon || []).some(h => h[0] === 'Rookie Team') ? 'rook' : '';
   // MFL's injury report first (data/mfl/injuries.json, the league's own designations); ESPN's when that isn't there yet
   const MINJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'IR': 'IR', 'IR-R': 'IR', 'IR-PUP': 'PUP', 'IR-NFI': 'IR', 'Suspended': 'SUS', 'Holdout': 'HO' };
   const mflInj = () => { const j = espn('MINJ', 'data/mfl/injuries.json'); if (!j || j.failed) return null;
@@ -565,7 +565,7 @@ window.FBPRosters = (function () {
         ${tf && tf.playoff != null ? stat(Math.round(tf.playoff) + '%', 'playoff odds') : ''}</div></div>`;
   }
   // Face of the Franchise: his photo, team, icons and every FBP honor he's won here
-  const HONK = { '1st Team': 'gold', '2nd Team': 'silver', 'MVP': 'gold', 'RoY': 'good', 'ToY': 'good' };
+  const HONK = { '1st Team': 'gold', '2nd Team': 'silver', 'Rookie Team': 'rook', 'MVP': 'gold', 'RoY': 'good', 'ToY': 'good' };
   function faceCard(t, ctx) {
     const F = t.face, esc = ctx.esc; if (!F) return '';
     const r = t.rows.find(x => String(x.id) === String(F.id)) || {};

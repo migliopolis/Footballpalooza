@@ -104,7 +104,7 @@ window.FBPHospital = (function () {
     return out;
   }
 
-  const med = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : '';
+  const med = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : (r.hon || []).some(h => h[0] === 'Rookie Team') ? 'rook' : '';
   function card(x, ctx) {
     const { r, i } = x, esc = ctx.esc, t = ctx.teams[r.f] || {}, o = open.has(r.id), ex = exp.has(r.id);
     const st = { 'Questionable': ['Q', 'q'], 'Doubtful': ['D', 'd'], 'Out': ['OUT', 'o'], 'Injured Reserve': ['IR', 'ir'] }[i.status] || [i.status, 'o'];

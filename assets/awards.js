@@ -34,7 +34,7 @@ window.FBPAwards = (() => {
     const src = p.pos === 'DEF' ? (m ? m.nflLogo(p.nfl) : '') : (p.espn && m ? m.headshot(p.espn) : '');
     const fb = (X.teams[p.team] || {}).logo || '';
     const md = (((S || A) || {}).allFbp || {});
-    let mc = (md.first || []).some(e => e.player && e.player.id === p.id) ? ' m-gold' : (md.second || []).some(e => e.player && e.player.id === p.id) ? ' m-silver' : '';
+    let mc = (md.first || []).some(e => e.player && e.player.id === p.id) ? ' m-gold' : (md.second || []).some(e => e.player && e.player.id === p.id) ? ' m-silver' : (md.rookie || []).some(e => e.player && e.player.id === p.id) ? ' m-rook' : '';
     // a Hall of Fame season (the All-Time FBP Team) shows in diamond with its HOF badge instead of 1st Team gold
     const hof = mc === ' m-gold' && HOF && HOF.has(p.id + ':' + (S || A).season);
     if (hof) mc = ' m-diamond';
@@ -66,6 +66,15 @@ window.FBPAwards = (() => {
     const r = (A.records || {})[p.pos];
     return `<span class="aw-pace" title="On pace for ${n1(p.pace.proj)} points${r ? `; the ${p.pos} record is ${n1(r.pts)} (${esc(r.name)}, ${r.year})` : ''}"><span>🔥 Record pace</span><b>${n1(p.pace.proj)}</b></span>`;
   };
+  // All-FBP Rookie Team: every point counts (starting lineup, bench or taxi squad), so the card leads with his total
+  const RK_ST = { TAXI_SQUAD: 'Taxi squad', INJURED_RESERVE: 'IR', ROSTER: 'Active roster' };
+  function rcard(slot, p) {
+    return `<div class="card aw-card second rook"><span class="aw-slot">${slot}</span>${photo(p, 'md', true)}
+      <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.status && RK_ST[p.status] ? ` · <i>${RK_ST[p.status]}</i>` : ''}</span>
+      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>
+      <span class="aw-stats"><span><b>${n1(p.allPts)}</b>total pts</span><span><b>${n1(p.pts)}</b>as a starter</span><span><b>${sal(p)}</b>salary</span></span>
+      <span class="aw-started">${p.starts ? `${p.starts} week${p.starts === 1 ? '' : 's'} started` : 'Hasn’t started yet'}</span></div>`;
+  }
   function card(slot, p, second) {
     return `<div class="card aw-card${second ? ' second' : ''}"><span class="aw-slot">${slot}</span>${photo(p, second ? 'md' : 'lg', true)}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.rookie ? ' · <i>Rookie</i>' : ''}</span>
@@ -99,7 +108,7 @@ window.FBPAwards = (() => {
     } else if (a.list) {
       const [w, ...rest] = a.list;
       const wks = (n, what) => `${n} week${n === 1 ? '' : 's'} ${what}`;
-      const st = p => p.starts != null ? wks(p.starts, 'started') : '';
+      const st = p => p.starterPts != null ? (p.starts ? `${n1(p.starterPts)} as a starter · ${wks(p.starts, 'started')}` : 'Hasn’t started yet') : p.starts != null ? wks(p.starts, 'started') : '';
       const extra = p => p.benchWeeks != null ? wks(p.benchWeeks, 'on the bench') : p.week ? `Week ${p.week}`
         : [p.perDollar != null ? `${n1(p.perDollar)} pts per $` : p.bid != null ? `${p.how}${p.how === 'FAAB' ? ' $' + Math.round(p.bid) : ''}` : '', st(p)].filter(Boolean).join(' · ');
       body = `<div class="aw-win">${photo(w, 'md')}<div><b>${esc(w.name)}</b>${mvpTag(w)}<span class="aw-sub">${pos(w)} ${esc(w.nfl || '')} · ${tlogo(w.team, 'mini')}${esc(tname(w.team))}</span>
@@ -148,7 +157,7 @@ window.FBPAwards = (() => {
     const open = awOpen.has(a.key);
     return `<section class="card aw-award k-${esc(a.key)}${open ? ' open' : ''}">
       <button type="button" class="aw-sum" data-aw-toggle="${esc(a.key)}" aria-expanded="${open}"><span class="aw-sumt"><h3>${esc(a.title)}</h3><span class="aw-prev">${preview(a)}</span></span><i class="car" aria-hidden="true"></i></button>
-      <div class="aw-body"${open ? '' : ' hidden'}><p class="aw-why">${esc(a.why)}</p>${picker}${body}</div></section>`;
+      <div class="aw-body"${open ? '' : ' hidden'}><p class="aw-why">${esc(a.why)}</p>${a.note ? `<p class="aw-note">${esc(a.note)}</p>` : ''}${picker}${body}</div></section>`;
   }
   // All-FBP teams fold the same way; the preview is the lineup's names
   function fold(key, title, t, html) {
@@ -208,6 +217,7 @@ window.FBPAwards = (() => {
     return head(sub) + fluid +
       fold('allfbp1', '1st Team All-FBP', S.allFbp.first, team(S.allFbp.first) + recNote()) +
       fold('allfbp2', '2nd Team All-FBP', S.allFbp.second, team(S.allFbp.second, true)) +
+      ((S.allFbp.rookie || []).length ? fold('allfbpR', 'All-FBP Rookie Team', S.allFbp.rookie, `<div class="aw-team">${S.allFbp.rookie.map(e => rcard(e.slot, e.player)).join('')}</div><p class="rf-foot">This season’s rookies on an FBP roster, by every point they’ve scored: starting lineup, bench or taxi squad. No defenses. A rookie on the 1st or 2nd Team keeps his gold or silver.</p>`) : '') +
       `<section><h2 class="sec">Season awards</h2><div class="aw-awards">${S.awards.concat(S === A && MV ? [
         MV.up && MV.up.length ? { key: 'riser', title: 'Biggest Riser', why: 'The biggest climb in OVR since week 1: Madden’s ratings, the dynasty consensus and his FBP production all count. Anyone rated 70 or better at either end.', movers: MV.up } : null,
         MV.down && MV.down.length ? { key: 'faller', title: 'Biggest Faller', why: 'The biggest drop in OVR since week 1. Anyone rated 70 or better at either end.', movers: MV.down } : null].filter(Boolean) : [])

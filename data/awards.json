@@ -427,6 +427,141 @@
      }
     }
    }
+  ],
+  "rookie": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "17462",
+     "name": "Fernando Mendoza",
+     "pos": "QB",
+     "nfl": "LVR",
+     "espn": "4837248",
+     "team": "0008",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 6.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 2.2,
+     "status": "TAXI_SQUAD"
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "17474",
+     "name": "Emmett Johnson",
+     "pos": "RB",
+     "nfl": "KCC",
+     "espn": "4832955",
+     "team": "0010",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 3.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 76.9,
+     "status": "TAXI_SQUAD"
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "17475",
+     "name": "Seth McGowan",
+     "pos": "RB",
+     "nfl": "IND",
+     "espn": "4686468",
+     "team": "0008",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 1.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 66.2,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "17500",
+     "name": "Denzel Boston",
+     "pos": "WR",
+     "nfl": "CLE",
+     "espn": "4832800",
+     "team": "0004",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 5.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 103.4,
+     "status": "TAXI_SQUAD"
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "17501",
+     "name": "KC Concepcion",
+     "pos": "WR",
+     "nfl": "CLE",
+     "espn": "4870653",
+     "team": "0010",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 8.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 91.3,
+     "status": "TAXI_SQUAD"
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "17543",
+     "name": "Kenyon Sadiq",
+     "pos": "TE",
+     "nfl": "NYJ",
+     "espn": "5083315",
+     "team": "0005",
+     "pts": 3.8,
+     "starts": 2,
+     "ppg": 1.9,
+     "salary": 6.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 54.8,
+     "status": "ROSTER"
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "17497",
+     "name": "Carnell Tate",
+     "pos": "WR",
+     "nfl": "TEN",
+     "espn": "4871023",
+     "team": "0008",
+     "pts": 0.0,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 12.0,
+     "contract": "1/5",
+     "rookie": true,
+     "allPts": 77.3,
+     "status": "TAXI_SQUAD"
+    }
+   }
   ]
  },
  "ready": true,
@@ -591,49 +726,53 @@
   {
    "key": "rookie",
    "title": "Rookie of the Year",
-   "why": "Top 2026 rookie by starter points",
+   "why": "Top 2026 rookie by every point scored: starting lineup, bench or taxi squad",
+   "note": "New this season: all points count, not just starter points.",
    "list": [
     {
-     "id": "17472",
-     "name": "Jeremiyah Love",
-     "pos": "RB",
-     "nfl": "ARI",
-     "espn": "4870808",
-     "team": "0006",
-     "pts": 40.4,
-     "starts": 5,
-     "ppg": 8.1,
-     "salary": 35.0,
-     "contract": "1/5",
-     "rookie": true
-    },
-    {
-     "id": "17473",
-     "name": "Jadarian Price",
-     "pos": "RB",
-     "nfl": "SEA",
-     "espn": "4685512",
+     "id": "17500",
+     "name": "Denzel Boston",
+     "pos": "WR",
+     "nfl": "CLE",
+     "espn": "4832800",
      "team": "0004",
-     "pts": 14.0,
-     "starts": 3,
-     "ppg": 4.7,
-     "salary": 25.0,
+     "pts": 103.4,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 5.0,
      "contract": "1/5",
-     "rookie": true
+     "rookie": true,
+     "starterPts": 0.0
     },
     {
-     "id": "17543",
-     "name": "Kenyon Sadiq",
-     "pos": "TE",
-     "nfl": "NYJ",
-     "espn": "5083315",
-     "team": "0005",
-     "pts": 3.8,
-     "starts": 2,
-     "ppg": 1.9,
-     "salary": 6.0,
+     "id": "17501",
+     "name": "KC Concepcion",
+     "pos": "WR",
+     "nfl": "CLE",
+     "espn": "4870653",
+     "team": "0010",
+     "pts": 91.3,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 8.0,
      "contract": "1/5",
-     "rookie": true
+     "rookie": true,
+     "starterPts": 0.0
+    },
+    {
+     "id": "17497",
+     "name": "Carnell Tate",
+     "pos": "WR",
+     "nfl": "TEN",
+     "espn": "4871023",
+     "team": "0008",
+     "pts": 77.3,
+     "starts": 0,
+     "ppg": 0,
+     "salary": 12.0,
+     "contract": "1/5",
+     "rookie": true,
+     "starterPts": 0.0
     }
    ]
   },
@@ -1802,7 +1941,7 @@
    ]
   }
  ],
- "generated": "2026-11-16T17:49:16+00:00",
+ "generated": "2026-11-16T20:04:10+00:00",
  "basis": {
   "throughWeek": 8,
   "teams": [

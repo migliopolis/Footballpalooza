@@ -16,7 +16,7 @@ window.FBPStats = (function () {
   const ab = t => String(FBPU.nflAbbr(t || '')).toLowerCase();
   const logo = t => t ? `<img class="st-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${ab(t)}.png" alt="" loading="lazy">` : '';
   const HC = { N: 'nuke', H: 'hot', C: 'cold', B: 'bust', W: 'wp' };
-  const SHORT = { '1st Team': '1st', '2nd Team': '2nd', 'Top Waiver': 'Waiver', 'High Game': 'High', 'Worst Contract': 'Worst $', 'Best Value': 'Value', 'Bench Points': 'Bench' };
+  const SHORT = { '1st Team': '1st', '2nd Team': '2nd', 'Rookie Team': 'Rookie', 'Top Waiver': 'Waiver', 'High Game': 'High', 'Worst Contract': 'Worst $', 'Best Value': 'Value', 'Bench Points': 'Bench' };
   // the Show menu: FBP points, or an NFL box-score stat by week (data/stats-detail.json, from nflverse), grouped, and
   // only the groups that fit the position picked
   const SG = [['Passing', [['att', 'Pass attempts', 'Att'], ['cmp', 'Completions', 'Cmp'], ['pyd', 'Passing yards', 'Pass yds'], ['ptd', 'Passing TDs', 'Pass TD'], ['int', 'Interceptions', 'INT'], ['pay', 'Passing air yards', 'Air yds'], ['sk', 'Sacks taken', 'Sacks']]],

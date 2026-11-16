@@ -39,7 +39,7 @@
   const NUKE = { QB: 35, RB: 30, WR: 30, TE: 25, DEF: 25 };
   // a player's photo with his tier on it (used by the Scoreboard and Players)
   // All-FBP 1st or 2nd Team this season: a gold or silver photo (FBP.medal styles, site.css)
-  const medal = id => { const L = (honors && honors.p[id]) || []; return L.some(c => c.l === '1st Team') ? ' m-gold' : L.some(c => c.l === '2nd Team') ? ' m-silver' : ''; };
+  const medal = id => { const L = (honors && honors.p[id]) || []; return L.some(c => c.l === '1st Team') ? ' m-gold' : L.some(c => c.l === '2nd Team') ? ' m-silver' : L.some(c => c.l === 'Rookie Team') ? ' m-rook' : ''; };
   function photoHtml(p, wk, fid) {
     const tr = tier(p, wk), ph = photo(p.id), out = dnp(p);
     // inactive: the photo goes grey with a red DNP rubber stamp across it
@@ -114,7 +114,7 @@
   function readHonors(j) {
     const h = { p: {}, t: {}, potw: {} }, add = (m, id, c) => { if (id) (m[id] = m[id] || []).push(c); };
     const af = (j && j.allFbp) || {};
-    [['first', '1st Team', 'gold'], ['second', '2nd Team', 'silver']].forEach(([k, l, c]) =>
+    [['first', '1st Team', 'gold'], ['second', '2nd Team', 'silver'], ['rookie', 'Rookie Team', 'rook']].forEach(([k, l, c]) =>
       (af[k] || []).forEach(x => x.player && add(h.p, x.player.id, { l, c, title: `All-FBP ${l}` })));
     ((j && j.awards) || []).forEach(a => {
       if (P_AWARDS[a.key] && (a.list || [])[0]) add(h.p, a.list[0].id, { l: P_AWARDS[a.key][0], c: P_AWARDS[a.key][1], title: `${a.title}: ${a.why}` });
@@ -131,7 +131,7 @@
     honors = h;
   }
   // award chips carry a short label too, for the compact view (1st Team → 1st)
-  const CHIP_SHORT = { '1st Team': '1st', '2nd Team': '2nd', 'Top Waiver': 'Waiver', 'High Game': 'High', 'Worst Contract': 'Worst $', 'Best Value': 'Value', 'Bench Points': 'Bench' };
+  const CHIP_SHORT = { '1st Team': '1st', '2nd Team': '2nd', 'Rookie Team': 'Rookie', 'Top Waiver': 'Waiver', 'High Game': 'High', 'Worst Contract': 'Worst $', 'Best Value': 'Value', 'Bench Points': 'Bench' };
   const chips = list => (list || []).map(c => `<span class="lv-af ${c.c}" title="${c.title.replace(/"/g, '&quot;')}"><span class="cf">${c.l}</span><span class="cs">${CHIP_SHORT[c.l] || c.l}</span></span>`).join('');
   // compact view: a whole matchup on one phone screen (photo, name, short chip and points only), saved on this device
   let compact = false; try { compact = localStorage.getItem('fbp-sb-compact') === '1'; } catch (e) {}

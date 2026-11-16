@@ -2149,6 +2149,9 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
   --ring-gold:0 0 0 2px #d4a72c,0 0 0 3px #8a6416;
   --ring-silver:0 0 0 2px #b9c0c8,0 0 0 3px #6f7883;
   --ring-diamond:0 0 0 2px #f2fbff,0 0 0 3px #8fb3c8,0 0 10px 1px rgba(150,215,255,.65);
+  /* All-FBP Rookie Team: emerald */
+  --med-rook:radial-gradient(circle at 30% 25%,#effff4 0,#9fe3b4 28%,#3fae6a 58%,#1d6b3d 85%,#6fcf92 100%);
+  --ring-rook:0 0 0 2px #3fb26c,0 0 0 3px #1d6b3d;
 }
 .m-gold:not(.t-nuke):not(.t-bust){background:var(--med-gold)!important}
 .m-silver:not(.t-nuke):not(.t-bust){background:var(--med-silver)!important}
@@ -3239,3 +3242,15 @@ img.ovbg{background:var(--ovg)}
 .lv-ph.def.t-hot::after{background:var(--dc,#e3e8ee)}
 /* the starting lineup's block gets softly rounded top (QB) and bottom (DEF) corners */
 .lv-fxw{border-radius:12px;overflow:hidden}
+
+
+/* All-FBP Rookie Team: an emerald photo and ring, chip and card accents */
+.m-rook:not(.t-nuke):not(.t-bust){background:var(--med-rook)!important}
+.m-rook{box-shadow:var(--ring-rook)!important}
+.lv-ph.t-hot.m-rook::after{background:var(--med-rook)}
+.lv-ph.t-nuke.m-rook{box-shadow:var(--ring-rook),0 0 10px 2px rgba(255,90,0,.55)!important}
+.lv-ph.m-rook img{border-radius:50%}
+[data-med="rook"]{--med:var(--med-rook);box-shadow:var(--ring-rook)!important}
+.lv-af.rook,.ro-chip.rook{background:#2f9e5e;color:#fff}
+.aw-card.rook .aw-slot{color:#2f9e5e}
+.aw-note{font-size:.78rem;color:var(--muted);border-left:3px solid #2f9e5e;padding:4px 0 4px 10px;margin:-4px 0 10px}
