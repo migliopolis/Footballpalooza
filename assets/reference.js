@@ -71,13 +71,15 @@ window.FBPRef = (() => {
   const pct = v => (v * 100).toFixed(1) + '%';
   const nm = (fr, y) => { const s = y && (D.franchise_seasons[fr] || []).find(x => x.year === y); return s ? s.name : D.franchises[fr] || fr; };
   const person = n => { n = (n || '').trim(); const i = n.indexOf(','); return i > 0 ? `${n.slice(i + 1).trim()} ${n.slice(0, i).trim()}` : n; };
-  const logo = fr => { const t = X.teams[fr]; return t && t.logo ? `<img src="${t.logo}" alt="" loading="lazy">` : ''; };
+  // a team's logo; with a season (yr), it's that season's logo: the gold champion outline goes on it only if the team won
+  // the title that year (site.js champMark)
+  const logo = (fr, yr) => { const t = X.teams[fr]; return t && t.logo ? `<img src="${t.logo}" alt="" loading="lazy"${yr ? ` data-fr="${fr}" data-yr="${yr}"` : ''}>` : ''; };
   // a team, linked to its franchise page, under the name it used that season
   const tl = (fr, y, label) => `<a class="rf-tm" href="#reference/f-${fr}">${X.chip(fr, { name: label || nm(fr, y) })}</a>`;
   // a stat tile's team: its logo, big and pushed off the bottom-right corner so only the top-left quarter shows
   // per-logo tweaks [size, how far off the corner]: wide logos with lots of empty space need more showing
   const TILE_FIT = { '0009': [1, 0.2, 0.4], '0008': [1, 0.25, 0.3] };   // [size, off the right edge, off the bottom edge]
-  const tileLogo = fr => { const t = fr && X.teams[fr], f = TILE_FIT[fr]; return t && t.logo ? `<img class="rf-tlogo" src="${t.logo}" alt="" loading="lazy"${f ? ` style="--tl:${f[0]};--tlx:${f[1]};--tly:${f[2]}"` : ''}>` : ''; };
+  const tileLogo = (fr, yr) => { const t = fr && X.teams[fr], f = TILE_FIT[fr]; return t && t.logo ? `<img class="rf-tlogo" src="${t.logo}" alt="" loading="lazy"${yr ? ` data-fr="${fr}" data-yr="${yr}"` : ''}${f ? ` style="--tl:${f[0]};--tlx:${f[1]};--tly:${f[2]}"` : ''}>` : ''; };
   // the tile in the team's colors (same rule as the franchise banner: very light primaries swap with the secondary)
   const tileStyle = fr => {
     const t = fr && X.teams[fr]; if (!t || !t.primary) return '';
@@ -88,7 +90,7 @@ window.FBPRef = (() => {
     return ` style="--tile-bg:${bg};--tile-fg:${fg};--tile-num:${num}"`;
   };
   const frByName = n => Object.keys(D.franchises).find(f => D.franchises[f] === n);
-  const lgCell = fr => `<td class="lg">${logo(fr)}</td>`;
+  const lgCell = (fr, yr) => `<td class="lg">${logo(fr, yr)}</td>`;
   const nameCell = (fr, y, label) => `<td class="t"><a class="rf-nm" href="#reference/f-${fr}">${esc(label || nm(fr, y))}</a></td>`;
   const champOf = y => D.championships[y] || D.championships[String(y)];
   const badge = (fr, y) => { const c = champOf(y); return c && c.champion === fr ? '<span class="rf-badge gold" title="Champion">🏆</span>' : c && c.runnerup === fr ? '<span class="rf-badge">2nd</span>' : ''; };
@@ -168,7 +170,7 @@ window.FBPRef = (() => {
         <div class="card rf-tile"><span>Seasons</span><b>${years().length + PRE().length}</b><small>${firstYear()}–${D.meta.current_year}</small></div>
         <div class="card rf-tile${most.length === 1 ? ' lg tm' : ''}"${most.length === 1 ? tileStyle(frByName(most[0][0])) : ''}>${most.length === 1 ? tileLogo(frByName(most[0][0])) : ''}<span>Most titles</span><b>${titles[0][1]}</b><small>${most.map(t => esc(t[0])).join(', ')}</small></div>
         <div class="card rf-tile lg tm"${tileStyle(best.fr)}>${tileLogo(best.fr)}<span>Best all-time win%</span><b>${pct(best.pct)}</b><small>${esc(D.franchises[best.fr])}</small></div>
-        <div class="card rf-tile lg tm"${tileStyle(hi.franchise)}>${tileLogo(hi.franchise)}<span>Highest score</span><b>${n1(hi.score)}</b><small>${esc(hi.name)}, ${hi.year} wk ${hi.week}</small></div>
+        <div class="card rf-tile lg tm"${tileStyle(hi.franchise)}>${tileLogo(hi.franchise, hi.year)}<span>Highest score</span><b>${n1(hi.score)}</b><small>${esc(hi.name)}, ${hi.year} wk ${hi.week}</small></div>
       </section>
       <div class="grid2">
         <section><h2 class="sec">Overall records <small>${firstYear()}–${D.meta.current_year}, regular season</small></h2>
@@ -176,8 +178,8 @@ window.FBPRef = (() => {
           ${rows.map(r => `<tr>${lgCell(r.fr)}${nameCell(r.fr)}<td>${rec(r.w, r.l, r.t)}</td><td>${pct(r.pct)}</td><td>${r.titles ? '🏆 ' + r.titles : '—'}</td><td>${r.seconds || '—'}</td></tr>`).join('')}
           </tbody></table></div>${PRE().length ? '<p class="rf-foot">Records skip 2017–2018 (not on record). Titles and 2nds count every year.</p>' : ''}</section>
         <section><h2 class="sec">Champions</h2><div class="card rf-champs">
-          ${champs.map(cy => { const c = D.championships[cy]; return `<a class="rf-champ" href="#reference/s-${cy}"><span class="yr">${cy}</span>${logo(c.champion) || '<i></i>'}<span class="who"><b>${esc(nm(c.champion, +cy))}</b><small>def. ${esc(nm(c.runnerup, +cy))} · ${esc(c.score)}</small></span></a>`; }).join('')}
-          ${PRE().map(x => `<div class="rf-champ"><a class="yr" href="#reference/s-${x.year}">${x.year}</a>${x.champion.franchise ? logo(x.champion.franchise) : '<i></i>'}<span class="who"><b>${x.champion.franchise ? `<a class="rf-nm" href="#reference/f-${x.champion.franchise}">${esc(x.champion.name)}</a>` : esc(x.champion.name)} ${NP}</b><small>${x.title_game ? `def. ${esc(x.runnerup.name)} · ${esc(x.title_game.score)}` : `2nd ${esc(x.runnerup.name)} · 3rd ${esc(x.third.name)}`}</small></span></div>`).join('')}
+          ${champs.map(cy => { const c = D.championships[cy]; return `<a class="rf-champ" href="#reference/s-${cy}"><span class="yr">${cy}</span>${logo(c.champion, cy) || '<i></i>'}<span class="who"><b>${esc(nm(c.champion, +cy))}</b><small>def. ${esc(nm(c.runnerup, +cy))} · ${esc(c.score)}</small></span></a>`; }).join('')}
+          ${PRE().map(x => `<div class="rf-champ"><a class="yr" href="#reference/s-${x.year}">${x.year}</a>${x.champion.franchise ? logo(x.champion.franchise, x.year) : '<i></i>'}<span class="who"><b>${x.champion.franchise ? `<a class="rf-nm" href="#reference/f-${x.champion.franchise}">${esc(x.champion.name)}</a>` : esc(x.champion.name)} ${NP}</b><small>${x.title_game ? `def. ${esc(x.runnerup.name)} · ${esc(x.title_game.score)}` : `2nd ${esc(x.runnerup.name)} · 3rd ${esc(x.third.name)}`}</small></span></div>`).join('')}
         </div></section>
       </div>
       <section><h2 class="sec">Franchises</h2><div class="rf-teams">
@@ -419,7 +421,7 @@ window.FBPRef = (() => {
     return head('Seasons') + nav('#reference/seasons') + `<section class="rf-seasons">${years().reverse().map(y => {
       const c = champOf(y);
       return `<a class="card rf-season" href="#reference/s-${y}"><b>${y}</b>${c ? `${X.chip(c.champion, { name: nm(c.champion, y) })}<small>def. ${esc(nm(c.runnerup, y))} ${esc(c.score)}</small>` : `<small>In progress${y === D.meta.current_year && D.meta.current_week ? ` · through week ${D.meta.current_week}` : ''}</small>`}</a>`;
-    }).join('')}${PRE().map(x => `<a class="card rf-season pre" href="#reference/s-${x.year}"><b>${x.year} ${NP}</b><span class="rf-pre1">🏆 ${x.champion.franchise ? logo(x.champion.franchise) : ''}${esc(x.champion.name)}</span><small>${x.title_game ? `def. ${esc(x.runnerup.name)} ${esc(x.title_game.score)}` : `2nd ${esc(x.runnerup.name)} · 3rd ${esc(x.third.name)}`}</small></a>`).join('')}</section>`;
+    }).join('')}${PRE().map(x => `<a class="card rf-season pre" href="#reference/s-${x.year}"><b>${x.year} ${NP}</b><span class="rf-pre1">🏆 ${x.champion.franchise ? logo(x.champion.franchise, x.year) : ''}${esc(x.champion.name)}</span><small>${x.title_game ? `def. ${esc(x.runnerup.name)} ${esc(x.title_game.score)}` : `2nd ${esc(x.runnerup.name)} · 3rd ${esc(x.third.name)}`}</small></a>`).join('')}</section>`;
   }
 
   function game(g, y, lbl) {
@@ -437,14 +439,14 @@ window.FBPRef = (() => {
   function pagePre(x) {
     const y = x.year, c = x.champion;
     const tm = (t, extra = '') => `${t.franchise ? `<a class="rf-nm" href="#reference/f-${t.franchise}">${esc(t.name)}</a>` : esc(t.name)}${extra}<small class="rf-by">${esc(t.owner)}</small>`;
-    const side = (o, win) => `<div class="card rf-box${win ? ' win' : ''}"><div class="rf-boxh">${o.franchise ? logo(o.franchise) : ''}<span>${tm(o)}</span><b>${n1(o.score)}</b></div>
+    const side = (o, win) => `<div class="card rf-box${win ? ' win' : ''}"><div class="rf-boxh">${o.franchise ? logo(o.franchise, y) : ''}<span>${tm(o)}</span><b>${n1(o.score)}</b></div>
       <table class="tbl rf-t"><tbody>${o.lineup.map(p => `<tr><td class="rf-pos"><span class="pos ${esc(p.pos).replace('/', '')}">${esc(p.pos)}</span></td><td class="t">${esc(p.player)}<small class="rf-by">${esc(p.nfl)} ${esc(p.opp)} · ${esc(p.result)}</small></td><td>${n1(p.pts)}</td></tr>`).join('')}</tbody></table></div>`;
-    const top3 = ['champion', 'runnerup', 'third'].map((k, i) => `<div class="rf-top3row"><span class="n">${i + 1}</span>${x[k].franchise ? logo(x[k].franchise) : '<i></i>'}<span>${tm(x[k])}</span></div>`).join('');
+    const top3 = ['champion', 'runnerup', 'third'].map((k, i) => `<div class="rf-top3row"><span class="n">${i + 1}</span>${x[k].franchise ? logo(x[k].franchise, y) : '<i></i>'}<span>${tm(x[k])}</span></div>`).join('');
     return head('Seasons') + nav('#reference/seasons') +
-      yearNav(y, `<span class="ch" title="${esc(c.name)}, champions">${c.franchise ? logo(c.franchise) : esc(c.name)}🏆</span>${NP}`) +
+      yearNav(y, `<span class="ch" title="${esc(c.name)}, champions">${c.franchise ? logo(c.franchise, y) : esc(c.name)}🏆</span>${NP}`) +
       (x.standings ? `<section><h2 class="sec">Final standings <small>non-PPR · finish includes the playoffs</small></h2>
         <div class="card tbl-wrap rf-pre-st"><table class="tbl rf-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th></tr></thead><tbody>
-        ${x.standings.map(s => `<tr><td>${s.place}</td><td class="lg">${s.franchise ? logo(s.franchise) : ''}</td><td class="t">${tm(s, s.place === 1 ? ' <span class="rf-badge gold">🏆</span>' : s.place === 2 ? '<span class="rf-badge">2nd</span>' : '')}</td><td>${rec(s.w, s.l, s.t)}</td></tr>`).join('')}
+        ${x.standings.map(s => `<tr><td>${s.place}</td><td class="lg">${s.franchise ? logo(s.franchise, y) : ''}</td><td class="t">${tm(s, s.place === 1 ? ' <span class="rf-badge gold">🏆</span>' : s.place === 2 ? '<span class="rf-badge">2nd</span>' : '')}</td><td>${rec(s.w, s.l, s.t)}</td></tr>`).join('')}
         </tbody></table></div></section>`
         : `<section><h2 class="sec">Top three</h2><div class="card rf-top3">${top3}</div><p class="rf-foot">Full standings for ${y} aren’t on record.</p></section>`) +
       (x.title_game ? `<section><h2 class="sec">Championship <small>${esc(x.title_game.score)}</small></h2><div class="rf-boxes">${side(x.title_game.winner, true)}${side(x.title_game.loser, false)}</div></section>`
@@ -464,10 +466,10 @@ window.FBPRef = (() => {
     else if (tab === 'auction') body = auctionTable(y);
     else body = resultsHtml(y, wk);
     return head('Seasons') + nav('#reference/seasons') +
-      yearNav(y, c ? `<span class="ch" title="${esc(nm(c.champion, y))}, champions">${logo(c.champion) || esc(nm(c.champion, y))}🏆</span>` : live ? '<small>in progress</small>' : '') + `
+      yearNav(y, c ? `<span class="ch" title="${esc(nm(c.champion, y))}, champions">${logo(c.champion, y) || esc(nm(c.champion, y))}🏆</span>` : live ? '<small>in progress</small>' : '') + `
       <section><h2 class="sec">${live ? 'Standings' : 'Final standings'}${live && D.meta.current_week ? ` <small>through week ${D.meta.current_week}</small>` : ''}</h2>
         <div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Team</th><th>W-L-T</th><th>PF</th><th>PA</th><th>All-play</th></tr></thead><tbody>
-        ${rows.map(s => `<tr><td>${s.rank || '—'}</td>${lgCell(s.fr)}<td class="t"><a class="rf-nm" href="#reference/f-${s.fr}">${esc(s.name)}</a>${badge(s.fr, y)}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`).join('')}
+        ${rows.map(s => `<tr><td>${s.rank || '—'}</td>${lgCell(s.fr, y)}<td class="t"><a class="rf-nm" href="#reference/f-${s.fr}">${esc(s.name)}</a>${badge(s.fr, y)}</td><td>${rec(s.w, s.l, s.t)}</td><td>${n1(s.pf)}</td><td>${n1(s.pa)}</td><td>${esc(s.all_play || '—')}</td></tr>`).join('')}
         </tbody></table></div></section>
       <section><h2 class="sec">Playoffs</h2>${br ? `<div class="card bracket rf-bracket">
         <div class="round"><h3>Round 1 · week ${br.round1_week}</h3>${br.round1_games.map(g => game(g, y)).join('')}<p class="rf-foot">Byes: ${br.byes.map(b => esc(nm(b, y))).join(', ')}</p></div>
@@ -496,7 +498,7 @@ window.FBPRef = (() => {
     if (!AB) loadAB(X.rerender);
     const B = AB ? bidsFor(y) : null;
     const total = list.reduce((s, p) => s + (p.price || 0), 0);
-    const team = fr => `<span class="ab-tm">${logo(fr)}<span>${esc(nm(fr, y))}</span></span>`;
+    const team = fr => `<span class="ab-tm">${logo(fr, y)}<span>${esc(nm(fr, y))}</span></span>`;
     const detail = (p, b) => {
       if (!b) return `<p class="ab-note">${B ? 'No bid log for this player.' : 'Loading bids…'}</p>`;
       if (b.n <= 1) return `<p class="ab-note">Nominated by ${esc(nm(b.nom, y))} at $${b.bids[0].v}. Nobody else bid.</p>`;
@@ -507,7 +509,7 @@ window.FBPRef = (() => {
     return `<p class="rf-foot" style="margin:0 0 8px">${list.length} players won · $${total} spent · $${(total / list.length).toFixed(2)} average · tap a player for the bidding</p>
       <div class="card tbl-wrap"><table class="tbl rf-t ab-t"><thead><tr><th>#</th><th class="lg"><span class="sr">Logo</span></th><th class="t">Player</th><th>Pos</th><th>$</th></tr></thead><tbody>
       ${list.map((p, i) => { const b = B && (B[`${p.player_id}|${p.franchise}|${p.price}`] || B[p.player_id]);
-        return `<tr data-ab tabindex="0" role="button" aria-expanded="false"><td>${i + 1}</td>${lgCell(p.franchise)}<td class="t">${esc(person(p.player_name) || 'Player #' + p.player_id)}<small class="rf-by">${esc(nm(p.franchise, y))}</small></td><td>${esc(p.player_pos || '')}</td><td class="ab-pr">$${p.price != null ? p.price : '—'}<i class="car" aria-hidden="true"></i></td></tr>
+        return `<tr data-ab tabindex="0" role="button" aria-expanded="false"><td>${i + 1}</td>${lgCell(p.franchise, y)}<td class="t">${esc(person(p.player_name) || 'Player #' + p.player_id)}<small class="rf-by">${esc(nm(p.franchise, y))}</small></td><td>${esc(p.player_pos || '')}</td><td class="ab-pr">$${p.price != null ? p.price : '—'}<i class="car" aria-hidden="true"></i></td></tr>
         <tr class="ab-det" hidden><td colspan="5">${detail(p, b)}</td></tr>`; }).join('')}
       </tbody></table></div>`;
   }
@@ -534,21 +536,21 @@ window.FBPRef = (() => {
           <th data-sort="num" tabindex="0">#</th><th class="lg"><span class="sr">Logo</span></th><th class="t" data-sort="txt" tabindex="0">Team</th>
           <th data-sort="num" tabindex="0" data-first="desc">Year</th><th data-sort="num" tabindex="0" data-first="desc" aria-sort="descending">PPG</th>
           <th data-sort="num" tabindex="0" data-first="desc" title="Sorts by win percentage">Record</th><th data-sort="num" tabindex="0" data-first="desc">GP</th><th data-sort="num" tabindex="0" data-first="desc">Points</th>
-        </tr></thead><tbody>${rows.map(r => `<tr${r.in_progress ? ' class="rf-live"' : ''}><td>${r.rank}</td>${lgCell(r.franchise)}<td class="t" data-v="${esc(r.team)}">${r.franchise ? `<a class="rf-nm" href="#reference/f-${r.franchise}">${esc(r.team)}</a>` : esc(r.team)}${r.champion ? ' <span class="rf-badge gold">🏆</span>' : ''}${r.in_progress ? ' <span class="rf-badge">in progress</span>' : ''}</td>
+        </tr></thead><tbody>${rows.map(r => `<tr${r.in_progress ? ' class="rf-live"' : ''}><td>${r.rank}</td>${lgCell(r.franchise, r.year)}<td class="t" data-v="${esc(r.team)}">${r.franchise ? `<a class="rf-nm" href="#reference/f-${r.franchise}">${esc(r.team)}</a>` : esc(r.team)}${r.champion ? ' <span class="rf-badge gold">🏆</span>' : ''}${r.in_progress ? ' <span class="rf-badge">in progress</span>' : ''}</td>
           <td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td><b>${r.ppg.toFixed(2)}</b></td><td data-v="${pct(r)}">${rec(r)}</td><td>${r.games != null ? r.games : parseInt(r.record)}</td><td>${n1(r.total_pts)}</td></tr>`).join('')}</tbody></table></div>`;
     }
     else if (b === 'playoff') body = `<h2 class="sec">Best playoff runs <small>points per game, two playoff games or more</small></h2>` + tbl(['#', 'lg', '!Team', 'Year', 'PPG', 'W-L', 'Points'],
-      L.playoff_ppg_top15.map(r => `<tr><td>${r.rank}</td>${lgCell(r.franchise)}<td class="t">${r.franchise ? `<a class="rf-nm" href="#reference/f-${r.franchise}">${esc(r.team)}</a>` : esc(r.team)}${r.champion ? ' <span class="rf-badge gold">🏆</span>' : ''}</td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td><b>${r.ppg.toFixed(2)}</b></td><td>${esc(r.record)}</td><td>${n1(r.total_pts)}</td></tr>`));
+      L.playoff_ppg_top15.map(r => `<tr><td>${r.rank}</td>${lgCell(r.franchise, r.year)}<td class="t">${r.franchise ? `<a class="rf-nm" href="#reference/f-${r.franchise}">${esc(r.team)}</a>` : esc(r.team)}${r.champion ? ' <span class="rf-badge gold">🏆</span>' : ''}</td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td><b>${r.ppg.toFixed(2)}</b></td><td>${esc(r.record)}</td><td>${n1(r.total_pts)}</td></tr>`));
     else if (b === 'games') {
       const g = (title, list) => `<h2 class="sec">${title}</h2>` + tbl(['#', 'lg', '!Team', 'Score', 'When', '!Opponent', ''],
-        list.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.score)}</b></td><td>${yw(r)}</td><td class="t">${esc(r.opp_name)}</td><td>${r.result}</td></tr>`));
+        list.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise, r.year)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.score)}</b></td><td>${yw(r)}</td><td class="t">${esc(r.opp_name)}</td><td>${r.result}</td></tr>`));
       body = g('Highest scores', L.top_single_game_scores) + '<div style="height:18px"></div>' + g('Lowest scores', L.low_single_game_scores);
     } else if (b === 'margins') {
       const m = (title, list) => `<h2 class="sec">${title}</h2>` + tbl(['#', 'lg', '!Winner', 'Margin', 'Score', '!Loser', 'When'],
-        list.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.winner)}${nameCell(r.winner, null, r.winner_name)}<td><b>${n1(r.margin)}</b></td><td>${n1(r.winner_score)}–${n1(r.loser_score)}</td><td class="t">${esc(r.loser_name)}</td><td>${yw(r)}</td></tr>`));
+        list.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.winner, r.year)}${nameCell(r.winner, null, r.winner_name)}<td><b>${n1(r.margin)}</b></td><td>${n1(r.winner_score)}–${n1(r.loser_score)}</td><td class="t">${esc(r.loser_name)}</td><td>${yw(r)}</td></tr>`));
       body = m('Biggest blowouts', L.biggest_blowouts) + '<div style="height:18px"></div>' + m('Closest finishes', L.closest_games);
     } else body = `<h2 class="sec">Best two-game stretches <small>back-to-back games, any week</small></h2>` + tbl(['#', 'lg', '!Team', 'Total', 'Year', 'Games'],
-      L.top_two_game_stretches.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.total)}</b></td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td>wk ${r.week_a} ${n1(r.score_a)} + wk ${r.week_b} ${n1(r.score_b)}</td></tr>`));
+      L.top_two_game_stretches.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise, r.year)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.total)}</b></td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td>wk ${r.week_a} ${n1(r.score_a)} + wk ${r.week_b} ${n1(r.score_b)}</td></tr>`));
     return head('Records') + nav('#reference/records') + (PRE().length ? '<p class="rf-note">P-PPR is on, but there are no game scores before 2019, so records cover 2019 on. See the blind spots on the Reference home.</p>' : '') + sub(BOARDS.map(([k, l]) => [`#reference/records/${k}`, l]), `#reference/records/${b}`, false, 'rf-grid') + `<section>${body}</section>`;
   }
 
@@ -586,7 +588,7 @@ window.FBPRef = (() => {
     const years = `<nav class="rf-weeks py-years" aria-label="Season">${S.map(s => `<a href="#reference/payroll/${s.year}"${s.year === Y.year ? ' aria-current="page"' : ''}>${s.year}</a>`).join('')}</nav>`;
     const contracts = `<section><h2 class="sec">Biggest contracts <small>${Y.year} · $${Y.total.toLocaleString()} paid · ${Y.over40} deals of $40+</small></h2>${years}
       <div class="card tbl-wrap"><table class="tbl rf-t py-t"><thead><tr><th>#</th><th class="t">Player</th><th class="lg"><span class="sr">Team</span></th><th>Salary</th><th class="t hide-sm">How</th><th>${Y.year >= 2021 ? 'Pts' : ''}</th></tr></thead><tbody>
-      ${Y.top.map((p, i) => `<tr><td>${i + 1}</td><td class="t">${who(p)}</td><td class="lg">${logo(p.fr)}</td><td><b>$${p.sal}</b></td><td class="t hide-sm">${esc(p.how)}</td><td>${p.pts != null ? n1(p.pts) : '—'}</td></tr>`).join('')}
+      ${Y.top.map((p, i) => `<tr><td>${i + 1}</td><td class="t">${who(p)}</td><td class="lg">${logo(p.fr, Y.year)}</td><td><b>$${p.sal}</b></td><td class="t hide-sm">${esc(p.how)}</td><td>${p.pts != null ? n1(p.pts) : '—'}</td></tr>`).join('')}
       </tbody></table></div>${Y.year === PAY.current ? '<p class="rf-foot">Season in progress: starter points so far.</p>' : ''}</section>`;
     const vlist = (title, sub2, list, good) => `<section><h2 class="sec">${title} <small>${sub2}</small></h2><div class="card py-v">
       ${list.slice(0, 8).map(p => `<div class="py-vr">${who(p)}<span class="py-vm"><b class="${good ? 'up' : 'dn'}">${p.per.toFixed(1)}</b><small>pts per $</small></span><span class="py-vd">$${p.sal} · ${n1(p.pts)} pts<small>${p.year} ${lg(p.fr)}</small></span></div>`).join('')}</div></section>`;
@@ -727,7 +729,7 @@ window.FBPRef = (() => {
       const st = +x.video.start || 0;
       return `<div class="hof-vid" data-yt="${v}" data-start="${st}"><button type="button" class="hof-play" aria-label="Play the clip"><img src="https://i.ytimg.com/vi/${v}/hqdefault.jpg" alt="" loading="lazy"><span class="hof-pbtn" aria-hidden="true"></span></button>
         <a class="hof-yt" href="https://youtu.be/${v}${st ? '?t=' + st : ''}" target="_blank" rel="noopener">Watch on YouTube</a></div>`; };
-    const card = x => `<article class="card hof-card">${frs(x).length ? `<span class="hof-lg${frs(x).length > 1 ? ' two' : ''}">${frs(x).map(f => logo(f)).join('')}</span>` : ''}<div>
+    const card = x => `<article class="card hof-card">${frs(x).length ? `<span class="hof-lg${frs(x).length > 1 ? ' two' : ''}">${frs(x).map(f => logo(f, x.year)).join('')}</span>` : ''}<div>
         <span class="hof-k">Class of ${esc(x.class)}</span>
         <b class="hof-t">${esc(x.title)}</b>${x.subtitle ? `<small class="hof-s">${x.franchise ? `<a href="#reference/f-${x.franchise}">${esc(x.subtitle)}</a>` : x.category === 'game' && x.year && x.week ? `<a href="#reference/s-${x.year}">${esc(x.subtitle)}</a>` : esc(x.subtitle)}</small>` : ''}
         ${x.stat ? `<span class="hof-stat">${esc(x.stat)}</span>` : ''}${x.blurb ? `<p class="hof-b">${esc(x.blurb)}</p>` : ''}${vid(x)}</div></article>`;
@@ -754,7 +756,7 @@ window.FBPRef = (() => {
       // every FBP team he started for that season, in order; a later team tucks slightly over the first
       // photo badges: the team he started the season with, then the team he finished with tucked over it
       const badges = teams.map((fr, i) => { const lg = (X.teams[fr] || {}).logo; return lg ? `<img class="aw-badge" src="${lg}" alt="" loading="lazy" title="${esc(nm(fr, e.year))}" style="right:${(teams.length - 1 - i) * 22 - 6}px;z-index:${i + 1}">` : ''; }).join('');
-      const names = teams.length > 1 ? teams.map(fr => `<a href="#reference/f-${fr}">${esc(nm(fr, e.year))}</a>`).join(' → ') : `${logo(teams[0])}<a href="#reference/f-${teams[0]}">${esc(nm(teams[0], e.year))}</a>`;
+      const names = teams.length > 1 ? teams.map(fr => `<a href="#reference/f-${fr}">${esc(nm(fr, e.year))}</a>`).join(' → ') : `${logo(teams[0], e.year)}<a href="#reference/f-${teams[0]}">${esc(nm(teams[0], e.year))}</a>`;
       const tags = [e.champ ? `<span class="hof-tag champ" title="Won the ${e.year} FBP title${e.champTeam && teams.length > 1 ? ' with ' + esc(nm(e.champTeam, e.year)) : ''}">🏆 Champion</span>` : '',
         e.mvp ? `<span class="hof-tag mvp" title="Most starter points in ${e.year}">${e.year} MVP</span>` : '',
         e.titleMvp ? `<span class="hof-tag tmvp" title="The champion's top scorer in the ${e.year} title game${e.titlePts != null ? ': ' + n1(e.titlePts) + ' points' : ''}">Title game MVP</span>` : ''].join('');

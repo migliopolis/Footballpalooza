@@ -20,7 +20,9 @@ window.FBPAwards = (() => {
     FBPU.json('data/ovr.json').then(d => { MV = d && d.movers; if (A) rerender(); }).catch(() => {});
     if (!HOF) FBPU.json('data/hof-seasons.json').then(d => { HOF = new Set(((d && d.seasons) || []).map(x => x.id + ':' + x.year)); if (A) rerender(); }).catch(() => {});
   };
-  const tlogo = (id, cls = '') => { const t = X.teams[id]; return t && t.logo ? `<img class="${cls}" src="${t.logo}" alt="" loading="lazy">` : ''; };
+  // a past season's logos are that season's: the gold champion outline only on that year's champion (site.js champMark)
+  const yrAttr = id => S && S !== A && S.season ? ` data-fr="${id}" data-yr="${S.season}"` : '';
+  const tlogo = (id, cls = '') => { const t = X.teams[id]; return t && t.logo ? `<img class="${cls}" src="${t.logo}" alt="" loading="lazy"${yrAttr(id)}>` : ''; };
   const tname = id => X.nameOf(id);
   const media = () => window.FBP && FBP.media;
   // player photo from ESPN; defenses use their NFL logo; anything missing falls back to the FBP team logo
@@ -153,7 +155,7 @@ window.FBPAwards = (() => {
     // the lineup's FBP teams as a stack of logos, QB's team in front, each next one tucked behind
     const ps = t.filter(e => e.player);
     const names = `<span class="aw-stack" aria-label="${esc(ps.map(e => `${e.slot} ${e.player.name}`).join(', '))}">${ps.map((e, i) => { const tm = X.teams[e.player.team] || {};
-      return `<span class="aw-sl" style="z-index:${ps.length - i}" title="${esc(e.slot + ': ' + e.player.name + ' (' + tname(e.player.team) + ')')}">${tm.logo ? `<img src="${tm.logo}" alt="">` : esc(tm.abbr || '')}</span>`; }).join('')}</span>`;
+      return `<span class="aw-sl" style="z-index:${ps.length - i}" title="${esc(e.slot + ': ' + e.player.name + ' (' + tname(e.player.team) + ')')}">${tm.logo ? `<img src="${tm.logo}" alt=""${yrAttr(e.player.team)}>` : esc(tm.abbr || '')}</span>`; }).join('')}</span>`;
     return `<section class="aw-fold${open ? ' open' : ''}"><button type="button" class="aw-sum aw-tsum" data-aw-toggle="${key}" aria-expanded="${open}"><span class="aw-sumt"><h2 class="sec">${title}</h2><span class="aw-prev aw-names">${names}</span></span><i class="car" aria-hidden="true"></i></button>
       <div class="aw-body"${open ? '' : ' hidden'}>${html}</div></section>`;
   }

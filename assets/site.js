@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0256';
+  const VERSION = '0.0257';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -53,9 +53,27 @@
   const champOf = () => (state.now && state.now.champ) || null;
   const champChip = (id, label) => { const c = champOf(); return c && c.f === id ? `<span class="champ-chip" title="${c.year} FBP champion">🏆 ${label || 'Defending Champ'}</span>` : ''; };
   let champT = null;
+  // champions by season (data/reference.json, which the Reference pages already load): for logos tied to a season
+  let champYrs = null, champYrsAsked = false;
+  function loadChampYrs() {
+    if (champYrsAsked) return; champYrsAsked = true;
+    FBPU.json('data/reference.json').then(D => { if (!D) return; const m = {};
+      Object.entries(D.championships || {}).forEach(([y, c]) => { if (c && c.champion) m[y] = c.champion; });
+      (((D.pre2019 || {}).seasons) || []).forEach(x => { const f = x && x.champion && x.champion.franchise; if (f) m[x.year] = f; });
+      champYrs = m; champMark(); }).catch(() => {});
+  }
   function champMark() {
+    // a logo tied to a season (data-yr, data-fr): gold only if that team won the title that season
+    const seasonal = document.querySelectorAll('img[data-yr]');
+    if (seasonal.length) {
+      if (!champYrs) loadChampYrs();
+      else seasonal.forEach(im => { const won = champYrs[im.dataset.yr] === im.dataset.fr;
+        if (won && !im.classList.contains('fbp-champ')) { im.classList.add('fbp-champ'); if (!im.title) im.title = `${im.dataset.yr} FBP champion`; }
+        else if (!won && im.classList.contains('fbp-champ')) im.classList.remove('fbp-champ'); });
+    }
+    // everything else: the defending champion's logo, everywhere
     const c = champOf(), t = c && state.teams[c.f]; if (!t || !t.logo) return;
-    document.querySelectorAll('img').forEach(im => { if (im.getAttribute('src') === t.logo && !im.classList.contains('fbp-champ')) { im.classList.add('fbp-champ'); if (!im.title) im.title = `${c.year} FBP champion`; } });
+    document.querySelectorAll('img:not([data-yr])').forEach(im => { if (im.getAttribute('src') === t.logo && !im.classList.contains('fbp-champ')) { im.classList.add('fbp-champ'); if (!im.title) im.title = `${c.year} FBP champion`; } });
   }
   new MutationObserver(() => { clearTimeout(champT); champT = setTimeout(champMark, 60); }).observe(document.documentElement, { childList: true, subtree: true });
   window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), champ: () => champOf(), teams: () => state.teams });
@@ -874,7 +892,7 @@
   let tkCfg = { lines: 1, rows: [] };
   try { const sv = JSON.parse(localStorage.getItem('fbp-ticker-cfg') || 'null');
     if (sv && Array.isArray(sv.rows)) tkCfg = sv;
-    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0256
+    else { const old = JSON.parse(localStorage.getItem('fbp-ticker-sections') || 'null');   // settings saved before v0.0257
       if (old) tkCfg.rows = [Object.assign(tkDef(0), { order: old.order || [], off: old.off || [] })]; } } catch (e) {}
   const tkRow = i => (tkCfg.rows[i] = Object.assign(tkDef(i), tkCfg.rows[i] || {}));
   const tkOrder = i => { const ids = TK_SECS.map(x => x[0]), o = (tkRow(i).order || []).filter(k => ids.includes(k)); return o.concat(ids.filter(k => !o.includes(k))); };
