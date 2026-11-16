@@ -3235,3 +3235,5 @@ img.ovbg{background:var(--ovg)}
 .ra-gt th[data-ra-gsort]{cursor:pointer;white-space:nowrap}
 .ra-gt th[data-ra-gsort]:hover{color:var(--fg)}
 .ra-gt th[aria-sort="descending"],.ra-gt th[aria-sort="ascending"]{color:var(--fg)}
+/* a hot defense keeps its team-color circle inside the fire ring */
+.lv-ph.def.t-hot::after{background:var(--dc,#e3e8ee)}
