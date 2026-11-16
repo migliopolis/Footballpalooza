@@ -14,10 +14,10 @@ window.FBPU = (function () {
     LV: '#A5ACAF', LAC: '#0080C6', LAR: '#003594', MIA: '#008E97', MIN: '#4F2683', NE: '#002244', NO: '#D3BC8D', NYG: '#0B2265',
     NYJ: '#125740', PHI: '#004C54', PIT: '#FFB612', SF: '#AA0000', SEA: '#69BE28', TB: '#D50A0A', TEN: '#4B92DB', WSH: '#5A1414' };
   // the circle behind a defense's logo: one of the team's own colors that its logo sits well on
-  const DEFBG = { ARI: '#000000', ATL: '#A71930', BAL: '#9E7C0C', BUF: '#FFFFFF', CAR: '#101820', CHI: '#0B162A', CIN: '#FFFFFF', CLE: '#311D00',
-    DAL: '#041E42', DEN: '#002244', DET: '#B0B7BC', GB: '#203731', HOU: '#FFFFFF', IND: '#FFFFFF', JAX: '#101820', KC: '#FFFFFF',
-    LV: '#000000', LAC: '#002A5E', LAR: '#FFFFFF', MIA: '#FFFFFF', MIN: '#FFC62F', NE: '#FFFFFF', NO: '#101820', NYG: '#FFFFFF',
-    NYJ: '#FFFFFF', PHI: '#A5ACAF', PIT: '#FFFFFF', SF: '#B3995D', SEA: '#A5ACAF', TB: '#34302B', TEN: '#FFFFFF', WSH: '#FFB612' };
+  const DEFBG = { ARI: '#000000', ATL: '#A71930', BAL: '#FFFFFF', BUF: '#FFFFFF', CAR: '#101820', CHI: '#0B162A', CIN: '#FFFFFF', CLE: '#311D00',
+    DAL: '#041E42', DEN: '#002244', DET: '#B0B7BC', GB: '#203731', HOU: '#FFFFFF', IND: '#FFFFFF', JAX: '#101820', KC: '#E31837',
+    LV: '#000000', LAC: '#002A5E', LAR: '#FFD100', MIA: '#FFFFFF', MIN: '#4F2683', NE: '#FFFFFF', NO: '#101820', NYG: '#FFFFFF',
+    NYJ: '#FFFFFF', PHI: '#A5ACAF', PIT: '#FFFFFF', SF: '#B3995D', SEA: '#69BE28', TB: '#34302B', TEN: '#FFFFFF', WSH: '#FFB612' };
   const defBg = t => t ? DEFBG[nflAbbr(t)] || '' : '';
   const nflColor = t => t ? COL[nflAbbr(t)] || '' : '';
   // ' --tc:#xxxxxx;' for a style attribute: his FBP team's color (its primary, or its second color when the primary is
