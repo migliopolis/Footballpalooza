@@ -843,19 +843,32 @@
     nfl.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     return { week: wk, started: all.some(({ p }) => state(p) !== 'pre'), games, top, cold, nfl };
   }
-  // Beta: the lineups pull down like a window shade (eases out, overshoots a few pixels and settles back) and roll back
-  // up on close. Instant for anyone with Reduce Motion on.
+  // Beta: the lineups pull down like a window shade, softly: the shade eases down past its mark and settles back with
+  // a gentle spring, while the lineups inside unfold from the header (narrow and squashed toward it, then full size),
+  // a little like the old Mac genie. Closing folds them back up into the header. Instant with Reduce Motion on.
   function shade(det, on) {
-    if (det._anim) { det._anim.cancel(); det._anim = null; }
+    (det._anims || []).forEach(a => a.cancel()); det._anims = null;
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches || !det.animate;
     if (on) det.hidden = false;
     if (still) { det.hidden = !on; return; }
-    const h = det.scrollHeight, over = Math.min(14, Math.max(6, h * 0.02));
+    const h = det.scrollHeight, over = Math.min(18, Math.max(8, h * 0.025)), kids = [...det.children];
     det.style.overflow = 'hidden';
-    const a = det._anim = det.animate(on
-      ? [{ height: '0px', easing: 'cubic-bezier(.2,.75,.25,1)' }, { height: (h + over) + 'px', offset: 0.72, easing: 'cubic-bezier(.4,0,.4,1)' }, { height: h + 'px' }]
-      : [{ height: h + 'px' }, { height: '0px' }], { duration: on ? 460 : 260, easing: on ? 'linear' : 'cubic-bezier(.4,0,.8,.4)' });
-    a.onfinish = () => { det.style.overflow = ''; det._anim = null; if (!on) det.hidden = true; };
+    const ease = 'cubic-bezier(.33,.0,.2,1)', soft = 'cubic-bezier(.45,0,.55,1)';
+    const open = () => [
+      det.animate([{ height: '0px', easing: ease }, { height: (h + over) + 'px', offset: 0.6, easing: soft },
+        { height: (h - over * 0.35) + 'px', offset: 0.82, easing: soft }, { height: h + 'px' }], { duration: 820 }),
+      ...kids.map(k => k.animate([{ transform: 'scale(.62,.25)', opacity: 0, easing: ease },
+        { transform: 'scale(1.015,1.03)', opacity: 1, offset: 0.6, easing: soft },
+        { transform: 'scale(.997,.99)', offset: 0.82, easing: soft }, { transform: 'none', opacity: 1 }],
+        { duration: 820, transformOrigin: '50% 0' }))];
+    const close = () => [
+      det.animate([{ height: h + 'px' }, { height: (h + over * 0.4) + 'px', offset: 0.18 }, { height: '0px' }],
+        { duration: 480, easing: 'cubic-bezier(.5,0,.75,.2)' }),
+      ...kids.map(k => k.animate([{ transform: 'none', opacity: 1 }, { transform: 'scale(1.01,1.02)', offset: 0.18 },
+        { transform: 'scale(.6,.2)', opacity: 0 }], { duration: 480, easing: 'cubic-bezier(.5,0,.75,.2)' }))];
+    const A = det._anims = on ? open() : close();
+    kids.forEach(k => { k.style.transformOrigin = '50% 0'; });
+    A[0].onfinish = () => { det.style.overflow = ''; kids.forEach(k => { k.style.transformOrigin = ''; }); det._anims = null; if (!on) det.hidden = true; };
   }
   window.FBPLive = { render, feed };
 })();
