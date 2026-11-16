@@ -61,7 +61,14 @@
     if (fresh && /ruled out|(won'?t|will not|not expected to|unlikely to) return/i.test(i.note || '')) return true;
     return /^(Out|Injured Reserve)$/.test(i.status) && !!i.date && !!g.date && Date.parse(i.date) >= Date.parse(g.date); };
   // the projection to show and count: what he has once he's ruled out
+  // the projection shown under his points: before kickoff MFL's; while he plays, where he's headed (his points plus
+  // his projection for the time left, the same way the team total counts him); once it's over, MFL's pre-game number
+  // again for comparison. Hot, cold and bust are always judged against the pre-game projection.
   const projNow = (p, wk) => { if (ruledOut(p)) return +p.score || 0; const g = gameOf(p.id);
+    if (g && g.state === 'in' && p.score != null && !dnp(p)) { const pj = projOf(p.id, wk); if (pj == null) return null;
+      let left = p.gameSecondsRemaining != null && p.gameSecondsRemaining !== '' ? +p.gameSecondsRemaining : null;
+      if (left == null) { const [m, s] = String(g.clock || '0:00').split(':').map(Number); left = Math.max(0, (4 - (+g.period || 1)) * 900 + (m || 0) * 60 + (s || 0)); }
+      return (+p.score || 0) + pj * Math.min(1, left / 3600); }
     return g && g.state === 'post' && !dnp(p) ? projRaw(p.id, wk) : projOf(p.id, wk); };
   const PL_TAG = { nuke: 'Nuclear', hot: 'Hot', cold: 'Cold', bust: 'Bust' };
   function tier(p, wk) {
@@ -650,7 +657,7 @@
         const pj = projNow(p, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}${rzc}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
-          : n1(+p.score) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="MFL projection">${n1(pj)}</small>` : '')}</td>`;
+          : n1(+p.score) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="${st === 'live' ? 'Projected finish: his points plus his MFL projection for the time left' : 'MFL projection'}">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
       const rx = k => ` data-lvr="${a.id}-${b.id}-${k}"${openRows.has(`${a.id}-${b.id}-${k}`) ? ' class="lv-rx"' : ''}`;
@@ -758,7 +765,7 @@
           <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${tr && PL_TAG[tr.k] ? `<span class="pl-tag ${tr.k}">${PL_TAG[tr.k]}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
             <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${slot(p.status)}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
-          <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${p.est ? '<small class="pl-est" title="Estimated from ESPN’s box score; MFL posts official points once his game is final">est.</small>' : ''}${pj != null ? `<small>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
+          <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${p.est ? '<small class="pl-est" title="Estimated from ESPN’s box score; MFL posts official points once his game is final">est.</small>' : ''}${pj != null ? `<small${st === 'live' ? ' title="Projected finish: his points plus his MFL projection for the time left"' : ''}>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
         ${list.length > n ? `<button type="button" class="pl-more" data-pl-more="${ps}">${more ? 'Show fewer' : `Show more (${Math.min(list.length, 25) - n})`}</button>` : ''}</section>`;
     };
     const live = all.some(p => state(p) === 'live');
