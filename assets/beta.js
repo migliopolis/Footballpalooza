@@ -117,7 +117,7 @@ window.FBPBeta = (function () {
     const s0 = sub();
     if (s0 === 'trade') return betaHead('trade') + (window.FBPTrade ? FBPTrade.render(ctx) : '<p class="error">The Trading Floor didn’t load.</p>');
     if (s0 === 'docket') { location.replace('#now/docket'); return ''; }   // The Docket moved to League Now
-    if (s0 === 'shade') return betaHead('shade') + (window.FBPLive ? FBPLive.render(Object.assign({}, ctx, { shade: true })) : '<p class="error">The Scoreboard didn’t load.</p>');
+    if (s0 === 'shade') return betaHead('shade') + `<p class="bt-demo"><button type="button" class="seg-btn" data-bt-demo>Shuffle a demo</button> <small>Made-up scores and game states so every kind of fire and ice shows. Open any matchup.</small></p>` + (window.FBPLive ? FBPLive.render(Object.assign({}, ctx, { shade: true })) : '<p class="error">The Scoreboard didn’t load.</p>');
     if (s0 === 'power') return betaHead('power') + (window.FBPPower ? FBPPower.render(ctx) : '<p class="error">The Power Rankings didn’t load.</p>');
     if (s0 !== 'cards') return betaHead('') + `<div class="bt-grid">${BETA.map(([k, l, d]) => `<a class="bt-btn" href="#beta/${k}"><b>${l}</b><span>${d}</span></a>`).join('')}</div>`;
     return betaHead('cards') + renderCards(ctx);
@@ -318,5 +318,7 @@ window.FBPBeta = (function () {
     }
   }
 
+  // Scoreboard Shade: shuffle a made-up game state (assets/live.js demo())
+  document.addEventListener('click', e => { if (e.target.closest('[data-bt-demo]') && window.FBPLive && FBPLive.demo) FBPLive.demo(); });
   return { render, after, cardFor };
 })();

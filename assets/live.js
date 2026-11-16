@@ -562,6 +562,12 @@
     // (the frozen-man photo for the week's coldest starter is retired for now; assets/players/coldest.jpg is kept)
     const heat = f => +f.score === hi && hi > 0 ? '<span class="lv-heat" title="Highest score this week">🔥</span>' : +f.score === lo && hi > lo && kicked(f) ? '<span class="lv-heat" title="Lowest score this week">🥶</span>' : '';
     // Beta (the Scoreboard Shade page): the week's hottest lineup burns along its outside edge, the coldest one ices over
+    // a player's own stretch of the edge: on a hot team the flames flare behind a hot player, die to embers and steam
+    // behind a cold one and go out (ash) behind a bust; on a cold team the ice melts and drips behind a hot player, is
+    // just water behind a nuclear one, and freezes deeper behind a bust
+    const fxv = (p, team) => { const k = (p && tier(p, shownW) || {}).k;
+      if (team === 'fire') return k === 'nuke' || k === 'hot' ? 'flare' : k === 'cold' || k === 'sink' ? 'embers' : k === 'bust' || k === 'wp' ? 'ash' : 'fire';
+      return k === 'nuke' ? 'water' : k === 'hot' ? 'melt' : k === 'bust' || k === 'wp' ? 'deep' : 'ice'; };
     const fx = f => !X.shade ? '' : +f.score === hi && hi > 0 ? 'fire' : +f.score === lo && hi > lo && kicked(f) ? 'ice' : '';
     // a team's bar color: its primary, or its secondary when the primary is near white
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
@@ -662,8 +668,12 @@
           : n1(+p.score) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="${st === 'live' ? 'Projected finish: his points plus his MFL projection for the time left' : 'MFL projection'}">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
-      const rx = k => ` data-lvr="${a.id}-${b.id}-${k}"${openRows.has(`${a.id}-${b.id}-${k}`) ? ' class="lv-rx"' : ''}`;
-      const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr${rx('s' + i)}>${cell(r.p, 'a', r.slot)}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b', o.slot || r.slot)}</tr>`; }).join('');
+      const rx = (k, cl) => { const c = [openRows.has(`${a.id}-${b.id}-${k}`) ? 'lv-rx' : '', cl || ''].filter(Boolean).join(' ');
+        return ` data-lvr="${a.id}-${b.id}-${k}"${c ? ` class="${c}"` : ''}`; };
+      // Beta: each starter's stretch of his team's fire or ice reacts to him (see fxv)
+      const fa = fx(a), fb = fx(b);
+      const fxc = (pa, pb) => [fa ? 'fxa-' + fxv(pa, fa) : '', fb ? 'fxb-' + fxv(pb, fb) : ''].filter(Boolean).join(' ');
+      const rows = la.map((r, i) => { const o = lb[i] || {}; return `<tr${rx('s' + i, fxc(r.p, o.p))}>${cell(r.p, 'a', r.slot)}<td class="lv-slot">${r.slot}</td>${cell(o.p, 'b', o.slot || r.slot)}</tr>`; }).join('');
       // bench, then taxi squad, then IR, each side listed in its own column
       const group = (xa, xb, lbl) => Array.from({ length: Math.max(xa.length, xb.length) }, (_, i) =>
         `<tr class="lv-r-${lbl.toLowerCase()}${openRows.has(`${a.id}-${b.id}-${lbl}${i}`) ? ' lv-rx' : ''}" data-lvr="${a.id}-${b.id}-${lbl}${i}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
@@ -680,7 +690,7 @@
         <div class="lv-det"${isOpen ? '' : ' hidden'}>
           <div class="lv-names"><b>${seed(a.id)}${esc(X.nameOf(a.id))}${honors ? chips(honors.t[a.id]) : ''}</b><b>${honors ? chips(honors.t[b.id]) : ''}${esc(X.nameOf(b.id))}${seed(b.id)}</b></div>
           <div class="lv-names lv-left"><small>${left(a)}</small><small>${left(b)}</small></div>
-          <div class="lv-fxw${fx(a) ? ' fx-a-' + fx(a) : ''}${fx(b) ? ' fx-b-' + fx(b) : ''}"><table class="lv-t"><tbody>${rows}</tbody></table></div>
+          <div class="lv-fxw"><table class="lv-t"><tbody>${rows}</tbody></table></div>
           ${benchRows ? `<details class="lv-bench"${openBench.has(key) ? ' open' : ''} data-lv-bench="${key}"><summary>${view ? 'Bench' : 'Bench, taxi squad and IR'}</summary><table class="lv-t"><tbody>${benchRows}</tbody></table></details>` : ''}
         </div></article>`;
     };
@@ -806,7 +816,8 @@
     }
     // compact view: tap a player-vs-player row (anywhere but a photo) to see that row in full; tap again to close it
     const tr = compact && !e.target.closest('a') && e.target.closest('.lv-compact tr[data-lvr]');
-    if (tr) { const k = tr.dataset.lvr, on = !openRows.has(k); on ? openRows.add(k) : openRows.delete(k); tr.classList.toggle('lv-rx', on); return; }
+    if (tr) { const k = tr.dataset.lvr, on = !openRows.has(k); on ? openRows.add(k) : openRows.delete(k);
+      if (X && X.shade) rowShade(tr, on); else tr.classList.toggle('lv-rx', on); return; }
     const b = e.target.closest('[data-lv]'); if (!b) return;
     const key = b.dataset.lv, g = b.closest('.lv-g'), on = !open.has(key);
     on ? open.add(key) : open.delete(key);
@@ -870,5 +881,68 @@
     kids.forEach(k => { k.style.transformOrigin = '50% 0'; });
     A[0].onfinish = () => { det.style.overflow = ''; kids.forEach(k => { k.style.transformOrigin = ''; }); det._anims = null; if (!on) det.hidden = true; };
   }
-  window.FBPLive = { render, feed };
+  // Beta: a compact row opening up the same way: everything below it slides down with the same gentle spring (and
+  // back up on close), while the row's own detail unfolds from the top
+  function rowShade(tr, on) {
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches || !tr.animate;
+    if (still) { tr.classList.toggle('lv-rx', on); return; }
+    const card = tr.closest('.lv-g'), list = card && card.parentElement;
+    const below = [...tr.parentElement.children].filter(r => r !== tr && (r.compareDocumentPosition(tr) & Node.DOCUMENT_POSITION_PRECEDING))
+      .concat([...(tr.closest('.lv-det') || card).querySelectorAll('.lv-bench')], list ? [...list.children].filter(c => c !== card && (c.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_PRECEDING)) : []);
+    const y0 = below.map(el => el.getBoundingClientRect().top);
+    tr.classList.toggle('lv-rx', on);
+    const ease = 'cubic-bezier(.33,0,.2,1)', soft = 'cubic-bezier(.45,0,.55,1)';
+    below.forEach((el, i) => { const dy = y0[i] - el.getBoundingClientRect().top; if (!dy) return;
+      const o = dy < 0 ? Math.min(10, -dy * 0.08) : 0;   // opening: a small overshoot past the new spot, then back
+      el.animate(on ? [{ transform: `translateY(${dy}px)`, easing: ease }, { transform: `translateY(${o}px)`, offset: 0.6, easing: soft },
+        { transform: `translateY(${-o * 0.35}px)`, offset: 0.82, easing: soft }, { transform: 'none' }]
+        : [{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: on ? 720 : 420, easing: on ? 'linear' : 'cubic-bezier(.4,0,.2,1)' }); });
+    if (on) [...tr.children].forEach(td => [...td.children].forEach(k => k.animate(
+      [{ transform: 'scale(.94,.7)', opacity: 0.2, easing: ease }, { transform: 'scale(1.01,1.03)', opacity: 1, offset: 0.6, easing: soft }, { transform: 'none', opacity: 1 }],
+      { duration: 720, transformOrigin: '50% 0' })));
+  }
+  // Beta: a made-up game state so every combination of fire and ice shows at once. Each matchup gets a hot side, a
+  // cold side or both; each starter gets a random heat (hot, nuclear, cold, bust, scoreless, witness protection or
+  // nothing yet), points to match, a row color (game on, has the ball, red zone, over, not started), and now and then
+  // a DNP or HURT. Only the page changes; nothing is saved. Shuffle again for a new mix.
+  function demo() {
+    const rnd = n => Math.floor(Math.random() * n), pick = a => a[rnd(a.length)];
+    const FIRE = { flare: ['hot', 'nuke'], embers: ['cold', 'sink'], ash: ['bust', 'wp'], fire: [''] };
+    const ICE = { melt: ['hot'], water: ['nuke'], deep: ['bust', 'wp'], ice: ['', 'cold'] };
+    const plan = [['fire', 'ice'], ['ice', 'fire'], ['fire', ''], ['', 'ice'], ['ice', ''], ['', 'fire']];
+    document.querySelectorAll('.lv-g').forEach((g, gi) => {
+      const [ta, tb] = plan[gi] || [pick(['fire', 'ice', '']), pick(['fire', 'ice', ''])];
+      g.querySelectorAll('.lv-sum .lv-heat').forEach(h => h.remove());
+      ['a', 'b'].forEach(sd => { const t = sd === 'a' ? ta : tb; if (!t) return; const w = g.querySelector(`.lv-sum .lv-side.${sd} .lv-lgw`);
+        if (w) w.insertAdjacentHTML('beforeend', `<span class="lv-heat">${t === 'fire' ? '🔥' : '🥶'}</span>`); });
+      const rows = [...g.querySelectorAll('.lv-fxw tr[data-lvr]')];
+      rows.forEach((tr, ri) => {
+        tr.className = tr.className.split(' ').filter(c => c && !/^fx[ab]-/.test(c)).join(' ');
+        ['a', 'b'].forEach(sd => {
+          const td = tr.querySelector(`td.lv-p.${sd}`), pt = tr.querySelector(`td.lv-pts.${sd}`); if (!td || td.classList.contains('empty')) return;
+          const team = sd === 'a' ? ta : tb, V = team === 'fire' ? FIRE : team === 'ice' ? ICE : null, vs = V ? Object.keys(V) : null;
+          const v = vs ? vs[(ri + (sd === 'b' ? 2 : 0) + gi) % vs.length] : '', k = V ? pick(V[v]) : pick(['', '', 'hot', 'cold', 'nuke', 'bust', 'sink', 'wp']);
+          if (v) tr.classList.add(`fx${sd}-${v}`);
+          const proj = 6 + rnd(18), sc = k === 'nuke' ? 30 + rnd(15) : k === 'hot' ? proj + 6 + rnd(8) : k === 'cold' ? Math.max(1, Math.round(proj * 0.3)) :
+            k === 'bust' ? Math.round(proj * 0.15 * 10) / 10 : k === 'sink' || k === 'wp' ? 0 : Math.round(proj * (0.4 + Math.random() * 0.5) * 10) / 10;
+          const ph = td.querySelector('.lv-ph'); if (!ph || ph.classList.contains('def')) return;
+          ph.className = ph.className.split(' ').filter(c => !/^t-/.test(c)).join(' '); ph.removeAttribute('title');
+          ph.querySelectorAll('.ice,.xt,.flame,.spark').forEach(x => x.remove()); ph.style.removeProperty('--drop');
+          const img = ph.querySelector('img'); if (img) img.style.display = '';
+          if (k) ph.classList.add('t-' + k);
+          if (k === 'bust') ph.insertAdjacentHTML('beforeend', '<i class="ice"></i><i class="xt a">❄</i><i class="xt b">❄</i><i class="xt c">✦</i>');
+          if (k === 'sink') ph.style.setProperty('--drop', (20 + rnd(60)) + '%');
+          if (k === 'wp' && img) img.style.display = 'none';
+          const tint = pick(['live', 'live', 'live lv-inpos', 'live lv-inrz', 'final', k ? 'live' : 'pre']);
+          [td, pt].forEach(c => { c.classList.remove('live', 'final', 'pre', 'lv-inpos', 'lv-inrz'); tint.split(' ').forEach(x => c.classList.add(x)); });
+          td.querySelectorAll('.lv-inj').forEach(x => x.remove());
+          const nm = td.querySelector('.lv-nm');
+          if (!k && Math.random() < 0.15) { ph.classList.add('t-dnp'); nm && nm.insertAdjacentHTML('beforeend', '<span class="lv-inj">IN</span>'); }
+          else if (Math.random() < 0.1) nm && nm.insertAdjacentHTML('beforeend', '<span class="lv-inj">HURT</span>');
+          if (pt) pt.innerHTML = tint === 'pre' ? `<span class="lv-pre">${proj.toFixed(1)}</span><small class="lv-pj0">proj</small>` : `${(+sc).toFixed(1)}<small class="lv-pj">${proj.toFixed(1)}</small>`;
+        });
+      });
+    });
+  }
+  window.FBPLive = { render, feed, demo };
 })();
