@@ -70,7 +70,7 @@ window.FBPAwards = (() => {
   const RK_ST = { TAXI_SQUAD: 'Taxi squad', INJURED_RESERVE: 'IR', ROSTER: 'Active roster' };
   function rcard(slot, p) {
     return `<div class="card aw-card second rook"><span class="aw-slot">${slot}</span>${photo(p, 'md', true)}
-      <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}${p.status && RK_ST[p.status] ? ` · <i>${RK_ST[p.status]}</i>` : ''}</span>
+      <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}</span>${p.status && RK_ST[p.status] ? `<span class="aw-sub aw-rst"><i>${RK_ST[p.status]}</i></span>` : ''}
       <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>
       <span class="aw-stats"><span><b>${n1(p.allPts)}</b>total pts</span><span><b>${n1(p.pts)}</b>as a starter</span><span><b>${sal(p)}</b>salary</span></span>
       <span class="aw-started">${p.starts ? `${p.starts} week${p.starts === 1 ? '' : 's'} started` : 'Hasn’t started yet'}</span></div>`;

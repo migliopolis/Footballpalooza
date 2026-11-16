@@ -3254,3 +3254,4 @@ img.ovbg{background:var(--ovg)}
 .lv-af.rook,.ro-chip.rook{background:#2f9e5e;color:#fff}
 .aw-card.rook .aw-slot{color:#2f9e5e}
 .aw-note{font-size:.78rem;color:var(--muted);border-left:3px solid #2f9e5e;padding:4px 0 4px 10px;margin:-4px 0 10px}
+.aw-sub.aw-rst{margin-top:-2px}
