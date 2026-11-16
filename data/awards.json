@@ -1292,22 +1292,22 @@
   {
    "key": "manager",
    "title": "Manager of the Year",
-   "why": "Beat expectations, win, stay active and set full lineups. .500 or better to qualify.",
+   "why": "Beat expectations and win. .500 or better to qualify.",
    "teams": [
     {
      "team": "0002",
      "stat": "7-2",
-     "sub": "Expected .443 · 11 moves"
+     "sub": "Expected .443"
     },
     {
      "team": "0004",
      "stat": "6-3",
-     "sub": "Expected .589 · 23 moves"
+     "sub": "Expected .589"
     },
     {
      "team": "0010",
      "stat": "5-4",
-     "sub": "Expected .453 · 9 moves"
+     "sub": "Expected .453"
     }
    ]
   },
@@ -1941,7 +1941,7 @@
    ]
   }
  ],
- "generated": "2026-11-16T20:46:14+00:00",
+ "generated": "2026-11-16T21:26:45+00:00",
  "basis": {
   "throughWeek": 8,
   "teams": [

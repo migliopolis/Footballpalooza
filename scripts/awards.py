@@ -357,8 +357,8 @@ def manager_award(standings, tx, weeks, wk_nums, slots, pinfo, by_team, moy):
             return ' · '.join(bits)
         if top:
             return ({'key': 'manager', 'title': 'Manager of the Year',
-                      'why': 'Beat expectations, win, stay active and set full lineups. .500 or better to qualify.',
-                      'teams': [{'team': r['id'], 'stat': r['rec'], 'sub': f"Expected {r['exp']:.3f}".replace('0.', '.', 1) + f" · {sub(r)}"} for r in top]})
+                      'why': 'Beat expectations and win. .500 or better to qualify.',
+                      'teams': [{'team': r['id'], 'stat': r['rec'], 'sub': f"Expected {r['exp']:.3f}".replace('0.', '.', 1)} for r in top]})
 
     return None
 
@@ -487,9 +487,6 @@ def partial_season(year, links, ref, fallback_info):
     ctx = moy_context(year, {}, pinfo, ref)
     m = manager_award(st, [], {}, [], slots, pinfo, defaultdict(float), ctx) if ctx['last'] else None   # needs last season's record
     if m:
-        m['why'] = 'Beat expectations and win. .500 or better to qualify. (Moves and lineups aren\'t saved for this season.)'
-        for t in m['teams']:
-            t['sub'] = t['sub'].split(' · ')[0]
         A.append(m)
     return {'season': year, 'ready': True, 'final': True, 'partial': True, 'allFbp': {'first': [], 'second': [], 'rookie': team}, 'awards': A}
 
