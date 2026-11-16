@@ -1,7 +1,7 @@
 /* Awards tab: All-FBP teams and season awards, from data/awards.json (scripts/awards.py).
    Points are starter points only (scored in an FBP starting lineup), rostered players only. */
 window.FBPAwards = (() => {
-  let A = null, MV = null, loading = false, failed = false, X, potw = null;   // MV: OVR movers (data/ovr.json)   // potw: week picked for Player of the Week
+  let A = null, MV = null, HOF = null, loading = false, failed = false, X, potw = null;   // MV: OVR movers (data/ovr.json)   // potw: week picked for Player of the Week
   let year = null;                                     // null = this season; else a past season's year
   // season awards start collapsed to a one-line preview; the ones you open stay open on this device
   const awOpen = new Set((() => { try { return JSON.parse(localStorage.getItem('fbp-aw-open') || '[]'); } catch (e) { return []; } })());
@@ -18,6 +18,7 @@ window.FBPAwards = (() => {
     FBPU.json('data/awards.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => { A = d; rerender(); }).catch(() => { failed = true; rerender(); });
     FBPU.json('data/ovr.json').then(d => { MV = d && d.movers; if (A) rerender(); }).catch(() => {});
+    if (!HOF) FBPU.json('data/hof-seasons.json').then(d => { HOF = new Set(((d && d.seasons) || []).map(x => x.id + ':' + x.year)); if (A) rerender(); }).catch(() => {});
   };
   const tlogo = (id, cls = '') => { const t = X.teams[id]; return t && t.logo ? `<img class="${cls}" src="${t.logo}" alt="" loading="lazy">` : ''; };
   const tname = id => X.nameOf(id);
@@ -30,9 +31,13 @@ window.FBPAwards = (() => {
     const m = media();
     const src = p.pos === 'DEF' ? (m ? m.nflLogo(p.nfl) : '') : (p.espn && m ? m.headshot(p.espn) : '');
     const fb = (X.teams[p.team] || {}).logo || '';
-    const md = (((S || A) || {}).allFbp || {}), mc = (md.first || []).some(e => e.player && e.player.id === p.id) ? ' m-gold' : (md.second || []).some(e => e.player && e.player.id === p.id) ? ' m-silver' : '';
+    const md = (((S || A) || {}).allFbp || {});
+    let mc = (md.first || []).some(e => e.player && e.player.id === p.id) ? ' m-gold' : (md.second || []).some(e => e.player && e.player.id === p.id) ? ' m-silver' : '';
+    // a Hall of Fame season (the All-Time FBP Team) shows in diamond with its HOF badge instead of 1st Team gold
+    const hof = mc === ' m-gold' && HOF && HOF.has(p.id + ':' + (S || A).season);
+    if (hof) mc = ' m-diamond';
     const ring = !mc && p.pos !== 'DEF' && src ? FBPU.tc(p.team) : '';
-    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}${mc}${ring ? ' tcr' : ''}"${(tint && teamBg(p.team)) || ring ? ` style="${tint && teamBg(p.team) ? teamBg(p.team) + ';' : ''}${ring.trim()}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}</span>`;
+    return `<span class="aw-ph ${size}${p.pos === 'DEF' ? ' def' : ''}${mc}${ring ? ' tcr' : ''}"${(tint && teamBg(p.team)) || ring ? ` style="${tint && teamBg(p.team) ? teamBg(p.team) + ';' : ''}${ring.trim()}"` : ''}>${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.onerror=null;${fb ? `this.src='${fb}';this.parentNode.classList.add('fb')` : 'this.remove()'}">` : (fb ? `<img src="${fb}" alt="" class="fbimg">` : '')}${tlogo(p.team, 'aw-badge')}${p.champ ? trophy(p) : ''}${hof ? '<span class="hof-badge" title="Hall of Fame season">HOF</span>' : ''}</span>`;
   }
   // won the title that season: trophy opposite the team badge
   const trophy = p => `<span class="aw-trophy" role="img" aria-label="Champion" title="Won the ${esc((S || A).season)} title${p.champTeam && p.champTeam !== p.team ? ' with ' + esc(tname(p.champTeam)) : ''}">🏆</span>`;

@@ -2165,13 +2165,26 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 [data-med]{background-size:cover,cover!important;background-position:center top,center!important;background-repeat:no-repeat!important}
 .pp-ph[data-med]{border-color:transparent}
 .hs-ph[data-med]{filter:none}
-/* Hall of Fame: diamond photo and a diamond trim across the top of each All-Time team card */
-.m-diamond{background:var(--med-diamond)!important;background-size:220% 220%!important;box-shadow:var(--ring-diamond)!important;animation:medSheen 6s ease-in-out infinite alternate}
-@keyframes medSheen{from{background-position:0% 0%}to{background-position:100% 100%}}
-.hof-at .aw-card{border-top:0!important;overflow:hidden}
-.hof-at .aw-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#b8e2f8,#ffffff,#e6d6ff,#c4eeff,#ffffff,#b8e2f8);background-size:200% 100%;animation:medTrim 5s linear infinite}
-@keyframes medTrim{from{background-position:0% 0}to{background-position:200% 0}}
-@media (prefers-reduced-motion:reduce){.m-diamond,.hof-at .aw-card::before{animation:none}}
+/* Hall of Fame: a cut-diamond photo background and diamond trim across the top of each All-Time team card and each
+   inductee card. Sharp white facets (hard-edged conic gradients) over a purple-to-light-blue body, with a light glint
+   sweeping across and the facets slowly turning. */
+:root{
+  --dia-facets:conic-gradient(from 15deg at 32% 30%,rgba(255,255,255,.6) 0 6%,rgba(255,255,255,0) 6% 17%,rgba(255,255,255,.38) 17% 21%,rgba(255,255,255,0) 21% 38%,rgba(255,255,255,.5) 38% 41%,rgba(255,255,255,0) 41% 57%,rgba(240,230,255,.45) 57% 62%,rgba(255,255,255,0) 62% 79%,rgba(255,255,255,.55) 79% 82%,rgba(255,255,255,0) 82%),
+    conic-gradient(from 200deg at 70% 72%,rgba(255,255,255,.5) 0 5%,rgba(255,255,255,0) 5% 19%,rgba(200,235,255,.45) 19% 24%,rgba(255,255,255,0) 24% 43%,rgba(255,255,255,.4) 43% 47%,rgba(255,255,255,0) 47% 66%,rgba(230,215,255,.5) 66% 70%,rgba(255,255,255,0) 70%);
+  --dia-body:linear-gradient(135deg,#8d6ae0 0%,#b597ff 18%,#e3d6ff 36%,#f6f3ff 46%,#c0e4ff 58%,#86c4f3 76%,#a892ff 100%);
+  --dia-glint:linear-gradient(115deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.7) 48%,rgba(255,255,255,0) 58%);
+  --ring-diamond:0 0 0 2px #ffffff,0 0 0 3.5px #7d5ae6,0 0 12px 2px rgba(140,110,255,.65),0 0 18px 4px rgba(110,190,255,.35);
+}
+.m-diamond{background:var(--dia-glint),var(--dia-facets),var(--dia-body)!important;background-size:260% 260%,170% 170%,150% 150%,220% 220%!important;
+  box-shadow:var(--ring-diamond)!important;animation:diaDrift 9s ease-in-out infinite alternate}
+@keyframes diaDrift{from{background-position:130% 130%,0% 20%,100% 0%,0% 0%}to{background-position:-50% -50%,60% 80%,30% 70%,100% 100%}}
+.hof-at .aw-card,.hof-card{border-top:0!important;overflow:hidden;position:relative}
+.hof-at .aw-card::before,.hof-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;z-index:1;
+  background:linear-gradient(115deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.95) 50%,rgba(255,255,255,0) 60%),
+    repeating-linear-gradient(120deg,#6a3fd0 0 14px,#b18cff 14px 22px,#f4f0ff 22px 26px,#8fd2ff 26px 40px,#5fb2f2 40px 48px,#d9c6ff 48px 56px);
+  background-size:300% 100%,auto;animation:diaTrim 4s linear infinite}
+@keyframes diaTrim{from{background-position:150% 0,0 0}to{background-position:-150% 0,56px 0}}
+@media (prefers-reduced-motion:reduce){.m-diamond,.hof-at .aw-card::before,.hof-card::before{animation:none}}
 tr.st-go{cursor:pointer}
 tr.st-go:hover td{background:var(--sky-soft)}
 tr.st-go:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
@@ -3194,3 +3207,9 @@ tr.fxa-water td.lv-p.a::before,tr.fxb-water td.lv-p.b::after{width:34px;backgrou
 /* taxi squad and IR rows keep their yellow and red once their games are over (no grey) */
 .lv-t2 .lv-bench .lv-t tr.lv-r-tx td.lv-p.final,.lv-t2 .lv-bench .lv-t tr.lv-r-tx td.lv-pts.final{background:rgba(240,200,40,.14)}
 .lv-t2 .lv-bench .lv-t tr.lv-r-ir td.lv-p.final,.lv-t2 .lv-bench .lv-t tr.lv-r-ir td.lv-pts.final{background:rgba(220,50,50,.09)}
+
+/* Hall of Fame seasons: a small HOF badge at the bottom center of the photo (Hall of Fame page, and on Awards when one
+   of those seasons is in that year's 1st Team) */
+.aw-ph .hof-badge{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);z-index:3;font:800 .58rem/1 var(--body);letter-spacing:.12em;
+  padding:3px 6px 3px 7px;border-radius:999px;color:#fff;background:linear-gradient(135deg,#6a3fd0,#8f74ff 55%,#5fb2f2);box-shadow:0 0 0 1.5px #fff,0 2px 6px rgba(80,50,180,.35);white-space:nowrap}
+.aw-ph.sm .hof-badge{font-size:.5rem;padding:2px 5px;bottom:-6px}

@@ -10,6 +10,7 @@ MVP (the champion's top scorer in the title game).
 
 build_reference.py calls apply(d), which adds d['all_time_team'].
 """
+import os
 import json
 from collections import defaultdict
 from pathlib import Path
@@ -94,4 +95,14 @@ def apply(d):
     years = sorted({int(y) for y in (d.get('championships') or {})})
     d['all_time_team'] = {'team': team, 'minStarts': MIN_STARTS,
                           'years': [years[0], years[-1]] if years else [], 'inducted': 2026}
+    # a small list of the Hall of Fame seasons for the Awards page, which shows them in diamond among that year's
+    # 1st Team All-FBP (data/hof-seasons.json: [{id, year}], MFL ids)
+    try:
+        import json
+        out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'hof-seasons.json')
+        with open(out, 'w') as f:
+            json.dump({'inducted': 2026, 'seasons': [{'id': r['id'], 'year': r['year']} for r in team]}, f, indent=1)
+            f.write('\n')
+    except Exception as e:
+        print(f'  hof-seasons.json skipped: {e}')
     return d
