@@ -3340,3 +3340,8 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 @media (max-width:640px){.nw-list{grid-template-columns:minmax(0,1fr)}.nw-bar .seg{flex:1 1 100%}}
 .tm-col{display:flex;flex-direction:column;justify-content:space-between;gap:2px;min-width:0}
 .nw-tv{margin-right:6px;font-size:.95em}
+.nw-card{position:relative}
+.nw-new{box-shadow:0 0 0 2px var(--accent,#c8211a)}
+.nw-badge{position:absolute;top:10px;right:10px;padding:2px 7px;border-radius:999px;background:var(--accent,#c8211a);color:#fff;font:700 .64rem/1.4 var(--body);text-transform:uppercase;letter-spacing:.06em}
+.nw-new .nw-who{padding-right:46px}
+.nw-newc{color:var(--accent,#c8211a);font-weight:700}

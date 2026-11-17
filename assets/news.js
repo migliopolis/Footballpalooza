@@ -8,10 +8,15 @@ window.FBPNews = (function () {
   let S = null, failed = false, loading = false, X = null;
   const NEWS = {};          // espn id -> [items] from his fantasy feed
   let HEAD = null;          // ESPN NFL headlines, matched to players
-  let queue = null, done = 0, total = 0, started = false, lastDraw = 0, t0 = 0;
+  let queue = null, done = 0, total = 0, started = false, lastDraw = 0, t0 = 0, pend = 0;
   let who = 'ro', team = '', pos = 'All', span = 3, q = '';
   const SPANS = [[1, '24 hours'], [3, '3 days'], [7, 'Week']];
-  const exp = new Set();     // cards opened to the full write-up
+  // NEW: anything published since your last visit to this page (remembered on the device). This visit's start is saved
+  // right away, so the badges stay while you're here and clear on your next visit or a reload. First visit: no badges.
+  let seenBefore = null, seenSet = false;
+  const markVisit = () => { if (seenSet) return; seenSet = true;
+    try { const v = +localStorage.getItem('fbp-news-seen'); seenBefore = v || null; localStorage.setItem('fbp-news-seen', String(Date.now())); } catch (_) {} };
+  const isNew = n => seenBefore && Date.parse(n.t) > seenBefore;
   const KEY = 'fbp-news-v3', TTL = 15 * 60 * 1000, LIMIT = 6, CONC = 6;
   const FEED = id => `https://site.api.espn.com/apis/fantasy/v2/games/ffl/news/players?playerId=${id}&limit=${LIMIT}`;
   const NFL = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=100';
@@ -19,7 +24,9 @@ window.FBPNews = (function () {
   const nflLogo = t => t ? `<img class="hs-nfl" src="https://a.espncdn.com/i/teamlogos/nfl/500/${FBPU.nflAbbr(t).toLowerCase()}.png" alt="${t}" loading="lazy">` : '';
   const redraw = (soft) => {
     if (!X || !X.rerender || !location.hash.startsWith('#now/news')) return;
-    if (soft && Date.now() - lastDraw < 700) return;    // while news streams in, redraw at most a bit more than once a second
+    // while news streams in, redraw at most a bit more than once a second; a skipped redraw always runs a moment later
+    if (soft && Date.now() - lastDraw < 700) { if (!pend) pend = setTimeout(() => { pend = 0; redraw(); }, 750); return; }
+    if (pend) { clearTimeout(pend); pend = 0; }
     lastDraw = Date.now();
     const y = window.scrollY, f = document.activeElement && document.activeElement.classList.contains('nw-q');
     X.rerender(); window.scrollTo(0, y);
@@ -104,10 +111,10 @@ window.FBPNews = (function () {
 
   const med = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : (r.hon || []).some(h => h[0] === 'Rookie Team') ? 'rook' : '';
   function card({ n, r }, ctx) {
-    const esc = ctx.esc, t = ctx.teams[r.f] || {}, m = med(r);
+    const esc = ctx.esc, t = ctx.teams[r.f] || {}, m = med(r), nw = isNew(n);
     const slot = r.sl === 'IR' ? '<i class="hs-slot">FBP IR</i>' : r.sl === 'T' ? '<i class="hs-slot">Taxi</i>' : '';
     const body = n.b && n.b !== n.h ? `<p class="nw-txt">${esc(n.b)}</p>` : '';   // the whole report, never clipped
-    return `<article class="nw-card card">
+    return `<article class="nw-card card${nw ? ' nw-new' : ''}">${nw ? '<span class="nw-badge">New</span>' : ''}
       <a class="nw-who" href="#now/player/${r.id}">
         <span class="hs-ph nw-ph${m ? '' : FBPU.tc(r.f) ? ' tcr' : ''}${m ? '' : FBPU.ovc(r.id)}"${m ? ` data-med="${m}"` : ''} style="background-image:url(${FBPU.headshot(r.e)}),var(--med,var(--ovg,var(--ov0)));${m ? '' : FBPU.tc(r.f)}">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
         <span class="hs-id"><b>${esc(r.n)}</b><small>${r.p} ${nflLogo(r.t) || 'FA'}${r.f ? ` · ${esc(t.abbr || '')}` : ' · Free agent'}${r.sal != null ? ` · $${r.sal}` : ''} ${slot}</small></span>
@@ -123,6 +130,7 @@ window.FBPNews = (function () {
     if (started && done >= total && Date.now() - t0 > TTL) { Object.keys(NEWS).forEach(k => delete NEWS[k]); HEAD = null; started = false; try { sessionStorage.removeItem(KEY); } catch (_) {} start(); }
     if (failed) return '<p class="error">Player news didn’t load.</p>';
     if (!S) return '<p class="loading">Loading players…</p>';
+    markVisit();
     const esc = ctx.esc, L = items(), mine = ctx.myTeam;
     // your team first if you've set one, then everyone A-Z by team name (the site's usual order)
     const tn = f => (ctx.nameOf ? ctx.nameOf(f) : '') || (ctx.teams[f] || {}).abbr || f;
@@ -144,7 +152,7 @@ window.FBPNews = (function () {
       </div>
       ${who === 'fa' ? '' : chips}
       ${prog}
-      <p class="nw-count">${L.length} update${L.length === 1 ? '' : 's'}${team ? ` for ${esc(tn(team))}` : ''}</p>
+      <p class="nw-count">${L.length} update${L.length === 1 ? '' : 's'}${team ? ` for ${esc(tn(team))}` : ''}${(() => { const k = L.filter(x => isNew(x.n)).length; return k ? ` · <b class="nw-newc">${k} new since your last visit</b>` : ''; })()}</p>
       ${list || empty}
       <p class="rf-foot">News comes live from ESPN: RotoWire’s fantasy updates for every player on an FBP roster, plus ESPN’s NFL headlines about one to three players, shown once under the first player tagged. Free agents show up only when they make the headlines. Tap a player for his Player Page; ESPN headlines open the story on ESPN; 📺 marks a video. Checked again when you come back after 15 minutes.</p>
     </div>`;
