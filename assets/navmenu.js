@@ -7,14 +7,15 @@
 (function () {
   const MENUS = {
     scores: [['#scores', 'Scoreboard'], ['#scores/players', 'Players'], ['#scores/nfl', 'NFL Scores'], ['#scores/ticket', 'Ticket Helper']],
-    // League Now reads down two columns (see COLS): Standings to Analytics on the left (six), My Team to The Docket on the right (five)
+    // League Now reads down two columns (see COLS): Standings to Analytics on the left (six), My Team to The Docket on the right (seven)
     now: [['#now', 'Standings'], ['#now/rosters', 'Rosters'], ['#now/stats', 'Stats'], ['#now/rankings', 'Player Rankings'], ['#now/power', 'Power Rankings'], ['#now/analytics', 'Analytics'],
       ['#now/team', 'My Team'], ['#now/news', 'Player News'], ['#now/transactions', 'Transactions'], ['#now/matchups', 'Matchups'], ['#now/playoffs', 'Playoff Picture'], ['#now/hospital', 'FBP General'], ['#now/docket', 'The Docket']],
     draft: [['#draft', 'Draft Home'], ['#draft/round1', 'Draft Order'], ['#draft/mock', 'Mock Draft'], ['#draft/board', 'Big Board'], ['#draft/order', 'All Rounds']],
     reference: [['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'],
       ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']],
   };
-  const COLS = { now: true };
+  // two-column menus: how many links go in the left column; the shorter column spreads out so both end on the same line
+  const COLS = { now: 6 };
   const tabs = document.querySelector('.tabs'), top = document.querySelector('.top');
   if (!tabs || !top) return;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -40,9 +41,11 @@
     open = k;
     const a = tabs.querySelector(`a[data-tab="${k}"]`), cur = currentHref(k);
     menu.setAttribute('aria-label', a ? a.textContent.trim() : k);
-    menu.innerHTML = MENUS[k].map(([h, l]) => `<a role="menuitem" href="${h}"${h === cur ? ' aria-current="page"' : ''}${h === '#now/team' ? ' class="tm-mine"' : ''}>${esc(l)}</a>`).join('');
-    // menus listed column by column fill down the left column first
-    menu.classList.toggle('tm-cols', !!COLS[k]); menu.style.gridTemplateRows = COLS[k] ? `repeat(${Math.ceil(MENUS[k].length / 2)},auto)` : '';
+    const link = ([h, l]) => `<a role="menuitem" href="${h}"${h === cur ? ' aria-current="page"' : ''}${h === '#now/team' ? ' class="tm-mine"' : ''}>${esc(l)}</a>`;
+    const n = COLS[k];
+    menu.innerHTML = n ? `<div class="tm-col">${MENUS[k].slice(0, n).map(link).join('')}</div><div class="tm-col">${MENUS[k].slice(n).map(link).join('')}</div>`
+      : MENUS[k].map(link).join('');
+    menu.classList.toggle('tm-cols', !!n);
     menu.style.top = (tabs.offsetTop + tabs.offsetHeight) + 'px';
     menu.hidden = false;
     // wider screens: a card under its tab instead of a full-width sheet

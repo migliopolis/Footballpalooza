@@ -2,6 +2,20 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0281",
+      "to": "0.0285",
+      "dates": "Nov 16–17, 2026",
+      "items": [
+        "League Now > Player News (new, under My Team): the latest RotoWire updates for every FBP player plus ESPN headlines, live from ESPN. Filter by roster, FBP team, position, time and name.",
+        "Records > Player careers (new): career leaders as a starter, from wins and points to touchdowns, yards, Nuclear games and the dubious ones. Reference > Players now lives here too, with its tiles, the searchable starter table and Player Journey.",
+        "Records > Single games: the best player games ever started, plus the top five at each position.",
+        "Player Page: sections from Season analytics down fold (tap the header) and reorder (press and hold, drag), remembered on your device.",
+        "Press Box: FBP team logos beside team names in game headers and tables.",
+        "FBP General: Season-ending goes by ESPN's return date; the 'Soon' placeholder is gone.",
+        "League Now menu: both columns end on the same line, My Team stays top right."
+      ]
+    },
+    {
       "from": "0.0271",
       "to": "0.0280",
       "dates": "Nov 16, 2026",
