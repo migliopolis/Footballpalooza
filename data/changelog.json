@@ -2,6 +2,21 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0271",
+      "to": "0.0280",
+      "dates": "Nov 16, 2026",
+      "items": [
+        "Scoreboard: defense logos centered, lineups run nearly edge to edge with square corners, even spacing in compact rows.",
+        "Scoreboard: one rule for players who didn't play. Inactive, Out, IR, suspended or PUP before kickoff all get the DNP stamp with the reason; sunglasses only for a 0 who played.",
+        "Scoreboard: a team that hasn't set its lineup on MFL shows a projected lineup (best healthy players) until the owner sets one.",
+        "Awards: tap a photo for the Player Page; players no longer in the pool get a page with their FBP honors and career.",
+        "Awards: Manager of the Year shows just the teams and records.",
+        "My Team: this season's schedule and results, folded by default; a stray bar on team pages fixed.",
+        "FBP General (was Hospital): New Patients at the top; IR players get full charts so they land in the right ward.",
+        "League Now menu: Stats before Player Rankings."
+      ]
+    },
+    {
       "from": "0.0256",
       "to": "0.0270",
       "dates": "Nov 15–16, 2026",

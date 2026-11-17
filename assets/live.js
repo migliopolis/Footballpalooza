@@ -174,7 +174,7 @@
     ]).then(([d, p]) => {
       loading = false;
       if (!d || !d.liveScoring) { failed = !data; return; }
-      data = d; stamp = new Date();
+      data = d; stamp = new Date(); fillGuess();
       setTimeout(() => window.dispatchEvent(new Event('fbp-live')), 0);   // the ticker's Game Day sections redraw
       if (p && !players) players = p.fields ? Object.fromEntries(Object.entries(p.players).map(([k, v]) => [k, Object.fromEntries(p.fields.map((f, i) => [f, v[i]]))])) : p;
       paint();
@@ -442,8 +442,25 @@
   }
   // Game of the week (the matchups page picks it): marked on the scoreboard for that week only
   let MU = null, muAsked = false;
+  const askMU = () => { if (!muAsked) { muAsked = true; FBPU.json('data/matchups.json').then(j => { MU = j; if (j) { fillGuess(); paint(); } }).catch(() => {}); } };
+  // a team that hasn't set its lineup on MFL yet: the Matchups page's projected lineup (best healthy players by MFL's
+  // projection) stands in, marked "Projected lineup", until the owner sets one
+  function fillGuess() {
+    askMU();
+    const L = data && data.liveScoring; if (!L || !MU || +MU.week !== +L.week) return;
+    (L.matchup || []).forEach(m => (m.franchise || []).forEach(f => {
+      const P = [].concat((f.players || {}).player || []);
+      if (P.some(p => p.status === 'starter')) { f.projLineup = false; return; }
+      const g = (MU.games || []).find(x => x.away === f.id || x.home === f.id), T = g && g.teams && g.teams[f.id];
+      const ids = (T && (T.lineup && T.lineup.length ? T.lineup : T.guess)) || []; if (!ids.length) return;
+      const have = new Set(P.map(p => p.id));
+      ids.forEach(id => { if (!have.has(id)) P.push({ id, status: 'starter', score: '0', gameSecondsRemaining: '3600' }); });
+      P.forEach(p => { p.status = ids.includes(p.id) ? 'starter' : 'nonstarter'; });
+      f.players = { player: P }; f.projLineup = true;
+    }));
+  }
   const isGotw = (w, x, y) => {
-    if (!muAsked) { muAsked = true; FBPU.json('data/matchups.json').then(j => { MU = j; if (j) paint(); }).catch(() => {}); }
+    askMU();
     if (!MU || +MU.week !== +w) return false;
     return (MU.games || []).some(g => g.gotw && ((g.away === x && g.home === y) || (g.away === y && g.home === x)));
   };
@@ -691,7 +708,7 @@
       const group = (xa, xb, lbl) => Array.from({ length: Math.max(xa.length, xb.length) }, (_, i) =>
         `<tr class="lv-r-${lbl.toLowerCase()}${openRows.has(`${a.id}-${b.id}-${lbl}${i}`) ? ' lv-rx' : ''}" data-lvr="${a.id}-${b.id}-${lbl}${i}">${xa[i] ? cell(xa[i], 'a') : '<td></td><td></td>'}<td class="lv-slot">${lbl}</td>${xb[i] ? cell(xb[i], 'b') : '<td></td><td></td>'}</tr>`).join('');
       const benchRows = group(bench(a), bench(b), 'BN') + (view ? '' : group(extra(a, 'taxi'), extra(b, 'taxi'), 'TX') + group(extra(a, 'ir'), extra(b, 'ir'), 'IR'));
-      const left = f => { const c = counts(f); return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
+      const left = f => { const c = counts(f); if (!view && f.projLineup) return '<span class="lv-projl" title="No lineup set on MFL yet: the best healthy players by MFL’s projection">Projected lineup</span>'; return c.live || c.pre ? `${c.live ? `${c.live} playing` : ''}${c.live && c.pre ? ', ' : ''}${c.pre ? `${c.pre} to play` : ''}` : 'Done'; };
       const gotw = isGotw(shownW, a.id, b.id), mine = X.myTeam && (a.id === X.myTeam || b.id === X.myTeam);
       const champ = !view && [seedOf(a.id), seedOf(b.id)].sort().join() === '1,2';
       const tags = gameTags(m, a, b, shownW, gotw, mine).slice(0, 2);

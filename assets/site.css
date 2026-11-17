@@ -3282,3 +3282,4 @@ img.ovbg{background:var(--ovg)}
 .ro-sch td:last-child,.ro-sch th:last-child{padding-left:8px}
 .hs-wtag{font-style:normal;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line);border-radius:999px;padding:0 6px;margin-left:6px;color:var(--muted)}
 .hs-new>h2{color:#c0392b}
+.lv-projl{font:700 .66rem var(--body);text-transform:uppercase;letter-spacing:.05em;color:#b26a00;background:#fff3dc;border-radius:999px;padding:1px 8px}
