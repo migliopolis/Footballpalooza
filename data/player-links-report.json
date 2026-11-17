@@ -2,11 +2,11 @@
  "summary": {
   "linked": 946,
   "mfl": 933,
-  "spellingFixed": 50,
+  "spellingFixed": 49,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 258,
-  "rosteredTotal": 258
+  "rosteredLinked": 257,
+  "rosteredTotal": 257
  },
  "mismatch": [],
  "byName": [
@@ -567,15 +567,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "17732",
-   "mflName": "EJ Smith",
-   "pos": "RB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4430825",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "12625",
    "mflName": "Ezekiel Elliott",
    "pos": "RB",
@@ -774,15 +765,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "15258",
-   "mflName": "Michael Carter",
-   "pos": "RB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4240657",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "16811",
    "mflName": "Michael Wiley",
    "pos": "RB",
@@ -945,6 +927,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17696",
+   "mflName": "Carsen Ryan",
+   "pos": "TE",
+   "team": "CLE",
+   "fbp": null,
+   "espn": "4685540",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "17724",
    "mflName": "Dae'Quan Wright",
    "pos": "TE",
@@ -1008,30 +999,12 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "15925",
-   "mflName": "John FitzPatrick",
-   "pos": "TE",
-   "team": "CLE",
-   "fbp": null,
-   "espn": "4379401",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "13753",
    "mflName": "Jordan Akins",
    "pos": "TE",
    "team": "JAC",
    "fbp": null,
    "espn": "3128452",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "17312",
-   "mflName": "Joshua Simon",
-   "pos": "TE",
-   "team": "WAS",
-   "fbp": null,
-   "espn": "4430482",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1359,15 +1332,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "17278",
-   "mflName": "Coleman Owen",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4578436",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "16354",
    "mflName": "Colton Dowell",
    "pos": "WR",
@@ -1647,12 +1611,12 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "16624",
-   "mflName": "Jamari Thrash",
+   "mfl": "14848",
+   "mflName": "James Proche",
    "pos": "WR",
-   "team": "LVR",
+   "team": "ARI",
    "fbp": null,
-   "espn": "4428678",
+   "espn": "3916204",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1905,15 +1869,6 @@
    "team": "WAS",
    "fbp": null,
    "espn": "2574808",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16202",
-   "mflName": "Ronnie Bell",
-   "pos": "WR",
-   "team": "LVR",
-   "fbp": null,
-   "espn": "4372063",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
