@@ -804,7 +804,7 @@
    "mfl": "15258",
    "mflName": "Michael Carter",
    "pos": "RB",
-   "team": "TEN",
+   "team": "FA",
    "fbp": null,
    "espn": "4240657",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -996,15 +996,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "3918639",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "14875",
-   "mflName": "Harrison Bryant",
-   "pos": "TE",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4040774",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1389,7 +1380,7 @@
    "mfl": "17278",
    "mflName": "Coleman Owen",
    "pos": "WR",
-   "team": "GBP",
+   "team": "FA",
    "fbp": null,
    "espn": "4578436",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
