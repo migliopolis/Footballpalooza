@@ -51,12 +51,18 @@
     // a defense: its NFL logo in a circle of one of that team's colors the logo reads well on
     const dc = pos(p.id) === 'DEF' ? FBPU.defBg(info(p.id).team) : '';
     const sty = (tr && tr.drop != null ? `--drop:${tr.drop}%;` : '') + ring.trim() + (dc ? `--dc:${dc};` : '');
-    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}${ring ? ' tcr' : ''}${ov}"${sty ? ` style="${sty}"` : ''}${out ? ' title="Inactive: didn’t play"' : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
+    return `<span class="lv-ph${pos(p.id) === 'DEF' ? ' def' : ''}${medal(p.id)}${tr ? ' t-' + tr.k : ''}${out ? ' t-dnp' : ''}${ring ? ' tcr' : ''}${ov}"${sty ? ` style="${sty}"` : ''}${out ? ` title="Didn’t play${inactive(p) ? ' (inactive)' : ''}"` : tr ? ` title="${tr.title}"` : ''}>${ph ? `<img src="${ph}" alt="" loading="lazy" onerror="this.remove()">` : ''}${extra}</span>`;
   }
   // a player who sat out: ESPN's game-day roster has him inactive (IR, a healthy scratch, ruled out) and he has no points.
   // A player who suited up and scored 0 still counts as having played.
-  const dnp = p => { if (pos(p.id) === 'DEF' || +p.score) return false; const g = gameOf(p.id), e = espnId(p.id), S = EW().stats;
-    return !!(g && e && S['ro' + g.id] && S['out:' + e]); };
+  // Also anyone the injury report had Out, on IR, suspended or on PUP when his game kicked off (IR players aren't on the
+  // game-day inactive list, so without this they'd look like a 0 who played). One rule: didn't play = the DNP stamp.
+  const OUTS = { 'Out': 1, 'Injured Reserve': 1, 'Suspension': 1, 'Physically Unable to Perform': 1 };
+  const inactive = p => { const g = gameOf(p.id), e = espnId(p.id), S = EW().stats; return !!(g && e && S['ro' + g.id] && S['out:' + e]); };
+  const dnp = p => { if (pos(p.id) === 'DEF' || +p.score) return false; if (inactive(p)) return true;
+    const g = gameOf(p.id), i = injuries && injuries[espnId(p.id)];
+    // only a status from before kickoff: one posted during or after his game means he got hurt playing
+    return !!(g && g.state !== 'pre' && i && OUTS[i.status] && !(i.date && g.date && Date.parse(i.date) >= Date.parse(g.date))); };
   // hurt and ruled out during his game: ESPN's live injury report has him Out, posted after kickoff (or the note says he
   // won't return). His day is done: his projection becomes what he has, and he's judged as if his game were over.
   const ruledOut = p => { if (view || pos(p.id) === 'DEF') return false; const g = gameOf(p.id); if (!g || g.state !== 'in') return false;
@@ -647,7 +653,7 @@
       const cell = (p, cls, slot) => {
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         // FBP's own IR counts even when ESPN no longer lists the injury
-        const st = state(p), ph = photo(p.id), inj = (dnp(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : null) || (ruledOut(p) ? null : hurtTag(p)) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
+        const st = state(p), ph = photo(p.id), inj = (dnp(p) ? (inactive(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : injTag(p.id)) : null) || (ruledOut(p) ? null : hurtTag(p)) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         // his photo opens his Player Page; its back arrow returns here, to this matchup
         const img = `<a class="lv-pha" href="#now/team/${(cls === 'a' ? a : b).id}/${p.id}" title="Player Page" aria-label="Player Page">${photoHtml(p, shownW, (cls === 'a' ? a : b).id)}</a>`;
