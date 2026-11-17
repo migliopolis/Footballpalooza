@@ -3337,7 +3337,5 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 .nw-body p{margin:0 0 6px;font-size:.88rem;line-height:1.45}
 .nw-src{color:var(--muted);font-size:.72rem}
 .nw-none{color:var(--muted);padding:18px 0}
-@media (max-width:640px){.nw-list{grid-template-columns:minmax(0,1fr)}.nw-teams{display:flex;overflow-x:auto;scrollbar-width:none;margin-left:-4px;padding:2px 4px}.nw-teams::-webkit-scrollbar{display:none}.nw-teams .hs-cb{flex:0 0 62px}.nw-bar .seg{flex:1 1 100%}}
-.nw-clip{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.nw-more{background:none;border:0;padding:0 0 6px;color:var(--accent,#c8211a);font:600 .78rem var(--body);cursor:pointer}
+@media (max-width:640px){.nw-list{grid-template-columns:minmax(0,1fr)}.nw-bar .seg{flex:1 1 100%}}
 .tm-col{display:flex;flex-direction:column;justify-content:space-between;gap:2px;min-width:0}

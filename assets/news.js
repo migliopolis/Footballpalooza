@@ -104,8 +104,7 @@ window.FBPNews = (function () {
   function card({ n, r }, ctx) {
     const esc = ctx.esc, t = ctx.teams[r.f] || {}, m = med(r);
     const slot = r.sl === 'IR' ? '<i class="hs-slot">FBP IR</i>' : r.sl === 'T' ? '<i class="hs-slot">Taxi</i>' : '';
-    const id = n.k + ':' + n.e, o = exp.has(id), long = (n.b || '').length > 200;
-    const body = n.b && n.b !== n.h ? `<p class="nw-txt${long && !o ? ' nw-clip' : ''}">${esc(n.b)}</p>${long ? `<button type="button" class="nw-more" data-nw-exp="${esc(id)}" aria-expanded="${o}">${o ? 'Less' : 'More'}</button>` : ''}` : '';
+    const body = n.b && n.b !== n.h ? `<p class="nw-txt">${esc(n.b)}</p>` : '';   // the whole report, never clipped
     return `<article class="nw-card card">
       <a class="nw-who" href="#now/player/${r.id}">
         <span class="hs-ph nw-ph${m ? '' : FBPU.tc(r.f) ? ' tcr' : ''}${m ? '' : FBPU.ovc(r.id)}"${m ? ` data-med="${m}"` : ''} style="background-image:url(${FBPU.headshot(r.e)}),var(--med,var(--ovg,var(--ov0)));${m ? '' : FBPU.tc(r.f)}">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
