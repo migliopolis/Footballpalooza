@@ -3264,3 +3264,4 @@ img.ovbg{background:var(--ovg)}
 /* compact rows: even space above the photo and below the name (the name line carried extra room underneath) */
 .lv-compact .lv-t tr:not(.lv-rx) td.lv-p{padding-top:7px;padding-bottom:4px}
 .lv-compact tr:not(.lv-rx) .lv-nm{line-height:1.1}
+.aw-phl{display:contents;color:inherit}.aw-phl .aw-ph{cursor:pointer}

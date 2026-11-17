@@ -679,8 +679,26 @@ window.FBPRosters = (function () {
     if (!R) return '<p class="loading">Loading…</p>';
     const f = findRow(pid);
     if (f === null) return '<p class="loading">Loading…</p>';
-    if (!f) return '<p class="error">No player with that id.</p>';
+    if (!f) return pastPlayer(pid, ctx);
     return playerPage(f[0], f[1], ctx);
+  }
+  // a player who's no longer in the player pool (retired, out of the league): his FBP honors and career, from the awards history
+  function pastPlayer(pid, ctx) {
+    const af = espn('AF', 'data/awards/all-fbp.json');
+    if (!af) return '<p class="loading">Loading…</p>';
+    let r = null;
+    Object.values(af.franchises || {}).some(list => (r = (list || []).find(p => p.id === pid)));
+    if (!r) return '<p class="error">No player with that id.</p>';
+    const esc = ctx.esc, code = NFL_ESPN[r.nfl] || (r.nfl || '').toLowerCase();
+    const sec = (title, body) => body ? `<section class="card ro-card pp-sec"><h2>${title}</h2>${body}</section>` : '';
+    return `<div class="pp">
+      <div class="pp-backs">${ppBack({ fid: null, name: '' })}</div>
+      <div class="pp-hero" style="--tc:var(--line)"><span class="pp-ph"${r.espn ? ` style="background-image:url(${FBPU.headshot(r.espn)}),var(--ov0)"` : ''}></span>
+        <div class="pp-id"><h2>${esc(r.name)}</h2><p>${esc(r.pos || '')}${r.nfl ? ` · ${nflLogo(code)}${esc(r.nfl)}` : ''}</p>
+          <p class="pp-fbp">No longer in the FBP player pool</p></div></div>
+      ${sec('FBP honors', honors({ id: pid }, ctx))}
+      ${sec('FBP career', fbpCareer({ id: pid }, ctx))}
+    </div>`;
   }
   function boxFor(ctx, pid) {   // his box, for pages outside Rosters (League Now > Rankings)
     X = ctx; load();
