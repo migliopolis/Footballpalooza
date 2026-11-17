@@ -11,6 +11,49 @@ window.FBPRosters = (function () {
   try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; noteShut = localStorage.getItem('fbp-ro-note') === 'shut'; schedShut = localStorage.getItem('fbp-ro-sched') !== 'open'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
   const open = new Set(), tabOf = {}, cache = {};
   let ppShut = {}; try { ppShut = JSON.parse(localStorage.getItem('fbp-pp-fold') || '{}') || {}; } catch (e) {}
+  // Player Page: the sections from Season analytics down fold (tap the header) and reorder (press and hold a header,
+  // then drag it up or down); both remembered on this device for every player
+  let ppOrder = []; try { ppOrder = JSON.parse(localStorage.getItem('fbp-pp-order') || '[]') || []; } catch (e) {}
+  function sortable(items) {
+    const at = k => { const i = ppOrder.indexOf(k); return i < 0 ? 100 + items.findIndex(x => x[0] === k) : i; };
+    const list = items.filter(x => x[2]).sort((a, b) => at(a[0]) - at(b[0]));
+    return `<div class="pp-sort">${list.map(([k, title, body, cls]) => `<section class="card ro-card pp-sec ro-fold pp-drag${cls ? ' ' + cls : ''}${ppShut[k] ? ' shut' : ''}" data-pp-k="${k}"><button type="button" class="ro-tog" data-pp-fold="${k}" aria-expanded="${!ppShut[k]}" title="Tap to open or close · press and hold to move"><span class="ro-car" aria-hidden="true"></span><h2>${title}</h2><span class="pp-grip" aria-hidden="true">⋮⋮</span></button><div class="ro-fb">${body}</div></section>`).join('')}</div>`;
+  }
+  // press and hold a header for 450ms to pick the section up; drag; let go to drop
+  let drag = null, holdT = 0, justDragged = false;
+  const endHold = () => { clearTimeout(holdT); holdT = 0; };
+  document.addEventListener('pointerdown', e => {
+    const h = e.target.closest && e.target.closest('.pp-drag > .ro-tog'); if (!h || (e.button != null && e.button !== 0)) return;
+    const sec = h.parentElement, x0 = e.clientX, y0 = e.clientY;
+    endHold();
+    holdT = setTimeout(() => {
+      holdT = 0; drag = { sec, list: sec.parentElement, y: y0, id: e.pointerId };
+      sec.classList.add('pp-lift'); document.body.classList.add('pp-dragging');
+      if (navigator.vibrate) try { navigator.vibrate(15); } catch (err) {}
+    }, 450);
+    const cancel = ev => { if (Math.abs(ev.clientX - x0) > 8 || Math.abs(ev.clientY - y0) > 8) endHold(); };
+    h.addEventListener('pointermove', cancel, { once: false });
+    const up = () => { endHold(); h.removeEventListener('pointermove', cancel); };
+    h.addEventListener('pointerup', up, { once: true }); h.addEventListener('pointercancel', up, { once: true });
+  });
+  const moveTo = y => {
+    if (!drag) return;
+    const { sec, list } = drag, sibs = [...list.children].filter(c => c !== sec);
+    const next = sibs.find(c => { const r = c.getBoundingClientRect(); return y < r.top + r.height / 2; });
+    if (next) { if (sec.nextElementSibling !== next) list.insertBefore(sec, next); } else if (list.lastElementChild !== sec) list.appendChild(sec);
+  };
+  document.addEventListener('pointermove', e => { if (drag) { e.preventDefault(); moveTo(e.clientY); } }, { passive: false });
+  document.addEventListener('touchmove', e => { if (drag) { e.preventDefault(); moveTo(e.touches[0].clientY); } }, { passive: false });
+  const drop = () => {
+    if (!drag) return;
+    const { sec, list } = drag; drag = null; justDragged = true; setTimeout(() => { justDragged = false; }, 300);
+    sec.classList.remove('pp-lift'); document.body.classList.remove('pp-dragging');
+    const now = [...list.children].map(c => c.dataset.ppK);
+    ppOrder = [...now, ...ppOrder.filter(k => !now.includes(k))];   // keys this player doesn't have keep their place
+    try { localStorage.setItem('fbp-pp-order', JSON.stringify(ppOrder)); } catch (err) {}
+  };
+  document.addEventListener('pointerup', drop); document.addEventListener('pointercancel', drop); document.addEventListener('touchend', drop);
+  document.addEventListener('contextmenu', e => { if (drag || holdT) e.preventDefault(); });
   // player search across all 12 rosters: the results list redraws in place as you type, so the box keeps focus
   let findQ = '';
   const fold = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, '');
@@ -504,13 +547,17 @@ window.FBPRosters = (function () {
       ${fsec('wk', `${R.season} FBP points by week`, weekBars(r, t))}
       ${def ? '' : fsec('ovr', `${R.season} OVR by week`, ovrChart(r))}
       ${def ? '' : fsec('news', 'Latest news', part(r, t, ctx, 'news', true))}
-      ${sec('Season analytics', part(r, t, ctx, 'an'))}
-      ${def ? '' : sec(`${R.season} game log`, part(r, t, ctx, 'log'))}
-      <div class="pp-two">${sec('Schedule', part(r, t, ctx, 'sched'))}<div class="pp-col">${sec('Contract', part(r, t, ctx, 'sal'))}${sec('Heat Check', heatStrip(r) || '<p class="ro-wait">Loading…</p>', 'pp-heat')}</div></div>
-      ${sec('FBP career', fbpCareer(r, ctx))}
-      ${sec('Awards and honors', honors(r, ctx))}
-      ${def || !r.espn || !CAREER[r.pos] ? '' : sec('NFL career stats', careerStats(r, esc))}
-      ${sec('FBP journey', part(r, t, ctx, 'jour'))}
+      ${sortable([
+        ['an', 'Season analytics', part(r, t, ctx, 'an')],
+        ['log', `${R.season} game log`, def ? '' : part(r, t, ctx, 'log')],
+        ['sched', 'Schedule', part(r, t, ctx, 'sched')],
+        ['sal', 'Contract', part(r, t, ctx, 'sal')],
+        ['heat', 'Heat Check', heatStrip(r) || '<p class="ro-wait">Loading…</p>', 'pp-heat'],
+        ['career', 'FBP career', fbpCareer(r, ctx)],
+        ['honors', 'Awards and honors', honors(r, ctx)],
+        ['nfl', 'NFL career stats', def || !r.espn || !CAREER[r.pos] ? '' : careerStats(r, esc)],
+        ['jour', 'FBP journey', part(r, t, ctx, 'jour')],
+      ])}
       <p class="rf-foot">Through week ${R.through}. NFL stats, bio, news and schedules come from ESPN; points are FBP scoring.</p>
     </div>`;
   }
@@ -920,7 +967,7 @@ window.FBPRosters = (function () {
 
   document.addEventListener('click', e => {
     const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick, .ra-page, .rk-page, .pp')) return;
-    const pf = t.closest('[data-pp-fold]'); if (pf) { const k = pf.dataset.ppFold; ppShut[k] = !ppShut[k]; try { localStorage.setItem('fbp-pp-fold', JSON.stringify(ppShut)); } catch (err) {}
+    const pf = t.closest('[data-pp-fold]'); if (pf && justDragged) return; if (pf) { const k = pf.dataset.ppFold; ppShut[k] = !ppShut[k]; try { localStorage.setItem('fbp-pp-fold', JSON.stringify(ppShut)); } catch (err) {}
       pf.closest('.ro-fold').classList.toggle('shut', !!ppShut[k]); pf.setAttribute('aria-expanded', String(!ppShut[k])); return; }
     const rs = t.closest('[data-ra-sort]'); if (rs) { const k = rs.dataset.raSort; raSort = k === 'pos' ? ['pos', 1] : raSort[0] === k ? [k, -raSort[1]] : [k, 1]; return redraw(); }
     const cs = t.closest('[data-ra-csort]'); if (cs) { const k = cs.dataset.raCsort; cSort = cSort[0] === k ? [k, -cSort[1]] : [k, 1]; return redraw(); }
