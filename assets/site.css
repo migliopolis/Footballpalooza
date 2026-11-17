@@ -3265,13 +3265,18 @@ img.ovbg{background:var(--ovg)}
 .lv-compact .lv-t tr:not(.lv-rx) td.lv-p{padding-top:7px;padding-bottom:4px}
 .lv-compact tr:not(.lv-rx) .lv-nm{line-height:1.1}
 .aw-phl{display:contents;color:inherit}.aw-phl .aw-ph{cursor:pointer}
-/* My Team: this season's schedule (folds) */
-.ro-sch{width:100%;border-collapse:collapse;font-size:.88rem}
-.ro-sch th,.ro-sch td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
-.ro-sch th.l,.ro-sch td.l{text-align:left}
-.ro-sch td.l a{color:inherit;text-decoration:none;font-weight:600}
-.ro-sch td.l img{width:20px;height:20px;object-fit:contain;vertical-align:middle;margin:0 6px 0 2px}
-.ro-wl{display:inline-block;min-width:18px;text-align:center;border-radius:4px;color:#fff;font-size:.72rem;padding:1px 4px;margin-right:2px}
+/* My Team: this season's schedule (folds): narrow columns so it fits a phone without sliding */
+.ro-sch{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.ro-sch th,.ro-sch td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.ro-sch th.l,.ro-sch td.l{text-align:left;width:100%}
+.ro-sch th.c,.ro-sch td.c{text-align:center}
+.ro-sch td.l a{color:inherit;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:5px;vertical-align:middle}
+.ro-sch td.l img{width:20px;height:20px;object-fit:contain;flex:none}
+.ro-sch .ro-sc i{font-style:normal;margin:0 2px;color:var(--muted)}
+.ro-wl{display:inline-block;min-width:18px;text-align:center;border-radius:4px;color:#fff;font-size:.72rem;padding:1px 4px}
 .ro-sr.w .ro-wl{background:#2f9e5e}.ro-sr.l .ro-wl{background:#c0392b}.ro-sr.t .ro-wl{background:#888}
 .ro-sr.up td{color:var(--muted)}
+@media (max-width:420px){.ro-sch{font-size:.8rem}.ro-sch th,.ro-sch td{padding:6px 3px}}
 .ro-tog h2 small{font-size:.75rem;font-weight:500;color:var(--muted);margin-left:6px;text-transform:none;letter-spacing:0}
+.ro-sch .ro-ha{display:inline-block;width:1.6em;color:var(--muted);vertical-align:middle}
+.ro-sch td:last-child,.ro-sch th:last-child{padding-left:8px}

@@ -532,10 +532,10 @@ window.FBPRosters = (function () {
     if (!rows.length) return '';
     rows.sort((x, y) => x.wk - y.wk);
     const left = rows.filter(x => !x.r).length;
-    const tr = x => { const o = tm(x.opp); return `<tr class="ro-sr${x.r ? ' ' + x.r.toLowerCase() : ' up'}"><td>${x.wk}</td><td class="l">${home.has(x.wk) ? 'vs' : '@'} <a href="#now/team/${x.opp}">${o.logo ? `<img src="${o.logo}" alt="" loading="lazy">` : ''}${esc(((ctx.teams || {})[x.opp] || {}).name || o.abbr || x.opp)}</a></td>
-      ${x.r ? `<td><b class="ro-wl">${x.r}</b> ${x.me.toFixed(1)}–${x.them.toFixed(1)}</td><td>${x.rec}</td>` : '<td class="ro-mu">—</td><td></td>'}</tr>`; };
+    const tr = x => { const o = tm(x.opp); return `<tr class="ro-sr${x.r ? ' ' + x.r.toLowerCase() : ' up'}"><td>${x.wk}</td><td class="l"><span class="ro-ha">${home.has(x.wk) ? 'vs' : '@'}</span><a href="#now/team/${x.opp}">${o.logo ? `<img src="${o.logo}" alt="" loading="lazy">` : ''}${esc(((ctx.teams || {})[x.opp] || {}).name || o.abbr || x.opp)}</a></td>
+      ${x.r ? `<td class="c"><b class="ro-wl">${x.r}</b></td><td class="ro-sc">${x.me.toFixed(1)}<i>–</i>${x.them.toFixed(1)}</td><td>${x.rec}</td>` : '<td></td><td class="ro-sc ro-mu">—</td><td></td>'}</tr>`; };
     return `<section class="card ro-card ro-fold${schedShut ? ' shut' : ''}"><button type="button" class="ro-tog" data-ro-fold="sched" aria-expanded="${!schedShut}"><span class="ro-car" aria-hidden="true"></span><h2>Schedule <small>${rc(w, l, t)}${left ? ` · ${left} to play` : ''}</small></h2></button>
-      <div class="ro-fb"><div class="tbl-wrap"><table class="ro-sch"><thead><tr><th>Wk</th><th class="l">Opponent</th><th>Result</th><th>Record</th></tr></thead><tbody>${rows.map(tr).join('')}</tbody></table></div>
+      <div class="ro-fb"><div class="tbl-wrap"><table class="ro-sch"><thead><tr><th>Wk</th><th class="l">Opponent</th><th class="c" colspan="2">Result</th><th>Rec</th></tr></thead><tbody>${rows.map(tr).join('')}</tbody></table></div>
       <p class="ro-why">Regular season. Home and away as MFL lists them.</p></div></section>`;
   }
   function weekly(t, esc, tm) {
