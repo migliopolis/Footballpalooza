@@ -3261,3 +3261,6 @@ img.ovbg{background:var(--ovg)}
 .aw-pick{display:block;font:600 .72rem var(--mono);color:var(--muted);margin-top:2px}
 /* defense logos: always dead center in their circle (Safari mis-sizes percentage images in a grid) */
 .lv-ph.def img,.lv-ph.def[class*=" t-"] img{position:absolute;inset:0;margin:auto;width:76%;height:76%;object-fit:contain;object-position:center}
+/* compact rows: even space above the photo and below the name (the name line carried extra room underneath) */
+.lv-compact .lv-t tr:not(.lv-rx) td.lv-p{padding-top:7px;padding-bottom:4px}
+.lv-compact tr:not(.lv-rx) .lv-nm{line-height:1.1}
