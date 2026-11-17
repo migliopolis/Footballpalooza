@@ -5,23 +5,23 @@
  "note": "Projected NFL landing spot per rookie. consensus = the team at his pick in the 1-week consensus mock (round 1); recent = the team holding his median pick in mocks from the last two weeks (Tankathon order); most = the team he is most often mocked to.",
  "players": {
   "Jeremiah Smith": {
-   "team": "TEN",
-   "pick": 1,
-   "basis": "recent",
+   "team": "LAC",
+   "pick": 2,
+   "basis": "consensus",
    "mocks": 25,
    "mostMocked": "LAC"
   },
   "Jadan Baugh": {
-   "team": "CIN",
-   "pick": 25,
-   "basis": "consensus",
+   "team": "DEN",
+   "pick": 24,
+   "basis": "recent",
    "mocks": 12,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
-   "team": "ATL",
-   "pick": 8,
-   "basis": "recent",
+   "team": "TB",
+   "pick": 10,
+   "basis": "consensus",
    "mocks": 25,
    "mostMocked": "WSH"
   },
@@ -40,8 +40,8 @@
    "mostMocked": "HOU"
   },
   "Darian Mensah": {
-   "team": "NYJ",
-   "pick": 6,
+   "team": "ARI",
+   "pick": 7,
    "basis": "consensus",
    "mocks": 19,
    "mostMocked": "NYJ"
@@ -56,7 +56,7 @@
   "CJ Carr": {
    "team": "NYJ",
    "pick": 6,
-   "basis": "recent",
+   "basis": "consensus",
    "mocks": 24,
    "mostMocked": "NYJ"
   },
@@ -70,13 +70,13 @@
   "Cam Coleman": {
    "team": "SEA",
    "pick": 17,
-   "basis": "recent",
+   "basis": "consensus",
    "mocks": 21,
    "mostMocked": "LV"
   },
   "Nick Marsh": {
-   "team": "SEA",
-   "pick": 17,
+   "team": "LV",
+   "pick": 15,
    "basis": "consensus",
    "mocks": 19,
    "mostMocked": "KC"
@@ -91,21 +91,21 @@
   "Dante Moore": {
    "team": "CLE",
    "pick": 18,
-   "basis": "recent",
+   "basis": "consensus",
    "mocks": 12,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
-   "team": "ARI",
-   "pick": 7,
-   "basis": "consensus",
+   "team": "ATL",
+   "pick": 8,
+   "basis": "recent",
    "mocks": 11,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
-   "team": "NYG",
-   "pick": 22,
-   "basis": "recent",
+   "team": "NE",
+   "pick": 16,
+   "basis": "consensus",
    "mocks": 16,
    "mostMocked": "CAR"
   },
@@ -124,8 +124,8 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "DEN",
-   "pick": 24,
+   "team": "DET",
+   "pick": 30,
    "basis": "consensus",
    "mocks": 17,
    "mostMocked": "DEN"
@@ -147,13 +147,13 @@
   "Ryan Coleman-Williams": {
    "team": "BUF",
    "pick": 32,
-   "basis": "consensus",
+   "basis": "recent",
    "mocks": 5,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
-   "team": "TB",
-   "pick": 10,
+   "team": "MIN",
+   "pick": 27,
    "basis": "consensus",
    "mocks": 15,
    "mostMocked": "PIT"
@@ -173,9 +173,9 @@
    "mostMocked": "LAR"
   },
   "Reed Harris": {
-   "team": "DET",
-   "pick": 30,
-   "basis": "recent",
+   "team": "KC",
+   "pick": 29,
+   "basis": "consensus",
    "mocks": 8,
    "mostMocked": "KC"
   },
@@ -243,9 +243,9 @@
    "mostMocked": "CLE"
   },
   "LaNorris Sellers": {
-   "team": "CLE",
-   "pick": 18,
-   "basis": "recent",
+   "team": "PIT",
+   "pick": 23,
+   "basis": "consensus",
    "mocks": 10,
    "mostMocked": "CLE"
   },

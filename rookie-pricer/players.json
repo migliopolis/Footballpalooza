@@ -9,14 +9,14 @@
    "pos": "WR",
    "school": "Ohio State",
    "adp": 1.0,
-   "nflPick": 1
+   "nflPick": 2
   },
   {
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
    "adp": 4.5,
-   "nflPick": 26
+   "nflPick": 25
   },
   {
    "name": "Cam Coleman",
@@ -30,14 +30,14 @@
    "pos": "WR",
    "school": "Indiana",
    "adp": 5.4,
-   "nflPick": 9
+   "nflPick": 10
   },
   {
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
    "adp": 5.7,
-   "nflPick": 6
+   "nflPick": 7
   },
   {
    "name": "Drew Mestemaker",
@@ -51,7 +51,7 @@
    "pos": "QB",
    "school": "Miami",
    "adp": 7.2,
-   "nflPick": 6
+   "nflPick": 7
   },
   {
    "name": "Dante Moore",
@@ -93,21 +93,21 @@
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 13.5,
-   "nflPick": 9
+   "nflPick": 25
   },
   {
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
    "adp": 13.9,
-   "nflPick": 25
+   "nflPick": 30
   },
   {
    "name": "Nick Marsh",
    "pos": "WR",
    "school": "Indiana",
    "adp": 14.1,
-   "nflPick": 19
+   "nflPick": 17
   },
   {
    "name": "Ryan Coleman-Williams",
@@ -121,7 +121,7 @@
    "pos": "TE",
    "school": "LSU",
    "adp": 16.5,
-   "nflPick": 22
+   "nflPick": 16
   },
   {
    "name": "Nate Frazier",
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 22.3,
-   "nflPick": 30
+   "nflPick": 29
   },
   {
    "name": "Mark Fletcher Jr.",

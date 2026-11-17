@@ -14,21 +14,21 @@
    "name": "Jeremiah Smith",
    "pos": "WR",
    "school": "Ohio State",
-   "nflPick": 1
+   "nflPick": 2
   },
   {
    "rank": 2,
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
-   "nflPick": 26
+   "nflPick": 25
   },
   {
    "rank": 3,
    "name": "Charlie Becker",
    "pos": "WR",
    "school": "Indiana",
-   "nflPick": 9
+   "nflPick": 10
   },
   {
    "rank": 4,
@@ -49,7 +49,7 @@
    "name": "Darian Mensah",
    "pos": "QB",
    "school": "Miami",
-   "nflPick": 6
+   "nflPick": 7
   },
   {
    "rank": 7,
@@ -84,7 +84,7 @@
    "name": "Nick Marsh",
    "pos": "WR",
    "school": "Indiana",
-   "nflPick": 19
+   "nflPick": 17
   },
   {
    "rank": 12,
@@ -105,14 +105,14 @@
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
-   "nflPick": 6
+   "nflPick": 7
   },
   {
    "rank": 15,
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
-   "nflPick": 22
+   "nflPick": 16
   },
   {
    "rank": 16,
@@ -133,7 +133,7 @@
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
-   "nflPick": 25
+   "nflPick": 30
   },
   {
    "rank": 19,
@@ -168,7 +168,7 @@
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
-   "nflPick": 9
+   "nflPick": 25
   },
   {
    "rank": 24,
@@ -203,7 +203,7 @@
    "name": "Reed Harris",
    "pos": "WR",
    "school": "Arizona State",
-   "nflPick": 30
+   "nflPick": 29
   },
   {
    "rank": 29,
@@ -273,7 +273,7 @@
    "name": "LaNorris Sellers",
    "pos": "QB",
    "school": "South Carolina",
-   "nflPick": 26
+   "nflPick": 30
   },
   {
    "rank": 39,
