@@ -12,7 +12,7 @@ window.FBPNews = (function () {
   let who = 'ro', team = '', pos = 'All', span = 3, q = '';
   const SPANS = [[1, '24 hours'], [3, '3 days'], [7, 'Week']];
   const exp = new Set();     // cards opened to the full write-up
-  const KEY = 'fbp-news-v2', TTL = 15 * 60 * 1000, LIMIT = 6, CONC = 6;
+  const KEY = 'fbp-news-v3', TTL = 15 * 60 * 1000, LIMIT = 6, CONC = 6;
   const FEED = id => `https://site.api.espn.com/apis/fantasy/v2/games/ffl/news/players?playerId=${id}&limit=${LIMIT}`;
   const NFL = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=100';
   const strip = x => String(x || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
@@ -52,7 +52,9 @@ window.FBPNews = (function () {
         const ids = [...new Set((a.categories || []).filter(c => c.type === 'athlete' && c.athleteId).map(c => String(c.athleteId)))].filter(id => byE[id]);
         if (!ids.length || ids.length > 3) return;
         const e = ids.find(id => byE[id].f) || ids[0], link = a.links && a.links.web && a.links.web.href;
-        HEAD.push({ k: 'h' + a.id, e, t: a.published || a.lastModified, h: strip(a.headline), b: strip(a.description), src: 'ESPN', url: link || '' });
+        // videos: ESPN's Media items, or anything that links to an ESPN video page
+        const vid = a.type === 'Media' || /espn\.com\/(video|watch)\b|\/video\/clip/.test(link || '');
+        HEAD.push({ k: 'h' + a.id, e, t: a.published || a.lastModified, h: strip(a.headline), b: strip(a.description), src: vid ? 'ESPN video' : 'ESPN', url: link || '', vid });
       });
       redraw(true);
     }).catch(() => { HEAD = []; });
@@ -110,7 +112,7 @@ window.FBPNews = (function () {
         <span class="hs-ph nw-ph${m ? '' : FBPU.tc(r.f) ? ' tcr' : ''}${m ? '' : FBPU.ovc(r.id)}"${m ? ` data-med="${m}"` : ''} style="background-image:url(${FBPU.headshot(r.e)}),var(--med,var(--ovg,var(--ov0)));${m ? '' : FBPU.tc(r.f)}">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
         <span class="hs-id"><b>${esc(r.n)}</b><small>${r.p} ${nflLogo(r.t) || 'FA'}${r.f ? ` · ${esc(t.abbr || '')}` : ' · Free agent'}${r.sal != null ? ` · $${r.sal}` : ''} ${slot}</small></span>
       </a>
-      <div class="nw-body"><h3>${n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.h)}</a>` : esc(n.h)}</h3>${body}
+      <div class="nw-body"><h3>${n.vid ? '<span class="nw-tv" role="img" aria-label="Video" title="Video">📺</span>' : ''}${n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.h)}</a>` : esc(n.h)}</h3>${body}
         <small class="nw-src">${n.src} · ${when(n.t)}</small></div>
     </article>`;
   }
@@ -142,7 +144,7 @@ window.FBPNews = (function () {
       ${prog}
       <p class="nw-count">${L.length} update${L.length === 1 ? '' : 's'}${team ? ` for ${esc((ctx.teams[team] || {}).name || '')}` : ''}</p>
       ${list || empty}
-      <p class="rf-foot">News comes live from ESPN: RotoWire’s fantasy updates for every player on an FBP roster, plus ESPN’s NFL headlines about one to three players, shown once under the first player tagged. Free agents show up only when they make the headlines. Tap a player for his Player Page; ESPN headlines open the story on ESPN. Checked again when you come back after 15 minutes.</p>
+      <p class="rf-foot">News comes live from ESPN: RotoWire’s fantasy updates for every player on an FBP roster, plus ESPN’s NFL headlines about one to three players, shown once under the first player tagged. Free agents show up only when they make the headlines. Tap a player for his Player Page; ESPN headlines open the story on ESPN; 📺 marks a video. Checked again when you come back after 15 minutes.</p>
     </div>`;
   }
 

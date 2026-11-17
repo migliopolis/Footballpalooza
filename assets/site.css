@@ -3339,3 +3339,4 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 .nw-none{color:var(--muted);padding:18px 0}
 @media (max-width:640px){.nw-list{grid-template-columns:minmax(0,1fr)}.nw-bar .seg{flex:1 1 100%}}
 .tm-col{display:flex;flex-direction:column;justify-content:space-between;gap:2px;min-width:0}
+.nw-tv{margin-right:6px;font-size:.95em}
