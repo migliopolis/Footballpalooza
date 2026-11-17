@@ -44,7 +44,7 @@ I checked his numbers, because that's the job. He's half right. McMillan's 45.2 
 
 On going nuclear, the site's Heat Check counts every starter who hits the nuclear line for his position. Fully Cooked's starters have gone nuclear eight times this season, tied for third-most in the league. Kenneth Walker III has done it three times by himself, Nacua twice. Thots' starters have done it five times. And Thots' opponents have gone nuclear against them 10 times, tied for the most in the league. One of them was Mahomes on Sunday. Big games happen to everybody. Fully Cooked just ran into two in the same building.
 
-Paul M. had his own podium. "He thinks it's lucky Christian McCaffrey has the high score for the week," he said. "While he's over there getting 35 from Patrick Mahomes on a $2." He's right about that one. Mahomes cost $2 at the auction and he's second for Best Value. Paul M. kept going: "Talk about luck, he stumbled (expletive) first into a 4th round Puka Nacua." That one checks out too. Nacua was pick 4.04 in 2023. Paul M. closed with: "I'm riding high right now. I just swept a division rival and I'm in his head rent free."
+Paul M. had his own podium. "He thinks it's lucky Christian McCaffrey has the high score for the week," he said. "While he's over there getting 35 points from Patrick (expletive) Mahomes on a $2 contract." He's right about that one. Mahomes cost $2 at the auction and he's second for Best Value. Paul M. kept going: "Talk about luck, he stumbled (expletive) first into a 4th round Puka Nacua." That one checks out too. Nacua was pick 4.04 in 2023. Paul M. closed with: "I'm riding high right now. I just swept a division rival and I'm in his head rent free."
 
 Thots are the 6 seed. Fully Cooked are the 4. A playoff meeting isn't out of the question. I'd like a seat for that one.
 
@@ -60,7 +60,7 @@ Jaxon Smith-Njigba 31.1, Deebo Samuel 28.0. Mailing It In end a two-game skid an
 
 ### Wholey Club 102.8, Son of Tinactin 83.0
 
-Stefon Diggs 20.3, Matthew Stafford 19.8. The Draft Bowl went to Wholey Club, who have won two straight and are 5-5. They still hold the 1.01. Son of Tinactin stay at 2, and they left George Pickens' 43.5 on the bench. That's the third-best score by anyone in the league this week, and it didn't count.
+Stefon Diggs 20.3, Matthew Stafford 19.8. In the Draft Bowl, losing is the point, and Son of Tinactin managed it. It didn't help them much. The draft order runs on potential points, not wins, and Tinactin's lineup could have scored 137.4, with George Pickens' 43.5 sitting on the bench. That's the third-best score by anyone in the league this week. Wholey Club's best possible lineup was 119.4. So Wholey Club won the game and still gained in the race for the top pick. Their edge for the 1.01 grew from 15.9 potential points to 33.9. Tinactin stay at 2.
 
 ### Bullish on da Bears 108.8, Jesus Christ College 89.3
 
