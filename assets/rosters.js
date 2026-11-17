@@ -7,8 +7,8 @@ window.FBPRosters = (function () {
   let R = null, loading = false, failed = false, X = null;
   let sort = ['sal', -1];
   let pickX = null;
-  let wkShut = false, noteShut = false, howOpen = false;   // howOpen: the Roster table's how-to-read notes
-  try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; noteShut = localStorage.getItem('fbp-ro-note') === 'shut'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
+  let wkShut = false, noteShut = false, howOpen = false, schedShut = true;   // howOpen: the Roster table's how-to-read notes
+  try { wkShut = localStorage.getItem('fbp-ro-wk') === 'shut'; noteShut = localStorage.getItem('fbp-ro-note') === 'shut'; schedShut = localStorage.getItem('fbp-ro-sched') !== 'open'; } catch (e) {}   // where the team-logo row was scrolled, so picking a team doesn't send it back to the start
   const open = new Set(), tabOf = {}, cache = {};
   let ppShut = {}; try { ppShut = JSON.parse(localStorage.getItem('fbp-pp-fold') || '{}') || {}; } catch (e) {}
   // player search across all 12 rosters: the results list redraws in place as you type, so the box keeps focus
@@ -516,6 +516,28 @@ window.FBPRosters = (function () {
   }
 
   // points by week, against the league average, low and high
+  // this season's schedule and results (data/league-now.json games, upcoming and homeWeeks), folded by default
+  function schedule(fid, ctx, tm) {
+    const N = ctx.now, esc = ctx.esc;
+    if (!N || !N.games) return '';
+    const home = new Set((N.homeWeeks || {})[fid] || []), rows = [], rc = (w, l, t) => `${w}-${l}${t ? '-' + t : ''}`;
+    let w = 0, l = 0, t = 0;
+    N.games.forEach(([wk, a, sa, b, sb]) => {
+      if (a !== fid && b !== fid) return;
+      const me = a === fid ? sa : sb, them = a === fid ? sb : sa, r = me > them ? 'W' : me < them ? 'L' : 'T';
+      if (r === 'W') w++; else if (r === 'L') l++; else t++;
+      rows.push({ wk, opp: a === fid ? b : a, r, me, them, rec: rc(w, l, t) });
+    });
+    (N.upcoming || []).forEach(([wk, a, b]) => { if ((a === fid || b === fid) && !rows.some(x => x.wk === wk)) rows.push({ wk, opp: a === fid ? b : a }); });
+    if (!rows.length) return '';
+    rows.sort((x, y) => x.wk - y.wk);
+    const left = rows.filter(x => !x.r).length;
+    const tr = x => { const o = tm(x.opp); return `<tr class="ro-sr${x.r ? ' ' + x.r.toLowerCase() : ' up'}"><td>${x.wk}</td><td class="l">${home.has(x.wk) ? 'vs' : '@'} <a href="#now/team/${x.opp}">${o.logo ? `<img src="${o.logo}" alt="" loading="lazy">` : ''}${esc(((ctx.teams || {})[x.opp] || {}).name || o.abbr || x.opp)}</a></td>
+      ${x.r ? `<td><b class="ro-wl">${x.r}</b> ${x.me.toFixed(1)}–${x.them.toFixed(1)}</td><td>${x.rec}</td>` : '<td class="ro-mu">—</td><td></td>'}</tr>`; };
+    return `<section class="card ro-card ro-fold${schedShut ? ' shut' : ''}"><button type="button" class="ro-tog" data-ro-fold="sched" aria-expanded="${!schedShut}"><span class="ro-car" aria-hidden="true"></span><h2>Schedule <small>${rc(w, l, t)}${left ? ` · ${left} to play` : ''}</small></h2></button>
+      <div class="ro-fb"><div class="tbl-wrap"><table class="ro-sch"><thead><tr><th>Wk</th><th class="l">Opponent</th><th>Result</th><th>Record</th></tr></thead><tbody>${rows.map(tr).join('')}</tbody></table></div>
+      <p class="ro-why">Regular season. Home and away as MFL lists them.</p></div></section>`;
+  }
   function weekly(t, esc, tm) {
     const W = t.weeks || [], n = W.length;
     if (!n) return '';
@@ -773,6 +795,7 @@ window.FBPRosters = (function () {
       ${faceCard(t, ctx)}
       ${(t.note && t.note.body) || outlook(pickd) ? `<section class="card ro-card ro-note ro-fold${noteShut ? ' shut' : ''}"><button type="button" class="ro-tog" data-ro-fold="note" aria-expanded="${!noteShut}"><span class="ro-car" aria-hidden="true"></span><h2>State of the Team</h2></button>
         <div class="ro-fb">${outlook(pickd)}${t.note && t.note.body ? `<p>${esc(t.note.body)}</p>` : ''}${t.note && (t.note.last || t.note.news) ? `<hr>${t.note.last ? `<p><b>Last week.</b> ${esc(t.note.last.replace(/^Week \d+: /, '').replace(/^./, c => c.toUpperCase()))}</p>` : ''}${t.note.news ? `<p><b>Team news.</b> ${esc(t.note.news)}</p>` : ''}` : ''}${t.note && t.note.next ? `<hr><p>${esc(t.note.next)}</p>` : ''}<small>Through week ${R.through} · from the standings, scores and the playoff simulation</small></div></section>` : ''}
+      ${schedule(pickd, ctx, tmx)}
       ${weekly(t, esc, tmx)}
       ${moves(pickd, ctx)}
       <section class="card ro-card"><div class="ro-rh"><h2>Roster</h2><button type="button" class="ro-howb" data-ro-how aria-expanded="${howOpen}">${howOpen ? 'Hide' : 'How to read this'}</button></div>${howOpen ? '<p class="ro-why">Tap a column to sort; players stay grouped by position. Tap a player to open his news, game log, schedule, analytics and salary. Slide the table for future salaries.</p>' : ''}
@@ -911,6 +934,8 @@ window.FBPRosters = (function () {
     if (t.closest('[data-ro-mvall]')) { mvAll = !mvAll; return redraw(); }
     const mv = t.closest('[data-ro-mv]'); if (mv) { mvShut = !mvShut; try { localStorage.setItem('fbp-ro-mv', mvShut ? 'shut' : 'open'); } catch (err) {}
       mv.closest('.ro-fold').classList.toggle('shut', mvShut); mv.setAttribute('aria-expanded', String(!mvShut)); return; }
+    const sc = t.closest('[data-ro-fold="sched"]'); if (sc) { schedShut = !schedShut; try { localStorage.setItem('fbp-ro-sched', schedShut ? 'shut' : 'open'); } catch (err) {}
+      sc.closest('.ro-fold').classList.toggle('shut', schedShut); sc.setAttribute('aria-expanded', String(!schedShut)); return; }
     const nt = t.closest('[data-ro-fold="note"]'); if (nt) { noteShut = !noteShut; try { localStorage.setItem('fbp-ro-note', noteShut ? 'shut' : 'open'); } catch (err) {}
       nt.closest('.ro-fold').classList.toggle('shut', noteShut); nt.setAttribute('aria-expanded', String(!noteShut)); return; }
     const wt = t.closest('[data-ro-wk]'); if (wt) { wkShut = !wkShut; try { localStorage.setItem('fbp-ro-wk', wkShut ? 'shut' : 'open'); } catch (err) {}

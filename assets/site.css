@@ -3265,3 +3265,13 @@ img.ovbg{background:var(--ovg)}
 .lv-compact .lv-t tr:not(.lv-rx) td.lv-p{padding-top:7px;padding-bottom:4px}
 .lv-compact tr:not(.lv-rx) .lv-nm{line-height:1.1}
 .aw-phl{display:contents;color:inherit}.aw-phl .aw-ph{cursor:pointer}
+/* My Team: this season's schedule (folds) */
+.ro-sch{width:100%;border-collapse:collapse;font-size:.88rem}
+.ro-sch th,.ro-sch td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.ro-sch th.l,.ro-sch td.l{text-align:left}
+.ro-sch td.l a{color:inherit;text-decoration:none;font-weight:600}
+.ro-sch td.l img{width:20px;height:20px;object-fit:contain;vertical-align:middle;margin:0 6px 0 2px}
+.ro-wl{display:inline-block;min-width:18px;text-align:center;border-radius:4px;color:#fff;font-size:.72rem;padding:1px 4px;margin-right:2px}
+.ro-sr.w .ro-wl{background:#2f9e5e}.ro-sr.l .ro-wl{background:#c0392b}.ro-sr.t .ro-wl{background:#888}
+.ro-sr.up td{color:var(--muted)}
+.ro-tog h2 small{font-size:.75rem;font-weight:500;color:var(--muted);margin-left:6px;text-transform:none;letter-spacing:0}
