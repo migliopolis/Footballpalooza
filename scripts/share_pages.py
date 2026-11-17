@@ -47,6 +47,7 @@ def routes():
         'reference/franchises': ('Franchises', 'Every Footballpalooza franchise, all time.'),
         'reference/seasons': ('Seasons', 'Every Footballpalooza season.'),
         'reference/records': ('Records', 'Footballpalooza record book.'),
+        'reference/records/players': ('Player careers', 'FBP player career records, starts only: wins, points, touchdowns, yards and more.'),
         'reference/hof': ('Hall of Fame', 'The Footballpalooza Hall of Fame and the All-Time FBP Team.'),
         'now/rosters': ('Rosters', 'All 12 FBP rosters side by side, by division or position by position.'),
         'now/team': ('My Team', 'One FBP team up close: its roster and contracts, Face of the Franchise, State of the Team and points by week.'),

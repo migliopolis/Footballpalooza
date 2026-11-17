@@ -522,7 +522,38 @@ window.FBPRef = (() => {
   }
 
   /* ---------- records ---------- */
-  const BOARDS = [['career', 'Career PPG'], ['season', 'Season PPG'], ['playoff', 'Playoff PPG'], ['games', 'Single games'], ['margins', 'Blowouts &amp; nail&#8209;biters'], ['stretch', 'Two&#8209;game stretches']];
+  const BOARDS = [['career', 'Career PPG'], ['season', 'Season PPG'], ['playoff', 'Playoff PPG'], ['games', 'Single games'], ['margins', 'Blowouts &amp; nail&#8209;biters'], ['stretch', 'Two&#8209;game stretches'], ['players', 'Player careers']];
+  // player careers and best player games, starts only (data/career-records.json, built by scripts/career_records.py)
+  let CR = null, crLoading = false;
+  const loadCR = rerender => {
+    if (CR || crLoading) return; crLoading = true;
+    FBPU.json('data/career-records.json').then(j => { if (j == null) throw 0; return j; })
+      .then(d => { CR = d; rerender(); }).catch(() => { CR = { failed: true }; rerender(); });
+  };
+  const crFace = p => { const m = window.FBP && FBP.media, src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : '');
+    return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
+  const crName = p => p.pos !== 'DEF' && p.id ? `<a class="rf-nm" href="#now/player/${p.id}">${esc(p.name)}</a>` : esc(p.name);
+  const crWho = (p, sub2) => `<span class="py-who">${crFace(p)}<span><b>${crName(p)}</b><small>${sub2}</small></span></span>`;
+  function crGames() {
+    if (!CR) { loadCR(X.rerender); return '<p class="loading">Loading player games…</p>'; }
+    if (CR.failed) return '<p class="error">Player games didn’t load.</p>';
+    const yw = r => `<a class="rf-nm" href="#reference/s-${r.year}/results/${r.week}">${r.year} wk ${r.week}</a>${r.po ? ' <span class="rf-badge">playoffs</span>' : ''}`;
+    const top = `<h2 class="sec">Best player games <small>most points by a starter, ${CR.first}–${CR.last}</small></h2>` + tbl(['#', '!Player', 'lg', 'Pts', '!When', ''],
+      CR.games.map((r, i) => `<tr><td>${i + 1}</td><td class="t">${crWho(r, esc(r.pos))}</td>${lgCell(r.fr, r.year)}<td><b>${n1(r.pts)}</b></td><td class="t">${yw(r)}${r.opp ? `<small class="rf-by">vs ${esc(nm(r.opp, r.year))}</small>` : ''}</td><td>${r.r}</td></tr>`));
+    const pos = `<h2 class="sec">Best by position</h2><div class="py-pos cr-pos">${Object.entries(CR.gamesByPos).map(([k, L2]) => `<div class="card"><h3>${k}</h3>${L2.map((r, i) =>
+      `<div class="cr-pr"><span class="cr-rk">${i + 1}</span><span class="cr-pn">${crName(r)}<small>${r.year} wk ${r.week} · ${esc(nm(r.fr, r.year))}</small></span><b>${n1(r.pts)}</b></div>`).join('')}</div>`).join('')}</div>`;
+    return top + '<div style="height:18px"></div>' + pos;
+  }
+  function crCareers() {
+    if (!CR) { loadCR(X.rerender); return '<p class="loading">Loading player careers…</p>'; }
+    if (CR.failed) return '<p class="error">Player careers didn’t load.</p>';
+    const fmt = (b, v) => b.fmt === 'pct' ? v.toFixed(3).replace(/^0/, '') : b.fmt === 'f1' ? n1(v) : Number(v).toLocaleString();
+    const card = b => `<div class="card cr-card"><h3>${esc(b.title)}${b.note ? ` <small>${esc(b.note)}</small>` : ''}</h3><ol class="cr-list">${b.rows.map((r, i) =>
+      `<li><span class="cr-rk">${i + 1}</span>${crWho(r, `${esc(r.pos)} · ${r.yrs[0] === r.yrs[1] ? r.yrs[0] : r.yrs[0] + '–' + String(r.yrs[1]).slice(2)} · ${r.n} start${r.n === 1 ? '' : 's'}`)}<span class="cr-lgs">${r.teams.slice(0, 4).map(f => `<span class="py-lg" title="${esc(D.franchises[f] || '')}">${logo(f)}</span>`).join('')}</span><b class="cr-v">${fmt(b, r.v)}</b></li>`).join('')}</ol></div>`;
+    const groups = [...new Set(CR.boards.map(b => b.group))];
+    return `<h2 class="sec">Player careers <small>FBP starts only, ${CR.first}–${CR.last}</small></h2>` + groups.map(g => `<h3 class="cr-g">${esc(g)}</h3><div class="cr-grid">${CR.boards.filter(b => b.group === g).map(card).join('')}</div>`).join('') +
+      `<p class="rf-foot">A start is a week in an FBP starting lineup, regular season or playoffs; consolation games don’t count. Wins are his FBP team’s result that week. Points are league scoring. Yards, touchdowns, receptions, interceptions and fumbles are his NFL box score in the weeks he started, from nflverse (CC-BY 4.0). Logos are the FBP teams he started for, most starts first. ${CR.last} counts finished weeks so far.</p>`;
+  }
   function tbl(cols, rows) {
     return `<div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr>${cols.map(c => c === 'lg' ? '<th class="lg"><span class="sr">Logo</span></th>' : c[0] === '!' ? `<th class="t">${c.slice(1)}</th>` : `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
   }
@@ -551,12 +582,13 @@ window.FBPRef = (() => {
     else if (b === 'games') {
       const g = (title, list) => `<h2 class="sec">${title}</h2>` + tbl(['#', 'lg', '!Team', 'Score', 'When', '!Opponent', ''],
         list.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise, r.year)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.score)}</b></td><td>${yw(r)}</td><td class="t">${esc(r.opp_name)}</td><td>${r.result}</td></tr>`));
-      body = g('Highest scores', L.top_single_game_scores) + '<div style="height:18px"></div>' + g('Lowest scores', L.low_single_game_scores);
+      body = g('Highest scores', L.top_single_game_scores) + '<div style="height:18px"></div>' + g('Lowest scores', L.low_single_game_scores) + '<div style="height:18px"></div>' + crGames();
     } else if (b === 'margins') {
       const m = (title, list) => `<h2 class="sec">${title}</h2>` + tbl(['#', 'lg', '!Winner', 'Margin', 'Score', '!Loser', 'When'],
         list.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.winner, r.year)}${nameCell(r.winner, null, r.winner_name)}<td><b>${n1(r.margin)}</b></td><td>${n1(r.winner_score)}–${n1(r.loser_score)}</td><td class="t">${esc(r.loser_name)}</td><td>${yw(r)}</td></tr>`));
       body = m('Biggest blowouts', L.biggest_blowouts) + '<div style="height:18px"></div>' + m('Closest finishes', L.closest_games);
-    } else body = `<h2 class="sec">Best two-game stretches <small>back-to-back games, any week</small></h2>` + tbl(['#', 'lg', '!Team', 'Total', 'Year', 'Games'],
+    } else if (b === 'players') body = crCareers();
+    else body = `<h2 class="sec">Best two-game stretches <small>back-to-back games, any week</small></h2>` + tbl(['#', 'lg', '!Team', 'Total', 'Year', 'Games'],
       L.top_two_game_stretches.map((r, i) => `<tr><td>${i + 1}</td>${lgCell(r.franchise, r.year)}${nameCell(r.franchise, null, r.name)}<td><b>${n1(r.total)}</b></td><td><a class="rf-nm" href="#reference/s-${r.year}">${r.year}</a></td><td>wk ${r.week_a} ${n1(r.score_a)} + wk ${r.week_b} ${n1(r.score_b)}</td></tr>`));
     return head('Records') + nav('#reference/records') + (PRE().length ? '<p class="rf-note">P-PPR is on, but there are no game scores before 2019, so records cover 2019 on. See the blind spots on the Reference home.</p>' : '') + sub(BOARDS.map(([k, l]) => [`#reference/records/${k}`, l]), `#reference/records/${b}`, false, 'rf-grid') + `<section>${body}</section>`;
   }
