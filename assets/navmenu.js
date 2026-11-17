@@ -12,7 +12,7 @@
       ['#now/team', 'My Team'], ['#now/transactions', 'Transactions'], ['#now/matchups', 'Matchups'], ['#now/playoffs', 'Playoff Picture'], ['#now/hospital', 'FBP General'], ['#now/docket', 'The Docket']],
     draft: [['#draft', 'Draft Home'], ['#draft/round1', 'Draft Order'], ['#draft/mock', 'Mock Draft'], ['#draft/board', 'Big Board'], ['#draft/order', 'All Rounds']],
     reference: [['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'],
-      ['#reference/players', 'Players'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']],
+      ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']],
   };
   const COLS = { now: true };
   const tabs = document.querySelector('.tabs'), top = document.querySelector('.top');

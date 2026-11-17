@@ -2,7 +2,7 @@
    Data: data/reference.json, rebuilt each week by scripts/build_reference.py from the frozen
    history (data/reference/history.json) plus the current season from the MFL refresh.
    Routes: #reference, #reference/franchises, #reference/f-0001, #reference/seasons,
-           #reference/s-2025[/draft|auction|results[/wk]], #reference/records[/<board>], #reference/players          */
+           #reference/s-2025[/draft|auction|results[/wk]], #reference/records[/<board>] (players = Player careers; #reference/players goes there too)          */
 window.FBPRef = (() => {
   let D = null, loading = null, failed = false;
   const load = rerender => {
@@ -139,7 +139,7 @@ window.FBPRef = (() => {
   const firstYear = () => (PRE().length ? Math.min(...PRE().map(x => x.year)) : 2019);
 
   function nav(top) {
-    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/players', 'Players'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']], top, true, 'pg-nav');
+    return sub([['#reference', 'Home'], ['#reference/franchises', 'Franchises'], ['#reference/seasons', 'Seasons'], ['#reference/records', 'Records'], ['#reference/payroll', 'Payroll'], ['#reference/hof', 'HOF']], top, true, 'pg-nav');
   }
   function head(title, extra = '') {
     const m = D.meta;
@@ -551,8 +551,10 @@ window.FBPRef = (() => {
     const card = b => `<div class="card cr-card"><h3>${esc(b.title)}${b.note ? ` <small>${esc(b.note)}</small>` : ''}</h3><ol class="cr-list">${b.rows.map((r, i) =>
       `<li><span class="cr-rk">${i + 1}</span>${crWho(r, `${esc(r.pos)} · ${r.yrs[0] === r.yrs[1] ? r.yrs[0] : r.yrs[0] + '–' + String(r.yrs[1]).slice(2)} · ${r.n} start${r.n === 1 ? '' : 's'}`)}<span class="cr-lgs">${r.teams.slice(0, 4).map(f => `<span class="py-lg" title="${esc(D.franchises[f] || '')}">${logo(f)}</span>`).join('')}</span><b class="cr-v">${fmt(b, r.v)}</b></li>`).join('')}</ol></div>`;
     const groups = [...new Set(CR.boards.map(b => b.group))];
-    return `<h2 class="sec">Player careers <small>FBP starts only, ${CR.first}–${CR.last}</small></h2>` + groups.map(g => `<h3 class="cr-g">${esc(g)}</h3><div class="cr-grid">${CR.boards.filter(b => b.group === g).map(card).join('')}</div>`).join('') +
-      `<p class="rf-foot">A start is a week in an FBP starting lineup, regular season or playoffs; consolation games don’t count. Wins are his FBP team’s result that week. Points are league scoring. Yards, touchdowns, receptions, interceptions and fumbles are his NFL box score in the weeks he started, from nflverse (CC-BY 4.0). Logos are the FBP teams he started for, most starts first. ${CR.last} counts finished weeks so far.</p>`;
+    const P = playersBody(), pb = typeof P === 'string' ? { tiles: '', table: P, journey: '' } : P;
+    return '<div class="py-page pr-page">' + pb.tiles + `<h2 class="sec">Career leaders <small>FBP starts, regular season, ${CR.first}–${CR.last}</small></h2>` + groups.map(g => `<h3 class="cr-g">${esc(g)}</h3><div class="cr-grid">${CR.boards.filter(b => b.group === g).map(card).join('')}</div>`).join('') +
+      `<p class="rf-foot">A start is a week in an FBP starting lineup. Everything counts regular-season starts except Most playoff wins (round 1, semifinals and finals; consolation games don’t count). Wins are his FBP team’s result that week. Points are league scoring. Yards, touchdowns, receptions, interceptions and fumbles are his NFL box score in the weeks he started, from nflverse (CC-BY 4.0). Logos are the FBP teams he started for, most starts first. ${CR.last} counts finished weeks so far.</p>` +
+      pb.table + pb.journey + '</div>';
   }
   function tbl(cols, rows) {
     return `<div class="card tbl-wrap"><table class="tbl rf-t"><thead><tr>${cols.map(c => c === 'lg' ? '<th class="lg"><span class="sr">Logo</span></th>' : c[0] === '!' ? `<th class="t">${c.slice(1)}</th>` : `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
@@ -716,10 +718,13 @@ window.FBPRef = (() => {
     if (a.dataset.jyAdd) setTimeout(() => { const q = document.querySelector('.jy-q'); if (q) q.focus({ preventScroll: true }); }, 0);
   });
 
-  function pagePlayers() {
-    const top = head('Players') + nav('#reference/players');
-    if (!PR) { loadPR(X.rerender); return top + '<p class="loading">Loading player records…</p>'; }
-    if (PR.failed) return top + '<p class="error">Player records didn’t load.</p>';
+  // the old Reference > Players page now lives in Records > Player careers
+  function pagePlayers() { return pageRecords('players'); }
+  // every player's record as a starter: tiles, the searchable table and Player Journey (Records > Player careers)
+  function playersBody() {
+    const top = '';
+    if (!PR) { loadPR(X.rerender); return '<p class="loading">Loading player records…</p>'; }
+    if (PR.failed) return '<p class="error">Player records didn’t load.</p>';
     const m = window.FBP && FBP.media;
     const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
     const L = PR.list, span = `${PR.first}–${PR.last}`;
@@ -750,7 +755,7 @@ window.FBPRef = (() => {
       </tr></thead><tbody>${rows}</tbody></table></div>
       <p class="rf-foot">A start is a week in an FBP starting lineup, and the record is his team’s result that week. Playoffs (round 1, semifinals, final) are counted separately; consolation games aren’t counted. ${PR.last} counts finished weeks so far. PPG is his points per start. Searching ignores the starts filter.</p></section>`;
     setTimeout(() => prFilter(), 0);
-    return '<div class="py-page pr-page">' + top + tiles + journeySec() + table + '</div>';
+    return { tiles, table, journey: journeySec() };
   }
 
   /* ---------- entry ---------- */

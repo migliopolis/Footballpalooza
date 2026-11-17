@@ -2,8 +2,9 @@
 """Build data/career-records.json: FBP player career records and best single games, counting starts only
 (Reference > Records > Player careers, and the player list under Records > Single games).
 
-A start is a week in an FBP starting lineup, in a regular-season or playoff game (round 1, semis, final);
-consolation games don't count. Lineups and results come from player_records.py (2019 on).
+A start is a week in an FBP starting lineup. Career boards count regular-season starts, the same as the
+Players table (player-records.json), except Most playoff wins (round 1, semis, final). Best player games count
+regular-season and playoff starts. Consolation games never count. Lineups and results come from player_records.py (2019 on).
 Points are league scoring. Yards, touchdowns and the rest are NFL box scores for those same weeks, from
 nflverse's weekly player stats (github.com/nflverse/nflverse-data, CC-BY 4.0), matched to MFL ids through
 DynastyProcess's player id table (github.com/dynastyprocess/data).
@@ -107,7 +108,8 @@ def main():
                     continue
                 for pid, pts in st:
                     starts.append((y, wk, fr, pid, float(pts), r[0], r[1]))
-                    weeks_by[y][pid].add(wk)
+                    if not r[1]:
+                        weeks_by[y][pid].add(wk)
 
     # box-score totals per season: cached for finished seasons, downloaded for this one (and any missing)
     cache = load(CACHE, {}) or {}
@@ -124,7 +126,7 @@ def main():
             got = season_stats(y, weeks_by, g2m) if g2m else None
             if got is not None:
                 seasons[str(y)] = got
-    cache = {'note': 'Box-score totals over FBP starts (regular season and playoffs), by season and MFL id. Built by scripts/career_records.py.',
+    cache = {'note': 'Box-score totals over regular-season FBP starts, by season and MFL id. Built by scripts/career_records.py.',
              'src': 'nflverse (nflverse-data, CC-BY 4.0) via DynastyProcess player ids', 'seasons': seasons}
     with open(CACHE, 'w', encoding='utf-8') as f:
         json.dump(cache, f, separators=(',', ':'))
@@ -134,16 +136,18 @@ def main():
     C = defaultdict(lambda: {'n': 0, 'w': 0, 'l': 0, 't': 0, 'pw': 0, 'pts': 0.0, 'nuke': 0, 'teams': defaultdict(int), 'yrs': set()})
     games = []
     for y, wk, fr, pid, pts, r, po in starts:
+        o = opp.get((y, wk, fr), (None, po))
+        games.append({'id': pid, 'pts': round(pts, 1), 'year': y, 'week': wk, 'fr': fr, 'opp': o[0], 'r': r, 'po': po})
+        if po:   # playoff starts only count toward Most playoff wins
+            if r == 'W':
+                C[pid]['pw'] += 1
+            continue
         c = C[pid]
         c['n'] += 1; c['pts'] += pts; c['teams'][fr] += 1; c['yrs'].add(y)
         c[{'W': 'w', 'L': 'l', 'T': 't'}[r]] += 1
-        if po and r == 'W':
-            c['pw'] += 1
         line = NUKE.get(pos.get(pid, ''))
         if line and pts >= line:
             c['nuke'] += 1
-        o = opp.get((y, wk, fr), (None, po))
-        games.append({'id': pid, 'pts': round(pts, 1), 'year': y, 'week': wk, 'fr': fr, 'opp': o[0], 'r': r, 'po': po})
     for y, S in seasons.items():
         for pid, t in S.items():
             if pid in C:
@@ -152,15 +156,15 @@ def main():
 
     def who(pid):
         c = C[pid]
-        team = max(c['teams'].items(), key=lambda kv: kv[1])[0]
-        ys = sorted(c['yrs'])
+        team = max(c['teams'].items(), key=lambda kv: kv[1])[0] if c['teams'] else ''
+        ys = sorted(c['yrs']) or [0]
         return {'id': pid, 'name': names.get(pid, pid), 'pos': pos.get(pid, ''), 'espn': espn.get(pid, '') or '',
                 'fr': team, 'teams': sorted(c['teams'], key=lambda f: -c['teams'][f]), 'n': c['n'], 'yrs': [ys[0], ys[-1]]}
 
     def board(key, title, group, val, fmt='n', cond=lambda c: True, note='', rev=False, top=10):
-        rows = [(pid, val(c)) for pid, c in C.items() if cond(c)]
+        rows = [(pid, val(c)) for pid, c in C.items() if (c['n'] or key == 'pwins') and cond(c)]
         rows = [r for r in rows if r[1]]
-        rows.sort(key=lambda r: (r[1] if rev else -r[1], -C[r[0]]['n']))
+        rows.sort(key=lambda r: (r[1] if rev else -r[1], -C[r[0]]['n'], names.get(r[0], r[0])))   # ties: more starts, then A-Z (same as the tiles)
         return {'key': key, 'title': title, 'group': group, 'fmt': fmt, 'note': note,
                 'rows': [dict(who(pid), v=round(v, 3) if fmt == 'pct' else round(v, 1) if fmt == 'f1' else v) for pid, v in rows[:top]]}
 

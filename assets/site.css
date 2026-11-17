@@ -3307,3 +3307,4 @@ img.ovbg{background:var(--ovg)}
 .col-tl{height:1.35em;width:1.35em;object-fit:contain;vertical-align:-.3em;margin-right:6px}
 .col-t .col-tl{height:20px;width:20px;vertical-align:middle}
 .col-t td:has(.col-tl),.col-t th:nth-child(2){text-align:left}
+.pr-page .rf-tiles{margin-bottom:18px}
