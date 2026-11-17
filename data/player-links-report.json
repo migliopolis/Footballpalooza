@@ -180,15 +180,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "14065",
-   "mflName": "Brett Rypien",
-   "pos": "QB",
-   "team": "TBB",
-   "fbp": null,
-   "espn": "3722362",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "16882",
    "mflName": "Carter Bradley",
    "pos": "QB",
@@ -213,15 +204,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4360175",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "13124",
-   "mflName": "Cooper Rush",
-   "pos": "QB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "2972515",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -693,15 +675,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "17069",
-   "mflName": "Jaydon Blue",
-   "pos": "RB",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4685279",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "14017",
    "mflName": "Jeffery Wilson",
    "pos": "RB",
@@ -1005,15 +978,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "3924365",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "17407",
-   "mflName": "Hayden Rucci",
-   "pos": "TE",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4428396",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1323,6 +1287,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17321",
+   "mflName": "Brennan Presley",
+   "pos": "WR",
+   "team": "LAR",
+   "fbp": null,
+   "espn": "4431342",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "17741",
    "mflName": "Brock Rechsteiner",
    "pos": "WR",
@@ -1347,6 +1320,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "4036335",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "16203",
+   "mflName": "Charlie Jones",
+   "pos": "WR",
+   "team": "NYG",
+   "fbp": null,
+   "espn": "4257188",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1941,15 +1923,6 @@
    "team": "SFO",
    "fbp": null,
    "espn": "3115378",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "15841",
-   "mflName": "Samori Toure",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4027873",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
