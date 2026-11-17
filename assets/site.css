@@ -2109,7 +2109,7 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 .hs-dx{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 10px;background:var(--bg);border-radius:6px}
 .hs-dx small,.hs-vit small{display:block;font:600 .62rem var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .hs-dx b{font-size:.92rem}.hs-dx b+small{display:block;text-transform:none;letter-spacing:0;font-weight:400}
-.hs-vit{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center}
+.hs-vit{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
 .hs-vit b{display:block;font:700 1.15rem/1.1 var(--display)}
 .hs-vit i{font-style:normal;font-size:.65rem;color:var(--muted)}
 .hs-tbd{color:var(--muted);font-size:.9rem!important}

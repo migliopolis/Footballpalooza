@@ -45,7 +45,8 @@ window.FBPHospital = (function () {
   ];
   function ward(i, now) {
     const wk = fbpWeek(i.ret), text = (i.short + ' ' + i.long).toLowerCase();
-    if (/for the (rest|remainder) of the season|(rest|remainder) of the season|season-ending|out for the year/.test(text) || (wk && wk > 18)) return 'season';
+    // ESPN's return date decides; the report's wording only when there's no date (a note can be about a teammate)
+    if ((wk && wk > 18) || (!wk && /for the (rest|remainder) of the season|(rest|remainder) of the season|season-ending|out for the year/.test(text))) return 'season';
     if (i.status === 'Injured Reserve') return 'ltc';
     if (i.status === 'Questionable') return 'triage';
     if (i.status === 'Doubtful' || !wk || wk <= now + 1) return 'obs';
@@ -121,7 +122,7 @@ window.FBPHospital = (function () {
       </div>
       ${ex ? `<div class="hs-body">
       <div class="hs-dx"><span><small>Injury</small><b>${esc(what)}</b></span><span><small>Expected back</small>${back}</span></div>
-      <div class="hs-vit"><span><small>Season</small><b>${x.avg != null ? x.avg.toFixed(1) : '–'}</b><i>pts/gm</i></span><span><small>Last 3 played</small><b>${x.l3 != null ? x.l3.toFixed(1) : '–'}</b><i>pts/gm</i></span><span><small>Missed</small><b>${x.missed}</b><i>straight</i></span><span><small>Expect on return</small><b class="hs-tbd">Soon</b><i>from FBP history</i></span></div>
+      <div class="hs-vit"><span><small>Season</small><b>${x.avg != null ? x.avg.toFixed(1) : '–'}</b><i>pts/gm</i></span><span><small>Last 3 played</small><b>${x.l3 != null ? x.l3.toFixed(1) : '–'}</b><i>pts/gm</i></span><span><small>Missed</small><b>${x.missed}</b><i>straight</i></span></div>
       ${rep ? `<p class="hs-rep">${esc(rep)}${i.date ? ` <small>${md(i.date)}</small>` : ''}</p>` : ''}
       ${n ? `<button type="button" class="hs-more" data-hs="${r.id}" aria-expanded="${o}">${i.type === 'Personal' ? 'About personal absences' : `About ${esc((i.type || '').toLowerCase())} injuries`} ${o ? '▴' : '▾'}</button>
         ${o ? `<dl class="hs-note"><dt>What it is</dt><dd>${n[0]}</dd>${n[1] ? `<dt>Treatment</dt><dd>${n[1]}</dd>` : ''}<dt>Usual range</dt><dd>${n[2]}</dd>${n[3] ? `<dt>Watch for</dt><dd>${n[3]}</dd>` : ''}</dl>` : ''}` : ''}
