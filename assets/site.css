@@ -3280,3 +3280,5 @@ img.ovbg{background:var(--ovg)}
 .ro-tog h2 small{font-size:.75rem;font-weight:500;color:var(--muted);margin-left:6px;text-transform:none;letter-spacing:0}
 .ro-sch .ro-ha{display:inline-block;width:1.6em;color:var(--muted);vertical-align:middle}
 .ro-sch td:last-child,.ro-sch th:last-child{padding-left:8px}
+.hs-wtag{font-style:normal;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line);border-radius:999px;padding:0 6px;margin-left:6px;color:var(--muted)}
+.hs-new>h2{color:#c0392b}

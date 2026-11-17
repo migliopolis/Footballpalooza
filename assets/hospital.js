@@ -28,7 +28,7 @@ window.FBPHospital = (function () {
   }
   const inj = e => { const l = LIVE && LIVE[e], s = SNAP && SNAP[e];
     if (l) return l;
-    return s ? { status: s.status, type: s.type, detail: '', side: '', ret: s.return, short: s.short, long: '', date: s.date } : null; };
+    return s ? { status: s.status, type: s.type, detail: s.detail || '', side: s.side || '', ret: s.return, short: s.short, long: '', date: s.date } : null; };
 
   // ESPN's NFL weeks run Tuesday to Monday; week 1 of 2026 starts Tuesday, Sep 8
   const W1 = Date.UTC(2026, 8, 8);
@@ -45,7 +45,7 @@ window.FBPHospital = (function () {
   ];
   function ward(i, now) {
     const wk = fbpWeek(i.ret), text = (i.short + ' ' + i.long).toLowerCase();
-    if (/for the (rest of the )?season|season-ending|out for the year/.test(text) || (wk && wk > 18)) return 'season';
+    if (/for the (rest|remainder) of the season|(rest|remainder) of the season|season-ending|out for the year/.test(text) || (wk && wk > 18)) return 'season';
     if (i.status === 'Injured Reserve') return 'ltc';
     if (i.status === 'Questionable') return 'triage';
     if (i.status === 'Doubtful' || !wk || wk <= now + 1) return 'obs';
@@ -105,7 +105,7 @@ window.FBPHospital = (function () {
   }
 
   const med = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : (r.hon || []).some(h => h[0] === 'Rookie Team') ? 'rook' : '';
-  function card(x, ctx) {
+  function card(x, ctx, wardName) {
     const { r, i } = x, esc = ctx.esc, t = ctx.teams[r.f] || {}, o = open.has(r.id), ex = exp.has(r.id);
     const st = { 'Questionable': ['Q', 'q'], 'Doubtful': ['D', 'd'], 'Out': ['OUT', 'o'], 'Injured Reserve': ['IR', 'ir'] }[i.status] || [i.status, 'o'];
     const what = [i.side, i.type, i.detail].filter(Boolean).join(' ') || 'Undisclosed';
@@ -116,7 +116,7 @@ window.FBPHospital = (function () {
     return `<article class="hs-card card${ex ? ' hs-open' : ''}">
       <div class="hs-top" data-hs-ex="${r.id}" role="button" tabindex="0" aria-expanded="${ex}">
         <span class="hs-ph${med(r) ? '' : FBPU.tc(r.f) ? ' tcr' : ''}${med(r) ? '' : FBPU.ovc(r.id)}"${med(r) ? ` data-med="${med(r)}"` : ''} style="background-image:url(${head(r.e)}),var(--med,var(--ovg,var(--ov0)));${med(r) ? '' : FBPU.tc(r.f)}">${r.f && t.logo ? `<img class="hs-fbp" src="${t.logo}" alt="${esc(t.abbr || '')}">` : ''}</span>
-        <span class="hs-id"><b>${esc(r.n)}</b><small>${r.p} ${nflLogo(r.t) || 'FA'}${r.f ? '' : ' · Free agent'}${r.sal != null ? ` · $${r.sal}` : ''} ${slot}<span class="hs-what">· ${esc(i.type || 'Undisclosed')}</span></small></span>
+        <span class="hs-id"><b>${esc(r.n)}</b><small>${r.p} ${nflLogo(r.t) || 'FA'}${r.f ? '' : ' · Free agent'}${r.sal != null ? ` · $${r.sal}` : ''} ${slot}<span class="hs-what">· ${esc(i.type || 'Undisclosed')}</span>${wardName ? `<i class="hs-wtag">${esc(wardName)}</i>` : ''}</small></span>
         <span class="hs-st hs-${st[1]}">${st[0]}</span><span class="hs-car" aria-hidden="true">${ex ? '▴' : '▾'}</span>
       </div>
       ${ex ? `<div class="hs-body">
@@ -144,6 +144,12 @@ window.FBPHospital = (function () {
     const census = `<div class="hs-cen">${cen.map(c => { const t = ctx.teams[c.f] || {};
       return `<button type="button" class="hs-cb${team === c.f ? ' on' : ''}" data-hs-team="${c.f}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || c.f)}</b><span>${c.n} in</span><small>${c.pts.toFixed(0)} pts/gm · $${c.sal}</small></button>`; }).join('')}</div>`;
     const seg = `<div class="seg hs-who">${[['ro', 'FBP rosters'], ['fa', 'Free agents'], ['all', 'All']].map(([k, l]) => `<button type="button" data-hs-who="${k}"${who === k ? ' aria-pressed="true"' : ''}>${l}</button>`).join('')}</div>`;
+    // New Patients: hurt in the week just played. He played that week and his injury report is dated from that
+    // week's Thursday on. Most serious first; each one is also in his ward below.
+    const thu = Date.UTC(2026, 8, 10) + (now - 1) * 6048e5, SEV = { season: 0, ltc: 1, ward: 2, obs: 3, triage: 4 };
+    const fresh = all.filter(x => now && x.r.w[now - 1] != null && x.i.date && Date.parse(x.i.date) >= thu)
+      .sort((a, b) => SEV[a.ward] - SEV[b.ward] || (b.wk || 99) - (a.wk || 99) || (b.avg || 0) - (a.avg || 0));
+    const newp = fresh.length ? `<section class="hs-ward hs-new"><h2 class="sec">New Patients <span class="hs-cnt">${fresh.length}</span><small>hurt in week ${now}, most serious first · each is also in his ward below</small></h2><div class="hs-grid">${fresh.map(x => card(x, ctx, WARDS.find(w => w[0] === x.ward)[1])).join('')}</div></section>` : '';
     const wards = WARDS.map(([k, name, sub]) => { const L = all.filter(x => x.ward === k).sort((a, b) => (a.wk || 99) - (b.wk || 99) || (b.avg || 0) - (a.avg || 0));
       if (!L.length) return '';
       return `<section class="hs-ward hs-w-${k}"><h2 class="sec">${name} <span class="hs-cnt">${L.length}</span><small>${sub}</small></h2><div class="hs-grid">${L.map(x => card(x, ctx)).join('')}</div></section>`; }).join('');
@@ -152,6 +158,7 @@ window.FBPHospital = (function () {
       <h2 class="sec">Census <small>FBP teams by points a game on the shelf (active and IR slots, 3+ games played) · tap a team to see only its patients</small></h2>
       ${census}
       ${seg}
+      ${newp}
       ${wards || '<p class="loading">No patients. A clean bill of health.</p>'}
       <section class="hs-ward"><h2 class="sec">Discharged <small>back this week, with his first game back</small></h2><div class="card hs-soon"><p>Comes with the daily injury history: players who left the list since last week, and how they did in their first game back.</p></div></section>
       <p class="rf-foot">Injury status, body part, estimated return dates and reports come from ESPN. Return dates are estimates and change often. The notes on each injury type are general football context, not medical advice and not about any one player.</p>

@@ -116,6 +116,29 @@ def fill_from_rosters():
         inj[aid] = {'name': a.get('name'), 'team': a.get('team'), 'status': st, 'short': '', 'date': '',
                     'type': '', 'return': '', 'from': 'roster'}
         added += 1
+    # the roster only says "Injured Reserve": for players on FBP rosters, pull the full chart (body part, surgery,
+    # side, ESPN's return estimate, latest report) from the athlete's page, so the Hospital can place him right
+    try:
+        fbp = {r['e'] for r in json.load(open(os.path.join(os.path.dirname(OUT), 'stats.json'))).get('rows', []) if r.get('f') and r.get('e')}
+    except Exception:
+        fbp = set()
+    for aid, v in inj.items():
+        if v.get('from') != 'roster' or aid not in fbp:
+            continue
+        try:
+            i = ((get(f'https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{aid}').get('athlete') or {}).get('injuries') or [None])[0]
+        except Exception:
+            i = None
+        time.sleep(0.3)
+        if not i:
+            continue
+        d = i.get('details') or {}
+        v.update({'type': ' - '.join(x for x in (d.get('type'), d.get('location') if d.get('location') != d.get('type') else '') if x),
+                  'detail': '' if d.get('detail') in (None, 'Not Specified') else d['detail'],
+                  'side': '' if d.get('side') in (None, 'Not Specified') else d['side'],
+                  'return': (d.get('returnDate') or '')[:10], 'date': (i.get('date') or '')[:16],
+                  'short': i.get('shortComment') or '', 'from': 'roster+athlete'})
+        added += 1
     if added:
         save('injuries', inj)
     return added
