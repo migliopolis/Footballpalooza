@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0287';
+  const VERSION = '0.0288';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -461,7 +461,7 @@
     if (sub === 'transactions') return headTxt + (window.FBPTransactions ? FBPTransactions.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/transactions')) route(); } }) : '<p class="error">Transactions didn’t load.</p>');
     if (sub === 'docket') return headTxt + (window.FBPLegal ? FBPLegal.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/docket')) route(); } }) : '<p class="error">The Docket didn’t load.</p>');
     if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
-    if (sub === 'news') return headTxt + (window.FBPNews ? FBPNews.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/news')) route(); } }) : '<p class="error">Player news didn’t load.</p>');
+    if (sub === 'news') return headTxt + (window.FBPNews ? FBPNews.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/news')) route(); } }) : '<p class="error">Player news didn’t load.</p>');
     if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `

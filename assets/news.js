@@ -124,7 +124,9 @@ window.FBPNews = (function () {
     if (failed) return '<p class="error">Player news didn’t load.</p>';
     if (!S) return '<p class="loading">Loading players…</p>';
     const esc = ctx.esc, L = items(), mine = ctx.myTeam;
-    const teams = Object.keys(ctx.teams).sort((a, b) => (b === mine) - (a === mine) || (ctx.teams[a].name || '').localeCompare(ctx.teams[b].name || ''));
+    // your team first if you've set one, then everyone A-Z by team name (the site's usual order)
+    const tn = f => (ctx.nameOf ? ctx.nameOf(f) : '') || (ctx.teams[f] || {}).abbr || f;
+    const teams = Object.keys(ctx.teams).sort((a, b) => (b === mine) - (a === mine) || tn(a).localeCompare(tn(b)));
     const seg = (k, opts, cur) => `<div class="seg nw-seg">${opts.map(([v, l]) => `<button type="button" data-nw-${k}="${v}"${String(cur) === String(v) ? ' aria-pressed="true"' : ''}>${l}</button>`).join('')}</div>`;
     const chips = `<div class="hs-cen nw-teams">${teams.map(f => { const t = ctx.teams[f] || {};
       return `<button type="button" class="hs-cb${team === f ? ' on' : ''}" data-nw-team="${f}" aria-pressed="${team === f}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || f)}</b>${f === mine ? '<small>My team</small>' : ''}</button>`; }).join('')}</div>`;
@@ -142,7 +144,7 @@ window.FBPNews = (function () {
       </div>
       ${who === 'fa' ? '' : chips}
       ${prog}
-      <p class="nw-count">${L.length} update${L.length === 1 ? '' : 's'}${team ? ` for ${esc((ctx.teams[team] || {}).name || '')}` : ''}</p>
+      <p class="nw-count">${L.length} update${L.length === 1 ? '' : 's'}${team ? ` for ${esc(tn(team))}` : ''}</p>
       ${list || empty}
       <p class="rf-foot">News comes live from ESPN: RotoWire’s fantasy updates for every player on an FBP roster, plus ESPN’s NFL headlines about one to three players, shown once under the first player tagged. Free agents show up only when they make the headlines. Tap a player for his Player Page; ESPN headlines open the story on ESPN; 📺 marks a video. Checked again when you come back after 15 minutes.</p>
     </div>`;
