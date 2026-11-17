@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0283';
+  const VERSION = '0.0284';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -421,7 +421,7 @@
       <td><b>${t.pwr ? t.pwr.toFixed(2) : '—'}</b></td><td>${t.w}-${t.l}${t.t ? '-' + t.t : ''}</td><td>${pts(t.pf)}</td><td class="hide-sm">${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('');
 
     const sub = (location.hash.split('/')[1] || '');
-    const nav = `<nav class="rf-sub seg now-sub ln-sub pg-nav">${[['', 'Standings'], ['team', 'My Team'], ['transactions', 'Transactions'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['rankings', 'Player<span class="sm-only">s</span><span class="lg-only"> Rankings</span>'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['hospital', 'FBP General'], ['docket', 'The Docket']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    const nav = `<nav class="rf-sub seg now-sub ln-sub pg-nav">${[['', 'Standings'], ['team', 'My Team'], ['news', 'Player News'], ['transactions', 'Transactions'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['rankings', 'Player<span class="sm-only">s</span><span class="lg-only"> Rankings</span>'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['hospital', 'FBP General'], ['docket', 'The Docket']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof"><b>Through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${state.meta && state.meta.fetched ? ` · <span id="ln-refresh">${esc(refreshText(true))}</span>` : genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
@@ -461,6 +461,7 @@
     if (sub === 'transactions') return headTxt + (window.FBPTransactions ? FBPTransactions.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/transactions')) route(); } }) : '<p class="error">Transactions didn’t load.</p>');
     if (sub === 'docket') return headTxt + (window.FBPLegal ? FBPLegal.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/docket')) route(); } }) : '<p class="error">The Docket didn’t load.</p>');
     if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
+    if (sub === 'news') return headTxt + (window.FBPNews ? FBPNews.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/news')) route(); } }) : '<p class="error">Player news didn’t load.</p>');
     if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `
