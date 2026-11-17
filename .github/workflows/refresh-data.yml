@@ -57,6 +57,9 @@ jobs:
       - name: Player records (Reference > Players)
         continue-on-error: true
         run: python scripts/player_records.py
+      - name: Player careers and best player games (Reference > Records)
+        continue-on-error: true
+        run: python scripts/career_records.py
       - name: Rosters (League Now > Rosters)
         continue-on-error: true
         run: python scripts/rosters.py
