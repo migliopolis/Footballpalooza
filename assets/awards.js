@@ -158,7 +158,7 @@ window.FBPAwards = (() => {
     const open = awOpen.has(a.key);
     return `<section class="card aw-award k-${esc(a.key)}${open ? ' open' : ''}">
       <button type="button" class="aw-sum" data-aw-toggle="${esc(a.key)}" aria-expanded="${open}"><span class="aw-sumt"><h3>${esc(a.title)}</h3><span class="aw-prev">${preview(a)}</span></span><i class="car" aria-hidden="true"></i></button>
-      <div class="aw-body"${open ? '' : ' hidden'}><p class="aw-why">${esc(a.why)}</p>${a.note ? `<p class="aw-note">${esc(a.note)}</p>` : ''}${picker}${body}</div></section>`;
+      <div class="aw-body"${open ? '' : ' hidden'}>${a.why ? `<p class="aw-why">${esc(a.why)}</p>` : ''}${a.note ? `<p class="aw-note">${esc(a.note)}</p>` : ''}${picker}${body}</div></section>`;
   }
   // All-FBP teams fold the same way; the preview is the lineup's names
   function fold(key, title, t, html) {

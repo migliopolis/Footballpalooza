@@ -246,22 +246,22 @@
   {
    "key": "manager",
    "title": "Manager of the Year",
-   "why": "Beat expectations and win. .500 or better to qualify.",
+   "why": "",
    "teams": [
     {
      "team": "0003",
      "stat": "11-2",
-     "sub": "Expected .635"
+     "sub": ""
     },
     {
      "team": "0011",
      "stat": "8-5",
-     "sub": "Expected .443"
+     "sub": ""
     },
     {
      "team": "0001",
      "stat": "8-5",
-     "sub": "Expected .519"
+     "sub": ""
     }
    ]
   }

@@ -358,8 +358,8 @@ def manager_award(standings, tx, weeks, wk_nums, slots, pinfo, by_team, moy):
             return ' · '.join(bits)
         if top:
             return ({'key': 'manager', 'title': 'Manager of the Year',
-                      'why': 'Beat expectations and win. .500 or better to qualify.',
-                      'teams': [{'team': r['id'], 'stat': r['rec'], 'sub': f"Expected {r['exp']:.3f}".replace('0.', '.', 1)} for r in top]})
+                      'why': '',
+                      'teams': [{'team': r['id'], 'stat': r['rec'], 'sub': ''} for r in top]})
 
     return None
 
