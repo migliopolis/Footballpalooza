@@ -548,7 +548,9 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const a = state.columns.columnists[k], tm = state.teams[a.fav] || {};
     const team = a.fav ? `<span class="st-fav">${tm.logo ? `<img src="${esc(tm.logo)}" alt="" loading="lazy">` : ''}<span><small>Favorite FBP team</small><b>${esc(nameOf(a.fav))}</b></span></span>` : '';
     const n = state.columns.columns.filter(c => c.author === k).length;
-    return `<article class="card st-card" id="st-${esc(k)}">
+    // the profile page leads with the full photo (photoFull, else the square one); tap opens it at full size
+    const big = full && (a.photoFull || a.photo) ? `<a class="st-photo" href="${esc(a.photoFull || a.photo)}" target="_blank" rel="noopener" aria-label="${esc(a.name)}, full photo"><img src="${esc(a.photoFull || a.photo)}" alt="${esc(a.name)}"></a>` : '';
+    return `<article class="card st-card${full ? ' st-full' : ''}" id="st-${esc(k)}">${big}
       <div class="st-top">${colAvatar(a, true)}<span><b class="st-name">${full ? esc(a.name) : `<a href="#press/staff/${esc(k)}">${esc(a.name)}</a>`}</b><small>${esc(a.title || '')}</small></span></div>
       ${a.beat ? `<p class="st-beat">${esc(a.beat)}</p>` : ''}
       <dl class="st-facts">${a.hometown ? `<div><dt>Hometown</dt><dd>${esc(a.hometown)}</dd></div>` : ''}${a.school ? `<div><dt>School</dt><dd>${esc(a.school)}</dd></div>` : ''}</dl>

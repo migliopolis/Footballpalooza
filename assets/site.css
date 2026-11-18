@@ -3426,3 +3426,8 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 .st-lvl{font-size:.72rem;font-weight:700;border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin-left:auto}
 .st .st-card+h2{margin-top:18px}
 .col-byline b a{color:inherit;text-decoration:none}
+/* Press Box staff profile page: the full photo on top */
+.st-photo{display:block;margin:-4px -4px 14px;border-radius:12px;overflow:hidden;background:var(--line)}
+.st-photo img{display:block;width:100%;height:auto;max-height:640px;object-fit:cover;object-position:50% 25%}
+@media (min-width:761px){.st-full{display:block;max-width:920px}.st-full::after{content:"";display:table;clear:both}.st-full > .st-photo{float:left;width:300px;margin:0 24px 6px 0}.st-full > :not(.st-photo):not(.st-fan){display:flow-root;margin-top:0;margin-bottom:10px}.st-full > .st-fan{overflow:hidden;margin:0}}
+.st-full .st-top > :first-child:not(span){display:none}
