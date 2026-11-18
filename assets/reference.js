@@ -203,7 +203,8 @@ window.FBPRef = (() => {
 
   /* ---------- franchises ---------- */
   // team buttons; pick one to open its page
-  const teamSwitch = cur => `<nav class="rf-switch" aria-label="Franchise">${Object.keys(D.franchises).sort((x, y) => D.franchises[x].localeCompare(D.franchises[y])).map(id => `<a href="#reference/f-${id}" title="${esc(D.franchises[id])}"${id === cur ? ' aria-current="page"' : ''}>${logo(id) || esc((X.teams[id] || {}).abbr || id)}</a>`).join('')}</nav>`;
+  const teamSwitch = cur => FBPU.divGrid(Object.keys(D.franchises), id => `<a href="#reference/f-${id}" title="${esc(D.franchises[id])}"${id === cur ? ' aria-current="page"' : ''}>${logo(id) || esc((X.teams[id] || {}).abbr || id)}</a>`,
+    { mine: X.myTeam, name: id => D.franchises[id], cls: 'rf-switch' }).replace('<div class="', '<nav aria-label="Franchise" class="').replace(/<\/div>$/, '</nav>');
   function pageFranchises() {
     return head('Franchises') + nav('#reference/franchises') + teamSwitch('') +
       '<p class="rf-note">Pick a team to see its year-by-year history, head-to-head and draft picks. Overall records are on the <a href="#reference">Reference home</a>.</p>';

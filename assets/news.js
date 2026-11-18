@@ -136,8 +136,8 @@ window.FBPNews = (function () {
     const tn = f => (ctx.nameOf ? ctx.nameOf(f) : '') || (ctx.teams[f] || {}).abbr || f;
     const teams = Object.keys(ctx.teams).sort((a, b) => (b === mine) - (a === mine) || tn(a).localeCompare(tn(b)));
     const seg = (k, opts, cur) => `<div class="seg nw-seg">${opts.map(([v, l]) => `<button type="button" data-nw-${k}="${v}"${String(cur) === String(v) ? ' aria-pressed="true"' : ''}>${l}</button>`).join('')}</div>`;
-    const chips = `<div class="hs-cen nw-teams">${teams.map(f => { const t = ctx.teams[f] || {};
-      return `<button type="button" class="hs-cb${team === f ? ' on' : ''}" data-nw-team="${f}" aria-pressed="${team === f}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || f)}</b>${f === mine ? '<small>My team</small>' : ''}</button>`; }).join('')}</div>`;
+    const chips = FBPU.divGrid(teams, f => { const t = ctx.teams[f] || {};
+      return `<button type="button" class="hs-cb${team === f ? ' on' : ''}" data-nw-team="${f}" aria-pressed="${team === f}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || f)}</b></button>`; }, { mine, name: tn, cls: 'hs-cen nw-teams' });
     const prog = total && done < total ? `<p class="nw-prog"><span style="width:${Math.round(done / total * 100)}%"></span><small>Checking ESPN for ${total} FBP players · ${done} done${mine ? ' · your team first' : ''}</small></p>` : '';
     let last = '', list = '';
     L.forEach(x => { const d = dayOf(x.n.t); if (d !== last) { list += `${last ? '</div>' : ''}<h2 class="sec nw-day">${d}</h2><div class="nw-list">`; last = d; } list += card(x, ctx); });

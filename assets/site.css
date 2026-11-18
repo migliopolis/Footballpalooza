@@ -3388,3 +3388,17 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 .fx-go{background:var(--fx-gold);color:#14161b}
 .fx-ok:focus-visible,.fx-go:focus-visible{outline:3px solid var(--fx-gold);outline-offset:2px}
 @media (max-width:420px){.fx-card{padding:18px 16px 18px}.fx-foot{margin:12px -16px -18px;padding:10px 16px 14px}.fx-top h2{font-size:2.05rem;margin-top:8px}.fx-top::after{margin-top:10px}.fx-demo{margin-top:12px}.fx-demo .fx-dc+.fx-dc{display:none}.fx-tiles p{font-size:.75rem}.fx-tiles{gap:6px}.fx-tiles li{padding:10px 10px 9px}.fx-btns{width:100%}.fx-ok,.fx-go{flex:1}}
+/* Team pickers by division (FBPU.divGrid): three outlined boxes, West, Central, East, each titled in a break in its
+   outline. Phones: three side by side, 2x2 inside. Wider screens: one row, four across inside. Overrides each picker's
+   own grid/flex (FBP General, Player News, Stats, Rosters, Reference franchises). */
+.dvg{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important;max-width:none!important;margin-right:0!important;padding:0!important;flex-wrap:nowrap}
+.dvg-box{min-width:0;margin:0;padding:0 6px 6px;border:1px solid var(--line);border-radius:10px}
+.dvg-box legend{margin:0 auto;padding:0 7px;font:600 .7rem/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.dvg-in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:4px}
+.dvg-in > *{width:auto!important;min-width:0;flex:initial!important}
+@media (min-width:761px){
+  .dvg-in{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .dvg.rf-switch,.dvg.ro-pick,.dvg.st-pick{display:flex!important;flex-wrap:wrap;gap:10px!important}
+  .dvg.rf-switch .dvg-in,.dvg.ro-pick .dvg-in,.dvg.st-pick .dvg-in{display:flex;gap:6px}
+  .dvg.rf-switch .dvg-in > *,.dvg.ro-pick .dvg-in > *,.dvg.st-pick .dvg-in > *{width:40px!important}
+}

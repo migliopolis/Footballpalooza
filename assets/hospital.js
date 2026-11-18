@@ -142,8 +142,10 @@ window.FBPHospital = (function () {
     const cen = Object.keys(ctx.teams).map(f => { const A = ro.filter(x => x.r.f === f), L = A.filter(x => x.r.sl !== 'T');
       return { f, n: A.length, pts: L.reduce((a, x) => a + (x.played >= 3 ? x.avg : 0), 0), sal: L.reduce((a, x) => a + (x.r.sal || 0), 0) }; })
       .sort((a, b) => b.pts - a.pts);
-    const census = `<div class="hs-cen">${cen.map(c => { const t = ctx.teams[c.f] || {};
-      return `<button type="button" class="hs-cb${team === c.f ? ' on' : ''}" data-hs-team="${c.f}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || c.f)}</b><span>${c.n} in</span><small>${c.pts.toFixed(0)} pts/gm · $${c.sal}</small></button>`; }).join('')}</div>`;
+    const cby = Object.fromEntries(cen.map(c => [c.f, c]));
+    const census = FBPU.divGrid(cen.map(c => c.f), f => { const c = cby[f], t = ctx.teams[f] || {};
+      return `<button type="button" class="hs-cb${team === f ? ' on' : ''}" data-hs-team="${f}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || f)}</b><span>${c.n} in</span><small>${c.pts.toFixed(0)} pts/gm · $${c.sal}</small></button>`; },
+      { mine: ctx.myTeam, name: f => (ctx.nameOf ? ctx.nameOf(f) : '') || (ctx.teams[f] || {}).abbr || f, cls: 'hs-cen' });
     const seg = `<div class="seg hs-who">${[['ro', 'FBP rosters'], ['fa', 'Free agents'], ['all', 'All']].map(([k, l]) => `<button type="button" data-hs-who="${k}"${who === k ? ' aria-pressed="true"' : ''}>${l}</button>`).join('')}</div>`;
     // New Patients: hurt in the week just played. He played that week and his injury report is dated from that
     // week's Thursday on. Most serious first; each one is also in his ward below.
@@ -156,7 +158,7 @@ window.FBPHospital = (function () {
       return `<section class="hs-ward hs-w-${k}"><h2 class="sec">${name} <span class="hs-cnt">${L.length}</span><small>${sub}</small></h2><div class="hs-grid">${L.map(x => card(x, ctx)).join('')}</div></section>`; }).join('');
     return `<div class="hs-page">
       <div class="hs-hero"><span class="hs-cross" aria-hidden="true"></span><div><h2>FBP General Hospital</h2><p>Beta · ${ro.length} FBP players admitted after Week ${now}${LIVE ? '' : ' · from the daily injury snapshot'}</p></div></div>
-      <h2 class="sec">Census <small>FBP teams by points a game on the shelf (active and IR slots, 3+ games played) · tap a team to see only its patients</small></h2>
+      <h2 class="sec">Census <small>each FBP team’s points a game on the shelf (active and IR slots, 3+ games played), by division · tap a team to see only its patients</small></h2>
       ${census}
       ${seg}
       ${newp}

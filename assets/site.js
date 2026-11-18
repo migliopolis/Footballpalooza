@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0290';
+  const VERSION = '0.0291';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -76,7 +76,7 @@
     document.querySelectorAll('img:not([data-yr])').forEach(im => { if (im.getAttribute('src') === t.logo && !im.classList.contains('fbp-champ')) { im.classList.add('fbp-champ'); if (!im.title) im.title = `${c.year} FBP champion`; } });
   }
   new MutationObserver(() => { clearTimeout(champT); champT = setTimeout(champMark, 60); }).observe(document.documentElement, { childList: true, subtree: true });
-  window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), champ: () => champOf(), teams: () => state.teams });
+  window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), champ: () => champOf(), teams: () => state.teams, now: () => state.now });
   function chip(id, opts = {}) {
     const tm = state.teams[id] || {}, row = (state.now && state.now.standings.find(s => s.id === id)) || {};
     const name = opts.name || row.name || id;
@@ -448,7 +448,7 @@
       </div>`;
 
     if (sub === 'matchups') return headTxt + pageMatchups(fp);
-    if (sub === 'stats') return headTxt + (window.FBPStats ? FBPStats.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/stats')) route(); } }) : '');
+    if (sub === 'stats') return headTxt + (window.FBPStats ? FBPStats.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/stats')) route(); } }) : '');
     // My Team (#now/team/<franchise>/<player>; the old #now/rosters/<franchise> links land here too) and Rosters, all 12
     // teams (#now/rosters, /full or /grid)
     const h2 = location.hash.split('/')[2] || '', h3 = location.hash.split('/')[3] || '';
@@ -462,7 +462,7 @@
     if (sub === 'docket') return headTxt + (window.FBPLegal ? FBPLegal.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/docket')) route(); } }) : '<p class="error">The Docket didn’t load.</p>');
     if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
     if (sub === 'news') return headTxt + (window.FBPNews ? FBPNews.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/news')) route(); } }) : '<p class="error">Player news didn’t load.</p>');
-    if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
+    if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `
       <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div>

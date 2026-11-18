@@ -95,8 +95,9 @@ window.FBPStats = (function () {
       `<button type="button" data-st-who="${v}" aria-pressed="${v ? F.who.includes(v) : !F.who.length}"${v === 'team' ? ` title="${hl ? esc(team(hl).name || hl) + '’s players' : 'Pick a team from the logos above'}"` : ''}>${v === 'team' && hl && team(hl).logo ? `<img class="st-wl" src="${team(hl).logo}" alt="">` : ''}${esc(l)}</button>`).join('')}</div>
     <button type="button" class="st-stb" data-st-starts aria-pressed="${F.st}" title="Count only the weeks he was in an FBP starting lineup">Starters</button></div>`;
     const me = hl;
-    const picker = `<div class="st-pick" role="group" aria-label="Highlight a team’s players">${Object.keys(ctx.teams).sort((a, b) => (team(a).abbr || '').localeCompare(team(b).abbr || '')).map(f =>
-      `<button type="button" data-st-hl="${f}" aria-pressed="${f === hl}" title="${esc(team(f).name || f)}">${team(f).logo ? `<img src="${team(f).logo}" alt="${esc(team(f).abbr || f)}">` : `<span>${esc(team(f).abbr || f)}</span>`}</button>`).join('')}</div>`;
+    const picker = FBPU.divGrid(Object.keys(ctx.teams), f =>
+      `<button type="button" data-st-hl="${f}" aria-pressed="${f === hl}" title="${esc(team(f).name || f)}">${team(f).logo ? `<img src="${team(f).logo}" alt="${esc(team(f).abbr || f)}">` : `<span>${esc(team(f).abbr || f)}</span>`}</button>`,
+      { mine: ctx.myTeam, name: f => (ctx.nameOf ? ctx.nameOf(f) : '') || team(f).name || team(f).abbr || f, cls: 'st-pick' }).replace('<div class="', '<div role="group" aria-label="Highlight a team’s players" class="');
     const body = shown.map((r, i) => {
       const t = r.f ? team(r.f) : null, h = HP[r.id];
       const cells = wi.map(([w, k], j) => { const v = F.st ? r.sc[j] : val(r, w, k), sat = (r.s || '')[k] !== '1' && r.w[k] != null, bench = F.st && sat;

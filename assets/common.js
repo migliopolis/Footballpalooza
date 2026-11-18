@@ -44,5 +44,17 @@ window.FBPU = (function () {
   const injChip = (x, esc) => { const t = x && INJ[x.status]; if (!t) return '';
     const e = esc || (s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])));
     return `<span class="ro-inj" title="${e(x.status + (x.details ? ': ' + x.details : ''))}">${t}</span>`; };
-  return { ESPN, COL, nflColor, defBg, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip };
+  // team pickers (two rows of six): three boxes of four, one per division, West, Central, East from left to right, each
+  // titled in a break in its outline. Your default team sits first (top left) in its division; the rest A-Z by name.
+  //   FBPU.divGrid(ids, item, { mine, name, cls })  item(id) -> one button/link's HTML
+  // Falls back to one plain grid (the same class) when the division list hasn't loaded.
+  const divGrid = (ids, item, o) => {
+    o = o || {}; const now = window.FBP && FBP.now ? FBP.now() : null, nm = o.name || (id => id), cls = o.cls || '';
+    const by = (a, b) => (b === o.mine) - (a === o.mine) || String(nm(a)).localeCompare(String(nm(b)));
+    const divs = now && now.divisions, of = {}; ((now && now.standings) || []).forEach(s => { of[s.id] = s.division; });
+    if (!divs || !divs.length || ids.some(id => !of[id])) return `<div class="${cls}">${ids.slice().sort(by).map(item).join('')}</div>`;
+    return `<div class="dvg ${cls}">${divs.map(dv => { const L = ids.filter(id => of[id] === dv.id).sort(by);
+      return L.length ? `<fieldset class="dvg-box"><legend>${dv.name}</legend><div class="dvg-in">${L.map(item).join('')}</div></fieldset>` : ''; }).join('')}</div>`;
+  };
+  return { ESPN, COL, nflColor, defBg, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip, divGrid };
 })();

@@ -836,7 +836,7 @@ window.FBPRosters = (function () {
     requestAnimationFrame(() => { const el = document.querySelector('.ro-pick'); if (!el) return;
       if (pickX != null) el.scrollLeft = pickX;
       else { const on = el.querySelector('[aria-selected="true"]'); if (on && on.offsetLeft + on.offsetWidth > el.clientWidth) el.scrollLeft = on.offsetLeft - (el.clientWidth - on.offsetWidth) / 2; } });
-    return `<div class="ro-page">${backR()}<div class="ro-pick" role="tablist" aria-label="Teams">${ids.map(f => `<a href="#now/team/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`).join('')}</div>
+    return `<div class="ro-page">${backR()}${FBPU.divGrid(ids, f => `<a href="#now/team/${f}" role="tab" aria-selected="${f === pickd}" title="${esc(R.teams[f].name)}">${lg(f)}<b>${esc(tmx(f).abbr || '')}</b></a>`, { mine: ctx.myTeam, name: f => R.teams[f].name, cls: 'ro-pick' }).replace('<div class="', '<div role="tablist" aria-label="Teams" class="')}
       ${findBox(esc)}
       ${teamHead(t, pickd, ctx)}
       ${faceCard(t, ctx)}
