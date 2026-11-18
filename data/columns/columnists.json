@@ -1,38 +1,104 @@
 {
  "sal": {
   "name": "Sal Ferraro",
-  "title": "FBP columnist",
+  "title": "Senior columnist",
   "bio": "Sixteen years on the Footballpalooza beat. Trusts the standings, has grudgingly learned to read the numbers.",
-  "photo": "assets/columnists/sal.jpg"
+  "photo": "assets/columnists/sal.jpg",
+  "beat": "Weekly recaps and previews",
+  "hometown": "Brooklyn, New York",
+  "school": "Syracuse University, Newhouse School (broadcast and digital journalism)",
+  "fav": "0002",
+  "fandom": "Mostly professional",
+  "fanWhy": "His dad was a Bullish on da Bears guy from the first season, and Sal grew up in Brooklyn watching the standings on the fridge door. He keeps it out of the copy. Mostly.",
+  "profile": [
+   "Sal came up through local radio and a decade of high school football on Friday nights before landing the Footballpalooza beat. He has covered every FBP title game since, and he still writes his ledes longhand in a reporter's notebook before typing them.",
+   "He is the voice of the weekly recap and the Wednesday preview: standings first, storylines second, and a firm belief that nothing is decided in October. He sits next to Devin in the press box and pretends not to read his spreadsheets."
+  ]
  },
- "desk": {
-  "name": "FBP Trade Desk",
-  "title": "Press box staff",
-  "bio": "",
-  "photo": "assets/fbp-shield-192.png"
+ "devin": {
+  "name": "Devin Cho",
+  "title": "Analytics and trade desk",
+  "bio": "Sits next to Sal in the press box. Turns every trade into expected points, dollars and a winner.",
+  "photo": "assets/columnists/devin.jpg",
+  "beat": "Trades, Trade Value and the Trading Floor",
+  "hometown": "Fremont, California",
+  "school": "Carnegie Mellon University (statistics and data science)",
+  "fav": "0007",
+  "fandom": "Strictly professional",
+  "fanWhy": "His older sister went to college in Chicago, came home a MR. FROBOT diehard and dragged him to every watch party. He has never once said so in print and he isn't starting now.",
+  "profile": [
+   "Devin spent three years building pricing models for a sports-betting startup before deciding he'd rather explain the numbers than sell them. He runs the trade desk: every deal gets Trade Value on both sides, a contract check and a plain-English verdict.",
+   "He is the press box's least sentimental writer and proud of it. If the model says your favorite player is a sell, Devin will say so, politely, with a chart."
+  ]
  },
  "peg": {
   "name": "Peg Okafor",
   "title": "Contracts and cap",
   "bio": "Covers the money: contracts, the cap and the auction. Reads salary escalators for fun.",
-  "photo": ""
+  "photo": "assets/columnists/peg.jpg",
+  "beat": "Contracts, the cap, the auction and keepers",
+  "hometown": "Boston, Massachusetts",
+  "school": "Howard University (accounting), MBA from Rice University",
+  "fav": "0004",
+  "fandom": "Professional, with a tell",
+  "fanWhy": "Her first accounting job was in Burbank, a few blocks from a Fully Cooked sports bar, and she spent two seasons doing spreadsheets at the corner table. She'll deny it, but she always checks their cap sheet first.",
+  "profile": [
+   "Peg audited payrolls for a regional accounting firm before she realized the most interesting payroll in her life was a fantasy football league's. She owns everything with a dollar sign: cap space, contract years, keeper costs and auction prices.",
+   "Her columns read like a friendly audit. She'll tell you exactly how much room you have, what next year's raises do to it, and which contract quietly costs more than it looks."
+  ]
  },
  "rex": {
   "name": "Rex Callahan",
-  "title": "FBP columnist",
+  "title": "League insider",
   "bio": "Believes flags fly forever and draft picks are lottery tickets with paperwork.",
-  "photo": "assets/columnists/rex.jpg"
+  "photo": "assets/columnists/rex.jpg",
+  "beat": "The rumor mill and rule-change talk",
+  "hometown": "Frankfort, Illinois",
+  "school": "Joliet Junior College, then the sports desk at his hometown paper",
+  "fav": "0009",
+  "fandom": "Homer",
+  "fanWhy": "He grew up in Mailing It In country and has both championship banners framed in his den. Flags fly forever, and Rex will remind you whose flags.",
+  "profile": [
+   "Rex never finished a four-year degree and never needed one. He spent twenty years working phones for a local paper and knows how to get an owner talking. He runs the rumor mill: proposed rule changes, by-law debates and whatever the group chat is whispering about.",
+   "He's the press box's loudest homer and makes no apology for it. He'll trade every future pick you own for one more banner, and he thinks the rest of the staff should too."
+  ]
  },
  "dana": {
   "name": "Dana Whitlock",
   "title": "Dynasty desk",
   "bio": "Dynasty lifer. Has never met a future first she didn't like.",
-  "photo": ""
+  "photo": "assets/columnists/dana.jpg",
+  "beat": "Long-term team building, prospects already in the league and taxi squads",
+  "hometown": "Columbus, Ohio",
+  "school": "Northwestern University, Medill School of Journalism",
+  "fav": "0011",
+  "fandom": "Openly rooting",
+  "fanWhy": "Her college roommate grew up in Dunedin, Florida, a Wholey Club lifer, and by sophomore year Dana was too. She'll tell you, and then she'll tell you why they're two years away.",
+  "profile": [
+   "Dana covered minor-league baseball out of college and learned to love prospects nobody else was watching. In Footballpalooza she covers the long game: taxi squads, age curves, rebuilds and the teams playing for 2028.",
+   "She roots openly and plans patiently. Ask her about your roster and she'll start with who you should hold for three more years."
+  ]
  },
- "devin": {
-  "name": "Devin Cho",
-  "title": "Analytics desk",
-  "bio": "Sits next to Sal in the press box. Turns every trade into expected points, dollars and a winner.",
-  "photo": "assets/columnists/devin.jpg"
+ "lainey": {
+  "name": "Lainey Pruitt",
+  "title": "Draft and college beat",
+  "beat": "College football as it matters to the FBP rookie draft, and Draft Home",
+  "hometown": "Brentwood, Tennessee",
+  "school": "University of Tennessee, School of Journalism and Electronic Media, class of 2024",
+  "fav": "0008",
+  "fandom": "Professional on the page, a Daughter at heart",
+  "fanWhy": "She's a Daughter of Tinactin, third generation. She grew up in Brentwood, Son of Tinactin's hometown. Her grandmother was one of the first Daughters to follow the team, and The Matriarch herself tied Lainey's first maroon scarf when she was six.",
+  "bio": "Watches more Saturday football than anyone in the press box. Knows the 2027 rookie class by heart.",
+  "photo": "assets/columnists/lainey.jpg",
+  "profile": [
+   "Lainey is 24 and the newest voice in the press box. She covered the SEC for the campus paper in Knoxville, then spent a year scouting college tape for a draft website before joining the FBP press box to cover the draft and college beat.",
+   "Every Monday she recaps the college weekend for one reason only: how the top 2027 prospects played and what it means for our rookie draft. She also writes Draft Home's \"What to Know.\" On the page she's all business. In the stands she's wearing maroon."
+  ]
+ },
+ "desk": {
+  "name": "FBP Trade Desk",
+  "title": "Press box staff",
+  "bio": "Unsigned trade notes from the analytics desk, led by Devin Cho.",
+  "photo": "assets/fbp-shield-192.png"
  }
 }

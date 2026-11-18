@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0292';
+  const VERSION = '0.0293';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -511,9 +511,9 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
       <p class="col-kick">From the press box · ${esc(c.kicker)}</p>
       <h1 class="col-h1">${esc(c.title)}</h1>
       ${c.image ? `<figure class="col-hero"><img src="${esc(c.image)}" alt="${esc(c.caption || '')}">${c.caption || c.credit ? `<figcaption>${esc(c.caption || '')}${c.credit ? ` <span>${esc(c.credit)}</span>` : ''}</figcaption>` : ''}</figure>` : ''}
-      <div class="col-byline">${colAvatar(a, true)}<span><b>${esc(a.name)}</b><small>${esc(a.title || '')} · ${colDate(c.date)} · ${c.minutes} min read</small></span></div>
+      <div class="col-byline">${colAvatar(a, true)}<span><b>${(a.profile || []).length ? `<a href="#press/staff/${esc(c.author)}">${esc(a.name)}</a>` : esc(a.name)}</b><small>${esc(a.title || '')} · ${colDate(c.date)} · ${c.minutes} min read</small></span></div>
       <div class="col-body">${c.html}</div>
-      ${a.bio ? `<p class="col-bio">${colAvatar(a)}<span><b>${esc(a.name)}</b> ${esc(a.bio)}</span></p>` : ''}
+      ${a.bio ? `<p class="col-bio">${colAvatar(a)}<span><b>${esc(a.name)}</b> ${esc(a.bio)}${(a.profile || []).length ? ` <a href="#press/staff/${esc(c.author)}">Full profile →</a>` : ''}</span></p>` : ''}
       ${more.length ? `<h2 class="sec">More from the press box</h2><div class="card col-more">${more.map(x => `<a href="#now/column/${x.slug}"><b>${esc(x.title)}</b><small>${esc(x.kicker)} · ${colDate(x.date)}</small></a>`).join('')}</div><a class="col-all" href="#press">Every article in the Press Box →</a>` : ''}
     </article>`;
   }
@@ -536,11 +536,38 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const weeks = []; C.forEach((c, i) => { if (i === 0 && !pbWho) return; const k = `${c.season}-${c.week}`; let g = weeks.find(x => x.k === k); if (!g) weeks.push(g = { k, w: c.week, list: [] }); g.list.push(c); });
     return `<section class="pb">
       <h1 class="pb-h1">Press Box</h1>
-      <p class="pb-sub">Recaps, previews, the trade desk and the rumor mill, from the FBP press box.</p>
+      <p class="pb-sub">Recaps, previews, the trade desk, the rumor mill and the college beat, from the FBP press box. <a href="#press/staff">Meet the staff →</a></p>
       <div class="pb-who" role="group" aria-label="Filter by writer"><button type="button" data-pb-who=""${pbWho ? '' : ' aria-pressed="true"'}>Everyone</button>${who.map(k => `<button type="button" data-pb-who="${esc(k)}"${pbWho === k ? ' aria-pressed="true"' : ''}>${colAvatar(person(k))}${esc(person(k).name)}</button>`).join('')}</div>
       ${pbWho ? '' : card(C[0], true)}
       ${weeks.map(g => `<h2 class="sec">Week ${g.w}</h2><div class="pb-list">${g.list.map(c => card(c)).join('')}</div>`).join('')}
     </section>`;
+  }
+  /* ---------- Press Box staff (#press/staff, #press/staff/<key>): who writes what, where they're from, who they root for ---------- */
+  const staffKeys = () => Object.keys(state.columns.columnists).filter(k => (state.columns.columnists[k].profile || []).length);
+  function staffCard(k, full) {
+    const a = state.columns.columnists[k], tm = state.teams[a.fav] || {};
+    const team = a.fav ? `<span class="st-fav">${tm.logo ? `<img src="${esc(tm.logo)}" alt="" loading="lazy">` : ''}<span><small>Favorite FBP team</small><b>${esc(nameOf(a.fav))}</b></span></span>` : '';
+    const n = state.columns.columns.filter(c => c.author === k).length;
+    return `<article class="card st-card" id="st-${esc(k)}">
+      <div class="st-top">${colAvatar(a, true)}<span><b class="st-name">${full ? esc(a.name) : `<a href="#press/staff/${esc(k)}">${esc(a.name)}</a>`}</b><small>${esc(a.title || '')}</small></span></div>
+      ${a.beat ? `<p class="st-beat">${esc(a.beat)}</p>` : ''}
+      <dl class="st-facts">${a.hometown ? `<div><dt>Hometown</dt><dd>${esc(a.hometown)}</dd></div>` : ''}${a.school ? `<div><dt>School</dt><dd>${esc(a.school)}</dd></div>` : ''}</dl>
+      ${(full ? a.profile : a.profile.slice(0, 1)).map(t => `<p>${esc(t)}</p>`).join('')}
+      <div class="st-fan" style="--tc:${esc(tm.primary || '#888')}">${team}${a.fandom ? `<span class="st-lvl">${esc(a.fandom)}</span>` : ''}${a.fanWhy ? `<p>${esc(a.fanWhy)}</p>` : ''}</div>
+      ${full ? '' : `<a class="col-all" href="#press/staff/${esc(k)}">${n ? `Profile and ${n} article${n === 1 ? '' : 's'}` : 'Full profile'} →</a>`}
+    </article>`;
+  }
+  function pageStaff(k) {
+    if (!state.columns) { loadColumns(); return '<p class="loading">Loading the Press Box…</p>'; }
+    const W = state.columns.columnists;
+    if (k && W[k] && (W[k].profile || []).length) {
+      const mine = state.columns.columns.filter(c => c.author === k);
+      return `<section class="pb st"><a class="col-back" href="#press/staff">← The staff</a>${staffCard(k, true)}
+        ${mine.length ? `<h2 class="sec">Articles</h2><div class="card col-more">${mine.map(x => `<a href="#now/column/${x.slug}"><b>${esc(x.title)}</b><small>${esc(x.kicker)} · ${colDate(x.date)}</small></a>`).join('')}</div>` : '<p class="pb-sub">No articles yet. Coming soon.</p>'}</section>`;
+    }
+    return `<section class="pb st"><a class="col-back" href="#press">← Press Box</a><h1 class="pb-h1">The staff</h1>
+      <p class="pb-sub">Who writes what in the FBP press box. Everyone has a favorite FBP team; some hide it better than others.</p>
+      <div class="st-grid">${staffKeys().map(x => staffCard(x)).join('')}</div></section>`;
   }
   document.addEventListener('click', e => { const b = e.target.closest('[data-pb-who]'); if (!b) return; pbWho = b.dataset.pbWho; route(); });
 
@@ -730,7 +757,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     }
     else if (tab === 'now') app.innerHTML = state.now ? pageNow() : '<p class="error">League data didn’t load. Refresh the page to try again.</p>';
     else if (tab === 'settings') app.innerHTML = pageSettings();
-    else if (tab === 'press') app.innerHTML = pagePress();
+    else if (tab === 'press') app.innerHTML = parts[1] === 'staff' ? pageStaff(parts[2]) : pagePress();
     else if (tab === 'beta') { app.innerHTML = window.FBPBeta ? FBPBeta.render({ esc, nameOf, teams: state.teams, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#beta')) route(); } }) : '<p class="error">The Beta page didn’t load.</p>'; if (window.FBPBeta) FBPBeta.after(); }
     else if (tab === 'awards') app.innerHTML = window.FBPAwards ? FBPAwards.render(draftCtx()) : '<p class="error">Awards didn’t load.</p>';
     else if (tab === 'reference') {

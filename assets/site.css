@@ -3408,3 +3408,21 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 .ro-map iframe{width:calc(100% + 56px);height:calc(100% + 40px);margin:-20px 0 0;border:0;pointer-events:none;filter:saturate(.85)}   /* the extra width crops OpenStreetMap's zoom buttons; its credit stays at bottom left */
 .ro-mapc{position:absolute;right:10px;top:8px;padding:3px 9px;border-radius:999px;background:rgba(17,17,17,.78);color:#fff;font:600 .72rem var(--body)}
 .loc-tag{display:block;margin-top:2px;color:var(--muted);font-size:.72rem}
+/* Press Box staff profiles */
+.st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.st-card{display:flex;flex-direction:column;gap:8px;padding:14px 16px}
+.st-card p{margin:0;line-height:1.5}
+.st-top{display:flex;gap:12px;align-items:center}
+.st-top>span{display:flex;flex-direction:column}
+.st-name{font:700 1.15rem var(--display)}.st-name a{color:inherit;text-decoration:none}
+.st-top small,.st-beat{color:var(--muted);font-size:.82rem}
+.st-beat{font-weight:600}
+.st-facts{display:flex;flex-direction:column;gap:2px;margin:0;font-size:.82rem}
+.st-facts div{display:flex;gap:8px}.st-facts dt{color:var(--muted);min-width:72px}.st-facts dd{margin:0}
+.st-fan{border-left:4px solid var(--tc);background:var(--surface-2,rgba(127,127,127,.07));border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:auto}
+.st-fan p{flex-basis:100%;font-size:.85rem}
+.st-fav{display:flex;gap:8px;align-items:center}.st-fav img{width:34px;height:34px;object-fit:contain}
+.st-fav span{display:flex;flex-direction:column}.st-fav small{color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
+.st-lvl{font-size:.72rem;font-weight:700;border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin-left:auto}
+.st .st-card+h2{margin-top:18px}
+.col-byline b a{color:inherit;text-decoration:none}

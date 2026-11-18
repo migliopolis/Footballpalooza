@@ -42,6 +42,7 @@ def routes():
         'now/matchups': (f"Week {mu.get('week')} Matchups" if mu.get('week') else 'Matchups', "This week's games, head to head."),
         'now/power': ('Power Rankings', f'{season} Footballpalooza power rankings{wk}.'),
         'now/playoffs': ('Playoff Picture', 'Seeds, the bracket and the 6-seed race' + (',' + wk if wk else '') + '.'),
+        'press/staff': ('The Press Box staff', 'Who writes what in the FBP press box, where they are from and who they root for.'),
         'awards': ('Awards', f'{season} Footballpalooza awards: All-FBP teams, MVP, Trade of the Year and more.'),
         'reference': ('FBP Reference', 'Footballpalooza history: franchises, seasons, records and the Hall of Fame.'),
         'reference/franchises': ('Franchises', 'Every Footballpalooza franchise, all time.'),
