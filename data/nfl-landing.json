@@ -15,7 +15,7 @@
    "team": "CIN",
    "pick": 25,
    "basis": "recent",
-   "mocks": 14,
+   "mocks": 15,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
@@ -43,7 +43,7 @@
    "team": "ARI",
    "pick": 7,
    "basis": "consensus",
-   "mocks": 21,
+   "mocks": 22,
    "mostMocked": "NYJ"
   },
   "Kewan Lacy": {
@@ -78,7 +78,7 @@
    "team": "LV",
    "pick": 15,
    "basis": "consensus",
-   "mocks": 21,
+   "mocks": 22,
    "mostMocked": "KC"
   },
   "Nate Frazier": {
@@ -99,14 +99,14 @@
    "team": "ATL",
    "pick": 8,
    "basis": "recent",
-   "mocks": 12,
+   "mocks": 13,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
    "team": "NE",
    "pick": 16,
    "basis": "consensus",
-   "mocks": 17,
+   "mocks": 18,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -127,7 +127,7 @@
    "team": "DET",
    "pick": 30,
    "basis": "consensus",
-   "mocks": 19,
+   "mocks": 20,
    "mostMocked": "DEN"
   },
   "Deuce Alexander": {
@@ -141,7 +141,7 @@
    "team": "DEN",
    "pick": null,
    "basis": "most",
-   "mocks": 1,
+   "mocks": 2,
    "mostMocked": "DEN"
   },
   "Ryan Coleman-Williams": {
@@ -155,7 +155,7 @@
    "team": "MIN",
    "pick": 27,
    "basis": "consensus",
-   "mocks": 16,
+   "mocks": 17,
    "mostMocked": "PIT"
   },
   "Wyatt Young": {
@@ -176,7 +176,7 @@
    "team": "KC",
    "pick": 29,
    "basis": "consensus",
-   "mocks": 9,
+   "mocks": 10,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
@@ -246,7 +246,7 @@
    "team": "PIT",
    "pick": 23,
    "basis": "consensus",
-   "mocks": 11,
+   "mocks": 12,
    "mostMocked": "CLE"
   },
   "Antwan Raymond": {

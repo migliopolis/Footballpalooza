@@ -1,5 +1,5 @@
 {
- "run": "2026-11-18T17:04:04+00:00",
+ "run": "2026-11-18T23:32:40+00:00",
  "results": {
   "players": {
    "ok": true,
@@ -7,15 +7,15 @@
   },
   "dynasty-ecr": {
    "ok": true,
-   "players": 458,
-   "matched": 457,
-   "updated": "2026-11-17"
+   "players": 448,
+   "matched": 448,
+   "updated": "2026-11-18"
   },
   "ros-ecr": {
    "ok": true,
    "players": 410,
    "matched": 410,
-   "updated": "2026-11-17"
+   "updated": "2026-11-18"
   },
   "rookies-ecr": {
    "ok": false,

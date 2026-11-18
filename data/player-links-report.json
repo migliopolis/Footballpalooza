@@ -1,7 +1,7 @@
 {
  "summary": {
-  "linked": 946,
-  "mfl": 933,
+  "linked": 947,
+  "mfl": 934,
   "spellingFixed": 49,
   "name": 13,
   "unmatched": 3,
@@ -930,7 +930,7 @@
    "mfl": "17696",
    "mflName": "Carsen Ryan",
    "pos": "TE",
-   "team": "CLE",
+   "team": "FA",
    "fbp": null,
    "espn": "4685540",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -1299,7 +1299,7 @@
    "mfl": "16203",
    "mflName": "Charlie Jones",
    "pos": "WR",
-   "team": "NYG",
+   "team": "FA",
    "fbp": null,
    "espn": "4257188",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -1434,7 +1434,7 @@
    "mfl": "14110",
    "mflName": "David Sills",
    "pos": "WR",
-   "team": "FA",
+   "team": "TBB",
    "fbp": null,
    "espn": "3871102",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -1455,15 +1455,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "15795",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "15302",
-   "mflName": "Dee Eskridge",
-   "pos": "WR",
-   "team": "MIA",
-   "fbp": null,
-   "espn": "4043016",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
