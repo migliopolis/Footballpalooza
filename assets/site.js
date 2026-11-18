@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0291';
+  const VERSION = '0.0292';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -76,7 +76,9 @@
     document.querySelectorAll('img:not([data-yr])').forEach(im => { if (im.getAttribute('src') === t.logo && !im.classList.contains('fbp-champ')) { im.classList.add('fbp-champ'); if (!im.title) im.title = `${c.year} FBP champion`; } });
   }
   new MutationObserver(() => { clearTimeout(champT); champT = setTimeout(champMark, 60); }).observe(document.documentElement, { childList: true, subtree: true });
-  window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), champ: () => champOf(), teams: () => state.teams, now: () => state.now });
+    // a team's home town (data/teams.json), as a small tag
+  const locTag = f => { const t = state.teams[f] || {}; return t.city ? `<span class="loc-tag">📍 ${esc(t.city)}, ${esc(t.st)}</span>` : ''; };
+window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), champ: () => champOf(), teams: () => state.teams, now: () => state.now });
   function chip(id, opts = {}) {
     const tm = state.teams[id] || {}, row = (state.now && state.now.standings.find(s => s.id === id)) || {};
     const name = opts.name || row.name || id;
@@ -576,9 +578,9 @@
       return `<article class="card mu">
         ${g.gotw || s.divisionGame ? `<div class="mu-tags">${g.gotw ? '<span class="mu-gotw">Game of the week</span>' : ''}${s.divisionGame ? '<span class="tag">Division</span>' : ''}</div>` : ''}
         <div class="mu-head">
-          <div class="mu-t">${logo(g.away)}<b>${esc(nameOf(g.away))}</b>${champChip(g.away)}<small>${rec(a)} · ${seedTxt(a)}</small></div>
+          <div class="mu-t">${logo(g.away)}<b>${esc(nameOf(g.away))}</b>${champChip(g.away)}<small>${rec(a)} · ${seedTxt(a)}</small>${locTag(g.away)}</div>
           <div class="mu-at">at</div>
-          <div class="mu-t">${logo(g.home)}<b>${esc(nameOf(g.home))}</b>${champChip(g.home)}<small>${rec(b)} · ${seedTxt(b)}</small></div>
+          <div class="mu-t">${logo(g.home)}<b>${esc(nameOf(g.home))}</b>${champChip(g.home)}<small>${rec(b)} · ${seedTxt(b)}</small>${locTag(g.home)}</div>
         </div>
         ${a.winProb != null ? `<div class="mu-wp"><span>${a.winProb}%</span><div class="mu-bar"><i style="width:${a.winProb}%"></i></div><span>${b.winProb}%</span></div><p class="mu-cap">Win chance</p>` : ''}
         <div class="mu-tape">

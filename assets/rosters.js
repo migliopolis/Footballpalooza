@@ -627,12 +627,20 @@ window.FBPRosters = (function () {
     const stat = (v, l) => `<div class="ro-hs1"><b>${v}</b><small>${l}</small></div>`;
     const ch = window.FBP && FBP.champ && FBP.champ(), isCh = ch && ch.f === f;   // last season's champion: a banner and the chip
     return `${isCh ? `<div class="ro-banner" role="note">🏆 <b>${ch.year} FBP Champions</b><span>Defending the title in ${ch.year + 1}</span></div>` : ''}<div class="ro-th${isCh ? ' champ' : ''}" style="--tc:${tm.primary || 'var(--line)'}">${tm.logo ? `<img class="ro-tl" src="${tm.logo}" alt="">` : ''}
-      <div class="ro-thm"><h2>${esc(t.name)}${window.FBP && FBP.champChip ? FBP.champChip(f) : ''}</h2><p>${esc(t.owner)}${tf && tf.outlook ? ` <span class="tf-out ${OUTC[tf.outlook]}" title="${tf.playoff}% playoff odds">${tf.outlook}</span>` : ''}</p></div>
+      <div class="ro-thm"><h2>${esc(t.name)}${window.FBP && FBP.champChip ? FBP.champChip(f) : ''}</h2><p>${esc(t.owner)}${tf && tf.outlook ? ` <span class="tf-out ${OUTC[tf.outlook]}" title="${tf.playoff}% playoff odds">${tf.outlook}</span>` : ''}</p>${tm.city ? `<p class="ro-loc">📍 ${esc(tm.city)}, ${esc(tm.st)}</p>` : ''}</div>
       <div class="ro-hstats">${stat(`${t.rec[0]}-${t.rec[1]}${t.rec[2] ? '-' + t.rec[2] : ''}`, st ? `${ord(st.divisionRank)} ${esc(st.divisionName)}` : 'record')}
         ${st ? stat(st.seed ? '#' + st.seed : '—', st.seed ? 'playoff seed' : 'out of a seed') : ''}
         ${stat(t.pf.toFixed(1), pfRk ? `points · ${ord(pfRk)}` : 'points')}
         ${stat(sg(n ? t.paa / n : 0), `vs avg a week · ${ord(t.paaRank)}`)}
-        ${tf && tf.playoff != null ? stat(Math.round(tf.playoff) + '%', 'playoff odds') : ''}</div></div>`;
+        ${tf && tf.playoff != null ? stat(Math.round(tf.playoff) + '%', 'playoff odds') : ''}</div>${homeMap(tm, esc)}</div>`;
+  }
+  // home town map (data/teams.json city and coordinates): an OpenStreetMap strip with a pin; tap opens the full map
+  function homeMap(tm, esc) {
+    if (tm.lat == null || tm.lon == null) return '';
+    const dx = 0.14, dy = 0.05, bb = [tm.lon - dx, tm.lat - dy, tm.lon + dx, tm.lat + dy].map(v => v.toFixed(4)).join('%2C');
+    const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bb}&layer=mapnik&marker=${tm.lat}%2C${tm.lon}`;
+    const href = `https://www.openstreetmap.org/?mlat=${tm.lat}&mlon=${tm.lon}#map=11/${tm.lat}/${tm.lon}`;
+    return `<a class="ro-map" href="${href}" target="_blank" rel="noopener" aria-label="${esc(tm.city)}, ${esc(tm.st)} on a map"><iframe src="${src}" title="Map of ${esc(tm.city)}, ${esc(tm.st)}" loading="lazy" tabindex="-1" aria-hidden="true"></iframe><span class="ro-mapc">📍 ${esc(tm.city)}, ${esc(tm.st)} · Home</span></a>`;
   }
   // Face of the Franchise: his photo, team, icons and every FBP honor he's won here
   const HONK = { '1st Team': 'gold', '2nd Team': 'silver', 'Rookie Team': 'rook', 'MVP': 'gold', 'RoY': 'good', 'ToY': 'good' };
