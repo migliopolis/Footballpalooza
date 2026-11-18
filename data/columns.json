@@ -14,7 +14,8 @@
    "profile": [
     "Sal came up through local radio and a decade of high school football on Friday nights before landing the Footballpalooza beat. He has covered every FBP title game since, and he still writes his ledes longhand in a reporter's notebook before typing them.",
     "He is the voice of the weekly recap and the Wednesday preview: standings first, storylines second, and a firm belief that nothing is decided in October. He sits next to Devin in the press box and pretends not to read his spreadsheets."
-   ]
+   ],
+   "photoFull": "assets/columnists/full/sal.jpg"
   },
   "devin": {
    "name": "Devin Cho",
@@ -30,7 +31,8 @@
    "profile": [
     "Devin spent three years building pricing models for a sports-betting startup before deciding he'd rather explain the numbers than sell them. He runs the trade desk: every deal gets Trade Value on both sides, a contract check and a plain-English verdict.",
     "He is the press box's least sentimental writer and proud of it. If the model says your favorite player is a sell, Devin will say so, politely, with a chart."
-   ]
+   ],
+   "photoFull": "assets/columnists/full/devin.jpg"
   },
   "peg": {
    "name": "Peg Okafor",
@@ -63,7 +65,8 @@
    "profile": [
     "Rex never finished a four-year degree and never needed one. He spent twenty years working phones for a local paper and knows how to get an owner talking. He runs the rumor mill: proposed rule changes, by-law debates and whatever the group chat is whispering about.",
     "He's the press box's loudest homer and makes no apology for it. He'll trade every future pick you own for one more banner, and he thinks the rest of the staff should too."
-   ]
+   ],
+   "photoFull": "assets/columnists/full/rex.jpg"
   },
   "dana": {
    "name": "Dana Whitlock",
