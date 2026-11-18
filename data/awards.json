@@ -453,21 +453,21 @@
    {
     "slot": "QB",
     "player": {
-     "id": "17462",
-     "name": "Fernando Mendoza",
+     "id": "17469",
+     "name": "Jalon Daniels",
      "pos": "QB",
-     "nfl": "LVR",
-     "espn": "4837248",
-     "team": "0008",
+     "nfl": "TBB",
+     "espn": "4596472",
+     "team": "0006",
      "pts": 0.0,
      "starts": 0,
      "ppg": 0,
-     "salary": 6.0,
-     "contract": "1/5",
+     "salary": 0.0,
+     "contract": "",
      "rookie": true,
-     "allPts": 16.1,
-     "status": "TAXI_SQUAD",
-     "pick": "1.08",
+     "allPts": 35.1,
+     "status": "ROSTER",
+     "pick": "Undrafted",
      "honors": {
       "first": 0,
       "second": 0,
@@ -2012,7 +2012,7 @@
    ]
   }
  ],
- "generated": "2026-11-17T23:58:43+00:00",
+ "generated": "2026-11-18T17:04:17+00:00",
  "basis": {
   "throughWeek": 9,
   "teams": [
