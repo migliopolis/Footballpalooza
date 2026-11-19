@@ -5,6 +5,8 @@ author: devin
 season: 2026
 week: 11
 date: 2026-11-19
+image: assets/columns/2026-week-11-irving.jpg
+caption: Bucky Irving, on Sour Grapes' trade block since Oct 23
 teaser: The Trading Floor is out of Beta and into League Now, and the trade block now follows players around the site. A guide to every tab, and how the league looks from the outside two weeks before the Dec 3 deadline.
 ---
 The trade deadline is Thursday, Dec 3 at 12 PM ET. That's two weeks from today, and two more weeks of games, 11 and 12, before in-season trading closes.
@@ -39,7 +41,7 @@ The top of the chart is Jaxon Smith-Njigba, alone at 9,999.
 
 This tab reads MFL's Trade Bait list. Any owner can add players to it from his team page in MFL, and it shows up here on the next refresh. Four teams have someone on it right now:
 
-- **Thots & Players:** Cam Ward, David Montgomery and Jonathan Taylor, on the list since Aug 30
+- **Thots & Players:** Cam Ward, David Montgomery and Jonathan Taylor, on the list since Aug 29
 - **Fully Cooked:** Nico Collins and Jadarian Price
 - **Sour Grapes:** Bucky Irving
 - **Jesus Christ College:** Tyler Allgeier, Jaylen Waddle and Juwan Johnson, looking for cash and picks
