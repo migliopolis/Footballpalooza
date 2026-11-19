@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0295';
+  const VERSION = '0.0296';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -552,7 +552,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const team = a.fav ? `<span class="st-fav">${tm.logo ? `<img src="${esc(tm.logo)}" alt="" loading="lazy">` : ''}<span><small>Favorite FBP team</small><b>${esc(nameOf(a.fav))}</b></span></span>` : '';
     const n = state.columns.columns.filter(c => c.author === k).length;
     // the profile page leads with the full photo (photoFull, else the square one); tap opens it at full size
-    const big = full && (a.photoFull || a.photo) ? `<a class="st-photo" href="${esc(a.photoFull || a.photo)}" target="_blank" rel="noopener" aria-label="${esc(a.name)}, full photo"><img src="${esc(a.photoFull || a.photo)}" alt="${esc(a.name)}"></a>` : '';
+    const big = full && (a.photoFull || a.photo) ? `<a class="st-photo" href="${esc(a.photoFull || a.photo)}" data-lightbox aria-label="${esc(a.name)}, full photo"><img src="${esc(a.photoFull || a.photo)}" alt="${esc(a.name)}"></a>` : '';
     return `<article class="card st-card${full ? ' st-full' : ''}" id="st-${esc(k)}">${big}
       <div class="st-top">${colAvatar(a, true)}<span><b class="st-name">${full ? esc(a.name) : `<a href="#press/staff/${esc(k)}">${esc(a.name)}</a>`}</b><small>${esc(a.title || '')}</small></span></div>
       ${a.beat ? `<p class="st-beat">${esc(a.beat)}</p>` : ''}
@@ -1173,6 +1173,26 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     if (r && !e.target.closest('.ex, a, button')) location.hash = r.dataset.go; });
   document.addEventListener('keydown', e => { const r = e.target.closest && e.target.closest('tr.st-go[data-go]');
     if (r && e.key === 'Enter') location.hash = r.dataset.go; });
+  // photo viewer: a link marked data-lightbox opens its picture over the page instead of on a page of its own (in the
+  // home-screen app that page has no way back). Close with ✕, a tap anywhere, Escape, or the phone's back button.
+  (() => {
+    let box = null;
+    const close = (fromBack) => { if (!box) return; box.remove(); box = null; document.documentElement.classList.remove('lb-open');
+      if (!fromBack && history.state && history.state.lb) history.back(); };
+    document.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a[data-lightbox]'); if (!a) return;
+      e.preventDefault(); if (box) return;
+      box = document.createElement('div'); box.className = 'lb-wrap'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
+      box.setAttribute('aria-label', a.getAttribute('aria-label') || 'Photo');
+      box.innerHTML = `<button type="button" class="lb-x" aria-label="Close">✕</button><img src="${a.getAttribute('href')}" alt="${esc(a.getAttribute('aria-label') || '')}">`;
+      box.addEventListener('click', () => close(false));
+      document.body.appendChild(box); document.documentElement.classList.add('lb-open');
+      try { history.pushState({ lb: 1 }, '', location.href); } catch (_) {}
+      box.querySelector('.lb-x').focus({ preventScroll: true });
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && box) close(false); });
+    window.addEventListener('popstate', () => { if (box) close(true); });
+  })();
   window.addEventListener('hashchange', () => { const tab = location.hash.slice(1).split('/')[0] || 'now';
       route(); if (tab !== lastTab) { lastTab = tab; toTop(); } });
     swipeTabs(); pullRefresh();
