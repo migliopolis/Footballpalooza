@@ -2,7 +2,7 @@
 
 Reads what the refresh already saved and writes data/trading-floor.json:
   teams   outlook from the playoff odds, 2026 payroll, the cost of keeping everyone worth keeping in 2027,
-          depth by position, QB count against the 2-QB keeper limit, rookie picks owned
+          depth by position, QB count against the 2-veteran-QB keeper limit (one taxi QB exempt), rookie picks owned
   targets sell candidates on teams out of a playoff spot (expiring, costly to keep, at peak age), by Trade Value, a few on playoff teams who could still be had (outside the box),
           expiring contracts, big 2027 raises, keeper crunches
   trades  every MFL trade since 2019: players and picks from MFL, plus auction cash, which MFL doesn't record
@@ -89,10 +89,14 @@ def main():
         for pos in NEED:
             g = sorted([p for p in mine if p['p'] == pos], key=lambda p: -(p['o'] or 0))
             depth[pos] = {'good': sum(1 for p in g if (p['o'] or 0) >= GOOD), 'top': [p['id'] for p in g[:4]]}
-        qbs = [p for p in mine if p['p'] == 'QB' and not p['exp'] and (p['o'] or 0) >= 70]
+        qbs = sorted([p for p in mine if p['p'] == 'QB' and not p['exp'] and (p['o'] or 0) >= 70], key=lambda p: -(p['o'] or 0))
+        # 2027 by-law: one QB who spent his whole rookie season on taxi can be kept as a 3rd QB entering year 2. Only this
+        # year's rookies can be on taxi, so a QB on taxi now qualifies; with two, the better one takes the exemption
+        qbx = next((p for p in qbs if p['st'] == 'TAXI_SQUAD'), None)
+        qbs = [p for p in qbs if p is not qbx]
         teams[f] = {'name': t['name'], 'owner': t.get('owner'), 'rec': t.get('rec'), 'pf': t.get('pf'), 'playoff': po, 'outlook': out, 'seed': seeds.get(f),
                     'pay26': pay26, 'cap27': cap[f], 'keepCost': keep_cost, 'keepN': len(keep), 'room27': round(cap[f] - keep_cost, 1),
-                    'depth': depth, 'qb27': [p['id'] for p in sorted(qbs, key=lambda p: -(p['o'] or 0))]}
+                    'depth': depth, 'qb27': [p['id'] for p in qbs], 'qbx': qbx['id'] if qbx else None}
 
     VT = (load(D('values.json'), {}) or {}).get('teams') or {}
     for f in teams:   # Trade Value by team and position (trade_values.py), with ranks
@@ -156,7 +160,7 @@ def main():
     good_bad = sorted(sell, key=lambda p: -(p['tv'] or 0))
     # Outside the box: players on playoff teams with a reason the team might still move them
     #   depth  more good players at his spot than the team starts (2027 lineup, with the SuperFlex)
-    #   qb     a third QB worth keeping, with only 2 veteran QB keeper spots
+    #   qb     a third QB worth keeping, with only 2 veteran QB keeper spots (a taxi QB's exemption doesn't count)
     #   cap    over the 2027 budget: keeping the best first, he's one who doesn't fit
     odd = {}
     for f, t in teams.items():
@@ -197,9 +201,12 @@ def main():
             crunch.append({'f': f, 'kind': 'cap', 'over': round(t['keepCost'] - t['cap27'], 1),
                            'ids': [p['id'] for p in sorted([p for p in P.values() if p['f'] == f and not p['exp'] and (p['o'] or 0) >= KEEP], key=lambda p: -(p['n27'] or 0))[:6]]})
         if len(t['qb27']) > 2:
-            crunch.append({'f': f, 'kind': 'qb', 'n': len(t['qb27']), 'ids': t['qb27']})
+            crunch.append({'f': f, 'kind': 'qb', 'n': len(t['qb27']), 'ids': t['qb27'], 'qbx': t['qbx']})
     for c in crunch:
         c['list'] = [{'id': i, 'n': P[i]['n'], 'p': P[i]['p'], 'n27': P[i]['n27'], 'o': P[i]['o'], 'tv': P[i]['tv']} for i in c.pop('ids')]
+        x = c.pop('qbx', None)
+        if x:
+            c['qbx'] = P[x]['n']   # his taxi QB, kept as a 3rd QB outside the limit
     targets = {'goodOnNonContenders': good_bad, 'outsideBox': box, 'expiring': [row(p) for p in expiring],
                'raises': [row(p) for p in raises], 'crunch': crunch}
 

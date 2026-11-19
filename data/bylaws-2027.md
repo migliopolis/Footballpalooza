@@ -5,7 +5,7 @@ These are the v5.0 by-laws rewritten for 2027. Every change is tagged [[CHANGED]
 | Area | Change for 2027 |
 | --- | --- |
 | Lineup / roster | SuperFlex becomes the 9th starter; bench 11; 20 active + 3 IR + 5 taxi |
-| QB keepers | Max 2 veteran QBs plus any rookie QBs from that year's rookie draft |
+| QB keepers | Max 2 veteran QBs plus any rookie QBs from that year's rookie draft; one second-year QB who spent his entire rookie season on taxi may be kept as a 3rd QB |
 | Rookie salaries | Published formula (NFL draft capital × FBP pick) for rounds 1–2; maxes RB $30, WR $15, QB $12, TE $8; round 2 floor $3; rounds 3/4 = $2/$1 |
 | Taxi squad | 5th spot; taxi rookies count at two-thirds of salary; deferred third, trade fee; TS assignments final 24 hours before the auction |
 | Playoffs | Full tiebreaker ladder incl. all-play wins; 3rd-place game in Week 17; division winners always outrank wild cards |
@@ -191,7 +191,8 @@ Owners monitor their own rosters and salaries and notify the commissioner of err
 
 - [[CHANGED]] Deadline: set by the commissioner each year (TBD). *Was "typically one week before the Veteran Auction."*
 - Cap: total keepers + $1 per open roster spot must stay under the $200 salary cap. [[CHANGED]] Open spots are measured against the 20-man active roster. TS rookies count toward the cap at their Article VI cost, not toward roster limits.
-- [[NEW]] **QB limit:** a team may keep at most **2 veteran QBs**, plus any rookie QBs drafted in that year's rDraft. A QB who spent his rookie year on TS may be kept into Year 2, but he uses one of the 2 veteran QB spots.
+- [[NEW]] **QB limit:** a team may keep at most **2 veteran QBs**, plus any rookie QBs drafted in that year's rDraft.
+- [[NEW]] **Taxi QB exemption:** a QB entering his **second season** who spent his **entire rookie season on the TS** may be kept as a **3rd QB**, outside the 2-veteran limit. One such QB per team, and only once, entering his second season. A rookie QB promoted off the TS at any point in his rookie season doesn't qualify and counts as one of the 2 veterans when kept. From his third season on, he counts toward the 2 like any other veteran.
 - Keeping zero players is allowed.
 
 **Jordy Nelson Rule.** If a keeper suffers a **season-ending injury** and is placed on IR by his team after the deadline but before the auction, one such player may be dropped to regain his salary.

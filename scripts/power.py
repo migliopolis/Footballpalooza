@@ -21,7 +21,7 @@ rookie deals get a floor from their NFL draft slot while they develop; QBs keep 
 Projected keepers: the FBP keeper model (data/keeper-model.json), trained on real keeper decisions before the 2022,
 2024, 2025 and 2026 deadlines, gives each player under contract for next season a chance he's kept, from his production
 this season, his next salary and contract, age, position and FantasyPros dynasty rank. Kept: 50% or better, then the
-by-laws: at most two veteran QBs, and keepers plus $1 per open roster spot within the team's budget (the least likely
+by-laws: at most two veteran QBs (plus one QB who spent his rookie season on taxi), and keepers plus $1 per open roster spot within the team's budget (the least likely
 keepers go first). Anyone can flip a keeper on their own device.
 
 The page shows two rankings, not one blend: Now (this season) and Future (next season: keepers, cash and picks).
@@ -80,7 +80,7 @@ for _pos in ('QB', 'RB', 'WR', 'TE'):   # this season's points-per-game rank at 
 
 
 def rookie_qb(r, season):
-    return r['pos'] == 'QB' and _DY.get(str(r['id'])) == season   # by-law: the 2-QB keeper limit is for veterans
+    return r['pos'] == 'QB' and _DY.get(str(r['id'])) == season   # this season's rookie draft
 
 
 def keep_chance(r, season):
@@ -261,7 +261,11 @@ def main():
         for p in players:
             p['kp'] = round(keep_chance(rowby[p['id']], season), 2) if p['next'] is not None else 0
         keep = sorted([p for p in players if p['next'] is not None and p['kp'] >= .5], key=lambda p: -p['kp'])
-        vqb = [p for p in keep if p['pos'] == 'QB' and not rookie_qb(rowby[p['id']], season)]
+        # by-law: at most 2 veteran QBs; one QB who spent his whole rookie season on taxi may be kept as a 3rd entering
+        # year 2 (only this year's rookies can be on taxi, so a QB on taxi now qualifies; with two, the likelier keeper)
+        qbs = [p for p in keep if p['pos'] == 'QB']
+        qbx = next((p for p in qbs if p['st'] == 'TAXI_SQUAD'), None)
+        vqb = [p for p in qbs if p is not qbx]
         for p in vqb[2:]:
             keep.remove(p)
         while keep and sum(p['next'] for p in keep) + max(0, ROSTER - sum(1 for p in keep if p['st'] != 'TAXI_SQUAD')) > budget.get(fid, 200):

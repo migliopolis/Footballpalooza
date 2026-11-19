@@ -72,7 +72,7 @@ window.FBPTrade = (function () {
     const box = (T.outsideBox || []).filter(posOk);
     const ord = FBPU.ord;
     const whyTxt = (p, w) => w.k === 'depth' ? `<span class="tf-why-c">Depth</span> his team’s ${ord(w.rank)}-best ${p.p}`
-      : w.k === 'qb' ? `<span class="tf-why-c">QB limit</span> one of ${w.n} QBs for 2 keeper spots`
+      : w.k === 'qb' ? `<span class="tf-why-c">QB limit</span> one of ${w.n} veteran QBs for 2 keeper spots`
       : `<span class="tf-why-c">Cap</span> doesn’t fit the 2027 budget, ${money(w.over)} over`;
     const sellTxt = (p, w) => w.k === 'exp' ? `<span class="tf-why-c">Expiring</span> contract ends after this season`
       : w.k === 'cost' ? `<span class="tf-why-c">Cost</span> ${money(p.n27)} in 2027; he’d go for about ${money(w.mkt)} at auction`
@@ -87,7 +87,7 @@ window.FBPTrade = (function () {
       const t = D.teams[c.f];
       const head = c.kind === 'cap'
         ? `Keeping all ${t.keepN} of its players rated 75+ would cost <b>${money(t.keepCost)}</b> in 2027 against a <b>${money(t.cap27)}</b> budget, <b>${money(c.over)} over</b>. Some of them will have to go.`
-        : `<b>${c.n} QBs</b> rated 70+ under contract for 2027, and only 2 veteran QBs can be kept. One of them has to go.`;
+        : `<b>${c.n} veteran QBs</b> rated 70+ under contract for 2027, and only 2 can be kept. ${c.n - 2 === 1 ? 'One of them has to go.' : `${c.n - 2} of them have to go.`}${c.qbx ? ` ${esc(c.qbx)} spent his rookie season on taxi, so he can be kept as a 3rd QB and isn’t counted.` : ''}`;
       return `<li class="tf-cr"><h4>${logo(c.f)}${esc(nm(c.f))} ${outChip(c.f)} <span class="tf-tag">${c.kind === 'cap' ? 'Cap' : 'QB limit'}</span></h4><p>${head}</p>
         <p class="tf-sub">${c.kind === 'cap' ? 'Biggest 2027 salaries' : 'The QBs'}: ${c.list.map(p => `${esc(p.n)} <span class="tf-sub">${p.p}, Trade Value ${p.tv == null ? '–' : Number(p.tv).toLocaleString()}</span> ${money(p.n27)}`).join(' · ')}</p></li>`;
     }).join('');
