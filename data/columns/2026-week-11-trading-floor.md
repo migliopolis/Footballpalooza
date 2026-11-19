@@ -5,13 +5,13 @@ author: devin
 season: 2026
 week: 11
 date: 2026-11-19
-teaser: The Trading Floor sorts every roster into who could sell, who needs help and what it's all worth. A guide to its tabs, and what they're showing two weeks before the Dec 3 deadline.
+teaser: The Trading Floor is out of Beta and into League Now, and the trade block now follows players around the site. A guide to every tab, and how the league looks from the outside two weeks before the Dec 3 deadline.
 ---
 The trade deadline is Thursday, Dec 3 at 12 PM ET. That's two weeks from today, and two more weeks of games, 11 and 12, before in-season trading closes.
 
-If you're thinking about a move, the Trading Floor is built for you. It lives in the Beta tab behind its own button for now. It doesn't tell anyone what to do. It lays out who has a reason to sell, who has a hole to fill, and what everything is worth, then leaves the decision to you.
+The Trading Floor is out of Beta. It now lives in League Now: open the ▾ beside League Now and it's right under Analytics. It doesn't tell anyone what to do. It's a view of the league from the outside, built from the same public data for everyone: who's on the block, which players fit the usual reasons to move, where each roster is deep or thin, and what everything is worth. Every owner sees exactly the same page.
 
-Here's how each part works, and what it's showing as of Wednesday night's data refresh.
+Here's how each part works, and what it shows as of Wednesday night's data refresh.
 
 ## Trade Value, first
 
@@ -31,7 +31,7 @@ One more thing: Trade Value isn't the FBP OVR. The OVR next to each name is the 
 
 The Value Chart puts all of this on one page. Value levels run down the left in 250-point bands, with a column for each position and one for rookie picks. Players in the same row are worth about the same.
 
-Here's one row as an example. Between 6,501 and 6,750 you'll find Puka Nacua (6,513), Tetairoa McMillan (6,552), Christian Watson (6,669) and Wholey Club's 2027 1st, currently projected at 1.01, at 6,745. That doesn't mean any of those trades is easy to make. It means none of them is crazy to ask about.
+Here's one row as an example. Between 6,501 and 6,750 you'll find Puka Nacua (6,513), Tetairoa McMillan (6,552), Christian Watson (6,669) and Wholey Club's 2027 1st, currently projected at 1.01, at 6,745. That doesn't mean anyone would make any of those swaps. It only means the model puts them at about the same level.
 
 The top of the chart is Jaxon Smith-Njigba, alone at 9,999.
 
@@ -44,11 +44,13 @@ This tab reads MFL's Trade Bait list. Any owner can add players to it from his t
 - **Sour Grapes:** Bucky Irving
 - **Jesus Christ College:** Tyler Allgeier, Jaylen Waddle and Juwan Johnson, looking for cash and picks
 
-If you're open to offers, this is the cheapest way to say so.
+## Spotting the block around the site
+
+The trade block isn't a secret anymore. Any player on Trade Bait now carries a gold **TRADE** chip beside his name wherever he shows up: the Scoreboard and Players pages, Rosters, My Team, his Player Page, Stats, Rankings and the Value Chart. Take a player off Trade Bait in MFL and the chip goes away on the next refresh.
 
 ## Targets
 
-Targets is the shopping list. It doesn't list every player on every bad team. It lists **sell candidates**: players on teams outside a playoff spot that a rebuilding owner has a reason to move now instead of carrying into next season. There are four reasons it looks for:
+Targets doesn't list every player on every team out of the race. It lists **sell candidates**: players on teams outside a playoff spot who fit one of the usual reasons a player gets moved instead of carried into next season. It looks for four:
 
 - **Expiring:** his contract ends after this season
 - **Cost:** his 2027 salary is more than he'd go for at the auction
@@ -65,28 +67,28 @@ There are 36 sell candidates this week. The top five by Trade Value:
 | DeVonta Smith, WR | Jesus Christ College | 4,427 | $16, $22 in 2027 | Age 28, the WR peak |
 | Davante Adams, WR | The Fist of the Magi | 3,328 | $15, $18 in 2027 | Sell high, 17.0 ppg |
 
-Two notes on that table. First, Hauk Tua aren't sellers. They're 5-5 with 48.1% playoff odds, and Watson is there only because they're out of a playoff spot right now. Targets is a snapshot. Win Sunday and they could drop off the list entirely.
+Two notes on that table. First, Targets is a snapshot. Hauk Tua are 5-5 with 48.1% playoff odds, and Watson shows up only because they're outside a playoff spot this week. A win could take them off the list entirely.
 
-Second, Derrick Henry shows why the "cost" reason exists. The Fist of the Magi's back is putting up 16.1 a game, but he's $47 next year, and the model thinks he'd go for about $24 at the auction.
+Second, here's what the "cost" reason looks like in practice. Derrick Henry is averaging 16.1 a game for The Fist of the Magi. He's $47 next year, and the model estimates he'd go for about $24 at the auction.
 
 ### Thinking outside the box
 
-Contenders usually don't sell good players, so Targets leaves playoff teams out, except here. This section lists 27 players on playoff teams with a reason their team might still move them: more good players at his position than the team will start in 2027, a third keeper-worthy QB, or a 2027 keeper bill over budget.
+Targets leaves playoff teams out, except here. This section lists 27 players on playoff teams who fit one of three roster or money reasons: more good players at his position than the team will start in 2027, a third keeper-worthy QB, or a 2027 keeper bill over budget.
 
-The top of this list is mostly a story about money. Matthew Golden (7,311) and Tetairoa McMillan (6,552) lead it, both from Thots & Players, the team with the biggest 2027 squeeze in the league. More on that below.
+The top of this list is mostly about money. Matthew Golden (7,311) and Tetairoa McMillan (6,552) lead it, both from Thots & Players, whose 2027 keeper bill is the furthest over budget in the league. More on that below.
 
 ## Teams
 
-The Teams tab is where matches get made. Each team's card shows its playoff odds, an outlook (Contending at 75% or better, In the mix from 25% to 75%, Building under 25%), and its depth: how many players rated 80 or better it has at each position. One more than the lineup needs is **deep**. Fewer is **thin**.
+The Teams tab shows where needs and surpluses line up. Each team's card shows its playoff odds, an outlook (Contending at 75% or better, In the mix from 25% to 75%, Building under 25%), and its depth: how many players rated 80 or better it has at each position. One more than the lineup needs is **deep**. Fewer is **thin**.
 
-Then it pairs needs with surpluses. A team that's thin somewhere is matched with teams that are deep there. Two playoff teams only get matched when the need runs both ways, because a contender doesn't hand another contender help for nothing.
+Then it lines up needs with surpluses. A team that's thin somewhere is listed with the teams that are deep there. Two playoff teams are only listed together when it runs both ways, each deep where the other is thin.
 
-This week there's exactly one contender pair like that, and it's a neat fit:
+This week there's exactly one pair of playoff teams like that:
 
 - **Bullish on da Bears** (8-2, 99.9%) are thin at RB, with one back rated 80+, and deep at QB and WR.
 - **Mailing It In** (6-3-1, 91.2%) are thin at QB, with none rated 80+, and deep at RB.
 
-Each has what the other is missing. Whether either wants to make a deal with the other is up to them.
+On paper, each is deep where the other is thin. That's as far as the tab goes.
 
 Elsewhere, three Building teams are thin at RB: Wholey Club, Son of Tinactin and Jesus Christ College. Sour Grapes are thin at TE, and the only team deep there is Thots & Players.
 
@@ -94,18 +96,18 @@ Each card also shows the 2027 money: payroll, what it would cost to keep everyon
 
 ## Keeper crunches
 
-That last number is why the Keeper crunches list is the most useful section for sellers who aren't rebuilding. It flags teams that can't keep everyone worth keeping, either by the $200 cap or by the 2027 rule of two veteran QBs. There are 17 crunches across the league this week: eight on the cap and nine on the QB limit.
+The Keeper crunches list, back on Targets, covers the same ground. It flags teams that can't keep everyone worth keeping, either by the $200 cap or by the 2027 rule of two veteran QBs. There are 17 crunches across the league this week: eight on the cap and nine on the QB limit.
 
-MR. FROBOT have the biggest QB crunch, with five quarterbacks under contract for 2027: Joe Burrow, Jalen Hurts, Tyler Shough, Ty Simpson and Mac Jones. A team that has to let someone go in the spring might rather get something for him in November.
+MR. FROBOT have the most quarterbacks against the limit, five under contract for 2027: Joe Burrow, Jalen Hurts, Tyler Shough, Ty Simpson and Mac Jones. Superflex makes that a deep room, and the limit means some of it can't be kept.
 
 ## Trade Habits and History
 
 The last two tabs look back. History has every MFL trade since 2019, 147 of them, with auction cash from the commissioner's trade log. Filter by season, team or type (with picks, with cash, players only, picks only), and open "How it played out" to follow each side's points forward. That includes players taken with traded picks, and anything flipped later.
 
-Trade Habits counts the same history by team. It's facts only, and there's no right number. Some owners like to deal: Thots & Players have made 46 trades, Bullish 44 and Son of Tinactin 43, and Thots and Son of Tinactin have traded with each other 12 times. Bullish make 33 of their 44 during the season. Others mostly stand pat: Sour Grapes have made 4 trades since 2019, all in season. If you've never traded with an owner, it doesn't mean he won't. It just means nobody has asked the right way yet.
+Trade Habits counts the same history by team. It's plain counts, and there's no right number. Some teams trade often: Thots & Players have made 46 trades, Bullish 44 and Son of Tinactin 43, and Thots and Son of Tinactin have traded with each other 12 times. Bullish make 33 of their 44 during the season. Others trade less often: Sour Grapes have made 4 trades since 2019, all during the season.
 
 ## What it all adds up to
 
-Eight trades so far in the 2026 league year, four of them in one week in October. Two weeks left. The Floor shows 36 sell candidates, one perfectly mirrored contender match, and 17 keeper crunches spread across nine teams. Everything you need to start a conversation is on one page.
+Eight trades so far in the 2026 league year, four of them in one week in October. Two weeks left. From the outside, the Floor shows 36 sell candidates, one mirrored pair of playoff teams, and 17 keeper crunches spread across nine teams. What anyone does with that is up to them.
 
-*Data through Wednesday night's refresh: rosters, contracts, picks, trades and Trade Bait from MFL; playoff odds from League Now; auction cash in trades from the commissioner's trade log. Trade Value is a model, and it's still being refined. A sell candidate is a reason to ask, not a verdict on anyone's team.*
+*Data through Wednesday night's refresh: rosters, contracts, picks, trades and Trade Bait from MFL; playoff odds from League Now; auction cash in trades from the commissioner's trade log. Trade Value is a model, and it's still being refined. Every list here describes rosters from the outside. None of it is a verdict on a team or a recommendation to anyone.*
