@@ -2,6 +2,29 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0291",
+      "to": "0.0295",
+      "dates": "Nov 17–19, 2026",
+      "items": [
+        "League Now > Trading Floor (out of Beta, under Analytics in the League Now menu): On the Block, Targets, Teams, Value Chart, Trade Habits and History. Old Beta links land there.",
+        "Trade block chips: a gold TRADE chip beside every player on MFL's Trade Bait list, on the Scoreboard, Players, Rosters, My Team, Player Pages, Stats, Rankings, the Value Chart and the Trading Floor.",
+        "A one-time pop-up introduces the Trading Floor.",
+        "Press Box staff profiles: six columnists with full photos, home towns, schools, beats and the story behind each one's favorite FBP team.",
+        "Team home towns: the city under the owner on each team page with a map strip, and a location tag on Matchups.",
+        "Team pickers grouped by division (West, Central, East), with your default team first in its box.",
+        "Scoreboard: every game keeps the same height, with or without context tags."
+      ]
+    },
+    {
+      "from": "0.0286",
+      "to": "0.0290",
+      "dates": "Nov 17, 2026",
+      "items": [
+        "New-feature pop-ups: a one-time infographic card for a new page; the first one introduces Player News.",
+        "Player News: NEW badges and a count for updates since your last visit, a TV icon on ESPN videos, full reports with no clipping, and team chips in A-Z order with your default team first."
+      ]
+    },
+    {
       "from": "0.0281",
       "to": "0.0285",
       "dates": "Nov 16–17, 2026",

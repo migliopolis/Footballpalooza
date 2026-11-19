@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0294';
+  const VERSION = '0.0295';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -423,7 +423,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
       <td><b>${t.pwr ? t.pwr.toFixed(2) : '—'}</b></td><td>${t.w}-${t.l}${t.t ? '-' + t.t : ''}</td><td>${pts(t.pf)}</td><td class="hide-sm">${t.allPlayW}-${t.allPlayL}${t.allPlayT ? '-' + t.allPlayT : ''}</td><td class="hide-sm">${esc(t.streak)}</td></tr>`).join('');
 
     const sub = (location.hash.split('/')[1] || '');
-    const nav = `<nav class="rf-sub seg now-sub ln-sub pg-nav">${[['', 'Standings'], ['team', 'My Team'], ['news', 'Player News'], ['transactions', 'Transactions'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['rankings', 'Player<span class="sm-only">s</span><span class="lg-only"> Rankings</span>'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['hospital', 'FBP General'], ['docket', 'The Docket']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+    const nav = `<nav class="rf-sub seg now-sub ln-sub pg-nav">${[['', 'Standings'], ['team', 'My Team'], ['news', 'Player News'], ['transactions', 'Transactions'], ['rosters', 'Rosters'], ['stats', 'Stats'], ['rankings', 'Player<span class="sm-only">s</span><span class="lg-only"> Rankings</span>'], ['matchups', 'Matchups'], ['power', 'Power<span class="lg-only"> Rankings</span>'], ['playoffs', 'Playoff<span class="sm-only">s</span><span class="lg-only"> Picture</span>'], ['analytics', 'Analytics'], ['trade', 'Trading Floor'], ['hospital', 'FBP General'], ['docket', 'The Docket']].map(([k, l]) => `<a href="#now${k ? '/' + k : ''}"${k === sub ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
     const headTxt = `<div class="pagehead"><h1>League Now</h1>
         <span class="asof"><b>Through Week ${d.weeksPlayed}</b> of ${d.lastRegularSeasonWeek}${state.meta && state.meta.fetched ? ` · <span id="ln-refresh">${esc(refreshText(true))}</span>` : genTxt ? ` · updated ${genTxt}` : ''}${P ? ` · arrows show change since week ${pw}` : ''}</span></div>${nav}`;
 
@@ -463,6 +463,9 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     if (sub === 'transactions') return headTxt + (window.FBPTransactions ? FBPTransactions.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/transactions')) route(); } }) : '<p class="error">Transactions didn’t load.</p>');
     if (sub === 'docket') return headTxt + (window.FBPLegal ? FBPLegal.render({ teams: state.teams, esc, nameOf, rerender: () => { if (location.hash.startsWith('#now/docket')) route(); } }) : '<p class="error">The Docket didn’t load.</p>');
     if (sub === 'analytics') return headTxt + (window.FBPAnalytics ? FBPAnalytics.render({ teams: state.teams, esc, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/analytics')) route(); } }) : '<p class="error">Analytics didn’t load.</p>');
+    // the Trading Floor (assets/trade.js), out of Beta for the 2026 deadline; its controls are wired after the page draws
+    if (sub === 'trade') { setTimeout(() => { if (window.FBPTrade && location.hash.startsWith('#now/trade')) FBPTrade.after(); }, 0);
+      return headTxt + (window.FBPTrade ? FBPTrade.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/trade')) route(); } }) : '<p class="error">The Trading Floor didn’t load.</p>'); }
     if (sub === 'news') return headTxt + (window.FBPNews ? FBPNews.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/news')) route(); } }) : '<p class="error">Player news didn’t load.</p>');
     if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
@@ -741,6 +744,8 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
   let lastPage = '';
   // OVR colors for player photo backgrounds (FBPU.ovc): redraw the page once they're loaded
   FBPU.ovLoad().then(() => { if (typeof route === 'function' && document.getElementById('app')) { const y = window.scrollY; route(); window.scrollTo(0, y); } });
+  // the trade block's TRADE chips (FBPU.tbChip): redraw once the list is in
+  FBPU.tbLoad().then(() => { if (typeof route === 'function' && document.getElementById('app')) { const y = window.scrollY; route(); window.scrollTo(0, y); } });
   function route() {
     const parts = location.hash.slice(1).split('/');
     const tab = TABS.includes(parts[0]) ? parts[0] : 'now';
@@ -965,7 +970,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     S.deadline = () => {
       const dl = Date.parse((F && F.deadline) || '2026-12-03T17:00:00Z'), ms = dl - Date.now(); if (!(ms > 0)) return [];
       const dd = Math.floor(ms / 864e5), hh = Math.floor(ms % 864e5 / 36e5);
-      return [`<a class="tk-h tk-dl" href="#beta/trade">Trade deadline</a>`, `<a class="tk-i" href="#beta/trade"><b>${dd ? dd + 'd ' : ''}${hh}h</b><span class="tk-p">Thu, Dec 3 · 12 PM EST</span></a>`];
+      return [`<a class="tk-h tk-dl" href="#now/trade">Trade deadline</a>`, `<a class="tk-i" href="#now/trade"><b>${dd ? dd + 'd ' : ''}${hh}h</b><span class="tk-p">Thu, Dec 3 · 12 PM EST</span></a>`];
     };
     S.power = () => {
       const rows = d.standings.filter(t => t.pwr).sort((a, b) => (a.pwrRank || 99) - (b.pwrRank || 99)); if (!rows.length) return [];
@@ -1000,10 +1005,10 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
         const aw = sa > sb, bw = sb > sa;
         return `<a class="tk-i" href="#now"><b class="${aw ? '' : 'tk-l'}">${ab(a)}</b><span class="tk-v ${aw ? 'win' : ''}">${sa.toFixed(1)}</span><span class="tk-p">–</span><b class="${bw ? '' : 'tk-l'}">${ab(b)}</b><span class="tk-v ${bw ? 'win' : ''}">${sb.toFixed(1)}</span></a>`; }));
     };
-    S.block = () => !(F && F.block && F.block.length) ? [] : [`<a class="tk-h tk-bl" href="#beta/trade">On the block</a>`].concat(F.block.map(b =>
-      `<a class="tk-i" href="#beta/trade"><b>${ab(b.f)}</b><span class="tk-v">${esc(b.items.map(short).join(', '))}</span></a>`));
-    S.moves = () => !(F && F.moves && F.moves.length) ? [] : [`<a class="tk-h tk-mv" href="#beta/trade">Latest moves</a>`].concat(F.moves.map(m =>
-      m.k === 'T' ? `<a class="tk-i" href="#beta/trade"><span class="tk-p">⇄</span><b>${ab(m.f)}</b><span class="tk-p">&amp;</span><b>${ab(m.f2)}</b><span class="tk-v">${esc(m.t)}</span></a>`
+    S.block = () => !(F && F.block && F.block.length) ? [] : [`<a class="tk-h tk-bl" href="#now/trade">On the block</a>`].concat(F.block.map(b =>
+      `<a class="tk-i" href="#now/trade"><b>${ab(b.f)}</b><span class="tk-v">${esc(b.items.map(short).join(', '))}</span></a>`));
+    S.moves = () => !(F && F.moves && F.moves.length) ? [] : [`<a class="tk-h tk-mv" href="#now/trade">Latest moves</a>`].concat(F.moves.map(m =>
+      m.k === 'T' ? `<a class="tk-i" href="#now/trade"><span class="tk-p">⇄</span><b>${ab(m.f)}</b><span class="tk-p">&amp;</span><b>${ab(m.f2)}</b><span class="tk-v">${esc(m.t)}</span></a>`
         : `<a class="tk-i" href="#now/team/${m.f}/${m.id}"><b>${ab(m.f)}</b><span class="tk-v">${esc(m.t)}</span><span class="tk-p">${new Date(m.ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></a>`));
     // the three newest Press Box columns: headline and writer
     S.press = () => { const C = state.columns && state.columns.columns; if (!C) { loadColumns(); return []; } if (!C.length) return [];

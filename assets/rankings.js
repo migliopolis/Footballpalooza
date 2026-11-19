@@ -77,7 +77,7 @@ window.FBPRankings = (function () {
       const tvW = p.tv ? Math.round(p.tv / 100) : 0;
       return `${tier}<tr class="rk-p${p.f === hl && hl ? ' rk-me' : ''}${on ? ' on' : ''}" data-rk-p="${p.id}" aria-expanded="${on}">
         <td class="rk-n">${S.list === 'tv' && !S.sort ? p._n : p._rk}</td>
-        <td class="l rk-pl"><span class="rk-ph"><span ${img}></span></span><span class="rk-nm"><b>${name}</b>${ic ? `<span class="ro-inj" title="${esc(inj.status + (inj.details ? ': ' + inj.details : ''))}">${ic}</span>` : ''}${p.dy === D.season ? '<span class="rk-rook" title="Rookie">R</span>' : ''}
+        <td class="l rk-pl"><span class="rk-ph"><span ${img}></span></span><span class="rk-nm"><b>${name}</b>${FBPU.tbChip(p.id)}${ic ? `<span class="ro-inj" title="${esc(inj.status + (inj.details ? ': ' + inj.details : ''))}">${ic}</span>` : ''}${p.dy === D.season ? '<span class="rk-rook" title="Rookie">R</span>' : ''}
           <small><span class="rk-pr">${p.pos}</span>${nflLogo(p.nfl)}${p.nfl && p.nfl !== 'FA' ? '' : ' NFL FA'}</small></span></td>
         <td class="rk-f">${p.f ? `<span class="rk-ft" title="${esc(X.nameOf ? X.nameOf(p.f) : '')}">${t.logo ? `<img src="${t.logo}" alt="">` : ''}<b>${esc(t.abbr || '')}</b></span>${p.st === 'TAXI_SQUAD' ? '<small>taxi</small>' : p.st === 'INJURED_RESERVE' ? '<small>IR</small>' : ''}` : '<span class="rk-fa">FA</span>'}</td>
         <td class="rk-e">${p.d && p.d[1] ? p.pos + p.d[1] : '—'}</td><td class="rk-e">${p.d ? p.d[0] : '—'}</td>

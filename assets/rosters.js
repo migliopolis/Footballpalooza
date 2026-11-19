@@ -191,12 +191,14 @@ window.FBPRosters = (function () {
   const MINJ = { 'Questionable': 'Q', 'Doubtful': 'D', 'Out': 'O', 'IR': 'IR', 'IR-R': 'IR', 'IR-PUP': 'PUP', 'IR-NFI': 'IR', 'Suspended': 'SUS', 'Holdout': 'HO' };
   const mflInj = () => { const j = espn('MINJ', 'data/mfl/injuries.json'); if (!j || j.failed) return null;
     if (!j._m) { j._m = {}; (((j.injuries || {}).injury) || []).forEach(x => { j._m[x.id] = x; }); } return j._m; };
-  const injChip = r => { const M = mflInj();
+  const injOnly = r => { const M = mflInj();
     if (M) { const x = M[r.id], t = x && MINJ[x.status]; if (!t) return '';
       const tip = `${x.status}${x.details ? ': ' + x.details : ''}${x.exp_return ? ' · expected back ' + x.exp_return : ''} (MFL)`;
       return `<span class="ro-inj" title="${X && X.esc ? X.esc(tip) : tip}">${t}</span>`; }
     if (!r.espn) return ''; const i = injMap()[r.espn], t = i && INJ[i.status]; if (!t) return '';
     return `<span class="ro-inj" title="${X && X.esc ? X.esc(i.status + (i.note ? ': ' + i.note : '')) : i.status}">${t}</span>`; };
+  // his injury tag, then a TRADE chip when he's on the trade block (FBPU.tbChip)
+  const injChip = r => injOnly(r) + FBPU.tbChip(r.id);
   // L3: his average over his last three games, skipping his bye week (fewer if he has played fewer)
   const l3 = r => { const w = Object.entries(r.wsc || {}).filter(([k]) => +k !== +r.bye).sort((a, b) => b[0] - a[0]).slice(0, 3);
     return w.length ? w.reduce((s, x) => s + x[1], 0) / w.length : null; };
@@ -672,7 +674,7 @@ window.FBPRosters = (function () {
       <ul>${t.deep && t.deep.length ? `<li><b>Deep</b> at ${list(t.deep)}${t.thin && t.thin.length ? `; <b>thin</b> at ${list(t.thin)}` : ''}</li>` : t.thin && t.thin.length ? `<li><b>Thin</b> at ${list(t.thin)}</li>` : ''}
         ${t.cap27 != null ? `<li><b>2027:</b> keeping its ${t.keepN} players rated 75+ would cost $${Math.round(t.keepCost)} against a $${t.cap27} budget (${t.room27 >= 0 ? '$' + Math.round(t.room27) + ' to spare' : '$' + Math.round(-t.room27) + ' over'})</li>` : ''}
         ${pk ? `<li><b>Picks</b> ${pk}${(t.picks || []).some(p => p.from !== f) ? ' <small>(* acquired)</small>' : ''}</li>` : ''}</ul>
-      <a class="ro-tfl" href="#beta/trade">Trading Floor ›</a></div>`;
+      <a class="ro-tfl" href="#now/trade">Trading Floor ›</a></div>`;
   }
 
   // Transactions: this season's waiver claims, free-agent pickups, drops and trades (data/trading-floor.json, from MFL)
@@ -719,7 +721,7 @@ window.FBPRosters = (function () {
     pPid = '';
     if (isPP(old) && h === ppFrom && ys[h]) { const y = ys[h]; [0, 250, 700, 1500].forEach(t => setTimeout(() => { if (Math.abs(window.scrollY - y) > 40 && document.documentElement.scrollHeight > y + 100) window.scrollTo(0, y); }, t)); }
   });
-  const LBL = { '': 'Standings', rosters: 'Rosters', rankings: 'Player Rankings', stats: 'Stats', matchups: 'Matchups', power: 'Power Rankings', playoffs: 'Playoff Picture', analytics: 'Analytics', hospital: 'FBP General', docket: 'The Docket' };
+  const LBL = { '': 'Standings', rosters: 'Rosters', rankings: 'Player Rankings', stats: 'Stats', matchups: 'Matchups', power: 'Power Rankings', playoffs: 'Playoff Picture', analytics: 'Analytics', trade: 'Trading Floor', news: 'Player News', transactions: 'Transactions', hospital: 'FBP General', docket: 'The Docket' };
   const TOPL = { scores: 'Matchup', game: 'Game Day', trade: 'Trading Floor', awards: 'Awards', draft: 'Rookie Draft', reference: 'Reference', offseason: 'Off-Season', press: 'Press Box', beta: 'Beta' };
   function ppBack(t) {
     const b = (h, l) => `<a class="pp-back" href="${h}"><span aria-hidden="true">←</span> ${X.esc(l)}</a>`;
@@ -942,7 +944,7 @@ window.FBPRosters = (function () {
     const yrs = [0, 1, 2, 3].map(k => (R.season || 2026) + 1 + k);
     const detail = x => { const L = x.t.rows.slice().sort((a, b) => b.sal - a.sal);
       return `<tr class="ra-mdet"><td colspan="8"><table class="ra-mt"><thead><tr><th class="l">Player</th><th>Contract</th><th>${R.season || 2026}</th>${yrs.map(y => `<th>${y}</th>`).join('')}</tr></thead><tbody>${L.map(r =>
-        `<tr${r.st !== 'ROSTER' ? ' class="off"' : ''}><td class="l"><a href="#now/team/${x.f}/${r.id}">${esc(r.name)}</a> <small>${r.pos}${r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : ''}</small></td><td>${r.cy || '—'}</td><td><b>${$(r.sal)}</b></td>${[0, 1, 2, 3].map(k => `<td>${r.fut && r.fut[k] != null ? $(r.fut[k]) : r.fut && k === r.fut.length ? '<span class="ro-fa">FA</span>' : ''}</td>`).join('')}</tr>`).join('')}</tbody></table></td></tr>`; };
+        `<tr${r.st !== 'ROSTER' ? ' class="off"' : ''}><td class="l"><a href="#now/team/${x.f}/${r.id}">${esc(r.name)}</a>${FBPU.tbChip(r.id)} <small>${r.pos}${r.st === 'TAXI_SQUAD' ? ' · taxi' : r.st === 'INJURED_RESERVE' ? ' · IR' : ''}</small></td><td>${r.cy || '—'}</td><td><b>${$(r.sal)}</b></td>${[0, 1, 2, 3].map(k => `<td>${r.fut && r.fut[k] != null ? $(r.fut[k]) : r.fut && k === r.fut.length ? '<span class="ro-fa">FA</span>' : ''}</td>`).join('')}</tr>`).join('')}</tbody></table></td></tr>`; };
     return `<div class="tbl-wrap ra-gw"><table class="ra-money"><thead><tr>${th('team', 'Team', 'l')}${th('pay', `${R.season || 2026} payroll`, 'ra-mpay')}${th('top', 'Top contract', 'l hide-sm')}${th('c27', `${(R.season || 2026) + 1} under contract`)}${th('room', 'Keep 75+ vs budget')}${th('exp', 'Expiring')}${th('picks', `${(R.season || 2026) + 1} picks`, 'hide-sm')}<th></th></tr></thead><tbody>${rows.map(x => { const on = cOpen.has(x.f);
       return `<tr class="ra-mr${on ? ' on' : ''}" data-ra-copen="${x.f}" aria-expanded="${on}"><td class="l ra-gtm"><span class="ra-mtm">${tmx(x.f).logo ? `<img src="${tmx(x.f).logo}" alt="">` : ''}<b>${esc(tmx(x.f).abbr || '')}</b></span></td>
         <td class="ra-mpay"><b>${$(x.pay)}</b><span class="ra-bar"><i style="width:${(100 * x.pay / capMax).toFixed(1)}%"></i></span></td>

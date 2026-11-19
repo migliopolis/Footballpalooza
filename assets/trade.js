@@ -1,8 +1,9 @@
-/* Beta > Trading Floor: a resource for owners thinking about a trade.
+/* League Now > Trading Floor (#now/trade; it started in Beta, and #beta/trade still lands here): a resource for owners thinking about a trade.
    Data: data/trading-floor.json, built by scripts/trading_floor.py on each refresh (MFL rosters, contracts, picks,
    trades since 2019 and Trade Bait; playoff odds from League Now; Trade Value leads, with the FBP OVR alongside).
    Facts only: nothing here grades a player, a contract or an owner.
-   Exposes window.FBPTrade.render(ctx) and .after(); beta.js routes #beta/trade here. */
+   Exposes window.FBPTrade.render(ctx) and .after(); site.js routes #now/trade here. Players on the trade block
+   carry a TRADE chip (FBPU.tbChip) here and everywhere else on the site. */
 window.FBPTrade = (function () {
   let D = null, failed = false, loading = false, X = null;
   let view = 'block', kind = '', hsort = 'new', pos = 'ALL', withCont = false, q = '', season = '', teamSel = '', tick = null;
@@ -35,7 +36,7 @@ window.FBPTrade = (function () {
   function prow(p, extra) {
     const href = `#now/team/${p.f}/${p.id}`;
     return `<li class="tf-p"><span class="tf-lead">${p.e ? `<span class="tf-ph tcr${FBPU.ovc(p.id)}" style="background-image:url(${FBPU.headshot(p.e)}),var(--ovg,var(--ov0));${FBPU.tc(p.f)}"></span>` : ''}<span class="tf-tv" title="Trade Value"><small>Trade</small>${p.tv == null ? '–' : Number(p.tv).toLocaleString()}<small>Value</small></span></span>
-      <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''}</span>
+      <div class="tf-pm"><a href="${href}"><b>${esc(p.n)}</b></a>${FBPU.tbChip(p.id)}${p.o != null ? ` <span class="tf-o tf-${tier(p.o)}" title="FBP OVR">${p.o}</span>` : ''} <span class="tf-sub">${p.p}${p.r ? p.r : ''}</span>
       <div class="tf-sub tf-bio">${nflLg(p.nfl)}${[p.age ? 'age ' + p.age : '', p.ppg != null ? p.ppg + ' ppg' : ''].filter(Boolean).join(' · ')}</div>
       <div class="tf-sub tf-tm">${logo(p.f)}${esc(nm(p.f))} ${outChip(p.f)}</div>
       <div class="tf-c">${contract(p)}${extra ? ' · ' + extra : ''}</div></div></li>`;
@@ -232,7 +233,7 @@ window.FBPTrade = (function () {
      <p class="tf-dl-line" id="tf-clock">${countdown()}</p>
      <nav class="seg tf-tabs">${Object.entries(V).map(([k, [l]]) => `<button type="button" data-tfv="${k}" aria-pressed="${k === view}">${l}</button>`).join('')}</nav>
      <div class="tf-view">${V[view][1]()}</div>
-     <p class="bc-foot">Beta. Players lead with Trade Value, with the FBP OVR beside the name. Outlook comes from the playoff odds: Contending 75%+, In the mix 25–75%, Building under 25%. Contracts, picks, trades and the block are from MFL; auction cash in trades is from the commissioner’s trade log.</p></section>`;
+     <p class="bc-foot">Players lead with Trade Value, with the FBP OVR beside the name. Outlook comes from the playoff odds: Contending 75%+, In the mix 25–75%, Building under 25%. Contracts, picks, trades and the block are from MFL; auction cash in trades is from the commissioner’s trade log.</p></section>`;
   }
 
   let wired = false;

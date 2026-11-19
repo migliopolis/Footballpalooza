@@ -3431,3 +3431,15 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 .st-photo img{display:block;width:100%;height:auto;max-height:640px;object-fit:cover;object-position:50% 25%}
 @media (min-width:761px){.st-full{display:block;max-width:920px}.st-full::after{content:"";display:table;clear:both}.st-full > .st-photo{float:left;width:300px;margin:0 24px 6px 0}.st-full > :not(.st-photo):not(.st-fan){display:flow-root;margin-top:0;margin-bottom:10px}.st-full > .st-fan{overflow:hidden;margin:0}}
 .st-full .st-top > :first-child:not(span){display:none}
+/* Trade block chip (FBPU.tbChip): TRADE beside any player on MFL's Trade Bait list, site-wide */
+.tb-chip{display:inline-block;font:800 .54rem/1 var(--body);letter-spacing:.06em;padding:2px 4px;border-radius:3px;background:#e8a317;color:#1a1305;margin-left:5px;vertical-align:2px;cursor:help;white-space:nowrap;text-decoration:none}
+.lv-nm .tb-chip,.pl-nm .tb-chip{margin:0 3px;padding:2px 3px;font-size:.5rem}
+.pp-id h2 .tb-chip{font-size:.62rem;padding:3px 5px;vertical-align:4px}
+.vl-chip b .tb-chip{font-size:.48rem;padding:1px 3px;margin-left:4px;vertical-align:1px}
+/* the Trading Floor pop-up's demo row: a roster line with the chip, and where else it shows */
+.fx-tbrow{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--fx-tile);border:1px solid var(--fx-line);border-radius:10px;box-shadow:0 0 0 2px #e8a317}
+.fx-tbrow .fx-dph{grid-row:auto;flex:none}
+.fx-tbrow .fx-dl{flex:1}
+.fx-tbrow .tb-chip{font-size:.66rem;padding:3px 6px;margin-left:0}
+.fx-tbcap{margin:6px 2px 0;font-size:.78rem;line-height:1.4;color:#c3bfb4;text-align:center}
+.fx-tbcap b{color:#e8a317}

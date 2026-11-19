@@ -384,13 +384,15 @@ def main():
     for L in log.values():
         L.sort(key=lambda m: -m['ts'])
     feed = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'deadline': DEADLINE, 'moves': moves[:20],
-            'block': [{'f': b['f'], 'items': [x.get('n') or x['t'] for x in b['items']]} for b in block]}
+            'block': [{'f': b['f'], 'items': [x.get('n') or x['t'] for x in b['items']]} for b in block],
+            # every player on the block, for the TRADE chip beside his name across the site (FBPU.tbChip)
+            'blockIds': sorted({x['id'] for b in block for x in b['items'] if x.get('k') == 'p' and x.get('id')})}
     with open(D('ticker.json'), 'w') as fh:
         json.dump(feed, fh, separators=(',', ':'), ensure_ascii=False)
         fh.write('\n')
 
     out = {'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': int((load(D('mfl', '_meta.json'), {}) or {}).get('season') or 2026), 'deadline': DEADLINE, 'cap': CAP,
-           'note': 'Beta. Ratings are the FBP OVR. seed: a playoff spot right now (Targets leave those teams out, but for Outside the box). Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',
+           'note': 'Ratings are the FBP OVR. seed: a playoff spot right now (Targets leave those teams out, but for Outside the box). Outlook: Contending 75%+ playoff odds, In the mix 25-75%, Building under 25%.',
            'teams': teams, 'targets': targets, 'trades': trades, 'habits': habits, 'moves': log,
            'block': block, 'blockFetched': block_fetched, 'blockOn': tb is not None}
     with open(D('trading-floor.json'), 'w') as fh:

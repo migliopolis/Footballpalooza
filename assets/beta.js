@@ -105,7 +105,6 @@ window.FBPBeta = (function () {
   /* ---------- Beta landing: a button per experiment ---------- */
   const sub = () => location.hash.slice(1).split('/')[1] || '';
   const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the FBP OVR.'],
-    ['trade', 'Trading Floor', 'The trade block, trade targets, team needs, trade habits and every trade since 2019.'],
     ['shade', 'Scoreboard Shade', 'The Scoreboard with new row colors to try: orange for a game on, green for the ball, red for the red zone, grey when it’s over.'],
     ['power', 'Power Rankings', 'Now and Future side by side: who’s built to win this season, and who’s set up for next, with projected keepers.']];
   function betaHead(cur) {
@@ -115,7 +114,7 @@ window.FBPBeta = (function () {
   function render(ctx) {
     X = ctx;
     const s0 = sub();
-    if (s0 === 'trade') return betaHead('trade') + (window.FBPTrade ? FBPTrade.render(ctx) : '<p class="error">The Trading Floor didn’t load.</p>');
+    if (s0 === 'trade') { location.replace('#now/trade'); return ''; }   // the Trading Floor moved to League Now
     if (s0 === 'docket') { location.replace('#now/docket'); return ''; }   // The Docket moved to League Now
     if (s0 === 'shade') return betaHead('shade') + `<p class="bt-demo"><button type="button" class="seg-btn" data-bt-demo>Shuffle a demo</button> <small>Made-up scores and game states to see every row color. Open any matchup.</small></p>` + (window.FBPLive ? FBPLive.render(Object.assign({}, ctx, { shade: true })) : '<p class="error">The Scoreboard didn’t load.</p>');
     if (s0 === 'power') return betaHead('power') + (window.FBPPower ? FBPPower.render(ctx) : '<p class="error">The Power Rankings didn’t load.</p>');
@@ -282,7 +281,6 @@ window.FBPBeta = (function () {
     if (el && !el.contains(e.relatedTarget)) { el.style.setProperty('--ry', '0deg'); el.style.setProperty('--rx', '0deg'); el.classList.remove('moving'); } });
 
   function after() {
-    if (sub() === 'trade') { if (window.FBPTrade) FBPTrade.after(); return; }
     const page = document.querySelector('.bc-page'); if (!page || !D) return;
     if (vio) vio.disconnect();
     seen.clear();

@@ -7,6 +7,25 @@
 (function () {
   const FEATURES = [
     {
+      id: 'trading-floor', until: '2026-12-31', href: '#now/trade',
+      kicker: 'Now in League Now', title: 'The Trading Floor',
+      sub: 'Your trade block isn’t a secret anymore.',
+      demo: `<div class="fx-demo" aria-hidden="true">
+          <div class="fx-tbrow"><span class="fx-dph"></span><span class="fx-dl"><b></b><i></i></span><span class="tb-chip">TRADE</span></div>
+          <p class="fx-tbcap">Put a player on MFL’s <b>Trade Bait</b> list and a gold <b>TRADE</b> chip follows him around the site: the Scoreboard, Players, Rosters, My Team, his Player Page, Stats, Rankings and the Value Chart.</p>
+        </div>`,
+      tiles: [
+        ['📋', 'On the Block', 'Every player owners have put on Trade Bait, and what they’re looking for. Add yours from your team page in MFL; it shows up on the next refresh.'],
+        ['🎯', 'Targets', 'Sell candidates on teams outside a playoff spot, a few on playoff teams, plus expiring deals, big 2027 raises and keeper crunches.'],
+        ['🤝', 'Teams', 'Each team’s outlook, depth at every position, 2027 keeper bill and picks, with each need matched to teams deep there.'],
+        ['📊', 'Value Chart', 'Every player and rookie pick by Trade Value, a column per position. Same row, about the same value.'],
+        ['🔁', 'Trade Habits', 'Each team’s trading history in plain counts: trades a season, usual partners, timing, picks and cash in and out.'],
+        ['📜', 'History', 'Every trade since 2019, auction cash included. Filter by season, team or type, and see how each one played out.'],
+      ],
+      stats: [['6', 'views'], ['1–9,999', 'Trade Value'], ['Dec 3', 'deadline, 12 PM ET']],
+      where: 'League Now <b>▾</b> › <b>Trading Floor</b>, right under Analytics',
+    },
+    {
       id: 'player-news', until: '2026-12-15', href: '#now/news',
       kicker: 'New in League Now', title: 'Player News',
       sub: 'Every update on every FBP player, in one feed.',

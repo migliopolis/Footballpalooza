@@ -56,7 +56,7 @@ window.FBPValues = (function () {
       if (cells.some(c => c.length)) rows.push([hi, cells]);
     }
     const chip = r => { const h = link(r), t = tm(r.f);
-      const inner = `<b>${esc(r.n)}</b><small>${t.logo ? `<img src="${t.logo}" alt="">` : ''}${esc(t.abbr || '')} · ${fmt(val(r))}${mode === 'tv' && r.sal != null ? ' · $' + Math.round(r.sal) : ''}</small>`;
+      const inner = `<b>${esc(r.n)}${r.pos === 'PICK' ? '' : FBPU.tbChip(r.id)}</b><small>${t.logo ? `<img src="${t.logo}" alt="">` : ''}${esc(t.abbr || '')} · ${fmt(val(r))}${mode === 'tv' && r.sal != null ? ' · $' + Math.round(r.sal) : ''}</small>`;
       return h ? `<a class="vl-chip" href="${h}" style="--pc:${COL[r.pos]}">${inner}</a>` : `<span class="vl-chip" style="--pc:${COL[r.pos]}">${inner}</span>`; };
     return `<div class="vl-chart">${toggles(true)}
       <p class="tf-sub">${MODE[mode][0]}: ${MODE[mode][1]}. ${mode === 'o' ? 'Each row is one OVR point.' : 'Each row is a 250-point band; players in the same row are worth about the same.'} Tap a player for his page.</p>

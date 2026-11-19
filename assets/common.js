@@ -44,6 +44,13 @@ window.FBPU = (function () {
   const injChip = (x, esc) => { const t = x && INJ[x.status]; if (!t) return '';
     const e = esc || (s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])));
     return `<span class="ro-inj" title="${e(x.status + (x.details ? ': ' + x.details : ''))}">${t}</span>`; };
+  // the trade block (MFL Trade Bait, data/ticker.json from scripts/trading_floor.py): a TRADE chip beside any player on it,
+  // on every page that shows him (Scoreboard, Rosters, My Team, Player Page, Stats, Rankings, the Trading Floor).
+  // site.js loads it at startup and redraws once it's in; until then, no chips.
+  let TB = null;
+  const tbLoad = () => json('data/ticker.json').then(d => { TB = new Set(((d && d.blockIds) || []).map(String)); }, () => { TB = new Set(); });
+  const onBlock = id => !!(TB && id != null && TB.has(String(id)));
+  const tbChip = id => onBlock(id) ? '<span class="tb-chip" title="On the trade block (League Now › Trading Floor)">TRADE</span>' : '';
   // team pickers (two rows of six): three boxes of four, one per division, West, Central, East from left to right, each
   // titled in a break in its outline. Your default team sits first (top left) in its division; the rest A-Z by name.
   //   FBPU.divGrid(ids, item, { mine, name, cls })  item(id) -> one button/link's HTML
@@ -56,5 +63,5 @@ window.FBPU = (function () {
     return `<div class="dvg ${cls}">${divs.map(dv => { const L = ids.filter(id => of[id] === dv.id).sort(by);
       return L.length ? `<fieldset class="dvg-box"><legend>${dv.name}</legend><div class="dvg-in">${L.map(item).join('')}</div></fieldset>` : ''; }).join('')}</div>`;
   };
-  return { ESPN, COL, nflColor, defBg, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip, divGrid };
+  return { ESPN, COL, nflColor, defBg, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip, divGrid, tbLoad, onBlock, tbChip };
 })();

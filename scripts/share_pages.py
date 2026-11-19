@@ -57,6 +57,7 @@ def routes():
         'now/news': ('Player News', 'The latest news on every FBP player, live from ESPN, filterable by team, position and time.'),
         'now/docket': ('The Docket', 'Fantasy-relevant NFL players with legal trouble: the charges, what’s at stake, and a word from their FBP teams.'),
         'now/analytics': ('Analytics', 'The numbers behind the standings: lineups, luck, projections, lineup cost, salary value and playoff odds.'),
+        'now/trade': ('Trading Floor', 'The trade block, sell candidates, team needs, the Trade Value chart, trade habits and every FBP trade since 2019.'),
         'reference/players': ('Player Records', 'How often each player’s team wins when he starts, and every FBP team he’s started for.'),
         'reference/payroll': ('Payroll', 'Footballpalooza salaries and cap.'),
         'offseason': ('Off-Season', 'The Footballpalooza off-season workbook.'),

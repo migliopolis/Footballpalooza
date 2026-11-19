@@ -671,7 +671,7 @@
         if (!p) { const nm = `<td class="lv-p ${cls} empty">—</td>`, pt = `<td class="lv-pts ${cls}"></td>`; return cls === 'a' ? nm + pt : pt + nm; }
         // FBP's own IR counts even when ESPN no longer lists the injury
         const st = state(p), ph = photo(p.id), inj = (dnp(p) ? (inactive(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : injTag(p.id)) : null) || (ruledOut(p) ? null : hurtTag(p)) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
-        const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
+        const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + FBPU.tbChip(p.id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
         // his photo opens his Player Page; its back arrow returns here, to this matchup
         const img = `<a class="lv-pha" href="#now/team/${(cls === 'a' ? a : b).id}/${p.id}" title="Player Page" aria-label="Player Page">${photoHtml(p, shownW, (cls === 'a' ? a : b).id)}</a>`;
         // bottom row: position (only when it isn't the slot's, as in FLEX or the bench), his NFL team's logo, the game clock, then the opponent (vs at home, @ away) and the
@@ -804,7 +804,7 @@
       return `<section class="card pl-sec"><h2 class="pl-h">${title}</h2><ol class="pl-list">${show.map((p, i) => {
         const tr = tier(p, wk), pj = projNow(p, wk), st = state(p);
         return `<li class="pl-r${tr ? ' t-' + tr.k : ''}${st === 'final' ? ' fin' : ''}"><span class="pl-rk">${i + 1}</span>${photoHtml(p, wk)}
-          <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${teamChip(p.id, p.fid)}${tr && PL_TAG[tr.k] ? `<span class="pl-tag ${tr.k}">${PL_TAG[tr.k]}</span>` : ''}</span>
+          <span class="pl-who"><span class="pl-nm">${esc(short(p.id))}${teamChip(p.id, p.fid)}${FBPU.tbChip(p.id)}${tr && PL_TAG[tr.k] ? `<span class="pl-tag ${tr.k}">${PL_TAG[tr.k]}</span>` : ''}</span>
             <small>${nlogo(p.id)}${esc(info(p.id).team || '')} · <span class="lv-st ${st}">${clock(p)}</span></small>
             <small class="pl-own">${p.fid ? `${flogo(p.fid)}${esc(tm(p.fid).abbr || X.nameOf(p.fid))}${slot(p.status)}` : '<span class="pl-fa">FA</span>Free agent'}</small></span>
           <span class="pl-pts"><b>${n1(+p.score || 0)}</b>${p.est ? '<small class="pl-est" title="Estimated from ESPN’s box score; MFL posts official points once his game is final">est.</small>' : ''}${pj != null ? `<small${st === 'live' ? ' title="Projected finish: his points plus his MFL projection for the time left"' : ''}>proj ${n1(pj)}</small>` : ''}</span></li>`; }).join('')}</ol>
