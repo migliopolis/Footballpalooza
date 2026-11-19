@@ -714,7 +714,7 @@
       const tags = gameTags(m, a, b, shownW, gotw, mine).slice(0, 2);
       return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw || champ ? ' lv-gotw' : ''}${mine ? ' lv-mine' + (lum(barColor(X.myTeam)) < .15 ? ' lv-mine-dk' : '') : ''}" data-lv-key="${key}"${mine ? ` style="--mine:${barColor(X.myTeam)};--mine-ink:${(SB[tm(X.myTeam).abbr] || [])[1] || (lum(barColor(X.myTeam)) > .6 ? '#1a1a1a' : '#fff')}"` : ''}>
         <button type="button" class="lv-sum" data-lv="${key}" aria-expanded="${isOpen}">
-          ${side(a, 'a')}<span class="lv-mid">${tags.length ? `<span class="lv-tags">${tags.map(t => `<span class="lv-ctx ${t[0]}" title="${esc(t[2])}">${t[1]}</span>`).join('')}</span>` : ''}${bar}${line}</span>${side(b, 'b')}
+          ${side(a, 'a')}<span class="lv-mid"><span class="lv-tags">${tags.map(t => `<span class="lv-ctx ${t[0]}" title="${esc(t[2])}">${t[1]}</span>`).join('')}</span>${bar}${line}</span>${side(b, 'b')}
           <span class="lv-metarow"><small>${meta(a.id)}</small><small>${meta(b.id)}</small></span>
         </button>
         <div class="lv-det"${isOpen ? '' : ' hidden'}>

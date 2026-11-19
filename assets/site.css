@@ -1169,7 +1169,7 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-g.lv-mine .lv-sum{background:color-mix(in srgb,var(--mine) 8%,transparent)}
 /* one line of context under "X to play" */
 .lv-ctx{display:block;width:max-content;font:700 .52rem var(--body);letter-spacing:.08em;text-transform:uppercase;padding:1px 6px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
-.lv-tags{flex-direction:column;align-items:center;gap:2px}
+.lv-tags{flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;min-height:calc(1.75rem + 2px)}   /* room for two tags on every game, so a game with none is as tall as the rest */
 .lv-ctx.gold{color:#7a5800;border-color:transparent;background:linear-gradient(90deg,#f5d76e,#fff3b8,#f5d76e)}
 .lv-ctx.mine{color:var(--mine-ink,#fff);border-color:transparent;background:var(--mine)}
 .lv-ctx.pp{color:#fff;border-color:transparent;background:var(--accent)}
