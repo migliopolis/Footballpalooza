@@ -1,5 +1,5 @@
 {
- "run": "2026-11-19T17:48:43+00:00",
+ "run": "2026-11-19T23:45:15+00:00",
  "results": {
   "players": {
    "ok": true,
@@ -13,8 +13,8 @@
   },
   "ros-ecr": {
    "ok": true,
-   "players": 410,
-   "matched": 410,
+   "players": 418,
+   "matched": 418,
    "updated": "2026-11-19"
   },
   "rookies-ecr": {

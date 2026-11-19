@@ -846,6 +846,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "15733",
+   "mflName": "Pierre Strong Jr.",
+   "pos": "RB",
+   "team": "GBP",
+   "fbp": null,
+   "espn": "4249836",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "15973",
    "mflName": "Raheem Blackshear",
    "pos": "RB",
@@ -1005,15 +1014,6 @@
    "team": "JAC",
    "fbp": null,
    "espn": "3128452",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "14876",
-   "mflName": "Josiah Deguara",
-   "pos": "TE",
-   "team": "SEA",
-   "fbp": null,
-   "espn": "3914151",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1248,6 +1248,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "3886809",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "17405",
+   "mflName": "Brandon Smith",
+   "pos": "WR",
+   "team": "PIT",
+   "fbp": null,
+   "espn": "4240577",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1734,15 +1743,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4240069",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16413",
-   "mflName": "Malik Heath",
-   "pos": "WR",
-   "team": "ATL",
-   "fbp": null,
-   "espn": "4689334",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
