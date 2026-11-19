@@ -7,6 +7,7 @@ week: 11
 date: 2026-11-19
 image: assets/columns/2026-week-11-irving.jpg
 caption: Bucky Irving, on Sour Grapes' trade block since Oct 23
+credit: Photo by Getty Images
 teaser: The Trading Floor is out of Beta and into League Now, and the trade block now follows players around the site. A guide to every tab, and how the league looks from the outside two weeks before the Dec 3 deadline.
 ---
 The trade deadline is Thursday, Dec 3 at 12 PM ET. That's two weeks from today, and two more weeks of games, 11 and 12, before in-season trading closes.
