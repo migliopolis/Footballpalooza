@@ -1036,13 +1036,13 @@
         "id": "0004",
         "isHome": "0",
         "result": "T",
-        "spread": "-34.6"
+        "spread": "-45.1"
        },
        {
         "id": "0011",
         "isHome": "1",
         "result": "T",
-        "spread": "34.6"
+        "spread": "45.1"
        }
       ]
      },
@@ -1100,13 +1100,13 @@
         "id": "0003",
         "isHome": "0",
         "result": "T",
-        "spread": "-30.3"
+        "spread": "-30"
        },
        {
         "id": "0006",
         "isHome": "1",
         "result": "T",
-        "spread": "30.3"
+        "spread": "30"
        }
       ]
      }

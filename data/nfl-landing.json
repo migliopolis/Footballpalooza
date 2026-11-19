@@ -1,7 +1,7 @@
 {
  "source": "NFL Mock Draft Database",
  "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
- "asOf": "2026-11-18",
+ "asOf": "2026-11-19",
  "note": "Projected NFL landing spot per rookie. consensus = the team at his pick in the 1-week consensus mock (round 1); recent = the team holding his median pick in mocks from the last two weeks (Tankathon order); most = the team he is most often mocked to.",
  "players": {
   "Jeremiah Smith": {
@@ -12,10 +12,10 @@
    "mostMocked": "LAC"
   },
   "Jadan Baugh": {
-   "team": "CIN",
-   "pick": 25,
-   "basis": "recent",
-   "mocks": 15,
+   "team": "NE",
+   "pick": 16,
+   "basis": "consensus",
+   "mocks": 18,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
@@ -43,7 +43,7 @@
    "team": "ARI",
    "pick": 7,
    "basis": "consensus",
-   "mocks": 22,
+   "mocks": 24,
    "mostMocked": "NYJ"
   },
   "Kewan Lacy": {
@@ -55,7 +55,7 @@
   },
   "CJ Carr": {
    "team": "NYJ",
-   "pick": 6,
+   "pick": 4,
    "basis": "consensus",
    "mocks": 25,
    "mostMocked": "NYJ"
@@ -71,14 +71,14 @@
    "team": "SEA",
    "pick": 17,
    "basis": "consensus",
-   "mocks": 22,
+   "mocks": 24,
    "mostMocked": "LV"
   },
   "Nick Marsh": {
    "team": "LV",
    "pick": 15,
    "basis": "consensus",
-   "mocks": 22,
+   "mocks": 24,
    "mostMocked": "KC"
   },
   "Nate Frazier": {
@@ -92,7 +92,7 @@
    "team": "CLE",
    "pick": 18,
    "basis": "consensus",
-   "mocks": 13,
+   "mocks": 16,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
@@ -103,10 +103,10 @@
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
-   "team": "NE",
-   "pick": 16,
-   "basis": "consensus",
-   "mocks": 18,
+   "team": "NYG",
+   "pick": 22,
+   "basis": "recent",
+   "mocks": 20,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -124,10 +124,10 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "DET",
-   "pick": 30,
+   "team": "DEN",
+   "pick": 24,
    "basis": "consensus",
-   "mocks": 20,
+   "mocks": 23,
    "mostMocked": "DEN"
   },
   "Deuce Alexander": {
@@ -141,7 +141,7 @@
    "team": "DEN",
    "pick": null,
    "basis": "most",
-   "mocks": 2,
+   "mocks": 3,
    "mostMocked": "DEN"
   },
   "Ryan Coleman-Williams": {
@@ -152,10 +152,10 @@
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
-   "team": "MIN",
-   "pick": 27,
+   "team": "PIT",
+   "pick": 23,
    "basis": "consensus",
-   "mocks": 17,
+   "mocks": 19,
    "mostMocked": "PIT"
   },
   "Wyatt Young": {
@@ -176,7 +176,7 @@
    "team": "KC",
    "pick": 29,
    "basis": "consensus",
-   "mocks": 10,
+   "mocks": 11,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
@@ -243,10 +243,10 @@
    "mostMocked": "CLE"
   },
   "LaNorris Sellers": {
-   "team": "PIT",
-   "pick": 23,
-   "basis": "consensus",
-   "mocks": 12,
+   "team": "CLE",
+   "pick": 18,
+   "basis": "recent",
+   "mocks": 13,
    "mostMocked": "CLE"
   },
   "Antwan Raymond": {
@@ -320,11 +320,11 @@
    "mostMocked": "PIT"
   },
   "Brendan Sorsby": {
-   "team": "PIT",
+   "team": "CLE",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "PIT"
+   "mostMocked": "CLE"
   },
   "DeSean Bishop": {
    "team": "CLE",

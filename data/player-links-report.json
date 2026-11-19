@@ -153,6 +153,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "16868",
+   "mflName": "Adrian Martinez",
+   "pos": "QB",
+   "team": "SEA",
+   "fbp": null,
+   "espn": "4361182",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "16804",
    "mflName": "Austin Reed",
    "pos": "QB",
@@ -927,15 +936,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "17696",
-   "mflName": "Carsen Ryan",
-   "pos": "TE",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4685540",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "17724",
    "mflName": "Dae'Quan Wright",
    "pos": "TE",
@@ -1260,15 +1260,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "17321",
-   "mflName": "Brennan Presley",
-   "pos": "WR",
-   "team": "LAR",
-   "fbp": null,
-   "espn": "4431342",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "17741",
    "mflName": "Brock Rechsteiner",
    "pos": "WR",
@@ -1293,15 +1284,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4036335",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "16203",
-   "mflName": "Charlie Jones",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4257188",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1554,6 +1536,15 @@
    "team": "CAR",
    "fbp": null,
    "espn": "4240573",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "14849",
+   "mflName": "Isaiah Hodgins",
+   "pos": "WR",
+   "team": "PIT",
+   "fbp": null,
+   "espn": "4242540",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

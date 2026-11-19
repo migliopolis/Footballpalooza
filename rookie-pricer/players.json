@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-18",
+ "asOf": "2026-11-19",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
@@ -16,7 +16,7 @@
    "pos": "RB",
    "school": "Florida",
    "adp": 4.5,
-   "nflPick": 26
+   "nflPick": 17
   },
   {
    "name": "Cam Coleman",
@@ -79,7 +79,7 @@
    "pos": "QB",
    "school": "Notre Dame",
    "adp": 13.1,
-   "nflPick": 7
+   "nflPick": 6
   },
   {
    "name": "Kewan Lacy",
@@ -93,14 +93,14 @@
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 13.5,
-   "nflPick": 25
+   "nflPick": 21
   },
   {
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
    "adp": 13.9,
-   "nflPick": 30
+   "nflPick": 25
   },
   {
    "name": "Nick Marsh",
@@ -121,7 +121,7 @@
    "pos": "TE",
    "school": "LSU",
    "adp": 16.5,
-   "nflPick": 16
+   "nflPick": 22
   },
   {
    "name": "Nate Frazier",
