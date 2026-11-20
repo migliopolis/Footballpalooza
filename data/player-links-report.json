@@ -144,6 +144,15 @@
  "unmatched": [],
  "staleId": [
   {
+   "mfl": "14059",
+   "mflName": "Daniel Jones",
+   "pos": "QB",
+   "team": "IND",
+   "fbp": "0011",
+   "espn": "3917792",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "12801",
    "mflName": "Tyreek Hill",
    "pos": "WR",
