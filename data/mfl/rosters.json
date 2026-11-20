@@ -142,15 +142,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
-      "drafted": "BB $0",
-      "id": "15727",
-      "salary": "",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "2019",
       "contractYear": "2/3",
       "drafted": "Auction $11 (2025)",
@@ -165,6 +156,15 @@
       "drafted": "BB $0",
       "id": "13590",
       "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $1",
+      "id": "17752",
+      "salary": "1",
       "status": "ROSTER"
      },
      {
@@ -227,15 +227,6 @@
    {
     "id": "0002",
     "player": [
-     {
-      "contractInfo": "",
-      "contractStatus": "3.12 2025",
-      "contractYear": "2/6",
-      "drafted": "3.12 (2025)",
-      "id": "17031",
-      "salary": "2",
-      "status": "ROSTER"
-     },
      {
       "contractInfo": "",
       "contractStatus": "2.06 2021",
@@ -386,6 +377,15 @@
       "contractYear": "",
       "drafted": "BB $1",
       "id": "15889",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "Draft 3.11 $2 (2024)",
+      "id": "16595",
       "salary": "1",
       "status": "ROSTER"
      },

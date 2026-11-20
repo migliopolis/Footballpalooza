@@ -1,13 +1,13 @@
 {
  "encoding": "utf-8",
- "fetched": "2026-11-19T23:42:04+00:00",
+ "fetched": "2026-11-20T17:00:52+00:00",
  "tradeBaits": {
   "tradeBait": [
    {
     "franchise_id": "0001",
     "inExchangeFor": "Fantasy Football assets",
-    "timestamp": "1795106903",
-    "willGiveUp": "13590,16584,17030,14071,16287,13674"
+    "timestamp": "1795153082",
+    "willGiveUp": "13590,16584,17030,14071,14802,16287,13674"
    },
    {
     "franchise_id": "0004",

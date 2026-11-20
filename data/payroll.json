@@ -1,13 +1,13 @@
 {
- "generated": "2026-11-19T23:45:34+00:00",
+ "generated": "2026-11-20T17:04:05+00:00",
  "first": 2019,
  "current": 2026,
  "totals": {
-  "paid": 18005,
+  "paid": 18004,
   "contracts": 1687,
   "players": 603,
-  "excludedWaivers": 225,
-  "excludedDollars": 1465,
+  "excludedWaivers": 226,
+  "excludedDollars": 1466,
   "biggest": {
    "id": "13604",
    "name": "Saquon Barkley",
@@ -1259,13 +1259,13 @@
   },
   {
    "year": 2026,
-   "total": 2310,
+   "total": 2309,
    "contracts": 218,
    "share": {
     "RB": 45.8,
-    "WR": 39.4,
+    "WR": 39.5,
     "TE": 6.1,
-    "QB": 7.6,
+    "QB": 7.5,
     "DEF": 1.1
    },
    "top": [

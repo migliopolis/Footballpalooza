@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-19",
+ "asOf": "2026-11-20",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
@@ -9,35 +9,35 @@
    "pos": "WR",
    "school": "Ohio State",
    "adp": 1.0,
-   "nflPick": 2
+   "nflPick": 1
   },
   {
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
    "adp": 4.5,
-   "nflPick": 17
+   "nflPick": 23
   },
   {
    "name": "Cam Coleman",
    "pos": "WR",
    "school": "Texas",
    "adp": 4.9,
-   "nflPick": 16
+   "nflPick": 15
   },
   {
    "name": "Charlie Becker",
    "pos": "WR",
    "school": "Indiana",
    "adp": 5.4,
-   "nflPick": 10
+   "nflPick": 9
   },
   {
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
    "adp": 5.7,
-   "nflPick": 7
+   "nflPick": 21
   },
   {
    "name": "Drew Mestemaker",
@@ -93,7 +93,7 @@
    "pos": "QB",
    "school": "Ole Miss",
    "adp": 13.5,
-   "nflPick": 21
+   "nflPick": 17
   },
   {
    "name": "Jamari Johnson",
@@ -121,7 +121,7 @@
    "pos": "TE",
    "school": "LSU",
    "adp": 16.5,
-   "nflPick": 22
+   "nflPick": 19
   },
   {
    "name": "Nate Frazier",
