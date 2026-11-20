@@ -289,7 +289,7 @@ window.FBPRosters = (function () {
   // RB/WR 10, TE 7); role archetypes from his ESPN game log (role() above). Each has an icon and a plain explainer.
   const ARCH = {
     'Mr. Reliable': ['🛡️', 'Starter-level scoring every week: never a dud week, and few big swings either way.'],
-    'High Floor': ['🧱', 'Even his worst weeks hold up: his bottom quarter of weeks still clears the starter line for his position.'],
+    'High Floor': ['🧱', 'Always gives you something: no dud weeks (QB under 10, RB/WR under 5, TE under 3), and three of every four weeks clear the starter line for his position.'],
     'Low Floor': ['🕳️', 'Averages like a starter, but a quarter of his weeks are duds.'],
     'Boom or Bust': ['🎢', 'At least two big weeks and at least two duds: the highs are high and the lows are low.'],
     'Ceiling Chaser': ['🚀', 'Finished top 3 at his position in at least two weeks.'],

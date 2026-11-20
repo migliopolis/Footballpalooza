@@ -305,9 +305,15 @@ DUD = {'QB': 10, 'RB': 5, 'WR': 5, 'TE': 3}
 STARTER = {'QB': 16, 'RB': 10, 'WR': 10, 'TE': 7}
 
 
-def profiles(rows_by_team, weekly, played, pos, wks_of):
+def profiles(rows_by_team, weekly, played, pos, wks_of, pjw=None):
     """scoring archetypes from every week's points: {player: [[label, why]]}, at most two per player.
-    weekly: {week: {player: pts}} for all players (falls back to FBP-roster weeks when missing)."""
+    weekly: {week: {player: pts}} for all players (falls back to FBP-roster weeks when missing).
+    pjw: {week: {player: projection}}. A zero with no real projection (under 3) is a week off (bye, inactive), not a
+    game, the same rule the Heat Check uses; a zero he was projected for counts as a game."""
+    pjw = pjw or {}
+    def games(pid):
+        return [weekly[w][pid] for w in weekly if pid in weekly[w]
+                and not (float(weekly[w][pid] or 0) == 0 and float((pjw.get(w) or {}).get(pid) or 0) < 3)]
     top3 = {}
     for w, sc in weekly.items():
         byp = collections.defaultdict(list)
@@ -322,7 +328,7 @@ def profiles(rows_by_team, weekly, played, pos, wks_of):
             p_ = r['pos']
             if p_ not in BIG:
                 continue
-            pts = [weekly[w][r['id']] for w in weekly if r['id'] in weekly[w]] if weekly else [v[0] for v in wks_of(r['id']).values()]
+            pts = games(r['id']) if weekly else [v[0] for v in wks_of(r['id']).values()]
             n = len(pts)
             if n < 4:
                 continue
@@ -330,15 +336,15 @@ def profiles(rows_by_team, weekly, played, pos, wks_of):
             sd = (sum((x - mean) ** 2 for x in pts) / n) ** .5
             srt = sorted(pts); p25 = srt[max(0, int(n * .25) - (1 if n % 4 == 0 else 0))]
             bigs = sum(x >= BIG[p_] for x in pts); duds = sum(x < DUD[p_] for x in pts)
-            tops = sum(1 for w in weekly if r['id'] in weekly[w] and weekly[w][r['id']] >= top3.get((w, p_), 999)) if weekly else 0
+            tops = sum(1 for w in weekly if r['id'] in weekly[w] and weekly[w][r['id']] > 0 and weekly[w][r['id']] >= top3.get((w, p_), 999)) if weekly else 0
             bench_big = sum(1 for v in wks_of(r['id']).values() if not v[1] and v[0] >= BIG[p_])
             cand = []
             if bigs >= 2 and duds >= 2:
                 cand.append((3, 'Boom or Bust', f'{bigs} weeks of {BIG[p_]}+ and {duds} under {DUD[p_]}'))
             if mean >= STARTER[p_] and duds == 0 and sd / mean <= .35:
                 cand.append((3, 'Mr. Reliable', f'no week under {DUD[p_]}, and few swings either way'))
-            elif p25 >= STARTER[p_]:
-                cand.append((2, 'High Floor', f'even his bottom quarter of weeks is {p25:.1f}+'))
+            elif p25 >= STARTER[p_] and duds == 0:   # a high-floor player never has a dud (a zero is a dud)
+                cand.append((2, 'High Floor', f'worst week {srt[0]:.1f}, and three of every four weeks {p25:.1f}+'))
             if p25 < DUD[p_] and mean >= STARTER[p_] and not (bigs >= 2 and duds >= 2):
                 cand.append((2, 'Low Floor', f'a quarter of his weeks are under {DUD[p_]}'))
             if tops >= 2:
@@ -552,7 +558,8 @@ def main():
         out_t[f]['paaRank'] = paa_order.index(f) + 1
     # player profiles (scoring archetypes) and FBP journeys
     weekly = {w: v for w, v in ((load(D('mfl', 'weeklyScores.json'), {}) or {}).get('weeks') or {}).items() if int(w) <= played}
-    prof = profiles({f: t['rows'] for f, t in out_t.items()}, weekly, played, pos, lambda pid: wks.get(pid, {}))
+    pjw = (load(D('mfl', 'projections.json'), {}) or {}).get('players', {})
+    prof = profiles({f: t['rows'] for f, t in out_t.items()}, weekly, played, pos, lambda pid: wks.get(pid, {}), pjw)
     jour = journeys({r['id'] for t in out_t.values() for r in t['rows']}, cur, abbr, names)
     for t in out_t.values():
         for r in t['rows']:
