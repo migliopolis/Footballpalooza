@@ -2,6 +2,21 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0296",
+      "to": "0.0300",
+      "dates": "Nov 19–20, 2026",
+      "items": [
+        "Press Box profile photos open in a viewer over the page, with a close button that works in the home-screen app.",
+        "2027 keeper rule: one QB who spent his whole rookie season on taxi can be kept as a third QB entering his second season. By-laws, Trading Floor and Power Score projections updated.",
+        "Settings > Change log grouped by week; open a week to see its versions.",
+        "Archetypes: High Floor now means no dud weeks, and byes and inactive weeks no longer count as zero-point games.",
+        "Injury tags (Q, D, O, IR and more) open that player's chart in FBP General, with a Back button to where you were.",
+        "Player Pages: his spot on his NFL team's depth chart, and his salary and points on scales against every rostered player at his position (or all positions, season total or per game).",
+        "Points by week: starts in the colors of the FBP team he started for, so a traded player shows both teams; the chart now stretches with the page.",
+        "My Team: an open player's tabs and Player Page button stay on screen at any window width."
+      ]
+    },
+    {
       "from": "0.0291",
       "to": "0.0295",
       "dates": "Nov 17–19, 2026",

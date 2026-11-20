@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0299';
+  const VERSION = '0.0300';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -495,7 +495,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     if (sub === 'trade') { setTimeout(() => { if (window.FBPTrade && location.hash.startsWith('#now/trade')) FBPTrade.after(); }, 0);
       return headTxt + (window.FBPTrade ? FBPTrade.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/trade')) route(); } }) : '<p class="error">The Trading Floor didn’t load.</p>'); }
     if (sub === 'news') return headTxt + (window.FBPNews ? FBPNews.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/news')) route(); } }) : '<p class="error">Player news didn’t load.</p>');
-    if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }) : '<p class="error">The hospital didn’t load.</p>');
+    if (sub === 'hospital') return headTxt + (window.FBPHospital ? FBPHospital.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#now/hospital')) route(); } }, h2) : '<p class="error">The hospital didn’t load.</p>');
     if (sub === 'column') return pageColumn(location.hash.split('/')[2] || '');
     return headTxt + pressBox() + `
       <section><h2 class="sec">Standings <small>division order uses the by-law tiebreaks</small></h2><div class="divs">${divTables}</div>

@@ -1774,7 +1774,8 @@ tr.dh-det > td{padding:6px 6px 10px!important;background:var(--bg);text-align:le
 .pp-wk .pp-avg{stroke:var(--fg);stroke-dasharray:4 4;opacity:.6}
 .ro-key i.pk.st{background:#4d6a85}.ro-key i.pk.bn{background:#a9bccd}.ro-key i.pk.ot{background:#c58b2b}.ro-key i.pk.fa{background:#9aa4ae}.ro-key i.pk.av{height:0;border-top:2px dashed var(--fg);border-radius:0;opacity:.6;vertical-align:3px}
 .pp .ro-nw+.ro-nw{margin-top:4px}
-.pp-wk{max-width:680px;display:block}
+.pp-wk{display:block}
+.pp-wk .pb.st{stroke-width:1.5}
 .pp-ct td.ro-op{white-space:nowrap}.pp-ct .pp-fl{vertical-align:middle;margin-right:5px}
 .pp-fl{width:20px;height:20px;object-fit:contain;max-width:none}
 .pp-tot td{font-weight:700;border-top:2px solid var(--line)}
@@ -2079,6 +2080,13 @@ ol.pp-hon{list-style:none;margin:0;padding:0}
 @media (max-width:560px){.seg.pl-show button{font-size:.78rem;padding:8px 2px}}
 /* Rosters: current NFL injury designation (Q, D, O, IR…) next to the name */
 .ro-inj{display:inline-block;font:700 .56rem/1 var(--body);padding:2px 4px;border-radius:3px;background:var(--red);color:#fff;margin-left:5px;vertical-align:2px;cursor:help}
+.ro-inj[data-inj]{cursor:pointer}
+.ro-inj[data-inj]:hover{filter:brightness(1.12);text-decoration:underline}
+.hs-fbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 14px}
+.hs-back{font:600 .9rem var(--body);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:40px}
+.hs-back:hover{border-color:var(--ink)}
+.hs-all{font-size:.85rem}
+.hs-focus .hs-grid{grid-template-columns:minmax(0,640px)}
 .pp-id h2 .ro-inj{font-size:.62rem;padding:3px 5px;vertical-align:4px}
 .lv-compact tr:not(.lv-rx) .lv-phw .lv-def{display:inline-block}
 .col-hero{margin:0 0 16px}
@@ -3459,3 +3467,24 @@ body.pp-dragging{-webkit-user-select:none;user-select:none;touch-action:none}
 .lb-x{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font:600 1.2rem/1 var(--body);cursor:pointer}
 .lb-x:focus-visible{outline:3px solid #fff;outline-offset:2px}
 html.lb-open{overflow:hidden}
+
+/* Player Page: depth chart and salary/points among his peers */
+.pp-dch{margin:0 0 8px;font-size:.92rem}.pp-dch b{font:700 1.05rem var(--display);margin-right:2px}
+.pp-dc{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-width:520px}
+.pp-dc li{display:flex;align-items:center;gap:10px;padding:5px 8px;border-radius:8px;border:1px solid transparent}
+.pp-dc li.me{background:var(--sky-soft);border-color:var(--line);font-weight:700}
+.pp-dcn{font:600 .74rem var(--mono);color:var(--muted);width:2.6rem;flex:none}
+.pp-dcp{width:30px;height:30px;border-radius:50%;background:var(--line) center/cover;flex:none}
+.pp-dcm{flex:1;min-width:0}.pp-dcm small{color:var(--red);font-weight:600;margin-left:4px}
+.pp-dcl{width:24px;height:24px;object-fit:contain;flex:none}.pp-dcfa{font:600 .66rem var(--body);color:var(--muted);width:24px;text-align:center}
+.pe-ctl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.pe-wrap{display:flex;gap:16px 28px;justify-content:flex-start;flex-wrap:wrap}
+.pe-col{width:150px;text-align:center}.pe-col h3{margin:0 0 4px;font:600 .8rem var(--body);text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.pe-svg{width:140px;height:auto;display:block;margin:0 auto}
+.pe-ax{stroke:var(--line);stroke-width:4;stroke-linecap:round}
+.pe-t{stroke:var(--muted);stroke-width:1.5;opacity:.45}
+.pe-me{stroke-width:5;stroke-linecap:round}
+.pe-v{font:700 14px var(--body);fill:var(--fg)}.pe-l{font:500 12px var(--body);fill:var(--muted)}
+.pe-rk{margin:4px 0 0;font-size:.85rem}.pe-top{margin:2px 0 0;font-size:.74rem;color:var(--muted)}
+.pp-wk .ax{font-size:11px}
+@media (max-width:600px){.pp-wk .ax{font-size:17px}}

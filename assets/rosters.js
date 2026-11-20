@@ -194,9 +194,9 @@ window.FBPRosters = (function () {
   const injOnly = r => { const M = mflInj();
     if (M) { const x = M[r.id], t = x && MINJ[x.status]; if (!t) return '';
       const tip = `${x.status}${x.details ? ': ' + x.details : ''}${x.exp_return ? ' · expected back ' + x.exp_return : ''} (MFL)`;
-      return `<span class="ro-inj" title="${X && X.esc ? X.esc(tip) : tip}">${t}</span>`; }
+      return `<span class="ro-inj" data-inj="${r.id}" role="link" tabindex="0" title="${X && X.esc ? X.esc(tip) : tip}">${t}</span>`; }
     if (!r.espn) return ''; const i = injMap()[r.espn], t = i && INJ[i.status]; if (!t) return '';
-    return `<span class="ro-inj" title="${X && X.esc ? X.esc(i.status + (i.note ? ': ' + i.note : '')) : i.status}">${t}</span>`; };
+    return `<span class="ro-inj" data-inj="${r.id}" role="link" tabindex="0" title="${X && X.esc ? X.esc(i.status + (i.note ? ': ' + i.note : '')) : i.status}">${t}</span>`; };
   // his injury tag, then a TRADE chip when he's on the trade block (FBPU.tbChip)
   const injChip = r => injOnly(r) + FBPU.tbChip(r.id);
   // L3: his average over his last three games, skipping his bye week (fewer if he has played fewer)
@@ -428,18 +428,91 @@ window.FBPRosters = (function () {
     const tot = `<tr class="pp-tot"><td class="l" colspan="2">Career</td>${cols.map(([c, l], i) => { const k = cats[c].labels.indexOf(l); return `<td${i && cols[i - 1][0] !== c ? ' class="gap"' : ''}>${esc(String((cats[c].totals || [])[k] || ''))}</td>`; }).join('')}</tr>`;
     return `<div class="tbl-wrap"><table class="ro-bt"><thead><tr><th class="l">Year</th><th class="l">Team</th>${hdr}</tr></thead><tbody>${rows}${tot}</tbody></table></div>`;
   }
+  function fitBoxes() { document.querySelectorAll('.ro-box').forEach(bx => { const w = bx.closest('.tbl-wrap');
+    if (w) bx.style.maxWidth = Math.max(240, w.clientWidth - 14) + 'px'; }); }
+  window.addEventListener('resize', () => requestAnimationFrame(fitBoxes));
+  // his FBP points each week. Starts are in the colors of the FBP team he started for that week (a traded player shows
+  // both teams), bench weeks are light, taxi or free-agent weeks gray. The chart stretches with the page.
   function weekBars(r, t) {
     const n = Math.max(R.through || 0, ...Object.keys(r.wsc || {}).map(Number));
     if (!n) return '';
+    const byAbbr = {}; Object.entries((X && X.teams) || {}).forEach(([f, o]) => { if (o && o.abbr) byAbbr[o.abbr] = f; });
     const W = Array.from({ length: n }, (_, i) => { const w = i + 1, v = (r.wsc || {})[String(w)], k = r.wks[String(w)];
-      return { w, v, cls: v == null ? 'none' : k && k[2] === t.abbr ? (k[1] ? 'st' : 'bn') : k ? 'ot' : 'fa', who: k ? k[2] : '' }; });
-    const top = Math.max(10, Math.ceil(Math.max(...W.map(d => d.v || 0)) / 10) * 10), w = 600, h = 180, pl = 32, pb = 24, pt = 8;
-    const cw = (w - pl - 6) / n, bw = Math.min(30, cw * .6), y = v => pt + (h - pt - pb) * (1 - v / top), x = i => pl + cw * i + cw / 2;
+      return { w, v, cls: v == null ? 'none' : k ? (k[1] ? 'st' : 'bn') : 'fa', who: k ? k[2] : '', f: k ? byAbbr[k[2]] || '' : '' }; });
+    const col = f => { const o = ((X && X.teams) || {})[f] || {}; return { fill: o.primary || '#4d6a85', line: o.secondary || o.primary || '#4d6a85' }; };
+    const top = Math.max(10, Math.ceil(Math.max(...W.map(d => d.v || 0)) / 10) * 10), w = 640, h = 190, pl = 32, pb = 24, pt = 8;
+    const cw = (w - pl - 6) / n, bw = Math.min(34, cw * .6), y = v => pt + (h - pt - pb) * (1 - v / top), x = i => pl + cw * i + cw / 2;
     const grid = [0, top / 2, top].map(v => `<line x1="${pl}" x2="${w - 6}" y1="${y(v)}" y2="${y(v)}" class="g"/><text x="${pl - 5}" y="${y(v) + 4}" class="ax" text-anchor="end">${v}</text>`).join('');
-    const bars = W.map((d, i) => `<g><title>Week ${d.w}: ${d.w === r.bye && d.v == null ? 'bye' : d.v == null ? 'no game' : d.v.toFixed(1) + (d.cls === 'st' ? ' · started' : d.cls === 'bn' ? ' · bench' : d.cls === 'ot' ? ' · with ' + d.who : ' · not on an FBP lineup')}</title>${d.w === r.bye && d.v == null ? `<text x="${x(i)}" y="${y(0) - 6}" class="ax" text-anchor="middle">bye</text>` : d.v != null ? `<rect x="${x(i) - bw / 2}" y="${y(d.v)}" width="${bw}" height="${Math.max(1, y(0) - y(d.v))}" rx="3" class="pb ${d.cls}"/>` : `<text x="${x(i)}" y="${y(0) - 4}" class="ax" text-anchor="middle">–</text>`}<text x="${x(i)}" y="${h - 7}" class="ax" text-anchor="middle">${d.w}</text></g>`).join('');
+    const bar = (d, i) => { const c = d.cls === 'st' ? col(d.f) : null;
+      return `<rect x="${x(i) - bw / 2}" y="${y(d.v)}" width="${bw}" height="${Math.max(1, y(0) - y(d.v))}" rx="3" class="pb ${d.cls}"${c ? ` style="fill:${c.fill};stroke:${c.line}"` : ''}/>`; };
+    const bars = W.map((d, i) => `<g><title>Week ${d.w}: ${d.w === r.bye && d.v == null ? 'bye' : d.v == null ? 'no game' : d.v.toFixed(1) + (d.cls === 'st' ? ' · started for ' + d.who : d.cls === 'bn' ? ' · bench for ' + d.who : ' · not on an FBP lineup')}</title>${d.w === r.bye && d.v == null ? `<text x="${x(i)}" y="${y(0) - 6}" class="ax" text-anchor="middle">bye</text>` : d.v != null ? bar(d, i) : `<text x="${x(i)}" y="${y(0) - 4}" class="ax" text-anchor="middle">–</text>`}<text x="${x(i)}" y="${h - 7}" class="ax" text-anchor="middle">${d.w}</text></g>`).join('');
     const avg = r.gp ? r.pts / r.gp : 0;
+    // one key entry per FBP team he started for, in the order he played for them
+    const sf = []; W.forEach(d => { if (d.cls === 'st' && !sf.includes(d.f)) sf.push(d.f); });
+    const keySt = sf.map(f => { const c = col(f), o = ((X && X.teams) || {})[f] || {};
+      return `<span><i class="pk" style="background:${c.fill};box-shadow:inset 0 0 0 1.5px ${c.line}"></i>Started${sf.length > 1 || f !== t.fid ? ' for ' + (o.abbr || f) : ''}</span>`; }).join('');
     return `<svg class="ro-wk pp-wk" viewBox="0 0 ${w} ${h}" role="img" aria-label="FBP points by week">${grid}${avg ? `<line x1="${pl}" x2="${w - 6}" y1="${y(avg)}" y2="${y(avg)}" class="pp-avg"/>` : ''}${bars}</svg>
-      <div class="ro-key"><span><i class="pk st"></i>Started</span><span><i class="pk bn"></i>Bench</span>${W.some(d => d.cls === 'ot') ? '<span><i class="pk ot"></i>Another FBP team</span>' : ''}${W.some(d => d.cls === 'fa') ? '<span><i class="pk fa"></i>Taxi or free agent</span>' : ''}<span><i class="pk av"></i>His average, ${avg.toFixed(1)}</span></div>`;
+      <div class="ro-key">${keySt}${W.some(d => d.cls === 'bn') ? '<span><i class="pk bn"></i>Bench</span>' : ''}${W.some(d => d.cls === 'fa') ? '<span><i class="pk fa"></i>Taxi or free agent</span>' : ''}<span><i class="pk av"></i>His average, ${avg.toFixed(1)}</span></div>`;
+  }
+  // his NFL team's depth chart at his position (ESPN's live depth chart; names from data/espn/athletes.json).
+  // Everyone at the position in ESPN's order, him highlighted, with the FBP team that rosters each one.
+  const DCK = { QB: 'qb', RB: 'rb', WR: 'wr', TE: 'te' };
+  function depthChart(r, ctx) {
+    const k = DCK[r.pos]; if (!k || !r.nfl || !r.espn) return '';
+    const T = espn('ETM', 'data/espn/teams.json'); if (!T) return '<p class="ro-wait">Loading…</p>';
+    const code = (NFL_ESPN[r.nfl] || r.nfl || '').toUpperCase(), tid = !T.failed && T[code] && T[code].id;
+    if (!tid) return '';
+    const D = espn('DC' + tid, `https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/${R.season}/teams/${tid}/depthcharts`);
+    const A = espn('ATH', 'data/espn/athletes.json');
+    if (!D || !A) return '<p class="ro-wait">Loading the depth chart from ESPN…</p>';
+    if (D.failed) return '<p class="ro-wait">ESPN’s depth chart didn’t load. Try again in a minute.</p>';
+    // the offensive chart that lists his position; ESPN ranks every player at the position across its slots
+    const ch = (D.items || []).find(c => c.positions && c.positions[k]);
+    if (!ch) return '<p class="ro-wait">ESPN has no depth chart for his position right now.</p>';
+    const L = [], seen = new Set();
+    (ch.positions[k].athletes || []).slice().sort((a, b) => (a.rank || 99) - (b.rank || 99)).forEach(x => {
+      const m = /athletes\/(\d+)/.exec((x.athlete && x.athlete.$ref) || ''); if (m && !seen.has(m[1])) { seen.add(m[1]); L.push(m[1]); } });
+    const at = L.indexOf(String(r.espn));
+    // who rosters each of them in FBP
+    const own = {}; Object.entries(R.teams || {}).forEach(([f, t]) => (t.rows || []).forEach(x => { if (x.espn) own[x.espn] = [f, x.id]; }));
+    const esc = ctx.esc, tmName = (T[code] || {}).short || r.nfl;
+    const head = at >= 0 ? `<p class="pp-dch"><b>${r.pos}${at + 1}</b> on the ${esc(tmName)} depth chart${at === 0 ? '' : ` · ${at} ahead of him`}</p>`
+      : `<p class="pp-dch">Not on the ${esc(tmName)} ${r.pos} depth chart right now.</p>`;
+    const rows = L.slice(0, Math.max(5, at + 1)).map((id, i) => { const a = A.failed ? {} : A[id] || {}, o = own[id], me = id === String(r.espn);
+      const tl = o && ctx.teams[o[0]] ? `<img class="pp-dcl" src="${ctx.teams[o[0]].logo || ''}" alt="${esc(ctx.teams[o[0]].abbr || '')}" title="${esc(ctx.teams[o[0]].abbr || '')}">` : '<span class="pp-dcfa">FA</span>';
+      const nm = esc(a.name || 'Unknown'), link = o && !me ? `<a href="#now/team/${o[0]}/${o[1]}">${nm}</a>` : nm;
+      return `<li class="${me ? 'me' : ''}"><span class="pp-dcn">${r.pos}${i + 1}</span><span class="pp-dcp" style="background-image:url(${FBPU.headshot(id)})"></span><span class="pp-dcm">${link}${a.injury ? ` <small>${esc(a.injury)}</small>` : ''}</span>${tl}</li>`; }).join('');
+    return `${head}<ol class="pp-dc">${rows}</ol><p class="ro-why">ESPN’s current depth chart. The logo shows who has each player in FBP.</p>`;
+  }
+  // where he sits among FBP-rostered peers: salary and points on side-by-side scales from 0 to the league's top
+  let peerPos = '', peerPg = false;
+  function peers(r, ctx) {
+    if (!R || !R.teams || r.pos === 'DEF') return '';
+    const esc = ctx.esc, pos = peerPos || r.pos, all = [];
+    Object.entries(R.teams).forEach(([f, t]) => (t.rows || []).forEach(x => { if (x.pos !== 'DEF' && (pos === 'ALL' || x.pos === pos)) all.push(Object.assign({ f }, x)); }));
+    if (!all.some(x => x.id === r.id) && !r.fa) all.push(Object.assign({ f: '' }, r));
+    const ptsOf = x => peerPg ? (x.gp >= 3 ? x.pts / x.gp : null) : x.gp ? x.pts : 0;
+    const me = all.find(x => x.id === r.id) || Object.assign({ f: '' }, r);
+    const scale = (key, val, fmt, label) => {
+      const L = all.map(x => [x, val(x)]).filter(z => z[1] != null), v = val(me);
+      const top = L.reduce((a, z) => z[1] > a[1] ? z : a, [null, 0]), max = top[1] || 1;
+      const rank = v == null ? null : L.filter(z => z[1] > v).length + 1;
+      const h = 230, pt = 30, pb = 22, y = q => pt + (h - pt - pb) * (1 - q / max), cx = 46;
+      const ticks = L.map(([x, q]) => `<line x1="${cx - 9}" x2="${cx + 9}" y1="${y(q)}" y2="${y(q)}" class="pe-t"><title>${esc(x.name)}: ${fmt(q)}</title></line>`).join('');
+      const c = ((ctx.teams[me.f] || {}).primary) || 'var(--accent)';
+      const mk = v == null ? '' : `<line x1="${cx - 16}" x2="${cx + 16}" y1="${y(v)}" y2="${y(v)}" class="pe-me" style="stroke:${c}"/><text x="${cx + 22}" y="${y(v) + 4}" class="pe-v">${fmt(v)}</text>`;
+      return `<div class="pe-col"><h3>${label}</h3><svg viewBox="0 0 150 ${h}" class="pe-svg" role="img" aria-label="${label}">
+        <line x1="${cx}" x2="${cx}" y1="${y(max)}" y2="${y(0)}" class="pe-ax"/>
+        <text x="${cx}" y="${pt - 16}" class="pe-l" text-anchor="middle">${fmt(max)}</text><text x="${cx}" y="${h - 6}" class="pe-l" text-anchor="middle">${fmt(0)}</text>
+        ${ticks}${mk}</svg>
+        <p class="pe-rk">${rank ? `<b>${FBPU.ord(rank)}</b> of ${L.length}` : '—'}</p>
+        <p class="pe-top">Top: ${esc(top[0] ? top[0].name : '—')}</p></div>`; };
+    const posBtns = ['QB', 'RB', 'WR', 'TE', 'ALL'].map(p => `<button type="button" data-pe-pos="${p}"${pos === p ? ' aria-pressed="true"' : ''}>${p === 'ALL' ? 'All' : p}</button>`).join('');
+    const modeBtns = [[false, 'Season total'], [true, 'Per game']].map(([pg, l]) => `<button type="button" data-pe-pg="${pg ? 1 : 0}"${peerPg === pg ? ' aria-pressed="true"' : ''}>${l}</button>`).join('');
+    const who = pos === 'ALL' ? 'rostered player' : `rostered ${pos}`;
+    return `<div class="pe-ctl"><div class="seg">${posBtns}</div><div class="seg">${modeBtns}</div></div>
+      <div class="pe-wrap">${me.fa || me.sal == null ? '' : scale('sal', x => x.sal == null ? null : +x.sal, q => '$' + Math.round(q), 'Salary')}${scale('pts', ptsOf, q => q.toFixed(peerPg ? 1 : 0), peerPg ? 'Points a game' : `${R.season} points`)}</div>
+      <p class="ro-why">Every ${who} on an FBP team, from 0 up to the league’s top. ${esc(r.name)} is the long ${(ctx.teams[me.f] || {}).abbr ? (ctx.teams[me.f].abbr + '-colored') : ''} mark; each short mark is another player (hover for who).${peerPg ? ' Per game counts players with 3+ games.' : ''}</p>`;
   }
   function fbpCareer(r, ctx) {
     const esc = ctx.esc, j = espn('PR', 'data/player-records.json');
@@ -546,6 +619,8 @@ window.FBPRosters = (function () {
         ${tile(`Week ${R.projWeek}`, fx(r.proj, 1), `MFL projection${r.bye ? ' · bye week ' + r.bye : ''}`)}
         ${r.fa ? tile('Salary', '—', 'FBP free agent') : tile('Salary', $(r.sal), `${r.cy ? 'contract year ' + r.cy : 'no contract year'}${r.fut && r.fut.length ? ' · ' + $(r.fut[0]) + ' next year' : ''}`)}
       </div>
+      ${def ? '' : fsec('dc', 'Depth chart', depthChart(r, ctx))}
+      ${def ? '' : fsec('peer', 'Salary and points among his peers', peers(r, ctx))}
       ${fsec('wk', `${R.season} FBP points by week`, weekBars(r, t))}
       ${def ? '' : fsec('ovr', `${R.season} OVR by week`, ovrChart(r))}
       ${def ? '' : fsec('news', 'Latest news', part(r, t, ctx, 'news', true))}
@@ -841,6 +916,9 @@ window.FBPRosters = (function () {
     // two award chips stack beside the name unless his second line runs under where the first chip sits
     requestAnimationFrame(() => document.querySelectorAll('.ro-nmw.two').forEach(w => { const a = w.querySelector('.ro-n1'), b = w.querySelector('.ro-n2');
       if (a && b) w.classList.toggle('inl', b.offsetWidth > a.offsetWidth + 4); }));
+    // the open player's box is as wide as the part of the table you can see, not the whole (scrolling) table, so the
+    // tabs, Player Card and Player Page button stay on screen at any window width
+    requestAnimationFrame(fitBoxes);
     requestAnimationFrame(() => document.querySelectorAll('.ro-tabs').forEach(tl => { const on = tl.querySelector('[aria-selected="true"]');
       if (on && (on.offsetLeft + on.offsetWidth > tl.scrollLeft + tl.clientWidth || on.offsetLeft < tl.scrollLeft)) tl.scrollLeft = on.offsetLeft - 8; }));
     requestAnimationFrame(() => { const el = document.querySelector('.ro-pick'); if (!el) return;
@@ -979,6 +1057,7 @@ window.FBPRosters = (function () {
     const t = e.target.closest ? e.target : null; if (!t || !document.querySelector('.ro-t, .ro-pick, .ra-page, .rk-page, .pp')) return;
     const pf = t.closest('[data-pp-fold]'); if (pf && justDragged) return; if (pf) { const k = pf.dataset.ppFold; ppShut[k] = !ppShut[k]; try { localStorage.setItem('fbp-pp-fold', JSON.stringify(ppShut)); } catch (err) {}
       pf.closest('.ro-fold').classList.toggle('shut', !!ppShut[k]); pf.setAttribute('aria-expanded', String(!ppShut[k])); return; }
+    const pp2 = t.closest('[data-pe-pos],[data-pe-pg]'); if (pp2) { if (pp2.dataset.pePos) peerPos = pp2.dataset.pePos; else peerPg = pp2.dataset.pePg === '1'; return redraw(); }
     const rs = t.closest('[data-ra-sort]'); if (rs) { const k = rs.dataset.raSort; raSort = k === 'pos' ? ['pos', 1] : raSort[0] === k ? [k, -raSort[1]] : [k, 1]; return redraw(); }
     const cs = t.closest('[data-ra-csort]'); if (cs) { const k = cs.dataset.raCsort; cSort = cSort[0] === k ? [k, -cSort[1]] : [k, 1]; return redraw(); }
     if (t.closest('.ra-mdet a')) return;

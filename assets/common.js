@@ -43,7 +43,7 @@ window.FBPU = (function () {
   const injMap = j => { const m = {}; (((j || {}).injuries || {}).injury || []).forEach(x => { m[x.id] = x; }); return m; };
   const injChip = (x, esc) => { const t = x && INJ[x.status]; if (!t) return '';
     const e = esc || (s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])));
-    return `<span class="ro-inj" title="${e(x.status + (x.details ? ': ' + x.details : ''))}">${t}</span>`; };
+    return `<span class="ro-inj" data-inj="${e(x.id || '')}" role="link" tabindex="0" title="${e(x.status + (x.details ? ': ' + x.details : ''))}">${t}</span>`; };
   // the trade block (MFL Trade Bait, data/ticker.json from scripts/trading_floor.py): a TRADE chip beside any player on it,
   // on every page that shows him (Scoreboard, Rosters, My Team, Player Page, Stats, Rankings, the Trading Floor).
   // site.js loads it at startup and redraws once it's in; until then, no chips.

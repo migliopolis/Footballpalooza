@@ -93,16 +93,20 @@ window.FBPHospital = (function () {
       if (who === 'ro' && !r.f) return;
       if (who === 'fa' && r.f) return;
       if (team && r.f !== team) return;
-      const i = inj(r.e); if (!i || !i.status || i.status === 'Active') return;
-      if (/coach'?s decision/i.test(i.type) || i.short === 'inactive' && !i.type) return;
-      const pts = r.w.filter(v => v != null), played = pts.length;
-      let missed = 0; for (let k = r.w.length - 1; k >= 0 && (r.w[k] == null || r.w[k] === 0); k--) missed++;
-      const last3 = r.w.filter(v => v != null && v !== 0).slice(-3);
-      const avg = played ? pts.reduce((a, b) => a + b, 0) / played : null;
-      out.push({ r, i, wk: fbpWeek(i.ret), ward: ward(i, now), avg, played, missed,
-        l3: last3.length ? last3.reduce((a, b) => a + b, 0) / last3.length : null });
+      const x = patient(r, now); if (x) out.push(x);
     });
     return out;
+  }
+  // one player's chart: his injury, ward and production (null when he isn't on the injury report)
+  function patient(r, now) {
+    const i = r.e && inj(r.e); if (!i || !i.status || i.status === 'Active') return null;
+    if (/coach'?s decision/i.test(i.type) || i.short === 'inactive' && !i.type) return null;
+    const pts = r.w.filter(v => v != null), played = pts.length;
+    let missed = 0; for (let k = r.w.length - 1; k >= 0 && (r.w[k] == null || r.w[k] === 0); k--) missed++;
+    const last3 = r.w.filter(v => v != null && v !== 0).slice(-3);
+    const avg = played ? pts.reduce((a, b) => a + b, 0) / played : null;
+    return { r, i, wk: fbpWeek(i.ret), ward: ward(i, now), avg, played, missed,
+      l3: last3.length ? last3.reduce((a, b) => a + b, 0) / last3.length : null };
   }
 
   const med = r => (r.hon || []).some(h => h[0] === '1st Team') ? 'gold' : (r.hon || []).some(h => h[0] === '2nd Team') ? 'silver' : (r.hon || []).some(h => h[0] === 'Rookie Team') ? 'rook' : '';
@@ -130,11 +134,25 @@ window.FBPHospital = (function () {
     </article>`;
   }
 
-  function render(ctx) {
+  // one patient's chart (#now/hospital/<player>), opened from an injury tag anywhere on the site, with a way back
+  function focus(ctx, id, now) {
+    const esc = ctx.esc, r = (S.rows || []).find(x => x.id === id);
+    let from = ''; try { from = sessionStorage.getItem('fbp-hs-from') || ''; } catch (e) { /* storage off */ }
+    const bar = `<div class="hs-fbar"><button type="button" class="hs-back" data-hs-back>‹ ${from ? 'Back' : 'All patients'}</button>${from ? '<a class="hs-all" href="#now/hospital">All patients ›</a>' : ''}</div>`;
+    if (!r) return `<div class="hs-page">${bar}<p class="loading">That player isn’t on the injury report.</p></div>`;
+    const x = patient(r, now);
+    if (!x) return `<div class="hs-page">${bar}<p class="loading">${esc(r.n)} isn’t on ESPN’s injury report right now. The tag you tapped may be MFL’s, which can run a little ahead of or behind ESPN.</p></div>`;
+    exp.add(r.id);
+    const wn = (WARDS.find(w => w[0] === x.ward) || [])[1];
+    return `<div class="hs-page hs-focus">${bar}<div class="hs-grid">${card(x, ctx, wn)}</div></div>`;
+  }
+
+  function render(ctx, id) {
     X = ctx; load();
     if (failed) return '<p class="error">The hospital didn’t load.</p>';
     if (!S) return '<p class="loading">Checking in with the hospital…</p>';
     const esc = ctx.esc, now = S.weeks[S.weeks.length - 1] || 0;
+    if (id) return focus(ctx, id, now);
     const all = rows(now);
     // census: every FBP team's injured players, points a game and salary on the shelf
     const keepWho = who, keepTeam = team; who = 'ro'; team = '';
@@ -169,6 +187,9 @@ window.FBPHospital = (function () {
   }
 
   document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('[data-hs-back]');
+    if (b) { let from = ''; try { from = sessionStorage.getItem('fbp-hs-from') || ''; sessionStorage.removeItem('fbp-hs-from'); } catch (x) { /* storage off */ }
+      if (from && history.length > 1) history.back(); else location.hash = '#now/hospital'; return; }
     const t = e.target.closest && e.target.closest('[data-hs],[data-hs-ex],[data-hs-team],[data-hs-who]'); if (!t || !document.querySelector('.hs-page')) return;
     if (t.dataset.hsEx) { const id = t.dataset.hsEx; exp.has(id) ? exp.delete(id) : exp.add(id); }
     else if (t.dataset.hs) { const id = t.dataset.hs; open.has(id) ? open.delete(id) : open.add(id); }
@@ -179,4 +200,15 @@ window.FBPHospital = (function () {
   document.addEventListener('keydown', e => { const t = e.target.closest && e.target.closest('[data-hs-ex]');
     if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); t.click(); } });
   return { render };
+})();
+
+// an injury tag anywhere on the site (span.ro-inj with data-inj) opens that player's chart in FBP General.
+// Capture phase, so the row or card it sits in doesn't open as well.
+(function () {
+  const go = el => { try { sessionStorage.setItem('fbp-hs-from', location.hash || '#now'); } catch (e) { /* storage off */ }
+    location.hash = '#now/hospital/' + el.dataset.inj; setTimeout(() => window.scrollTo(0, 0), 60); };
+  document.addEventListener('click', e => { const el = e.target.closest && e.target.closest('.ro-inj[data-inj]');
+    if (!el || !el.dataset.inj) return; e.preventDefault(); e.stopPropagation(); go(el); }, true);
+  document.addEventListener('keydown', e => { const el = e.target.closest && e.target.closest('.ro-inj[data-inj]');
+    if (el && el.dataset.inj && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); go(el); } }, true);
 })();
