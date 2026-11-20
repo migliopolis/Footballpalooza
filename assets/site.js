@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0297';
+  const VERSION = '0.0298';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -207,7 +207,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
         <div class="seg" role="group" aria-label="Light or dark">${seg}</div>`)}
       ${changelog()}`;
   }
-  // Change log (data/changelog.json): one entry for every five site versions, newest first; the latest one starts open
+  // Change log (data/changelog.json): one entry for every five site versions, newest first, grouped by week; the latest week and its latest entry start open
   let CL = null, clLoading = false;
   function changelog() {
     if (!CL) {
@@ -216,9 +216,37 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
       return '';
     }
     if (!(CL.entries || []).length) return '';
-    return setSec('changelog', 'Change log', `<p>What’s new on the site, five versions at a time. You’re on v${esc(VERSION)}.</p>
-      ${CL.entries.map((e, i) => `<details class="cl-e"${i ? '' : ' open'}><summary><b>v${esc(e.from)}–v${esc(e.to)}</b><small>${esc(e.dates)}</small></summary>
-        <ul>${e.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>`).join('')}`, 'cl');
+    // group the five-version entries by week (Sunday to Saturday), going by each entry's last day
+    const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const lastDay = str => {
+      const m = /([A-Z][a-z]{2}) (\d+)(?:–(?:([A-Z][a-z]{2}) )?(\d+))?, (\d{4})/.exec(str || '');
+      if (!m) return null;
+      const mon = MO.indexOf(m[3] || m[1]);
+      return mon < 0 ? null : new Date(+m[5], mon, +(m[4] || m[2]));
+    };
+    const fmt = d => `${MO[d.getMonth()]} ${d.getDate()}`;
+    const weeks = [];
+    CL.entries.forEach(e => {
+      const d = lastDay(e.dates);
+      const start = d ? new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay()) : null;
+      const key = start ? start.toDateString() : 'other';
+      let w = weeks.find(x => x.key === key);
+      if (!w) { w = { key, start, entries: [] }; weeks.push(w); }
+      w.entries.push(e);
+    });
+    const wLabel = w => {
+      if (!w.start) return 'Earlier';
+      const end = new Date(w.start.getFullYear(), w.start.getMonth(), w.start.getDate() + 6);
+      return `Week of ${fmt(w.start)}–${end.getMonth() === w.start.getMonth() ? end.getDate() : fmt(end)}, ${end.getFullYear()}`;
+    };
+    const entry = (e, open) => `<details class="cl-e"${open ? ' open' : ''}><summary><b>v${esc(e.from)}–v${esc(e.to)}</b><small>${esc(e.dates)}</small></summary>
+        <ul>${e.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>`;
+    return setSec('changelog', 'Change log', `<p>What’s new on the site, by week. Open a week to see its versions. You’re on v${esc(VERSION)}.</p>
+      ${weeks.map((w, i) => {
+        const n = w.entries.length, lo = w.entries[n - 1].from, hi = w.entries[0].to;
+        return `<details class="cl-w"${i ? '' : ' open'}><summary><b>${esc(wLabel(w))}</b><small>v${esc(lo)}–v${esc(hi)} · ${n} update${n === 1 ? '' : 's'}</small></summary>
+        <div class="cl-wb">${w.entries.map((e, j) => entry(e, !i && !j)).join('')}</div></details>`;
+      }).join('')}`, 'cl');
   }
   // Settings sections open and close; they start closed, and the ones you open are remembered on this device
   const SET_KEY = 'fbp-settings-open';

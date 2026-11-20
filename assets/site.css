@@ -1332,6 +1332,16 @@ table.sortable th[aria-sort="descending"]::after{content:" ▼";font-size:.8em}
 .lv-t tr.lv-r-tx td{background:rgba(240,200,40,.14)}
 .lv-t tr.lv-r-ir td{background:rgba(220,50,50,.09)}
 /* Settings > Change log */
+.cl-w{border-top:1px solid var(--line);padding:10px 0}
+.cl-w:first-of-type{margin-top:6px}
+.cl-w>summary{cursor:pointer;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;list-style:none}
+.cl-w>summary::-webkit-details-marker{display:none}
+.cl-w>summary::before{content:'▸';color:var(--muted);font-size:.8em}
+.cl-w[open]>summary::before{content:'▾'}
+.cl-w>summary b{font-family:var(--display);font-weight:600;letter-spacing:.3px}
+.cl-w>summary small{color:var(--muted);font-size:.78rem}
+.cl-wb{margin:6px 0 0 14px;padding-left:12px;border-left:2px solid var(--line)}
+.cl-wb .cl-e:first-child{border-top:0}
 .cl-e{border-top:1px solid var(--line);padding:8px 0}
 .cl-e:first-of-type{margin-top:6px}
 .cl-e summary{cursor:pointer;display:flex;align-items:baseline;gap:10px;list-style:none}
