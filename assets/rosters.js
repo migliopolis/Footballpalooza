@@ -13,7 +13,13 @@ window.FBPRosters = (function () {
   let ppShut = {}; try { ppShut = JSON.parse(localStorage.getItem('fbp-pp-fold') || '{}') || {}; } catch (e) {}
   // Player Page: the sections from Season analytics down fold (tap the header) and reorder (press and hold a header,
   // then drag it up or down); both remembered on this device for every player
-  let ppOrder = []; try { ppOrder = JSON.parse(localStorage.getItem('fbp-pp-order') || '[]') || []; } catch (e) {}
+  let ppOrder = []; try { ppOrder = JSON.parse(localStorage.getItem('fbp-pp-order2') || '[]') || []; } catch (e) {}
+  // the Player Page's sections come in four labeled groups (Right now, This season, Value, History); each group's
+  // sections can be dragged into another order within the group
+  function group(label, items) {
+    const body = sortable(items); if (!items.some(x => x[2])) return '';
+    return `<h3 class="pp-grp"><span>${label}</span></h3>${body}`;
+  }
   function sortable(items) {
     const at = k => { const i = ppOrder.indexOf(k); return i < 0 ? 100 + items.findIndex(x => x[0] === k) : i; };
     const list = items.filter(x => x[2]).sort((a, b) => at(a[0]) - at(b[0]));
@@ -50,7 +56,7 @@ window.FBPRosters = (function () {
     sec.classList.remove('pp-lift'); document.body.classList.remove('pp-dragging');
     const now = [...list.children].map(c => c.dataset.ppK);
     ppOrder = [...now, ...ppOrder.filter(k => !now.includes(k))];   // keys this player doesn't have keep their place
-    try { localStorage.setItem('fbp-pp-order', JSON.stringify(ppOrder)); } catch (err) {}
+    try { localStorage.setItem('fbp-pp-order2', JSON.stringify(ppOrder)); } catch (err) {}
   };
   document.addEventListener('pointerup', drop); document.addEventListener('pointercancel', drop); document.addEventListener('touchend', drop);
   document.addEventListener('contextmenu', e => { if (drag || holdT) e.preventDefault(); });
@@ -619,21 +625,27 @@ window.FBPRosters = (function () {
         ${tile(`Week ${R.projWeek}`, fx(r.proj, 1), `MFL projection${r.bye ? ' · bye week ' + r.bye : ''}`)}
         ${r.fa ? tile('Salary', '—', 'FBP free agent') : tile('Salary', $(r.sal), `${r.cy ? 'contract year ' + r.cy : 'no contract year'}${r.fut && r.fut.length ? ' · ' + $(r.fut[0]) + ' next year' : ''}`)}
       </div>
-      ${def ? '' : fsec('dc', 'Depth chart', depthChart(r, ctx))}
-      ${def ? '' : fsec('peer', 'Salary and points among his peers', peers(r, ctx))}
-      ${fsec('wk', `${R.season} FBP points by week`, weekBars(r, t))}
-      ${def ? '' : fsec('ovr', `${R.season} OVR by week`, ovrChart(r))}
-      ${def ? '' : fsec('news', 'Latest news', part(r, t, ctx, 'news', true))}
-      ${sortable([
-        ['an', 'Season analytics', part(r, t, ctx, 'an')],
-        ['log', `${R.season} game log`, def ? '' : part(r, t, ctx, 'log')],
+      ${group('Right now', [
+        ['news', 'Latest news', def ? '' : part(r, t, ctx, 'news', true)],
         ['sched', 'Schedule', part(r, t, ctx, 'sched')],
-        ['sal', 'Contract', part(r, t, ctx, 'sal')],
+        ['dc', 'Depth chart', def ? '' : depthChart(r, ctx)],
         ['heat', 'Heat Check', heatStrip(r) || '<p class="ro-wait">Loading…</p>', 'pp-heat'],
-        ['career', 'FBP career', fbpCareer(r, ctx)],
+      ])}
+      ${group('This season', [
+        ['wk', `${R.season} FBP points by week`, weekBars(r, t)],
+        ['log', `${R.season} game log`, def ? '' : part(r, t, ctx, 'log')],
+        ['ovr', `${R.season} OVR by week`, def ? '' : ovrChart(r)],
+        ['an', 'Season analytics', part(r, t, ctx, 'an')],
+      ])}
+      ${group('Value', [
+        ['sal', 'Contract', part(r, t, ctx, 'sal')],
+        ['peer', 'Salary and points among his peers', def ? '' : peers(r, ctx)],
+      ])}
+      ${group('History', [
         ['honors', 'Awards and honors', honors(r, ctx)],
-        ['nfl', 'NFL career stats', def || !r.espn || !CAREER[r.pos] ? '' : careerStats(r, esc)],
+        ['career', 'FBP career', fbpCareer(r, ctx)],
         ['jour', 'FBP journey', part(r, t, ctx, 'jour')],
+        ['nfl', 'NFL career stats', def || !r.espn || !CAREER[r.pos] ? '' : careerStats(r, esc)],
       ])}
       <p class="rf-foot">Through week ${R.through}. NFL stats, bio, news and schedules come from ESPN; points are FBP scoring.</p>
     </div>`;
