@@ -169,7 +169,8 @@ def main():
         team = max(c['teams'].items(), key=lambda kv: kv[1])[0] if c['teams'] else ''
         ys = sorted(c['yrs']) or [0]
         return {'id': pid, 'name': names.get(pid, pid), 'pos': pos.get(pid, ''), 'espn': espn.get(pid, '') or '',
-                'fr': team, 'teams': sorted(c['teams'], key=lambda f: -c['teams'][f]), 'n': c['n'], 'yrs': [ys[0], ys[-1]]}
+                'fr': team, 'teams': sorted(c['teams'], key=lambda f: -c['teams'][f]), 'n': c['n'], 'yrs': [ys[0], ys[-1]],
+                'rec': [c['w'], c['l'], c['t']]}
 
     def board(key, title, group, val, fmt='n', cond=lambda c: True, note='', rev=False, top=10):
         rows = [(pid, val(c)) for pid, c in C.items() if (c['n'] or key == 'pwins') and cond(c)]
