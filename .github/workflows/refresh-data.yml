@@ -105,6 +105,9 @@ jobs:
       - name: Build the press box columns
         continue-on-error: true
         run: pip install markdown && python scripts/build_columns.py
+      - name: Build the Player Page share previews (name and photo)
+        continue-on-error: true
+        run: pip install pillow && python scripts/share_players.py
       - name: Build the share-link preview pages
         continue-on-error: true
         run: python scripts/share_pages.py
