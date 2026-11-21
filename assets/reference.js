@@ -531,7 +531,7 @@ window.FBPRef = (() => {
     FBPU.json('data/career-records.json').then(j => { if (j == null) throw 0; return j; })
       .then(d => { CR = d; rerender(); }).catch(() => { CR = { failed: true }; rerender(); });
   };
-  const crFace = p => { const m = window.FBP && FBP.media, src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : '');
+  const crFace = p => { if (p.pos === 'DEF') return FBPU.defFace(p.name); const m = window.FBP && FBP.media, src = p.espn && m ? m.headshot(p.espn) : '';
     return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
   const crName = p => p.pos !== 'DEF' && p.id ? `<a class="rf-nm" href="#now/player/${p.id}">${esc(p.name)}</a>` : esc(p.name);
   const crWho = (p, sub2) => `<span class="py-who">${crFace(p)}<span><b>${crName(p)}</b><small>${sub2}</small></span></span>`;
@@ -609,7 +609,7 @@ window.FBPRef = (() => {
     if (!PAY) { loadPay(X.rerender); return top + '<p class="loading">Loading payroll…</p>'; }
     if (PAY.failed) return top + '<p class="error">Payroll didn’t load.</p>';
     const m = window.FBP && FBP.media;
-    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
+    const face = p => { if (p.pos === 'DEF') return FBPU.defFace(p.name); const src = p.espn && m ? m.headshot(p.espn) : ''; return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
     const who = p => `<span class="py-who">${face(p)}<span><b>${esc(p.name)}</b><small>${esc(p.pos)}</small></span></span>`;
     const lg = fr => logo(fr) ? `<span class="py-lg" title="${esc(D.franchises[fr] || '')}">${logo(fr)}</span>` : '';
     const T = PAY.totals, S = PAY.seasons, cur = S[S.length - 1], first = S[0];
@@ -728,7 +728,7 @@ window.FBPRef = (() => {
     if (!PR) { loadPR(X.rerender); return '<p class="loading">Loading player records…</p>'; }
     if (PR.failed) return '<p class="error">Player records didn’t load.</p>';
     const m = window.FBP && FBP.media;
-    const face = p => { const src = p.pos === 'DEF' ? '' : (p.espn && m ? m.headshot(p.espn) : ''); return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
+    const face = p => { if (p.pos === 'DEF') return FBPU.defFace(p.name); const src = p.espn && m ? m.headshot(p.espn) : ''; return src ? `<img class="py-face${FBPU.ovc(p.id)}" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="py-face"></i>'; };
     const L = PR.list, span = `${PR.first}–${PR.last}`;
     // tiles: best and worst win rate with 40+ starts, most starts, most FBP teams
     const q40 = L.filter(p => p.n >= 40), byPct = q40.slice().sort((a, b) => b.pct - a.pct || b.n - a.n);

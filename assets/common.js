@@ -19,6 +19,15 @@ window.FBPU = (function () {
     LV: '#000000', LAC: '#002A5E', LAR: '#FFD100', MIA: '#FFFFFF', MIN: '#4F2683', NE: '#FFFFFF', NO: '#101820', NYG: '#FFFFFF',
     NYJ: '#FFFFFF', PHI: '#A5ACAF', PIT: '#FFFFFF', SF: '#B3995D', SEA: '#69BE28', TB: '#34302B', TEN: '#FFFFFF', WSH: '#FFB612' };
   const defBg = t => t ? DEFBG[nflAbbr(t)] || '' : '';
+  // a defense from its team name ("Baltimore Ravens", "Washington Football Team"): NFL abbreviation by nickname
+  const NICK = { Cardinals: 'ARI', Falcons: 'ATL', Ravens: 'BAL', Bills: 'BUF', Panthers: 'CAR', Bears: 'CHI', Bengals: 'CIN', Browns: 'CLE',
+    Cowboys: 'DAL', Broncos: 'DEN', Lions: 'DET', Packers: 'GB', Texans: 'HOU', Colts: 'IND', Jaguars: 'JAX', Chiefs: 'KC', Raiders: 'LV',
+    Chargers: 'LAC', Rams: 'LAR', Dolphins: 'MIA', Vikings: 'MIN', Patriots: 'NE', Saints: 'NO', Giants: 'NYG', Jets: 'NYJ', Eagles: 'PHI',
+    Steelers: 'PIT', '49ers': 'SF', Seahawks: 'SEA', Buccaneers: 'TB', Titans: 'TEN', Commanders: 'WSH', Redskins: 'WSH', Team: 'WSH' };
+  const defAbbr = name => NICK[String(name || '').trim().split(/\s+/).pop()] || '';
+  // a defense's face, the same look as the scoreboard: its NFL logo on a circle of one of the team's colors
+  const defFace = (name, cls = 'py-face') => { const a = defAbbr(name); if (!a) return `<i class="${cls}"></i>`;
+    return `<span class="${cls} def-face" style="--dc:${DEFBG[a] || '#e3e8ee'}"><img src="https://a.espncdn.com/i/teamlogos/nfl/500/${a.toLowerCase()}.png" alt="" loading="lazy"></span>`; };
   const nflColor = t => t ? COL[nflAbbr(t)] || '' : '';
   // ' --tc:#xxxxxx;' for a style attribute: his FBP team's color (its primary, or its second color when the primary is
   // near-white); empty for a free agent. The CSS draws a thin ring around a plain photo in it.
@@ -63,5 +72,5 @@ window.FBPU = (function () {
     return `<div class="dvg ${cls}">${divs.map(dv => { const L = ids.filter(id => of[id] === dv.id).sort(by);
       return L.length ? `<fieldset class="dvg-box"><legend>${dv.name}</legend><div class="dvg-in">${L.map(item).join('')}</div></fieldset>` : ''; }).join('')}</div>`;
   };
-  return { ESPN, COL, nflColor, defBg, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip, divGrid, tbLoad, onBlock, tbChip };
+  return { ESPN, COL, nflColor, defBg, defAbbr, defFace, tc, ovLoad, ovTier, ovc, nflAbbr, nflLogo, headshot, ord, json, INJ, injMap, injChip, divGrid, tbLoad, onBlock, tbChip };
 })();
