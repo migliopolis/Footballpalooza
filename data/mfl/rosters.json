@@ -1615,15 +1615,6 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "1.03 2025",
-      "contractYear": "2/5",
-      "drafted": "1.03 (2025)",
-      "id": "17043",
-      "salary": "23",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
       "drafted": "BB $0",
@@ -1688,15 +1679,6 @@
      {
       "contractInfo": "",
       "contractStatus": "",
-      "contractYear": "1/3",
-      "drafted": "BB $11",
-      "id": "16195",
-      "salary": "11",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
       "contractYear": "",
       "drafted": "BB $1",
       "id": "17192",
@@ -1710,7 +1692,7 @@
       "drafted": "Draft 1.05 $35 (2024)",
       "id": "16597",
       "salary": "4",
-      "status": "INJURED_RESERVE"
+      "status": "ROSTER"
      },
      {
       "contractInfo": "",
@@ -1719,6 +1701,24 @@
       "drafted": "Trade",
       "id": "17068",
       "salary": "8",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "1.03 2025",
+      "contractYear": "2/5",
+      "drafted": "1.03 (2025)",
+      "id": "17043",
+      "salary": "23",
+      "status": "INJURED_RESERVE"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "1/3",
+      "drafted": "BB $11",
+      "id": "16195",
+      "salary": "11",
       "status": "INJURED_RESERVE"
      },
      {
