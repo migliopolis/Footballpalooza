@@ -60,7 +60,8 @@ window.FBPTrade = (function () {
   function vBlock() {
     if (!D.blockOn) return `<div class="tf-empty"><p>The trade block reads MFL’s <b>Trade Bait</b> list, which every owner can fill in from his team page in MFL. It switches on with the next data refresh.</p></div>`;
     if (!D.block.length) return `<div class="tf-empty"><p>Nobody’s on the block right now.</p><p class="tf-sub">To put a player or pick on the block, open your team in MFL and use <b>Trade Bait</b>. It shows up here on the next refresh.</p></div>`;
-    return D.block.map(b => `<section class="tf-card"><h3>${logo(b.f)}${esc(nm(b.f))} ${outChip(b.f)}</h3>
+    // newest first: the team that most recently updated its block (MFL Trade Bait) leads
+    return D.block.slice().sort((a, b) => (b.ts || 0) - (a.ts || 0)).map(b => `<section class="tf-card"><h3>${logo(b.f)}${esc(nm(b.f))} ${outChip(b.f)}</h3>
       ${b.ts ? `<p class="tf-sub">Updated ${date(b.ts)}</p>` : ''}
       <ul class="tf-list">${b.items.map(x => (x.k === 'p' || x.id) && x.f ? prow(x) : `<li class="tf-p"><span class="tf-ovr tf-n">${x.k === 'pick' ? 'PK' : '–'}</span><div class="tf-pm"><b>${esc(x.t)}</b></div></li>`).join('')}</ul>
       ${b.wants ? `<p class="tf-wants"><span>Looking for</span> ${esc(b.wants)}</p>` : ''}</section>`).join('');
