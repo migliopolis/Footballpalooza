@@ -148,6 +148,16 @@ def main():
         line = NUKE.get(pos.get(pid, ''))
         if line and pts >= line:
             c['nuke'] += 1
+    # Player of the Week: the top starter score of each regular-season week (same as the Awards page),
+    # rebuilt for every season from the lineups. A tie shares it.
+    wk_best = defaultdict(list)
+    for y, wk, fr, pid, pts, r, po in starts:
+        if not po and pos.get(pid) in ('QB', 'RB', 'WR', 'TE', 'DEF'):
+            wk_best[(y, wk)].append((pts, pid))
+    for (y, wk), L2 in wk_best.items():
+        top = max(p for p, _ in L2)
+        for pid in sorted({pid for p, pid in L2 if p == top}):
+            C[pid]['potw'] = C[pid].get('potw', 0) + 1
     for y, S in seasons.items():
         for pid, t in S.items():
             if pid in C:
@@ -177,6 +187,7 @@ def main():
         board('pwins', 'Most playoff wins', 'Winning', g('pw')),
         board('pts', 'Most points', 'Scoring', g('pts'), 'f1'),
         board('ppg', 'Most points per start', 'Scoring', lambda c: c['pts'] / c['n'], 'f1', rate, f'{MIN_RATE}+ starts'),
+        board('potw', 'Most Player of the Week honors', 'Scoring', g('potw'), note='top starter score of a regular-season week; ties share it'),
         board('nuke', 'Most Nuclear games', 'Scoring', g('nuke'), note='QB 35+, RB and WR 30+, TE and DEF 25+'),
         board('tds', 'Most touchdowns', 'Scoring', lambda c: c.get('rtd', 0) + c.get('td', 0) + c.get('sttd', 0), note='rushing, receiving and returns'),
         board('pyd', 'Most passing yards', 'Passing', g('pyd')),

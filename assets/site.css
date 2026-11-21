@@ -3308,7 +3308,11 @@ img.ovbg{background:var(--ovg)}
 .cr-card h3{margin:0 0 6px;font:700 .95rem var(--body)}
 .cr-card h3 small{font-weight:400;color:var(--muted);font-size:.75rem}
 .cr-list{list-style:none;margin:0;padding:0}
-.cr-list li{display:grid;grid-template-columns:18px minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
+.cr-list li{display:grid;grid-template-columns:18px auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
+.cr-tx{display:flex;flex-direction:column;gap:2px;min-width:0;line-height:1.2}
+.cr-tx b{font-weight:600}
+.cr-tx small{font-size:.72rem;color:var(--muted)}
+.cr-tx .cr-lgs{margin-top:2px}
 .cr-list li:first-child{border-top:0}
 .cr-rk{color:var(--muted);font-size:.78rem;text-align:right}
 .cr-lgs{display:flex;gap:2px}
