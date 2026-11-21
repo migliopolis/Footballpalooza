@@ -3313,6 +3313,9 @@ img.ovbg{background:var(--ovg)}
 .cr-tx b{font-weight:600}
 .cr-tx small{font-size:.72rem;color:var(--muted)}
 .cr-tx .cr-lgs{margin-top:2px}
+.cr-st{white-space:nowrap}
+/* phones: the starts count gets its own line rather than breaking mid-line */
+@media (max-width:640px){.cr-sep{display:none}.cr-st{display:block}}
 .cr-list li:first-child{border-top:0}
 .cr-rk{color:var(--muted);font-size:.78rem;text-align:right}
 .cr-lgs{display:flex;gap:2px}
