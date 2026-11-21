@@ -855,15 +855,6 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
-   "mfl": "15733",
-   "mflName": "Pierre Strong Jr.",
-   "pos": "RB",
-   "team": "GBP",
-   "fbp": null,
-   "espn": "4249836",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "15973",
    "mflName": "Raheem Blackshear",
    "pos": "RB",
@@ -1257,6 +1248,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "3886809",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "11674",
+   "mflName": "Brandin Cooks",
+   "pos": "WR",
+   "team": "SFO",
+   "fbp": null,
+   "espn": "16731",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
