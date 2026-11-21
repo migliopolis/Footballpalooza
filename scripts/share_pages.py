@@ -117,8 +117,10 @@ def main():
     for f in os.listdir(OUT):
         if f.endswith('.html') and f not in keep:
             os.remove(os.path.join(OUT, f))
+    # Player Pages (share/p/<player>.html, built by share_players.py): route player/<id> -> key p/<id>
+    keys.update(load('share', 'p', 'routes.json') or {})
     json.dump(keys, open(os.path.join(OUT, 'pages.json'), 'w'), indent=0, sort_keys=True)
-    print(f'share pages: {len(keys)}')
+    print(f'share pages: {len(keys)} (players included)')
 
 
 if __name__ == '__main__':

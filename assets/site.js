@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0305';
+  const VERSION = '0.0306';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -17,6 +17,9 @@
     fetch('share/pages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).then(j => { pages = j || {}; }).catch(() => {});
     const shareUrl = () => {
       const route = decodeURIComponent(location.hash.replace(/^#/, '')) || 'now';
+      // a Player Page shares its own preview page (share/p/<player>.html: his name and photo)
+      const pm = /^now\/(?:team\/[^/]+|player)\/(\d+)$/.exec(route), pk = pm && pages['player/' + pm[1]];
+      if (pk) return new URL(`share/${pk}.html?to=${encodeURIComponent(route)}`, location.href.split('#')[0]).href;
       const parts = route.split('/');
       for (let n = parts.length; n > 0; n--) {
         const r = parts.slice(0, n).join('/'), key = pages[r];
@@ -25,8 +28,10 @@
       return location.href;
     };
     btn.addEventListener('click', async () => {
-      const h = document.querySelector('#app h1');
-      const title = (h ? h.textContent.trim().replace(/\s+/g, ' ') + ' · ' : '') + 'Footballpalooza';
+      // the page's heading, or on a Player Page the player's name (the page's h1 there still says My Team)
+      const h = document.querySelector('#app .pp-id h2') || document.querySelector('#app h1');
+      const ht = h ? (h.matches('.pp-id h2') ? (h.firstChild || h).textContent : h.textContent) : '';   // name only, not his chips
+      const title = (ht ? ht.trim().replace(/\s+/g, ' ') + ' · ' : '') + 'Footballpalooza';
       const url = shareUrl();
       if (navigator.share) { try { await navigator.share({ title, url }); } catch (e) {} return; }
       try { await navigator.clipboard.writeText(url); toast('Link copied'); } catch (e) { toast(url); }
