@@ -82,6 +82,13 @@
    "f": "0004",
    "amt": null,
    "why": "Fully Cooked sent auction cash (2021); the amount wasn't recorded. Commissioner confirmed it was cash."
+  },
+  {
+   "ts": 1782351656,
+   "f": "0003",
+   "amt": 1,
+   "y": 2026,
+   "why": "Hauk Tua bought Fist of the Magi's 2026 4th (4.05) for $1 of 2026 auction cash; the budgets were adjusted then (Hauk Tua $197, Magi $209)."
   }
  ],
  "drop": [
