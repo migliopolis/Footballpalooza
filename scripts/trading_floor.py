@@ -285,6 +285,14 @@ def main():
                 if v < 0:
                     add_cash(t, f, -v, B.get('season', 2027))
 
+    # still nothing on one side: MFL can't record auction cash in a trade (the league tracked it separately), so a side
+    # with nothing on it is auction cash, amount not recorded unless the trade log or budgets above supplied it
+    for t in trades:
+        for side, f in (('aGave', t['a']), ('bGave', t['b'])):
+            if not t[side]:
+                t[side].append({'k': 'cash', 'amt': None, 'y': t['season'], 't': 'Auction cash (amount not recorded)'})
+                t['cash'] = True
+
     # ---------- how each trade played out (the same numbers as Awards > Trade of the Year) ----------
     # Each used pick becomes the player taken with it; each side's haul gets its starter points for that team from
     # the trade season on, until the team lets him go.
