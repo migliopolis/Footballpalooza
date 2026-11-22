@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0309';
+  const VERSION = '0.0310';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -508,6 +508,8 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
   }
 
   /* ---------- From the press box: the weekly column (data/columns.json, built by scripts/build_columns.py) ---------- */
+  // a column photo's crop point (front matter 'focus', e.g. "50% 15%"), so a cropped photo keeps the face
+  const colPos = c => c.focus && /^[\d.]+% [\d.]+%$/.test(c.focus) ? ` style="object-position:${c.focus}"` : '';
   function loadColumns() {
     if (state.columns || state.columnsLoading) return;
     state.columnsLoading = true;
@@ -533,7 +535,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const C = state.columns.columns.slice(0, 3); if (!C.length) return '';
     const who = c => (state.columns.columnists[c.author] || { name: c.author }).name;
     return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map((c, i) => i === 0
-      ? `<li class="col-feat"><a href="#now/column/${c.slug}">${c.image ? `<img class="col-fimg" src="${esc(c.image)}" alt="${esc(c.caption || '')}" loading="lazy">` : ''}<span class="col-ftxt"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="col-ftz">${esc(c.teaser)}</span>` : ''}<span class="col-fby">${esc(who(c))} · ${colAgo(c.date)}</span></span></a></li>`
+      ? `<li class="col-feat"><a href="#now/column/${c.slug}">${c.image ? `<img class="col-fimg" src="${esc(c.image)}" alt="${esc(c.caption || '')}" loading="lazy"${colPos(c)}>` : ''}<span class="col-ftxt"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="col-ftz">${esc(c.teaser)}</span>` : ''}<span class="col-fby">${esc(who(c))} · ${colAgo(c.date)}</span></span></a></li>`
       : `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span></span></li>`).join('')}</ul><a class="col-all" href="#press">All ${state.columns.columns.length} articles in the Press Box →</a></section>`;
   }
   function pageColumn(slug) {
@@ -546,7 +548,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
       <a class="col-back" href="#press">← Press Box</a>
       <p class="col-kick">From the press box · ${esc(c.kicker)}</p>
       <h1 class="col-h1">${esc(c.title)}</h1>
-      ${c.image ? `<figure class="col-hero"><img src="${esc(c.image)}" alt="${esc(c.caption || '')}">${c.caption || c.credit ? `<figcaption>${esc(c.caption || '')}${c.credit ? ` <span>${esc(c.credit)}</span>` : ''}</figcaption>` : ''}</figure>` : ''}
+      ${c.image ? `<figure class="col-hero"><img src="${esc(c.image)}" alt="${esc(c.caption || '')}"${colPos(c)}>${c.caption || c.credit ? `<figcaption>${esc(c.caption || '')}${c.credit ? ` <span>${esc(c.credit)}</span>` : ''}</figcaption>` : ''}</figure>` : ''}
       <div class="col-byline">${colAvatar(a, true)}<span><b>${(a.profile || []).length ? `<a href="#press/staff/${esc(c.author)}">${esc(a.name)}</a>` : esc(a.name)}</b><small>${esc(a.title || '')} · ${colDate(c.date)} · ${c.minutes} min read</small></span></div>
       <div class="col-body">${c.html}</div>
       ${a.bio ? `<p class="col-bio">${colAvatar(a)}<span><b>${esc(a.name)}</b> ${esc(a.bio)}${(a.profile || []).length ? ` <a href="#press/staff/${esc(c.author)}">Full profile →</a>` : ''}</span></p>` : ''}
@@ -566,7 +568,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const person = k => W[k] || { name: k };
     const card = (c, lead) => { const a = person(c.author);
       return `<a class="pb-card${lead ? ' pb-lead' : ''}${c.image ? ' has-img' : ''}" href="#now/column/${c.slug}">
-        ${c.image ? `<span class="pb-img"><img src="${esc(c.image)}" alt="" loading="lazy"></span>` : ''}
+        ${c.image ? `<span class="pb-img"><img src="${esc(c.image)}" alt="" loading="lazy"${colPos(c)}></span>` : ''}
         <span class="pb-txt"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="pb-teas">${esc(c.teaser)}</span>` : ''}
         <span class="pb-by">${colAvatar(a)}<span>${esc(a.name)} · ${colAgo(c.date)} · ${c.minutes} min read</span></span></span></a>`; };
     const weeks = []; C.forEach((c, i) => { if (i === 0 && !pbWho) return; const k = `${c.season}-${c.week}`; let g = weeks.find(x => x.k === k); if (!g) weeks.push(g = { k, w: c.week, list: [] }); g.list.push(c); });

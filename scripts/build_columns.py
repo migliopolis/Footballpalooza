@@ -57,7 +57,7 @@ def parse(path, people={}, logos={}):
     return dict(slug=slug, title=meta.get('title', slug), kicker=meta.get('kicker', ''), author=meta.get('author', ''),
                 season=int(meta.get('season', 0) or 0), week=int(meta.get('week', 0) or 0), date=meta.get('date', ''),
                 teaser=meta.get('teaser', ''), image=meta.get('image', ''), caption=meta.get('caption', ''),
-                credit=meta.get('credit', ''), minutes=max(1, round(words / 230)), html=html)
+                credit=meta.get('credit', ''), focus=meta.get('focus', ''), minutes=max(1, round(words / 230)), html=html)
 
 
 def main():

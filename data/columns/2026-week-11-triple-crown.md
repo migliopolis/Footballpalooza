@@ -8,6 +8,7 @@ date: 2026-11-22
 image: assets/columns/2026-week-11-smith-njigba.jpg
 caption: Jaxon Smith-Njigba, Mailing It In's receiver and the FBP scoring leader
 credit: Photo by Getty Images
+focus: 50% 4%
 teaser: Win MVP, make the All-FBP team and lift the trophy, all in one season. It's been done twice. Jahmyr Gibbs and Jaxon Smith-Njigba are both on pace for the best season this league has ever seen, and only one of them can get all three.
 ---
 In eight seasons, 96 teams have chased a Footballpalooza title, and plenty of players have put up monster years along the way. Only two have done all three things a player can do in one season: win MVP, make the All-FBP team and win the championship.
