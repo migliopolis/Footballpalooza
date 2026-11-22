@@ -552,6 +552,7 @@ window.FBPRosters = (function () {
       items.push(yy.tier === 3 ? [+yy.year, '<span class="ro-chip rook">Rookie Team</span>', `All-FBP Rookie Team with ${team} · ${(+yy.pts).toFixed(1)} pts${yy.pick ? ' · ' + (yy.pick === 'Undrafted' ? 'undrafted' : 'drafted ' + yy.pick) : ''}`]
         : [+yy.year, `<span class="ro-chip ${yy.tier === 1 ? 'gold' : 'silver'}">${yy.tier === 1 ? '1st Team' : '2nd Team'}</span>`, `All-FBP ${yy.tier === 1 ? 'first' : 'second'} team with ${team} · ${(+yy.pts).toFixed(1)} pts in ${yy.starts} starts`]);
       if (yy.mvp) items.push([+yy.year, '<span class="ro-chip gold">MVP</span>', `FBP Most Valuable Player with ${team}`]);
+      if (yy.crown) items.push([+yy.year, '<span class="ro-chip crown">Triple Crown</span>', `MVP, All-FBP and FBP champion with ${team}, all in one season`]);
       })));
     // titles: everyone on the champion's roster at the end of the season (data/player-records.json, titles)
     const pr = espn('PR', 'data/player-records.json');

@@ -661,6 +661,7 @@
      "champ": true,
      "champTeam": "0007",
      "mvp": true,
+     "tripleCrown": true,
      "mvps": [
       "2023"
      ]
@@ -2617,5 +2618,17 @@
    ]
   }
  ],
- "final": true
+ "final": true,
+ "tripleCrown": {
+  "id": "12801",
+  "name": "Tyreek Hill",
+  "pos": "WR",
+  "nfl": "MIA",
+  "espn": "3116406",
+  "team": "0007",
+  "pts": 322.7,
+  "mvps": [
+   "2023"
+  ]
+ }
 }

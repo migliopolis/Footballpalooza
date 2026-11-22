@@ -655,6 +655,7 @@
      "champ": true,
      "champTeam": "0009",
      "mvp": true,
+     "tripleCrown": true,
      "mvps": [
       "2021"
      ]
@@ -2599,5 +2600,17 @@
    ]
   }
  ],
- "final": true
+ "final": true,
+ "tripleCrown": {
+  "id": "13164",
+  "name": "Cooper Kupp",
+  "pos": "WR",
+  "nfl": "LAR",
+  "espn": "2977187",
+  "team": "0009",
+  "pts": 335.4,
+  "mvps": [
+   "2021"
+  ]
+ }
 }

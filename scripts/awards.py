@@ -601,6 +601,12 @@ def add_honors(seasons):
         if mvp and a.get('final') and mvp['list']:
             mvps[mvp['list'][0]['id']].append(y)
             mvp['list'][0]['mvp'] = True          # this season's MVP
+            # the Triple Crown: MVP, an All-FBP spot and the title, all in one season
+            w = mvp['list'][0]
+            on = {e['player']['id'] for t in (a['allFbp']['first'], a['allFbp']['second']) for e in t}
+            if w.get('champ') and w['id'] in on:
+                w['tripleCrown'] = True
+                a['tripleCrown'] = {k: w.get(k) for k in ('id', 'name', 'pos', 'nfl', 'espn', 'team', 'pts')}
         for p in players_in(a):
             if p['id'] in mvps:
                 p['mvps'] = list(mvps[p['id']])
@@ -629,7 +635,8 @@ def franchise_all_fbp(seasons):
                     continue
                 r = by[p['team']].setdefault(p['id'], {k: p[k] for k in ('id', 'name', 'pos', 'nfl', 'espn')} | {'years': []})
                 r['name'], r['nfl'] = p['name'], p['nfl'] or r['nfl']   # latest spelling and team
-                r['years'].append({'year': y, 'tier': tier, 'pts': p.get('allPts', 0) if tier == 3 else p.get('teamPts', p['pts']), 'starts': 0 if tier == 3 else (p.get('teamStarts', p['starts']) or 0), 'champ': p.get('champTeam') == p['team'], 'mvp': bool(p.get('mvp'))} | ({'pick': p['pick']} if tier == 3 and p.get('pick') else {}))   # title with this franchise; MVP that season
+                r['years'].append({'year': y, 'tier': tier, 'pts': p.get('allPts', 0) if tier == 3 else p.get('teamPts', p['pts']), 'starts': 0 if tier == 3 else (p.get('teamStarts', p['starts']) or 0), 'champ': p.get('champTeam') == p['team'], 'mvp': bool(p.get('mvp')),
+                                   'crown': tier < 3 and bool(p.get('mvp')) and p.get('champTeam') == p['team']} | ({'pick': p['pick']} if tier == 3 and p.get('pick') else {}))   # title with this franchise; MVP that season
     out = {}
     for fr, players in by.items():
         rows = []
@@ -640,6 +647,7 @@ def franchise_all_fbp(seasons):
             r['rookie'] = sum(1 for x in ys if x['tier'] == 3)
             r['champs'] = sum(1 for x in ys if x['champ'])
             r['mvps'] = sum(1 for x in ys if x['mvp'])
+            r['crowns'] = sum(1 for x in ys if x.get('crown'))
             r['pts'] = round(sum(x['pts'] for x in ys if x['tier'] < 3), 1)   # starter points in 1st/2nd Team seasons
             r['starts'] = sum(x['starts'] for x in ys if x['tier'] < 3)
             r['ppg'] = round(r['pts'] / r['starts'], 1) if r['starts'] else 0
@@ -652,7 +660,9 @@ def franchise_all_fbp(seasons):
         m = next((x for x in a.get('awards', []) if x['key'] == 'manager' and x.get('teams')), None)
         if m:
             moy[m['teams'][0]['team']].append({'year': y, 'rec': m['teams'][0]['stat']})
-    return {'seasons': [y for y, _ in sorted(seasons)], 'franchises': out, 'managers': moy}
+    # every Triple Crown (MVP + All-FBP + title in one season), oldest first
+    crowns = [dict(a['tripleCrown'], year=y) for y, a in sorted(seasons) if a.get('tripleCrown')]
+    return {'seasons': [y for y, _ in sorted(seasons)], 'franchises': out, 'managers': moy, 'tripleCrowns': crowns}
 
 
 def snapshot(a):
