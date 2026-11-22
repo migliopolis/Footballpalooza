@@ -1,0 +1,51 @@
+{
+ "note": "What MFL's trade records leave out, added back by scripts/awards.py (apply_trade_fixes) for the Awards page and the Trading Floor. MFL couldn't carry rookie picks until the 2021 draft was set up, so 2020 trades that included a 2021 pick show nothing on that side; the commissioner later moved those picks with one-way entries (March and June 2021), which are bookkeeping, not trades. Picks are tied back to their trade from the 2021 draft results ('Pick traded from ...') and the one-way entries; cash is auction cash MFL doesn't record (amt null when the amount isn't known).",
+ "picks": [
+  {
+   "ts": 1605036379,
+   "f": "0004",
+   "codes": [
+    "FP_0004_2021_1"
+   ],
+   "why": "Fully Cooked's 2021 1st to MR. FROBOT for James Conner (Nov 10, 2020); the pick became 1.05, Ja'Marr Chase. Commissioner confirmed; MFL moved the pick Mar 19, 2021."
+  },
+  {
+   "ts": 1603817383,
+   "f": "0002",
+   "codes": [
+    "FP_0002_2021_2"
+   ],
+   "why": "Bullish's 2021 2nd to MR. FROBOT for Cam Akers (Oct 27, 2020); became 2.11, Pat Freiermuth. MFL moved the pick Mar 19, 2021."
+  },
+  {
+   "ts": 1606960558,
+   "f": "0002",
+   "codes": [
+    "FP_0002_2021_1"
+   ],
+   "why": "Bullish's 2021 1st to Son of Tinactin for Chris Carson (Dec 2, 2020); MFL moved the pick Mar 19, 2021. SOT sent it on to JCC in the May 25, 2021 swap, where it became 1.11, Elijah Moore."
+  },
+  {
+   "ts": 1634852348,
+   "f": "0002",
+   "codes": [
+    "FP_0002_2022_2"
+   ],
+   "why": "Bullish's 2022 2nd to Hauk Tua with the Josh Jacobs trade (Oct 21, 2021): the commissioner moved the pick 23 minutes after the trade."
+  }
+ ],
+ "cash": [
+  {
+   "ts": 1599343334,
+   "f": "0002",
+   "amt": null,
+   "why": "Bullish sent auction cash to Hauk Tua for Josh Jacobs (Sep 5, 2020); the amount wasn't recorded. Commissioner confirmed."
+  }
+ ],
+ "drop": [
+  {
+   "ts": 1625005134,
+   "why": "The commissioner re-entering the 1.02/1.04 half of the May 25, 2021 JCC-SOT pick swap the day before the draft; the trade itself is May 25."
+  }
+ ]
+}

@@ -183,12 +183,7 @@ def build(season, weeks, pinfo, links, owner, salary, contract, tx, standings, s
                   'list': [dict(player(k[0], pts, k[1]), bid=v['bid'], how='FAAB' if v['type'] == 'BBID_WAIVER' else 'Free agent') for pts, k, v in pick[:3]]})
 
     # trades: what each side received, and its starter points for its new team that season
-    def bookkeeping(t):
-        # the commissioner moving picks one way with nothing back: carrying out a pick trade made earlier, not a new trade
-        a = [x for x in (t.get('franchise1_gave_up') or '').split(',') if x.strip()]
-        b = [x for x in (t.get('franchise2_gave_up') or '').split(',') if x.strip()]
-        return str(t.get('by_commish')) == '1' and not (a and b) and all(not x.isdigit() for x in a + b)
-    tx = [t for t in tx if not (t.get('type') == 'TRADE' and bookkeeping(t))]
+    tx = [t for t in apply_trade_fixes([dict(t) for t in tx]) if not (t.get('type') == 'TRADE' and is_bookkeeping(t))]
     trades = []
     last_got = {}   # (team, pick) -> when that team last received the pick (a pick moved twice is credited once)
     for t in tx:
@@ -426,6 +421,30 @@ def current(links):
             a['note'] = 'New this season: all points count, not just starter points.'
     out['generated'] = stamp
     return out
+
+
+def apply_trade_fixes(tx):
+    """Add what MFL's trade records leave out (data/reference/trade-fixes.json): 2021 rookie picks traded in 2020,
+    before MFL carried picks, and picks the commissioner moved separately from their trade. Changes tx in place."""
+    fx = load(D('reference', 'trade-fixes.json'), {}) or {}
+    drop = {str(x['ts']) for x in fx.get('drop') or []}   # a trade entered twice: the copy goes
+    tx[:] = [t for t in tx if not (isinstance(t, dict) and t.get('type') == 'TRADE' and str(t.get('timestamp')) in drop)]
+    by_ts = {str(t.get('timestamp')): t for t in tx if isinstance(t, dict) and t.get('type') == 'TRADE'}
+    for x in fx.get('picks') or []:
+        t = by_ts.get(str(x['ts']))
+        if not t:
+            continue
+        k = 'franchise1_gave_up' if t.get('franchise') == x['f'] else 'franchise2_gave_up'
+        have = [c for c in (t.get(k) or '').split(',') if c.strip()]
+        t[k] = ','.join(have + [c for c in x['codes'] if c not in have]) + ','
+    return tx
+
+
+def is_bookkeeping(t):
+    """The commissioner moving picks one way with nothing back: carrying out a pick trade made earlier, not a new trade."""
+    a = [x for x in (t.get('franchise1_gave_up') or '').split(',') if x.strip()]
+    b = [x for x in (t.get('franchise2_gave_up') or '').split(',') if x.strip()]
+    return str(t.get('by_commish')) == '1' and not (a and b) and all(not x.isdigit() for x in a + b)
 
 
 def standings_from_reference(rows):

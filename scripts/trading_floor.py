@@ -242,8 +242,9 @@ def main():
         tj = load(D('history', str(y), 'transactions.json') if y < 2026 else D('mfl', 'transactions.json'), {}) or {}
         tx = tj.get('transactions')
         tx = tx.get('transaction') if isinstance(tx, dict) else tx
-        for t in as_list(tx):
-            if t.get('type') != 'TRADE':
+        import awards as AWF   # same fixes and bookkeeping rule as the Awards page
+        for t in AWF.apply_trade_fixes([dict(x) for x in as_list(tx)]):
+            if t.get('type') != 'TRADE' or AWF.is_bookkeeping(t):
                 continue
             ts = int(t['timestamp'])
             g1 = [item(x, y) for x in t.get('franchise1_gave_up', '').split(',') if x]
@@ -262,6 +263,15 @@ def main():
         if t:
             for x in c['cash']:
                 add_cash(t, x['f'], x['amt'], x['y'])
+    # cash MFL didn't record and the trade log doesn't have either (amount unknown): data/reference/trade-fixes.json
+    for c in (load(D('reference', 'trade-fixes.json'), {}) or {}).get('cash', []):
+        t = by_ts.get(c['ts'])
+        if t and c.get('amt') is None:
+            side = 'aGave' if c['f'] == t['a'] else 'bGave'
+            t[side].append({'k': 'cash', 'amt': None, 'y': t['season'], 't': 'Auction cash (amount not recorded)'})
+            t['cash'] = True
+        elif t:
+            add_cash(t, c['f'], c['amt'], c.get('y') or t['season'] + 1)
     B = load(D('budgets.json'), {}) or {}
     for bt in B.get('trades') or []:
         cash = bt.get('cash') or {}
@@ -315,8 +325,8 @@ def main():
                      'picksIn': sum(1 for t in mine for x in got(t) if x['k'] == 'pick'),
                      'playersOut': sum(1 for t in mine for x in gave(t) if x['k'] == 'p'),
                      'playersIn': sum(1 for t in mine for x in got(t) if x['k'] == 'p'),
-                     'cashOut': sum(x['amt'] for t in mine for x in gave(t) if x['k'] == 'cash'),
-                     'cashIn': sum(x['amt'] for t in mine for x in got(t) if x['k'] == 'cash'),
+                     'cashOut': sum(x['amt'] or 0 for t in mine for x in gave(t) if x['k'] == 'cash'),
+                     'cashIn': sum(x['amt'] or 0 for t in mine for x in got(t) if x['k'] == 'cash'),
                      'last': mine[0]['ts'] if mine else None, 'this': per.get(2026, 0)}
 
     # ---------- the block (MFL Trade Bait) ----------
