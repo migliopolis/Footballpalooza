@@ -1440,15 +1440,6 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
-      "drafted": "BB $2",
-      "id": "14840",
-      "salary": "2",
-      "status": "ROSTER"
-     },
-     {
-      "contractInfo": "",
-      "contractStatus": "",
-      "contractYear": "",
       "drafted": "BB $3",
       "id": "0525",
       "salary": "3",
@@ -1479,7 +1470,7 @@
       "drafted": "Auction $10 (2025)",
       "id": "15253",
       "salary": "13",
-      "status": "INJURED_RESERVE"
+      "status": "ROSTER"
      },
      {
       "contractInfo": "",

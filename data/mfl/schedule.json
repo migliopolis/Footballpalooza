@@ -1068,13 +1068,13 @@
         "id": "0012",
         "isHome": "0",
         "result": "T",
-        "spread": "7.3"
+        "spread": "30.3"
        },
        {
         "id": "0007",
         "isHome": "1",
         "result": "T",
-        "spread": "-7.3"
+        "spread": "-30.3"
        }
       ]
      },

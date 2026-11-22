@@ -1,13 +1,13 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-21",
+ "asOf": "2026-11-22",
  "board": {
   "name": "Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys)",
   "url": "https://www.footballguys.com/article/2027-dynasty-rookie-rankings-big-board-v4",
   "date": "2026-10-21"
  },
- "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-21); players no NFL source mentions price as undrafted.",
+ "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-22); players no NFL source mentions price as undrafted.",
  "players": [
   {
    "rank": 1,
@@ -21,7 +21,7 @@
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
-   "nflPick": 23
+   "nflPick": 27
   },
   {
    "rank": 3,
@@ -105,7 +105,7 @@
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
-   "nflPick": 21
+   "nflPick": 8
   },
   {
    "rank": 15,
@@ -154,7 +154,7 @@
    "name": "Ryan Coleman-Williams",
    "pos": "WR",
    "school": "Alabama",
-   "nflPick": 32
+   "nflPick": 30
   },
   {
    "rank": 22,
@@ -273,7 +273,7 @@
    "name": "LaNorris Sellers",
    "pos": "QB",
    "school": "South Carolina",
-   "nflPick": 25
+   "nflPick": 30
   },
   {
    "rank": 39,
