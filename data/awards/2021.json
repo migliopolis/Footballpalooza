@@ -74,7 +74,7 @@
      "teamPts": 242.3,
      "teamStarts": 11,
      "honors": {
-      "first": 1,
+      "first": 2,
       "second": 0,
       "rookie": 0
      }
@@ -182,7 +182,7 @@
      "teamPts": 248.4,
      "teamStarts": 13,
      "honors": {
-      "first": 1,
+      "first": 2,
       "second": 0,
       "rookie": 0
      }
@@ -208,7 +208,7 @@
      "teamPts": 162.0,
      "teamStarts": 11,
      "honors": {
-      "first": 1,
+      "first": 2,
       "second": 0,
       "rookie": 0
      }
@@ -314,7 +314,7 @@
      "teamPts": 242.2,
      "teamStarts": 11,
      "honors": {
-      "first": 0,
+      "first": 1,
       "second": 1,
       "rookie": 0
      }
@@ -366,7 +366,7 @@
      "teamPts": 104.0,
      "teamStarts": 8,
      "honors": {
-      "first": 0,
+      "first": 2,
       "second": 1,
       "rookie": 0
      }
@@ -393,7 +393,7 @@
      "teamStarts": 13,
      "honors": {
       "first": 0,
-      "second": 1,
+      "second": 2,
       "rookie": 0
      }
     }
@@ -2236,7 +2236,10 @@
       "rookie": false,
       "week": 10,
       "champ": false,
-      "champTeam": null
+      "champTeam": null,
+      "mvps": [
+       "2020"
+      ]
      },
      {
       "id": "14136",

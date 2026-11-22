@@ -25,7 +25,7 @@
       "2024"
      ],
      "honors": {
-      "first": 1,
+      "first": 2,
       "second": 0,
       "rookie": 0
      },
@@ -79,7 +79,7 @@
      "teamStarts": 13,
      "honors": {
       "first": 1,
-      "second": 1,
+      "second": 3,
       "rookie": 0
      }
     }
@@ -392,7 +392,7 @@
      "teamPts": 230.1,
      "teamStarts": 12,
      "honors": {
-      "first": 0,
+      "first": 1,
       "second": 1,
       "rookie": 0
      }

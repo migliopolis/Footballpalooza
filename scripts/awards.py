@@ -447,7 +447,7 @@ _PICKS = {}
 
 def rookie_pick(year, pid):
     """The FBP rookie-draft pick a player was taken with that year ('1.03'), 'Undrafted' when the draft is on file and
-    he isn't in it, or None when that draft isn't saved (2019 and 2020 were drafted off MFL)."""
+    he isn't in it, or None when there was no rookie draft (FBP started its rookie draft in 2021)."""
     if not _PICKS:
         ref = load(D('reference.json'), {}) or {}
         for y, rows in (ref.get('draft_classes') or {}).items():

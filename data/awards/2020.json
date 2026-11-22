@@ -1,11 +1,430 @@
 {
  "season": "2020",
- "ready": true,
- "final": true,
- "partial": true,
  "allFbp": {
-  "first": [],
-  "second": [],
+  "first": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "13116",
+     "name": "Patrick Mahomes",
+     "pos": "QB",
+     "nfl": "KCC",
+     "espn": "3139477",
+     "team": "0002",
+     "pts": 310.6,
+     "starts": 12,
+     "ppg": 25.9,
+     "salary": 21.0,
+     "contract": "3",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 310.6,
+     "teamStarts": 12,
+     "mvps": [
+      "2020"
+     ],
+     "honors": {
+      "first": 1,
+      "second": 0,
+      "rookie": 0
+     },
+     "mvp": true
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "13132",
+     "name": "Alvin Kamara",
+     "pos": "RB",
+     "nfl": "NOS",
+     "espn": "3054850",
+     "team": "0010",
+     "pts": 280.8,
+     "starts": 12,
+     "ppg": 23.4,
+     "salary": 13.0,
+     "contract": "4",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 280.8,
+     "teamStarts": 12,
+     "honors": {
+      "first": 1,
+      "second": 0,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "13128",
+     "name": "Dalvin Cook",
+     "pos": "RB",
+     "nfl": "MIN",
+     "espn": "3116593",
+     "team": "0001",
+     "pts": 275.4,
+     "starts": 11,
+     "ppg": 25.0,
+     "salary": 59.0,
+     "contract": "3",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 162.1,
+     "teamStarts": 6,
+     "honors": {
+      "first": 2,
+      "second": 0,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "12801",
+     "name": "Tyreek Hill",
+     "pos": "WR",
+     "nfl": "KCC",
+     "espn": "3116406",
+     "team": "0002",
+     "pts": 274.9,
+     "starts": 12,
+     "ppg": 22.9,
+     "salary": 31.0,
+     "contract": "4",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 274.9,
+     "teamStarts": 12,
+     "honors": {
+      "first": 1,
+      "second": 0,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "11675",
+     "name": "Davante Adams",
+     "pos": "WR",
+     "nfl": "GBP",
+     "espn": "16800",
+     "team": "0003",
+     "pts": 262.9,
+     "starts": 10,
+     "ppg": 26.3,
+     "salary": 54.0,
+     "contract": "5",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 262.9,
+     "teamStarts": 10,
+     "honors": {
+      "first": 1,
+      "second": 0,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "11244",
+     "name": "Travis Kelce",
+     "pos": "TE",
+     "nfl": "KCC",
+     "espn": "15847",
+     "team": "0011",
+     "pts": 239.6,
+     "starts": 12,
+     "ppg": 20.0,
+     "salary": 32.0,
+     "contract": "2",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 239.6,
+     "teamStarts": 12,
+     "honors": {
+      "first": 2,
+      "second": 0,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "14102",
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "nfl": "SEA",
+     "espn": "4047650",
+     "team": "0001",
+     "pts": 226.9,
+     "starts": 12,
+     "ppg": 18.9,
+     "salary": 6.0,
+     "contract": "2",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 226.9,
+     "teamStarts": 12,
+     "honors": {
+      "first": 1,
+      "second": 0,
+      "rookie": 1
+     }
+    }
+   },
+   {
+    "slot": "DEF",
+    "player": {
+     "id": "0510",
+     "name": "Pittsburgh Steelers",
+     "pos": "DEF",
+     "nfl": "PIT",
+     "espn": "",
+     "team": "0011",
+     "pts": 187.0,
+     "starts": 12,
+     "ppg": 15.6,
+     "salary": 4.0,
+     "contract": "1",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 187.0,
+     "teamStarts": 12,
+     "honors": {
+      "first": 1,
+      "second": 0,
+      "rookie": 0
+     }
+    }
+   }
+  ],
+  "second": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "14056",
+     "name": "Kyler Murray",
+     "pos": "QB",
+     "nfl": "ARI",
+     "espn": "3917315",
+     "team": "0009",
+     "pts": 307.9,
+     "starts": 12,
+     "ppg": 25.7,
+     "salary": 5.0,
+     "contract": "2",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 307.9,
+     "teamStarts": 12,
+     "honors": {
+      "first": 0,
+      "second": 1,
+      "rookie": 1
+     }
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "12626",
+     "name": "Derrick Henry",
+     "pos": "RB",
+     "nfl": "TEN",
+     "espn": "3043078",
+     "team": "0005",
+     "pts": 226.9,
+     "starts": 12,
+     "ppg": 18.9,
+     "salary": 25.0,
+     "contract": "4",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 226.9,
+     "teamStarts": 12,
+     "honors": {
+      "first": 0,
+      "second": 2,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "RB",
+    "player": {
+     "id": "14813",
+     "name": "James Robinson",
+     "pos": "RB",
+     "nfl": "JAC",
+     "espn": "4052042",
+     "team": "0009",
+     "pts": 212.4,
+     "starts": 11,
+     "ppg": 19.3,
+     "salary": 5.0,
+     "contract": "1",
+     "rookie": true,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 189.6,
+     "teamStarts": 10,
+     "honors": {
+      "first": 0,
+      "second": 1,
+      "rookie": 1
+     }
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "11222",
+     "name": "Keenan Allen",
+     "pos": "WR",
+     "nfl": "LAC",
+     "espn": "15818",
+     "team": "0004",
+     "pts": 222.3,
+     "starts": 12,
+     "ppg": 18.5,
+     "salary": 13.0,
+     "contract": "1",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 222.3,
+     "teamStarts": 12,
+     "honors": {
+      "first": 0,
+      "second": 1,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "WR",
+    "player": {
+     "id": "12186",
+     "name": "Stefon Diggs",
+     "pos": "WR",
+     "nfl": "BUF",
+     "espn": "2976212",
+     "team": "0012",
+     "pts": 217.7,
+     "starts": 12,
+     "ppg": 18.1,
+     "salary": 25.0,
+     "contract": "4",
+     "rookie": false,
+     "champ": true,
+     "champTeam": "0012",
+     "teamPts": 217.7,
+     "teamStarts": 12,
+     "honors": {
+      "first": 0,
+      "second": 1,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "TE",
+    "player": {
+     "id": "12263",
+     "name": "Darren Waller",
+     "pos": "TE",
+     "nfl": "LVR",
+     "espn": "2576925",
+     "team": "0010",
+     "pts": 191.2,
+     "starts": 12,
+     "ppg": 15.9,
+     "salary": 4.0,
+     "contract": "2",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 191.2,
+     "teamStarts": 12,
+     "honors": {
+      "first": 0,
+      "second": 2,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "11232",
+     "name": "DeAndre Hopkins",
+     "pos": "WR",
+     "nfl": "ARI",
+     "espn": "15795",
+     "team": "0001",
+     "pts": 214.9,
+     "starts": 12,
+     "ppg": 17.9,
+     "salary": 46.0,
+     "contract": "1",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 214.9,
+     "teamStarts": 12,
+     "honors": {
+      "first": 0,
+      "second": 2,
+      "rookie": 0
+     }
+    }
+   },
+   {
+    "slot": "DEF",
+    "player": {
+     "id": "0528",
+     "name": "Los Angeles Rams",
+     "pos": "DEF",
+     "nfl": "LAR",
+     "espn": "",
+     "team": "0004",
+     "pts": 156.0,
+     "starts": 11,
+     "ppg": 14.2,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 135.0,
+     "teamStarts": 9,
+     "honors": {
+      "first": 0,
+      "second": 1,
+      "rookie": 0
+     }
+    }
+   }
+  ],
   "rookie": [
    {
     "slot": "QB",
@@ -16,15 +435,19 @@
      "nfl": "LAC",
      "espn": "4038941",
      "team": "0011",
-     "pts": 239.4,
-     "allPts": 239.4,
-     "starts": null,
-     "ppg": 0,
+     "pts": 179.5,
+     "starts": 8,
+     "ppg": 22.4,
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
+     "allPts": 239.4,
      "status": "ROSTER",
      "pick": null,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 179.5,
+     "teamStarts": 8,
      "honors": {
       "first": 0,
       "second": 0,
@@ -41,18 +464,22 @@
      "nfl": "JAC",
      "espn": "4052042",
      "team": "0001",
-     "pts": 223.8,
-     "allPts": 223.8,
-     "starts": null,
-     "ppg": 0,
+     "pts": 212.4,
+     "starts": 11,
+     "ppg": 19.3,
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
+     "allPts": 223.8,
      "status": "INJURED_RESERVE",
      "pick": null,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 22.8,
+     "teamStarts": 1,
      "honors": {
       "first": 0,
-      "second": 0,
+      "second": 1,
       "rookie": 1
      }
     }
@@ -66,15 +493,19 @@
      "nfl": "WAS",
      "espn": "4360294",
      "team": "0004",
-     "pts": 183.2,
-     "allPts": 183.2,
-     "starts": null,
-     "ppg": 0,
+     "pts": 141.8,
+     "starts": 9,
+     "ppg": 15.8,
      "salary": 26.0,
      "contract": "1",
      "rookie": true,
+     "allPts": 183.2,
      "status": "ROSTER",
      "pick": null,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 90.4,
+     "teamStarts": 5,
      "honors": {
       "first": 0,
       "second": 0,
@@ -91,15 +522,19 @@
      "nfl": "MIN",
      "espn": "4262921",
      "team": "0005",
-     "pts": 209.1,
-     "allPts": 209.1,
-     "starts": null,
-     "ppg": 0,
+     "pts": 166.6,
+     "starts": 9,
+     "ppg": 18.5,
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
+     "allPts": 209.1,
      "status": "ROSTER",
      "pick": null,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 166.6,
+     "teamStarts": 9,
      "honors": {
       "first": 0,
       "second": 0,
@@ -116,15 +551,19 @@
      "nfl": "PIT",
      "espn": "4046692",
      "team": "0007",
-     "pts": 172.1,
-     "allPts": 172.1,
-     "starts": null,
-     "ppg": 0,
+     "pts": 74.5,
+     "starts": 6,
+     "ppg": 12.4,
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
+     "allPts": 172.1,
      "status": "ROSTER",
      "pick": null,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 74.5,
+     "teamStarts": 6,
      "honors": {
       "first": 0,
       "second": 0,
@@ -141,15 +580,19 @@
      "nfl": "CHI",
      "espn": "4258595",
      "team": "0007",
-     "pts": 38.1,
-     "allPts": 38.1,
-     "starts": null,
+     "pts": 0.0,
+     "starts": 0,
      "ppg": 0,
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
+     "allPts": 38.1,
      "status": "ROSTER",
      "pick": null,
+     "champ": false,
+     "champTeam": null,
+     "teamPts": 0,
+     "teamStarts": 0,
      "honors": {
       "first": 0,
       "second": 0,
@@ -166,15 +609,19 @@
      "nfl": "DAL",
      "espn": "4241389",
      "team": "0012",
-     "pts": 157.1,
-     "allPts": 157.1,
-     "starts": null,
-     "ppg": 0,
+     "pts": 106.5,
+     "starts": 8,
+     "ppg": 13.3,
      "salary": 18.0,
      "contract": "1",
      "rookie": true,
+     "allPts": 157.1,
      "status": "ROSTER",
      "pick": null,
+     "champ": true,
+     "champTeam": "0012",
+     "teamPts": 106.5,
+     "teamStarts": 8,
      "honors": {
       "first": 0,
       "second": 0,
@@ -184,7 +631,187 @@
    }
   ]
  },
+ "ready": true,
+ "throughWeek": 13,
  "awards": [
+  {
+   "key": "mvp",
+   "title": "MVP",
+   "why": "Most points in an FBP starting lineup",
+   "list": [
+    {
+     "id": "13116",
+     "name": "Patrick Mahomes",
+     "pos": "QB",
+     "nfl": "KCC",
+     "espn": "3139477",
+     "team": "0002",
+     "pts": 310.6,
+     "starts": 12,
+     "ppg": 25.9,
+     "salary": 21.0,
+     "contract": "3",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null,
+     "mvp": true,
+     "mvps": [
+      "2020"
+     ]
+    },
+    {
+     "id": "14056",
+     "name": "Kyler Murray",
+     "pos": "QB",
+     "nfl": "ARI",
+     "espn": "3917315",
+     "team": "0009",
+     "pts": 307.9,
+     "starts": 12,
+     "ppg": 25.7,
+     "salary": 5.0,
+     "contract": "2",
+     "rookie": false,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "7836",
+     "name": "Aaron Rodgers",
+     "pos": "QB",
+     "nfl": "GBP",
+     "espn": "8439",
+     "team": "0012",
+     "pts": 282.8,
+     "starts": 12,
+     "ppg": 23.6,
+     "salary": 16.0,
+     "contract": "2",
+     "rookie": false,
+     "champ": true,
+     "champTeam": "0012"
+    }
+   ]
+  },
+  {
+   "key": "value",
+   "title": "Best Value",
+   "why": "Most starter points per salary dollar (at least 7 starts; no defenses)",
+   "list": [
+    {
+     "id": "13589",
+     "name": "Josh Allen",
+     "pos": "QB",
+     "nfl": "BUF",
+     "espn": "3918298",
+     "team": "0001",
+     "pts": 276.1,
+     "starts": 11,
+     "ppg": 25.1,
+     "salary": 3.0,
+     "contract": "2",
+     "rookie": false,
+     "perDollar": 92.0,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "11761",
+     "name": "Jerick McKinnon",
+     "pos": "RB",
+     "nfl": "SFO",
+     "espn": "16782",
+     "team": "0006",
+     "pts": 81.9,
+     "starts": 8,
+     "ppg": 10.2,
+     "salary": 1.0,
+     "contract": "1",
+     "rookie": false,
+     "perDollar": 81.9,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "7401",
+     "name": "Ben Roethlisberger",
+     "pos": "QB",
+     "nfl": "PIT",
+     "espn": "5536",
+     "team": "0010",
+     "pts": 133.8,
+     "starts": 7,
+     "ppg": 19.1,
+     "salary": 2.0,
+     "contract": "1",
+     "rookie": false,
+     "perDollar": 66.9,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
+  {
+   "key": "bench",
+   "title": "Left on the Bench",
+   "why": "Most points scored while sitting on an FBP bench",
+   "list": [
+    {
+     "id": "12610",
+     "name": "Carson Wentz",
+     "pos": "QB",
+     "nfl": "MIN",
+     "espn": "2573079",
+     "team": "0001",
+     "pts": 175.4,
+     "starts": 2,
+     "ppg": 11.5,
+     "salary": null,
+     "contract": "",
+     "rookie": false,
+     "benchWeeks": 11,
+     "started": 2,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "14777",
+     "name": "Joe Burrow",
+     "pos": "QB",
+     "nfl": "CIN",
+     "espn": "3915511",
+     "team": "0008",
+     "pts": 162.3,
+     "starts": 1,
+     "ppg": 11.3,
+     "salary": 2.0,
+     "contract": "1",
+     "rookie": true,
+     "benchWeeks": 10,
+     "started": 1,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "9431",
+     "name": "Matthew Stafford",
+     "pos": "QB",
+     "nfl": "LAR",
+     "espn": "12483",
+     "team": "0003",
+     "pts": 126.2,
+     "starts": 3,
+     "ppg": 13.0,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": false,
+     "benchWeeks": 8,
+     "started": 3,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
   {
    "key": "rookie",
    "title": "Rookie of the Year",
@@ -198,14 +825,14 @@
      "espn": "4038941",
      "team": "0011",
      "pts": 239.4,
-     "allPts": 239.4,
-     "starts": null,
-     "ppg": 0,
+     "starts": 8,
+     "ppg": 22.4,
      "salary": 0.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER",
-     "pick": null
+     "starterPts": 179.5,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "14813",
@@ -215,14 +842,14 @@
      "espn": "4052042",
      "team": "0001",
      "pts": 223.8,
-     "allPts": 223.8,
-     "starts": null,
-     "ppg": 0,
+     "starts": 11,
+     "ppg": 19.3,
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
-     "status": "INJURED_RESERVE",
-     "pick": null
+     "starterPts": 212.4,
+     "champ": false,
+     "champTeam": null
     },
     {
      "id": "14836",
@@ -232,14 +859,593 @@
      "espn": "4262921",
      "team": "0005",
      "pts": 209.1,
-     "allPts": 209.1,
-     "starts": null,
-     "ppg": 0,
+     "starts": 9,
+     "ppg": 18.5,
      "salary": 5.0,
      "contract": "1",
      "rookie": true,
-     "status": "ROSTER",
-     "pick": null
+     "starterPts": 166.6,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
+  {
+   "key": "waiver",
+   "title": "Waiver Claim of the Year",
+   "why": "Most starter points for the team that picked him up (no defenses)",
+   "list": [
+    {
+     "id": "14779",
+     "name": "Justin Herbert",
+     "pos": "QB",
+     "nfl": "LAC",
+     "espn": "4038941",
+     "team": "0011",
+     "pts": 179.5,
+     "starts": 8,
+     "ppg": 22.4,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": true,
+     "bid": 0.0,
+     "how": "FAAB",
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "12164",
+     "name": "Mike Davis",
+     "pos": "RB",
+     "nfl": "CAR",
+     "espn": "3025433",
+     "team": "0006",
+     "pts": 139.1,
+     "starts": 9,
+     "ppg": 15.5,
+     "salary": 33.0,
+     "contract": "1",
+     "rookie": false,
+     "bid": 33.0,
+     "how": "FAAB",
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "14841",
+     "name": "Chase Claypool",
+     "pos": "WR",
+     "nfl": "PIT",
+     "espn": "4046692",
+     "team": "0007",
+     "pts": 74.5,
+     "starts": 6,
+     "ppg": 12.4,
+     "salary": 0.0,
+     "contract": "1",
+     "rookie": true,
+     "bid": 0.0,
+     "how": "FAAB",
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
+  {
+   "key": "trade",
+   "title": "Trade of the Year",
+   "why": "Biggest edge in starter points from what each side received (a pick used in that season's draft counts as the player taken)",
+   "trade": {
+    "winner": {
+     "team": "0002",
+     "players": [
+      {
+       "id": "13116",
+       "name": "Patrick Mahomes",
+       "pos": "QB",
+       "nfl": "KCC",
+       "espn": "3139477",
+       "team": "0002",
+       "pts": 310.6,
+       "starts": 12,
+       "ppg": 25.9,
+       "salary": 21.0,
+       "contract": "3",
+       "rookie": false,
+       "champ": false,
+       "champTeam": null,
+       "mvps": [
+        "2020"
+       ]
+      },
+      {
+       "id": "12676",
+       "name": "Hunter Henry",
+       "pos": "TE",
+       "nfl": "LAC",
+       "espn": "3046439",
+       "team": "0002",
+       "pts": 12.3,
+       "starts": 8,
+       "ppg": 10.9,
+       "salary": 3.0,
+       "contract": "1",
+       "rookie": false,
+       "champ": false,
+       "champTeam": null
+      }
+     ],
+     "picks": [],
+     "drafted": {},
+     "pts": 322.9,
+     "became": {},
+     "later": {
+      "years": [
+       "2020",
+       "2021",
+       "2022",
+       "2023",
+       "2024",
+       "2025",
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [
+       {
+        "id": "13116",
+        "name": "Patrick Mahomes",
+        "pos": "QB",
+        "via": null,
+        "pts": {
+         "2020": 310.6,
+         "2021": 262.6,
+         "2022": 320.4,
+         "2023": 235.7,
+         "2024": 156.5
+        }
+       },
+       {
+        "id": "12676",
+        "name": "Hunter Henry",
+        "pos": "TE",
+        "via": null,
+        "pts": {
+         "2020": 12.3
+        }
+       }
+      ],
+      "total": 1298.1
+     }
+    },
+    "loser": {
+     "team": "0003",
+     "players": [
+      {
+       "id": "9831",
+       "name": "Golden Tate",
+       "pos": "WR",
+       "nfl": "NYG",
+       "espn": "13217",
+       "team": "0003",
+       "pts": 0.0,
+       "starts": 2,
+       "ppg": 3.8,
+       "salary": 5.0,
+       "contract": "1",
+       "rookie": false,
+       "champ": false,
+       "champTeam": null
+      }
+     ],
+     "picks": [],
+     "drafted": {},
+     "pts": 0.0,
+     "became": {},
+     "later": {
+      "years": [
+       "2020",
+       "2021",
+       "2022",
+       "2023",
+       "2024",
+       "2025",
+       "2026"
+      ],
+      "current": "2026",
+      "rows": [
+       {
+        "id": "9831",
+        "name": "Golden Tate",
+        "pos": "WR",
+        "via": null,
+        "pts": {}
+       }
+      ],
+      "total": 0
+     }
+    },
+    "margin": 322.9,
+    "ts": 1599339059
+   },
+   "more": [
+    {
+     "winner": {
+      "team": "0008",
+      "players": [
+       {
+        "id": "10703",
+        "name": "Russell Wilson",
+        "pos": "QB",
+        "nfl": "SEA",
+        "espn": "14881",
+        "team": "0008",
+        "pts": 222.3,
+        "starts": 10,
+        "ppg": 22.2,
+        "salary": 8.0,
+        "contract": "2",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       },
+       {
+        "id": "13680",
+        "name": "Hayden Hurst",
+        "pos": "TE",
+        "nfl": "ATL",
+        "espn": "3924365",
+        "team": "0008",
+        "pts": 23.5,
+        "starts": 3,
+        "ppg": 7.8,
+        "salary": 4.0,
+        "contract": "1",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 245.8,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "10703",
+         "name": "Russell Wilson",
+         "pos": "QB",
+         "via": null,
+         "pts": {
+          "2020": 222.3
+         }
+        },
+        {
+         "id": "13680",
+         "name": "Hayden Hurst",
+         "pos": "TE",
+         "via": null,
+         "pts": {
+          "2020": 23.5
+         }
+        }
+       ],
+       "total": 245.8
+      }
+     },
+     "loser": {
+      "team": "0002",
+      "players": [
+       {
+        "id": "14137",
+        "name": "Noah Fant",
+        "pos": "TE",
+        "nfl": "DEN",
+        "espn": "4036131",
+        "team": "0002",
+        "pts": 51.6,
+        "starts": 6,
+        "ppg": 8.6,
+        "salary": 6.0,
+        "contract": "2",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 51.6,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14137",
+         "name": "Noah Fant",
+         "pos": "TE",
+         "via": null,
+         "pts": {
+          "2020": 51.6
+         }
+        }
+       ],
+       "total": 51.6
+      }
+     },
+     "margin": 194.2,
+     "ts": 1600887193
+    },
+    {
+     "winner": {
+      "team": "0002",
+      "players": [
+       {
+        "id": "14073",
+        "name": "Josh Jacobs",
+        "pos": "RB",
+        "nfl": "LVR",
+        "espn": "4047365",
+        "team": "0002",
+        "pts": 172.7,
+        "starts": 11,
+        "ppg": 15.7,
+        "salary": 58.0,
+        "contract": "2",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 172.7,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "14073",
+         "name": "Josh Jacobs",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2020": 172.7
+         }
+        }
+       ],
+       "total": 172.7
+      }
+     },
+     "loser": {
+      "team": "0003",
+      "players": [],
+      "picks": [],
+      "drafted": {},
+      "pts": 0,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [],
+       "total": 0
+      }
+     },
+     "margin": 172.7,
+     "ts": 1599343334
+    },
+    {
+     "winner": {
+      "team": "0001",
+      "players": [
+       {
+        "id": "12676",
+        "name": "Hunter Henry",
+        "pos": "TE",
+        "nfl": "LAC",
+        "espn": "3046439",
+        "team": "0001",
+        "pts": 74.6,
+        "starts": 8,
+        "ppg": 10.9,
+        "salary": 3.0,
+        "contract": "1",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 74.6,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "12676",
+         "name": "Hunter Henry",
+         "pos": "TE",
+         "via": null,
+         "pts": {
+          "2020": 74.6
+         }
+        }
+       ],
+       "total": 74.6
+      }
+     },
+     "loser": {
+      "team": "0002",
+      "players": [
+       {
+        "id": "12634",
+        "name": "12634",
+        "pos": "",
+        "nfl": "",
+        "espn": "",
+        "team": "0002",
+        "pts": 0.0,
+        "starts": 0,
+        "ppg": 0,
+        "salary": null,
+        "contract": "",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 0.0,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "12634",
+         "name": "12634",
+         "pos": "",
+         "via": null,
+         "pts": {
+          "2020": 0
+         }
+        }
+       ],
+       "total": 0
+      }
+     },
+     "margin": 74.6,
+     "ts": 1600617073
+    },
+    {
+     "winner": {
+      "team": "0010",
+      "players": [
+       {
+        "id": "9099",
+        "name": "Matt Ryan",
+        "pos": "QB",
+        "nfl": "ATL",
+        "espn": "11237",
+        "team": "0010",
+        "pts": 59.5,
+        "starts": 5,
+        "ppg": 15.4,
+        "salary": 2.0,
+        "contract": "1",
+        "rookie": false,
+        "champ": false,
+        "champTeam": null
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 59.5,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "9099",
+         "name": "Matt Ryan",
+         "pos": "QB",
+         "via": null,
+         "pts": {
+          "2020": 59.5
+         }
+        }
+       ],
+       "total": 59.5
+      }
+     },
+     "loser": {
+      "team": "0007",
+      "players": [],
+      "picks": [],
+      "drafted": {},
+      "pts": 0,
+      "became": {},
+      "later": {
+       "years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [],
+       "total": 0
+      }
+     },
+     "margin": 59.5,
+     "ts": 1603996862
     }
    ]
   },
@@ -264,6 +1470,926 @@
      "sub": ""
     }
    ]
+  },
+  {
+   "key": "lucky",
+   "title": "Luckiest Team",
+   "why": "Record furthest above what its all-play record suggests",
+   "teams": [
+    {
+     "team": "0007",
+     "stat": "+16% win",
+     "sub": "6-7 record, should be about 4-9 · 56-131 all-play"
+    },
+    {
+     "team": "0003",
+     "stat": "+16% win",
+     "sub": "11-2 record, should be about 9-4 · 129-58 all-play"
+    },
+    {
+     "team": "0011",
+     "stat": "+9% win",
+     "sub": "8-5 record, should be about 7-6 · 98-89 all-play"
+    }
+   ]
+  },
+  {
+   "key": "unlucky",
+   "title": "Unluckiest Team",
+   "why": "Record furthest below its all-play record",
+   "teams": [
+    {
+     "team": "0001",
+     "stat": "-14% win",
+     "sub": "8-5 record, should be about 10-3 · 142-45 all-play"
+    },
+    {
+     "team": "0005",
+     "stat": "-12% win",
+     "sub": "4-9 record, should be about 6-7 · 80-107 all-play"
+    },
+    {
+     "team": "0004",
+     "stat": "-9% win",
+     "sub": "5-8 record, should be about 6-7 · 89-98 all-play"
+    }
+   ]
+  },
+  {
+   "key": "contract",
+   "title": "Worst Contract",
+   "why": "Fewest starter points per dollar among $15+ salaries (at least 7 starts)",
+   "list": [
+    {
+     "id": "10271",
+     "name": "Julio Jones",
+     "pos": "WR",
+     "nfl": "ATL",
+     "espn": "13982",
+     "team": "0010",
+     "pts": 146.1,
+     "starts": 9,
+     "ppg": 16.2,
+     "salary": 59.0,
+     "contract": "2",
+     "rookie": false,
+     "perDollar": 2.5,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "14803",
+     "name": "Clyde Edwards-Helaire",
+     "pos": "RB",
+     "nfl": "KCC",
+     "espn": "4242214",
+     "team": "0010",
+     "pts": 152.6,
+     "starts": 12,
+     "ppg": 12.7,
+     "salary": 60.0,
+     "contract": "1",
+     "rookie": true,
+     "perDollar": 2.5,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "14802",
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "nfl": "IND",
+     "espn": "4242335",
+     "team": "0008",
+     "pts": 109.0,
+     "starts": 8,
+     "ppg": 13.6,
+     "salary": 41.0,
+     "contract": "1",
+     "rookie": true,
+     "perDollar": 2.7,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
+  },
+  {
+   "key": "week",
+   "title": "Player of the Week",
+   "why": "Top starter score each week",
+   "list": [
+    {
+     "id": "12263",
+     "name": "Darren Waller",
+     "pos": "TE",
+     "nfl": "LVR",
+     "espn": "2576925",
+     "team": "0010",
+     "pts": 45.0,
+     "starts": 12,
+     "ppg": 15.9,
+     "salary": 4.0,
+     "contract": "2",
+     "rookie": false,
+     "week": 13,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "11675",
+     "name": "Davante Adams",
+     "pos": "WR",
+     "nfl": "GBP",
+     "espn": "16800",
+     "team": "0003",
+     "pts": 34.1,
+     "starts": 10,
+     "ppg": 26.3,
+     "salary": 54.0,
+     "contract": "5",
+     "rookie": false,
+     "week": 13,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "11644",
+     "name": "Derek Carr",
+     "pos": "QB",
+     "nfl": "FA",
+     "espn": "16757",
+     "team": "0010",
+     "pts": 31.7,
+     "starts": 3,
+     "ppg": 21.5,
+     "salary": null,
+     "contract": "",
+     "rookie": false,
+     "week": 13,
+     "champ": false,
+     "champTeam": null
+    }
+   ],
+   "weeks": {
+    "1": [
+     {
+      "id": "11675",
+      "name": "Davante Adams",
+      "pos": "WR",
+      "nfl": "GBP",
+      "espn": "16800",
+      "team": "0003",
+      "pts": 41.6,
+      "starts": 10,
+      "ppg": 26.3,
+      "salary": 54.0,
+      "contract": "5",
+      "rookie": false,
+      "week": 1,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14073",
+      "name": "Josh Jacobs",
+      "pos": "RB",
+      "nfl": "LVR",
+      "espn": "4047365",
+      "team": "0002",
+      "pts": 35.9,
+      "starts": 11,
+      "ppg": 15.7,
+      "salary": 58.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 1,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13629",
+      "name": "Calvin Ridley",
+      "pos": "WR",
+      "nfl": "ATL",
+      "espn": "3925357",
+      "team": "0007",
+      "pts": 33.9,
+      "starts": 11,
+      "ppg": 17.7,
+      "salary": 18.0,
+      "contract": "1",
+      "rookie": false,
+      "week": 1,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "2": [
+     {
+      "id": "13319",
+      "name": "Aaron Jones Sr.",
+      "pos": "RB",
+      "nfl": "GBP",
+      "espn": "3042519",
+      "team": "0001",
+      "pts": 45.6,
+      "starts": 10,
+      "ppg": 19.3,
+      "salary": 20.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 2,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "12620",
+      "name": "Dak Prescott",
+      "pos": "QB",
+      "nfl": "DAL",
+      "espn": "2577417",
+      "team": "0003",
+      "pts": 39.8,
+      "starts": 5,
+      "ppg": 27.1,
+      "salary": null,
+      "contract": "",
+      "rookie": false,
+      "week": 2,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13132",
+      "name": "Alvin Kamara",
+      "pos": "RB",
+      "nfl": "NOS",
+      "espn": "3054850",
+      "team": "0010",
+      "pts": 38.4,
+      "starts": 12,
+      "ppg": 23.4,
+      "salary": 13.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 2,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "3": [
+     {
+      "id": "13132",
+      "name": "Alvin Kamara",
+      "pos": "RB",
+      "nfl": "NOS",
+      "espn": "3054850",
+      "team": "0010",
+      "pts": 44.7,
+      "starts": 12,
+      "ppg": 23.4,
+      "salary": 13.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 3,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13116",
+      "name": "Patrick Mahomes",
+      "pos": "QB",
+      "nfl": "KCC",
+      "espn": "3139477",
+      "team": "0002",
+      "pts": 40.0,
+      "starts": 12,
+      "ppg": 25.9,
+      "salary": 21.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 3,
+      "champ": false,
+      "champTeam": null,
+      "mvps": [
+       "2020"
+      ]
+     },
+     {
+      "id": "12187",
+      "name": "Tyler Lockett",
+      "pos": "WR",
+      "nfl": "SEA",
+      "espn": "2577327",
+      "team": "0008",
+      "pts": 37.0,
+      "starts": 12,
+      "ppg": 17.3,
+      "salary": 12.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 3,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "4": [
+     {
+      "id": "13131",
+      "name": "Joe Mixon",
+      "pos": "RB",
+      "nfl": "CIN",
+      "espn": "3116385",
+      "team": "0009",
+      "pts": 42.1,
+      "starts": 5,
+      "ppg": 16.8,
+      "salary": 44.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 4,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13299",
+      "name": "George Kittle",
+      "pos": "TE",
+      "nfl": "SFO",
+      "espn": "3040151",
+      "team": "0001",
+      "pts": 40.1,
+      "starts": 6,
+      "ppg": 16.4,
+      "salary": 9.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 4,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "11679",
+      "name": "Odell Beckham Jr.",
+      "pos": "WR",
+      "nfl": "MIN",
+      "espn": "16733",
+      "team": "0004",
+      "pts": 38.4,
+      "starts": 7,
+      "ppg": 12.4,
+      "salary": null,
+      "contract": "",
+      "rookie": false,
+      "week": 4,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "5": [
+     {
+      "id": "12164",
+      "name": "Mike Davis",
+      "pos": "RB",
+      "nfl": "CAR",
+      "espn": "3025433",
+      "team": "0006",
+      "pts": 29.9,
+      "starts": 9,
+      "ppg": 15.5,
+      "salary": 33.0,
+      "contract": "1",
+      "rookie": false,
+      "week": 5,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13116",
+      "name": "Patrick Mahomes",
+      "pos": "QB",
+      "nfl": "KCC",
+      "espn": "3139477",
+      "team": "0002",
+      "pts": 29.7,
+      "starts": 12,
+      "ppg": 25.9,
+      "salary": 21.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 5,
+      "champ": false,
+      "champTeam": null,
+      "mvps": [
+       "2020"
+      ]
+     },
+     {
+      "id": "11938",
+      "name": "Adam Thielen",
+      "pos": "WR",
+      "nfl": "MIN",
+      "espn": "16460",
+      "team": "0011",
+      "pts": 29.3,
+      "starts": 10,
+      "ppg": 19.2,
+      "salary": 18.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 5,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "6": [
+     {
+      "id": "12626",
+      "name": "Derrick Henry",
+      "pos": "RB",
+      "nfl": "TEN",
+      "espn": "3043078",
+      "team": "0005",
+      "pts": 40.4,
+      "starts": 12,
+      "ppg": 18.9,
+      "salary": 25.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 6,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14836",
+      "name": "Justin Jefferson",
+      "pos": "WR",
+      "nfl": "MIN",
+      "espn": "4262921",
+      "team": "0005",
+      "pts": 39.6,
+      "starts": 9,
+      "ppg": 18.5,
+      "salary": 5.0,
+      "contract": "1",
+      "rookie": true,
+      "week": 6,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "10271",
+      "name": "Julio Jones",
+      "pos": "WR",
+      "nfl": "ATL",
+      "espn": "13982",
+      "team": "0010",
+      "pts": 33.7,
+      "starts": 9,
+      "ppg": 16.2,
+      "salary": 59.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 6,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "7": [
+     {
+      "id": "12187",
+      "name": "Tyler Lockett",
+      "pos": "WR",
+      "nfl": "SEA",
+      "espn": "2577327",
+      "team": "0008",
+      "pts": 53.0,
+      "starts": 12,
+      "ppg": 17.3,
+      "salary": 12.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 7,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "11675",
+      "name": "Davante Adams",
+      "pos": "WR",
+      "nfl": "GBP",
+      "espn": "16800",
+      "team": "0003",
+      "pts": 44.6,
+      "starts": 10,
+      "ppg": 26.3,
+      "salary": 54.0,
+      "contract": "5",
+      "rookie": false,
+      "week": 7,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14779",
+      "name": "Justin Herbert",
+      "pos": "QB",
+      "nfl": "LAC",
+      "espn": "4038941",
+      "team": "0011",
+      "pts": 38.5,
+      "starts": 8,
+      "ppg": 22.4,
+      "salary": 0.0,
+      "contract": "1",
+      "rookie": true,
+      "week": 7,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "8": [
+     {
+      "id": "13128",
+      "name": "Dalvin Cook",
+      "pos": "RB",
+      "nfl": "MIN",
+      "espn": "3116593",
+      "team": "0001",
+      "pts": 48.6,
+      "starts": 11,
+      "ppg": 25.0,
+      "salary": 59.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 8,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14102",
+      "name": "DK Metcalf",
+      "pos": "WR",
+      "nfl": "SEA",
+      "espn": "4047650",
+      "team": "0001",
+      "pts": 40.1,
+      "starts": 12,
+      "ppg": 18.9,
+      "salary": 6.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 8,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13116",
+      "name": "Patrick Mahomes",
+      "pos": "QB",
+      "nfl": "KCC",
+      "espn": "3139477",
+      "team": "0002",
+      "pts": 36.6,
+      "starts": 12,
+      "ppg": 25.9,
+      "salary": 21.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 8,
+      "champ": false,
+      "champTeam": null,
+      "mvps": [
+       "2020"
+      ]
+     }
+    ],
+    "9": [
+     {
+      "id": "13128",
+      "name": "Dalvin Cook",
+      "pos": "RB",
+      "nfl": "MIN",
+      "espn": "3116593",
+      "team": "0001",
+      "pts": 39.2,
+      "starts": 11,
+      "ppg": 25.0,
+      "salary": 59.0,
+      "contract": "3",
+      "rookie": false,
+      "week": 9,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14056",
+      "name": "Kyler Murray",
+      "pos": "QB",
+      "nfl": "ARI",
+      "espn": "3917315",
+      "team": "0009",
+      "pts": 37.9,
+      "starts": 12,
+      "ppg": 25.7,
+      "salary": 5.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 9,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13589",
+      "name": "Josh Allen",
+      "pos": "QB",
+      "nfl": "BUF",
+      "espn": "3918298",
+      "team": "0001",
+      "pts": 36.0,
+      "starts": 11,
+      "ppg": 25.1,
+      "salary": 3.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 9,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "10": [
+     {
+      "id": "13132",
+      "name": "Alvin Kamara",
+      "pos": "RB",
+      "nfl": "NOS",
+      "espn": "3054850",
+      "team": "0010",
+      "pts": 34.8,
+      "starts": 12,
+      "ppg": 23.4,
+      "salary": 13.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 10,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14056",
+      "name": "Kyler Murray",
+      "pos": "QB",
+      "nfl": "ARI",
+      "espn": "3917315",
+      "team": "0009",
+      "pts": 29.9,
+      "starts": 12,
+      "ppg": 25.7,
+      "salary": 5.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 10,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14073",
+      "name": "Josh Jacobs",
+      "pos": "RB",
+      "nfl": "LVR",
+      "espn": "4047365",
+      "team": "0002",
+      "pts": 29.6,
+      "starts": 11,
+      "ppg": 15.7,
+      "salary": 58.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 10,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "11": [
+     {
+      "id": "11222",
+      "name": "Keenan Allen",
+      "pos": "WR",
+      "nfl": "LAC",
+      "espn": "15818",
+      "team": "0004",
+      "pts": 34.5,
+      "starts": 12,
+      "ppg": 18.5,
+      "salary": 13.0,
+      "contract": "1",
+      "rookie": false,
+      "week": 11,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "11938",
+      "name": "Adam Thielen",
+      "pos": "WR",
+      "nfl": "MIN",
+      "espn": "16460",
+      "team": "0011",
+      "pts": 32.3,
+      "starts": 10,
+      "ppg": 19.2,
+      "salary": 18.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 11,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "13113",
+      "name": "Deshaun Watson",
+      "pos": "QB",
+      "nfl": "HOU",
+      "espn": "3122840",
+      "team": "0005",
+      "pts": 31.4,
+      "starts": 12,
+      "ppg": 23.1,
+      "salary": 11.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 11,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "12": [
+     {
+      "id": "12801",
+      "name": "Tyreek Hill",
+      "pos": "WR",
+      "nfl": "KCC",
+      "espn": "3116406",
+      "team": "0002",
+      "pts": 57.9,
+      "starts": 12,
+      "ppg": 22.9,
+      "salary": 31.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 12,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "12626",
+      "name": "Derrick Henry",
+      "pos": "RB",
+      "nfl": "TEN",
+      "espn": "3043078",
+      "team": "0005",
+      "pts": 38.5,
+      "starts": 12,
+      "ppg": 18.9,
+      "salary": 25.0,
+      "contract": "4",
+      "rookie": false,
+      "week": 12,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "14852",
+      "name": "Antonio Gibson",
+      "pos": "RB",
+      "nfl": "WAS",
+      "espn": "4360294",
+      "team": "0004",
+      "pts": 36.6,
+      "starts": 9,
+      "ppg": 15.8,
+      "salary": 26.0,
+      "contract": "1",
+      "rookie": true,
+      "week": 12,
+      "champ": false,
+      "champTeam": null
+     }
+    ],
+    "13": [
+     {
+      "id": "12263",
+      "name": "Darren Waller",
+      "pos": "TE",
+      "nfl": "LVR",
+      "espn": "2576925",
+      "team": "0010",
+      "pts": 45.0,
+      "starts": 12,
+      "ppg": 15.9,
+      "salary": 4.0,
+      "contract": "2",
+      "rookie": false,
+      "week": 13,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "11675",
+      "name": "Davante Adams",
+      "pos": "WR",
+      "nfl": "GBP",
+      "espn": "16800",
+      "team": "0003",
+      "pts": 34.1,
+      "starts": 10,
+      "ppg": 26.3,
+      "salary": 54.0,
+      "contract": "5",
+      "rookie": false,
+      "week": 13,
+      "champ": false,
+      "champTeam": null
+     },
+     {
+      "id": "11644",
+      "name": "Derek Carr",
+      "pos": "QB",
+      "nfl": "FA",
+      "espn": "16757",
+      "team": "0010",
+      "pts": 31.7,
+      "starts": 3,
+      "ppg": 21.5,
+      "salary": null,
+      "contract": "",
+      "rookie": false,
+      "week": 13,
+      "champ": false,
+      "champTeam": null
+     }
+    ]
+   },
+   "week": 13
+  },
+  {
+   "key": "high",
+   "title": "Season-High Game",
+   "why": "Best single-week starter score of the season",
+   "list": [
+    {
+     "id": "12801",
+     "name": "Tyreek Hill",
+     "pos": "WR",
+     "nfl": "KCC",
+     "espn": "3116406",
+     "team": "0002",
+     "pts": 57.9,
+     "starts": 12,
+     "ppg": 22.9,
+     "salary": 31.0,
+     "contract": "4",
+     "rookie": false,
+     "week": 12,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "12187",
+     "name": "Tyler Lockett",
+     "pos": "WR",
+     "nfl": "SEA",
+     "espn": "2577327",
+     "team": "0008",
+     "pts": 53.0,
+     "starts": 12,
+     "ppg": 17.3,
+     "salary": 12.0,
+     "contract": "3",
+     "rookie": false,
+     "week": 7,
+     "champ": false,
+     "champTeam": null
+    },
+    {
+     "id": "13128",
+     "name": "Dalvin Cook",
+     "pos": "RB",
+     "nfl": "MIN",
+     "espn": "3116593",
+     "team": "0001",
+     "pts": 48.6,
+     "starts": 11,
+     "ppg": 25.0,
+     "salary": 59.0,
+     "contract": "3",
+     "rookie": false,
+     "week": 8,
+     "champ": false,
+     "champTeam": null
+    }
+   ]
   }
- ]
+ ],
+ "final": true
 }

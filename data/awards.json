@@ -75,10 +75,11 @@
       "since": 9
      },
      "mvps": [
+      "2019",
       "2025"
      ],
      "honors": {
-      "first": 3,
+      "first": 4,
       "second": 1,
       "rookie": 0
      },
@@ -712,7 +713,10 @@
      "salary": 2.0,
      "contract": "1/3",
      "rookie": false,
-     "perDollar": 88.7
+     "perDollar": 88.7,
+     "mvps": [
+      "2020"
+     ]
     },
     {
      "id": "16213",
@@ -1072,6 +1076,7 @@
         "contract": "1/3",
         "rookie": false,
         "mvps": [
+         "2019",
          "2025"
         ]
        }
@@ -1442,6 +1447,7 @@
      "rookie": false,
      "week": 10,
      "mvps": [
+      "2019",
       "2025"
      ]
     },
@@ -1473,7 +1479,10 @@
      "salary": 2.0,
      "contract": "1/3",
      "rookie": false,
-     "week": 10
+     "week": 10,
+     "mvps": [
+      "2020"
+     ]
     }
    ],
    "weeks": {
@@ -1728,6 +1737,7 @@
       "rookie": false,
       "week": 6,
       "mvps": [
+       "2019",
        "2025"
       ]
      },
@@ -1919,6 +1929,7 @@
       "rookie": false,
       "week": 10,
       "mvps": [
+       "2019",
        "2025"
       ]
      },
@@ -1950,7 +1961,10 @@
       "salary": 2.0,
       "contract": "1/3",
       "rookie": false,
-      "week": 10
+      "week": 10,
+      "mvps": [
+       "2020"
+      ]
      }
     ]
    },
@@ -1976,6 +1990,7 @@
      "rookie": false,
      "week": 10,
      "mvps": [
+      "2019",
       "2025"
      ]
     },
@@ -2012,7 +2027,7 @@
    ]
   }
  ],
- "generated": "2026-11-21T22:20:15+00:00",
+ "generated": "2026-11-22T01:51:23+00:00",
  "basis": {
   "throughWeek": 9,
   "teams": [

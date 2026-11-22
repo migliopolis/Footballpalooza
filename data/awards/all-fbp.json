@@ -9,6 +9,2468 @@
   "2025"
  ],
  "franchises": {
+  "0007": [
+   {
+    "id": "12801",
+    "name": "Tyreek Hill",
+    "pos": "WR",
+    "nfl": "MIA",
+    "espn": "3116406",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 1,
+      "pts": 291.0,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2023",
+      "tier": 1,
+      "pts": 322.7,
+      "starts": 13,
+      "champ": true,
+      "mvp": true
+     }
+    ],
+    "first": 2,
+    "second": 0,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 1,
+    "pts": 613.7,
+    "starts": 26,
+    "ppg": 23.6
+   },
+   {
+    "id": "14783",
+    "name": "Jalen Hurts",
+    "pos": "QB",
+    "nfl": "PHI",
+    "espn": "4040715",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 1,
+      "pts": 334.9,
+      "starts": 13,
+      "champ": false,
+      "mvp": true
+     },
+     {
+      "year": "2023",
+      "tier": 2,
+      "pts": 291.8,
+      "starts": 13,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 1,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 1,
+    "pts": 626.7,
+    "starts": 26,
+    "ppg": 24.1
+   },
+   {
+    "id": "15281",
+    "name": "Ja'Marr Chase",
+    "pos": "WR",
+    "nfl": "CIN",
+    "espn": "4362628",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 3,
+      "pts": 223.6,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.05"
+     },
+     {
+      "year": "2023",
+      "tier": 2,
+      "pts": 239.3,
+      "starts": 13,
+      "champ": true,
+      "mvp": false
+     },
+     {
+      "year": "2024",
+      "tier": 1,
+      "pts": 317.4,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 1,
+    "rookie": 1,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 556.7,
+    "starts": 26,
+    "ppg": 21.4
+   },
+   {
+    "id": "13604",
+    "name": "Saquon Barkley",
+    "pos": "RB",
+    "nfl": "PHI",
+    "espn": "3929630",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 1,
+      "pts": 300.0,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 300.0,
+    "starts": 13,
+    "ppg": 23.1
+   },
+   {
+    "id": "13593",
+    "name": "Lamar Jackson",
+    "pos": "QB",
+    "nfl": "BAL",
+    "espn": "3916387",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 295.4,
+      "starts": 11,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 295.4,
+    "starts": 11,
+    "ppg": 26.9
+   },
+   {
+    "id": "13163",
+    "name": "Chris Godwin Jr.",
+    "pos": "WR",
+    "nfl": "TBB",
+    "espn": "3116165",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 242.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 242.9,
+    "starts": 12,
+    "ppg": 20.2
+   },
+   {
+    "id": "13404",
+    "name": "Austin Ekeler",
+    "pos": "RB",
+    "nfl": "LAC",
+    "espn": "3068267",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 1,
+      "pts": 242.3,
+      "starts": 11,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 242.3,
+    "starts": 11,
+    "ppg": 22.0
+   },
+   {
+    "id": "11232",
+    "name": "DeAndre Hopkins",
+    "pos": "WR",
+    "nfl": "HOU",
+    "espn": "15795",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 217.1,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 217.1,
+    "starts": 12,
+    "ppg": 18.1
+   },
+   {
+    "id": "11244",
+    "name": "Travis Kelce",
+    "pos": "TE",
+    "nfl": "KCC",
+    "espn": "15847",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 2,
+      "pts": 104.0,
+      "starts": 8,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 104.0,
+    "starts": 8,
+    "ppg": 13.0
+   },
+   {
+    "id": "14841",
+    "name": "Chase Claypool",
+    "pos": "WR",
+    "nfl": "PIT",
+    "espn": "4046692",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 3,
+      "pts": 172.1,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "14867",
+    "name": "Cole Kmet",
+    "pos": "TE",
+    "nfl": "CHI",
+    "espn": "4258595",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 3,
+      "pts": 38.1,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   }
+  ],
+  "0005": [
+   {
+    "id": "14836",
+    "name": "Justin Jefferson",
+    "pos": "WR",
+    "nfl": "MIN",
+    "espn": "4262921",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 3,
+      "pts": 209.1,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2021",
+      "tier": 1,
+      "pts": 262.2,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2022",
+      "tier": 1,
+      "pts": 280.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2024",
+      "tier": 1,
+      "pts": 157.5,
+      "starts": 8,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 3,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 700.6,
+    "starts": 33,
+    "ppg": 21.2
+   },
+   {
+    "id": "13130",
+    "name": "Christian McCaffrey",
+    "pos": "RB",
+    "nfl": "SFO",
+    "espn": "3117251",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 354.1,
+      "starts": 12,
+      "champ": false,
+      "mvp": true
+     },
+     {
+      "year": "2022",
+      "tier": 2,
+      "pts": 166.5,
+      "starts": 8,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2023",
+      "tier": 1,
+      "pts": 311.4,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 2,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 1,
+    "pts": 832.0,
+    "starts": 33,
+    "ppg": 25.2
+   },
+   {
+    "id": "13589",
+    "name": "Josh Allen",
+    "pos": "QB",
+    "nfl": "BUF",
+    "espn": "3918298",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 1,
+      "pts": 255.4,
+      "starts": 11,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 255.4,
+    "starts": 11,
+    "ppg": 23.2
+   },
+   {
+    "id": "0531",
+    "name": "Baltimore Ravens",
+    "pos": "DEF",
+    "nfl": "BAL",
+    "espn": "",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 1,
+      "pts": 193.0,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 193.0,
+    "starts": 13,
+    "ppg": 14.8
+   },
+   {
+    "id": "0501",
+    "name": "Buffalo Bills",
+    "pos": "DEF",
+    "nfl": "BUF",
+    "espn": "",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 1,
+      "pts": 167.0,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 167.0,
+    "starts": 13,
+    "ppg": 12.8
+   },
+   {
+    "id": "12626",
+    "name": "Derrick Henry",
+    "pos": "RB",
+    "nfl": "TEN",
+    "espn": "3043078",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 223.0,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2020",
+      "tier": 2,
+      "pts": 226.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 2,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 449.9,
+    "starts": 24,
+    "ppg": 18.7
+   },
+   {
+    "id": "15254",
+    "name": "Najee Harris",
+    "pos": "RB",
+    "nfl": "PIT",
+    "espn": "4241457",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 2,
+      "pts": 241.0,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2021",
+      "tier": 3,
+      "pts": 241.0,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.01"
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 241.0,
+    "starts": 13,
+    "ppg": 18.5
+   },
+   {
+    "id": "15789",
+    "name": "Christian Watson",
+    "pos": "WR",
+    "nfl": "GBP",
+    "espn": "4248528",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 3,
+      "pts": 125.9,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.08"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "16627",
+    "name": "Ladd McConkey",
+    "pos": "WR",
+    "nfl": "LAC",
+    "espn": "4612826",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 3,
+      "pts": 164.9,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.11"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "17042",
+    "name": "Ashton Jeanty",
+    "pos": "RB",
+    "nfl": "LVR",
+    "espn": "4890973",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 3,
+      "pts": 183.4,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.01"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "17102",
+    "name": "Tyler Warren",
+    "pos": "TE",
+    "nfl": "IND",
+    "espn": "4431459",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 3,
+      "pts": 160.7,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "2.01"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   }
+  ],
+  "0004": [
+   {
+    "id": "13128",
+    "name": "Dalvin Cook",
+    "pos": "RB",
+    "nfl": "MIN",
+    "espn": "3116593",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 269.6,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 269.6,
+    "starts": 12,
+    "ppg": 22.5
+   },
+   {
+    "id": "16211",
+    "name": "Puka Nacua",
+    "pos": "WR",
+    "nfl": "LAR",
+    "espn": "4426515",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 3,
+      "pts": 222.4,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "4.04"
+     },
+     {
+      "year": "2025",
+      "tier": 1,
+      "pts": 258.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 258.9,
+    "starts": 12,
+    "ppg": 21.6
+   },
+   {
+    "id": "11222",
+    "name": "Keenan Allen",
+    "pos": "WR",
+    "nfl": "LAC",
+    "espn": "15818",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 2,
+      "pts": 222.3,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 222.3,
+    "starts": 12,
+    "ppg": 18.5
+   },
+   {
+    "id": "15715",
+    "name": "James Cook III",
+    "pos": "RB",
+    "nfl": "BUF",
+    "espn": "4379399",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 2,
+      "pts": 204.7,
+      "starts": 11,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 204.7,
+    "starts": 11,
+    "ppg": 18.6
+   },
+   {
+    "id": "0528",
+    "name": "Los Angeles Rams",
+    "pos": "DEF",
+    "nfl": "LAR",
+    "espn": "",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 2,
+      "pts": 135.0,
+      "starts": 9,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 135.0,
+    "starts": 9,
+    "ppg": 15.0
+   },
+   {
+    "id": "14852",
+    "name": "Antonio Gibson",
+    "pos": "RB",
+    "nfl": "WAS",
+    "espn": "4360294",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 3,
+      "pts": 183.2,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "16150",
+    "name": "C.J. Stroud",
+    "pos": "QB",
+    "nfl": "HOU",
+    "espn": "4432577",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 3,
+      "pts": 242.6,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "3.02"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "16615",
+    "name": "Malik Nabers",
+    "pos": "WR",
+    "nfl": "NYG",
+    "espn": "4595348",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 3,
+      "pts": 182.1,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.02"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   }
+  ],
+  "0010": [
+   {
+    "id": "13132",
+    "name": "Alvin Kamara",
+    "pos": "RB",
+    "nfl": "NOS",
+    "espn": "3054850",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 280.8,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 280.8,
+    "starts": 12,
+    "ppg": 23.4
+   },
+   {
+    "id": "11222",
+    "name": "Keenan Allen",
+    "pos": "WR",
+    "nfl": "LAC",
+    "espn": "15818",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 1,
+      "pts": 278.9,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 278.9,
+    "starts": 13,
+    "ppg": 21.5
+   },
+   {
+    "id": "12652",
+    "name": "Michael Thomas",
+    "pos": "WR",
+    "nfl": "NOS",
+    "espn": "2976316",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 274.1,
+      "starts": 12,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 274.1,
+    "starts": 12,
+    "ppg": 22.8
+   },
+   {
+    "id": "0504",
+    "name": "New England Patriots",
+    "pos": "DEF",
+    "nfl": "NEP",
+    "espn": "",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 226.0,
+      "starts": 11,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 226.0,
+    "starts": 11,
+    "ppg": 20.5
+   },
+   {
+    "id": "0515",
+    "name": "Seattle Seahawks",
+    "pos": "DEF",
+    "nfl": "SEA",
+    "espn": "",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 1,
+      "pts": 113.0,
+      "starts": 6,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 113.0,
+    "starts": 6,
+    "ppg": 18.8
+   },
+   {
+    "id": "15287",
+    "name": "Amon-Ra St. Brown",
+    "pos": "WR",
+    "nfl": "DET",
+    "espn": "4374302",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 2,
+      "pts": 227.0,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2025",
+      "tier": 2,
+      "pts": 233.5,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 2,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 460.5,
+    "starts": 26,
+    "ppg": 17.7
+   },
+   {
+    "id": "12263",
+    "name": "Darren Waller",
+    "pos": "TE",
+    "nfl": "LVR",
+    "espn": "2576925",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 165.2,
+      "starts": 12,
+      "champ": true,
+      "mvp": false
+     },
+     {
+      "year": "2020",
+      "tier": 2,
+      "pts": 191.2,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 2,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 356.4,
+    "starts": 24,
+    "ppg": 14.8
+   },
+   {
+    "id": "12626",
+    "name": "Derrick Henry",
+    "pos": "RB",
+    "nfl": "TEN",
+    "espn": "3043078",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 2,
+      "pts": 244.1,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 244.1,
+    "starts": 13,
+    "ppg": 18.8
+   },
+   {
+    "id": "14136",
+    "name": "Deebo Samuel Sr.",
+    "pos": "WR",
+    "nfl": "SFO",
+    "espn": "3126486",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 2,
+      "pts": 234.5,
+      "starts": 11,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 234.5,
+    "starts": 11,
+    "ppg": 21.3
+   },
+   {
+    "id": "13129",
+    "name": "Leonard Fournette",
+    "pos": "RB",
+    "nfl": "JAC",
+    "espn": "3115364",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 224.3,
+      "starts": 12,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 224.3,
+    "starts": 12,
+    "ppg": 18.7
+   },
+   {
+    "id": "13589",
+    "name": "Josh Allen",
+    "pos": "QB",
+    "nfl": "BUF",
+    "espn": "3918298",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 2,
+      "pts": 202.3,
+      "starts": 10,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 202.3,
+    "starts": 10,
+    "ppg": 20.2
+   }
+  ],
+  "0011": [
+   {
+    "id": "11244",
+    "name": "Travis Kelce",
+    "pos": "TE",
+    "nfl": "KCC",
+    "espn": "15847",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 184.3,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 239.6,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 2,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 423.9,
+    "starts": 25,
+    "ppg": 17.0
+   },
+   {
+    "id": "13130",
+    "name": "Christian McCaffrey",
+    "pos": "RB",
+    "nfl": "SFO",
+    "espn": "3117251",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 1,
+      "pts": 328.5,
+      "starts": 13,
+      "champ": false,
+      "mvp": true
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 1,
+    "pts": 328.5,
+    "starts": 13,
+    "ppg": 25.3
+   },
+   {
+    "id": "13593",
+    "name": "Lamar Jackson",
+    "pos": "QB",
+    "nfl": "BAL",
+    "espn": "3916387",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 1,
+      "pts": 321.4,
+      "starts": 13,
+      "champ": false,
+      "mvp": true
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 1,
+    "pts": 321.4,
+    "starts": 13,
+    "ppg": 24.7
+   },
+   {
+    "id": "13404",
+    "name": "Austin Ekeler",
+    "pos": "RB",
+    "nfl": "LAC",
+    "espn": "3068267",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 1,
+      "pts": 292.7,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 292.7,
+    "starts": 13,
+    "ppg": 22.5
+   },
+   {
+    "id": "15253",
+    "name": "Travis Etienne Jr.",
+    "pos": "RB",
+    "nfl": "JAC",
+    "espn": "4239996",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 1,
+      "pts": 226.9,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 226.9,
+    "starts": 13,
+    "ppg": 17.5
+   },
+   {
+    "id": "0510",
+    "name": "Pittsburgh Steelers",
+    "pos": "DEF",
+    "nfl": "PIT",
+    "espn": "",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 187.0,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 187.0,
+    "starts": 12,
+    "ppg": 15.6
+   },
+   {
+    "id": "0504",
+    "name": "New England Patriots",
+    "pos": "DEF",
+    "nfl": "NEP",
+    "espn": "",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 1,
+      "pts": 162.0,
+      "starts": 11,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 162.0,
+    "starts": 11,
+    "ppg": 14.7
+   },
+   {
+    "id": "12186",
+    "name": "Stefon Diggs",
+    "pos": "WR",
+    "nfl": "BUF",
+    "espn": "2976212",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 2,
+      "pts": 234.3,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 234.3,
+    "starts": 13,
+    "ppg": 18.0
+   },
+   {
+    "id": "12447",
+    "name": "Raheem Mostert",
+    "pos": "RB",
+    "nfl": "MIA",
+    "espn": "2576414",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 2,
+      "pts": 224.4,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 224.4,
+    "starts": 12,
+    "ppg": 18.7
+   },
+   {
+    "id": "14779",
+    "name": "Justin Herbert",
+    "pos": "QB",
+    "nfl": "LAC",
+    "espn": "4038941",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 3,
+      "pts": 239.4,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "15284",
+    "name": "Jaylen Waddle",
+    "pos": "WR",
+    "nfl": "MIA",
+    "espn": "4372016",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 3,
+      "pts": 199.2,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.09"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   }
+  ],
+  "0006": [
+   {
+    "id": "12626",
+    "name": "Derrick Henry",
+    "pos": "RB",
+    "nfl": "BAL",
+    "espn": "3043078",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 1,
+      "pts": 254.2,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 254.2,
+    "starts": 13,
+    "ppg": 19.6
+   },
+   {
+    "id": "13404",
+    "name": "Austin Ekeler",
+    "pos": "RB",
+    "nfl": "LAC",
+    "espn": "3068267",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 1,
+      "pts": 234.8,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 234.8,
+    "starts": 12,
+    "ppg": 19.6
+   },
+   {
+    "id": "14783",
+    "name": "Jalen Hurts",
+    "pos": "QB",
+    "nfl": "PHI",
+    "espn": "4040715",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 2,
+      "pts": 231.1,
+      "starts": 11,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 231.1,
+    "starts": 11,
+    "ppg": 21.0
+   },
+   {
+    "id": "13604",
+    "name": "Saquon Barkley",
+    "pos": "RB",
+    "nfl": "NYG",
+    "espn": "3929630",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 2,
+      "pts": 226.4,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 226.4,
+    "starts": 13,
+    "ppg": 17.4
+   },
+   {
+    "id": "11671",
+    "name": "Mike Evans",
+    "pos": "WR",
+    "nfl": "TBB",
+    "espn": "16737",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 219.6,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 219.6,
+    "starts": 12,
+    "ppg": 18.3
+   },
+   {
+    "id": "14138",
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "nfl": "MIN",
+    "espn": "4036133",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 2,
+      "pts": 196.9,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 196.9,
+    "starts": 13,
+    "ppg": 15.1
+   },
+   {
+    "id": "14109",
+    "name": "Terry McLaurin",
+    "pos": "WR",
+    "nfl": "WAS",
+    "espn": "3121422",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 3,
+      "pts": 136.6,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "15711",
+    "name": "Kenneth Walker III",
+    "pos": "RB",
+    "nfl": "SEA",
+    "espn": "4567048",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 3,
+      "pts": 149.5,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.02"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "16747",
+    "name": "Tyrone Tracy Jr.",
+    "pos": "RB",
+    "nfl": "NYG",
+    "espn": "4360516",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 3,
+      "pts": 146.1,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "3.07"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "17032",
+    "name": "Jaxson Dart",
+    "pos": "QB",
+    "nfl": "NYG",
+    "espn": "4689114",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 3,
+      "pts": 173.9,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "2.08"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "17081",
+    "name": "Emeka Egbuka",
+    "pos": "WR",
+    "nfl": "TBB",
+    "espn": "4567750",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 3,
+      "pts": 173.5,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.06"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   }
+  ],
+  "0002": [
+   {
+    "id": "12801",
+    "name": "Tyreek Hill",
+    "pos": "WR",
+    "nfl": "KCC",
+    "espn": "3116406",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 274.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2021",
+      "tier": 1,
+      "pts": 248.4,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 2,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 523.3,
+    "starts": 25,
+    "ppg": 20.9
+   },
+   {
+    "id": "11244",
+    "name": "Travis Kelce",
+    "pos": "TE",
+    "nfl": "KCC",
+    "espn": "15847",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 1,
+      "pts": 257.4,
+      "starts": 13,
+      "champ": true,
+      "mvp": false
+     },
+     {
+      "year": "2023",
+      "tier": 1,
+      "pts": 197.6,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 2,
+    "second": 0,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 455.0,
+    "starts": 25,
+    "ppg": 18.2
+   },
+   {
+    "id": "13116",
+    "name": "Patrick Mahomes",
+    "pos": "QB",
+    "nfl": "KCC",
+    "espn": "3139477",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 310.6,
+      "starts": 12,
+      "champ": false,
+      "mvp": true
+     },
+     {
+      "year": "2022",
+      "tier": 2,
+      "pts": 320.4,
+      "starts": 13,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 1,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 1,
+    "pts": 631.0,
+    "starts": 25,
+    "ppg": 25.2
+   },
+   {
+    "id": "14073",
+    "name": "Josh Jacobs",
+    "pos": "RB",
+    "nfl": "LVR",
+    "espn": "4047365",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 1,
+      "pts": 282.8,
+      "starts": 13,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 282.8,
+    "starts": 13,
+    "ppg": 21.8
+   },
+   {
+    "id": "10703",
+    "name": "Russell Wilson",
+    "pos": "QB",
+    "nfl": "SEA",
+    "espn": "14881",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 267.4,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 267.4,
+    "starts": 12,
+    "ppg": 22.3
+   },
+   {
+    "id": "0501",
+    "name": "Buffalo Bills",
+    "pos": "DEF",
+    "nfl": "BUF",
+    "espn": "",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 2,
+      "pts": 174.0,
+      "starts": 13,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 174.0,
+    "starts": 13,
+    "ppg": 13.4
+   },
+   {
+    "id": "0532",
+    "name": "Houston Texans",
+    "pos": "DEF",
+    "nfl": "HOU",
+    "espn": "",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 2,
+      "pts": 168.0,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 168.0,
+    "starts": 12,
+    "ppg": 14.0
+   },
+   {
+    "id": "16641",
+    "name": "Brock Bowers",
+    "pos": "TE",
+    "nfl": "LVR",
+    "espn": "4432665",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 3,
+      "pts": 205.7,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.06"
+     },
+     {
+      "year": "2025",
+      "tier": 2,
+      "pts": 153.1,
+      "starts": 10,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 153.1,
+    "starts": 10,
+    "ppg": 15.3
+   },
+   {
+    "id": "0521",
+    "name": "Chicago Bears",
+    "pos": "DEF",
+    "nfl": "CHI",
+    "espn": "",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 150.0,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 150.0,
+    "starts": 12,
+    "ppg": 12.5
+   },
+   {
+    "id": "15241",
+    "name": "Mac Jones",
+    "pos": "QB",
+    "nfl": "NEP",
+    "espn": "4241464",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 3,
+      "pts": 169.6,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "3.11"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "16204",
+    "name": "Tank Dell",
+    "pos": "WR",
+    "nfl": "HOU",
+    "espn": "4366031",
+    "years": [
+     {
+      "year": "2023",
+      "tier": 3,
+      "pts": 165.0,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "3.12"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   }
+  ],
+  "0001": [
+   {
+    "id": "15794",
+    "name": "Trey McBride",
+    "pos": "TE",
+    "nfl": "ARI",
+    "espn": "4361307",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 1,
+      "pts": 177.3,
+      "starts": 12,
+      "champ": true,
+      "mvp": false
+     },
+     {
+      "year": "2025",
+      "tier": 1,
+      "pts": 234.7,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 2,
+    "second": 0,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 412.0,
+    "starts": 25,
+    "ppg": 16.5
+   },
+   {
+    "id": "14802",
+    "name": "Jonathan Taylor",
+    "pos": "RB",
+    "nfl": "IND",
+    "espn": "4242335",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 1,
+      "pts": 309.0,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 309.0,
+    "starts": 13,
+    "ppg": 23.8
+   },
+   {
+    "id": "13589",
+    "name": "Josh Allen",
+    "pos": "QB",
+    "nfl": "BUF",
+    "espn": "3918298",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 1,
+      "pts": 306.1,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 306.1,
+    "starts": 13,
+    "ppg": 23.5
+   },
+   {
+    "id": "14102",
+    "name": "DK Metcalf",
+    "pos": "WR",
+    "nfl": "SEA",
+    "espn": "4047650",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 3,
+      "pts": 141.6,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 226.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 226.9,
+    "starts": 12,
+    "ppg": 18.9
+   },
+   {
+    "id": "13128",
+    "name": "Dalvin Cook",
+    "pos": "RB",
+    "nfl": "MIN",
+    "espn": "3116593",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 162.1,
+      "starts": 6,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 162.1,
+    "starts": 6,
+    "ppg": 27.0
+   },
+   {
+    "id": "16167",
+    "name": "De'Von Achane",
+    "pos": "RB",
+    "nfl": "MIA",
+    "espn": "4429160",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 2,
+      "pts": 232.0,
+      "starts": 13,
+      "champ": true,
+      "mvp": false
+     },
+     {
+      "year": "2025",
+      "tier": 2,
+      "pts": 271.9,
+      "starts": 13,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 2,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 503.9,
+    "starts": 26,
+    "ppg": 19.4
+   },
+   {
+    "id": "13132",
+    "name": "Alvin Kamara",
+    "pos": "RB",
+    "nfl": "NOS",
+    "espn": "3054850",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 2,
+      "pts": 230.1,
+      "starts": 12,
+      "champ": true,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 1,
+    "mvps": 0,
+    "pts": 230.1,
+    "starts": 12,
+    "ppg": 19.2
+   },
+   {
+    "id": "13319",
+    "name": "Aaron Jones Sr.",
+    "pos": "RB",
+    "nfl": "GBP",
+    "espn": "3042519",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 2,
+      "pts": 222.2,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 222.2,
+    "starts": 12,
+    "ppg": 18.5
+   },
+   {
+    "id": "11232",
+    "name": "DeAndre Hopkins",
+    "pos": "WR",
+    "nfl": "ARI",
+    "espn": "15795",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 2,
+      "pts": 214.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 214.9,
+    "starts": 12,
+    "ppg": 17.9
+   },
+   {
+    "id": "12186",
+    "name": "Stefon Diggs",
+    "pos": "WR",
+    "nfl": "BUF",
+    "espn": "2976212",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 2,
+      "pts": 182.3,
+      "starts": 9,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 182.3,
+    "starts": 9,
+    "ppg": 20.3
+   },
+   {
+    "id": "13671",
+    "name": "Mark Andrews",
+    "pos": "TE",
+    "nfl": "BAL",
+    "espn": "3116365",
+    "years": [
+     {
+      "year": "2022",
+      "tier": 2,
+      "pts": 157.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 157.9,
+    "starts": 12,
+    "ppg": 13.2
+   },
+   {
+    "id": "14138",
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "nfl": "DET",
+    "espn": "4036133",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 3,
+      "pts": 80.7,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "14813",
+    "name": "James Robinson",
+    "pos": "RB",
+    "nfl": "JAC",
+    "espn": "4052042",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 3,
+      "pts": 223.8,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "15282",
+    "name": "DeVonta Smith",
+    "pos": "WR",
+    "nfl": "PHI",
+    "espn": "4241478",
+    "years": [
+     {
+      "year": "2021",
+      "tier": 3,
+      "pts": 144.1,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.08"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "16618",
+    "name": "Brian Thomas Jr.",
+    "pos": "WR",
+    "nfl": "JAC",
+    "espn": "4432773",
+    "years": [
+     {
+      "year": "2024",
+      "tier": 3,
+      "pts": 182.1,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.10"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   },
+   {
+    "id": "17071",
+    "name": "Tetairoa McMillan",
+    "pos": "WR",
+    "nfl": "CAR",
+    "espn": "4685472",
+    "years": [
+     {
+      "year": "2025",
+      "tier": 3,
+      "pts": 175.6,
+      "starts": 0,
+      "champ": false,
+      "mvp": false,
+      "pick": "1.04"
+     }
+    ],
+    "first": 0,
+    "second": 0,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 0,
+    "starts": 0,
+    "ppg": 0
+   }
+  ],
   "0009": [
    {
     "id": "13164",
@@ -103,6 +2565,39 @@
     "ppg": 22.1
    },
    {
+    "id": "14056",
+    "name": "Kyler Murray",
+    "pos": "QB",
+    "nfl": "ARI",
+    "espn": "3917315",
+    "years": [
+     {
+      "year": "2019",
+      "tier": 3,
+      "pts": 233.2,
+      "starts": 0,
+      "champ": false,
+      "mvp": false
+     },
+     {
+      "year": "2020",
+      "tier": 2,
+      "pts": 307.9,
+      "starts": 12,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 1,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 307.9,
+    "starts": 12,
+    "ppg": 25.7
+   },
+   {
     "id": "11675",
     "name": "Davante Adams",
     "pos": "WR",
@@ -153,6 +2648,31 @@
     "ppg": 18.6
    },
    {
+    "id": "14813",
+    "name": "James Robinson",
+    "pos": "RB",
+    "nfl": "JAC",
+    "espn": "4052042",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 2,
+      "pts": 189.6,
+      "starts": 10,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 0,
+    "second": 1,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 189.6,
+    "starts": 10,
+    "ppg": 19.0
+   },
+   {
     "id": "13299",
     "name": "George Kittle",
     "pos": "TE",
@@ -201,31 +2721,6 @@
     "pts": 166.0,
     "starts": 12,
     "ppg": 13.8
-   },
-   {
-    "id": "14056",
-    "name": "Kyler Murray",
-    "pos": "QB",
-    "nfl": "ARI",
-    "espn": "3917315",
-    "years": [
-     {
-      "year": "2019",
-      "tier": 3,
-      "pts": 233.2,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
    },
    {
     "id": "15692",
@@ -374,6 +2869,31 @@
     "pts": 544.4,
     "starts": 26,
     "ppg": 20.9
+   },
+   {
+    "id": "11675",
+    "name": "Davante Adams",
+    "pos": "WR",
+    "nfl": "GBP",
+    "espn": "16800",
+    "years": [
+     {
+      "year": "2020",
+      "tier": 1,
+      "pts": 262.9,
+      "starts": 10,
+      "champ": false,
+      "mvp": false
+     }
+    ],
+    "first": 1,
+    "second": 0,
+    "rookie": 0,
+    "champs": 0,
+    "mvps": 0,
+    "pts": 262.9,
+    "starts": 10,
+    "ppg": 26.3
    },
    {
     "id": "14104",
@@ -793,583 +3313,6 @@
     "ppg": 0
    }
   ],
-  "0001": [
-   {
-    "id": "15794",
-    "name": "Trey McBride",
-    "pos": "TE",
-    "nfl": "ARI",
-    "espn": "4361307",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 1,
-      "pts": 177.3,
-      "starts": 12,
-      "champ": true,
-      "mvp": false
-     },
-     {
-      "year": "2025",
-      "tier": 1,
-      "pts": 234.7,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 2,
-    "second": 0,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 412.0,
-    "starts": 25,
-    "ppg": 16.5
-   },
-   {
-    "id": "14802",
-    "name": "Jonathan Taylor",
-    "pos": "RB",
-    "nfl": "IND",
-    "espn": "4242335",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 1,
-      "pts": 309.0,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 309.0,
-    "starts": 13,
-    "ppg": 23.8
-   },
-   {
-    "id": "13589",
-    "name": "Josh Allen",
-    "pos": "QB",
-    "nfl": "BUF",
-    "espn": "3918298",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 1,
-      "pts": 306.1,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 306.1,
-    "starts": 13,
-    "ppg": 23.5
-   },
-   {
-    "id": "16167",
-    "name": "De'Von Achane",
-    "pos": "RB",
-    "nfl": "MIA",
-    "espn": "4429160",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 2,
-      "pts": 232.0,
-      "starts": 13,
-      "champ": true,
-      "mvp": false
-     },
-     {
-      "year": "2025",
-      "tier": 2,
-      "pts": 271.9,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 2,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 503.9,
-    "starts": 26,
-    "ppg": 19.4
-   },
-   {
-    "id": "13132",
-    "name": "Alvin Kamara",
-    "pos": "RB",
-    "nfl": "NOS",
-    "espn": "3054850",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 2,
-      "pts": 230.1,
-      "starts": 12,
-      "champ": true,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 230.1,
-    "starts": 12,
-    "ppg": 19.2
-   },
-   {
-    "id": "12186",
-    "name": "Stefon Diggs",
-    "pos": "WR",
-    "nfl": "BUF",
-    "espn": "2976212",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 2,
-      "pts": 182.3,
-      "starts": 9,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 182.3,
-    "starts": 9,
-    "ppg": 20.3
-   },
-   {
-    "id": "13671",
-    "name": "Mark Andrews",
-    "pos": "TE",
-    "nfl": "BAL",
-    "espn": "3116365",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 2,
-      "pts": 157.9,
-      "starts": 12,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 157.9,
-    "starts": 12,
-    "ppg": 13.2
-   },
-   {
-    "id": "14102",
-    "name": "DK Metcalf",
-    "pos": "WR",
-    "nfl": "SEA",
-    "espn": "4047650",
-    "years": [
-     {
-      "year": "2019",
-      "tier": 3,
-      "pts": 141.6,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "14138",
-    "name": "T.J. Hockenson",
-    "pos": "TE",
-    "nfl": "DET",
-    "espn": "4036133",
-    "years": [
-     {
-      "year": "2019",
-      "tier": 3,
-      "pts": 80.7,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "14813",
-    "name": "James Robinson",
-    "pos": "RB",
-    "nfl": "JAC",
-    "espn": "4052042",
-    "years": [
-     {
-      "year": "2020",
-      "tier": 3,
-      "pts": 223.8,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "15282",
-    "name": "DeVonta Smith",
-    "pos": "WR",
-    "nfl": "PHI",
-    "espn": "4241478",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 3,
-      "pts": 144.1,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.08"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "16618",
-    "name": "Brian Thomas Jr.",
-    "pos": "WR",
-    "nfl": "JAC",
-    "espn": "4432773",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 3,
-      "pts": 182.1,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.10"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "17071",
-    "name": "Tetairoa McMillan",
-    "pos": "WR",
-    "nfl": "CAR",
-    "espn": "4685472",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 3,
-      "pts": 175.6,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.04"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   }
-  ],
-  "0006": [
-   {
-    "id": "12626",
-    "name": "Derrick Henry",
-    "pos": "RB",
-    "nfl": "BAL",
-    "espn": "3043078",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 1,
-      "pts": 254.2,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 254.2,
-    "starts": 13,
-    "ppg": 19.6
-   },
-   {
-    "id": "14783",
-    "name": "Jalen Hurts",
-    "pos": "QB",
-    "nfl": "PHI",
-    "espn": "4040715",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 2,
-      "pts": 231.1,
-      "starts": 11,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 231.1,
-    "starts": 11,
-    "ppg": 21.0
-   },
-   {
-    "id": "13604",
-    "name": "Saquon Barkley",
-    "pos": "RB",
-    "nfl": "NYG",
-    "espn": "3929630",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 2,
-      "pts": 226.4,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 226.4,
-    "starts": 13,
-    "ppg": 17.4
-   },
-   {
-    "id": "14138",
-    "name": "T.J. Hockenson",
-    "pos": "TE",
-    "nfl": "MIN",
-    "espn": "4036133",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 2,
-      "pts": 196.9,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 196.9,
-    "starts": 13,
-    "ppg": 15.1
-   },
-   {
-    "id": "14109",
-    "name": "Terry McLaurin",
-    "pos": "WR",
-    "nfl": "WAS",
-    "espn": "3121422",
-    "years": [
-     {
-      "year": "2019",
-      "tier": 3,
-      "pts": 136.6,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "15711",
-    "name": "Kenneth Walker III",
-    "pos": "RB",
-    "nfl": "SEA",
-    "espn": "4567048",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 3,
-      "pts": 149.5,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.02"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "16747",
-    "name": "Tyrone Tracy Jr.",
-    "pos": "RB",
-    "nfl": "NYG",
-    "espn": "4360516",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 3,
-      "pts": 146.1,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "3.07"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "17032",
-    "name": "Jaxson Dart",
-    "pos": "QB",
-    "nfl": "NYG",
-    "espn": "4689114",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 3,
-      "pts": 173.9,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "2.08"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "17081",
-    "name": "Emeka Egbuka",
-    "pos": "WR",
-    "nfl": "TBB",
-    "espn": "4567750",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 3,
-      "pts": 173.5,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.06"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   }
-  ],
   "0012": [
    {
     "id": "14832",
@@ -1383,7 +3326,7 @@
       "tier": 3,
       "pts": 157.1,
       "starts": 0,
-      "champ": false,
+      "champ": true,
       "mvp": false
      },
      {
@@ -1406,7 +3349,7 @@
     "first": 1,
     "second": 1,
     "rookie": 1,
-    "champs": 0,
+    "champs": 1,
     "mvps": 0,
     "pts": 503.0,
     "starts": 26,
@@ -1453,6 +3396,14 @@
     "espn": "2976212",
     "years": [
      {
+      "year": "2020",
+      "tier": 2,
+      "pts": 217.7,
+      "starts": 12,
+      "champ": true,
+      "mvp": false
+     },
+     {
       "year": "2021",
       "tier": 2,
       "pts": 217.2,
@@ -1462,13 +3413,13 @@
      }
     ],
     "first": 0,
-    "second": 1,
+    "second": 2,
     "rookie": 0,
-    "champs": 0,
+    "champs": 1,
     "mvps": 0,
-    "pts": 217.2,
-    "starts": 13,
-    "ppg": 16.7
+    "pts": 434.9,
+    "starts": 25,
+    "ppg": 17.4
    },
    {
     "id": "15721",
@@ -1597,1313 +3548,19 @@
     "starts": 0,
     "ppg": 0
    }
-  ],
-  "0011": [
-   {
-    "id": "13130",
-    "name": "Christian McCaffrey",
-    "pos": "RB",
-    "nfl": "SFO",
-    "espn": "3117251",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 1,
-      "pts": 328.5,
-      "starts": 13,
-      "champ": false,
-      "mvp": true
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 1,
-    "pts": 328.5,
-    "starts": 13,
-    "ppg": 25.3
-   },
-   {
-    "id": "13593",
-    "name": "Lamar Jackson",
-    "pos": "QB",
-    "nfl": "BAL",
-    "espn": "3916387",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 1,
-      "pts": 321.4,
-      "starts": 13,
-      "champ": false,
-      "mvp": true
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 1,
-    "pts": 321.4,
-    "starts": 13,
-    "ppg": 24.7
-   },
-   {
-    "id": "13404",
-    "name": "Austin Ekeler",
-    "pos": "RB",
-    "nfl": "LAC",
-    "espn": "3068267",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 1,
-      "pts": 292.7,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 292.7,
-    "starts": 13,
-    "ppg": 22.5
-   },
-   {
-    "id": "15253",
-    "name": "Travis Etienne Jr.",
-    "pos": "RB",
-    "nfl": "JAC",
-    "espn": "4239996",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 1,
-      "pts": 226.9,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 226.9,
-    "starts": 13,
-    "ppg": 17.5
-   },
-   {
-    "id": "0504",
-    "name": "New England Patriots",
-    "pos": "DEF",
-    "nfl": "NEP",
-    "espn": "",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 1,
-      "pts": 162.0,
-      "starts": 11,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 162.0,
-    "starts": 11,
-    "ppg": 14.7
-   },
-   {
-    "id": "12186",
-    "name": "Stefon Diggs",
-    "pos": "WR",
-    "nfl": "BUF",
-    "espn": "2976212",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 2,
-      "pts": 234.3,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 234.3,
-    "starts": 13,
-    "ppg": 18.0
-   },
-   {
-    "id": "12447",
-    "name": "Raheem Mostert",
-    "pos": "RB",
-    "nfl": "MIA",
-    "espn": "2576414",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 2,
-      "pts": 224.4,
-      "starts": 12,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 224.4,
-    "starts": 12,
-    "ppg": 18.7
-   },
-   {
-    "id": "14779",
-    "name": "Justin Herbert",
-    "pos": "QB",
-    "nfl": "LAC",
-    "espn": "4038941",
-    "years": [
-     {
-      "year": "2020",
-      "tier": 3,
-      "pts": 239.4,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "15284",
-    "name": "Jaylen Waddle",
-    "pos": "WR",
-    "nfl": "MIA",
-    "espn": "4372016",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 3,
-      "pts": 199.2,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.09"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   }
-  ],
-  "0004": [
-   {
-    "id": "16211",
-    "name": "Puka Nacua",
-    "pos": "WR",
-    "nfl": "LAR",
-    "espn": "4426515",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 3,
-      "pts": 222.4,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "4.04"
-     },
-     {
-      "year": "2025",
-      "tier": 1,
-      "pts": 258.9,
-      "starts": 12,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 258.9,
-    "starts": 12,
-    "ppg": 21.6
-   },
-   {
-    "id": "15715",
-    "name": "James Cook III",
-    "pos": "RB",
-    "nfl": "BUF",
-    "espn": "4379399",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 2,
-      "pts": 204.7,
-      "starts": 11,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 204.7,
-    "starts": 11,
-    "ppg": 18.6
-   },
-   {
-    "id": "14852",
-    "name": "Antonio Gibson",
-    "pos": "RB",
-    "nfl": "WAS",
-    "espn": "4360294",
-    "years": [
-     {
-      "year": "2020",
-      "tier": 3,
-      "pts": 183.2,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "16150",
-    "name": "C.J. Stroud",
-    "pos": "QB",
-    "nfl": "HOU",
-    "espn": "4432577",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 3,
-      "pts": 242.6,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "3.02"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "16615",
-    "name": "Malik Nabers",
-    "pos": "WR",
-    "nfl": "NYG",
-    "espn": "4595348",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 3,
-      "pts": 182.1,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.02"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   }
-  ],
-  "0005": [
-   {
-    "id": "14836",
-    "name": "Justin Jefferson",
-    "pos": "WR",
-    "nfl": "MIN",
-    "espn": "4262921",
-    "years": [
-     {
-      "year": "2020",
-      "tier": 3,
-      "pts": 209.1,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     },
-     {
-      "year": "2021",
-      "tier": 1,
-      "pts": 262.2,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     },
-     {
-      "year": "2022",
-      "tier": 1,
-      "pts": 280.9,
-      "starts": 12,
-      "champ": false,
-      "mvp": false
-     },
-     {
-      "year": "2024",
-      "tier": 1,
-      "pts": 157.5,
-      "starts": 8,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 3,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 700.6,
-    "starts": 33,
-    "ppg": 21.2
-   },
-   {
-    "id": "13130",
-    "name": "Christian McCaffrey",
-    "pos": "RB",
-    "nfl": "SFO",
-    "espn": "3117251",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 2,
-      "pts": 166.5,
-      "starts": 8,
-      "champ": false,
-      "mvp": false
-     },
-     {
-      "year": "2023",
-      "tier": 1,
-      "pts": 311.4,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 477.9,
-    "starts": 21,
-    "ppg": 22.8
-   },
-   {
-    "id": "13589",
-    "name": "Josh Allen",
-    "pos": "QB",
-    "nfl": "BUF",
-    "espn": "3918298",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 1,
-      "pts": 255.4,
-      "starts": 11,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 255.4,
-    "starts": 11,
-    "ppg": 23.2
-   },
-   {
-    "id": "0531",
-    "name": "Baltimore Ravens",
-    "pos": "DEF",
-    "nfl": "BAL",
-    "espn": "",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 1,
-      "pts": 193.0,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 193.0,
-    "starts": 13,
-    "ppg": 14.8
-   },
-   {
-    "id": "0501",
-    "name": "Buffalo Bills",
-    "pos": "DEF",
-    "nfl": "BUF",
-    "espn": "",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 1,
-      "pts": 167.0,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 167.0,
-    "starts": 13,
-    "ppg": 12.8
-   },
-   {
-    "id": "15254",
-    "name": "Najee Harris",
-    "pos": "RB",
-    "nfl": "PIT",
-    "espn": "4241457",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 2,
-      "pts": 241.0,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     },
-     {
-      "year": "2021",
-      "tier": 3,
-      "pts": 241.0,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.01"
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 241.0,
-    "starts": 13,
-    "ppg": 18.5
-   },
-   {
-    "id": "15789",
-    "name": "Christian Watson",
-    "pos": "WR",
-    "nfl": "GBP",
-    "espn": "4248528",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 3,
-      "pts": 125.9,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.08"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "16627",
-    "name": "Ladd McConkey",
-    "pos": "WR",
-    "nfl": "LAC",
-    "espn": "4612826",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 3,
-      "pts": 164.9,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.11"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "17042",
-    "name": "Ashton Jeanty",
-    "pos": "RB",
-    "nfl": "LVR",
-    "espn": "4890973",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 3,
-      "pts": 183.4,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.01"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "17102",
-    "name": "Tyler Warren",
-    "pos": "TE",
-    "nfl": "IND",
-    "espn": "4431459",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 3,
-      "pts": 160.7,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "2.01"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   }
-  ],
-  "0007": [
-   {
-    "id": "12801",
-    "name": "Tyreek Hill",
-    "pos": "WR",
-    "nfl": "MIA",
-    "espn": "3116406",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 1,
-      "pts": 291.0,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     },
-     {
-      "year": "2023",
-      "tier": 1,
-      "pts": 322.7,
-      "starts": 13,
-      "champ": true,
-      "mvp": true
-     }
-    ],
-    "first": 2,
-    "second": 0,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 1,
-    "pts": 613.7,
-    "starts": 26,
-    "ppg": 23.6
-   },
-   {
-    "id": "14783",
-    "name": "Jalen Hurts",
-    "pos": "QB",
-    "nfl": "PHI",
-    "espn": "4040715",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 1,
-      "pts": 334.9,
-      "starts": 13,
-      "champ": false,
-      "mvp": true
-     },
-     {
-      "year": "2023",
-      "tier": 2,
-      "pts": 291.8,
-      "starts": 13,
-      "champ": true,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 1,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 1,
-    "pts": 626.7,
-    "starts": 26,
-    "ppg": 24.1
-   },
-   {
-    "id": "15281",
-    "name": "Ja'Marr Chase",
-    "pos": "WR",
-    "nfl": "CIN",
-    "espn": "4362628",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 3,
-      "pts": 223.6,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.05"
-     },
-     {
-      "year": "2023",
-      "tier": 2,
-      "pts": 239.3,
-      "starts": 13,
-      "champ": true,
-      "mvp": false
-     },
-     {
-      "year": "2024",
-      "tier": 1,
-      "pts": 317.4,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 1,
-    "rookie": 1,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 556.7,
-    "starts": 26,
-    "ppg": 21.4
-   },
-   {
-    "id": "13604",
-    "name": "Saquon Barkley",
-    "pos": "RB",
-    "nfl": "PHI",
-    "espn": "3929630",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 1,
-      "pts": 300.0,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 300.0,
-    "starts": 13,
-    "ppg": 23.1
-   },
-   {
-    "id": "13404",
-    "name": "Austin Ekeler",
-    "pos": "RB",
-    "nfl": "LAC",
-    "espn": "3068267",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 1,
-      "pts": 242.3,
-      "starts": 11,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 242.3,
-    "starts": 11,
-    "ppg": 22.0
-   },
-   {
-    "id": "11244",
-    "name": "Travis Kelce",
-    "pos": "TE",
-    "nfl": "KCC",
-    "espn": "15847",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 2,
-      "pts": 104.0,
-      "starts": 8,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 104.0,
-    "starts": 8,
-    "ppg": 13.0
-   },
-   {
-    "id": "14841",
-    "name": "Chase Claypool",
-    "pos": "WR",
-    "nfl": "PIT",
-    "espn": "4046692",
-    "years": [
-     {
-      "year": "2020",
-      "tier": 3,
-      "pts": 172.1,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "14867",
-    "name": "Cole Kmet",
-    "pos": "TE",
-    "nfl": "CHI",
-    "espn": "4258595",
-    "years": [
-     {
-      "year": "2020",
-      "tier": 3,
-      "pts": 38.1,
-      "starts": 0,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   }
-  ],
-  "0002": [
-   {
-    "id": "11244",
-    "name": "Travis Kelce",
-    "pos": "TE",
-    "nfl": "KCC",
-    "espn": "15847",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 1,
-      "pts": 257.4,
-      "starts": 13,
-      "champ": true,
-      "mvp": false
-     },
-     {
-      "year": "2023",
-      "tier": 1,
-      "pts": 197.6,
-      "starts": 12,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 2,
-    "second": 0,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 455.0,
-    "starts": 25,
-    "ppg": 18.2
-   },
-   {
-    "id": "14073",
-    "name": "Josh Jacobs",
-    "pos": "RB",
-    "nfl": "LVR",
-    "espn": "4047365",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 1,
-      "pts": 282.8,
-      "starts": 13,
-      "champ": true,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 282.8,
-    "starts": 13,
-    "ppg": 21.8
-   },
-   {
-    "id": "12801",
-    "name": "Tyreek Hill",
-    "pos": "WR",
-    "nfl": "KCC",
-    "espn": "3116406",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 1,
-      "pts": 248.4,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 248.4,
-    "starts": 13,
-    "ppg": 19.1
-   },
-   {
-    "id": "13116",
-    "name": "Patrick Mahomes",
-    "pos": "QB",
-    "nfl": "KCC",
-    "espn": "3139477",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 2,
-      "pts": 320.4,
-      "starts": 13,
-      "champ": true,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 320.4,
-    "starts": 13,
-    "ppg": 24.6
-   },
-   {
-    "id": "0501",
-    "name": "Buffalo Bills",
-    "pos": "DEF",
-    "nfl": "BUF",
-    "espn": "",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 2,
-      "pts": 174.0,
-      "starts": 13,
-      "champ": true,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 1,
-    "mvps": 0,
-    "pts": 174.0,
-    "starts": 13,
-    "ppg": 13.4
-   },
-   {
-    "id": "0532",
-    "name": "Houston Texans",
-    "pos": "DEF",
-    "nfl": "HOU",
-    "espn": "",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 2,
-      "pts": 168.0,
-      "starts": 12,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 168.0,
-    "starts": 12,
-    "ppg": 14.0
-   },
-   {
-    "id": "16641",
-    "name": "Brock Bowers",
-    "pos": "TE",
-    "nfl": "LVR",
-    "espn": "4432665",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 3,
-      "pts": 205.7,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "1.06"
-     },
-     {
-      "year": "2025",
-      "tier": 2,
-      "pts": 153.1,
-      "starts": 10,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 153.1,
-    "starts": 10,
-    "ppg": 15.3
-   },
-   {
-    "id": "15241",
-    "name": "Mac Jones",
-    "pos": "QB",
-    "nfl": "NEP",
-    "espn": "4241464",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 3,
-      "pts": 169.6,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "3.11"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   },
-   {
-    "id": "16204",
-    "name": "Tank Dell",
-    "pos": "WR",
-    "nfl": "HOU",
-    "espn": "4366031",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 3,
-      "pts": 165.0,
-      "starts": 0,
-      "champ": false,
-      "mvp": false,
-      "pick": "3.12"
-     }
-    ],
-    "first": 0,
-    "second": 0,
-    "rookie": 1,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 0,
-    "starts": 0,
-    "ppg": 0
-   }
-  ],
-  "0010": [
-   {
-    "id": "11222",
-    "name": "Keenan Allen",
-    "pos": "WR",
-    "nfl": "LAC",
-    "espn": "15818",
-    "years": [
-     {
-      "year": "2023",
-      "tier": 1,
-      "pts": 278.9,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 278.9,
-    "starts": 13,
-    "ppg": 21.5
-   },
-   {
-    "id": "0515",
-    "name": "Seattle Seahawks",
-    "pos": "DEF",
-    "nfl": "SEA",
-    "espn": "",
-    "years": [
-     {
-      "year": "2025",
-      "tier": 1,
-      "pts": 113.0,
-      "starts": 6,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 1,
-    "second": 0,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 113.0,
-    "starts": 6,
-    "ppg": 18.8
-   },
-   {
-    "id": "15287",
-    "name": "Amon-Ra St. Brown",
-    "pos": "WR",
-    "nfl": "DET",
-    "espn": "4374302",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 2,
-      "pts": 227.0,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     },
-     {
-      "year": "2025",
-      "tier": 2,
-      "pts": 233.5,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 2,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 460.5,
-    "starts": 26,
-    "ppg": 17.7
-   },
-   {
-    "id": "12626",
-    "name": "Derrick Henry",
-    "pos": "RB",
-    "nfl": "TEN",
-    "espn": "3043078",
-    "years": [
-     {
-      "year": "2022",
-      "tier": 2,
-      "pts": 244.1,
-      "starts": 13,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 244.1,
-    "starts": 13,
-    "ppg": 18.8
-   },
-   {
-    "id": "14136",
-    "name": "Deebo Samuel Sr.",
-    "pos": "WR",
-    "nfl": "SFO",
-    "espn": "3126486",
-    "years": [
-     {
-      "year": "2021",
-      "tier": 2,
-      "pts": 234.5,
-      "starts": 11,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 234.5,
-    "starts": 11,
-    "ppg": 21.3
-   },
-   {
-    "id": "13589",
-    "name": "Josh Allen",
-    "pos": "QB",
-    "nfl": "BUF",
-    "espn": "3918298",
-    "years": [
-     {
-      "year": "2024",
-      "tier": 2,
-      "pts": 202.3,
-      "starts": 10,
-      "champ": false,
-      "mvp": false
-     }
-    ],
-    "first": 0,
-    "second": 1,
-    "rookie": 0,
-    "champs": 0,
-    "mvps": 0,
-    "pts": 202.3,
-    "starts": 10,
-    "ppg": 20.2
-   }
   ]
  },
  "managers": {
+  "0007": [
+   {
+    "year": "2019",
+    "rec": "10-3"
+   },
+   {
+    "year": "2024",
+    "rec": "13-1"
+   }
+  ],
   "0003": [
    {
     "year": "2020",
@@ -2930,12 +3587,6 @@
    {
     "year": "2023",
     "rec": "11-3"
-   }
-  ],
-  "0007": [
-   {
-    "year": "2024",
-    "rec": "13-1"
    }
   ]
  }

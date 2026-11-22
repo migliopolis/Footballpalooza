@@ -52,7 +52,7 @@
      "teamPts": 292.7,
      "teamStarts": 13,
      "honors": {
-      "first": 2,
+      "first": 3,
       "second": 0,
       "rookie": 0
      }
@@ -104,7 +104,7 @@
      "teamPts": 291.0,
      "teamStarts": 13,
      "honors": {
-      "first": 2,
+      "first": 3,
       "second": 0,
       "rookie": 0
      }
@@ -156,7 +156,7 @@
      "teamPts": 257.4,
      "teamStarts": 13,
      "honors": {
-      "first": 1,
+      "first": 3,
       "second": 1,
       "rookie": 0
      }
@@ -182,7 +182,7 @@
      "teamPts": 155.7,
      "teamStarts": 8,
      "honors": {
-      "first": 1,
+      "first": 2,
       "second": 1,
       "rookie": 0
      }
@@ -235,8 +235,11 @@
      "champTeam": "0002",
      "teamPts": 320.4,
      "teamStarts": 13,
+     "mvps": [
+      "2020"
+     ],
      "honors": {
-      "first": 0,
+      "first": 1,
       "second": 1,
       "rookie": 0
      }
@@ -261,8 +264,11 @@
      "champTeam": null,
      "teamPts": 166.5,
      "teamStarts": 8,
+     "mvps": [
+      "2019"
+     ],
      "honors": {
-      "first": 0,
+      "first": 1,
       "second": 1,
       "rookie": 0
      }
@@ -289,7 +295,7 @@
      "teamStarts": 13,
      "honors": {
       "first": 0,
-      "second": 1,
+      "second": 3,
       "rookie": 0
      }
     }
@@ -315,7 +321,7 @@
      "teamStarts": 9,
      "honors": {
       "first": 0,
-      "second": 2,
+      "second": 3,
       "rookie": 0
      }
     }
@@ -673,7 +679,10 @@
      "contract": "1/3",
      "rookie": false,
      "champ": true,
-     "champTeam": "0002"
+     "champTeam": "0002",
+     "mvps": [
+      "2020"
+     ]
     },
     {
      "id": "13404",
@@ -1047,7 +1056,10 @@
         "contract": "5/5",
         "rookie": false,
         "champ": false,
-        "champTeam": null
+        "champTeam": null,
+        "mvps": [
+         "2019"
+        ]
        }
       ],
       "picks": [],
@@ -1633,7 +1645,10 @@
       "rookie": false,
       "week": 1,
       "champ": true,
-      "champTeam": "0002"
+      "champTeam": "0002",
+      "mvps": [
+       "2020"
+      ]
      },
      {
       "id": "13604",
@@ -2004,7 +2019,10 @@
       "rookie": false,
       "week": 8,
       "champ": false,
-      "champTeam": null
+      "champTeam": null,
+      "mvps": [
+       "2019"
+      ]
      },
      {
       "id": "14104",
@@ -2074,7 +2092,10 @@
       "rookie": false,
       "week": 9,
       "champ": true,
-      "champTeam": "0002"
+      "champTeam": "0002",
+      "mvps": [
+       "2020"
+      ]
      }
     ],
     "10": [

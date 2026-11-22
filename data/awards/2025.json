@@ -48,10 +48,11 @@
      "teamPts": 328.5,
      "teamStarts": 13,
      "mvps": [
+      "2019",
       "2025"
      ],
      "honors": {
-      "first": 2,
+      "first": 3,
       "second": 1,
       "rookie": 0
      },
@@ -659,6 +660,7 @@
      "champTeam": null,
      "mvp": true,
      "mvps": [
+      "2019",
       "2025"
      ]
     },
@@ -2050,6 +2052,7 @@
       "champ": false,
       "champTeam": null,
       "mvps": [
+       "2019",
        "2025"
       ]
      },
@@ -2282,6 +2285,7 @@
       "champ": false,
       "champTeam": null,
       "mvps": [
+       "2019",
        "2025"
       ]
      },
