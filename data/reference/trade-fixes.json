@@ -40,6 +40,48 @@
    "f": "0002",
    "amt": null,
    "why": "Bullish sent auction cash to Hauk Tua for Josh Jacobs (Sep 5, 2020); the amount wasn't recorded. Commissioner confirmed."
+  },
+  {
+   "ts": 1574880486,
+   "f": "0007",
+   "amt": null,
+   "why": "MR. FROBOT sent auction cash (2019); the amount wasn't recorded. Commissioner confirmed it was cash."
+  },
+  {
+   "ts": 1566076493,
+   "f": "0008",
+   "amt": null,
+   "why": "Son of Tinactin sent auction cash (2019); the amount wasn't recorded. Commissioner confirmed it was cash."
+  },
+  {
+   "ts": 1606962000,
+   "f": "0003",
+   "amt": null,
+   "why": "Hauk Tua sent auction cash (2020); the amount wasn't recorded. Commissioner confirmed it was cash."
+  },
+  {
+   "ts": 1606773591,
+   "f": "0003",
+   "amt": null,
+   "why": "Hauk Tua sent auction cash (2020); the amount wasn't recorded. Commissioner confirmed it was cash."
+  },
+  {
+   "ts": 1606067534,
+   "f": "0003",
+   "amt": null,
+   "why": "Hauk Tua sent auction cash (2020); the amount wasn't recorded. Commissioner confirmed it was cash."
+  },
+  {
+   "ts": 1603996862,
+   "f": "0010",
+   "amt": null,
+   "why": "Hold Timers sent auction cash (2020); the amount wasn't recorded. Commissioner confirmed it was cash."
+  },
+  {
+   "ts": 1635704183,
+   "f": "0004",
+   "amt": null,
+   "why": "Fully Cooked sent auction cash (2021); the amount wasn't recorded. Commissioner confirmed it was cash."
   }
  ],
  "drop": [
