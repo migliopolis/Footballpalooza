@@ -5,6 +5,9 @@ author: sal
 season: 2026
 week: 11
 date: 2026-11-22
+image: assets/columns/2026-week-11-smith-njigba.jpg
+caption: Jaxon Smith-Njigba, Mailing It In's receiver and the FBP scoring leader
+credit: Photo by Getty Images
 teaser: Win MVP, make the All-FBP team and lift the trophy, all in one season. It's been done twice. Jahmyr Gibbs and Jaxon Smith-Njigba are both on pace for the best season this league has ever seen, and only one of them can get all three.
 ---
 In eight seasons, 96 teams have chased a Footballpalooza title, and plenty of players have put up monster years along the way. Only two have done all three things a player can do in one season: win MVP, make the All-FBP team and win the championship.
@@ -36,6 +39,8 @@ Five MVPs, five teams that came up short in December. One great player can carry
 ## Gibbs vs. Smith-Njigba
 
 **Jaxon Smith-Njigba, Mailing It In.** 263.2 points in 10 starts, 26.3 a start. He leads the league and he's started every week. He's on bye today, then has three games left. At his pace he finishes around 342. That would pass Kupp's 335.4 for the best receiver season in league history, for the same franchise that rode Kupp to the crown.
+
+<figure class="col-hero"><img src="assets/columns/2026-week-11-gibbs.jpg" alt="Jahmyr Gibbs on the field at Ford Field"><figcaption>Jahmyr Gibbs at Ford Field, where Hauk Tua's season runs through. Photo by Getty Images</figcaption></figure>
 
 **Jahmyr Gibbs, Hauk Tua.** 253.4 points in 9 starts, 28.2 a start, the best rate of anyone in the league. He had his bye in week 6, so he has four games left, starting today against JCC. At his pace he finishes around 366. That would be the best season this league has ever seen, past McCaffrey's 354.1 from 2019.
 
