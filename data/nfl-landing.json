@@ -19,16 +19,16 @@
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
-   "team": "TB",
-   "pick": 9,
-   "basis": "consensus",
+   "team": "ATL",
+   "pick": 10,
+   "basis": "recent",
    "mocks": 25,
    "mostMocked": "WSH"
   },
   "Drew Mestemaker": {
-   "team": "MIA",
+   "team": "LAC",
    "pick": 3,
-   "basis": "consensus",
+   "basis": "recent",
    "mocks": 25,
    "mostMocked": "MIA"
   },
@@ -40,9 +40,9 @@
    "mostMocked": "HOU"
   },
   "Darian Mensah": {
-   "team": "ARI",
+   "team": "PHI",
    "pick": 7,
-   "basis": "consensus",
+   "basis": "recent",
    "mocks": 25,
    "mostMocked": "NYJ"
   },
@@ -75,9 +75,9 @@
    "mostMocked": "LV"
   },
   "Nick Marsh": {
-   "team": "LV",
-   "pick": 15,
-   "basis": "consensus",
+   "team": "CLE",
+   "pick": 17,
+   "basis": "recent",
    "mocks": 25,
    "mostMocked": "KC"
   },
@@ -89,14 +89,14 @@
    "mostMocked": "PHI"
   },
   "Dante Moore": {
-   "team": "CLE",
+   "team": "SEA",
    "pick": 18,
    "basis": "recent",
    "mocks": 18,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
-   "team": "TB",
+   "team": "NO",
    "pick": 9,
    "basis": "recent",
    "mocks": 15,
@@ -152,9 +152,9 @@
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
-   "team": "CLE",
-   "pick": 18,
-   "basis": "consensus",
+   "team": "NYG",
+   "pick": 23,
+   "basis": "recent",
    "mocks": 22,
    "mostMocked": "PIT"
   },
@@ -243,9 +243,9 @@
    "mostMocked": "CLE"
   },
   "LaNorris Sellers": {
-   "team": "PIT",
-   "pick": 23,
-   "basis": "consensus",
+   "team": "CAR",
+   "pick": 19,
+   "basis": "recent",
    "mocks": 16,
    "mostMocked": "CLE"
   },

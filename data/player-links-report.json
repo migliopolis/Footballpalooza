@@ -1,10 +1,10 @@
 {
  "summary": {
-  "linked": 947,
-  "mfl": 934,
+  "linked": 948,
+  "mfl": 935,
   "spellingFixed": 49,
   "name": 13,
-  "unmatched": 3,
+  "unmatched": 4,
   "rosteredLinked": 256,
   "rosteredTotal": 256
  },
@@ -141,7 +141,15 @@
    "how": "name"
   }
  ],
- "unmatched": [],
+ "unmatched": [
+  {
+   "mfl": "17834",
+   "mflName": "Max Hurleman",
+   "pos": "WR",
+   "team": "PIT",
+   "fbp": null
+  }
+ ],
  "staleId": [
   {
    "mfl": "14059",
@@ -1254,7 +1262,7 @@
    "mfl": "11674",
    "mflName": "Brandin Cooks",
    "pos": "WR",
-   "team": "SFO",
+   "team": "FA",
    "fbp": null,
    "espn": "16731",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
@@ -1263,7 +1271,7 @@
    "mfl": "17405",
    "mflName": "Brandon Smith",
    "pos": "WR",
-   "team": "PIT",
+   "team": "FA",
    "fbp": null,
    "espn": "4240577",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
