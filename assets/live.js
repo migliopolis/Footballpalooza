@@ -828,7 +828,7 @@
   function allPlayBody(L, shownW, liveW) {
     const esc = X.esc, tm = id => X.teams[id] || {};
     const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
-    const col = id => { const t = tm(id), c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
+    const col = id => { const t = tm(id); if (t.abbr === 'THOT') return 'var(--apt-thot)'; const c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
       return c.length ? c.sort((x, y) => Math.abs(lum(x) - 0.5) - Math.abs(lum(y) - 0.5))[0] : 'var(--muted)'; };
     const logo = id => tm(id).logo ? `<img src="${tm(id).logo}" alt="${esc(tm(id).abbr || '')}">` : `<span class="apt-ab">${esc(tm(id).abbr || '')}</span>`;
     const rec = (w, l, t) => t ? `${w}-${l}-${t}` : `${w}-${l}`;
@@ -866,7 +866,89 @@
         <div class="apt-race">${pool.map((r, i) => { const gb = apw(lead) - apw(r);
           return `${i === 1 ? '<div class="apt-cut">Chasing the 6 seed</div>' : ''}<div class="apt-r${i ? '' : ' lead'}${r.id === me ? ' me' : ''}" style="--tc:${col(r.id)}">${logo(r.id)}<span class="nm">${esc(X.nameOf(r.id))}<small>${r.rec}${addNote ? ` · <span class="apt-up">+${r.add}</span> this week` : ''}</small></span><span class="w">${rec(r.w, r.l, r.t)}</span><span class="gb">${i ? (gb ? num(gb) + ' back' : 'tied') : '6 seed'}</span></div>`; }).join('')}</div>`;
     }
-    return `<section class="card apt">${seg}${html}</section>`;
+    return `<section class="card apt">${seg}${html}</section>${apCharts({ esc, tm, col, logo, liveW, live, counted, scored, me })}`;
+  }
+
+  // Under the tracker: charts to study all-play across the season. Pick teams to highlight (your team by default).
+  let apSel = null, apRun = false, apAsked = false;
+  try { apSel = JSON.parse(localStorage.getItem('fbp-ap-sel') || 'null'); apRun = localStorage.getItem('fbp-ap-run') === '1'; } catch (e) {}
+  document.addEventListener('click', e => {
+    const t = e.target.closest && e.target.closest('[data-ap-hl]'), r = e.target.closest && e.target.closest('[data-ap-run]');
+    if (!t && !r) return;
+    if (t) { const id = t.dataset.apHl, S = new Set(apSel || []); S.has(id) ? S.delete(id) : S.add(id); apSel = [...S]; try { localStorage.setItem('fbp-ap-sel', JSON.stringify(apSel)); } catch (err) {} }
+    if (r) { apRun = r.dataset.apRun === '1'; try { localStorage.setItem('fbp-ap-run', apRun ? '1' : '0'); } catch (err) {} }
+    paint();
+  });
+  function apCharts(o) {
+    const { esc, tm, col, logo, liveW, live, counted, scored, me } = o;
+    if (!weekly || !sched) {
+      if (!apAsked) { apAsked = true;
+        Promise.all([weekly ? 0 : FBPU.json('data/mfl/weeklyResults.json').then(j => { weekly = (j || {}).weeks || {}; }),
+                     sched ? 0 : FBPU.json('data/mfl/schedule.json').then(j => { sched = ((j || {}).schedule || {}).weeklySchedule || []; })]).then(paint, () => {}); }
+      return '<p class="loading">Loading the season’s all-play charts…</p>';
+    }
+    if (apSel === null) apSel = me ? [me] : [];
+    const sel = new Set(apSel), ids = Object.keys(X.teams);
+    // every week's scores: the finished weeks from the weekly results, plus the live week until the update counts it
+    const weeks = Object.keys(weekly).map(Number).filter(w => w <= (X.weeksPlayed || 0)).sort((a, b) => a - b);
+    const scoreOf = {};
+    weeks.forEach(w => { scoreOf[w] = {}; ids.forEach(id => { const t = (weekly[w] || {})[id]; if (t) scoreOf[w][id] = (t.s || []).reduce((a, x) => a + x[1], 0); }); });
+    if (!counted && scored && !weeks.includes(liveW)) { weeks.push(liveW); scoreOf[liveW] = {}; Object.values(live).forEach(r => { scoreOf[liveW][r.id] = r.pts; }); }
+    if (!weeks.length) return '';
+    const apOf = {};   // apOf[id][i] = all-play wins in weeks[i] (a tie is half)
+    ids.forEach(id => { apOf[id] = weeks.map(w => { const S = scoreOf[w], v = S[id]; if (v == null) return null;
+      return Object.entries(S).reduce((a, [o2, x]) => o2 === id ? a : a + (v > x ? 1 : v === x ? .5 : 0), 0); }); });
+    const num = x => x % 1 ? x.toFixed(1) : String(x);
+    const nm = id => X.nameOf(id);
+    const picker = FBPU.divGrid(ids, f => `<button type="button" data-ap-hl="${f}" aria-pressed="${sel.has(f)}" title="${esc(nm(f))}">${tm(f).logo ? `<img src="${tm(f).logo}" alt="${esc(tm(f).abbr || f)}">` : `<span>${esc(tm(f).abbr || f)}</span>`}</button>`,
+      { mine: me, name: nm, cls: 'st-pick apt-pick' }).replace('<div class="', '<div role="group" aria-label="Highlight teams" class="');
+    const liveTag = weeks.includes(liveW) && !counted ? ` <span class="apt-livetag">week ${liveW} live</span>` : '';
+
+    // 1. all-play wins by week (or the running total), one line a team
+    const W = 360, H = 210, L = 28, R = 30, T = 10, B = 24;
+    const series = ids.map(id => { let run = 0; return { id, v: apOf[id].map(x => x == null ? null : apRun ? (run += x) : x) }; });
+    const ymax = apRun ? Math.max(11, ...series.flatMap(s => s.v.filter(x => x != null))) : 11;
+    const xs = i => L + (weeks.length === 1 ? (W - L - R) / 2 : i * (W - L - R) / (weeks.length - 1)), ys = v => T + (1 - v / ymax) * (H - T - B);
+    const step = apRun ? (ymax > 80 ? 20 : 10) : 1;
+    const grid = []; if (apRun) { for (let v = 0; v <= ymax; v += step) grid.push(v); } else grid.push(0, 3, 6, 9, 11);
+    const gridSvg = grid.map(v => `<line x1="${L}" x2="${W - R}" y1="${ys(v)}" y2="${ys(v)}" class="apt-gl"/><text x="${L - 5}" y="${ys(v) + 3}" class="apt-ax" text-anchor="end">${v}</text>`).join('');
+    const xl = weeks.map((w, i) => `<text x="${xs(i)}" y="${H - 8}" class="apt-ax" text-anchor="middle">${w}</text>`).join('');
+    const path = s => s.v.map((v, i) => v == null ? '' : `${i && s.v[i - 1] != null ? 'L' : 'M'}${xs(i).toFixed(1)},${ys(v).toFixed(1)}`).join('');
+    const lines = series.filter(s => !sel.has(s.id)).map(s => `<path d="${path(s)}" class="apt-ln"><title>${esc(nm(s.id))}</title></path>`).join('')
+      + series.filter(s => sel.has(s.id)).map(s => { const li = s.v.length - 1 - [...s.v].reverse().findIndex(x => x != null), lv = s.v[li];
+        return `<path d="${path(s)}" class="apt-ln on" style="--tc:${col(s.id)}"/>${s.v.map((v, i) => v == null ? '' : `<circle cx="${xs(i)}" cy="${ys(v)}" r="2.6" fill="${col(s.id)}"><title>${esc(nm(s.id))}, week ${weeks[i]}: ${num(v)}</title></circle>`).join('')}`
+          + (tm(s.id).logo ? `<image href="${tm(s.id).logo}" x="${xs(li) + 4}" y="${ys(lv) - 10}" width="20" height="20"/>` : ''); }).join('');
+    const chart1 = `<section class="card apt-c"><h3>All-play wins by week${liveTag}</h3>
+      <div class="seg apt-seg apt-seg-s" role="group" aria-label="Line chart"><button type="button" data-ap-run="0" aria-pressed="${!apRun}">Each week</button><button type="button" data-ap-run="1" aria-pressed="${apRun}">Running total</button></div>
+      <svg viewBox="0 0 ${W} ${H}" class="apt-svg" role="img" aria-label="All-play wins by week">${gridSvg}${xl}${lines}</svg>
+      <p class="apt-note">${sel.size ? 'Highlighted teams in color; tap a logo above to add or remove one.' : 'Tap a team’s logo above to highlight its line.'}${apRun ? '' : ' 11 is a perfect week, beating every team.'}</p></section>`;
+
+    // 2. luck: real wins against the wins all-play says a team "should" have (all-play win % x games played)
+    const res = {}; ids.forEach(id => { res[id] = { w: 0, g: 0, ap: 0, apG: 0 }; });
+    weeks.forEach((w, i) => { const wk = (sched || []).find(x => +x.week === w), S = scoreOf[w];
+      ((wk || {}).matchup || []).forEach(m => { const [a, b] = m.franchise.map(f => f.id); if (S[a] == null || S[b] == null) return;
+        res[a].g++; res[b].g++; res[a].w += S[a] > S[b] ? 1 : S[a] === S[b] ? .5 : 0; res[b].w += S[b] > S[a] ? 1 : S[a] === S[b] ? .5 : 0; });
+      ids.forEach(id => { const v = apOf[id][i]; if (v != null) { res[id].ap += v; res[id].apG += 11; } }); });
+    const luck = ids.map(id => { const r = res[id], exp = r.apG ? r.ap / r.apG * r.g : 0; return { id, w: r.w, exp, d: r.w - exp }; }).sort((a, b) => b.d - a.d);
+    const dmax = Math.max(1, ...luck.map(r => Math.abs(r.d)));
+    const chart2 = `<section class="card apt-c"><h3>Schedule luck${liveTag}</h3>
+      <p class="apt-note">Real wins minus the wins all-play expects (all-play win % × games played). Right of center: the schedule has helped. Left: it’s cost them.</p>
+      <div class="apt-luck">${luck.map(r => `<div class="apt-lk${sel.has(r.id) ? ' on' : ''}" style="--tc:${col(r.id)}" title="${esc(nm(r.id))}: ${num(r.w)} wins, ${r.exp.toFixed(1)} expected">${logo(r.id)}
+        <span class="apt-lkb"><i style="${r.d >= 0 ? 'left:50%' : `right:50%`};width:${(Math.abs(r.d) / dmax * 50).toFixed(1)}%"></i></span><b>${r.d >= 0 ? '+' : '−'}${Math.abs(r.d).toFixed(1)}</b></div>`).join('')}</div></section>`;
+
+    // 3. every team's every week as a heat map: rows by season all-play wins, cells by that week's all-play wins
+    const tot = id => apOf[id].reduce((a, x) => a + (x || 0), 0);
+    const rows = ids.slice().sort((a, b) => tot(b) - tot(a));
+    const cell = v => { if (v == null) return '<span class="apt-hc"></span>';
+      const t = (v - 5.5) / 5.5, c = t >= 0 ? '#2f6fd6' : '#d0453a', pc = Math.round(Math.abs(t) * 85);
+      return `<span class="apt-hc" style="background:color-mix(in srgb,${c} ${pc}%,var(--surface));${pc > 50 ? 'color:#fff' : ''}">${num(v)}</span>`; };
+    const perfect = id => apOf[id].filter(x => x === 11).length, zero = id => apOf[id].filter(x => x === 0).length;
+    const chart3 = `<section class="card apt-c"><h3>Week by week${liveTag}</h3>
+      <p class="apt-note">Each week’s all-play wins (0–11). Blue is a big week, red a rough one. Under each total, a <i class="apt-dot pf"></i> for every 11-0 week and a <i class="apt-dot zr"></i> for every 0-11 week.</p>
+      <div class="apt-heat" style="--n:${weeks.length}"><span></span>${weeks.map(w => `<span class="apt-hw">${w}</span>`).join('')}<span class="apt-hw">Tot</span>
+        ${rows.map(id => `<span class="apt-hl${sel.has(id) ? ' on' : ''}" style="--tc:${col(id)}" title="${esc(nm(id))}">${logo(id)}</span>${apOf[id].map(cell).join('')}<span class="apt-ht${sel.has(id) ? ' on' : ''}">${num(tot(id))}<small>${'<i class="pf"></i>'.repeat(perfect(id))}${'<i class="zr"></i>'.repeat(zero(id))}</small></span>`).join('')}</div></section>`;
+
+    return `<div class="apt-charts"><h2 class="apt-h">Study the all-play</h2>${picker}${chart1}${chart2}${chart3}</div>`;
   }
 
   function render(ctx) {
