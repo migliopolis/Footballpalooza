@@ -1,7 +1,7 @@
 {
  "source": "NFL Mock Draft Database",
  "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
- "asOf": "2026-11-22",
+ "asOf": "2026-11-23",
  "note": "Projected NFL landing spot per rookie. consensus = the team at his pick in the 1-week consensus mock (round 1); recent = the team holding his median pick in mocks from the last two weeks (Tankathon order); most = the team he is most often mocked to.",
  "players": {
   "Jeremiah Smith": {
@@ -13,8 +13,8 @@
   },
   "Jadan Baugh": {
    "team": "MIN",
-   "pick": 27,
-   "basis": "consensus",
+   "pick": 25,
+   "basis": "recent",
    "mocks": 20,
    "mostMocked": "JAX"
   },
@@ -26,9 +26,9 @@
    "mostMocked": "WSH"
   },
   "Drew Mestemaker": {
-   "team": "LAC",
+   "team": "MIA",
    "pick": 3,
-   "basis": "recent",
+   "basis": "consensus",
    "mocks": 25,
    "mostMocked": "MIA"
   },
@@ -40,9 +40,9 @@
    "mostMocked": "HOU"
   },
   "Darian Mensah": {
-   "team": "PHI",
-   "pick": 7,
-   "basis": "recent",
+   "team": "ARI",
+   "pick": 6,
+   "basis": "consensus",
    "mocks": 25,
    "mostMocked": "NYJ"
   },
@@ -61,9 +61,9 @@
    "mostMocked": "NYJ"
   },
   "KJ Duff": {
-   "team": "TEN",
-   "pick": 28,
-   "basis": "recent",
+   "team": "DEN",
+   "pick": 30,
+   "basis": "consensus",
    "mocks": 10,
    "mostMocked": "KC"
   },
@@ -97,24 +97,24 @@
   },
   "Arch Manning": {
    "team": "NO",
-   "pick": 9,
+   "pick": 8,
    "basis": "recent",
-   "mocks": 15,
+   "mocks": 17,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
-   "team": "CAR",
-   "pick": 19,
-   "basis": "consensus",
+   "team": "DAL",
+   "pick": 22,
+   "basis": "recent",
    "mocks": 24,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
-   "team": "KC",
+   "team": "LAR",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "KC"
+   "mostMocked": "LAR"
   },
   "Hollywood Smothers": {
    "team": "MIN",
@@ -124,9 +124,9 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "DEN",
-   "pick": 24,
-   "basis": "consensus",
+   "team": "CIN",
+   "pick": 26,
+   "basis": "recent",
    "mocks": 24,
    "mostMocked": "DEN"
   },
@@ -145,16 +145,16 @@
    "mostMocked": "DEN"
   },
   "Ryan Coleman-Williams": {
-   "team": "DET",
+   "team": "DEN",
    "pick": 30,
    "basis": "recent",
    "mocks": 6,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
-   "team": "NYG",
-   "pick": 23,
-   "basis": "recent",
+   "team": "CLE",
+   "pick": 17,
+   "basis": "consensus",
    "mocks": 22,
    "mostMocked": "PIT"
   },
@@ -173,18 +173,18 @@
    "mostMocked": "LAR"
   },
   "Reed Harris": {
-   "team": "KC",
+   "team": "DET",
    "pick": 29,
-   "basis": "consensus",
+   "basis": "recent",
    "mocks": 14,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
-   "team": "CHI",
+   "team": "CIN",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "CHI"
+   "mostMocked": "CIN"
   },
   "Austin Simmons": {
    "team": "MIN",
@@ -194,11 +194,11 @@
    "mostMocked": "MIN"
   },
   "Isaac Brown": {
-   "team": "JAX",
+   "team": "HOU",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "JAX"
+   "mostMocked": "HOU"
   },
   "DJ Vonnahme": {
    "team": "KC",
@@ -229,11 +229,11 @@
    "mostMocked": "LAR"
   },
   "Cam Cook": {
-   "team": "SEA",
+   "team": "NE",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "SEA"
+   "mostMocked": "NE"
   },
   "Drake Lindsey": {
    "team": "CLE",
@@ -248,6 +248,13 @@
    "basis": "recent",
    "mocks": 16,
    "mostMocked": "CLE"
+  },
+  "Carlos Hernandez": {
+   "team": "NYJ",
+   "pick": null,
+   "basis": "most",
+   "mocks": 0,
+   "mostMocked": "NYJ"
   },
   "Que'Sean Brown": {
    "team": "CHI",
@@ -299,11 +306,11 @@
    "mostMocked": "MIN"
   },
   "Wayshawn Parker": {
-   "team": "IND",
+   "team": "NO",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "IND"
+   "mostMocked": "NO"
   },
   "Omarion Miller": {
    "team": "LV",
@@ -327,11 +334,11 @@
    "mostMocked": "PIT"
   },
   "Brendan Sorsby": {
-   "team": "CLE",
+   "team": "MIN",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "CLE"
+   "mostMocked": "MIN"
   },
   "DeSean Bishop": {
    "team": "CLE",

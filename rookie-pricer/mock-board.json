@@ -1,13 +1,13 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-22",
+ "asOf": "2026-11-23",
  "board": {
   "name": "Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys)",
   "url": "https://www.footballguys.com/article/2027-dynasty-rookie-rankings-big-board-v4",
   "date": "2026-10-21"
  },
- "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-22); players no NFL source mentions price as undrafted.",
+ "note": "Rookie order: Mike Kashuba's 2027 Rookie Draft Superflex Big Board 4.0 (Footballguys). Projected NFL picks: the Rookie Pricer's sources (as of 2026-11-23); players no NFL source mentions price as undrafted.",
  "players": [
   {
    "rank": 1,
@@ -21,7 +21,7 @@
    "name": "Jadan Baugh",
    "pos": "RB",
    "school": "Florida",
-   "nflPick": 27
+   "nflPick": 26
   },
   {
    "rank": 3,
@@ -49,7 +49,7 @@
    "name": "Darian Mensah",
    "pos": "QB",
    "school": "Miami",
-   "nflPick": 7
+   "nflPick": 6
   },
   {
    "rank": 7,
@@ -70,7 +70,7 @@
    "name": "KJ Duff",
    "pos": "WR",
    "school": "Rutgers",
-   "nflPick": 29
+   "nflPick": 30
   },
   {
    "rank": 10,
@@ -105,14 +105,14 @@
    "name": "Arch Manning",
    "pos": "QB",
    "school": "Texas",
-   "nflPick": 8
+   "nflPick": 7
   },
   {
    "rank": 15,
    "name": "Trey'Dez Green",
    "pos": "TE",
    "school": "LSU",
-   "nflPick": 19
+   "nflPick": 22
   },
   {
    "rank": 16,
@@ -133,7 +133,7 @@
    "name": "Jamari Johnson",
    "pos": "TE",
    "school": "Oregon",
-   "nflPick": 25
+   "nflPick": 27
   },
   {
    "rank": 19,
@@ -168,7 +168,7 @@
    "name": "Trinidad Chambliss",
    "pos": "QB",
    "school": "Ole Miss",
-   "nflPick": 21
+   "nflPick": 16
   },
   {
    "rank": 24,
