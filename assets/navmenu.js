@@ -6,7 +6,7 @@
    The first visit after this change shows a short note about where the buttons went (until "Don't show this again"). */
 (function () {
   const MENUS = {
-    scores: [['#scores', 'Scoreboard'], ['#scores/players', 'Players'], ['#scores/nfl', 'NFL Scores'], ['#scores/ticket', 'Ticket Helper']],
+    scores: [['#scores', 'Scoreboard'], ['#scores/players', 'Players'], ['#scores/allplay', 'All-Play'], ['#scores/nfl', 'NFL Scores'], ['#scores/ticket', 'Ticket Helper']],
     // League Now reads down two columns (see COLS): Standings to Analytics and the Trading Floor on the left (seven), My Team to The Docket on the right (seven)
     now: [['#now', 'Standings'], ['#now/rosters', 'Rosters'], ['#now/stats', 'Stats'], ['#now/rankings', 'Player Rankings'], ['#now/power', 'Power Rankings'], ['#now/analytics', 'Analytics'], ['#now/trade', 'Trading Floor'],
       ['#now/team', 'My Team'], ['#now/news', 'Player News'], ['#now/transactions', 'Transactions'], ['#now/matchups', 'Matchups'], ['#now/playoffs', 'Playoff Picture'], ['#now/hospital', 'FBP General'], ['#now/docket', 'The Docket']],

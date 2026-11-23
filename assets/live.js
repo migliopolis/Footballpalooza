@@ -146,7 +146,7 @@
     .map(c => `<span class="lv-af lv-pchip ${c.c}" title="${c.title.replace(/"/g, '&quot;')}">${CHIP_SHORT[c.l]}</span>`).join('');
   const playerChips = (id, wk, fid) => !honors ? '' : chips((honors.p[id] || []).filter(c => !c.team || c.team === fid).concat(honors.potw[wk] === id ? [{ l: 'POTW', c: 'good', title: `Player of the Week, week ${wk}` }] : []));
 
-  const onPage = () => /^#scores(\/players)?\/?$/.test(location.hash);   // the Scoreboard and Players, not the Ticket Helper or NFL
+  const onPage = () => /^#scores(\/(players|allplay))?\/?$/.test(location.hash);   // the Scoreboard and Players, not the Ticket Helper or NFL
   const n1 = v => (Math.round(v * 10) / 10).toFixed(1);
   // the week to show live: the one after the last week the league update has counted. MFL's own current week can lag
   // a day behind (it still said week 9 on Monday night after week 9 was final), so ask for the next week by number.
@@ -568,6 +568,7 @@
     if (view && !hist[view]) return picker + '<p class="loading">Loading week ' + view + '…</p>';
     const L = cur().liveScoring;
     if (X.mode === 'players') return picker + playersBody(L, shownW);
+    if (X.mode === 'allplay') return picker + allPlayBody(L, shownW, liveW);
     const tm = id => X.teams[id] || {};
     const seedOf = id => ((X.seeds || []).find(x => x.id === id) || {}).seed;
     const seed = id => !view && seedOf(id) ? `<span class="lv-seed${seedOf(id) > 3 ? ' wc' : ''}" title="${seedOf(id)} seed if the season ended today">${seedOf(id)}</span>` : '';
@@ -818,11 +819,62 @@
   }
   document.addEventListener('click', e => { const b = e.target.closest('[data-pl-more]'); if (!b) return; const k = b.dataset.plMore; plMore.has(k) ? plMore.delete(k) : plMore.add(k); paint(); });
 
+  // Game Day > All-Play: every team against all 11 others. Week = the shown week's scores; Season = season all-play
+  // record plus the live week; 6 Seed = the race for seed 6 (most all-play wins outside seeds 1-5), live week included.
+  let apMode = 'week';
+  try { apMode = localStorage.getItem('fbp-ap-mode') || 'week'; } catch (e) {}
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-ap-mode]'); if (!b) return;
+    apMode = b.dataset.apMode; try { localStorage.setItem('fbp-ap-mode', apMode); } catch (err) {} paint(); });
+  function allPlayBody(L, shownW, liveW) {
+    const esc = X.esc, tm = id => X.teams[id] || {};
+    const lum = h => { h = String(h || '#888').replace('#', ''); return (0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16)) / 255; };
+    const col = id => { const t = tm(id), c = [t.primary, t.secondary].filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
+      return c.length ? c.sort((x, y) => Math.abs(lum(x) - 0.5) - Math.abs(lum(y) - 0.5))[0] : 'var(--muted)'; };
+    const logo = id => tm(id).logo ? `<img src="${tm(id).logo}" alt="${esc(tm(id).abbr || '')}">` : `<span class="apt-ab">${esc(tm(id).abbr || '')}</span>`;
+    const rec = (w, l, t) => t ? `${w}-${l}-${t}` : `${w}-${l}`;
+    const num = x => x % 1 ? x.toFixed(1) : String(x);
+    const allW = (Lx) => { const sc = {}; (Lx.matchup || []).forEach(m => m.franchise.forEach(f => { sc[f.id] = +f.score || 0; }));
+      const ids = Object.keys(sc), out = {};
+      ids.forEach(id => { let w = 0, l = 0, t = 0; ids.forEach(o => { if (o === id) return; sc[id] > sc[o] ? w++ : sc[id] < sc[o] ? l++ : t++; }); out[id] = { id, w, l, t, pts: sc[id] }; });
+      return out; };
+    const me = X.myTeam;
+    const mode = ['week', 'season', 'six'].includes(apMode) ? apMode : 'week';
+    // Season and 6 Seed run on the current week; the standings already hold it once the weekly update has counted it
+    const liveL = data.liveScoring, live = allW(liveL), counted = (X.weeksPlayed || 0) >= liveW, scored = Object.values(live).some(r => r.pts);
+    const add = id => counted || !scored ? { w: 0, l: 0, t: 0 } : live[id];
+    const season = (X.standings || []).map(s => { const a = add(s.id) || { w: 0, l: 0, t: 0 };
+      return { id: s.id, w: (s.allPlayW || 0) + a.w, l: (s.allPlayL || 0) + a.l, t: (s.allPlayT || 0) + a.t, add: a.w, rec: rec(s.w, s.l, s.t) }; })
+      .sort((a, b) => (b.w + b.t / 2) - (a.w + a.t / 2) || ((X.standings.find(x => x.id === b.id) || {}).pf || 0) - ((X.standings.find(x => x.id === a.id) || {}).pf || 0));
+    const apw = r => r.w + r.t / 2;
+    const bar = r => { const n = r.w + r.l + r.t; return `<span class="apt-bar"><i style="width:${n ? Math.round(100 * apw(r) / n) : 0}%"></i></span>`; };
+    const tile = (r, i, sub) => `<div class="apt-t${r.id === me ? ' me' : ''}" style="--tc:${col(r.id)}" title="${esc(X.nameOf(r.id))}"><span class="rk">${i + 1}</span>${logo(r.id)}<b>${rec(r.w, r.l, r.t)}</b><small>${sub}</small>${bar(r)}</div>`;
+    const seg = `<div class="seg apt-seg" role="group" aria-label="All-play view">${[['week', 'Week'], ['season', 'Season'], ['six', '6 Seed']].map(([k, l]) => `<button type="button" data-ap-mode="${k}" aria-pressed="${mode === k}">${l}</button>`).join('')}</div>`;
+    const addNote = counted || !scored ? '' : ` plus week ${liveW} so far`;
+    let html;
+    if (mode === 'week') {
+      const wk = Object.values(allW(L)).sort((a, b) => apw(b) - apw(a) || b.pts - a.pts);
+      html = `<p class="apt-note">Week ${shownW}: each team’s score against all 11 others, most all-play wins first.</p>
+        <div class="apt-grid">${wk.map((r, i) => tile(r, i, r.pts.toFixed(1))).join('')}</div>`;
+    } else if (mode === 'season') {
+      html = `<p class="apt-note">Season all-play records${addNote}, most wins first.${addNote ? ' The green number is this week’s wins.' : ''}</p>
+        <div class="apt-grid">${season.map((r, i) => tile(r, i, addNote ? `<span class="apt-up">+${r.add}</span> wk` : `${(X.standings.find(x => x.id === r.id) || {}).pf || 0} PF`)).join('')}</div>`;
+    } else {
+      const top5 = (X.seeds || []).filter(x => x.seed <= 5).sort((a, b) => a.seed - b.seed).map(x => x.id);
+      const pool = season.filter(r => !top5.includes(r.id)), lead = pool[0];
+      html = `<p class="apt-note">Seed 6 goes to the team with the most all-play wins outside seeds 1–5${addNote}. Games back are all-play wins; a tie counts as half.</p>
+        <div class="apt-top">Seeds 1–5 (current standings): ${top5.map((id, i) => `<span title="${i + 1}. ${esc(X.nameOf(id))}">${logo(id)}</span>`).join('')}</div>
+        <div class="apt-race">${pool.map((r, i) => { const gb = apw(lead) - apw(r);
+          return `${i === 1 ? '<div class="apt-cut">Chasing the 6 seed</div>' : ''}<div class="apt-r${i ? '' : ' lead'}${r.id === me ? ' me' : ''}" style="--tc:${col(r.id)}">${logo(r.id)}<span class="nm">${esc(X.nameOf(r.id))}<small>${r.rec}${addNote ? ` · <span class="apt-up">+${r.add}</span> this week` : ''}</small></span><span class="w">${rec(r.w, r.l, r.t)}</span><span class="gb">${i ? (gb ? num(gb) + ' back' : 'tied') : '6 seed'}</span></div>`; }).join('')}</div>`;
+    }
+    return `<section class="card apt">${seg}${html}</section>`;
+  }
+
   function render(ctx) {
     X = ctx;
     if ((!data && !failed) || (data && nextW() !== askedW && !loading)) load();
     poll();
     setTimeout(fitSoon, 0);
+    if (X.mode === 'allplay') return `<div class="pagehead"><h1>All-Play Tracker</h1><span class="asof">Every team against all 11 others, live · pick a week</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
     if (X.mode === 'players') return `<div class="pagehead"><h1>Players</h1><span class="asof">The week’s top scorers at every position, live · pick a week</span></div>${X.nav || ''}<div id="lv-root">${body()}</div>`;
     const html = body(); setTimeout(showStatus, 0);
     return `<div class="pagehead"><h1>Scoreboard</h1><span class="asof" id="lv-asof">${statusHtml}</span></div>${X.nav || ''}<div id="lv-root">${html}</div>`;

@@ -340,6 +340,7 @@
 "reference/s-2026": "reference_s-2026",
 "reference/seasons": "reference_seasons",
 "scores": "scores",
+"scores/allplay": "scores_allplay",
 "scores/nfl": "scores_nfl",
 "scores/players": "scores_players",
 "scores/ticket": "scores_ticket"

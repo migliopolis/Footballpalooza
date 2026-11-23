@@ -3506,3 +3506,32 @@ html.lb-open{overflow:hidden}
 .ro-chip.crown{background:linear-gradient(135deg,#f6d365,#e8b93a 45%,#b8860b);color:#2b2100;box-shadow:inset 0 0 0 1px rgba(120,80,0,.35)}
 .aw-crown{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;font:700 .68rem var(--body);letter-spacing:.3px;background:linear-gradient(135deg,#f6d365,#e8b93a 45%,#b8860b);color:#2b2100;vertical-align:2px}
 .aw-crown.sm{font-size:.6rem;padding:1px 6px;margin-left:4px;vertical-align:1px}
+
+/* Game Day > All-Play Tracker */
+.apt{padding:12px}
+.apt-seg{display:flex;width:100%}.apt-seg button{flex:1;padding:6px 6px;font-size:.8rem}
+.apt-note{font-size:.74rem;color:var(--muted);margin:8px 0}
+.apt-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+@media (min-width:760px){.apt-grid{grid-template-columns:repeat(12,minmax(0,1fr))}}
+.apt-t{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 2px 6px;border:1px solid var(--line);border-radius:9px;background:var(--surface);min-width:0}
+.apt-t .rk{position:absolute;top:2px;left:5px;font:700 .58rem var(--body);color:var(--muted)}
+.apt-t img,.apt-t .apt-ab{width:34px;height:34px;object-fit:contain}
+.apt-ab{display:inline-flex;align-items:center;justify-content:center;font:700 .62rem var(--body)}
+.apt-t b{font:700 min(.78rem,3.1vw) var(--body);letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.apt-t small{font-size:.62rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.apt-bar{height:3px;width:80%;background:var(--line);border-radius:2px;overflow:hidden}.apt-bar i{display:block;height:100%;background:var(--tc)}
+.apt-t.me{outline:2px solid var(--tc);outline-offset:-1px}
+.apt-up{color:#1f9d55;font-weight:700}:root[data-theme="dark"] .apt-up{color:#4cc282}
+.apt-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.72rem;color:var(--muted);margin-bottom:8px}
+.apt-top img,.apt-top .apt-ab{width:22px;height:22px;object-fit:contain;opacity:.6}
+.apt-race{display:flex;flex-direction:column;gap:5px}
+.apt-r{display:grid;grid-template-columns:30px minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--line);border-radius:9px}
+.apt-r img,.apt-r .apt-ab{width:30px;height:30px;object-fit:contain}
+.apt-r .nm{font:600 .82rem var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apt-r .nm small{display:block;font:500 .66rem var(--body);color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.apt-r .w{font:700 .82rem var(--body);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.apt-r .gb{font:700 .74rem var(--body);font-variant-numeric:tabular-nums;min-width:54px;text-align:right;color:var(--muted);white-space:nowrap}
+.apt-r.lead{border-color:var(--tc);box-shadow:inset 4px 0 0 var(--tc)}.apt-r.lead .gb{color:var(--fg)}
+.apt-r.me .nm{text-decoration:underline;text-decoration-color:var(--tc);text-underline-offset:3px}
+.apt-cut{display:flex;align-items:center;gap:8px;font:600 .64rem var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:2px 0}
+.apt-cut:before,.apt-cut:after{content:"";flex:1;border-top:1px dashed var(--line)}
