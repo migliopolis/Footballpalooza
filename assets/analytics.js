@@ -81,7 +81,7 @@ window.FBPAnalytics = (function () {
         f => `<td class="n" style="--a:${Math.min(1, share(f, p) / 0.6).toFixed(2)}" title="${Math.round(100 * share(f, p))}% of the lineup’s salary">${money((T[f].costPos || {})[p] || 0)}</td>`]),
       ['tot', 'Total', 'n', f => T[f].lineupCost, f => num(T[f].lineupCost, money, true)],
     ], ids, ['tot', -1], 'an-heat');
-    const pr = A.pricier || [0, 0, 0], prN = pr[0] + pr[1] + pr[2];
+    const pr = A.pricier || [0, 0, 0], PA = A.pricierAll && A.pricierAll.bySeason && A.pricierAll.bySeason.length ? A.pricierAll : null;
 
     const odW = A.oddsWeeks || [];
     const spark = o => { const pts = o.map((x, i) => x == null ? null : [(i * 84 / Math.max(1, o.length - 1) + 3), (23 - x * 20 / 100)]).filter(Boolean);
@@ -157,16 +157,22 @@ window.FBPAnalytics = (function () {
       card('cost', 'Starting lineup cost', 'The average salary of each team’s starting lineup each week, and the points it returned per dollar.',
         bars('cost', 'lineupCost', money, t => f2(t.ptsPerDollar) + ' pts per $', -1), { tool: flip('cost', 'lineupCost', -1, 'Priciest', 'Cheapest') }),
       card('costpos', 'Where the lineup money goes', 'Average weekly salary started at each position. Darker cells are a bigger share of that team’s lineup.', posTbl),
-      card('pricier', 'Does the pricier lineup win?', 'Every game this season, the team that started more salary against the team that started less.',
-        `<div class="an-hero"><b>${pr[0]}-${pr[1]}${pr[2] ? '-' + pr[2] : ''}</b><span>record of the pricier lineup${prN ? ` · ${Math.round(100 * (pr[0] + pr[2] / 2) / prN)}%` : ''}</span></div>
-        <h3>Biggest bargain wins</h3>` + table('cheapwins', [
-          ['wk', 'Wk', '', r => r[0], r => `<td>${r[0]}</td>`],
-          ['win', 'Winner', '', r => T[r[1]].name, r => `<td class="an-tm">${lg(r[1])}<span class="an-ab">${ab(r[1])}</span> ${f1(r[3])}</td>`],
-          ['wc', 'Started', 'n', r => r[2], r => num(r[2], money)],
-          ['lose', 'Loser', '', r => T[r[4]].name, r => `<td class="an-tm">${lg(r[4])}<span class="an-ab">${ab(r[4])}</span> ${f1(r[6])}</td>`],
-          ['lc', 'Started', 'n', r => r[5], r => num(r[5], money)],
-          ['gap', 'Gap', 'n', r => r[5] - r[2], r => num(r[5] - r[2], money, true)],
-        ], A.cheapWins || [], ['gap', -1])),
+      card('pricier', 'Does the pricier lineup win?', prAll && PA ? `Every regular-season game since ${PA.bySeason[0][0]}, the team that started more salary against the team that started less. Salaries are each season’s own.` : 'Every game this season, the team that started more salary against the team that started less.',
+        (() => { const R = prAll && PA ? PA.rec : pr, N = R[0] + R[1] + R[2];
+          const hero = `<div class="an-hero"><b>${R[0]}-${R[1]}${R[2] ? '-' + R[2] : ''}</b><span>${prAll && PA ? 'all-time ' : ''}record of the pricier lineup${N ? ` · ${Math.round(100 * (R[0] + R[2] / 2) / N)}%` : ''}</span></div>`;
+          const seasons = prAll && PA ? `<h3>By season</h3><div class="an-prs">${PA.bySeason.map(([y, r]) => { const n = r[0] + r[1] + r[2], pc = n ? Math.round(100 * (r[0] + r[2] / 2) / n) : 0;
+            return `<div class="an-pry"><span>${y}</span><span class="an-trk"><span class="an-mid"></span><span class="an-b ${pc >= 50 ? 'p' : 'n'}" style="left:${pc >= 50 ? 50 : 50 - Math.min(50, 2 * (50 - pc))}%;width:${Math.min(50, 2 * Math.abs(pc - 50))}%"></span></span><b>${r[0]}-${r[1]}${r[2] ? '-' + r[2] : ''}</b><small>${pc}%</small></div>`; }).join('')}</div>` : '';
+          const cols = [
+            ...(prAll && PA ? [['yr', 'Yr', '', r => r[0], r => `<td>${r[0]}</td>`]] : []),
+            ['wk', 'Wk', '', r => r[o], r => `<td>${r[o]}</td>`],
+            ['win', 'Winner', '', r => (T[r[o + 1]] || {}).name || '', r => `<td class="an-tm">${lg(r[o + 1])}<span class="an-ab">${ab(r[o + 1])}</span> ${f1(r[o + 3])}</td>`],
+            ['wc', 'Started', 'n', r => r[o + 2], r => num(r[o + 2], money)],
+            ['lose', 'Loser', '', r => (T[r[o + 4]] || {}).name || '', r => `<td class="an-tm">${lg(r[o + 4])}<span class="an-ab">${ab(r[o + 4])}</span> ${f1(r[o + 6])}</td>`],
+            ['lc', 'Started', 'n', r => r[o + 5], r => num(r[o + 5], money)],
+            ['gap', 'Gap', 'n', r => r[o + 5] - r[o + 2], r => num(r[o + 5] - r[o + 2], money, true)]];
+          const o = prAll && PA ? 1 : 0;
+          return hero + seasons + `<h3>Biggest bargain wins</h3>` + table(prAll && PA ? 'cheapwinsall' : 'cheapwins', cols, prAll && PA ? PA.cheapWins : (A.cheapWins || []), ['gap', -1]); })(),
+        { tool: PA ? `<span class="an-prtog" role="group" aria-label="Season or all-time"><button type="button" data-an-prall="0" aria-pressed="${!prAll}">Season</button><button type="button" data-an-prall="1" aria-pressed="${prAll}">All-time</button></span>` : '' }),
       card('points', 'Cheapest and priciest points', 'Salary per point each time a player started, for players with 3 or more starts.',
         `<h3>Cheapest (10+ points a start)</h3>` + playerTbl('cheapst', A.cheapStarters || [], ['cpp', 1], [
           ['sal', 'Salary', 'n', r => r.sal, r => num(r.sal, money)], ['ppg', 'Pts/start', 'n', r => r.ppg, r => num(r.ppg, f1)],
@@ -201,6 +207,7 @@ window.FBPAnalytics = (function () {
       <p class="rf-foot">Through week ${A.through}. Tap a column header to sort a table, and a section’s title to fold it. Best lineups are MFL’s optimal lineup each week. Salaries are what each player is paid on his FBP roster now; players since dropped use their 2026 auction price or waiver bid.</p>`;
   }
 
+  let prAll = false; try { prAll = localStorage.getItem('fbp-an-prall') === '1'; } catch (e) {}
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   document.addEventListener('click', e => {
     const t = e.target.closest ? e.target : null; if (!t) return;
@@ -209,6 +216,8 @@ window.FBPAnalytics = (function () {
       if (s.dataset.anBest != null) sorts[id] = [k, -((cur || [k, +s.dataset.anBest])[1])];   // a chart's flip button
       else sorts[id] = cur && cur[0] === k ? [k, -cur[1]] : [k, +s.dataset.anFirst];
       return redraw(); }
+    const pa = t.closest('[data-an-prall]');
+    if (pa) { prAll = pa.dataset.anPrall === '1'; try { localStorage.setItem('fbp-an-prall', prAll ? '1' : '0'); } catch (err) {} return redraw(); }
     const at = t.closest('[data-an-accteam]');
     if (at) { const f = at.dataset.anAccteam; accF.teams.has(f) ? accF.teams.delete(f) : accF.teams.add(f); return redraw(); }
     const ap = t.closest('[data-an-accpos]');

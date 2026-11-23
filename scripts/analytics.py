@@ -14,6 +14,7 @@ Salary: points on FBP rosters this season against current salaries.
 Playoff odds: each week's simulation, from data/league-now-history.json plus the latest run.
 Run after league_now.py and refresh_mfl.py: python scripts/analytics.py
 """
+import re
 import json, os, sys, collections
 from datetime import datetime, timezone
 
@@ -45,6 +46,60 @@ def salaries():
                     try: sal.setdefault(pid, float(parts[1]))
                     except ValueError: pass
     return sal
+
+
+def season_salaries(y):
+    """{player: salary} for a past season: that year's final rosters, then its auction, then its waiver bids."""
+    sal = {}
+    for f in ((load(D('history', str(y), 'rosters.json'), {}) or {}).get('rosters') or {}).get('franchise', []):
+        for p in f.get('player', []):
+            if p.get('salary') not in (None, ''):
+                sal[p['id']] = float(p['salary'])
+    for a in ((load(D('reference.json'), {}) or {}).get('auction_results') or {}).get(str(y), []):
+        sal.setdefault(str(a.get('player_id')), float(a.get('price') or 0))
+    for t in (load(D('history', str(y), 'transactions.json'), {}) or {}).get('transactions', []) or []:
+        if t.get('type') == 'BBID_WAIVER':
+            parts = t.get('transaction', '').split('|')
+            if len(parts) > 1:
+                for pid in filter(None, parts[0].split(',')):
+                    try: sal.setdefault(pid, float(parts[1]))
+                    except ValueError: pass
+    return sal
+
+
+def pricier_past():
+    """Regular-season games of every finished season: {year: ([w, l, t], cheap wins)}."""
+    ref = load(D('reference.json'), {}) or {}
+    out = {}
+    for y, games in sorted((ref.get('schedules_by_year') or {}).items()):
+        wr = (load(D('history', y, 'weeklyResults.json'), {}) or {}).get('weeks', {})
+        if not wr:
+            continue
+        po = min((ref.get('playoff_weeks_by_year') or {}).get(y) or [99])
+        sal = season_salaries(y)
+        cost = {}
+        for w, fr in wr.items():
+            for f, t in fr.items():
+                cost[(int(w), f)] = sum(sal.get(pid, 0) for pid, _ in t.get('s', []))
+        rec, cheap = [0, 0, 0], []
+        for g in games:
+            w = int(g['week'])
+            if w >= po:
+                continue
+            a, b = g['franchiseA'], g['franchiseB']
+            try: sa, sb = float(g['scoreA']), float(g['scoreB'])
+            except (TypeError, ValueError): continue
+            ca, cb = cost.get((w, a)), cost.get((w, b))
+            if not ca or not cb or ca == cb:
+                continue
+            hi, lo = (a, b) if ca > cb else (b, a)
+            his, los = (sa, sb) if hi == a else (sb, sa)
+            rec[0 if his > los else 1 if his < los else 2] += 1
+            if los > his:
+                cheap.append([int(y), w, lo, r1(cost[(w, lo)]), r1(los), hi, r1(cost[(w, hi)]), r1(his)])
+        if sum(rec):
+            out[int(y)] = (rec, cheap)
+    return out
 
 
 def main():
@@ -106,6 +161,15 @@ def main():
         pricier[0 if his > los else 1 if his < los else 2] += 1
         if los > his:
             cheap_wins.append([w, lo, r1(wk_cost[(w, lo)][0]), r1(los), hi, r1(wk_cost[(w, hi)][0]), r1(his)])
+
+    # all time: every finished season plus this one
+    year = int((re.search(r'(19|20)\d\d', str(ln.get('season') or '')) or [0])[0] or 0)
+    past = {y: v for y, v in pricier_past().items() if not year or y < year}
+    allrec = [sum(v[0][i] for v in past.values()) + pricier[i] for i in range(3)]
+    allcheap = [c for v in past.values() for c in v[1]] + [[year] + c for c in cheap_wins]
+    allcheap.sort(key=lambda c: -(c[6] - c[3]))
+    pricier_all = {'rec': allrec, 'bySeason': [[y, v[0]] for y, v in sorted(past.items())] + ([[year, pricier]] if year else []),
+                   'cheapWins': allcheap[:10]}
 
     out_t = {}
     for f, s in st.items():
@@ -237,7 +301,7 @@ def main():
     out = {
         'built': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'season': ln.get('season'), 'through': played,
         'teams': out_t, 'oddsWeeks': odds_weeks, 'leftWeeks': left_weeks[:8],
-        'pricier': pricier, 'cheapWins': cheap_wins[:6],
+        'pricier': pricier, 'cheapWins': cheap_wins[:6], 'pricierAll': pricier_all,
         'bargains': bargains, 'letdowns': letdowns, 'cheapStarters': cheap_starters, 'priceyStarters': pricey_starters,
         'heatWeeks': [int(w) for w in hw], 'heatPts': HEAT, 'heatTeams': heat_t, 'heatPlayers': heat_p, 'acc': acc,
     }
