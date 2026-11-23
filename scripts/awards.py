@@ -750,6 +750,11 @@ class Followups:
     def __init__(self):
         ref = load(D('reference.json'), {}) or {}
         self.po = ref.get('playoff_weeks_by_year') or {}
+        # bought at an auction = he was let go first (not kept), even if the same team buys him back
+        self.bought = {}
+        for y, rows in (ref.get('auction_results') or {}).items():
+            for x in rows or []:
+                self.bought.setdefault((int(y), str(x.get('player_id'))), []).append(int(x.get('timestamp') or 0))
         self.brackets = ref.get('playoff_brackets') or {}
         self.pweekly = {}
         meta = load(D('mfl', '_meta.json'), {}) or {}
@@ -830,6 +835,8 @@ class Followups:
             # on another team's roster (e.g. let go on keeper day and bought back at the auction by someone else)
             elsewhere = sorted(w for w, frs in self.listed_with(y).get(pid, {}).items() if w >= first and fr not in frs)
             ends = ([PT.week_of(moves[0], y)] if moves else []) + elsewhere[:1]
+            if any(b > ts for b in self.bought.get((y, pid), [])):
+                return y, 1   # not kept: back in the auction pool (a same-team re-buy starts a new stint)
             if ends:
                 return y, min(ends)
             if y > y0 and ro and not any(f.get('id') == fr and any(str(pl.get('id')) == pid for pl in (f.get('player') or [])) for f in ro):
