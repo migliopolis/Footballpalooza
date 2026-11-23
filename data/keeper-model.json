@@ -105,5 +105,12 @@
    0.95,
    0.98
   ]
- }
+ },
+ "ceiling": {
+  "QB": 32,
+  "RB": 59,
+  "WR": 48,
+  "TE": 45
+ },
+ "ceilingNote": "Highest next-season salary ever kept at each position (keeper decisions 2021-2026). Above it the model's odds fall off: x e^(-dollars over / 10). No RB has ever been kept at $60+, even the RB1 (Ekeler 2022, McCaffrey 2025 at $63)."
 }

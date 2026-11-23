@@ -100,7 +100,12 @@ def keep_chance(r, season):
          (r.get('age') or 26) - KM['peak'][r['pos']], bool(dy and season - dy + 1 <= 2), r.get('st') == 'TAXI_SQUAD',
          r['pos'] == 'QB', r['pos'] == 'RB', r['pos'] == 'WR', r['pos'] == 'TE', math.log(d), mk, mk - nxt, (mk - nxt) / max(nxt, 1)]
     z = KM['intercept'] + sum(c * (float(x) - m) / s for c, x, m, s in zip(KM['coef'], f, KM['mean'], KM['sd']))
-    return 1 / (1 + math.exp(-z))
+    pr = 1 / (1 + math.exp(-z))
+    # history's price ceiling: no one has kept a player at his position above this next salary, so the odds fall off past it
+    cap = (KM.get('ceiling') or {}).get(r['pos'])
+    if cap and nxt > cap:
+        pr *= math.exp(-(nxt - cap) / 10)
+    return pr
 
 
 def main():
