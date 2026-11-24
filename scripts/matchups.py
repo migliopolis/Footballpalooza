@@ -10,7 +10,9 @@ For each game in the next unplayed week:
   - stakes: each team's playoff and bye odds after a win and after a loss
   - the series since 2019: overall record, playoff meetings, current streak,
     average score, biggest win each way, and every meeting
-The game with the biggest combined playoff swing is tagged game of the week.
+Game of the week: what's at stake for both teams (playoff odds, then bye and 1 seed odds at half and quarter
+weight), scaled by how good the two teams are (their power ratings, cubed, so a game between top teams beats one
+where only one side matters) and by how close the game is. A blowout pick or a game only one team needs doesn't get it.
 """
 import json, os
 from datetime import datetime, timezone
@@ -173,10 +175,18 @@ def main():
         if wk != week: continue
         A, B = tape(a, b), tape(b, a)
         swing = sum((x['ifWin'][0] - x['ifLoss'][0]) for x in (A, B) if x['ifWin'])
-        out.append(dict(away=a, home=b, teams={a: A, b: B}, series=series(a, b), swing=round(swing, 1)))
+        stakes = sum(sum(wt * (x['ifWin'][i] - x['ifLoss'][i]) for i, wt in enumerate((1, .5, .25)) if i < len(x['ifWin']))
+                     for x in (A, B) if x['ifWin'])
+        pw = {t['id']: t.get('pwr') or 0 for t in now['standings']}
+        top = max(pw.values()) or 1
+        quality = ((pw.get(a, 0) + pw.get(b, 0)) / 2 / top) ** 3
+        p = (A.get('winProb') or 50) / 100
+        close = .5 + .5 * (1 - abs(2 * p - 1))
+        out.append(dict(away=a, home=b, teams={a: A, b: B}, series=series(a, b), swing=round(swing, 1),
+                        gotwScore=round(stakes * quality * close, 1)))
     if out:
-        max(out, key=lambda g: g['swing'])['gotw'] = True
-    out.sort(key=lambda g: -g['swing'])
+        max(out, key=lambda g: g['gotwScore'])['gotw'] = True
+    out.sort(key=lambda g: -g['gotwScore'])
 
     json.dump(dict(season=now['season'], week=week, through=now['weeksPlayed'], since=min(g['y'] for g in games),
                    generated=datetime.now(timezone.utc).isoformat(timespec='seconds'), games=out),
