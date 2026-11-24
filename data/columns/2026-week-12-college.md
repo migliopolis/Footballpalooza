@@ -5,9 +5,9 @@ author: lainey
 season: 2026
 week: 12
 date: 2026-11-24
-image: assets/draft/draft-home-hero.jpg
+image: assets/columns/2026-week-12-college-smith.jpg
 caption: Jeremiah Smith, Ohio State. Still the no-doubt 1.01.
-credit: 
+credit: Samantha Madar / The Columbus Dispatch / USA TODAY Network
 teaser: The new draft and college column starts with the easiest pick in years, a 30,000-foot look at the 2027 class, how the top prospects did Saturday, and a draft order full of familiar faces.
 ---
 Hi. I'm Lainey Pruitt, and this is the new college and draft column. Every Monday I'll tell you how the top 2027 prospects played that weekend and what it means for our rookie draft. I'll also keep Draft Home's "What to Know" current, and every week one prospect gets a closer look.
@@ -104,6 +104,8 @@ Picks 1 through 6 go to the non-playoff teams, worst potential points first. Pic
 **Pick 6 is a playoff question.** Hauk Tua is the best team outside the field and has about a 44 percent chance to get in. If they make it, someone else becomes the sixth pick. The Fist of the Magi (2.7 percent) and Wholey Club (0.4 percent) are hanging on by a thread.
 
 **Some teams are double-dipping.** Wholey Club has 1 and 10. Son of Tinactin has 2 and 8. JCC has 3 and 12. In a superflex year with this many quarterbacks, two first-rounders is a real advantage. If you're picking 2 or 3, you can take the best quarterback on the board and still get a shot at Becker or Baugh with your second pick.
+
+All three of those teams play in the East. The fourth East team, Bullish on da Bears, has no first at all. Their pick belongs to JCC. Bullish leads the division now, but the other three are lining up for next year.
 
 ## Familiar faces
 
