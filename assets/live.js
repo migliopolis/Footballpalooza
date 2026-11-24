@@ -359,6 +359,8 @@
     const rush = ru && (n(ru.CAR) || n(ru.YDS)) ? `${ru.CAR} car, ${ru.YDS} yds${n(ru.TD) ? `, ${ru.TD} TD` : ''}` : '';
     const rec = re && (n(re.REC) || n(re.TGTS)) ? `${re.REC} rec${re.TGTS ? ` (${re.TGTS} tgt)` : ''}, ${re.YDS} yds${n(re.TD) ? `, ${re.TD} TD` : ''}` : '';
     if (pos(id) === 'WR' || pos(id) === 'TE') { if (rec) out.push(rec); if (rush) out.push(rush); } else { if (rush) out.push(rush); if (rec) out.push(rec); }
+    // kick and punt returns (return yards score .05 a yard in FBP)
+    [[r.kickReturns, 'KR'], [r.puntReturns, 'PR']].forEach(([x, l]) => { if (x && (n(x.NO) || n(x.YDS))) out.push(`${x.NO} ${l}, ${x.YDS} yds${n(x.TD) ? `, ${x.TD} TD` : ''}`); });
     if (k) out.push(`FG ${k.FG}, XP ${k.XP}`);
     const fl = r.fumbles && n(r.fumbles.LOST);
     if (fl) out.push(`${fl} fum lost`);
