@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-24T18:53:30+00:00",
+ "fetched": "2026-11-24T19:04:00+00:00",
  "transactions": [
   {
    "activated": "15253,",
@@ -798,6 +798,13 @@
    "franchise": "0011",
    "timestamp": "1788720553",
    "type": "IR"
+  },
+  {
+   "demoted": "17500,",
+   "franchise": "0008",
+   "promoted": "17607,",
+   "timestamp": "1795546755",
+   "type": "TAXI"
   },
   {
    "demoted": "",

@@ -552,7 +552,7 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 108.2,
-     "status": "ROSTER",
+     "status": "TAXI_SQUAD",
      "pick": "1.11",
      "honors": {
       "first": 0,
@@ -2077,7 +2077,7 @@
    ]
   }
  ],
- "generated": "2026-11-24T18:56:22+00:00",
+ "generated": "2026-11-24T19:06:40+00:00",
  "basis": {
   "throughWeek": 10,
   "teams": [

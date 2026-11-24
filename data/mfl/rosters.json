@@ -1678,11 +1678,11 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "1.11 2026",
+      "contractStatus": "3.03 2026",
       "contractYear": "1/5",
-      "drafted": "Trade",
-      "id": "17500",
-      "salary": "5",
+      "drafted": "3.03",
+      "id": "17607",
+      "salary": "2",
       "status": "ROSTER"
      },
      {
@@ -1741,11 +1741,11 @@
      },
      {
       "contractInfo": "",
-      "contractStatus": "3.03 2026",
+      "contractStatus": "1.11 2026",
       "contractYear": "1/5",
-      "drafted": "3.03",
-      "id": "17607",
-      "salary": "2",
+      "drafted": "Trade",
+      "id": "17500",
+      "salary": "5",
       "status": "TAXI_SQUAD"
      }
     ],
