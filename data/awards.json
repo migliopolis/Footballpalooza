@@ -544,7 +544,7 @@
      "pos": "WR",
      "nfl": "CLE",
      "espn": "4832800",
-     "team": "0004",
+     "team": "0008",
      "pts": 0.0,
      "starts": 0,
      "ppg": 0,
@@ -552,7 +552,7 @@
      "contract": "1/5",
      "rookie": true,
      "allPts": 108.2,
-     "status": "TAXI_SQUAD",
+     "status": "ROSTER",
      "pick": "1.11",
      "honors": {
       "first": 0,
@@ -826,7 +826,7 @@
      "pos": "WR",
      "nfl": "CLE",
      "espn": "4832800",
-     "team": "0004",
+     "team": "0008",
      "pts": 108.2,
      "starts": 0,
      "ppg": 0,
@@ -2077,7 +2077,7 @@
    ]
   }
  ],
- "generated": "2026-11-24T17:49:12+00:00",
+ "generated": "2026-11-24T18:56:22+00:00",
  "basis": {
   "throughWeek": 10,
   "teams": [

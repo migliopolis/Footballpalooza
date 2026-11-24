@@ -1,6 +1,6 @@
 {
  "encoding": "utf-8",
- "fetched": "2026-11-24T17:45:54+00:00",
+ "fetched": "2026-11-24T18:52:46+00:00",
  "tradeBaits": {
   "tradeBait": [
    {
@@ -26,12 +26,6 @@
     "inExchangeFor": "Cash and picks",
     "timestamp": "1795107190",
     "willGiveUp": "17472,17081,15282,14861"
-   },
-   {
-    "franchise_id": "0008",
-    "inExchangeFor": "",
-    "timestamp": "1795282273",
-    "willGiveUp": "15762"
    }
   ]
  },
