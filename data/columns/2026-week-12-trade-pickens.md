@@ -28,7 +28,9 @@ Two things to know. First, Dallas has its bye in Week 14, the last week of the r
 
 Boston was Fully Cooked's 1.11 in this year's rookie draft and he's on the All-FBP Rookie Team: 108.2 points in 10 games, 10.8 a game, as a rookie. He's $5 this year and runs $5, $8, $14, $23 and $35 over the five years of his deal. Son of Tinactin keep him for years at a price Pickens will never see again.
 
-Then there's the draft angle. Son of Tinactin are 3-7-1 and out of the playoff race. As Lainey laid out Monday, they're second in the draft order, 21.9 potential points behind Wholey Club for the 1.01. Potential points count the best lineup a team could have set. Take Son of Tinactin's best receiver off the roster, and that number grows more slowly for the last three weeks. Whether that was the plan or not, it helps them chase Jeremiah Smith. Fittingly, Pickens scored 43.5 in Week 10 while sitting on their bench.
+Then there's the draft angle. Son of Tinactin are 3-7-1 and out of the playoff race. As Lainey laid out Monday in [her college and draft column](#now/column/2026-week-12-college), they're second in the draft order, 21.9 potential points behind Wholey Club for the 1.01. Potential points count the best lineup a team could have set. Take Son of Tinactin's best receiver off the roster, and that number grows more slowly for the last three weeks. Whether that was the plan or not, it helps them chase Jeremiah Smith. Fittingly, Pickens scored 43.5 in Week 10 while sitting on their bench.
+
+**Update, 11:00 a.m.:** Son of Tinactin have already moved Boston to their taxi squad and promoted rookie tight end Eli Raridon (NE, $2, 52.1 points in 9 games) to make room. Taxi players don't count toward potential points, so Boston's points won't push Son of Tinactin's number up either. Pickens out, Boston stashed: their potential points just got a lot easier to keep low.
 
 ## The Week 12 wrinkle
 
