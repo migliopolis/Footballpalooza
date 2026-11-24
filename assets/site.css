@@ -3579,3 +3579,6 @@ html.lb-open{overflow:hidden}
 .an-pry{display:grid;grid-template-columns:36px minmax(0,1fr) auto 34px;white-space:nowrap;align-items:center;gap:8px;font:600 .76rem var(--body);font-variant-numeric:tabular-nums}
 .an-pry b{text-align:right}.an-pry small{color:var(--muted);text-align:right}
 .an-pry .an-trk{position:relative;height:12px}
+
+/* Scoreboard: points that include ESPN plays MFL hasn't posted yet */
+.lv-quick{text-decoration:underline dotted;text-decoration-color:var(--muted);text-underline-offset:3px}

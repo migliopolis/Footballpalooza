@@ -398,7 +398,36 @@
       hist[w] = { liveScoring: { week: String(w), matchup: ((wk || {}).matchup || []).map(m => ({ franchise: m.franchise.map(fr) })) } };
     });
   }
-  const cur = () => view ? hist[view] : data;
+  // Quick points: MFL's live scoring lags ESPN's box scores by a minute or more, so between MFL updates a player's points
+  // move with his ESPN stat line (FBP scoring rules, estimate() above). Only the change since MFL last moved is added,
+  // so things ESPN can't see (2-point conversions and the like) stay MFL's; MFL's number takes over again as soon as it
+  // changes, or after 3 minutes if the two never agree. QB/RB/WR/TE only: defenses wait for MFL.
+  const QK = {};
+  function quick(d) {
+    if (!d || !d.liveScoring || view || weekDone()) return d;
+    const now = Date.now();
+    const L = d.liveScoring, out = { liveScoring: Object.assign({}, L, { matchup: (L.matchup || []).map(m => ({ franchise: m.franchise.map(f => {
+      let add = 0;
+      const pl = (f.players.player || []).map(p => {
+        if (!['QB', 'RB', 'WR', 'TE'].includes(pos(p.id)) || p.score == null || p.score === '') return p;
+        const g = gameOf(p.id); if (!g || g.state === 'pre') return p;
+        const e = estimate(p.id); if (e == null) return p;
+        const mfl = +p.score || 0;
+        let r = QK[p.id];
+        if (!r) r = QK[p.id] = { mfl, base: Math.min(e, mfl), at: now };   // ESPN already ahead on first look: show it
+        if (mfl !== r.mfl) { const was = e - r.base; r.base += mfl - r.mfl; r.mfl = mfl; r.at = now;
+          const left = e - r.base; if (Math.abs(left) < .05 || Math.sign(left) !== Math.sign(was)) r.base = e; }
+        if (now - r.at > 180000) { r.base = e; r.at = now; }       // three minutes with no MFL change: trust MFL
+        const q = Math.round((e - r.base) * 100) / 100;
+        if (Math.abs(q) < .05) return p;
+        if (p.status === 'starter') add += q;
+        return Object.assign({}, p, { score: String(Math.round((mfl + q) * 100) / 100), quick: q });
+      });
+      return Object.assign({}, f, { score: String(Math.round(((+f.score || 0) + add) * 100) / 100), quick: Math.round(add * 100) / 100, players: Object.assign({}, f.players, { player: pl }) });
+    }) })) }) };
+    return Object.assign({}, d, out);
+  }
+  const cur = () => view ? hist[view] : quick(data);
   function showWeek(w) {
     const live = data ? +data.liveScoring.week : 0;
     view = !w || +w === live ? null : +w;
@@ -696,7 +725,7 @@
         const pj = projNow(p, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}${rzc}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
-          : n1(+p.score) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="${st === 'live' ? 'Projected finish: his points plus his MFL projection for the time left' : 'MFL projection'}">${n1(pj)}</small>` : '')}</td>`;
+          : (p.quick ? `<span class="lv-quick" title="Includes ${n1(p.quick)} from ESPN’s box score that MFL hasn’t posted yet">${n1(+p.score)}</span>` : n1(+p.score)) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="${st === 'live' ? 'Projected finish: his points plus his MFL projection for the time left' : 'MFL projection'}">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
       const rx = (k, cl) => { const c = [openRows.has(`${a.id}-${b.id}-${k}`) ? 'lv-rx' : '', cl || ''].filter(Boolean).join(' ');
@@ -840,7 +869,7 @@
     const me = X.myTeam;
     const mode = ['week', 'season', 'six'].includes(apMode) ? apMode : 'week';
     // Season and 6 Seed run on the current week; the standings already hold it once the weekly update has counted it
-    const liveL = data.liveScoring, live = allW(liveL), counted = (X.weeksPlayed || 0) >= liveW, scored = Object.values(live).some(r => r.pts);
+    const liveL = quick(data).liveScoring, live = allW(liveL), counted = (X.weeksPlayed || 0) >= liveW, scored = Object.values(live).some(r => r.pts);
     const add = id => counted || !scored ? { w: 0, l: 0, t: 0 } : live[id];
     const season = (X.standings || []).map(s => { const a = add(s.id) || { w: 0, l: 0, t: 0 };
       return { id: s.id, w: (s.allPlayW || 0) + a.w, l: (s.allPlayL || 0) + a.l, t: (s.allPlayT || 0) + a.t, add: a.w, rec: rec(s.w, s.l, s.t) }; })
@@ -1002,7 +1031,7 @@
     if (ctx) tkCtx = ctx;
     if (!data && !loading && !failed) { load(); poll(); }
     if (!data || !players) return null;
-    const L = data.liveScoring, wk = +L.week, n1x = v => n1(+v || 0);
+    const L = quick(data).liveScoring, wk = +L.week, n1x = v => n1(+v || 0);
     const side = f => { const st = (f.players.player || []).filter(p => p.status === 'starter');
       return { id: f.id, score: +f.score || 0, proj: projTotal(f, wk), top: st.filter(p => +p.score).sort((a, b) => b.score - a.score).slice(0, 2).map(p => [short(p.id), n1x(p.score)]) }; };
     const games = (L.matchup || []).map(m => { const fs = m.franchise.slice().sort((a, b) => (+a.isHome) - (+b.isHome)); return { a: side(fs[0]), b: side(fs[1]) }; });
