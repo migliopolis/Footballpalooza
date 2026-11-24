@@ -1,7 +1,7 @@
 {
   "note": "Rookie Draft > Draft Home: the class primer. Edit the summary and the profiles (comp: the NFL player comparison, compBy: who made it) here; ranks, positions, photos and schools come from the big board (rookie-pricer/mock-board.json) and data/rookies-espn.json.",
   "class": 2027,
-  "updated": "2026-11-14",
+  "updated": "2026-11-24",
   "hero": {
     "src": "assets/draft/draft-home-hero.jpg",
     "alt": "Jeremiah Smith in Ohio State's scarlet uniform, arms crossed in the end zone after a touchdown",
@@ -19,14 +19,14 @@
     {
       "name": "Jeremiah Smith",
       "tag": "The no-doubt 1.01",
-      "text": "A 6-4, 223-pound receiver who has done everything since the day he arrived: 76 catches for 1,315 yards and 15 touchdowns as a freshman on a national title team, then 87 for 1,243 and 12 and a unanimous All-American nod in 2025. Two-time Big Ten Receiver of the Year, now Ohio State's career leader. Hands, size, speed and route craft are all elite.",
+      "text": "A 6-4, 223-pound receiver who has done everything since the day he arrived: 76 catches for 1,315 yards and 15 touchdowns as a freshman on a national title team, then 87 for 1,243 and 12 and a unanimous All-American nod in 2025. This fall he has 17 touchdown catches, tying Terry Glenn's Ohio State single-season record, and he holds the Big Ten's career records for receiving yards and touchdown catches. Hands, size, speed and route craft are all elite.",
       "comp": "Calvin Johnson",
       "compBy": "Todd McShay"
     },
     {
       "name": "Jadan Baugh",
       "tag": "RB1 of the class",
-      "text": "The best back in the class opened 2026 with 600 yards and 11 touchdowns in four games, over seven yards a carry and 100 yards every week. Patient behind the line, and the receiving role is growing. Boards compare his style to Le'Veon Bell's.",
+      "text": "The best back in the class has 981 yards and 16 rushing touchdowns, the most by a Florida back since 2000, and is 19 yards from the program's first back-to-back 1,000-yard seasons. Patient behind the line, and the receiving role is growing. Boards compare his style to Le'Veon Bell's.",
       "comp": "Le'Veon Bell",
       "compBy": "A to Z Sports"
     },
@@ -54,14 +54,14 @@
     {
       "name": "Darian Mensah",
       "tag": "The fall's biggest riser",
-      "text": "Climbed from outside the top 35 in September into the top tier, tied for the national lead with 25 touchdown passes against one interception at Miami. The question scouts ask: how much of it is a short, quick-throw offense.",
+      "text": "Climbed from outside the top 35 in September into the top tier: 3,324 yards, 29 touchdown passes and four interceptions at Miami. Virginia Tech gave him his first game of the year without a touchdown pass, though Miami's coaches called it one of his best. The question scouts ask: how much of it is a short, quick-throw offense.",
       "comp": "Teddy Bridgewater",
       "compBy": "A to Z Sports"
     },
     {
       "name": "Kewan Lacy",
-      "tag": "Touchdown machine, if healthy",
-      "text": "Scored 24 touchdowns at Ole Miss in 2025. This year has been a fight with his body: a lower-leg injury, shoulder trouble and a dislocation against Texas that cost him a game. At 205 pounds, durability is the knock.",
+      "tag": "Touchdown machine, out for the year",
+      "text": "Scored 24 touchdowns at Ole Miss in 2025. This year was a fight with his body: a lower-leg injury, shoulder trouble, then a dislocated left shoulder against Texas in late October, the same shoulder he had surgery on in the offseason. He's out for the season with 388 yards and five touchdowns, and has a year of eligibility left if he wants it. At 205 pounds, durability is the knock.",
       "comp": "Lamar Miller, if he ran tougher",
       "compBy": "A to Z Sports"
     },
@@ -75,14 +75,14 @@
     {
       "name": "KJ Duff",
       "tag": "6-6 red-zone weapon",
-      "text": "A 6-6, 225-pound receiver who moves like a smaller one. He accounts for nearly half of Rutgers' receiving yards and more than half of its receiving touchdowns. Built to win in the end zone.",
+      "text": "A 6-6, 225-pound receiver who moves like a smaller one, with 45 catches for 774 yards and nine touchdowns before high-ankle surgery ended his season in November. He's expected back to full football activities in January and expected to enter the draft. Built to win in the end zone.",
       "comp": "Mike Evans",
       "compBy": "Sports Illustrated"
     },
     {
       "name": "Cam Coleman",
       "tag": "First-round traits, low volume",
-      "text": "The talent is obvious: a deep threat with first-round tools. The production hasn't matched it at Texas (23 catches, 409 yards and 7 touchdowns through eight games), which is why he slid from third on some boards in September.",
+      "text": "The talent is obvious: a deep threat with first-round tools. The production hasn't matched it at Texas, and a shoulder injury against Mississippi State has limited him since; he caught one pass against Arkansas and hasn't been practicing. That's why he slid from third on some boards in September.",
       "comp": "Julio Jones",
       "compBy": "Steve Sarkisian"
     }
