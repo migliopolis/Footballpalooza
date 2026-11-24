@@ -5,6 +5,10 @@ author: devin
 season: 2026
 week: 12
 date: 2026-11-24
+breaking: yes
+image: assets/columns/2026-week-12-trade-pickens.jpg
+caption: George Pickens, now a Fully Cooked receiver
+credit: 
 teaser: Pickens goes to Fully Cooked for rookie Denzel Boston, days before the two teams play each other. A contender gets its stretch-run receiver, and Son of Tinactin may have just helped their own draft position.
 ---
 Nine days before the Dec 3 deadline, we have a trade. It went through Tuesday morning, and the timing is the first thing you notice: these two teams play each other this week.
