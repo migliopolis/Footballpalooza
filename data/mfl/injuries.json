@@ -1,6 +1,6 @@
 {
  "encoding": "utf-8",
- "fetched": "2026-11-24T16:35:34+00:00",
+ "fetched": "2026-11-24T17:46:00+00:00",
  "injuries": {
   "injury": [
    {
@@ -1933,7 +1933,7 @@
     "details": "Hip",
     "exp_return": "Nov 29, 2026",
     "id": "17062",
-    "status": "IR"
+    "status": "IR-R"
    },
    {
     "details": "Knee",
@@ -2518,7 +2518,7 @@
     "status": "Questionable"
    }
   ],
-  "timestamp": "1795532464",
+  "timestamp": "1795539664",
   "week": "12"
  },
  "version": "1.0"
