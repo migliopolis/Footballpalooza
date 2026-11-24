@@ -12,7 +12,7 @@ teaser: The new draft and college column starts with the easiest pick in years, 
 ---
 Hi. I'm Lainey Pruitt, and this is the new college and draft column. Every Monday I'll tell you how the top 2027 prospects played that weekend and what it means for our rookie draft. I'll also keep Draft Home's "What to Know" current, and every week one prospect gets a closer look.
 
-Some of you already know me from my other page. After college I started a subscription account to cover Son of Tinactin: news, lineup notes, injury updates, the occasional scarf. It got popular. Some of that was the football. Some of it wasn't, and I've made my peace with that. Either way, enough people were reading that the press box called and asked if I'd cover college and the draft for everybody. I said yes, as long as I could keep the scarf.
+Some of you already know me from my other page. After college I started a subscription account to cover Son of Tinactin: news, lineup notes, injury updates, the occasional scarf. It got popular. Some of that was the football. Some of it wasn't. Enough people were reading that the press box called and asked if I'd cover college and the draft for everybody. I said yes, as long as I could keep the scarf.
 
 On the page I'm all business. Mostly.
 
