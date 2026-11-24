@@ -25,6 +25,19 @@ def load(*p):
         return {}
 
 
+def breaking(c):
+    # a column flagged breaking: yes says so in its link preview on the day it's dated and the day after, like the site's tag
+    import datetime
+    if not c.get('breaking'):
+        return False
+    try:
+        d = datetime.date.fromisoformat(c.get('date', ''))
+    except ValueError:
+        return False
+    today = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=8)).date()
+    return (today - d).days <= 1
+
+
 def routes():
     now = load('data', 'league-now.json')
     mu = load('data', 'matchups.json')
@@ -78,7 +91,7 @@ def routes():
         r[f'reference/s-{y}'] = (f'{y} Season', f'The {y} Footballpalooza season.')
     for c in cols.get('columns') or []:
         who = ((cols.get('columnists') or {}).get(c.get('author')) or {}).get('name', '')
-        r[f"now/column/{c['slug']}"] = (c['title'], (c.get('teaser') or '') + (f' By {who}.' if who else ''), c.get('image') or '')
+        r[f"now/column/{c['slug']}"] = (('Breaking News: ' if breaking(c) else '') + c['title'], (c.get('teaser') or '') + (f' By {who}.' if who else ''), c.get('image') or '')
     return r
 
 
