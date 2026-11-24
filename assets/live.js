@@ -584,7 +584,10 @@
   // taxi squad and IR players aren't in MFL's live scoring: their game state comes from ESPN, no points
   const extra = (f, kind) => ((rosters || {})[f.id] || {})[kind] ? rosters[f.id][kind].filter(id => !(((f.players || {}).player) || []).some(x => x.id === id)).map(id => {
     const g = gameOf(id), secs = !g ? 0 : g.state === 'pre' ? 3600 : g.state === 'post' ? 0 : Math.max(1, (4 - Math.min(4, g.period || 1)) * 900 + (String(g.clock || '0:00').split(':').reduce((m, x) => m * 60 + (+x || 0), 0)));
-    return { id, status: kind, score: null, gameSecondsRemaining: String(secs) };
+    // MFL leaves them out, so a taxi player's points come from ESPN's box score (FBP scoring) once his game kicks off;
+    // IR players don't score
+    const e = kind === 'taxi' && g && g.state !== 'pre' ? estimate(id) : null;
+    return { id, status: kind, score: e == null ? null : String(e), est: e != null, gameSecondsRemaining: String(secs) };
   }) : [];
   const counts = f => ({ live: +f.playersCurrentlyPlaying || 0, pre: +f.playersYetToPlay || 0 });
 
@@ -727,6 +730,7 @@
         const pj = projNow(p, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}${rzc}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
+          : p.est ? `<span class="lv-quick" title="From ESPN’s box score: MFL doesn’t score taxi squad players">${n1(+p.score)}</span>` + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj">${n1(pj)}</small>` : '')
           : (p.quick ? `<span class="lv-quick" title="Includes ${n1(p.quick)} from ESPN’s box score that MFL hasn’t posted yet">${n1(+p.score)}</span>` : n1(+p.score)) + (pj != null && st !== 'bye' && (st !== 'final' || view) ? `<small class="lv-pj" title="${st === 'live' ? 'Projected finish: his points plus his MFL projection for the time left' : 'MFL projection'}">${n1(pj)}</small>` : '')}</td>`;
         return cls === 'a' ? nm + pt : pt + nm;
       };
