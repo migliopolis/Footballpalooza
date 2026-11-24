@@ -5,25 +5,30 @@
    {
     "slot": "QB",
     "player": {
-     "id": "13589",
-     "name": "Josh Allen",
+     "id": "12620",
+     "name": "Dak Prescott",
      "pos": "QB",
-     "nfl": "BUF",
-     "espn": "3918298",
-     "team": "0001",
-     "pts": 223.1,
-     "starts": 9,
-     "ppg": 24.8,
-     "salary": 24.0,
+     "nfl": "DAL",
+     "espn": "2577417",
+     "team": "0012",
+     "pts": 237.7,
+     "starts": 11,
+     "ppg": 21.6,
+     "salary": 9.0,
      "contract": "2/3",
      "rookie": false,
+     "change": {
+      "dir": "up",
+      "text": "Up from 2nd Team · replaced Josh Allen (now 2nd Team)",
+      "since": 10
+     },
      "honors": {
-      "first": 4,
-      "second": 1,
+      "first": 1,
+      "second": 0,
       "rookie": 0
      },
      "pace": {
-      "proj": 322.3,
+      "proj": 280.9,
       "record": false
      }
     }
@@ -37,9 +42,9 @@
      "nfl": "DET",
      "espn": "4429795",
      "team": "0003",
-     "pts": 253.4,
-     "starts": 9,
-     "ppg": 28.2,
+     "pts": 281.2,
+     "starts": 10,
+     "ppg": 28.1,
      "salary": 55.0,
      "contract": "4/5",
      "rookie": false,
@@ -49,7 +54,7 @@
       "rookie": 1
      },
      "pace": {
-      "proj": 366.2,
+      "proj": 365.5,
       "record": true
      }
     }
@@ -63,17 +68,12 @@
      "nfl": "SFO",
      "espn": "3117251",
      "team": "0001",
-     "pts": 213.0,
-     "starts": 9,
-     "ppg": 23.7,
+     "pts": 227.2,
+     "starts": 10,
+     "ppg": 22.7,
      "salary": 51.0,
      "contract": "1/3",
      "rookie": false,
-     "change": {
-      "dir": "up",
-      "text": "Up from 2nd Team · replaced Kenneth Walker III (now 2nd Team)",
-      "since": 9
-     },
      "mvps": [
       "2019",
       "2025"
@@ -84,7 +84,7 @@
       "rookie": 0
      },
      "pace": {
-      "proj": 307.8,
+      "proj": 295.3,
       "record": false
      }
     }
@@ -124,9 +124,9 @@
      "nfl": "DAL",
      "espn": "4241389",
      "team": "0007",
-     "pts": 222.0,
-     "starts": 10,
-     "ppg": 22.2,
+     "pts": 252.2,
+     "starts": 11,
+     "ppg": 22.9,
      "salary": 48.0,
      "contract": "2/3",
      "rookie": false,
@@ -136,7 +136,7 @@
       "rookie": 1
      },
      "pace": {
-      "proj": 288.6,
+      "proj": 298.0,
       "record": false
      }
     }
@@ -150,9 +150,9 @@
      "nfl": "ARI",
      "espn": "4361307",
      "team": "0004",
-     "pts": 171.5,
-     "starts": 10,
-     "ppg": 17.1,
+     "pts": 186.3,
+     "starts": 11,
+     "ppg": 16.9,
      "salary": 20.0,
      "contract": "1/3",
      "rookie": false,
@@ -162,13 +162,108 @@
       "rookie": 0
      },
      "pace": {
-      "proj": 222.8,
+      "proj": 220.1,
       "record": false
      }
     }
    },
    {
     "slot": "FLEX",
+    "player": {
+     "id": "15281",
+     "name": "Ja'Marr Chase",
+     "pos": "WR",
+     "nfl": "CIN",
+     "espn": "4362628",
+     "team": "0002",
+     "pts": 201.9,
+     "starts": 10,
+     "ppg": 20.2,
+     "salary": 62.0,
+     "contract": "1/3",
+     "rookie": false,
+     "change": {
+      "dir": "up",
+      "text": "Up from 2nd Team · replaced Bijan Robinson (now 2nd Team)",
+      "since": 10
+     },
+     "honors": {
+      "first": 2,
+      "second": 1,
+      "rookie": 1
+     },
+     "pace": {
+      "proj": 262.5,
+      "record": false
+     }
+    }
+   },
+   {
+    "slot": "DEF",
+    "player": {
+     "id": "0511",
+     "name": "Denver Broncos",
+     "pos": "DEF",
+     "nfl": "DEN",
+     "espn": "",
+     "team": "0005",
+     "pts": 129.0,
+     "starts": 10,
+     "ppg": 12.9,
+     "salary": 3.0,
+     "contract": "1/3",
+     "rookie": false,
+     "change": {
+      "dir": "new",
+      "text": "New this week · replaced Minnesota Vikings (off the list)",
+      "since": 10
+     },
+     "honors": {
+      "first": 1,
+      "second": 0,
+      "rookie": 0
+     },
+     "pace": {
+      "proj": 167.7,
+      "record": false
+     }
+    }
+   }
+  ],
+  "second": [
+   {
+    "slot": "QB",
+    "player": {
+     "id": "13589",
+     "name": "Josh Allen",
+     "pos": "QB",
+     "nfl": "BUF",
+     "espn": "3918298",
+     "team": "0001",
+     "pts": 235.3,
+     "starts": 10,
+     "ppg": 23.5,
+     "salary": 24.0,
+     "contract": "2/3",
+     "rookie": false,
+     "change": {
+      "dir": "down",
+      "text": "Down from 1st Team",
+      "since": 10
+     },
+     "honors": {
+      "first": 3,
+      "second": 2,
+      "rookie": 0
+     },
+     "pace": {
+      "proj": 305.8,
+      "record": false
+     }
+    }
+   },
+   {
+    "slot": "RB",
     "player": {
      "id": "16161",
      "name": "Bijan Robinson",
@@ -182,72 +277,18 @@
      "salary": 63.0,
      "contract": "4/5",
      "rookie": false,
+     "change": {
+      "dir": "down",
+      "text": "Down from 1st Team",
+      "since": 10
+     },
      "honors": {
-      "first": 2,
-      "second": 1,
+      "first": 1,
+      "second": 2,
       "rookie": 1
      },
      "pace": {
       "proj": 257.1,
-      "record": false
-     }
-    }
-   },
-   {
-    "slot": "DEF",
-    "player": {
-     "id": "0524",
-     "name": "Minnesota Vikings",
-     "pos": "DEF",
-     "nfl": "MIN",
-     "espn": "",
-     "team": "0001",
-     "pts": 113.0,
-     "starts": 7,
-     "ppg": 16.1,
-     "salary": 1.0,
-     "contract": "1/3",
-     "rookie": false,
-     "change": {
-      "dir": "new",
-      "text": "New this week · replaced Denver Broncos (off the list)",
-      "since": 9
-     },
-     "honors": {
-      "first": 1,
-      "second": 0,
-      "rookie": 0
-     },
-     "pace": {
-      "proj": 177.4,
-      "record": false
-     }
-    }
-   }
-  ],
-  "second": [
-   {
-    "slot": "QB",
-    "player": {
-     "id": "12620",
-     "name": "Dak Prescott",
-     "pos": "QB",
-     "nfl": "DAL",
-     "espn": "2577417",
-     "team": "0012",
-     "pts": 201.8,
-     "starts": 10,
-     "ppg": 20.2,
-     "salary": 9.0,
-     "contract": "2/3",
-     "rookie": false,
-     "honors": {
-      "first": 0,
-      "second": 1,
-      "rookie": 0
-     },
-     "pace": {
-      "proj": 262.4,
       "record": false
      }
     }
@@ -262,80 +303,18 @@
      "espn": "4567048",
      "team": "0004",
      "pts": 196.4,
-     "starts": 8,
-     "ppg": 24.5,
+     "starts": 9,
+     "ppg": 21.8,
      "salary": 66.0,
      "contract": "1/3",
      "rookie": false,
-     "change": {
-      "dir": "down",
-      "text": "Down from 1st Team",
-      "since": 9
-     },
      "honors": {
       "first": 0,
       "second": 1,
       "rookie": 1
      },
      "pace": {
-      "proj": 294.4,
-      "record": false
-     }
-    }
-   },
-   {
-    "slot": "RB",
-    "player": {
-     "id": "15715",
-     "name": "James Cook III",
-     "pos": "RB",
-     "nfl": "BUF",
-     "espn": "4379399",
-     "team": "0004",
-     "pts": 170.1,
-     "starts": 9,
-     "ppg": 18.9,
-     "salary": 38.0,
-     "contract": "5/6",
-     "rookie": false,
-     "change": {
-      "dir": "new",
-      "text": "New this week · replaced Javonte Williams (off the list)",
-      "since": 9
-     },
-     "honors": {
-      "first": 0,
-      "second": 2,
-      "rookie": 0
-     },
-     "pace": {
-      "proj": 245.7,
-      "record": false
-     }
-    }
-   },
-   {
-    "slot": "WR",
-    "player": {
-     "id": "15281",
-     "name": "Ja'Marr Chase",
-     "pos": "WR",
-     "nfl": "CIN",
-     "espn": "4362628",
-     "team": "0002",
-     "pts": 193.8,
-     "starts": 9,
-     "ppg": 21.5,
-     "salary": 62.0,
-     "contract": "1/3",
-     "rookie": false,
-     "honors": {
-      "first": 1,
-      "second": 2,
-      "rookie": 1
-     },
-     "pace": {
-      "proj": 279.8,
+      "proj": 261.8,
       "record": false
      }
     }
@@ -349,56 +328,25 @@
      "nfl": "DET",
      "espn": "4374302",
      "team": "0010",
-     "pts": 185.2,
-     "starts": 9,
-     "ppg": 20.6,
+     "pts": 199.9,
+     "starts": 10,
+     "ppg": 20.0,
      "salary": 33.0,
      "contract": "6/6",
      "rookie": false,
-     "change": {
-      "dir": "new",
-      "text": "New this week · replaced Puka Nacua (off the list)",
-      "since": 9
-     },
      "honors": {
       "first": 0,
       "second": 3,
       "rookie": 0
      },
      "pace": {
-      "proj": 267.6,
+      "proj": 259.9,
       "record": false
      }
     }
    },
    {
-    "slot": "TE",
-    "player": {
-     "id": "16641",
-     "name": "Brock Bowers",
-     "pos": "TE",
-     "nfl": "LVR",
-     "espn": "4432665",
-     "team": "0002",
-     "pts": 149.8,
-     "starts": 8,
-     "ppg": 18.7,
-     "salary": 9.0,
-     "contract": "3/6",
-     "rookie": false,
-     "honors": {
-      "first": 0,
-      "second": 2,
-      "rookie": 1
-     },
-     "pace": {
-      "proj": 224.6,
-      "record": false
-     }
-    }
-   },
-   {
-    "slot": "FLEX",
+    "slot": "WR",
     "player": {
      "id": "15789",
      "name": "Christian Watson",
@@ -424,27 +372,89 @@
     }
    },
    {
-    "slot": "DEF",
+    "slot": "TE",
     "player": {
-     "id": "0509",
-     "name": "Jacksonville Jaguars",
-     "pos": "DEF",
-     "nfl": "JAC",
-     "espn": "",
-     "team": "0011",
-     "pts": 113.0,
-     "starts": 9,
-     "ppg": 12.6,
-     "salary": 1.0,
-     "contract": "1/3",
+     "id": "16641",
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "nfl": "LVR",
+     "espn": "4432665",
+     "team": "0002",
+     "pts": 149.8,
+     "starts": 8,
+     "ppg": 18.7,
+     "salary": 9.0,
+     "contract": "3/6",
      "rookie": false,
      "honors": {
       "first": 0,
+      "second": 2,
+      "rookie": 1
+     },
+     "pace": {
+      "proj": 205.9,
+      "record": false
+     }
+    }
+   },
+   {
+    "slot": "FLEX",
+    "player": {
+     "id": "15256",
+     "name": "Javonte Williams",
+     "pos": "RB",
+     "nfl": "DAL",
+     "espn": "4361579",
+     "team": "0007",
+     "pts": 191.4,
+     "starts": 11,
+     "ppg": 17.4,
+     "salary": 18.0,
+     "contract": "2/3",
+     "rookie": false,
+     "change": {
+      "dir": "new",
+      "text": "New this week · replaced Ja'Marr Chase (now 1st Team)",
+      "since": 10
+     },
+     "honors": {
+      "first": 0,
       "second": 1,
+      "rookie": 1
+     },
+     "pace": {
+      "proj": 226.2,
+      "record": false
+     }
+    }
+   },
+   {
+    "slot": "DEF",
+    "player": {
+     "id": "0532",
+     "name": "Houston Texans",
+     "pos": "DEF",
+     "nfl": "HOU",
+     "espn": "",
+     "team": "0002",
+     "pts": 119.0,
+     "starts": 10,
+     "ppg": 11.9,
+     "salary": 4.0,
+     "contract": "2/3",
+     "rookie": false,
+     "change": {
+      "dir": "new",
+      "text": "New this week · replaced Jacksonville Jaguars (off the list)",
+      "since": 10
+     },
+     "honors": {
+      "first": 0,
+      "second": 2,
       "rookie": 0
      },
      "pace": {
-      "proj": 163.4,
+      "proj": 154.7,
       "record": false
      }
     }
@@ -454,21 +464,21 @@
    {
     "slot": "QB",
     "player": {
-     "id": "17469",
-     "name": "Jalon Daniels",
+     "id": "17462",
+     "name": "Fernando Mendoza",
      "pos": "QB",
-     "nfl": "TBB",
-     "espn": "4596472",
-     "team": "0006",
+     "nfl": "LVR",
+     "espn": "4837248",
+     "team": "0008",
      "pts": 0.0,
      "starts": 0,
      "ppg": 0,
-     "salary": 0.0,
-     "contract": "",
+     "salary": 6.0,
+     "contract": "1/5",
      "rookie": true,
-     "allPts": 35.1,
-     "status": "ROSTER",
-     "pick": "Undrafted",
+     "allPts": 39.0,
+     "status": "TAXI_SQUAD",
+     "pick": "1.08",
      "honors": {
       "first": 0,
       "second": 0,
@@ -491,7 +501,7 @@
      "salary": 3.0,
      "contract": "1/5",
      "rookie": true,
-     "allPts": 112.0,
+     "allPts": 136.3,
      "status": "TAXI_SQUAD",
      "pick": "2.06",
      "honors": {
@@ -504,21 +514,21 @@
    {
     "slot": "RB",
     "player": {
-     "id": "17475",
-     "name": "Seth McGowan",
+     "id": "17477",
+     "name": "Jonah Coleman",
      "pos": "RB",
-     "nfl": "IND",
-     "espn": "4686468",
-     "team": "0008",
+     "nfl": "DEN",
+     "espn": "4702555",
+     "team": "0006",
      "pts": 0.0,
      "starts": 0,
      "ppg": 0,
-     "salary": 1.0,
+     "salary": 3.0,
      "contract": "1/5",
      "rookie": true,
-     "allPts": 83.0,
-     "status": "ROSTER",
-     "pick": "4.03",
+     "allPts": 99.2,
+     "status": "TAXI_SQUAD",
+     "pick": "2.01",
      "honors": {
       "first": 0,
       "second": 0,
@@ -591,7 +601,7 @@
      "salary": 6.0,
      "contract": "1/5",
      "rookie": true,
-     "allPts": 56.1,
+     "allPts": 62.1,
      "status": "ROSTER",
      "pick": "1.07",
      "honors": {
@@ -604,21 +614,21 @@
    {
     "slot": "FLEX",
     "player": {
-     "id": "17497",
-     "name": "Carnell Tate",
+     "id": "17512",
+     "name": "Antonio Williams",
      "pos": "WR",
-     "nfl": "TEN",
-     "espn": "4871023",
-     "team": "0008",
+     "nfl": "WAS",
+     "espn": "5081432",
+     "team": "0012",
      "pts": 0.0,
      "starts": 0,
      "ppg": 0,
-     "salary": 12.0,
+     "salary": 3.0,
      "contract": "1/5",
      "rookie": true,
-     "allPts": 77.3,
+     "allPts": 93.9,
      "status": "TAXI_SQUAD",
-     "pick": "1.03",
+     "pick": "2.02",
      "honors": {
       "first": 0,
       "second": 0,
@@ -629,13 +639,27 @@
   ]
  },
  "ready": true,
- "throughWeek": 10,
+ "throughWeek": 11,
  "awards": [
   {
    "key": "mvp",
    "title": "MVP",
    "why": "Most points in an FBP starting lineup",
    "list": [
+    {
+     "id": "16162",
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "nfl": "DET",
+     "espn": "4429795",
+     "team": "0003",
+     "pts": 281.2,
+     "starts": 10,
+     "ppg": 28.1,
+     "salary": 55.0,
+     "contract": "4/5",
+     "rookie": false
+    },
     {
      "id": "16185",
      "name": "Jaxon Smith-Njigba",
@@ -651,30 +675,16 @@
      "rookie": false
     },
     {
-     "id": "16162",
-     "name": "Jahmyr Gibbs",
-     "pos": "RB",
-     "nfl": "DET",
-     "espn": "4429795",
-     "team": "0003",
-     "pts": 253.4,
-     "starts": 9,
-     "ppg": 28.2,
-     "salary": 55.0,
-     "contract": "4/5",
-     "rookie": false
-    },
-    {
-     "id": "13589",
-     "name": "Josh Allen",
-     "pos": "QB",
-     "nfl": "BUF",
-     "espn": "3918298",
-     "team": "0001",
-     "pts": 223.1,
-     "starts": 9,
-     "ppg": 24.8,
-     "salary": 24.0,
+     "id": "14832",
+     "name": "CeeDee Lamb",
+     "pos": "WR",
+     "nfl": "DAL",
+     "espn": "4241389",
+     "team": "0007",
+     "pts": 252.2,
+     "starts": 11,
+     "ppg": 22.9,
+     "salary": 48.0,
      "contract": "2/3",
      "rookie": false
     }
@@ -683,7 +693,7 @@
   {
    "key": "value",
    "title": "Best Value",
-   "why": "Most starter points per salary dollar (at least 5 starts; no defenses)",
+   "why": "Most starter points per salary dollar (at least 6 starts; no defenses)",
    "list": [
     {
      "id": "14136",
@@ -692,13 +702,13 @@
      "nfl": "SFO",
      "espn": "3126486",
      "team": "0009",
-     "pts": 102.6,
-     "starts": 6,
-     "ppg": 17.1,
+     "pts": 113.2,
+     "starts": 7,
+     "ppg": 16.2,
      "salary": 1.0,
      "contract": "1/3",
      "rookie": false,
-     "perDollar": 102.6
+     "perDollar": 113.2
     },
     {
      "id": "13116",
@@ -707,13 +717,13 @@
      "nfl": "KCC",
      "espn": "3139477",
      "team": "0004",
-     "pts": 177.4,
-     "starts": 9,
-     "ppg": 19.7,
+     "pts": 202.4,
+     "starts": 10,
+     "ppg": 20.2,
      "salary": 2.0,
      "contract": "1/3",
      "rookie": false,
-     "perDollar": 88.7,
+     "perDollar": 101.2,
      "mvps": [
       "2020"
      ]
@@ -747,30 +757,14 @@
      "nfl": "HOU",
      "espn": "4432577",
      "team": "0012",
-     "pts": 184.5,
+     "pts": 205.0,
      "starts": 0,
      "ppg": 0,
      "salary": 2.0,
      "contract": "1/3",
      "rookie": false,
-     "benchWeeks": 10,
+     "benchWeeks": 11,
      "started": 0
-    },
-    {
-     "id": "14782",
-     "name": "Jordan Love",
-     "pos": "QB",
-     "nfl": "GBP",
-     "espn": "4036378",
-     "team": "0008",
-     "pts": 122.5,
-     "starts": 3,
-     "ppg": 24.5,
-     "salary": 4.0,
-     "contract": "2/3",
-     "rookie": false,
-     "benchWeeks": 7,
-     "started": 3
     },
     {
      "id": "17030",
@@ -779,14 +773,30 @@
      "nfl": "TEN",
      "espn": "4688380",
      "team": "0001",
-     "pts": 119.6,
+     "pts": 141.8,
      "starts": 0,
      "ppg": 0,
      "salary": 3.0,
      "contract": "2/6",
      "rookie": false,
-     "benchWeeks": 10,
+     "benchWeeks": 11,
      "started": 0
+    },
+    {
+     "id": "17039",
+     "name": "Tyler Shough",
+     "pos": "QB",
+     "nfl": "NOS",
+     "espn": "4360689",
+     "team": "0007",
+     "pts": 127.0,
+     "starts": 2,
+     "ppg": 21.4,
+     "salary": 2.0,
+     "contract": "2/6",
+     "rookie": false,
+     "benchWeeks": 9,
+     "started": 2
     }
    ]
   },
@@ -802,7 +812,7 @@
      "nfl": "KCC",
      "espn": "4832955",
      "team": "0010",
-     "pts": 112.0,
+     "pts": 136.3,
      "starts": 0,
      "ppg": 0,
      "salary": 3.0,
@@ -855,9 +865,9 @@
      "nfl": "NYJ",
      "espn": "4685247",
      "team": "0008",
-     "pts": 93.4,
-     "starts": 7,
-     "ppg": 13.3,
+     "pts": 102.8,
+     "starts": 8,
+     "ppg": 12.9,
      "salary": 10.0,
      "contract": "1/3",
      "rookie": false,
@@ -913,9 +923,9 @@
        "nfl": "NYG",
        "espn": "4361050",
        "team": "0006",
-       "pts": 142.9,
-       "starts": 8,
-       "ppg": 17.9,
+       "pts": 147.4,
+       "starts": 9,
+       "ppg": 16.4,
        "salary": 3.0,
        "contract": "2/3",
        "rookie": false
@@ -925,7 +935,7 @@
       "FP_0008_2027_3"
      ],
      "drafted": {},
-     "pts": 142.9,
+     "pts": 147.4,
      "became": {},
      "later": {
       "years": [
@@ -939,11 +949,11 @@
         "pos": "TE",
         "via": null,
         "pts": {
-         "2026": 142.9
+         "2026": 147.4
         }
        }
       ],
-      "total": 142.9
+      "total": 147.4
      }
     },
     "loser": {
@@ -987,10 +997,77 @@
       "total": 7.2
      }
     },
-    "margin": 135.7,
+    "margin": 140.2,
     "ts": 1788091652
    },
    "more": [
+    {
+     "winner": {
+      "team": "0001",
+      "players": [
+       {
+        "id": "13130",
+        "name": "Christian McCaffrey",
+        "pos": "RB",
+        "nfl": "SFO",
+        "espn": "3117251",
+        "team": "0001",
+        "pts": 105.2,
+        "starts": 10,
+        "ppg": 22.7,
+        "salary": 51.0,
+        "contract": "1/3",
+        "rookie": false,
+        "mvps": [
+         "2019",
+         "2025"
+        ]
+       }
+      ],
+      "picks": [],
+      "drafted": {},
+      "pts": 105.2,
+      "became": {},
+      "later": {
+       "years": [
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [
+        {
+         "id": "13130",
+         "name": "Christian McCaffrey",
+         "pos": "RB",
+         "via": null,
+         "pts": {
+          "2026": 105.2
+         }
+        }
+       ],
+       "total": 105.2
+      }
+     },
+     "loser": {
+      "team": "0012",
+      "players": [],
+      "picks": [
+       "FP_0001_2027_2"
+      ],
+      "drafted": {},
+      "pts": 0,
+      "became": {},
+      "later": {
+       "years": [
+        "2026"
+       ],
+       "current": "2026",
+       "rows": [],
+       "total": 0
+      }
+     },
+     "margin": 105.2,
+     "ts": 1792774937
+    },
     {
      "winner": {
       "team": "0002",
@@ -1002,9 +1079,9 @@
         "nfl": "CIN",
         "espn": "4362628",
         "team": "0002",
-        "pts": 96.7,
-        "starts": 9,
-        "ppg": 21.5,
+        "pts": 104.8,
+        "starts": 10,
+        "ppg": 20.2,
         "salary": 62.0,
         "contract": "1/3",
         "rookie": false
@@ -1015,7 +1092,7 @@
        "FP_0007_2027_4"
       ],
       "drafted": {},
-      "pts": 96.7,
+      "pts": 104.8,
       "became": {},
       "later": {
        "years": [
@@ -1029,11 +1106,11 @@
          "pos": "WR",
          "via": null,
          "pts": {
-          "2026": 96.7
+          "2026": 104.8
          }
         }
        ],
-       "total": 96.7
+       "total": 104.8
       }
      },
      "loser": {
@@ -1055,35 +1132,31 @@
        "total": 0
       }
      },
-     "margin": 96.7,
+     "margin": 104.8,
      "ts": 1793097113
     },
     {
      "winner": {
-      "team": "0001",
+      "team": "0004",
       "players": [
        {
-        "id": "13130",
-        "name": "Christian McCaffrey",
+        "id": "15715",
+        "name": "James Cook III",
         "pos": "RB",
-        "nfl": "SFO",
-        "espn": "3117251",
-        "team": "0001",
-        "pts": 91.0,
-        "starts": 9,
-        "ppg": 23.7,
-        "salary": 51.0,
-        "contract": "1/3",
-        "rookie": false,
-        "mvps": [
-         "2019",
-         "2025"
-        ]
+        "nfl": "BUF",
+        "espn": "4379399",
+        "team": "0004",
+        "pts": 73.7,
+        "starts": 10,
+        "ppg": 18.7,
+        "salary": 38.0,
+        "contract": "5/6",
+        "rookie": false
        }
       ],
       "picks": [],
       "drafted": {},
-      "pts": 91.0,
+      "pts": 73.7,
       "became": {},
       "later": {
        "years": [
@@ -1092,23 +1165,23 @@
        "current": "2026",
        "rows": [
         {
-         "id": "13130",
-         "name": "Christian McCaffrey",
+         "id": "15715",
+         "name": "James Cook III",
          "pos": "RB",
          "via": null,
          "pts": {
-          "2026": 91.0
+          "2026": 73.7
          }
         }
        ],
-       "total": 91.0
+       "total": 73.7
       }
      },
      "loser": {
-      "team": "0012",
+      "team": "0011",
       "players": [],
       "picks": [
-       "FP_0001_2027_2"
+       "FP_0004_2027_1"
       ],
       "drafted": {},
       "pts": 0,
@@ -1122,8 +1195,8 @@
        "total": 0
       }
      },
-     "margin": 91.0,
-     "ts": 1792774937
+     "margin": 73.7,
+     "ts": 1792639617
     },
     {
      "winner": {
@@ -1136,9 +1209,9 @@
         "nfl": "ARI",
         "espn": "4373626",
         "team": "0006",
-        "pts": 66.8,
-        "starts": 6,
-        "ppg": 11.1,
+        "pts": 69.1,
+        "starts": 7,
+        "ppg": 9.9,
         "salary": 5.0,
         "contract": "2/3",
         "rookie": false
@@ -1146,7 +1219,7 @@
       ],
       "picks": [],
       "drafted": {},
-      "pts": 66.8,
+      "pts": 69.1,
       "became": {},
       "later": {
        "years": [
@@ -1160,11 +1233,11 @@
          "pos": "RB",
          "via": null,
          "pts": {
-          "2026": 66.8
+          "2026": 69.1
          }
         }
        ],
-       "total": 66.8
+       "total": 69.1
       }
      },
      "loser": {
@@ -1241,71 +1314,8 @@
        "total": 0
       }
      },
-     "margin": 66.8,
+     "margin": 69.1,
      "ts": 1782313355
-    },
-    {
-     "winner": {
-      "team": "0004",
-      "players": [
-       {
-        "id": "15715",
-        "name": "James Cook III",
-        "pos": "RB",
-        "nfl": "BUF",
-        "espn": "4379399",
-        "team": "0004",
-        "pts": 56.5,
-        "starts": 9,
-        "ppg": 18.9,
-        "salary": 38.0,
-        "contract": "5/6",
-        "rookie": false
-       }
-      ],
-      "picks": [],
-      "drafted": {},
-      "pts": 56.5,
-      "became": {},
-      "later": {
-       "years": [
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [
-        {
-         "id": "15715",
-         "name": "James Cook III",
-         "pos": "RB",
-         "via": null,
-         "pts": {
-          "2026": 56.5
-         }
-        }
-       ],
-       "total": 56.5
-      }
-     },
-     "loser": {
-      "team": "0011",
-      "players": [],
-      "picks": [
-       "FP_0004_2027_1"
-      ],
-      "drafted": {},
-      "pts": 0,
-      "became": {},
-      "later": {
-       "years": [
-        "2026"
-       ],
-       "current": "2026",
-       "rows": [],
-       "total": 0
-      }
-     },
-     "margin": 56.5,
-     "ts": 1792639617
     }
    ]
   },
@@ -1316,17 +1326,17 @@
    "teams": [
     {
      "team": "0002",
-     "stat": "8-2",
+     "stat": "8-3",
      "sub": ""
     },
     {
      "team": "0010",
-     "stat": "6-4",
+     "stat": "7-4",
      "sub": ""
     },
     {
-     "team": "0009",
-     "stat": "6-3-1",
+     "team": "0007",
+     "stat": "7-4",
      "sub": ""
     }
    ]
@@ -1338,18 +1348,18 @@
    "teams": [
     {
      "team": "0002",
-     "stat": "+32% win",
-     "sub": "8-2 record, should be about 5-5 · 52-57 all-play"
+     "stat": "+27% win",
+     "sub": "8-3 record, should be about 5-6 · 55-65 all-play"
     },
     {
      "team": "0011",
-     "stat": "+30% win",
-     "sub": "5-5 record, should be about 2-8 · 22-88 all-play"
+     "stat": "+26% win",
+     "sub": "5-6 record, should be about 2-9 · 24-97 all-play"
     },
     {
      "team": "0008",
-     "stat": "+9% win",
-     "sub": "3-6-1 record, should be about 3-7 · 28-81 all-play"
+     "stat": "+7% win",
+     "sub": "3-7-1 record, should be about 3-8 · 29-91 all-play"
     }
    ]
   },
@@ -1359,26 +1369,26 @@
    "why": "Record furthest below its all-play record",
    "teams": [
     {
-     "team": "0001",
+     "team": "0012",
      "stat": "-17% win",
-     "sub": "5-5 record, should be about 7-3 · 74-36 all-play"
+     "sub": "3-8 record, should be about 5-6 · 53-68 all-play"
     },
     {
-     "team": "0004",
-     "stat": "-12% win",
-     "sub": "6-4 record, should be about 7-3 · 79-30 all-play"
+     "team": "0001",
+     "stat": "-10% win",
+     "sub": "6-5 record, should be about 7-4 · 78-43 all-play"
     },
     {
      "team": "0007",
-     "stat": "-11% win",
-     "sub": "6-4 record, should be about 7-3 · 78-32 all-play"
+     "stat": "-10% win",
+     "sub": "7-4 record, should be about 8-3 · 89-32 all-play"
     }
    ]
   },
   {
    "key": "contract",
    "title": "Worst Contract",
-   "why": "Fewest starter points per dollar among $15+ salaries (at least 5 starts)",
+   "why": "Fewest starter points per dollar among $15+ salaries (at least 6 starts)",
    "list": [
     {
      "id": "13604",
@@ -1387,28 +1397,28 @@
      "nfl": "PHI",
      "espn": "3929630",
      "team": "0002",
-     "pts": 58.7,
-     "starts": 7,
-     "ppg": 8.4,
+     "pts": 72.2,
+     "starts": 8,
+     "ppg": 9.0,
      "salary": 58.0,
      "contract": "1/3",
      "rookie": false,
-     "perDollar": 1.0
+     "perDollar": 1.2
     },
     {
-     "id": "17472",
-     "name": "Jeremiyah Love",
+     "id": "14800",
+     "name": "J.K. Dobbins",
      "pos": "RB",
-     "nfl": "ARI",
-     "espn": "4870808",
+     "nfl": "DEN",
+     "espn": "4241985",
      "team": "0006",
-     "pts": 40.4,
-     "starts": 5,
-     "ppg": 8.1,
-     "salary": 35.0,
-     "contract": "1/5",
-     "rookie": true,
-     "perDollar": 1.2
+     "pts": 30.3,
+     "starts": 6,
+     "ppg": 5.0,
+     "salary": 16.0,
+     "contract": "1/3",
+     "rookie": false,
+     "perDollar": 1.9
     },
     {
      "id": "15708",
@@ -1417,13 +1427,13 @@
      "nfl": "NYJ",
      "espn": "4427366",
      "team": "0009",
-     "pts": 69.0,
-     "starts": 5,
-     "ppg": 13.8,
+     "pts": 88.0,
+     "starts": 6,
+     "ppg": 14.7,
      "salary": 41.0,
      "contract": "1/3",
      "rookie": false,
-     "perDollar": 1.7
+     "perDollar": 2.1
     }
    ]
   },
@@ -1433,56 +1443,49 @@
    "why": "Top starter score each week",
    "list": [
     {
-     "id": "13130",
-     "name": "Christian McCaffrey",
-     "pos": "RB",
-     "nfl": "SFO",
-     "espn": "3117251",
-     "team": "0001",
-     "pts": 46.3,
-     "starts": 9,
-     "ppg": 23.7,
-     "salary": 51.0,
-     "contract": "1/3",
-     "rookie": false,
-     "week": 10,
-     "mvps": [
-      "2019",
-      "2025"
-     ]
-    },
-    {
-     "id": "16162",
-     "name": "Jahmyr Gibbs",
-     "pos": "RB",
-     "nfl": "DET",
-     "espn": "4429795",
-     "team": "0003",
-     "pts": 44.2,
-     "starts": 9,
-     "ppg": 28.2,
-     "salary": 55.0,
-     "contract": "4/5",
-     "rookie": false,
-     "week": 10
-    },
-    {
-     "id": "13116",
-     "name": "Patrick Mahomes",
+     "id": "12620",
+     "name": "Dak Prescott",
      "pos": "QB",
-     "nfl": "KCC",
-     "espn": "3139477",
-     "team": "0004",
-     "pts": 35.4,
-     "starts": 9,
-     "ppg": 19.7,
-     "salary": 2.0,
-     "contract": "1/3",
+     "nfl": "DAL",
+     "espn": "2577417",
+     "team": "0012",
+     "pts": 35.9,
+     "starts": 11,
+     "ppg": 21.6,
+     "salary": 9.0,
+     "contract": "2/3",
      "rookie": false,
-     "week": 10,
-     "mvps": [
-      "2020"
-     ]
+     "week": 11
+    },
+    {
+     "id": "14832",
+     "name": "CeeDee Lamb",
+     "pos": "WR",
+     "nfl": "DAL",
+     "espn": "4241389",
+     "team": "0007",
+     "pts": 30.2,
+     "starts": 11,
+     "ppg": 22.9,
+     "salary": 48.0,
+     "contract": "2/3",
+     "rookie": false,
+     "week": 11
+    },
+    {
+     "id": "17042",
+     "name": "Ashton Jeanty",
+     "pos": "RB",
+     "nfl": "LVR",
+     "espn": "4890973",
+     "team": "0005",
+     "pts": 27.9,
+     "starts": 11,
+     "ppg": 16.1,
+     "salary": 38.0,
+     "contract": "2/5",
+     "rookie": false,
+     "week": 11
     }
    ],
    "weeks": {
@@ -1495,8 +1498,8 @@
       "espn": "4431611",
       "team": "0002",
       "pts": 37.3,
-      "starts": 5,
-      "ppg": 19.5,
+      "starts": 6,
+      "ppg": 18.6,
       "salary": 9.0,
       "contract": "3/6",
       "rookie": false,
@@ -1510,8 +1513,8 @@
       "espn": "3918298",
       "team": "0001",
       "pts": 35.7,
-      "starts": 9,
-      "ppg": 24.8,
+      "starts": 10,
+      "ppg": 23.5,
       "salary": 24.0,
       "contract": "2/3",
       "rookie": false,
@@ -1525,8 +1528,8 @@
       "espn": "3043078",
       "team": "0005",
       "pts": 35.3,
-      "starts": 10,
-      "ppg": 16.1,
+      "starts": 11,
+      "ppg": 16.4,
       "salary": 44.0,
       "contract": "1/3",
       "rookie": false,
@@ -1557,8 +1560,8 @@
       "espn": "3918298",
       "team": "0001",
       "pts": 40.8,
-      "starts": 9,
-      "ppg": 24.8,
+      "starts": 10,
+      "ppg": 23.5,
       "salary": 24.0,
       "contract": "2/3",
       "rookie": false,
@@ -1589,8 +1592,8 @@
       "espn": "4429795",
       "team": "0003",
       "pts": 41.4,
-      "starts": 9,
-      "ppg": 28.2,
+      "starts": 10,
+      "ppg": 28.1,
       "salary": 55.0,
       "contract": "4/5",
       "rookie": false,
@@ -1636,8 +1639,8 @@
       "espn": "4685472",
       "team": "0001",
       "pts": 45.2,
-      "starts": 9,
-      "ppg": 14.6,
+      "starts": 10,
+      "ppg": 15.0,
       "salary": 18.0,
       "contract": "2/5",
       "rookie": false,
@@ -1651,8 +1654,8 @@
       "espn": "4241389",
       "team": "0007",
       "pts": 41.3,
-      "starts": 10,
-      "ppg": 22.2,
+      "starts": 11,
+      "ppg": 22.9,
       "salary": 48.0,
       "contract": "2/3",
       "rookie": false,
@@ -1698,8 +1701,8 @@
       "espn": "4429795",
       "team": "0003",
       "pts": 37.7,
-      "starts": 9,
-      "ppg": 28.2,
+      "starts": 10,
+      "ppg": 28.1,
       "salary": 55.0,
       "contract": "4/5",
       "rookie": false,
@@ -1730,8 +1733,8 @@
       "espn": "3117251",
       "team": "0012",
       "pts": 30.7,
-      "starts": 9,
-      "ppg": 23.7,
+      "starts": 10,
+      "ppg": 22.7,
       "salary": 51.0,
       "contract": "1/3",
       "rookie": false,
@@ -1749,8 +1752,8 @@
       "espn": "4595348",
       "team": "0004",
       "pts": 28.5,
-      "starts": 8,
-      "ppg": 15.5,
+      "starts": 9,
+      "ppg": 15.9,
       "salary": 21.0,
       "contract": "3/5",
       "rookie": false,
@@ -1764,8 +1767,8 @@
       "espn": "4567048",
       "team": "0004",
       "pts": 27.9,
-      "starts": 8,
-      "ppg": 24.5,
+      "starts": 9,
+      "ppg": 21.8,
       "salary": 66.0,
       "contract": "1/3",
       "rookie": false,
@@ -1781,8 +1784,8 @@
       "espn": "3916148",
       "team": "0009",
       "pts": 36.5,
-      "starts": 5,
-      "ppg": 16.9,
+      "starts": 6,
+      "ppg": 16.0,
       "salary": 15.0,
       "contract": "1/3",
       "rookie": false,
@@ -1811,8 +1814,8 @@
       "espn": "3915511",
       "team": "0007",
       "pts": 28.9,
-      "starts": 6,
-      "ppg": 28.3,
+      "starts": 7,
+      "ppg": 27.1,
       "salary": 14.0,
       "contract": "2/3",
       "rookie": false,
@@ -1828,8 +1831,8 @@
       "espn": "3915511",
       "team": "0007",
       "pts": 39.5,
-      "starts": 6,
-      "ppg": 28.3,
+      "starts": 7,
+      "ppg": 27.1,
       "salary": 14.0,
       "contract": "2/3",
       "rookie": false,
@@ -1843,8 +1846,8 @@
       "espn": "4239993",
       "team": "0007",
       "pts": 37.5,
-      "starts": 7,
-      "ppg": 21.8,
+      "starts": 8,
+      "ppg": 20.6,
       "salary": 23.0,
       "contract": "1/3",
       "rookie": false,
@@ -1858,8 +1861,8 @@
       "espn": "4373626",
       "team": "0006",
       "pts": 36.1,
-      "starts": 6,
-      "ppg": 11.1,
+      "starts": 7,
+      "ppg": 9.9,
       "salary": 5.0,
       "contract": "2/3",
       "rookie": false,
@@ -1875,8 +1878,8 @@
       "espn": "4567048",
       "team": "0004",
       "pts": 36.3,
-      "starts": 8,
-      "ppg": 24.5,
+      "starts": 9,
+      "ppg": 21.8,
       "salary": 66.0,
       "contract": "1/3",
       "rookie": false,
@@ -1922,8 +1925,8 @@
       "espn": "3117251",
       "team": "0001",
       "pts": 46.3,
-      "starts": 9,
-      "ppg": 23.7,
+      "starts": 10,
+      "ppg": 22.7,
       "salary": 51.0,
       "contract": "1/3",
       "rookie": false,
@@ -1941,8 +1944,8 @@
       "espn": "4429795",
       "team": "0003",
       "pts": 44.2,
-      "starts": 9,
-      "ppg": 28.2,
+      "starts": 10,
+      "ppg": 28.1,
       "salary": 55.0,
       "contract": "4/5",
       "rookie": false,
@@ -1956,8 +1959,8 @@
       "espn": "3139477",
       "team": "0004",
       "pts": 35.4,
-      "starts": 9,
-      "ppg": 19.7,
+      "starts": 10,
+      "ppg": 20.2,
       "salary": 2.0,
       "contract": "1/3",
       "rookie": false,
@@ -1966,9 +1969,56 @@
        "2020"
       ]
      }
+    ],
+    "11": [
+     {
+      "id": "12620",
+      "name": "Dak Prescott",
+      "pos": "QB",
+      "nfl": "DAL",
+      "espn": "2577417",
+      "team": "0012",
+      "pts": 35.9,
+      "starts": 11,
+      "ppg": 21.6,
+      "salary": 9.0,
+      "contract": "2/3",
+      "rookie": false,
+      "week": 11
+     },
+     {
+      "id": "14832",
+      "name": "CeeDee Lamb",
+      "pos": "WR",
+      "nfl": "DAL",
+      "espn": "4241389",
+      "team": "0007",
+      "pts": 30.2,
+      "starts": 11,
+      "ppg": 22.9,
+      "salary": 48.0,
+      "contract": "2/3",
+      "rookie": false,
+      "week": 11
+     },
+     {
+      "id": "17042",
+      "name": "Ashton Jeanty",
+      "pos": "RB",
+      "nfl": "LVR",
+      "espn": "4890973",
+      "team": "0005",
+      "pts": 27.9,
+      "starts": 11,
+      "ppg": 16.1,
+      "salary": 38.0,
+      "contract": "2/5",
+      "rookie": false,
+      "week": 11
+     }
     ]
    },
-   "week": 10
+   "week": 11
   },
   {
    "key": "high",
@@ -1983,8 +2033,8 @@
      "espn": "3117251",
      "team": "0001",
      "pts": 46.3,
-     "starts": 9,
-     "ppg": 23.7,
+     "starts": 10,
+     "ppg": 22.7,
      "salary": 51.0,
      "contract": "1/3",
      "rookie": false,
@@ -2002,8 +2052,8 @@
      "espn": "4685472",
      "team": "0001",
      "pts": 45.2,
-     "starts": 9,
-     "ppg": 14.6,
+     "starts": 10,
+     "ppg": 15.0,
      "salary": 18.0,
      "contract": "2/5",
      "rookie": false,
@@ -2017,8 +2067,8 @@
      "espn": "4429795",
      "team": "0003",
      "pts": 44.2,
-     "starts": 9,
-     "ppg": 28.2,
+     "starts": 10,
+     "ppg": 28.1,
      "salary": 55.0,
      "contract": "4/5",
      "rookie": false,
@@ -2027,9 +2077,9 @@
    ]
   }
  ],
- "generated": "2026-11-24T03:29:42+00:00",
+ "generated": "2026-11-24T05:32:42+00:00",
  "basis": {
-  "throughWeek": 9,
+  "throughWeek": 10,
   "teams": [
    [
     {
@@ -2044,8 +2094,8 @@
     },
     {
      "slot": "RB",
-     "id": "15711",
-     "name": "Kenneth Walker III"
+     "id": "13130",
+     "name": "Christian McCaffrey"
     },
     {
      "slot": "WR",
@@ -2069,8 +2119,8 @@
     },
     {
      "slot": "DEF",
-     "id": "0511",
-     "name": "Denver Broncos"
+     "id": "0524",
+     "name": "Minnesota Vikings"
     }
    ],
    [
@@ -2081,23 +2131,23 @@
     },
     {
      "slot": "RB",
-     "id": "13130",
-     "name": "Christian McCaffrey"
+     "id": "15711",
+     "name": "Kenneth Walker III"
     },
     {
      "slot": "RB",
-     "id": "15256",
-     "name": "Javonte Williams"
+     "id": "15715",
+     "name": "James Cook III"
     },
     {
      "slot": "WR",
-     "id": "15789",
-     "name": "Christian Watson"
+     "id": "15281",
+     "name": "Ja'Marr Chase"
     },
     {
      "slot": "WR",
-     "id": "16211",
-     "name": "Puka Nacua"
+     "id": "15287",
+     "name": "Amon-Ra St. Brown"
     },
     {
      "slot": "TE",
@@ -2106,8 +2156,8 @@
     },
     {
      "slot": "FLEX",
-     "id": "15281",
-     "name": "Ja'Marr Chase"
+     "id": "15789",
+     "name": "Christian Watson"
     },
     {
      "slot": "DEF",

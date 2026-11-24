@@ -585,6 +585,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "17732",
+   "mflName": "EJ Smith",
+   "pos": "RB",
+   "team": "KCC",
+   "fbp": null,
+   "espn": "4430825",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "12625",
    "mflName": "Ezekiel Elliott",
    "pos": "RB",
@@ -1257,6 +1266,15 @@
    "team": "FA",
    "fbp": null,
    "espn": "16731",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "14840",
+   "mflName": "Brandon Aiyuk",
+   "pos": "WR",
+   "team": "SFO",
+   "fbp": null,
+   "espn": "4360438",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

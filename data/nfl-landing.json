@@ -12,10 +12,10 @@
    "mostMocked": "LAC"
   },
   "Jadan Baugh": {
-   "team": "MIN",
+   "team": "PHI",
    "pick": 25,
    "basis": "recent",
-   "mocks": 20,
+   "mocks": 21,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
@@ -92,7 +92,7 @@
    "team": "SEA",
    "pick": 18,
    "basis": "recent",
-   "mocks": 18,
+   "mocks": 19,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
@@ -103,10 +103,10 @@
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
-   "team": "DAL",
-   "pick": 22,
+   "team": "NYG",
+   "pick": 23,
    "basis": "recent",
-   "mocks": 24,
+   "mocks": 25,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -124,7 +124,7 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "CIN",
+   "team": "MIN",
    "pick": 26,
    "basis": "recent",
    "mocks": 24,
@@ -176,7 +176,7 @@
    "team": "DET",
    "pick": 29,
    "basis": "recent",
-   "mocks": 14,
+   "mocks": 15,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
