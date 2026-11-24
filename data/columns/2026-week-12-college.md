@@ -4,7 +4,7 @@ kicker: College and draft
 author: lainey
 season: 2026
 week: 12
-date: 2026-11-24
+date: 2026-11-23
 image: assets/columns/2026-week-12-college-smith.jpg
 caption: Jeremiah Smith, Ohio State. Still the no-doubt 1.01.
 credit: Samantha Madar / The Columbus Dispatch / USA TODAY Network
