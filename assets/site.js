@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0316';
+  const VERSION = '0.0317';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -528,6 +528,9 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const days = Math.round((n - t) / 864e5);
     return days <= 0 ? 'Today' : days === 1 ? 'Yesterday' : days < 7 ? `${days} days ago` : colDate(d);
   };
+  // breaking news: a red tag on a column flagged breaking: yes, shown on the day it's dated and the day after
+  const colBrk = c => { if (!c.breaking) return false; const t = new Date(c.date + 'T12:00:00'), n = new Date(); n.setHours(12, 0, 0, 0); return !isNaN(t) && Math.round((n - t) / 864e5) <= 1; };
+  const brkTag = c => colBrk(c) ? '<span class="col-brk">Breaking news</span>' : '';
   // front page: the latest columns, newest first. The newest leads with its photo (about half the screen wide on a
   // phone); the next two sit underneath as compact one-line links.
   function pressBox() {
@@ -535,8 +538,8 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const C = state.columns.columns.slice(0, 3); if (!C.length) return '';
     const who = c => (state.columns.columnists[c.author] || { name: c.author }).name;
     return `<section class="col-heads"><h2 class="col-hk">From the press box</h2><ul>${C.map((c, i) => i === 0
-      ? `<li class="col-feat"><a href="#now/column/${c.slug}">${c.image ? `<img class="col-fimg" src="${esc(c.image)}" alt="${esc(c.caption || '')}" loading="lazy"${colPos(c)}>` : ''}<span class="col-ftxt"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="col-ftz">${esc(c.teaser)}</span>` : ''}<span class="col-fby">${esc(who(c))} · ${colAgo(c.date)}</span></span></a></li>`
-      : `<li><a href="#now/column/${c.slug}"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span></span></li>`).join('')}</ul><a class="col-all" href="#press">All ${state.columns.columns.length} articles in the Press Box →</a></section>`;
+      ? `<li class="col-feat"><a href="#now/column/${c.slug}">${c.image ? `<img class="col-fimg" src="${esc(c.image)}" alt="${esc(c.caption || '')}" loading="lazy"${colPos(c)}>` : ''}<span class="col-ftxt">${brkTag(c)}<span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="col-ftz">${esc(c.teaser)}</span>` : ''}<span class="col-fby">${esc(who(c))} · ${colAgo(c.date)}</span></span></a></li>`
+      : `<li><a href="#now/column/${c.slug}">${brkTag(c)}<span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span></span></li>`).join('')}</ul><a class="col-all" href="#press">All ${state.columns.columns.length} articles in the Press Box →</a></section>`;
   }
   function pageColumn(slug) {
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the column…</p>'; }
@@ -546,7 +549,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const more = C.filter(x => x.slug !== c.slug).slice(0, 6);
     return `<article class="col-page">
       <a class="col-back" href="#press">← Press Box</a>
-      <p class="col-kick">From the press box · ${esc(c.kicker)}</p>
+      <p class="col-kick">${brkTag(c)}From the press box · ${esc(c.kicker)}</p>
       <h1 class="col-h1">${esc(c.title)}</h1>
       ${c.image ? `<figure class="col-hero"><img src="${esc(c.image)}" alt="${esc(c.caption || '')}"${colPos(c)}>${c.caption || c.credit ? `<figcaption>${esc(c.caption || '')}${c.credit ? ` <span>${esc(c.credit)}</span>` : ''}</figcaption>` : ''}</figure>` : ''}
       <div class="col-byline">${colAvatar(a, true)}<span><b>${(a.profile || []).length ? `<a href="#press/staff/${esc(c.author)}">${esc(a.name)}</a>` : esc(a.name)}</b><small>${esc(a.title || '')} · ${colDate(c.date)} · ${c.minutes} min read</small></span></div>
@@ -569,7 +572,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const card = (c, lead) => { const a = person(c.author);
       return `<a class="pb-card${lead ? ' pb-lead' : ''}${c.image ? ' has-img' : ''}" href="#now/column/${c.slug}">
         ${c.image ? `<span class="pb-img"><img src="${esc(c.image)}" alt="" loading="lazy"${colPos(c)}></span>` : ''}
-        <span class="pb-txt"><span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="pb-teas">${esc(c.teaser)}</span>` : ''}
+        <span class="pb-txt">${brkTag(c)}<span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="pb-teas">${esc(c.teaser)}</span>` : ''}
         <span class="pb-by">${colAvatar(a)}<span>${esc(a.name)} · ${colAgo(c.date)} · ${c.minutes} min read</span></span></span></a>`; };
     const weeks = []; C.forEach((c, i) => { if (i === 0 && !pbWho) return; const k = `${c.season}-${c.week}`; let g = weeks.find(x => x.k === k); if (!g) weeks.push(g = { k, w: c.week, list: [] }); g.list.push(c); });
     return `<section class="pb">
@@ -1048,7 +1051,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     // the three newest Press Box columns: headline and writer
     S.press = () => { const C = state.columns && state.columns.columns; if (!C) { loadColumns(); return []; } if (!C.length) return [];
       return [`<a class="tk-h tk-pr" href="#press">Press Box</a>`].concat(C.slice(0, 3).map(c =>
-        `<a class="tk-i" href="#now/column/${esc(c.slug)}"><b class="tk-hl">${esc(c.title)}</b><span class="tk-p">${esc((state.columns.columnists[c.author] || { name: c.author }).name)}</span></a>`)); };
+        `<a class="tk-i" href="#now/column/${esc(c.slug)}">${colBrk(c) ? '<span class="tk-brk">Breaking</span>' : ''}<b class="tk-hl">${esc(c.title)}</b><span class="tk-p">${esc((state.columns.columnists[c.author] || { name: c.author }).name)}</span></a>`)); };
     // Game Day: live from the scoreboard's feed (assets/live.js), only while these sections are on
     const LV = window.FBPLive && FBPLive.feed ? FBPLive.feed() : null, fmt = v => (+v || 0).toFixed(1);
     const HEAT = { nuke: '☢️', hot: '🔥', cold: '🥶', bust: '🧊', sink: '🥶', wp: '🕶️' };

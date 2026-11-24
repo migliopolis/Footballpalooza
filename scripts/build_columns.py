@@ -1,7 +1,7 @@
 """Build data/columns.json from the weekly columns in data/columns/*.md (League Now > From the press box).
 
 Each column is a markdown file with a short header between --- lines:
-  title, kicker (e.g. "Week 8 preview"), author (key in data/columns/columnists.json),
+  title, kicker (e.g. "Week 8 preview"), breaking (yes: a red Breaking news tag for the first two days), author (key in data/columns/columnists.json),
   season, week, date (YYYY-MM-DD), teaser
   and optionally a lead photo: image (path, e.g. assets/columns/x.jpg), caption, credit
 A line "@by <key>" starts a section by another columnist (multi-voice pieces like the trade desk).
@@ -57,7 +57,8 @@ def parse(path, people={}, logos={}):
     return dict(slug=slug, title=meta.get('title', slug), kicker=meta.get('kicker', ''), author=meta.get('author', ''),
                 season=int(meta.get('season', 0) or 0), week=int(meta.get('week', 0) or 0), date=meta.get('date', ''),
                 teaser=meta.get('teaser', ''), image=meta.get('image', ''), caption=meta.get('caption', ''),
-                credit=meta.get('credit', ''), focus=meta.get('focus', ''), minutes=max(1, round(words / 230)), html=html)
+                credit=meta.get('credit', ''), focus=meta.get('focus', ''),
+                breaking=meta.get('breaking', '').lower() in ('yes', 'true', '1'), minutes=max(1, round(words / 230)), html=html)
 
 
 def main():
