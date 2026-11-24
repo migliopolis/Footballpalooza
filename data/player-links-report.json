@@ -1,9 +1,9 @@
 {
  "summary": {
   "linked": 949,
-  "mfl": 935,
+  "mfl": 936,
   "spellingFixed": 49,
-  "name": 14,
+  "name": 13,
   "unmatched": 3,
   "rosteredLinked": 256,
   "rosteredTotal": 256
@@ -138,16 +138,6 @@
    "fbp": null,
    "espn": "4686472",
    "espnName": "Marvin Mims Jr.",
-   "how": "name"
-  },
-  {
-   "mfl": "17834",
-   "mflName": "Max Hurleman",
-   "pos": "WR",
-   "team": "PIT",
-   "fbp": null,
-   "espn": "4694237",
-   "espnName": "Max Hurleman",
    "how": "name"
   }
  ],
