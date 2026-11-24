@@ -669,7 +669,9 @@ def snapshot(a):
     """Who held each All-FBP spot, to compare with next week's teams."""
     return {'throughWeek': a.get('throughWeek'),
             'teams': [[{'slot': e['slot'], 'id': e['player']['id'], 'name': e['player']['name']} for e in a['allFbp'][k]]
-                      for k in ('first', 'second')]}
+                      for k in ('first', 'second')],
+            'rookie': [{'slot': e['slot'], 'id': e['player']['id'], 'name': e['player']['name']}
+                       for e in a['allFbp'].get('rookie', []) if e.get('player')]}
 
 
 def mark_changes(cur, prev):
@@ -705,6 +707,20 @@ def mark_changes(cur, prev):
                 now = new_tier.get(pick['id'])
                 tail = f" · replaced {pick['name']} ({'off the list' if now is None else 'now ' + label[now]})"
             p['change'] = {'dir': d, 'text': head + tail, 'since': basis['throughWeek']}
+    # the All-FBP Rookie Team gets the same note: who's new this week and who they replaced
+    if basis.get('rookie') is not None:
+        old_r = {x['id'] for x in basis['rookie']}
+        team = [e for e in cur['allFbp'].get('rookie', []) if e.get('player')]
+        new_r = {e['player']['id'] for e in team}
+        left = [x for x in basis['rookie'] if x['id'] not in new_r]
+        for e in team:
+            if e['player']['id'] in old_r:
+                continue
+            pick = next((x for x in left if x['slot'] == e['slot']), None) or (left[0] if left else None)
+            if pick:
+                left.remove(pick)
+            e['player']['change'] = {'dir': 'new', 'text': 'New this week' + (f" · replaced {pick['name']} (off the list)" if pick else ''),
+                                     'since': basis['throughWeek']}
 
 
 _DRAFT = {}

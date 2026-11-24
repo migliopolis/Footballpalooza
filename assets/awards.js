@@ -74,7 +74,7 @@ window.FBPAwards = (() => {
   function rcard(slot, p) {
     return `<div class="card aw-card second rook"><span class="aw-slot">${slot}</span>${photo(p, 'md', true)}
       <b class="aw-nm">${esc(p.name)}</b><span class="aw-sub">${pos(p)} ${esc(p.nfl || '')}</span>${!S.final && p.status && RK_ST[p.status] ? `<span class="aw-sub aw-rst"><i>${RK_ST[p.status]}</i></span>` : ''}
-      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${p.pick ? `<span class="aw-pick">${p.pick === 'Undrafted' ? 'Undrafted' : `Drafted ${esc(p.pick)}`}</span>` : ''}
+      <span class="aw-fbp">${tlogo(p.team)}${esc(tname(p.team))}</span>${p.pick ? `<span class="aw-pick">${p.pick === 'Undrafted' ? 'Undrafted' : `Drafted ${esc(p.pick)}`}</span>` : ''}${change(p)}
       <span class="aw-stats"><span><b>${n1(p.allPts)}</b>total pts</span>${S.partial ? '' : `<span><b>${n1(p.pts)}</b>as a starter</span>`}${p.salary ? `<span><b>${sal(p)}</b>salary</span>` : ''}</span>
       ${S.partial ? '' : `<span class="aw-started">${p.starts ? `${p.starts} week${p.starts === 1 ? '' : 's'} started` : S.final ? 'Never started' : 'Hasn’t started yet'}</span>`}</div>`;
   }
