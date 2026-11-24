@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0317';
+  const VERSION = '0.0318';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -541,6 +541,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
       ? `<li class="col-feat"><a href="#now/column/${c.slug}">${c.image ? `<img class="col-fimg" src="${esc(c.image)}" alt="${esc(c.caption || '')}" loading="lazy"${colPos(c)}>` : ''}<span class="col-ftxt">${brkTag(c)}<span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b>${c.teaser ? `<span class="col-ftz">${esc(c.teaser)}</span>` : ''}<span class="col-fby">${esc(who(c))} · ${colAgo(c.date)}</span></span></a></li>`
       : `<li><a href="#now/column/${c.slug}">${brkTag(c)}<span class="col-hkick">${esc(c.kicker)}</span><b>${esc(c.title)}</b></a><span class="col-side"><span class="col-ago">${colAgo(c.date)}</span></span></li>`).join('')}</ul><a class="col-all" href="#press">All ${state.columns.columns.length} articles in the Press Box →</a></section>`;
   }
+  function navPrev() { return typeof navStack !== 'undefined' && navStack.length > 1; }
   function pageColumn(slug) {
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the column…</p>'; }
     const C = state.columns.columns, c = C.find(x => x.slug === slug) || C[0];
@@ -548,7 +549,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     const a = state.columns.columnists[c.author] || { name: c.author };
     const more = C.filter(x => x.slug !== c.slug).slice(0, 6);
     return `<article class="col-page">
-      <a class="col-back" href="#press">← Press Box</a>
+      ${navPrev() ? '<a class="col-back" href="#press" data-nav-back>← Back</a>' : '<a class="col-back" href="#press">← Press Box</a>'}
       <p class="col-kick">${brkTag(c)}From the press box · ${esc(c.kicker)}</p>
       <h1 class="col-h1">${esc(c.title)}</h1>
       ${c.image ? `<figure class="col-hero"><img src="${esc(c.image)}" alt="${esc(c.caption || '')}"${colPos(c)}>${c.caption || c.credit ? `<figcaption>${esc(c.caption || '')}${c.credit ? ` <span>${esc(c.credit)}</span>` : ''}</figcaption>` : ''}</figure>` : ''}
@@ -844,6 +845,14 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
   window.addEventListener('scroll', () => { pinned = window.scrollY >= brandH() - 1; }, { passive: true });
   function toTop() { window.scrollTo(0, pinned ? brandH() : 0); }
   let lastTab = (location.hash.slice(1).split('/')[0]) || 'now';
+  // pages visited in this visit, so a column opened from a link inside another column can go back to it, and land
+  // where the reader left off; a column opened fresh starts at the top
+  const navStack = [location.hash || '#now'], navY = {};
+  let navWasBack = false;
+  function navNote(h) {
+    if (navStack.length > 1 && navStack[navStack.length - 2] === h) { navStack.pop(); navWasBack = true; }
+    else { navStack.push(h); navWasBack = false; }
+  }
 
   // phones: pull down from the top of the page to reload it (the saved home-screen app has no pull-to-refresh of its own)
   function pullRefresh() {
@@ -1231,8 +1240,12 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && box) close(false); });
     window.addEventListener('popstate', () => { if (box) close(true); });
   })();
-  window.addEventListener('hashchange', () => { const tab = location.hash.slice(1).split('/')[0] || 'now';
-      route(); if (tab !== lastTab) { lastTab = tab; toTop(); } });
+  window.addEventListener('hashchange', e => { const tab = location.hash.slice(1).split('/')[0] || 'now';
+      const from = '#' + ((e.oldURL || '').split('#')[1] || 'now'); navY[from] = window.scrollY; navNote(location.hash || '#now');
+      route();
+      if (location.hash.startsWith('#now/column/')) { lastTab = tab; if (navWasBack && navY[location.hash] != null) window.scrollTo(0, navY[location.hash]); else toTop(); }
+      else if (navWasBack && from.startsWith('#now/column/') && navY[location.hash] != null) { lastTab = tab; window.scrollTo(0, navY[location.hash]); }
+      else if (tab !== lastTab) { lastTab = tab; toTop(); } });
     swipeTabs(); pullRefresh();
     // sticky panels sit just under the header, whatever height it wraps to
     // --hdr-h is the part that stays pinned (the tabs); --brand-h is the logo row that scrolls away
@@ -1242,6 +1255,7 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     app.addEventListener('input', e => { if (e.target.id === 'bl-q') blSearch(e.target.value.trim()); });
     app.addEventListener('change', e => { if (window.FBPDraft && FBPDraft.change(e)) keepScroll(route); });
     app.addEventListener('click', e => {
+      const nb = e.target.closest('[data-nav-back]'); if (nb && navPrev()) { e.preventDefault(); history.back(); return; }
       if (location.hash.startsWith('#draft') && location.hash !== '#draft/mock' && window.FBPDraftHub && FBPDraftHub.click(e)) { keepScroll(route); return; }
       const awSel = location.hash === '#awards' && window.FBPAwards && FBPAwards.click(e);   // selector of the button pressed
       if (awSel) {
