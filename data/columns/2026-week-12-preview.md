@@ -5,6 +5,9 @@ author: sal
 season: 2026
 week: 12
 date: 2026-11-25
+image: assets/columns/2026-week-12-bijan.jpg
+caption: Bijan Robinson, back from the bye for the defending champs
+credit: Photo via Alamy
 teaser: No byes this week, so everybody's whole. MR. FROBOT bring a five-game win streak to the defending champs, Bullish are underdogs at Hauk Tua, and Hold Timers host the team that beat them in this same week last year.
 ---
 For the first time since Week 4, no NFL team is on bye. Nobody gets to blame the schedule this week. Jaxon Smith-Njigba and Bijan Robinson are back for Mailing It In. Kyren Williams and Harold Fannin Jr. are back for FROBOT. And those two teams play each other.
