@@ -1,7 +1,7 @@
 {
  "source": "NFL Mock Draft Database",
  "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
- "asOf": "2026-11-24",
+ "asOf": "2026-11-25",
  "note": "Projected NFL landing spot per rookie. consensus = the team at his pick in the 1-week consensus mock (round 1); recent = the team holding his median pick in mocks from the last two weeks (Tankathon order); most = the team he is most often mocked to.",
  "players": {
   "Jeremiah Smith": {
@@ -44,7 +44,7 @@
    "pick": 6,
    "basis": "consensus",
    "mocks": 25,
-   "mostMocked": "NYJ"
+   "mostMocked": "CLE"
   },
   "Kewan Lacy": {
    "team": "HOU",
@@ -313,11 +313,11 @@
    "mostMocked": "NO"
   },
   "Omarion Miller": {
-   "team": "LV",
+   "team": "WSH",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "LV"
+   "mostMocked": "WSH"
   },
   "Devin McCuin": {
    "team": "JAX",
