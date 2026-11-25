@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0320';
+  const VERSION = '0.0321';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -566,8 +566,9 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the Press Box…</p>'; }
     const all = state.columns.columns, W = state.columns.columnists;
     if (!all.length) return '<div class="card soon"><h2>Press Box</h2><p>No columns yet.</p></div>';
-    // every writer on staff, published or not, in staff order; the unsigned desk byline last
-    const who = [...Object.keys(W).filter(k => k !== 'desk'), ...(W.desk ? ['desk'] : [])];
+    // every writer on staff, published or not, most columns first (ties in staff order)
+    const nCol = k => all.filter(c => c.author === k).length, staff = Object.keys(W);
+    const who = staff.slice().sort((a, b) => nCol(b) - nCol(a) || staff.indexOf(a) - staff.indexOf(b));
     if (pbWho && !who.includes(pbWho)) pbWho = '';
     const C = pbWho ? all.filter(c => c.author === pbWho) : all;
     const person = k => W[k] || { name: k };
