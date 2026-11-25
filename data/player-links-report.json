@@ -5,8 +5,8 @@
   "spellingFixed": 49,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 253,
-  "rosteredTotal": 253
+  "rosteredLinked": 255,
+  "rosteredTotal": 255
  },
  "mismatch": [],
  "byName": [
@@ -150,6 +150,15 @@
    "team": "IND",
    "fbp": "0011",
    "espn": "3917792",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "14840",
+   "mflName": "Brandon Aiyuk",
+   "pos": "WR",
+   "team": "SFO",
+   "fbp": "0006",
+   "espn": "4360438",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
@@ -1266,15 +1275,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "16731",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "14840",
-   "mflName": "Brandon Aiyuk",
-   "pos": "WR",
-   "team": "SFO",
-   "fbp": null,
-   "espn": "4360438",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

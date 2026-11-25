@@ -16,7 +16,7 @@
    "pos": "RB",
    "school": "Florida",
    "adp": 4.5,
-   "nflPick": 25
+   "nflPick": 26
   },
   {
    "name": "Cam Coleman",
@@ -58,14 +58,14 @@
    "pos": "QB",
    "school": "Oregon",
    "adp": 8.1,
-   "nflPick": 25
+   "nflPick": 8
   },
   {
    "name": "KJ Duff",
    "pos": "WR",
    "school": "Rutgers",
    "adp": 11.9,
-   "nflPick": 29
+   "nflPick": 28
   },
   {
    "name": "Ahmad Hardy",
@@ -100,7 +100,7 @@
    "pos": "TE",
    "school": "Oregon",
    "adp": 13.9,
-   "nflPick": 27
+   "nflPick": 30
   },
   {
    "name": "Nick Marsh",
@@ -114,7 +114,7 @@
    "pos": "WR",
    "school": "Alabama",
    "adp": 15.3,
-   "nflPick": 30
+   "nflPick": 17
   },
   {
    "name": "Trey'Dez Green",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 25.6,
-   "nflPick": 29
+   "nflPick": 19
   },
   {
    "name": "Justice Haynes",

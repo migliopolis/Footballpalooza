@@ -12,16 +12,16 @@
    "mostMocked": "LAC"
   },
   "Jadan Baugh": {
-   "team": "CIN",
-   "pick": 24,
-   "basis": "recent",
-   "mocks": 21,
+   "team": "MIN",
+   "pick": 26,
+   "basis": "consensus",
+   "mocks": 23,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
    "team": "ATL",
    "pick": 10,
-   "basis": "consensus",
+   "basis": "recent",
    "mocks": 25,
    "mostMocked": "WSH"
   },
@@ -61,9 +61,9 @@
    "mostMocked": "NYJ"
   },
   "KJ Duff": {
-   "team": "TEN",
-   "pick": 28,
-   "basis": "recent",
+   "team": "KC",
+   "pick": 27,
+   "basis": "consensus",
    "mocks": 10,
    "mostMocked": "KC"
   },
@@ -89,17 +89,17 @@
    "mostMocked": "PHI"
   },
   "Dante Moore": {
-   "team": "MIN",
-   "pick": 26,
+   "team": "TB",
+   "pick": 7,
    "basis": "consensus",
-   "mocks": 19,
+   "mocks": 20,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
    "team": "NO",
    "pick": 8,
    "basis": "recent",
-   "mocks": 17,
+   "mocks": 18,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
@@ -124,9 +124,9 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "MIN",
-   "pick": 26,
-   "basis": "recent",
+   "team": "DEN",
+   "pick": 30,
+   "basis": "consensus",
    "mocks": 24,
    "mostMocked": "DEN"
   },
@@ -145,17 +145,17 @@
    "mostMocked": "DEN"
   },
   "Ryan Coleman-Williams": {
-   "team": "DEN",
-   "pick": 30,
-   "basis": "recent",
-   "mocks": 6,
+   "team": "NYJ",
+   "pick": 15,
+   "basis": "consensus",
+   "mocks": 7,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
    "team": "CLE",
    "pick": 17,
    "basis": "consensus",
-   "mocks": 22,
+   "mocks": 24,
    "mostMocked": "PIT"
   },
   "Wyatt Young": {
@@ -176,7 +176,7 @@
    "team": "PIT",
    "pick": 21,
    "basis": "consensus",
-   "mocks": 15,
+   "mocks": 16,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
@@ -187,10 +187,10 @@
    "mostMocked": "CIN"
   },
   "Austin Simmons": {
-   "team": "MIN",
-   "pick": null,
-   "basis": "most",
-   "mocks": 4,
+   "team": "SEA",
+   "pick": 18,
+   "basis": "recent",
+   "mocks": 13,
    "mostMocked": "MIN"
   },
   "Isaac Brown": {
@@ -246,7 +246,7 @@
    "team": "PHI",
    "pick": 25,
    "basis": "consensus",
-   "mocks": 16,
+   "mocks": 18,
    "mostMocked": "CLE"
   },
   "Carlos Hernandez": {
