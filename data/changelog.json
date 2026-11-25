@@ -2,6 +2,50 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0316",
+      "to": "0.0320",
+      "dates": "Nov 23–25, 2026",
+      "items": [
+        "Press Box: writer filter is a tidy scrolling row of photos, and every writer on staff is on it, including ones who haven't published yet.",
+        "Breaking news: a red tag on breaking stories (front page, Press Box, the article and the ticker) for two days, and their link previews lead with Breaking News.",
+        "Links between articles open at the top; Back returns to the article you came from, where you left off. Back and previous buttons get a thin pill outline.",
+        "All-FBP Rookie Team cards show who's new this week and who they replaced, like the 1st and 2nd Teams.",
+        "Scoreboard: taxi squad players show the points they scored."
+      ]
+    },
+    {
+      "from": "0.0311",
+      "to": "0.0315",
+      "dates": "Nov 22–23, 2026",
+      "items": [
+        "Game Day > All-Play Tracker: week, season and the 6-seed race, live, with charts for wins by week, schedule luck and a week-by-week heat map.",
+        "Analytics: Does the pricier lineup win? gets a Season / All-time toggle.",
+        "Scoreboard: points move with live box scores between MFL updates, and stat lines include kick and punt returns."
+      ]
+    },
+    {
+      "from": "0.0306",
+      "to": "0.0310",
+      "dates": "Nov 21–22, 2026",
+      "items": [
+        "A shared Player Page previews as the player, with his name and photo.",
+        "Player Page sections in four labeled groups: Right now, This season, Value and History.",
+        "Triple Crown (MVP, All-FBP and the title in one season): a badge on Awards and a line in Player Page honors.",
+        "Trading Floor > On the Block lists the most recently updated block first.",
+        "Press Box photos can set where they crop."
+      ]
+    },
+    {
+      "from": "0.0301",
+      "to": "0.0305",
+      "dates": "Nov 20, 2026",
+      "items": [
+        "Reference > Records: Most Player of the Week honors on the player career boards, and the Best win % board shows each player's FBP record.",
+        "Defenses on Reference records show their NFL logo on a team-color circle.",
+        "Player Page salary and points scales stay side by side on phones."
+      ]
+    },
+    {
       "from": "0.0296",
       "to": "0.0300",
       "dates": "Nov 19–20, 2026",

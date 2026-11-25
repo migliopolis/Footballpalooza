@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0319';
+  const VERSION = '0.0320';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -566,7 +566,8 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     if (!state.columns) { loadColumns(); return '<p class="loading">Loading the Press Box…</p>'; }
     const all = state.columns.columns, W = state.columns.columnists;
     if (!all.length) return '<div class="card soon"><h2>Press Box</h2><p>No columns yet.</p></div>';
-    const who = [...new Set(all.map(c => c.author))];
+    // every writer on staff, published or not, in staff order; the unsigned desk byline last
+    const who = [...Object.keys(W).filter(k => k !== 'desk'), ...(W.desk ? ['desk'] : [])];
     if (pbWho && !who.includes(pbWho)) pbWho = '';
     const C = pbWho ? all.filter(c => c.author === pbWho) : all;
     const person = k => W[k] || { name: k };
@@ -579,8 +580,9 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     return `<section class="pb">
       <h1 class="pb-h1">Press Box</h1>
       <p class="pb-sub">Recaps, previews, the trade desk, the rumor mill and the college beat, from the FBP press box. <a href="#press/staff">Meet the staff →</a></p>
-      <div class="pb-who" role="group" aria-label="Filter by writer"><button type="button" data-pb-who=""${pbWho ? '' : ' aria-pressed="true"'}>Everyone</button>${who.map(k => `<button type="button" data-pb-who="${esc(k)}"${pbWho === k ? ' aria-pressed="true"' : ''}>${colAvatar(person(k))}${esc(person(k).name)}</button>`).join('')}</div>
-      ${pbWho ? '' : card(C[0], true)}
+      <div class="pb-who" role="group" aria-label="Filter by writer"><button type="button" data-pb-who=""${pbWho ? '' : ' aria-pressed="true"'}><span class="col-av pb-all" aria-hidden="true">All</span><span class="pb-wn">Everyone</span></button>${who.map(k => { const a = person(k); const short = k === 'desk' ? 'Trade Desk' : a.name.split(' ')[0];
+        return `<button type="button" data-pb-who="${esc(k)}" title="${esc(a.name)}"${pbWho === k ? ' aria-pressed="true"' : ''}>${colAvatar(a)}<span class="pb-wn">${esc(short)}</span></button>`; }).join('')}</div>
+      ${!C.length ? `<div class="card soon"><p>No columns from ${esc(person(pbWho).name)} yet${person(pbWho).title ? ` (${esc(person(pbWho).title.toLowerCase())})` : ''}. Check back soon.</p></div>` : pbWho ? '' : card(C[0], true)}
       ${weeks.map(g => `<h2 class="sec">Week ${g.w}</h2><div class="pb-list">${g.list.map(c => card(c)).join('')}</div>`).join('')}
     </section>`;
   }
