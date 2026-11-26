@@ -12,16 +12,16 @@
    "mostMocked": "LAC"
   },
   "Jadan Baugh": {
-   "team": "MIN",
-   "pick": 26,
+   "team": "NYG",
+   "pick": 23,
    "basis": "consensus",
-   "mocks": 20,
+   "mocks": 21,
    "mostMocked": "JAX"
   },
   "Charlie Becker": {
-   "team": "ATL",
-   "pick": 10,
-   "basis": "recent",
+   "team": "LV",
+   "pick": 12,
+   "basis": "consensus",
    "mocks": 25,
    "mostMocked": "WSH"
   },
@@ -43,7 +43,7 @@
    "team": "ARI",
    "pick": 6,
    "basis": "consensus",
-   "mocks": 25,
+   "mocks": 24,
    "mostMocked": "CLE"
   },
   "Kewan Lacy": {
@@ -55,28 +55,28 @@
   },
   "CJ Carr": {
    "team": "NYJ",
-   "pick": 4,
+   "pick": 5,
    "basis": "consensus",
    "mocks": 25,
    "mostMocked": "NYJ"
   },
   "KJ Duff": {
-   "team": "KC",
-   "pick": 27,
-   "basis": "consensus",
-   "mocks": 9,
+   "team": "DET",
+   "pick": 29,
+   "basis": "recent",
+   "mocks": 10,
    "mostMocked": "KC"
   },
   "Cam Coleman": {
    "team": "NE",
    "pick": 16,
    "basis": "consensus",
-   "mocks": 23,
+   "mocks": 22,
    "mostMocked": "LV"
   },
   "Nick Marsh": {
-   "team": "SEA",
-   "pick": 18,
+   "team": "WSH",
+   "pick": 14,
    "basis": "consensus",
    "mocks": 25,
    "mostMocked": "KC"
@@ -89,9 +89,9 @@
    "mostMocked": "PHI"
   },
   "Dante Moore": {
-   "team": "TB",
-   "pick": 7,
-   "basis": "consensus",
+   "team": "SEA",
+   "pick": 18,
+   "basis": "recent",
    "mocks": 18,
    "mostMocked": "NYJ"
   },
@@ -103,10 +103,10 @@
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
-   "team": "CAR",
-   "pick": 19,
+   "team": "CIN",
+   "pick": 24,
    "basis": "consensus",
-   "mocks": 24,
+   "mocks": 25,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -124,10 +124,10 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "DEN",
-   "pick": 30,
-   "basis": "consensus",
-   "mocks": 23,
+   "team": "TEN",
+   "pick": 28,
+   "basis": "recent",
+   "mocks": 24,
    "mostMocked": "DEN"
   },
   "Deuce Alexander": {
@@ -139,21 +139,21 @@
   },
   "Luke Reynolds": {
    "team": "DEN",
-   "pick": null,
-   "basis": "most",
-   "mocks": 3,
+   "pick": 30,
+   "basis": "consensus",
+   "mocks": 4,
    "mostMocked": "DEN"
   },
   "Ryan Coleman-Williams": {
-   "team": "NYJ",
-   "pick": 15,
-   "basis": "consensus",
+   "team": "SF",
+   "pick": 32,
+   "basis": "recent",
    "mocks": 6,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
-   "team": "CLE",
-   "pick": 17,
+   "team": "MIN",
+   "pick": 26,
    "basis": "consensus",
    "mocks": 22,
    "mostMocked": "PIT"
@@ -173,10 +173,10 @@
    "mostMocked": "LAR"
   },
   "Reed Harris": {
-   "team": "PIT",
-   "pick": 21,
+   "team": "BUF",
+   "pick": 31,
    "basis": "consensus",
-   "mocks": 14,
+   "mocks": 15,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
@@ -187,10 +187,10 @@
    "mostMocked": "CIN"
   },
   "Austin Simmons": {
-   "team": "NE",
-   "pick": 16,
+   "team": "SEA",
+   "pick": 18,
    "basis": "recent",
-   "mocks": 14,
+   "mocks": 16,
    "mostMocked": "MIN"
   },
   "Isaac Brown": {
@@ -243,8 +243,8 @@
    "mostMocked": "CLE"
   },
   "LaNorris Sellers": {
-   "team": "PHI",
-   "pick": 25,
+   "team": "PIT",
+   "pick": 21,
    "basis": "consensus",
    "mocks": 16,
    "mostMocked": "CLE"

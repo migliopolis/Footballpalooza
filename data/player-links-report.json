@@ -5,8 +5,8 @@
   "spellingFixed": 48,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 255,
-  "rosteredTotal": 255
+  "rosteredLinked": 253,
+  "rosteredTotal": 253
  },
  "mismatch": [],
  "byName": [
@@ -144,15 +144,6 @@
  "unmatched": [],
  "staleId": [
   {
-   "mfl": "14059",
-   "mflName": "Daniel Jones",
-   "pos": "QB",
-   "team": "FA",
-   "fbp": "0011",
-   "espn": "3917792",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
    "mfl": "12801",
    "mflName": "Tyreek Hill",
    "pos": "WR",
@@ -231,6 +222,15 @@
    "team": "TBB",
    "fbp": null,
    "espn": "2972515",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
+   "mfl": "14059",
+   "mflName": "Daniel Jones",
+   "pos": "QB",
+   "team": "FA",
+   "fbp": null,
+   "espn": "3917792",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {

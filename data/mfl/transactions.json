@@ -1,6 +1,27 @@
 {
- "fetched": "2026-11-26T01:06:34+00:00",
+ "fetched": "2026-11-26T16:37:58+00:00",
  "transactions": [
+  {
+   "franchise": "0007",
+   "timestamp": "1795700896",
+   "transaction": "|13672,",
+   "type": "FREE_AGENT"
+  },
+  {
+   "expires": "1795910400",
+   "franchise": "0007",
+   "franchise1_gave_up": ",",
+   "franchise2": "0012",
+   "franchise2_gave_up": "16598,",
+   "timestamp": "1795700246",
+   "type": "TRADE"
+  },
+  {
+   "franchise": "0011",
+   "timestamp": "1795658171",
+   "transaction": "|14059,",
+   "type": "FREE_AGENT"
+  },
   {
    "franchise": "0009",
    "timestamp": "1795626000",
