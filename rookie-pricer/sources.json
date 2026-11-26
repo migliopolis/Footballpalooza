@@ -1,6 +1,6 @@
 {
  "season": 2027,
- "asOf": "2026-11-25",
+ "asOf": "2026-11-26",
  "mode": "projected",
  "settings": {
   "windowDays": 60,
@@ -331,7 +331,7 @@
  "nflSources": [
   {
    "name": "NFL Mock Draft Database consensus mock (1 week) and recent mocks",
-   "date": "2026-11-25",
+   "date": "2026-11-26",
    "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
    "type": "mock",
    "weight": 3,
@@ -345,9 +345,9 @@
     "Charlie Becker": 10,
     "Ryan Coleman-Williams": 15,
     "Cam Coleman": 16,
+    "Austin Simmons": 16,
     "Trinidad Chambliss": 17,
     "Nick Marsh": 18,
-    "Austin Simmons": 18,
     "Trey'Dez Green": 19,
     "Reed Harris": 21,
     "LaNorris Sellers": 25,
