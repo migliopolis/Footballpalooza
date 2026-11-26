@@ -707,6 +707,7 @@
         // FBP's own IR counts even when ESPN no longer lists the injury
         const st = state(p), ph = photo(p.id), inj = (dnp(p) ? (inactive(p) ? { t: 'IN', title: 'Inactive: didn’t play this game' } : injTag(p.id)) : null) || (ruledOut(p) ? null : hurtTag(p)) || injTag(p.id) || (p.status === 'ir' ? { t: 'IR', title: 'On FBP injured reserve' } : null);
         const tag = playerChips(p.id, shownW, (cls === 'a' ? a : b).id) + FBPU.tbChip(p.id) + (inj ? `<span class="lv-inj" title="${esc(inj.title)}">${inj.t}</span>` : '');
+        const turk = turkeyGame(p.id, shownW); const tagT = turk ? `<span class="lv-turkey" title="${esc(turk)}">🦃</span>` : '';
         // his photo opens his Player Page; its back arrow returns here, to this matchup
         const img = `<a class="lv-pha" href="#now/team/${(cls === 'a' ? a : b).id}/${p.id}" title="Player Page" aria-label="Player Page">${photoHtml(p, shownW, (cls === 'a' ? a : b).id)}</a>`;
         // bottom row: position (only when it isn't the slot's, as in FLEX or the bench), his NFL team's logo, the game clock, then the opponent (vs at home, @ away) and the
@@ -726,7 +727,7 @@
         const isD = pos(p.id) === 'DEF', live = g && g.state === 'in';
         const rzOn = live && (isD ? !g.ball && g.defRz : g.ball && g.rz), posOn = live && !rzOn && (isD ? !g.ball && g.oppBall : g.ball);
         const rzc = rzOn ? ' lv-inrz' : posOn ? ' lv-inpos' : '';
-        const nm = `<td class="lv-p ${cls} ${st}${rzc}"><div class="lv-pc"><span class="lv-phw"><span class="lv-phx">${img}</span>${teamChip(p.id, (cls === 'a' ? a : b).id)}</span><span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}</span><span class="lv-ext"><small class="lv-bot">${bottom.join('')}</small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></span></div></td>`;
+        const nm = `<td class="lv-p ${cls} ${st}${rzc}"><div class="lv-pc"><span class="lv-phw"><span class="lv-phx">${img}</span>${teamChip(p.id, (cls === 'a' ? a : b).id)}</span><span class="lv-who"><span class="lv-nm"><span class="lv-nmt">${esc(short(p.id))}</span>${tag}${tagT}</span><span class="lv-ext"><small class="lv-bot">${bottom.join('')}</small>${statLine(p.id) ? `<small class="lv-stat">${esc(statLine(p.id))}</small>` : ''}</span></span></div></td>`;
         const pj = projNow(p, shownW);
         // before kickoff the projection stands in, muted; once he plays, his points with the projection under them
         const pt = `<td class="lv-pts ${cls} ${st}${rzc}">${st === 'pre' || p.score == null ? (pj != null ? `<span class="lv-pre" title="MFL projection">${n1(pj)}</span><small class="lv-pj0">proj</small>` : '–')
@@ -767,7 +768,7 @@
       : !p ? `<b>Final.</b> Week ${esc(L.week)} is in the books.`
       : p === SLOW_MS ? `Updated ${t} · checks every 5 min until kickoff` : `<b>Live</b> · updated ${t} · every ${POLL_MS / 1000}s`;
     statusHtml = status;
-    return `<div class="lv-bar lv-topbar">${picker}
+    return `${X.turkey ? turkeyBanner(L, shownW) : ''}<div class="lv-bar lv-topbar">${picker}
         <span class="lv-btns"><button type="button" class="lv-all lv-cmp" data-lv-cmp aria-pressed="${compact}">Compact</button><button type="button" class="lv-all" data-lv-all="${open.size === any ? 'close' : 'open'}">${open.size === any ? 'Collapse all' : 'Expand all'}</button></span></div>
       <div class="lv-list lv-t2${compact ? ' lv-compact' : ''}">${mineFirst(ordered(L.matchup)).map(game).join('')}</div>
       ${honors && honors.thru ? `<p class="rf-foot lv-foot">Award chips (1st Team, MVP, RoY, ToY and the rest) show who holds each <a href="#awards">award</a> through week ${honors.thru} of the ${esc(String(honors.season || ''))} season. The awards aren’t final until the regular season ends, so the chips can change from week to week.</p>` : ''}`;
@@ -986,6 +987,29 @@
     return `<div class="apt-charts"><h2 class="apt-h">Study the all-play</h2>${picker}${chart1}${chart2}${chart3}</div>`;
   }
 
+  // Beta > Thanksgiving: the holiday-weekend look. Players in the week's Thanksgiving NFL games get a turkey, and the
+  // Turkey Leg Award goes to the top FBP starter from those games, live. HOLIDAY: FBP week -> ESPN team -> when.
+  const HOLIDAY = { 12: { GB: 'Wed night', LAR: 'Wed night', CHI: 'Thanksgiving', DET: 'Thanksgiving', PHI: 'Thanksgiving',
+    DAL: 'Thanksgiving', KC: 'Thanksgiving', BUF: 'Thanksgiving', DEN: 'Black Friday', PIT: 'Black Friday' } };
+  function turkeyGame(id, w) {
+    if (!X || !X.turkey) return '';
+    const H = HOLIDAY[w]; if (!H) return '';
+    const t = TEAM[info(id).team] || info(id).team, when = H[t];
+    return when ? `Plays in a holiday game (${when})` : '';
+  }
+  function turkeyBanner(L, w) {
+    const H = HOLIDAY[w];
+    let best = null;
+    if (H) (L.matchup || []).forEach(m => m.franchise.forEach(f => (f.players.player || []).forEach(p => {
+      if (p.status !== 'starter' || !turkeyGame(p.id, w) || p.score == null || state(p) === 'pre') return;
+      if (!best || +p.score > +best.p.score) best = { p, f: f.id };
+    })));
+    const leaves = Array.from({ length: 7 }, (_, i) => `<i class="tg-leaf" style="left:${8 + i * 13}%;animation-delay:${(i * 0.55).toFixed(2)}s">${i % 2 ? '🍁' : '🍂'}</i>`).join('');
+    const leader = best ? `<b>${esc(short(best.p.id))}</b> <span>${esc((X.teams[best.f] || {}).abbr || X.nameOf(best.f))} · ${n1(+best.p.score)} pts</span>`
+      : `<b>Up for grabs</b> <span>${H ? 'The holiday games start Wednesday night' : 'No holiday games this week'}</span>`;
+    return `<section class="tg-wrap"><div class="tg-banner">${leaves}<small>Week ${w} · Thanksgiving weekend</small><h2>Happy Thanksgiving from Footballpalooza</h2><p>Wednesday night through Monday night · 5 holiday NFL games</p></div>
+      <div class="tg-leg"><span class="tg-ico" aria-hidden="true">🍗</span><span><small>Turkey Leg Award · top FBP starter in the holiday games</small><span class="tg-who">${leader}</span></span></div></section>`;
+  }
   function render(ctx) {
     X = ctx;
     if ((!data && !failed) || (data && nextW() !== askedW && !loading)) load();
