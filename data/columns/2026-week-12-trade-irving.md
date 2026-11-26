@@ -7,7 +7,7 @@ week: 12
 date: 2026-11-26
 breaking: yes
 image: assets/columns/2026-week-12-trade-irving.jpg
-focus: 50% 30%
+focus: 50% 72%
 caption: Bucky Irving, now running for MR. FROBOT
 credit: 
 teaser: Sour Grapes send Bucky Irving to MR. FROBOT for $6 of 2027 auction cash. The Central leaders add a top-10 back for the bye race, and a team out of the race gets paid for a player headed to the auction anyway.
