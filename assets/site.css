@@ -3612,3 +3612,10 @@ html.lb-open{overflow:hidden}
 .tg-leg small{display:block;font-size:.7rem;color:var(--muted)}
 .tg-who b{font-weight:700}.tg-who span{color:var(--muted);font-size:.85rem}
 .lv-turkey{font-size:.8em;margin-left:3px;vertical-align:1px}
+.lv-g{position:relative}
+.tg-deco{position:absolute;z-index:1;pointer-events:none;font-size:13px;line-height:1;letter-spacing:-3px;opacity:.92}
+.tg-tl{top:1px;left:2px;transform:rotate(-12deg)}
+.tg-tr{top:1px;right:3px;transform:rotate(10deg)}
+.tg-bl{bottom:1px;left:2px;transform:rotate(8deg)}
+.tg-br{bottom:1px;right:3px;transform:rotate(-8deg)}
+.lv-g:has(.tg-deco):not(.lv-gotw):not(.lv-mine){border-color:#F0997B}

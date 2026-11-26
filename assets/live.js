@@ -749,7 +749,7 @@
       const gotw = isGotw(shownW, a.id, b.id), mine = X.myTeam && (a.id === X.myTeam || b.id === X.myTeam);
       const champ = !view && [seedOf(a.id), seedOf(b.id)].sort().join() === '1,2';
       const tags = gameTags(m, a, b, shownW, gotw, mine).slice(0, 2);
-      return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw || champ ? ' lv-gotw' : ''}${mine ? ' lv-mine' + (lum(barColor(X.myTeam)) < .15 ? ' lv-mine-dk' : '') : ''}" data-lv-key="${key}"${mine ? ` style="--mine:${barColor(X.myTeam)};--mine-ink:${(SB[tm(X.myTeam).abbr] || [])[1] || (lum(barColor(X.myTeam)) > .6 ? '#1a1a1a' : '#fff')}"` : ''}>
+      return `<article class="card lv-g${isOpen ? ' open' : ''}${gotw || champ ? ' lv-gotw' : ''}${mine ? ' lv-mine' + (lum(barColor(X.myTeam)) < .15 ? ' lv-mine-dk' : '') : ''}" data-lv-key="${key}"${mine ? ` style="--mine:${barColor(X.myTeam)};--mine-ink:${(SB[tm(X.myTeam).abbr] || [])[1] || (lum(barColor(X.myTeam)) > .6 ? '#1a1a1a' : '#fff')}"` : ''}>${X.turkey ? turkeyDeco(gi) : ''}
         <button type="button" class="lv-sum" data-lv="${key}" aria-expanded="${isOpen}">
           ${side(a, 'a')}<span class="lv-mid"><span class="lv-tags">${tags.map(t => `<span class="lv-ctx ${t[0]}" title="${esc(t[2])}">${t[1]}</span>`).join('')}</span>${bar}${line}</span>${side(b, 'b')}
           <span class="lv-metarow"><small>${meta(a.id)}</small><small>${meta(b.id)}</small></span>
@@ -996,6 +996,11 @@
     const H = HOLIDAY[w]; if (!H) return '';
     const t = TEAM[info(id).team] || info(id).team, when = H[t];
     return when ? `Plays in a holiday game (${when})` : '';
+  }
+  // the holiday dressing on each matchup card: a cluster of fall things in each corner, varied card to card
+  const DECO = [['🍁', '🎃', '🍂'], ['🌽', '🍂'], ['🍂', '🥧', '🍁'], ['🦃', '🍁'], ['🎃', '🍂', '🌰'], ['🍁', '🍎', '🍂'], ['🍂', '🦃'], ['🌾', '🎃', '🍁']];
+  function turkeyDeco(gi) {
+    return ['tl', 'tr', 'bl', 'br'].map((c, k) => `<span class="tg-deco tg-${c}" aria-hidden="true">${DECO[(gi * 3 + k * 5) % DECO.length].slice(0, 2).join('')}</span>`).join('');
   }
   function turkeyBanner(L, w) {
     const H = HOLIDAY[w];
