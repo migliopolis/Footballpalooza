@@ -5,8 +5,8 @@
   "spellingFixed": 48,
   "name": 13,
   "unmatched": 3,
-  "rosteredLinked": 253,
-  "rosteredTotal": 253
+  "rosteredLinked": 257,
+  "rosteredTotal": 257
  },
  "mismatch": [],
  "byName": [
@@ -18,6 +18,16 @@
    "fbp": "0009",
    "espn": "3916148",
    "espnName": "Tony Pollard",
+   "how": "name"
+  },
+  {
+   "mfl": "16342",
+   "mflName": "Demario Douglas",
+   "pos": "WR",
+   "team": "NEP",
+   "fbp": "0012",
+   "espn": "4427095",
+   "espnName": "DeMario Douglas",
    "how": "name"
   },
   {
@@ -108,16 +118,6 @@
    "fbp": null,
    "espn": "4372505",
    "espnName": "Payne Durham",
-   "how": "name"
-  },
-  {
-   "mfl": "16342",
-   "mflName": "Demario Douglas",
-   "pos": "WR",
-   "team": "NEP",
-   "fbp": null,
-   "espn": "4427095",
-   "espnName": "DeMario Douglas",
    "how": "name"
   },
   {

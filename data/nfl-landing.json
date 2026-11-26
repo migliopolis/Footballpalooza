@@ -64,7 +64,7 @@
    "team": "DET",
    "pick": 29,
    "basis": "recent",
-   "mocks": 10,
+   "mocks": 11,
    "mostMocked": "KC"
   },
   "Cam Coleman": {
@@ -99,7 +99,7 @@
    "team": "NO",
    "pick": 8,
    "basis": "recent",
-   "mocks": 15,
+   "mocks": 17,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
@@ -124,8 +124,8 @@
    "mostMocked": "MIN"
   },
   "Jamari Johnson": {
-   "team": "TEN",
-   "pick": 28,
+   "team": "DET",
+   "pick": 29,
    "basis": "recent",
    "mocks": 24,
    "mostMocked": "DEN"
@@ -155,7 +155,7 @@
    "team": "MIN",
    "pick": 26,
    "basis": "consensus",
-   "mocks": 22,
+   "mocks": 23,
    "mostMocked": "PIT"
   },
   "Wyatt Young": {
@@ -176,7 +176,7 @@
    "team": "BUF",
    "pick": 31,
    "basis": "consensus",
-   "mocks": 15,
+   "mocks": 17,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
@@ -187,10 +187,10 @@
    "mostMocked": "CIN"
   },
   "Austin Simmons": {
-   "team": "SEA",
-   "pick": 18,
+   "team": "DAL",
+   "pick": 17,
    "basis": "recent",
-   "mocks": 16,
+   "mocks": 17,
    "mostMocked": "MIN"
   },
   "Isaac Brown": {
@@ -246,7 +246,7 @@
    "team": "PIT",
    "pick": 21,
    "basis": "consensus",
-   "mocks": 16,
+   "mocks": 18,
    "mostMocked": "CLE"
   },
   "Carlos Hernandez": {

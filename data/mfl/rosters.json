@@ -2301,8 +2301,26 @@
       "contractInfo": "",
       "contractStatus": "",
       "contractYear": "",
+      "drafted": "BB $1",
+      "id": "13113",
+      "salary": "1",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
       "drafted": "BB $0",
-      "id": "0506",
+      "id": "17527",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "17541",
       "salary": "",
       "status": "ROSTER"
      },
@@ -2489,6 +2507,15 @@
       "contractYear": "",
       "drafted": "BB $0",
       "id": "16608",
+      "salary": "",
+      "status": "ROSTER"
+     },
+     {
+      "contractInfo": "",
+      "contractStatus": "",
+      "contractYear": "",
+      "drafted": "BB $0",
+      "id": "16342",
       "salary": "",
       "status": "ROSTER"
      },

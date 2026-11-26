@@ -1169,13 +1169,13 @@
         "id": "0011",
         "isHome": "0",
         "result": "T",
-        "spread": "36.8"
+        "spread": "51.2"
        },
        {
         "id": "0001",
         "isHome": "1",
         "result": "T",
-        "spread": "-36.8"
+        "spread": "-51.2"
        }
       ]
      },

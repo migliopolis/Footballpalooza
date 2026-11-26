@@ -1,6 +1,30 @@
 {
- "fetched": "2026-11-26T16:37:58+00:00",
+ "fetched": "2026-11-26T17:06:31+00:00",
  "transactions": [
+  {
+   "franchise": "0011",
+   "timestamp": "1795712400",
+   "transaction": "17541,|0.00|0506,",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0011",
+   "timestamp": "1795712400",
+   "transaction": "17527,|0.00|",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0012",
+   "timestamp": "1795712400",
+   "transaction": "16342,|0.00|",
+   "type": "BBID_WAIVER"
+  },
+  {
+   "franchise": "0011",
+   "timestamp": "1795712400",
+   "transaction": "13113,|1.00|",
+   "type": "BBID_WAIVER"
+  },
   {
    "franchise": "0007",
    "timestamp": "1795700896",
