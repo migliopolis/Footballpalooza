@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-26",
+ "asOf": "2026-11-27",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
@@ -135,7 +135,7 @@
    "pos": "WR",
    "school": "Arizona State",
    "adp": 22.3,
-   "nflPick": 31
+   "nflPick": 29
   },
   {
    "name": "Mark Fletcher Jr.",
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 25.6,
-   "nflPick": 18
+   "nflPick": 17
   },
   {
    "name": "Justice Haynes",
@@ -254,7 +254,7 @@
    "pos": "TE",
    "school": "Virginia Tech",
    "adp": 30.0,
-   "nflPick": 33
+   "nflPick": 66
   }
  ]
 }

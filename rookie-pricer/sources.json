@@ -1,6 +1,6 @@
 {
  "season": 2027,
- "asOf": "2026-11-26",
+ "asOf": "2026-11-27",
  "mode": "projected",
  "settings": {
   "windowDays": 60,
@@ -331,7 +331,7 @@
  "nflSources": [
   {
    "name": "NFL Mock Draft Database consensus mock (1 week) and recent mocks",
-   "date": "2026-11-26",
+   "date": "2026-11-27",
    "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
    "type": "mock",
    "weight": 3,
@@ -344,7 +344,7 @@
     "Charlie Becker": 12,
     "Nick Marsh": 14,
     "Cam Coleman": 16,
-    "Austin Simmons": 17,
+    "Austin Simmons": 16,
     "Dante Moore": 18,
     "LaNorris Sellers": 21,
     "Jadan Baugh": 23,
@@ -352,8 +352,7 @@
     "Trinidad Chambliss": 26,
     "KJ Duff": 29,
     "Jamari Johnson": 29,
-    "Luke Reynolds": 30,
-    "Reed Harris": 31,
+    "Reed Harris": 29,
     "Ryan Coleman-Williams": 32
    },
    "note": "Round 1: the pick in the 1-week consensus mock. Others: median pick across mocks from the last 14 days (5+ mocks)."
