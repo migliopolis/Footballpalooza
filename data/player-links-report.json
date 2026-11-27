@@ -2,7 +2,7 @@
  "summary": {
   "linked": 949,
   "mfl": 936,
-  "spellingFixed": 48,
+  "spellingFixed": 49,
   "name": 13,
   "unmatched": 3,
   "rosteredLinked": 257,
@@ -1791,6 +1791,15 @@
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
+   "mfl": "16413",
+   "mflName": "Malik Heath",
+   "pos": "WR",
+   "team": "WAS",
+   "fbp": null,
+   "espn": "4689334",
+   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
+  },
+  {
    "mfl": "13669",
    "mflName": "Malik Turner",
    "pos": "WR",
@@ -1941,15 +1950,6 @@
    "team": "FA",
    "fbp": null,
    "espn": "4362630",
-   "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
-  },
-  {
-   "mfl": "17088",
-   "mflName": "Theo Wease",
-   "pos": "WR",
-   "team": "FA",
-   "fbp": null,
-   "espn": "4426535",
    "note": "ESPN id not on a current NFL roster (free agent, retired or practice squad elsewhere)"
   },
   {
