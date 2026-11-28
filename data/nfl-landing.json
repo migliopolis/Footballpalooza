@@ -68,10 +68,10 @@
    "mostMocked": "KC"
   },
   "Cam Coleman": {
-   "team": "NE",
-   "pick": 16,
-   "basis": "consensus",
-   "mocks": 18,
+   "team": "DAL",
+   "pick": 17,
+   "basis": "recent",
+   "mocks": 19,
    "mostMocked": "LV"
   },
   "Nick Marsh": {
@@ -89,24 +89,24 @@
    "mostMocked": "PHI"
   },
   "Dante Moore": {
-   "team": "SEA",
-   "pick": 18,
-   "basis": "recent",
-   "mocks": 15,
+   "team": "MIN",
+   "pick": 26,
+   "basis": "consensus",
+   "mocks": 16,
    "mostMocked": "NYJ"
   },
   "Arch Manning": {
    "team": "ARI",
    "pick": 6,
    "basis": "consensus",
-   "mocks": 13,
+   "mocks": 14,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
    "team": "CAR",
    "pick": 19,
    "basis": "consensus",
-   "mocks": 24,
+   "mocks": 25,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -127,7 +127,7 @@
    "team": "DET",
    "pick": 28,
    "basis": "consensus",
-   "mocks": 19,
+   "mocks": 20,
    "mostMocked": "DEN"
   },
   "Deuce Alexander": {
