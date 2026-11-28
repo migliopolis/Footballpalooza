@@ -72,6 +72,9 @@ jobs:
       - name: Power Rankings, Now and Future, with projected keepers (Beta > Power Rankings; after Stats, which the keeper model reads)
         continue-on-error: true
         run: python scripts/power.py
+      - name: Off-Season (keepers, 2027 cap, auction pool; after Power Rankings, which it reads)
+        continue-on-error: true
+        run: python scripts/offseason.py
       - name: NFL box-score stats for Stats (nflverse)
         continue-on-error: true
         run: python scripts/refresh_nflverse.py
