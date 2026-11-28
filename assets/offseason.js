@@ -2,8 +2,9 @@
    Data: data/offseason.json (scripts/offseason.py), which reads rosters.json (contracts and future salaries), power.json
    (the keeper model's keep chances and projected keepers, each team's auction budget from budgets.json, draft picks),
    values.json (Player Value, Trade Value) and auction-bids.json (the auction price curve).
-   Views: Keeper Builder (#offseason), All Keepers (#offseason/all), Auction Pool (#offseason/pool), Trade Builder
-   (#offseason/trade), Contracts (#offseason/contracts). A shared plan opens at #offseason/plan/<team>/<id.id.id>.
+   Lives in Beta for now (#beta/offseason; ctx.base sets the prefix, so it can move to the Off-Season tab as is).
+   Views: Keeper Builder (<base>), All Keepers (<base>/all), Auction Pool (<base>/pool), Trade Builder
+   (<base>/trade), Contracts (<base>/contracts). A shared plan opens at <base>/plan/<team>/<id.id.id>.
    Keeper picks are the same on-device picks as Beta > Power Rankings ('fbp-power-keep'), so both pages agree.
    Saved plans live in this browser ('fbp-os-plans'). Nothing here is official: keepers are declared with the commissioner. */
 window.FBPOffseason = (function () {
@@ -14,6 +15,7 @@ window.FBPOffseason = (function () {
   const rd = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || '') || d; } catch (e) { return d; } };
   const wr = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
   let flips = rd(FK, {}), plans = rd(PK, []);
+  const B = () => (X && X.base) || '#offseason';
   const redraw = () => { const y = window.scrollY; if (X && X.rerender) { X.rerender(); window.scrollTo(0, y); } };
   function load() {
     if (D || loading) return;
@@ -50,8 +52,8 @@ window.FBPOffseason = (function () {
   }
   const teamCap = f => { const t = D.teams[f]; t.players.forEach(p => { p.f = f; }); return cap(f, t.players.filter(isKept), t.budget); };
 
-  const nav = v => `<nav class="rf-sub seg now-sub pg-nav os-nav">${[['', 'Keeper Builder'], ['all', 'All Keepers'], ['pool', 'Auction Pool'], ['trade', 'Trade Builder'], ['contracts', 'Contracts']]
-    .map(([k, l]) => `<a href="#offseason${k ? '/' + k : ''}"${v === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
+  const nav = v => `<nav class="rf-sub seg now-sub${B() === '#offseason' ? ' pg-nav' : ''} os-nav">${[['', '<span class="lg-only">Keeper Builder</span><span class="sm-only">Keepers</span>'], ['all', '<span class="lg-only">All Keepers</span><span class="sm-only">League</span>'], ['pool', '<span class="lg-only">Auction Pool</span><span class="sm-only">Auction</span>'], ['trade', '<span class="lg-only">Trade Builder</span><span class="sm-only">Trade</span>'], ['contracts', 'Contracts']]
+    .map(([k, l]) => `<a href="${B()}${k ? '/' + k : ''}"${v === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
   const picker = (cur, attr) => FBPU.divGrid(Object.keys(D.teams), f => { const c = teamCap(f);
     return `<button type="button" class="hs-cb os-cb${cur === f ? ' on' : ''}" ${attr}="${f}">${logo(f, '')}<b>${X.esc(abbr(f))}</b><small>${c.n} kept · ${$(c.left)} left</small></button>`; },
     { mine: X.myTeam, name: f => X.nameOf(f), cls: 'hs-cen os-cen' });
@@ -97,7 +99,7 @@ window.FBPOffseason = (function () {
     const any = Object.keys(flips).length;
     return `<p class="os-intro">Every team’s ${D.next} keepers as projected by the keeper model${any ? ', with the picks you’ve changed on this device' : ''}. Open a team in the Keeper Builder to change them.</p>
       <div class="os-all">${ids.map(f => { const t = D.teams[f], c = Object.assign(teamCap(f), { budget: t.budget }), K = t.players.filter(isKept).sort((a, b) => b.next - a.next);
-        return `<div class="card os-ak"><a class="os-tm" href="#offseason" data-os-go="${f}">${logo(f, 'os-big')}<div><h3>${esc(X.nameOf(f))}</h3><small>${c.n} kept · ${$(c.sal)} · ${$(c.left)} left · max bid ${c.open ? $(c.max) : '—'}</small></div></a>
+        return `<div class="card os-ak"><a class="os-tm" href="${B()}" data-os-go="${f}">${logo(f, 'os-big')}<div><h3>${esc(X.nameOf(f))}</h3><small>${c.n} kept · ${$(c.sal)} · ${$(c.left)} left · max bid ${c.open ? $(c.max) : '—'}</small></div></a>
           ${c.warn.length ? `<ul class="os-warn">${c.warn.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
           <ol>${K.map(p => `<li><span>${nm(p)} <small>${p.pos}${taxi(p) ? ' · Taxi' : ''}</small></span><b>${$(p.next)}</b></li>`).join('') || '<li class="os-none">No keepers</li>'}</ol></div>`; }).join('')}</div>`;
   }
@@ -116,8 +118,8 @@ window.FBPOffseason = (function () {
     return `<p class="os-intro">Who’s likely to reach the ${D.next} auction, with a predicted price. Prices come from the last ${D.curveYears.length} auctions (${D.curveYears[0]}–${D.curveYears[D.curveYears.length - 1]}): the best player available gets the average top price, the second best the average second-highest, and so on. Teams have about ${$(spend)} to spend after keepers.</p>
       <div class="os-ctl"><div class="seg">${['ALL'].concat(POS).map(k => `<button type="button" data-os-pos="${k}" aria-pressed="${posF === k}">${k === 'ALL' ? 'All' : k}</button>`).join('')}</div>
         ${my ? `<label class="os-chk"><input type="checkbox" data-os-mine${poolMine ? ' checked' : ''}> Only what ${esc(abbr(X.myTeam))} can afford (max bid ${my.open ? $(my.max) : '—'})</label>` : ''}</div>
-      <div class="card tbl-wrap"><table class="tbl os-tbl os-pool"><thead><tr><th>#</th><th class="l">Player</th><th title="Released by">From</th><th title="Predicted auction price">Price</th><th title="${D.next} salary if his team kept him">Keeper $</th><th title="Keeper model">Keep %</th></tr></thead>
-        <tbody>${L.map(p => `<tr><td>${P.indexOf(p) + 1}</td><td class="l"><b>${nm(p)}</b><small>${p.pos} · ${p.nfl || ''}${p.age ? ' · ' + p.age : ''}</small></td><td>${logo(p.f)}</td><td><b>${$(p.price)}</b></td><td>${p.next != null ? $(p.next) : '<small>Expires</small>'}</td><td>${kp(p)}</td></tr>`).join('')}</tbody></table></div>
+      <div class="card tbl-wrap"><table class="tbl os-tbl os-pool"><thead><tr><th>#</th><th class="l">Player</th><th title="Released by">From</th><th title="Predicted auction price">Price</th><th title="${D.next} salary if his team kept him">Keeper $</th><th class="os-tv" title="Keeper model">Keep %</th></tr></thead>
+        <tbody>${L.map(p => `<tr><td>${P.indexOf(p) + 1}</td><td class="l"><b>${nm(p)}</b><small>${p.pos} · ${p.nfl || ''}${p.age ? ' · ' + p.age : ''}</small></td><td>${logo(p.f)}</td><td><b>${$(p.price)}</b></td><td>${p.next != null ? $(p.next) : '<small>Expires</small>'}</td><td class="os-tv">${kp(p)}</td></tr>`).join('')}</tbody></table></div>
       <p class="rf-foot">FBP rosters only: free agents and the ${D.next} rookie class aren’t in the pool. Change a team’s keepers in the Keeper Builder and the pool and prices follow. ${D.curveYears.map((y, i) => `${y}: ${D.curveSizes[i]} sold`).join(' · ')}.</p>`;
   }
 
@@ -168,6 +170,7 @@ window.FBPOffseason = (function () {
     if (failed) return '<p class="error">The Off-Season data didn’t load. Refresh the page to try again.</p>';
     if (!D) return '<p class="loading">Loading the off-season…</p>';
     let v = parts[1] || '';
+    if (v !== 'plan') share = null;   // a shared plan is a preview on its own link only
     if (v === 'plan' && D.teams[parts[2]]) {   // a shared plan: preview it without touching your own picks
       if (!share || share.key !== parts.slice(2).join('/')) share = { key: parts.slice(2).join('/'), f: parts[2], ids: new Set((parts[3] || '').split('.').filter(id => D.teams[parts[2]].players.some(p => p.id === id))) };
       team = parts[2]; v = '';
@@ -184,7 +187,7 @@ window.FBPOffseason = (function () {
   document.addEventListener('click', e => {
     const t = e.target.closest ? e.target : null; if (!t || !D || !t.closest('.os')) return;
     const tb = t.closest('[data-os-team]'); if (tb) { team = tb.dataset.osTeam; msg = ''; return redraw(); }
-    const go = t.closest('[data-os-go]'); if (go) { team = go.dataset.osGo; msg = ''; return; }   // the link goes to #offseason
+    const go = t.closest('[data-os-go]'); if (go) { team = go.dataset.osGo; msg = ''; return; }   // the link goes to the Keeper Builder
     const ps = t.closest('[data-os-pos]'); if (ps) { posF = ps.dataset.osPos; return redraw(); }
     const ld = t.closest('[data-os-load]'); if (ld) { const p = plans[+ld.dataset.osLoad]; if (!p) return;
       team0().players.forEach(x => { if (keepable(x)) setKept(x, p.ids.includes(x.id)); }); msg = `Loaded “${X.esc(p.name)}”.`; return redraw(); }
@@ -197,14 +200,14 @@ window.FBPOffseason = (function () {
     else if (act === 'save') { const inp = document.getElementById('os-name'), name = ((inp && inp.value) || '').trim() || `${abbr(team)} plan ${plans.filter(p => p.f === team).length + 1}`;
       plans.push({ name, f: team, ids: T.players.filter(isKept).map(p => p.id), at: Date.now() }); wr(PK, plans); msg = `Saved “${X.esc(name)}”.`; }
     else if (act === 'link') {
-      const url = location.href.split('#')[0] + '#offseason/plan/' + team + '/' + T.players.filter(isKept).map(p => p.id).join('.');
+      const url = location.href.split('#')[0] + B() + '/plan/' + team + '/' + T.players.filter(isKept).map(p => p.id).join('.');
       const done = () => { msg = 'Link copied. Anyone who opens it sees this plan without changing their own.'; redraw(); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => { msg = `Copy this link: <input class="os-url" readonly value="${X.esc(url)}">`; redraw(); });
       else { msg = `Copy this link: <input class="os-url" readonly value="${X.esc(url)}">`; }
       return redraw();
     }
-    else if (act === 'share-keep') { const ids = share.ids; share = null; T.players.forEach(p => { if (keepable(p)) setKept(p, ids.has(p.id)); }); msg = 'This plan is now your working plan for this team.'; location.replace('#offseason'); return; }
-    else if (act === 'share-drop') { share = null; msg = ''; location.replace('#offseason'); return; }
+    else if (act === 'share-keep') { const ids = share.ids; share = null; T.players.forEach(p => { if (keepable(p)) setKept(p, ids.has(p.id)); }); msg = 'This plan is now your working plan for this team.'; location.replace(B()); return; }
+    else if (act === 'share-drop') { share = null; msg = ''; location.replace(B()); return; }
     else if (act === 'tr-clear') { tr = { a: new Set(), b: new Set(), cash: 0 }; }
     redraw();
   });

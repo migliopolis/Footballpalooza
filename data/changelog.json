@@ -2,6 +2,18 @@
   "note": "Settings > Change log. One entry for every five site versions (66-70, 71-75, ...), newest first.",
   "entries": [
     {
+      "from": "0.0321",
+      "to": "0.0325",
+      "dates": "Nov 25–28, 2026",
+      "items": [
+        "Press Box: writer photos run from most columns to fewest.",
+        "Beta › Thanksgiving: a holiday Scoreboard with a banner, fall decorations around every matchup, turkeys on players in the holiday games and a live Turkey Leg Award.",
+        "Trading Floor links preview with a trading floor photo.",
+        "Beta › Off-Season: the 2027 look-ahead, rebuilt from the 2026 Keeper Builder. Build and save keeper plans (and share them by link), see every team's keepers and cap room, the auction pool with predicted prices from past auctions, a trade builder and every contract year by year.",
+        "Keeper picks you make in the Off-Season Keeper Builder and in Power Rankings are the same picks now. The old 2026 workbook link goes to Beta › Off-Season."
+      ]
+    },
+    {
       "from": "0.0316",
       "to": "0.0320",
       "dates": "Nov 23–25, 2026",

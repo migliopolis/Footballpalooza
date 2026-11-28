@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0324';
+  const VERSION = '0.0325';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -823,13 +823,11 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
         .then(b => { state.bylaws = b; if (location.hash === '#bylaws') route(); })
         .catch(() => { app.innerHTML = '<p class="error">The by-laws didn’t load. Refresh the page to try again.</p>'; });
     }
-    else if (tab === 'offseason') {   // the 2027 look-ahead (assets/offseason.js): Keeper Builder, All Keepers, Auction Pool, Trade Builder, Contracts
-      app.innerHTML = window.FBPOffseason ? FBPOffseason.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#offseason')) route(); } }, parts) : '<p class="error">The Off-Season page didn’t load.</p>';
-      const page = 'offseason/' + (parts[1] === 'plan' ? '' : parts[1] || '');
-      if (page !== lastPage && lastPage.startsWith('offseason/')) toTop();
-      lastPage = page;
+    else if (tab === 'offseason') {   // coming soon; the look-ahead is in Beta for now (a shared plan link forwards there)
+      if (parts[1]) { location.replace('#beta/offseason/' + parts.slice(1).join('/')); return; }
+      app.innerHTML = `<div class="card soon"><h2>Off-Season</h2><p>A sandbox for next year: keepers, cap space, the auction pool with predicted prices, trades and contracts.</p><p>Coming soon. Try it now in <a href="#beta/offseason">Beta › Off-Season</a>.</p></div>`;
     }
-    if (tab !== 'reference' && tab !== 'draft' && tab !== 'offseason') lastPage = tab;
+    if (tab !== 'reference' && tab !== 'draft') lastPage = tab;
     const active = document.querySelector('.tabs a[aria-current="page"]');
     if (active && active.parentElement.scrollWidth > active.parentElement.clientWidth) active.parentElement.scrollLeft = active.offsetLeft - 10;
   }

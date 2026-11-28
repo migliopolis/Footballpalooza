@@ -107,7 +107,8 @@ window.FBPBeta = (function () {
   const BETA = [['cards', 'Player Cards', 'A trading card for every player, built on the FBP OVR.'],
     ['shade', 'Scoreboard Shade', 'The Scoreboard with new row colors to try: orange for a game on, green for the ball, red for the red zone, grey when it’s over.'],
     ['turkey', 'Thanksgiving', 'The Scoreboard dressed for the holiday weekend: a banner, turkeys on players in the holiday games and the Turkey Leg Award, live.'],
-    ['power', 'Power Rankings', 'Now and Future side by side: who’s built to win this season, and who’s set up for next, with projected keepers.']];
+    ['power', 'Power Rankings', 'Now and Future side by side: who’s built to win this season, and who’s set up for next, with projected keepers.'],
+    ['offseason', 'Off-Season', 'The 2027 look-ahead: build and save keeper plans, every team’s keepers, the auction pool with predicted prices, a trade builder and contracts.']];
   function betaHead(cur) {
     return `<div class="pagehead"><h1>Beta</h1><span class="asof">Testing ground for things that aren’t finished</span></div>
 <nav class="seg bt-sub">${[['', 'All'], ...BETA.map(([k, l]) => [k, l])].map(([k, l]) => `<a href="#beta${k ? '/' + k : ''}"${cur === k ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`;
@@ -119,6 +120,7 @@ window.FBPBeta = (function () {
     if (s0 === 'docket') { location.replace('#now/docket'); return ''; }   // The Docket moved to League Now
     if (s0 === 'shade') return betaHead('shade') + `<p class="bt-demo"><button type="button" class="seg-btn" data-bt-demo>Shuffle a demo</button> <small>Made-up scores and game states to see every row color. Open any matchup.</small></p>` + (window.FBPLive ? FBPLive.render(Object.assign({}, ctx, { shade: true })) : '<p class="error">The Scoreboard didn’t load.</p>');
     if (s0 === 'turkey') return betaHead('turkey') + (window.FBPLive ? FBPLive.render(Object.assign({}, ctx, { turkey: true })) : '<p class="error">The Scoreboard didn’t load.</p>');
+    if (s0 === 'offseason') return betaHead('offseason') + (window.FBPOffseason ? FBPOffseason.render(Object.assign({}, ctx, { base: '#beta/offseason' }), location.hash.slice(1).split('/').slice(1)) : '<p class="error">The Off-Season page didn’t load.</p>');
     if (s0 === 'power') return betaHead('power') + (window.FBPPower ? FBPPower.render(ctx) : '<p class="error">The Power Rankings didn’t load.</p>');
     if (s0 !== 'cards') return betaHead('') + `<div class="bt-grid">${BETA.map(([k, l, d]) => `<a class="bt-btn" href="#beta/${k}"><b>${l}</b><span>${d}</span></a>`).join('')}</div>`;
     return betaHead('cards') + renderCards(ctx);
