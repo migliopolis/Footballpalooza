@@ -1,6 +1,13 @@
 {
- "fetched": "2026-11-27T17:46:38+00:00",
+ "fetched": "2026-11-28T00:39:40+00:00",
  "transactions": [
+  {
+   "activated": "",
+   "deactivated": "16192,",
+   "franchise": "0007",
+   "timestamp": "1795802666",
+   "type": "IR"
+  },
   {
    "activated": "",
    "deactivated": "15716,13633,",

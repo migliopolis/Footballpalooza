@@ -1,7 +1,7 @@
 {
  "source": "NFL Mock Draft Database",
  "url": "https://www.nflmockdraftdatabase.com/mock-drafts/2027/consensus-mock-draft-2027",
- "asOf": "2026-11-27",
+ "asOf": "2026-11-28",
  "note": "Projected NFL landing spot per rookie. consensus = the team at his pick in the 1-week consensus mock (round 1); recent = the team holding his median pick in mocks from the last two weeks (Tankathon order); most = the team he is most often mocked to.",
  "players": {
   "Jeremiah Smith": {
@@ -71,7 +71,7 @@
    "team": "NE",
    "pick": 16,
    "basis": "consensus",
-   "mocks": 20,
+   "mocks": 18,
    "mostMocked": "LV"
   },
   "Nick Marsh": {
@@ -99,14 +99,14 @@
    "team": "ARI",
    "pick": 6,
    "basis": "consensus",
-   "mocks": 14,
+   "mocks": 13,
    "mostMocked": "ARI"
   },
   "Trey'Dez Green": {
    "team": "CAR",
    "pick": 19,
    "basis": "consensus",
-   "mocks": 25,
+   "mocks": 24,
    "mostMocked": "CAR"
   },
   "Ryan Wingo": {
@@ -127,7 +127,7 @@
    "team": "DET",
    "pick": 28,
    "basis": "consensus",
-   "mocks": 21,
+   "mocks": 19,
    "mostMocked": "DEN"
   },
   "Deuce Alexander": {
@@ -148,14 +148,14 @@
    "team": "BUF",
    "pick": 32,
    "basis": "recent",
-   "mocks": 6,
+   "mocks": 5,
    "mostMocked": "KC"
   },
   "Trinidad Chambliss": {
    "team": "CLE",
    "pick": 20,
    "basis": "consensus",
-   "mocks": 19,
+   "mocks": 18,
    "mostMocked": "PIT"
   },
   "Wyatt Young": {
@@ -176,7 +176,7 @@
    "team": "PIT",
    "pick": 21,
    "basis": "consensus",
-   "mocks": 15,
+   "mocks": 14,
    "mostMocked": "KC"
   },
   "Raleek Brown": {
@@ -187,10 +187,10 @@
    "mostMocked": "CIN"
   },
   "Austin Simmons": {
-   "team": "NE",
-   "pick": 16,
+   "team": "DAL",
+   "pick": 17,
    "basis": "recent",
-   "mocks": 12,
+   "mocks": 11,
    "mostMocked": "MIN"
   },
   "Isaac Brown": {
@@ -246,7 +246,7 @@
    "team": "CLE",
    "pick": 20,
    "basis": "recent",
-   "mocks": 15,
+   "mocks": 13,
    "mostMocked": "CLE"
   },
   "Carlos Hernandez": {
@@ -313,11 +313,11 @@
    "mostMocked": "PIT"
   },
   "Omarion Miller": {
-   "team": "WSH",
+   "team": "LV",
    "pick": null,
    "basis": "most",
    "mocks": 0,
-   "mostMocked": "WSH"
+   "mostMocked": "LV"
   },
   "Devin McCuin": {
    "team": "JAX",

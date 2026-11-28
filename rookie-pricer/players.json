@@ -1,7 +1,7 @@
 {
  "season": 2027,
  "mode": "projected",
- "asOf": "2026-11-27",
+ "asOf": "2026-11-28",
  "note": "NFL picks are projections from NFL Mock Draft Database consensus mock (1 week) and recent mocks; NFL Mock Draft Database consensus big board; FanSided first-round mock. Rookie-draft order (adp) is averaged from NFL Mock Draft Database superflex rookie rankings; DLF superflex rookie mock (round 1 only); DraftSharks superflex rookie rankings; RotoBaller superflex mock. Newer sources count more.",
  "players": [
   {
@@ -191,7 +191,7 @@
    "pos": "QB",
    "school": "Missouri",
    "adp": 25.6,
-   "nflPick": 17
+   "nflPick": 18
   },
   {
    "name": "Justice Haynes",
