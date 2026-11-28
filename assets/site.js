@@ -3,7 +3,7 @@
 (() => {
   // Site version shown in the header. Add 0.0001 with every push Paul approves (see claude/github-push-setup.md),
   // and update the matching ?v= stamps on the script and stylesheet links in index.html so phones fetch fresh files.
-  const VERSION = '0.0323';
+  const VERSION = '0.0324';
   window.FBP = Object.assign(window.FBP || {}, { version: VERSION });
   // Share button in the header: the phone's own share sheet (Web Share API) for the page you're on;
   // where there's no share sheet (most desktop browsers), copy the link instead
@@ -761,15 +761,6 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
     hit.textContent = total ? `${total} match${total > 1 ? 'es' : ''} in ${n} article${n > 1 ? 's' : ''}` : 'No matches';
   }
 
-  /* ---------- placeholders ---------- */
-  const SOON = {
-    offseason: ['Off-Season', 'A sandbox for next year: rosters, cap space, keeper look-ahead, free agents, the incoming rookie class and auction price predictions tuned on 2026 results.', []],
-  };
-  const pageSoon = k => {
-    const [h, p, extra] = SOON[k];
-    return `<div class="card soon"><h2>${h}</h2><p>${p}</p>${extra.length ? `<ul>${extra.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}<p>Coming soon.</p></div>`;
-  };
-
   // re-render without jumping: keep the page and any scrolling lists where they were
   function keepScroll(fn) {
     const y = window.scrollY, boxes = ['.dr-list', '#dr-board'].map(sel => { const el = document.querySelector(sel); return [sel, el ? el.scrollTop : 0]; });
@@ -832,8 +823,13 @@ window.FBP = Object.assign(window.FBP || {}, { champChip: id => champChip(id), c
         .then(b => { state.bylaws = b; if (location.hash === '#bylaws') route(); })
         .catch(() => { app.innerHTML = '<p class="error">The by-laws didn’t load. Refresh the page to try again.</p>'; });
     }
-    else app.innerHTML = pageSoon(tab);
-    if (tab !== 'reference' && tab !== 'draft') lastPage = tab;
+    else if (tab === 'offseason') {   // the 2027 look-ahead (assets/offseason.js): Keeper Builder, All Keepers, Auction Pool, Trade Builder, Contracts
+      app.innerHTML = window.FBPOffseason ? FBPOffseason.render({ teams: state.teams, esc, nameOf, myTeam: myTeam(), rerender: () => { if (location.hash.startsWith('#offseason')) route(); } }, parts) : '<p class="error">The Off-Season page didn’t load.</p>';
+      const page = 'offseason/' + (parts[1] === 'plan' ? '' : parts[1] || '');
+      if (page !== lastPage && lastPage.startsWith('offseason/')) toTop();
+      lastPage = page;
+    }
+    if (tab !== 'reference' && tab !== 'draft' && tab !== 'offseason') lastPage = tab;
     const active = document.querySelector('.tabs a[aria-current="page"]');
     if (active && active.parentElement.scrollWidth > active.parentElement.clientWidth) active.parentElement.scrollLeft = active.offsetLeft - 10;
   }

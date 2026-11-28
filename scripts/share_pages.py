@@ -74,7 +74,7 @@ def routes():
         'now/trade': ('Trading Floor', 'The trade block, sell candidates, team needs, the Trade Value chart, trade habits and every FBP trade since 2019.', 'assets/share/trading-floor.jpg'),
         'reference/players': ('Player Records', 'How often each player’s team wins when he starts, and every FBP team he’s started for.'),
         'reference/payroll': ('Payroll', 'Footballpalooza salaries and cap.'),
-        'offseason': ('Off-Season', 'The Footballpalooza off-season workbook.'),
+        'offseason': ('Off-Season', 'Build your 2027 keepers, check the cap, price the auction pool and sketch trades.'),
         # Draft Home previews with its hero photo (data/draft-home.json hero.src), like a column does
         'draft': ('Rookie Draft', f'The {int(season) + 1 if season else ""} rookie class: who the top prospects are and what kind of draft it is.'.replace('  ', ' '),
                   (load('data', 'draft-home.json').get('hero') or {}).get('src') or ''),

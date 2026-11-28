@@ -82,6 +82,7 @@ window.FBPPower = (function () {
 
   function render(ctx) {
     X = ctx; load();
+    try { flips = JSON.parse(localStorage.getItem('fbp-power-keep') || '{}') || {}; } catch (e) { flips = {}; }   // shared with the Off-Season Keeper Builder
     if (failed) return '<p class="error">The Power Rankings didn’t load.</p>';
     if (!P) return '<p class="loading">Loading the Power Rankings…</p>';
     const esc = ctx.esc, { T, order } = score();
